@@ -1,6 +1,14 @@
+
 $( document ).ready(function() {
 
+	var ajaxRequestArray = []
+
 	$('#user_email').on('focusout', function(){
+
+		if(ajaxRequestArray.length > 0){
+			ajaxRequestArray[0].abort();
+			ajaxRequestArray.pop();
+		}
 
 		$("#sign_up_button").prop("disabled",true);
 		$("#sign_up_button").css("background-color","grey");
@@ -14,7 +22,7 @@ $( document ).ready(function() {
 			validateEmailFormat($('#user_email').val());
 			validateEmailDomain($('#user_email').val());
 
-			$.ajax({
+			var request = $.ajax({
 				url: window.location.origin + "/check_email",
 				type: "GET",
 				data:{
@@ -58,6 +66,8 @@ $( document ).ready(function() {
 
 				}
 			})
+			ajaxRequestArray.push(request)
+			
 		}
 		catch(err){
 			console.log("Invalid e-mail format.")
