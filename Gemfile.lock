@@ -637,6 +637,7 @@ GEM
       sass (~> 3.2)
       thor
     builder (3.0.4)
+    client_side_validations (3.2.8)
     coderay (1.1.2)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -819,6 +820,7 @@ DEPENDENCIES
   activeadmin (= 0.6.3)
   addressable
   aws-sdk
+  client_side_validations
   coffee-rails (~> 3.2.1)
   devise
   faker

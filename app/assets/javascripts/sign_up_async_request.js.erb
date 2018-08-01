@@ -6,11 +6,11 @@ $( document ).ready(function() {
 		$("#sign_up_button").css("background-color","grey");
 		$(".spinner").css("display","block");
 		$("#check_email_div").css("display","block")
-		$("#check_email_span").text("Validating email.");
+		$("#check_email_span").text("Validating email: " + $(this).val());
 		$("#check_email_span").css({"margin-left":"30px","color":"black"});
 
-		validateEmailFormat($('#user_email').val());
-		validateEmailDomain($('#user_email').val());
+		 validateEmailFormat($('#user_email').val());
+		 validateEmailDomain($('#user_email').val());
 
 		$.ajax({
 			url: window.location.origin + "/check_email",
@@ -31,7 +31,7 @@ $( document ).ready(function() {
 
 					$(".spinner").css("display","none");
 
-					$("#check_email_span").css({"margin-left":"0px","color":"#7FFF00"})
+					$("#check_email_span").css({"margin-left":"0px","color":'green'})
 					$("#check_email_span").text("Success! We've confirmed that you don't already have a MyLibraryNYC account."); 
 
 					$("#sign_up_button").prop("disabled",false);
@@ -56,7 +56,7 @@ $( document ).ready(function() {
 
 			}
 		})
-	})
+})
 
 function handleError(){
 
@@ -69,8 +69,8 @@ function validateEmailFormat(email) {
 	var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]     {1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	if(re.test(email) == false){
 		$(".spinner").css("display","none");
-		$("#check_email_span").css({"margin-left":"0px","color": "red"})
-		$("#check_email_span").text('Enter a valid email address ending in "@schools.nyc.gov"');
+		$('#check_email_div').css("display","none");
+
 		throw new InvalidEmailFormatError("Invalid e-mail-format");
 	}
 }
@@ -79,12 +79,30 @@ function validateEmailDomain(email){
 	var domain = email.split('@')
 	if(domain[1] != "schools.nyc.gov"){
 		$(".spinner").css("display","none");
-		$("#check_email_span").css({"margin-left":"0px","color": "red"})
-		$("#check_email_span").text('Enter a valid email address ending in "@schools.nyc.gov"');
+	    $('#check_email_div').css("display","none");
 		throw new InvalidEmailDomainError("Invalid e-mail domain")
 	}
 }
- 
+
+
+
+window.ClientSideValidations.callbacks.element.fail = function(element, message, callback) {
+	callback();
+	$(element).css('background', '#f6d6d8');
+	$(element).css('border','0.0625rem #97272c solid');
+	if(element[0].name == 'user[email]'){
+		$($("[for=user_email]")[1]).text('Enter a valid email address ending in "@schools.nyc.gov".')
+
+	}
+}
+
+window.ClientSideValidations.callbacks.element.pass = function(element, callback) {
+	$(element).css('background', '#E8E4E2');
+	$(element).css('border','1px solid #D0CDC8');
+	callback()
+}
+
+
 
 
 })	
