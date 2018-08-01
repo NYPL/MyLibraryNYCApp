@@ -10,7 +10,7 @@ deploy:
   bucket_name: elasticbeanstalk-us-east-1-224280085904
   bucket_path: my-library-nyc-app-development
   on:
-    repo: NYPL/MyLibraryNYC
+    repo: NYPL/MyLibraryNYCApp
     branch: development
 env:
   global:
