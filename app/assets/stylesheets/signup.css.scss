@@ -1,0 +1,29 @@
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+ 
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: #333;
+  display: inline-block;
+  animation: spinner .6s linear infinite;
+}
+
+#check_email_span {
+  color: green;
+  font-weight: bold;
+}
+
+#check_email_div{
+  display:none;
+}
+
+#sign_up_button:focusout{
+	background-color:grey;
+}

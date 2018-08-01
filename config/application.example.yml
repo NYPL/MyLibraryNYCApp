@@ -1,0 +1,6 @@
+# SendGrid info will be placed in here:
+
+SENDGRID_PASSWORD:
+SENDGRID_USERNAME:
+SECRET_KEY_BASE:
+  

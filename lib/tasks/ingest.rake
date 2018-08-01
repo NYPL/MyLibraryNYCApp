@@ -1,0 +1,616 @@
+
+require 'net/http'
+require 'uri'
+
+require 'csv'    
+
+namespace :ingest do 
+
+  # Fetch latest data from biblio
+  desc "Import new data"
+  task :ingest, [:page, :limit, :just_id]  => :environment do |t, args|
+    args.with_defaults(:page=> 1, :limit => 25, :just_id => nil)
+
+    page = args.page.to_i 
+    page = 1 if page == 0
+
+    limit = args.limit.to_i
+    limit = 25 if limit == 0
+
+    just_id = args.just_id.to_i
+    just_id = nil if just_id == 0
+
+    TeacherSet.fetch_new page, limit, just_id
+  end
+
+  # Update availability status and counts of all sets by scraping internal catalog
+  desc "Update availability numbers for all sets"
+  task :update_availability, [:start, :limit, :id]  => :environment do |t, args|
+    args.with_defaults(:start => 0, :limit => nil, :id => nil)
+    start = args.start.to_i 
+    limit = args.limit.to_i unless args.limit.nil?
+    id = args.id
+
+    sets = TeacherSet
+    sets = sets.limit limit unless limit.nil?
+    sets = sets.offset start unless start.nil?
+    sets = sets.order('id ASC')
+    sets = [sets.find(id)] unless id.nil?
+    sets.each_with_index do |set, i|
+      puts "#{i}: #{set.id}: #{set.title}"
+      set.update_availability
+    end
+  end
+
+  # Created because some sets appear in the app but not in Sierra.
+  # Bibliocommons API now returns a response, even if the teacher set
+  # is no longer available.
+  desc "Remove teacher sets based on call number"
+  task :remove_teacher_sets, [] => :environment do |t, args|
+    require 'csv'
+
+    path = 'db/data_update_dec2014/Dec15.2014-TeacherSetsToRemoveWebApp.csv'
+
+    teacher_sets_not_found = []
+
+    CSV.foreach(path) do |line|
+      (call_number, set_title) = line
+
+      # puts "#{call_number}"
+
+      teacherSet = TeacherSet.find_by_call_number call_number.strip
+
+      if teacherSet.nil?
+        puts "    Teacher Set not found: #{call_number}"
+        teacher_sets_not_found << "#{call_number}"
+      else 
+        puts "Deleting Teacher Set: #{call_number}"
+        teacherSet.destroy
+      end
+    end
+
+    puts "Total number of sets not found: #{teacher_sets_not_found.size}"
+  end
+
+
+  # Updated for December 1st, 2014 release.
+  desc "Import all teacher data from local csvs into users table"
+  task :teachers, [] => :environment do |t, args|
+    require 'csv'    
+
+    path = 'db/data_update_dec2014/Amie edits data phone app - Main Data.csv'
+    create_users = []
+    distinct_emails = []
+    duplicate_emails = []
+    update_users = []
+
+    CSV.foreach(path) do |line|
+      # Sturm,Aliza,23333041038868,'kenny@bibliocommons.com',zm047,47 The American Sign Language And English Secondary School
+      (last_name, first_name, barcode, email, school_code, school_name) = line
+
+      next if email.nil? || email.strip.empty?
+      puts "#{email}"
+
+      if !(school = School.find_by_code(school_code.strip.downcase)).nil?
+        if school.active?
+
+          # Find the user by email
+          user = User.find_by_email email.downcase
+          if user.nil?
+
+            if !distinct_emails.include? email
+              distinct_emails << email
+              puts "Couldn't find user: #{email} [#{line}]"
+              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: barcode.strip, school_code: school_code.strip, school: school}
+            else
+              duplicate_emails << email
+              alt_barcode = create_users.find {|user| user[:email] == email}[:barcode]
+              create_users.delete_if {|user| user[:email] == email}
+
+              duplicate_barcode = "#{barcode};#{alt_barcode}"
+
+              puts "Duplicate email for new user: #{email}, updating alt_barcode"
+              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: duplicate_barcode.strip, school_code: school_code.strip, school: school}
+            end
+
+          else
+            update_users << "#{email}"
+            puts "Updating existing user: #{email}"
+
+            alt_barcodes = nil
+            if user.barcode != barcode.to_i
+              # Update alt_barcodes
+              if user.alt_barcodes.nil?
+                alt_barcodes = "#{user.barcode}"
+              else
+                alt_barcodes = "#{user.alt_barcodes};#{user.barcode}"
+              end
+              puts "barcode: #{barcode}, alt: #{alt_barcodes}"
+            end
+
+            user.home_library = school_code.strip.downcase
+            user.update_attributes({
+              :first_name => first_name,
+              :last_name => last_name,
+              :barcode => barcode.to_i,
+              :alt_barcodes => alt_barcodes
+            })
+
+            user.save
+          end
+        end
+      else
+        puts "school not found '#{school_code}'"
+      end
+    end
+
+    # Don't touch these records: select id, email, school_id FROM users where updated_at > '2014-02-7' OR email ILIKE '@nypl.org' OR id in (SELECT user_id FROM holds);
+    delete = User.where("id NOT IN (SELECT user_id FROM holds) AND email NOT ILIKE '%nypl.org' AND updated_at <= '2014-02-7'")
+    puts "Create #{create_users.size} users"
+    puts "Update #{update_users.size} users"
+    puts "Delete #{delete.count} users"
+
+    create_users.each_with_index do |u, i|
+      email = u[:email]
+      name = u[:name]
+      barcode = u[:barcode]
+      home_library = u[:school_code]
+
+      if (names = name.split(';')).size >= 2
+        name = names.select {|n| !n.index(',').nil? }.first
+        puts " mult names: #{names.size}: #{names.select {|n| !n.index(',').nil? }}"
+        name = names.first if name.nil?
+      end
+
+      puts "Processing #{i}: #{name}"
+
+      (last_name, first_name) = name.split ', '
+      first_name = '' if first_name.nil?
+      last_name.capitalize!
+      first_name.capitalize!
+
+      alt_barcodes = nil
+      if (barcodes = barcode.split(';')).size >= 2
+        puts " mult barcodes: #{barcodes.size}"
+        barcode = barcodes.shift
+        alt_barcodes = barcodes.join ', '
+        puts "  Adding alt barcode: #{alt_barcodes}"
+      end
+      barcode = barcode.to_i
+      email.downcase!
+
+      # If two emails given, e.g.:
+      # e.g. "...867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
+      # .. save one email as alternate
+      alt_email = nil
+      if (emails = email.split(';')).size >= 2
+        email = emails[0]
+        alt_email = emails[1] unless email == emails[1]
+      end
+
+      user = User.find_or_initialize_by_email(email.downcase)
+      user.home_library = home_library
+      user.update_attributes({
+        :first_name => first_name,
+        :last_name => last_name,
+        :barcode => barcode,
+        :alt_barcodes => alt_barcodes
+      })
+
+      user.school = u[:school]
+      puts " user has custom school: #{user.school}" if user.school != u[:school]
+      user.update_attribute :alt_email, alt_email unless alt_email.nil? or !user.alt_email.empty?
+      
+      user.save
+      puts "save user: #{email} exists ? #{user.persisted?}" if !user.persisted?
+
+      # All validation failures so far seen have been due to "null" email in csvs
+      if user.errors.count > 0
+        puts "Errors: #{user.errors.full_messages}"
+        puts "  row: #{i} #{u.inspect}"
+      end
+    end
+  end
+
+  desc "Remove teachers from database based on cvs file"
+  task :remove_teachers, [] => :environment do |t, args|
+    require 'csv'
+
+    path = 'db/data_update_dec2014/Dec4.2014-DroppedEducators.csv'
+    deleted_users = []
+    not_found_users = []
+    no_emails = []
+
+    CSV.foreach(path) do |line|
+      # ACOSTA,ANA,27777021508793,AAcosta4@schools.nyc.gov,zk053,P.S. K053
+      (last_name, first_name, barcode, email, school_code, school_name) = line
+
+      if email.nil? || email.strip.empty?
+        no_emails << "#{last_name}, #{first_name}"
+        next
+      end
+
+      user = User.find_by_email email.strip.downcase
+      if user.nil?
+        puts "Could not find user: #{email}"
+        not_found_users << "#{email}"
+      else
+        puts "Will delete educator: #{email}"
+        deleted_users << "#{email}"
+        user.destroy
+      end
+    end
+
+    puts "Users not found to delete, #{not_found_users.size}: #{not_found_users}"
+    puts "Deleted a total of #{deleted_users.size} users from the database"
+    puts "Users with no emails, #{no_emails.size}: #{no_emails}"
+  end
+
+  # This use to be the :teachers task but it has been updated due to new 
+  # data set structure.
+  desc "Import all teacher data from local csvs into users table"
+  task :deprecated_teachers, [] => :environment do |t, args|
+    require 'csv'    
+
+    dumps_base = 'db/final-schools-dump'
+
+    create_users = []
+
+    School.active.each do |school|
+      code = school.code
+      path = "#{dumps_base}/#{code}.csv"
+      path = "#{dumps_base}/e#{code}.csv" if !File.exists?(path)
+
+      if File.exists?(path)
+        puts "Process teachers for #{code}"
+        CSV.foreach(path) do |line|
+          # "p44607908",151,"KIM, DENISE",23333087938609,"zx445",9/27/2013,0,2,9/14/2011,"kim2@bxscience.edu"
+          (_number, _type, name, barcode, school_code, _n1, _n2, _d1, _d2, email) = line
+          next if email.nil? || email.strip.empty?
+
+          user = User.find_by_email email.downcase
+          if user.nil?
+            puts "couldn't find user: #{email} [#{line}]"
+          end
+
+          create_users << {email: email.strip, name: name.strip, barcode: barcode.strip, school_code: school_code.strip, school: school}
+
+        end
+
+      else
+        puts "Missing teachers dump for #{code} (#{path})"
+      end
+    end
+
+    # Don't touch these records: select id, email, school_id FROM users where updated_at > '2014-02-7' OR email ILIKE '@nypl.org' OR id in (SELECT user_id FROM holds);
+    delete = User.where("id NOT IN (SELECT user_id FROM holds) AND email NOT ILIKE '%nypl.org' AND updated_at <= '2014-02-7'")
+    puts "Create #{create_users.size} users"
+    puts "Delete #{delete.count} users"
+
+    add_emails = create_users.map { |u| u[:email].downcase }
+    User.where("id IN (SELECT user_id FROM holds) OR updated_at > '2014-02-7'").each do |u|
+      if ! add_emails.include? u.email.downcase 
+        puts " Keeping #{u.email} but why"
+      end
+    end
+
+    create_users.each_with_index do |u, i|
+      email = u[:email]
+      name = u[:name]
+      barcode = u[:barcode]
+      home_library = u[:school_code]
+
+      if (names = name.split(';')).size >= 2
+        name = names.select {|n| !n.index(',').nil? }.first
+        puts " mult names: #{names.size}: #{names.select {|n| !n.index(',').nil? }}"
+        name = names.first if name.nil?
+      end
+
+      puts "Processing #{i}: #{name}"
+
+      (last_name, first_name) = name.split ', '
+      first_name = '' if first_name.nil?
+      last_name.capitalize!
+      first_name.capitalize!
+
+      alt_barcodes = nil
+      if (barcodes = barcode.split(';')).size >= 2
+        puts " mult barcodes: #{barcodes.size}"
+        barcode = barcodes.shift
+        alt_barcodes = barcodes.join ', '
+        puts "  Adding alt barcode: #{alt_barcodes}"
+      end
+      barcode = barcode.to_i
+      email.downcase!
+
+      # If two emails given, e.g.:
+      # e.g. "...867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
+      # .. save one email as alternate
+      alt_email = nil
+      if (emails = email.split(';')).size >= 2
+        email = emails[0]
+        alt_email = emails[1] unless email == emails[1]
+      end
+
+      user = User.find_or_initialize_by_email(email.downcase)
+      user.update_attributes({
+        :first_name => first_name,
+        :last_name => last_name,
+        :home_library => home_library,
+        :barcode => barcode,
+        :alt_barcodes => alt_barcodes
+      })
+
+      user.school = u[:school]
+      puts " user has custom school: #{user.school}" if user.school != u[:school]
+      # user.update_attribute :alt_email, alt_email unless !user.alt_email.empty? or alt_email.nil?
+      
+      # user.save
+      puts "save user: #{email} exists ? #{user.persisted?}" if !user.persisted?
+
+      # All validation failures so far seen have been due to "null" email in csvs
+      if user.errors.count > 0
+        puts "Errors: #{user.errors.full_messages}"
+        puts "  row: #{i} #{u.inspect}"
+      end
+    end
+
+  end
+
+  task :backup do
+    sh 'rake db:data:dump_dir dir="backups/`date +"%Y%m%d"`"'
+  end
+
+  desc "Add and update list of participating schools"
+  task :update_schools, [] => :environment do |t, args|
+    path = 'db/2016-october-update/participating_school_list-2016-2017.csv'
+
+    CSV.foreach(path) do |line|
+      (code, name) = line
+      puts "#{code} - #{name}"
+      if !(school = School.find_by_code("z#{code}".downcase)).nil?
+        if school.name.strip.downcase != name.strip.downcase
+          puts "Updating school name:"
+          puts "  existing:   #{school.name}"
+          puts "  referenced: #{name}"
+          school.name = name
+        end
+        
+        school.active = true
+        school.save
+      else
+        puts "Adding new school, code: #{code}"
+        puts "  #{name}"
+        new_school = School.find_or_create_by_name name
+        new_school.code = "z#{code}".downcase
+        new_school.active = true
+        new_school.save
+      end
+    end
+  end
+
+  desc "Deactivate schools from authorized list"
+  task :deactivate_schools, [] => :environment do |t, args|
+    path = 'db/2015SchoolUpdate/dropped-schools.csv'
+
+    dropped_schools = []
+    CSV.foreach(path) do |line|
+      (name, blank, code) = line
+      puts "#{code.downcase}"
+      if !(school = School.find_by_code(code.strip.downcase)).nil?
+        dropped_schools << "#{code.downcase}"
+        if school.active == true
+          puts "School to remove from the participating list: #{code.downcase}"
+          school.active = false
+          school.save
+        end
+      end
+    end
+
+    puts "Total schools dropped: #{dropped_schools.size}"
+  end
+
+  # Newer ingest script above
+  desc "Selectively activate schools from authorized list"
+  task :activate_schools, [] => :environment do |t, args|
+    path = 'db/final-schools-dump/School Names.csv'
+    CSV.foreach(path) do |line|
+      (code, name) = line
+      if !(school = School.find_by_code(code)).nil?
+        if school.name.strip.downcase != name.strip.downcase
+          puts "Warning: Mismatch when activating #{code}:"
+          puts "  existing:   #{school.name}"
+          puts "  referenced: #{name}"
+        end
+        
+        school.active = true
+        school.save
+      end
+    end
+  end
+
+  desc "Import and active a new set of schools."
+  task :new_schools, [] => :environment do |t, args|
+    path = 'db/2015SchoolUpdate/new-schools.csv'
+
+    new_schools = []
+    CSV.foreach(path) do |line|
+      (name, blank, code) = line
+      
+      puts "#{code.downcase}"
+      new_schools << "#{code.downcase}"
+
+      school = School.find_or_create_by_name name
+      school.code = code
+      school.active = true
+      school.save!
+    end
+
+    puts "Total new schools added and active: #{new_schools.size}"
+  end
+
+  desc "Import full set of schools from three boroughs, regardless of whether or not they're participating (run activate_schools to selectively activate)"
+  task :schools , [] => :environment do |t, args|
+
+    dumps_base = 'db/schools'
+
+    Dir.new(dumps_base).each do |f|
+      m = f.match /(\w+)_school_codes/
+      next if m.nil?
+      borough_name = m[1].underscore.split('_').map(&:capitalize).join(' ')
+
+      next if ['Brooklyn','Queens'].include? borough_name
+
+      borough = Borough.find_or_create_by_name borough_name
+
+      path = "#{dumps_base}/#{f}"
+      CSV.foreach(path) do |line|
+        next if $. == 1
+
+        puts "#{$.}: #{line}"
+
+        (code, campus_name, school_name) = line
+
+        campus = Campus.find_or_create_by_name campus_name
+        campus.borough = borough
+        campus.save!
+
+        school = School.find_or_create_by_name school_name
+        school.campus = campus
+        school.code = code
+        school.save!
+
+      end
+    end
+
+  end
+
+
+ 
+=begin
+  desc "Import all teacher data from local csvs into users table"
+  task :teachers, [] => :environment do |t, args|
+    require 'csv'    
+
+    dumps_base = 'db/teacher_dumps'
+
+    Dir.new(dumps_base).each do |f|
+      next if ['.','..'].include? f
+
+
+      issues = {
+        :multi_emails => 0,
+        :no_emails => 0,
+        :multi_barcodes => 0,
+        :empty_codes => 0,
+        :code_lookup_failures => {},
+        :max_barcodes => 0
+      }
+      # if (m = f.match /^([A-Za-z_]+)_educators_([0-9]+)/)
+      if (m = f.match /^[^.].*\.txt/)
+
+        path = "#{dumps_base}/#{f}"
+        lines = %x(wc -l #{path}).to_i
+        puts "processing #{f}: #{lines}"
+        File.foreach(path) do |line|
+          next if $. == 1
+
+          # This appears in one of the dumps: 
+          # "p55258827"|"151"|"EDWARDS, TESNA"|"27777016362867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
+          # .. So remove those confounding quotes from around the ; 
+          # (also, that's the same email addresss with different case... so not sure why it's there)
+          line = line.gsub /";"/, ';'
+          row = CSV.parse(line, {:col_sep => '|'}).first
+          # puts "row: #{row.inspect}"
+
+          # (number, type, name, barcode, home_library, email) = row
+          (number, type, name, barcode, home_library, circ_active, current_checkout, total_checkout, created, email) = row
+
+          email.strip!
+          home_library.strip!
+
+          if email.nil? || email.empty?
+            puts "  Skipping acct with no email: #{name}"
+            next
+          end
+
+          if (names = name.split(';')).size >= 2
+            name = names.select {|n| !n.index(',').nil? }.first
+            puts " mult names: #{names.size}: #{names.select {|n| !n.index(',').nil? }}"
+            name = names.first if name.nil?
+          end
+
+          puts "Processing #{$.}: #{name}"
+
+          (last_name, first_name) = name.split ', '
+          first_name = '' if first_name.nil?
+          last_name.capitalize!
+          first_name.capitalize!
+
+          alt_barcodes = nil
+          if (barcodes = barcode.split(';')).size >= 2
+            puts " mult barcodes: #{barcodes.size}"
+            issues[:multi_barcodes] += 1
+            issues[:max_barcodes] = [issues[:max_barcodes], barcodes.size].max
+            barcode = barcodes.shift
+            alt_barcodes = barcodes.join ', '
+            puts "  Adding alt barcode: #{alt_barcodes}"
+          end
+          barcode = barcode.to_i
+          email.downcase!
+
+          # If two emails given, e.g.:
+          # e.g. "...867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
+          # .. save one email as alternate
+          alt_email = nil
+          if (emails = email.split(';')).size >= 2
+            email = emails[0]
+            alt_email = emails[1] unless email == emails[1]
+            issues[:multi_emails] += 1
+          end
+
+          issues[:no_emails] += 1 if email.nil? || email.blank?
+
+
+          user = User.find_or_create_by_email(email.downcase)
+          user.update_attributes({
+            :first_name => first_name,
+            :last_name => last_name,
+            :home_library => home_library,
+            :barcode => barcode,
+            :alt_barcodes => alt_barcodes
+          })
+          user.update_attribute :alt_email, alt_email unless alt_email.nil?
+
+          if home_library.nil? || home_library.empty?
+            issues[:empty_codes] += 1
+
+          elsif (user.school = School.find_by_code home_library).nil?
+            issues[:code_lookup_failures][home_library] = 0 if issues[:code_lookup_failures][home_library].nil?
+            issues[:code_lookup_failures][home_library] += 1
+            puts "  Couldn't find school for code #{home_library}"
+
+          else
+            user.save
+          end
+
+
+          # All validation failures so far seen have been due to "null" email in csvs
+          if user.errors.count > 0
+            puts "Errors: #{user.errors.full_messages}"
+            puts "  row: #{$.} #{row.inspect}"
+          end
+
+          # break if $. > 1000
+        end
+
+        puts "issues: #{issues.to_json}"
+      end
+    end
+    
+  end
+=end
+
+
+
+end

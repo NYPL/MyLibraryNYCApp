@@ -1,0 +1,12 @@
+<p><%= @message %></p>
+
+<p>
+  Your order ID is <strong><%= @hold.access_key %></strong>. You can view the details of your order here:<br />
+  <%= link_to "#{hold_url(@hold.access_key)}", hold_url(@hold.access_key) %> 
+</p>
+
+<p>
+  Thank You,<br />
+  MyLibraryNYC<br />
+  <%= link_to "#{root_url}", root_url %> 
+</p>

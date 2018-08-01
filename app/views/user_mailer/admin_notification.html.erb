@@ -1,0 +1,9 @@
+<p>
+  The following user has registered at sets.mylibrarynyc.org. Please review the user's registration and remove the user from <%= link_to "the admin", "http://sets.mylibrarynyc.org/admin/users" %> if there are any issues.
+</p>
+<p>User's registration details: <br />
+  Name: <%= @user.first_name %> <%= @user.last_name %> <br />
+  Email: <%= link_to @user.email, "mailto:#{@user.email}" %> <br />
+  School: <%= @user.school.name %> <br />
+  Barcode: <%= @user.barcode %> <br />
+</p>

@@ -1,0 +1,23 @@
+<p>
+  <%= link_to @user.email, "mailto:#{@user.email}" %> has ordered the following teacher set:<br />
+  <%= link_to @teacher_set.title, teacher_set_url(@teacher_set) %>.
+
+<p>
+  Change this order's status here:<br />
+  <%= link_to "#{new_admin_hold_change_url(:hold => @hold)}", new_admin_hold_change_url(:hold => @hold) %> 
+</p>
+
+<% if @user.multiple_barcodes? %>
+  <p style="font-weight: bold; color: red;">Note: This user has multiple barcodes.</p>
+<% end %>
+
+<p>
+  Additional admin links:
+</p>
+
+<p>
+  Teacher: <%= link_to @user.email, admin_user_url(@user) %><br />
+  School: <%= link_to @user.school.name, admin_school_url(@user.school) %><br />
+  Order: <%= link_to @hold.access_key, admin_hold_url(@hold) %><br />
+  Teacher Set: <%= link_to @teacher_set.title, admin_teacher_set_url(@teacher_set) %>
+</p>

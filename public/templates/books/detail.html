@@ -1,0 +1,41 @@
+<div class="animate-in-container" ng-show="loaded">
+  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include> 
+  <div class="book-banner">
+    <div class="book-cover">
+      <img src="{{book.cover_uri}}" />
+    </div>   
+    <div class="book-title">
+      <h2>{{book.title}}</h2>
+      <h3>{{book.sub_title}}</h3>
+      <h4>{{book.statement_of_responsibility}}</h4>
+      <p>{{book.description}}</p>
+    </div>  
+  </div>
+  
+  <div class="ts-details">
+    <dl>
+      <dt ng-show="book.publication_date">Publication Date</dt>
+      <dd>{{book.publication_date}}</dd>
+      <dt ng-show="book.call_number">Call Number</dt>
+      <dd>{{book.call_number}}</dd>
+      <dt ng-show="book.physical_description">Physical Description</dt>
+      <dd>{{book.physical_description}}</dd>
+      <dt ng-show="book.primary_language">Primary Language</dt>
+      <dd>{{book.primary_language}}</dd>
+      <dt ng-show="book.isbn">ISBN</dt>
+      <dd>{{book.isbn}}</dd>
+      <dt ng-show="book.notes">Notes</dt>
+      <dd>{{book.notes}}</dd>
+    </dl>
+    <p><a href="{{book.details_url}}" target="_blank">View in catalog</a></p>
+  </div>
+  
+  <hr />
+  
+  <h3>Appears in These Sets:</h3>
+  <ul class="result-list">
+    <li ng-repeat="ts in teacher_sets">
+      <ng-include src="'/templates/teacher_sets/_result.html'"></ng-include> 
+    </li>
+  </ul>
+</div>

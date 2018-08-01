@@ -1,0 +1,102 @@
+// SASS variable overrides must be declared before loading up Active Admin's styles.
+//
+// To view the variables that Active Admin provides, take a look at
+// `app/assets/stylesheets/active_admin/mixins/_variables.css.scss` in the
+// Active Admin source.
+//
+// For example, to change the sidebar width:
+// $sidebar-width: 242px;
+
+// Active Admin's got SASS!
+@import "active_admin/mixins";
+@import "active_admin/base";
+
+// Overriding any non-variable SASS must be done after the fact.
+// For example, to change the default status-tag color:
+//
+//   body.active_admin {
+//      .status_tag { background: #6090DB; }
+//   }
+//
+// Notice that Active Admin CSS rules are nested within a
+// 'body.active_admin' selector to prevent conflicts with
+// other pages in the app. It is best to wrap your changes in a 
+// namespace so they are properly recognized. You have options
+// if you e.g. want different styles for different namespaces:
+//
+// .active_admin       applies to any Active Admin namespace
+// .admin_namespace    applies to the admin namespace (eg: /admin)
+// .other_namespace    applies to a custom namespace named other (eg: /other)
+
+#main_content {
+  .text.input {
+    a {
+      margin-left:20px;
+      text-transform:capitalize;
+    }
+
+    textarea.message {
+      font-size:1.5em;
+      line-height:1.2em;
+    }
+  }
+}
+
+#title_bar {
+  h2 {
+    line-height:1.1em;
+  }
+}
+
+.has_many.books {
+  .img-holder {
+    width:100px;
+    min-height:50px;
+    text-align:right;
+    vertical-align:top;
+    display:inline-block;
+
+    img {
+      min-height:40px;
+      max-height:80px;
+      border:solid gray 1px;
+      margin-right:20px;
+      margin-bottom:10px;
+    }
+  }
+
+  fieldset.re-search {
+    .radio {
+      -display:none;
+    }
+  }
+}
+
+
+body.active_admin.logged_out {
+  
+  background-image: url(/assets/mylibrarynyc-logo-white-mini.png);
+  background-position: center 50px;
+  background-repeat: no-repeat;
+  background-color:#818283;
+
+  div#content_wrapper {
+    margin-top:120px;
+  }
+
+  div h2 {
+    @include gradient(#E05359, #Ad1720);
+    padding-left:200px;
+    content: "Admin Login";
+  }
+
+  form input[type="submit"] {
+    background: -moz-linear-gradient(-90deg, #E05359, #Ad1720) repeat scroll 0 0 rgba(0, 0, 0, 0);
+  }
+
+  div.flash {
+    color:#ddd;
+    text-shadow: 0 1px 0 #202020;
+  }
+}
+

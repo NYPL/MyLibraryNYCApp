@@ -1,0 +1,38 @@
+<h2>Hi, <%= current_user.name %> <small>(<%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>)</small></h2>
+
+<%= form_for(current_user, :as => :user, :url => registration_path(:user), :html => { :method => :put }) do |f| %>
+
+  <%
+    # devise_error_messages!
+  %>
+
+  <!-- <div class="field-group">
+    You are registered with DOE email address <%= @email %>
+  </div> -->
+
+  <div class="field-group">
+    <%= f.label 'Preferred email address for reservation notifications:' %>
+    <%= f.email_field :alt_email, :value => @contact_email, :autofocus => true %>
+    <div class="checkbox">
+  <label><input type="checkbox" value="">Unsubscribe from email alerts</label>
+</div>
+  </div>
+
+  <div class="field-group">
+    <%= f.label 'Your school:' %>
+    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }  %>
+  </div>
+
+  <%= f.hidden_field :current_password, :value => User.default_password.to_s %>
+
+  <div class="actions">
+    <%= f.submit "Update Settings", :class=> "button" %>
+  </div>
+
+<% end %>
+
+<% unless @holds.empty? %>
+  <hr />
+  <h2>My Teacher Set Orders</h2>
+  <%= render "holds/list" %>
+<% end %>

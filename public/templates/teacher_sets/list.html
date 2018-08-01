@@ -1,0 +1,56 @@
+<div class="facet-toolbar">
+  <form ng-submit="teacher_sets.doSearch()" class="form-search" ng-hide="teacher_sets.active_keyword">
+    <input id="keyword" name="keyword" type="text" ng-model="teacher_sets.queryParams.keyword" />
+    <span class="input-button">
+      <button type="submit" class="button"><i class="fa fa-search"></i></button>
+    </span>
+  </form>
+  <div class="selected-keyword" ng-show="teacher_sets.active_keyword">
+    <a ng-click="teacher_sets.removeKeyword()">{{teacher_sets.active_keyword}} <i class='fa fa-times-circle'></i></a>
+  </div>
+</div>
+
+<div class="row animate-in-container">
+  <div id="facets" class="column" ng-class="{'active': facetsVisible}">
+    <div id="facets-inner">
+      <div id="facets-inner-scrollable">
+        <div class="facetGroup" ng-show="!hideFacet">
+          <a href="#/" class="button xsmall clear-filters" ng-show="teacher_sets.facetString">Clear Filters <i class='fa fa-times-circle'></i></a>
+          <div class="ui-slider">
+            <h3><a>&nbsp; &nbsp;Grades {{grade_values[0]||'K'}}&ndash;{{grade_values[1]}}</a></h3>
+            <div slider-grades grades="grades"></div>
+          </div>
+          <div ng-repeat="facet in teacher_sets.facets">
+            <h3><a ng-click="hideList = !hideList"><i class="fa fa-caret-down" ng-class="{'fa-caret-right': !hideList}"></i> {{facet.label}}</a></h3>
+            <ul id="facet-list-{{facet.label}}" class="facet-list collapsible" ng-class="{on: hideList}">
+              <li ng-repeat="facet_item in facet.items">
+                <a href="#{{facet_item.path}}" ng-click="teacher_sets.doFilter(facet_item.q)" ng-class="{selected: facet_item.selected}"
+                   data-id="{{facet_item.value}}" data-param="{{facet.label}}">
+                  {{facet_item.label}} <span class="count">{{facet_item.count}}</span><i class="fa fa-minus-circle"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="toggle">
+      <a ng-click="hideFacets()" ng-show="facetsVisible" class="hide-link"><i class="fa fa-check-circle" title="Hide Filters"></i> Done</a>
+      <a ng-click="showFacets()" ng-hide="facetsVisible" class="show-link"><i class="fa fa-filter" title="Show Filters"></i> <span>Filter</span></a>
+    </div>
+  </div>
+  <div id="teacher_sets" class="column">
+    <ul id="teacher_sets-list" class="result-list"
+        infinite-scroll="teacher_sets.nextPage()" infinite-scroll-immediate-check="false"
+        infinite-scroll-distance="1" infinite-scroll-disabled="teacher_sets.busy">
+      <li ng-repeat="ts in teacher_sets.items">
+        <ng-include src="'/templates/teacher_sets/_result.html'"></ng-include>
+      </li>
+    </ul>
+    <div ng-hide="teacher_sets.items.length || teacher_sets.busy" class="no-results">Sorry, no results found!</div>
+    <div ng-show="teacher_sets.showBusy" class="loading-results">
+      <div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div>
+    </div>
+  </div>
+</div>
+<img ng-src="{{tracking_url}}" width="1" height="1" />

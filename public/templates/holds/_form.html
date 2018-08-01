@@ -1,0 +1,13 @@
+<form ng-submit="submitForm()">
+
+  <!-- 
+  <label><strong>Date needed by</strong></label>
+  <div class="field-group date-group">
+    <datepicker ng-model='formData.hold.date_required' date-format='EEEE, MMMM d, yyyy' placeholder='Pick a Date' disable-timepicker="true" ></datepicker>
+  </div> -->
+  
+  <div class="actions">
+    <input class="button" type="submit" value="{{action_label}}" ng-disabled="{{busy}}" ng-class="{'disabled': busy}" />
+  </div>
+
+</form>

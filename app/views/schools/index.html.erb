@@ -1,0 +1,6 @@
+<h1>MyLibraryNYC Participating Schools</h1>
+<ul class="result-list">
+  <% @schools.each do |school| %>
+    <li><%= school.name %> (<%= school.code[1..-1].upcase %>)</li>
+  <% end %>
+</ul>

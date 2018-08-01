@@ -1,0 +1,8 @@
+<div id="breadcrumb">
+	<a ng-hide="$location.path()=='/teacher_sets'" href="/app#/teacher_sets">Home</a> 
+    <span ng-show="$location.path()|regex:'teacher_sets/[0-9]*'" class=""><i class="fa fa-angle-right"></i> Teacher Set</span>
+    <span ng-show="$location.path()|regex:'holds/[0-9]*'" class=""><i class="fa fa-angle-right"></i> Order</span>
+    <span ng-show="$location.path()|regex:'books/[0-9]*'" class=""><i class="fa fa-angle-right"></i> <a ng-click="goToTeacherSet()">Teacher Set</a></span>
+    <span ng-show="$location.path()|regex:'books/[0-9]*'" class=""><i class="fa fa-angle-right"></i> Book</span>
+    <!-- <br />{{$location.path()}} -->
+</div>

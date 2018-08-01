@@ -1,0 +1,26 @@
+<div class="animate-in-container" ng-show="loaded">
+  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include> 
+  <h1>Your Order</h1>
+  
+  <p class="alert hold-alert" ng-show="hold.status == 'cancelled'">
+    Your order has been cancelled.
+  </p>
+  
+  <p class="alert hold-alert" ng-show="hold.status == 'new'">
+    Your order has been received by our system and will soon be delivered to your school.<br/><br/>Check your email inbox for a message with further details.
+  </p>
+  
+  <ng-include src="'/templates/teacher_sets/_banner.html'"></ng-include> 
+  
+  <hr />
+  
+  <p>
+    <strong>Status</strong><br />{{hold.status_label}} <br />
+    <strong>Placed</strong><br />{{hold.created_at_pretty}}
+  </p>
+  <p ng-show="hold.status == 'new'">
+    <a href="/app#/holds/{{hold.access_key}}/cancel" class="button">{{action_label}}</a>
+  </p>
+</div>
+
+<img ng-src="{{tracking_url}}" width="1" height="1" />

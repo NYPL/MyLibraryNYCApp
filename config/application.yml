@@ -1,0 +1,41 @@
+# Add configuration values here, as shown below.
+#
+# pusher_app_id: "2954"
+# pusher_key: 7381a978f7dd7f9a1117
+# pusher_secret: abdc3b896a0ffb85d373
+# stripe_api_key: sk_test_2J0l093xOyW72XUYJHE4Dv2r
+# stripe_publishable_key: pk_test_ro9jV5SNwGb1yYlQfzG17LHK
+#
+# production:
+#   stripe_api_key: sk_live_EeHnL644i6zo4Iyq4v1KdV9H
+#   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
+
+SENDGRID_PASSWORD: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGY/97q+tGJGGG5iNwIBEIAx6+8g3UugGcZqK0oszFJ5l9QC7PVeLQ5aFOyKJKNnxUZKPMWgwGju5l6auy0KnheViQ=="
+SENDGRID_USERNAME: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDD/C62QpqdcXGlEUxwIBEIAxVeOJrp9vOXRUAv0lh0jaAc7E+8eGFgnpZcOQbRJi7EtxQAJgmBYQHQ6tqEKKc4Hesg=="
+SECRET_KEY_BASE: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A=="
+
+<% require "aws_decrypt.rb" 
+  database_url = "postgresql://localhost/postgres"
+  #database_url = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAASwwggEoBgkqhkiG9w0BBwagggEZMIIBFQIBADCCAQ4GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3apJFu88CTtQfpWdAgEQgIHg5FzviDrg2Qkl2HnO09j5KWORAq1CDtGaZtIATpvKoCHoxogGd4GyJ8M1/J/zHAtnapZiwe4AH22b3aUGQrQLDreu3t1kqp/4jVlkvz1Xa8+dCqeEeIsHgMXG1FTHrH3KZY27Fkg2mAHkJMlFI97oMoV8gj6O6UUfn/ZhNthrNkVSMZNZt2wFoZGXUC8s2rztJdnhQk1RusdDMp70+yoNwa470nOpXHNFoFHf1NVJ0Ih1HD8qSeViwWR7Q8sJSQCUYv9OPCGXkLNUWO1xNWY5d255dMrR/tSnEtugDNRXI1c=")
+%>
+
+development:
+  RACK_ENV: "development"
+  CLIENT_ID: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCL+6xESlcH6XPieZQIBEIAnue0eoIvwsVklKFk6Ss/15ozhEeOX57PLO7JzZ2C0VEftw0Wg6YWp"
+  CLIENT_SECRET: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz6OkwUOUwsV+igt9ICARCAQ0GQCQ1PahswCs4FO/oADmOgGh1ORhBstr88yYUp8eh2FHWTRsmrLRImou+9zqrdKLnN2qcMuY0RLqFplr/5YChbPgg="
+  DATABASE_URL: <%= database_url %>
+  ISSO_OAUTH_TOKEN_URL: "https://isso.nypl.org/oauth/token"
+  PATRON_MICROSERVICE_URL_V01: "https://dev-platform.nypl.org/api/v0.1/patrons"
+
+  # AWS Lambda we ask to register a patron in Sierra for us.
+  PATRON_MICROSERVICE_URL_V02: "https://dev-platform.nypl.org/api/v0.2/patrons"
+
+test:
+  RACK_ENV: "test"
+  CLIENT_ID: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGIwYAYJKoZIhvcNAQcGoFMwUQIBADBMBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGZr+4UWsYRsygu43AIBEIAffB7iAPvaUctKIur+3encRJWrmXCKrlwzdEYfBx5xyQ=="
+  CLIENT_SECRET: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGIwYAYJKoZIhvcNAQcGoFMwUQIBADBMBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGZr+4UWsYRsygu43AIBEIAffB7iAPvaUctKIur+3encRJWrmXCKrlwzdEYfBx5xyQ=="
+  DATABASE_URL: postgresql://localhost/postgres
+  ISSO_OAUTH_TOKEN_URL: 'https://isso.nypl.org/oauth/token'
+  PATRON_MICROSERVICE_URL_V01: 'https://dev-platform.nypl.org/api/v0.1/patrons'
+  PATRON_MICROSERVICE_URL_V02: 'https://dev-platform.nypl.org/api/v0.2/patrons'
+

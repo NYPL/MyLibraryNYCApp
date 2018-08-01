@@ -1,0 +1,14 @@
+<div class="result-left">
+  <div class="result-image subject subject-<%= set.subject.parameterize %>">
+    <i class="fa"></i>
+    <span class="caption"><%= set.subject %></span>
+  </div>
+</div>
+<div class="result-right">
+  <div class="result-title"><%= link_to set.title, set %></div>
+  <div class="result-categories"><%= set.suitabilities.join('; ') %></div>
+  <div class="result-description"><%= set.description %></div>
+  <div class="result-notes">
+    <%= set.teacher_set_notes.first.content unless set.teacher_set_notes.empty?  %>
+  </div>
+</div>

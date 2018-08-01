@@ -1,0 +1,19 @@
+<div class="animate-in-container" ng-show="loaded">
+  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include> 
+  <h1>Cancel Your Order</h1>
+  
+  <p class="alert hold-alert">
+    Please confirm. Are you sure you want to cancel this order for <strong>{{ts.title}}</strong>?
+  </p>
+  <form ng-submit="submitForm()">
+  
+    <div class="field-group date-group">
+      <textarea ng-model='formData.hold_change.comment' placeholder='Reason for cancelling (optional)' ></textarea>
+    </div>
+    
+    <div class="actions">
+      <input class="button" type="submit" value="{{action_label}}" />
+    </div>
+  
+  </form>
+</div>

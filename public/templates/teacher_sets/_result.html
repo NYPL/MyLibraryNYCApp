@@ -1,0 +1,13 @@
+<div class="result-left">
+  <div class="result-image subject subject-{{ts.subject_key}}">
+    <i class="fa"></i>
+    <span class="caption">{{ts.subject}}</span>
+  </div>
+</div>
+<div class="result-right" ng-click="$location.path('/teacher_sets/'+ts.id)">
+  <div class="result-title"><a href="#/teacher_sets/{{ts.id}}">{{ts.title}}</a></div>
+  <div class="result-categories">{{ts.suitabilities_string}}</div>
+  <div class="result-availability {{ts.availability | lowercase}}"><i class="fa"></i> {{ts.availability}}</div>
+  <div class="result-description">{{ts.description}}</div>
+  <div class="result-notes"></div>
+</div> 

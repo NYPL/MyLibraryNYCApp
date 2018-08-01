@@ -1,0 +1,17 @@
+<nav class="navigation" role="navigation">
+  <div class="container">
+    <%= link_to "<i class='fa fa-book'></i> Learn More".html_safe, 'http://mylibrarynyc.org', :class=>"link-learn-more" %>
+    <% if user_signed_in? %>
+    <%= link_to "<span>Dashboard</span>".html_safe, app_url, :class=>"link-home" %>
+    <% else %>
+    <%= link_to "<span>Home</span>".html_safe, root_url, :class=>"link-home" %>
+    <% end %>
+    <%= link_to "<i class='fa fa-question'></i> Help".html_safe, help_url %>
+    <% if user_signed_in? %>
+    <%= link_to "<i class='fa fa-user'></i> Account".html_safe, account_url %>
+    <% else %>
+    <%= link_to "<i class='fa fa-user'></i> Sign In".html_safe, new_user_session_path %>
+    <% end %>
+  </div>
+</nav>
+

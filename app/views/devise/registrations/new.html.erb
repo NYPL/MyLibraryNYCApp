@@ -1,0 +1,58 @@
+<h1>Sign Up</h1>
+
+<%= javascript_include_tag('sign_up_async_request.js') %>
+
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+
+  <%= devise_error_messages! %>
+  <div class="field-group">
+    <%= f.label :email, "Your DOE email address" %>
+    <%= f.email_field :email %>
+    <div id='check_email_div'>
+      <span class ='spinner'></span>
+      <span id='check_email_span'>
+        Validate e-mail.
+      </span>
+    </div>
+    <span>
+      Email address must end with @schools.nyc.gov
+    </span>
+  </div>
+  <div class="field-group">
+    <%= f.label :alt_email, "Alternate E-mail Address (optional)" %>
+    <%= f.email_field :alt_email %> 
+  </div>
+  <div class="field-group">
+    <%= f.label :first_name, "First name" %>
+    <%= f.text_field :first_name, :autofocus => true %>
+  </div>
+  <div class="field-group">
+    <%= f.label :last_name, "Last name" %>
+    <%= f.text_field :last_name %>
+  </div>
+
+  <div class="field-group">
+    <%= f.label 'Your school:' %>
+    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }  %>
+  </div>
+
+  <div class="field-group">
+    <%= f.label :pin, "PIN" %>
+    <%= f.text_field :pin %>
+    <span>
+    Your PIN serves as the password for your account. Make sure it is a number you will remember.    
+    </span>
+    <br>
+    <span>
+      Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363).
+    </span>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign Up", :class=> "button", :id =>'sign_up_button' %>
+  </div>
+<% end %>
+
+<%=
+  # render "devise/shared/links"
+%>

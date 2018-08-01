@@ -1,0 +1,418 @@
+@import "vendor/css3-mixins";
+@import "mixins";
+@import "variables";
+@import "keyframes";
+
+/* Globals */
+body { 
+  padding: $navHeight 0 0 0;
+  color: $grayDarker;
+  font-size: 1em;
+  line-height: 1.4;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-transform: uppercase;
+  margin: 0.5em 0;
+  a {
+    text-decoration: none;
+    color: $red;
+    &:hover {
+      color: lighten($red,5%);
+    }
+  }
+}
+p {
+  line-height: 1.8;
+}
+a {
+  color: $blue;
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    color: lighten($blue,10%);
+  }
+}
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+hr {
+  border: none;
+  border-bottom: 1px dashed $grayLighter;
+  margin: $basePadding 0;
+}
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+pre {
+  font-family: sans-serif;
+}
+.table {
+  width: 100%;
+  // border: 1px solid $grayLighter;
+  th, td {
+    padding: $componentPadding*2;
+  }
+  th {
+    text-align: left;
+    // border-bottom: 1px solid $grayLighter;
+    background: $grayLightest;
+  }  
+  td {
+    // border-top: 1px dashed $grayLighter;
+  }
+  tr:first-child td {
+    border-top: none;
+  }
+}
+.nowrap {
+  white-space: nowrap;
+  @media (max-width: $reallySmallBreakpoint) {
+    white-space: normal;
+  }
+}
+
+
+#home-reservations {
+  .status {
+    text-transform: uppercase;
+  }
+
+  @media (max-width: $containerMaxWidth) {
+    thead {
+      display: none;
+    }
+    td {
+      float: left;
+      clear: left;
+      padding: 0;
+      margin: 0;
+    }
+    .date {
+      font-size: 0.8em;
+    }
+    .title {
+      font-size: 1.2em;
+    }
+    .status {
+      margin-bottom: 1em;
+      padding: 1px 5px 0;
+      background: $grayLight;
+      color: $white;
+      font-size: 0.8em;
+      margin-top: 5px;
+    }
+  }
+}
+
+/* Components */
+.button {
+  width: auto;
+  display: block;
+  margin: 0 auto;
+  padding: $componentPadding*2;
+  font-size: 1em;
+  font-weight: normal;
+  // line-height: 2;
+  text-align: center;
+  // white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background: $red;
+  color: $white;
+  border: none;
+  border-radius: $componentRadius;  
+  text-decoration: none;
+  text-transform: uppercase;
+  &:hover {
+    background: lighten($red,5%);
+    color: $white;
+  }
+}
+.button.secondary {
+  background: $blue;
+  &:hover {
+    background: lighten($blue,5%);
+  }
+}
+.button.queue {
+  background: $orange;
+  &:hover {
+    background: lighten($orange,5%);
+  }
+}
+.button.small {
+  padding: $componentPadding/2 $componentPadding;
+  font-size: 1.2em;
+  line-height: 1.8;
+}
+.button.xsmall {
+  padding: $componentPadding/2 $componentPadding;
+  font-size: 1em;
+  line-height: 1.4;
+}
+.button.disabled {
+  @include opacity(0.5);
+}
+.hl {
+  color: $red;
+}
+.alert {
+  background: $highlight;
+  margin: $basePadding/2 0 $basePadding;
+  text-align: center;
+  padding: $basePadding*2 0;
+  line-height: 20px;
+  margin-bottom: 0;
+  @include clearfix();
+  &.alert-fixed {
+    position: fixed;
+    margin: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  &.main-alert {
+    margin-top: 0px;
+  }
+  &.fade-in-out {
+    padding: 0;
+    overflow: hidden;
+    max-height: 0;
+    @include animation(fade-in-out-alert 5s);
+    @include transition(max-height, 0.5s);
+  }
+}
+#error_explanation {
+  background: $highlight;
+  padding: $componentPadding;
+  margin-bottom: $basePadding;
+  h2 {
+    font-size: 1em;
+  }
+}
+.help-block {
+  &.on {
+    margin: $componentPadding 0;  
+    background: $highlight;
+    padding: $componentPadding;
+    border: 1px solid $grayLighter;
+  }
+}
+
+.collapsible {
+  max-height: 0;
+  overflow: hidden;
+  @include transition(all, 0.3s);
+  &.on {
+    max-height: 3000px;
+  }
+}
+
+/* Forms */
+form,
+.form {
+  max-width: 600px;
+}
+.field-group {
+  margin-bottom: $basePadding;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="submit"],
+textarea {
+  width: 100%;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  margin: $componentPadding 0;
+  padding: $componentPadding 0;
+  font-size: 1em;
+  color: $gray;
+  border: 1px solid $grayLighter;
+  outline: none;
+  background: $grayLightest;
+  text-indent: $componentPadding;
+  @include transition(background, 0.2s);
+  &:active, &:focus {
+    border: 1px solid $grayLight;
+    background: $white;
+  }
+}
+label {
+  display: block;
+  a i {
+    font-size: 1.2em;
+  }
+}
+select {
+  width: 100%;
+  min-width: 100px;
+}
+.date-group {
+  select {
+    @media (max-width: $containerMaxWidth) {
+      max-width: 280px;
+    }
+  }
+}
+input.picker.hide {
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+#ui-datepicker-div {
+  background: $white;
+  padding: 10px;
+}
+.ui-datepicker-trigger {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+input.fakespan {
+  background-color: transparent;
+  border: 1px solid transparent;
+  display: inline-block;
+  width: auto;
+}
+
+/* Grid */
+.container {
+  max-width: $containerMaxWidth;
+  margin: 0 auto;
+  @media (max-width: $containerMaxWidth) {
+    width: auto;
+    margin: 0 $basePadding;
+  }
+}
+.row {
+  @include clearfix();
+  margin-left: -$basePadding/2;
+  margin-right: -$basePadding/2;
+}
+.column {
+  float: left;
+  padding: 0 $basePadding/2;
+}
+@media (max-width: $containerMaxWidth) {
+  .row {
+    margin: 0;
+  }
+  .column {
+    float: none;
+    padding: 0;
+  }
+}
+
+/* Navigation */
+.navigation {
+  width: 100%;
+  height: $navHeight;
+  overflow: hidden;
+  line-height: $navHeight - 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: lighten($red,5%);
+  z-index: 100;
+  // border-bottom: 1px solid darken($red,10%); 
+  .container {
+    white-space: nowrap;
+    @include clearfix();
+    @media (max-width: $containerMaxWidth) {
+      margin: 0;
+    }
+  }
+  a {
+    color: $white;
+    display: block;
+    float: right;
+    width: 60px;    
+    height: $navHeight - 10;
+    line-height: 10px;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    background: $red;
+    margin: 5px 5px 5px 0;
+    font-size: 12px;
+    @include border-radius(5px);
+    &:hover {
+      background: $red;
+    }
+    i {
+      display: block;
+      line-height: 20px;
+    }
+    &.link-home {
+      float: left;
+      margin-left: 5px;
+      width: 130px;
+      background: url(/assets/mylibrarynyc-logo-white-mini.png) center no-repeat;
+      background-size: contain;
+      background-color: transparent;
+
+      span {
+        display: none;
+      }
+    }
+    &.link-learn-more {
+      width: 75px;
+    }
+    &.active {
+      color: $red;
+      background: $white; //darken($red,5%);
+    }
+    @media (max-width: $reallySmallBreakpoint) {
+      font-size: 0.8em;
+    }
+  }
+}
+
+#breadcrumb {
+  margin-bottom: $componentPadding;
+  i {
+    margin: 0 $componentPadding;
+  }
+}
+
+/* Main */
+#main {
+  
+  padding-top: $basePadding;
+
+  h1, h2, h3 {
+    &:first-child {
+      margin-top: 0;
+    }    
+  }  
+}
+.animate-in-container {
+  @include animation(fade-in 0.5s);
+}
+
+/* Footer */
+footer {
+  background: $offWhite;
+  border-top: 1px dashed $grayLighter;
+  margin: $basePadding 0 0;
+  padding: $basePadding 0;
+  text-align: center;
+  a {
+    display: inline-block;
+    margin: 0 $componentPadding;
+  }
+}
+
