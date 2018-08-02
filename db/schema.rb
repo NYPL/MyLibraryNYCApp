@@ -116,9 +116,12 @@ ActiveRecord::Schema.define(:version => 20180802145655) do
     t.integer "campus_id"
     t.string  "code",        :limit => 8
     t.boolean "active",                   :default => false
-    t.string  "street"
+    t.string  "address_line_1"
+    t.string  "address_line_2"
     t.string  "state"
     t.string  "postal_code"
+    t.string  "phone_numer"
+    t.string  "borough"
   end
 
   add_index "schools", ["active"], :name => "index_schools_on_active"
