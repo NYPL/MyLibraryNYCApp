@@ -8,9 +8,10 @@ class RegistrationsController < Devise::RegistrationsController
 	# In addition, overriding the method allows us to validate the incoming data from the form, send the data
 	# to the microservice, and create a record on MyLibraryNYC depending on if the microservice is working properly.
 	def create
+		Rails.logger.debug("creating new user")
 		build_resource(sign_up_params)
 		if resource.valid?
-			begin
+  		begin
 				resource.send_user_to_ils
 				resource.save
 				yield resource if block_given?
