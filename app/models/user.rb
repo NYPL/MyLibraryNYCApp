@@ -17,16 +17,16 @@ class User < ActiveRecord::Base
 
   validates :school, :first_name, :last_name, :presence => true
   validates :email, :uniqueness => true
-  # Validation only occurs when a user record is being 
-  # created on sign up. Does not occur when updating 
-  # the record. 
+  # Validation only occurs when a user record is being
+  # created on sign up. Does not occur when updating
+  # the record.
   validates_format_of :email, with: /\@schools.nyc\.gov/, message: ' should end in @schools.nyc.gov', :on => :create
   validates_format_of :first_name, :last_name, :with => /^[a-z]+$/i
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
-  # Validation only occurs when a user record is being 
-  # created on sign up. Does not occur when updating 
-  # the record. 
-  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." }, 
+  # Validation only occurs when a user record is being
+  # created on sign up. Does not occur when updating
+  # the record.
+  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
 
   has_many :holds
@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
     self.password_confirmation ||= User.default_password
   end
 
-  #Current ticket this sprint to fix functionaility 
+  #Current ticket this sprint to fix functionaility
   #after_create :do_after_create
 
   # We don't require passwords, so just create a generic one, yay!
@@ -88,27 +88,24 @@ class User < ActiveRecord::Base
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
-  
-  
+
+
   def send_user_to_ils
     Rails.logger.debug("send_user_to_ils: start")
     assign_barcode
     send_request_to_patron_creator_service
   end
-  
+
 
 
   def assign_barcode
-    Rails.logger.debug("make_barcode: start\n\n\n")
+    Rails.logger.debug("assign_barcode: start")
     last_user = User.where('barcode < 27777099999999').order(:barcode).last
     self.barcode = last_user.barcode + 1
-
-    # self.barcode = Time.zone.now.to_i.to_s
-    #binding.pry
-    puts self.barcode
+    Rails.logger.debug("assign_barcode: generated barcode #{self.barcode}")
   end
 
-  
+
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -118,11 +115,11 @@ class User < ActiveRecord::Base
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
+      'barcodes' => [self.barcode.to_s],
       'patronType' => 151,
       'patronCodes' => {
         'pcode4' => -1
-      },
-      'barcodes' => [self.barcode]
+      }
     }
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
@@ -136,7 +133,7 @@ class User < ActiveRecord::Base
     when 201
       Rails.logger.debug(
         {
-          'status' => "The account with e-mail #{email} was 
+          'status' => "The account with e-mail #{email} was
            successfully created from the micro-service!"
         }
       )
@@ -177,7 +174,7 @@ class User < ActiveRecord::Base
       ).to_s
     else
       Rails.logger.debug "#{response}"
-    end 
+    end
     return response
   end
 
