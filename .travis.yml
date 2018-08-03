@@ -8,6 +8,7 @@ before_install:
 script: 
 - bundle install
 - bundle update rake
+- rake db:migrate
 - ruby -I test test/unit/user_test.rb
 deploy:
 - provider: elasticbeanstalk
