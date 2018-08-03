@@ -8,10 +8,11 @@ class RegistrationsController < Devise::RegistrationsController
 	# In addition, overriding the method allows us to validate the incoming data from the form, send the data
 	# to the microservice, and create a record on MyLibraryNYC depending on if the microservice is working properly.
 	def create
-		build_resource(sign_up_params) 
+		Rails.logger.debug("creating new user")
+		build_resource(sign_up_params)
 		if resource.valid?
 			begin
-				resource.send_request_to_patron_creator_service	
+				resource.send_request_to_patron_creator_service
 				resource.save
 				yield resource if block_given?
 				if resource.persisted?
@@ -31,12 +32,12 @@ class RegistrationsController < Devise::RegistrationsController
 				end
 			rescue Net::ReadTimeout
 				set_flash_message :notice, :time_out if is_flashing_format?
-				render :template => '/devise/registrations/new'  
-			end 
+				render :template => '/devise/registrations/new'
+			end
 		else
-			render :template => '/devise/registrations/new'  
-		end 
-	rescue Exceptions::InvalidResponse 
+			render :template => '/devise/registrations/new'
+		end
+	rescue Exceptions::InvalidResponse
 		set_flash_message :notice, :invalid_response if is_flashing_format?
 		render :template => '/devise/registrations/new'
 	end
@@ -49,5 +50,5 @@ class RegistrationsController < Devise::RegistrationsController
     end
     redirect_url
   end
-  
+
 end
