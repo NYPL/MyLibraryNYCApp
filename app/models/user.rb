@@ -88,7 +88,32 @@ class User < ActiveRecord::Base
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
+  
+  
+  def send_user_to_ils
+    Rails.logger.debug("send_user_to_ils: start")
+    assign_barcode
+    send_request_to_patron_creator_service
+  end
+  
 
+
+  def assign_barcode
+    Rails.logger.debug("make_barcode: start\n\n\n")
+    last_user = User.where('barcode < 27777099999999').order(:barcode).last
+    self.barcode = last_user.barcode + 1
+
+    # self.barcode = Time.zone.now.to_i.to_s
+    #binding.pry
+    puts self.barcode
+  end
+
+  
+  # Sends a request to the patron creator microservice.
+  # Passes patron-specific information to the microservice s.a. name, email, and type.
+  # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
+  # a success/failure response.
+  # Accepts a response from the microservice, and returns.
   def send_request_to_patron_creator_service
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
@@ -97,7 +122,7 @@ class User < ActiveRecord::Base
       'patronCodes' => {
         'pcode4' => -1
       },
-      'barcodes' => ["27777"]
+      'barcodes' => [self.barcode]
     }
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
