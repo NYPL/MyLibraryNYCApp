@@ -1,6 +1,8 @@
 language: generic
 rvm:
 - 2.2.10 
+before_install:
+- bundle install
 script: 
 - ruby -I test test/unit/user_test.rb
 deploy:
