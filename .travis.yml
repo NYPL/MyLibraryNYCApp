@@ -1,4 +1,6 @@
 language: generic
+script: 
+- ruby -I test test/unit/user_test.rb
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
@@ -12,7 +14,6 @@ deploy:
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: unit-tests-with-travis
-  script: ruby -I test test/unit/user_test.rb
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
