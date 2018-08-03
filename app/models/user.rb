@@ -87,27 +87,23 @@ class User < ActiveRecord::Base
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
-  
-  
+
+
   def send_user_to_ils
     Rails.logger.debug("send_user_to_ils: start")
     assign_barcode
     send_request_to_patron_creator_service
   end
-  
+
 
 
   def assign_barcode
-    Rails.logger.debug("make_barcode: start\n\n\n")
+    Rails.logger.debug("assign_barcode: start")
     last_user = User.where('barcode < 27777099999999').order(:barcode).last
     self.barcode = last_user.barcode + 1
-
-    # self.barcode = Time.zone.now.to_i.to_s
-    #binding.pry
-    puts self.barcode
+    Rails.logger.debug("assign_barcode: generated barcode #{self.barcode}")
   end
 
-<<<<<<< HEAD
 
   def assign_barcode
     Rails.logger.debug("assign_barcode: start")
@@ -118,9 +114,6 @@ class User < ActiveRecord::Base
   end
 
 
-=======
-  
->>>>>>> Added barcode-making function.  Need to add unit test.
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -135,12 +128,7 @@ class User < ActiveRecord::Base
       'patronType' => 151,
       'patronCodes' => {
         'pcode4' => -1
-<<<<<<< HEAD
       }
-=======
-      },
-      'barcodes' => [self.barcode]
->>>>>>> Added barcode-making function.  Need to add unit test.
     }
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
