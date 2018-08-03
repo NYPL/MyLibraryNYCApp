@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(:version => 20180802145655) do
     t.string   "primary_language"
     t.string   "call_number"
     t.text     "description"
-    t.string   "physical_description"
+    t.text     "physical_description"
     t.text     "notes"
     t.text     "statement_of_responsibility"
     t.string   "cover_uri"
@@ -181,6 +181,7 @@ ActiveRecord::Schema.define(:version => 20180802145655) do
     t.integer  "total_copies"
     t.string   "primary_subject"
     t.string   "bnumber",                     :limit => 20
+    t.string   "test_column",                 :limit => 20
     t.string   "set_type",                    :limit => 20
     t.text     "contents"
   end
