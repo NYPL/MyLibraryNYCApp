@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(:version => 20180802145655) do
     t.string   "primary_language"
     t.string   "call_number"
     t.text     "description"
-    t.text     "physical_description"
+    t.string   "physical_description"
     t.text     "notes"
     t.text     "statement_of_responsibility"
     t.string   "cover_uri"
@@ -112,16 +112,18 @@ ActiveRecord::Schema.define(:version => 20180802145655) do
   add_index "holds", ["access_key"], :name => "index_holds_access_key", :unique => true
 
   create_table "schools", :force => true do |t|
-    t.string  "name"
-    t.integer "campus_id"
-    t.string  "code",        :limit => 8
-    t.boolean "active",                   :default => false
-    t.string  "address_line_1"
-    t.string  "address_line_2"
-    t.string  "state"
-    t.string  "postal_code"
-    t.string  "phone_numer"
-    t.string  "borough"
+    t.string   "name"
+    t.integer  "campus_id"
+    t.string   "code",           :limit => 8
+    t.boolean  "active",                      :default => false
+    t.string   "address_line_1"
+    t.string   "address_line_2"
+    t.string   "state"
+    t.string   "postal_code"
+    t.string   "phone_number"
+    t.string   "borough"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "schools", ["active"], :name => "index_schools_on_active"
@@ -165,7 +167,7 @@ ActiveRecord::Schema.define(:version => 20180802145655) do
     t.string   "availability"
     t.string   "isbn"
     t.string   "language"
-    t.string   "physical_description"
+    t.text     "physical_description"
     t.string   "primary_language"
     t.string   "publisher"
     t.string   "series"
