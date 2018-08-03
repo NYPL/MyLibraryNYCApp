@@ -26,7 +26,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
 
   # Test that generated barcode is a 14-digit string, starting with '27777'.
   test "user method generate_barcode returns valid string" do
-    assert(/2777\d{10}/ === user.generate_barcode)
+    assert(/\A2777\d{10}\z/ === user.generate_barcode)
   end
 
 end
