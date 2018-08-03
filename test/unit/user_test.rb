@@ -11,25 +11,13 @@ class UserTest < ActiveSupport::TestCase
   school_id = '1076'
   password = 'password123'
 
-  # Create user objects in the database
-  user = User.create!(
-    first_name: first_name,
-    last_name: last_name,
-    email: email,
-    school_id: school_id,
-    password: password,
-    pin: pin,
-    password_confirmation: password
-  )
+  user = crank!(:user)
 
-  test 'user model can successfully be created' do
-    assert_instance_of User, user
-    assert(!user.id.nil?, 'New user model expected to be created')
-  end
+
 
   [generate_email].each do |new_email|
     test 'user model cannot be created without first name' do
-      user = User.create(
+      user_one = User.create(
         last_name: last_name,
         email: new_email,
         school_id: school_id,
@@ -37,13 +25,13 @@ class UserTest < ActiveSupport::TestCase
         pin: pin,
         password_confirmation: password
       )
-      assert user.id.nil?
+      assert_equal(user_one.errors.messages[:first_name],["can't be blank", "is invalid"])
     end
   end
 
   [generate_email].each do |new_email|
     test 'user model cannot be created without last name' do
-      user = User.create(
+      user_two = User.create(
         first_name: first_name,
         email: new_email,
         school_id: school_id,
@@ -51,50 +39,36 @@ class UserTest < ActiveSupport::TestCase
         pin: pin,
         password_confirmation: password
       )
-      assert user.id.nil?
+      assert_equal(user_two.errors.messages[:last_name],["can't be blank", "is invalid"])
     end
   end
 
   [generate_email].each do |new_email|
     test 'user model cannot be created without pin' do
-      user = User.create(
-        first_name: first_name,
-        last_name: last_name,
-        email: new_email,
-        school_id: school_id,
-        password: password,
-        password_confirmation: password
-      )
-      assert user.id.nil?
-    end
-  end
-
-  test 'cannot create a user object with an e-mail address already saved
-    in the database' do
-    user_two = User.create(
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      school_id: school_id,
-      password: password,
-      pin: pin,
-      password_confirmation: password
-    )
-    assert user_two.id.nil?
-  end
-
-  [generate_email_without_valid_domain].each do |new_email|
-    test 'should not save user without schools.nyc.gov domain in email' do
       user_three = User.create(
         first_name: first_name,
         last_name: last_name,
         email: new_email,
         school_id: school_id,
         password: password,
+        password_confirmation: password
+      )
+      assert_equal(user_three.errors.messages[:pin],["can't be blank", "requires numbers only.", "must be 4 digits."])
+    end
+  end
+
+  [generate_email_without_valid_domain].each do |new_email|
+    test 'should not save user without schools.nyc.gov domain in email' do
+      user_four = User.create(
+        first_name: first_name,
+        last_name: last_name,
+        email: new_email,
+        school_id: school_id,
+        password: password,
         pin: pin,
         password_confirmation: password
       )
-      assert user_three.id.nil?
+      assert_equal(user_four.errors[:email],[" should end in @schools.nyc.gov"])
     end
   end
 
