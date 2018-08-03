@@ -11,7 +11,8 @@ deploy:
   bucket_path: my-library-nyc-app-development
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: development
+    branch: unit-tests-with-travis
+  script: ruby -I test test/unit/user_test.rb
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
