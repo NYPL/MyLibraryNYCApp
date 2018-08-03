@@ -10,11 +10,15 @@ gem 'test-unit'
 gem 'pg'
 
 gem 'webmock'
+gem 'client_side_validations'
+
 group :development do
 	gem 'pry-rails'
 end
 
-gem 'client_side_validations'
+group :local do
+	gem 'pry-rails'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
