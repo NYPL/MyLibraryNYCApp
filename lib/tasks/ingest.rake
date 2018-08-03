@@ -2,16 +2,16 @@
 require 'net/http'
 require 'uri'
 
-require 'csv'    
+require 'csv'
 
-namespace :ingest do 
+namespace :ingest do
 
   # Fetch latest data from biblio
   desc "Import new data"
   task :ingest, [:page, :limit, :just_id]  => :environment do |t, args|
     args.with_defaults(:page=> 1, :limit => 25, :just_id => nil)
 
-    page = args.page.to_i 
+    page = args.page.to_i
     page = 1 if page == 0
 
     limit = args.limit.to_i
@@ -27,7 +27,7 @@ namespace :ingest do
   desc "Update availability numbers for all sets"
   task :update_availability, [:start, :limit, :id]  => :environment do |t, args|
     args.with_defaults(:start => 0, :limit => nil, :id => nil)
-    start = args.start.to_i 
+    start = args.start.to_i
     limit = args.limit.to_i unless args.limit.nil?
     id = args.id
 
@@ -63,7 +63,7 @@ namespace :ingest do
       if teacherSet.nil?
         puts "    Teacher Set not found: #{call_number}"
         teacher_sets_not_found << "#{call_number}"
-      else 
+      else
         puts "Deleting Teacher Set: #{call_number}"
         teacherSet.destroy
       end
@@ -76,7 +76,7 @@ namespace :ingest do
   # Updated for December 1st, 2014 release.
   desc "Import all teacher data from local csvs into users table"
   task :teachers, [] => :environment do |t, args|
-    require 'csv'    
+    require 'csv'
 
     path = 'db/data_update_dec2014/Amie edits data phone app - Main Data.csv'
     create_users = []
@@ -200,7 +200,7 @@ namespace :ingest do
       user.school = u[:school]
       puts " user has custom school: #{user.school}" if user.school != u[:school]
       user.update_attribute :alt_email, alt_email unless alt_email.nil? or !user.alt_email.empty?
-      
+
       user.save
       puts "save user: #{email} exists ? #{user.persisted?}" if !user.persisted?
 
@@ -246,11 +246,11 @@ namespace :ingest do
     puts "Users with no emails, #{no_emails.size}: #{no_emails}"
   end
 
-  # This use to be the :teachers task but it has been updated due to new 
+  # This use to be the :teachers task but it has been updated due to new
   # data set structure.
   desc "Import all teacher data from local csvs into users table"
   task :deprecated_teachers, [] => :environment do |t, args|
-    require 'csv'    
+    require 'csv'
 
     dumps_base = 'db/final-schools-dump'
 
@@ -289,7 +289,7 @@ namespace :ingest do
 
     add_emails = create_users.map { |u| u[:email].downcase }
     User.where("id IN (SELECT user_id FROM holds) OR updated_at > '2014-02-7'").each do |u|
-      if ! add_emails.include? u.email.downcase 
+      if ! add_emails.include? u.email.downcase
         puts " Keeping #{u.email} but why"
       end
     end
@@ -344,7 +344,7 @@ namespace :ingest do
       user.school = u[:school]
       puts " user has custom school: #{user.school}" if user.school != u[:school]
       # user.update_attribute :alt_email, alt_email unless !user.alt_email.empty? or alt_email.nil?
-      
+
       # user.save
       puts "save user: #{email} exists ? #{user.persisted?}" if !user.persisted?
 
@@ -375,7 +375,7 @@ namespace :ingest do
           puts "  referenced: #{name}"
           school.name = name
         end
-        
+
         school.active = true
         school.save
       else
@@ -386,6 +386,44 @@ namespace :ingest do
         new_school.active = true
         new_school.save
       end
+    end
+  end
+
+  desc "Import all NYC schools"
+  # task import_all_nyc_schools: :environment do
+  task import_all_nyc_schools: :environment do
+    csv_text = File.read('data/2016_-_2017_School_Locations.csv')
+    rows = CSV.parse(csv_text, headers: true)
+    rows.each do |row|
+      row_hash = row.to_hash
+      school = School.where(code: row_hash['ATS SYSTEM CODE'].strip).first_or_initialize
+      school.name = school.name || row_hash['LOCATION_NAME'].strip
+      school.address_line_1 = school.address_line_1 || row_hash['PRIMARY_ADDRESS_LINE_1'].strip
+      school.state = school.state || row_hash['STATE_CODE'].strip
+      if row_hash['Location 1'].present?
+        school.address_line_2 = school.address_line_2 || row_hash['Location 1'].strip
+        school.borough = school.borough || borough(row_hash['Location 1'].strip)
+        school.postal_code = school.postal_code || row_hash['Location 1'].strip[-5..-1]
+      end
+      school.phone_number = school.phone_number || row_hash['PRINCIPAL_PHONE_NUMBER'].strip
+      school.created_at = Time.zone.now if school.id.nil?
+      school.updated_at = Time.zone.now
+      school.save
+      puts school.name
+    end
+  end
+
+  def borough(borough_string)
+    if borough_string.include?('Manhattan')
+      'Manhattan'
+    elsif borough_string.include?('Queens')
+      'Queens'
+    elsif borough_string.include?('Brooklyn')
+      'Brooklyn'
+    elsif borough_string.include?('Statten')
+      'Statten Island'
+    elsif borough_string.include?('Bronx')
+      'Bronx'
     end
   end
 
@@ -422,7 +460,7 @@ namespace :ingest do
           puts "  existing:   #{school.name}"
           puts "  referenced: #{name}"
         end
-        
+
         school.active = true
         school.save
       end
@@ -436,7 +474,7 @@ namespace :ingest do
     new_schools = []
     CSV.foreach(path) do |line|
       (name, blank, code) = line
-      
+
       puts "#{code.downcase}"
       new_schools << "#{code.downcase}"
 
@@ -486,11 +524,11 @@ namespace :ingest do
   end
 
 
- 
+
 =begin
   desc "Import all teacher data from local csvs into users table"
   task :teachers, [] => :environment do |t, args|
-    require 'csv'    
+    require 'csv'
 
     dumps_base = 'db/teacher_dumps'
 
@@ -515,9 +553,9 @@ namespace :ingest do
         File.foreach(path) do |line|
           next if $. == 1
 
-          # This appears in one of the dumps: 
+          # This appears in one of the dumps:
           # "p55258827"|"151"|"EDWARDS, TESNA"|"27777016362867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
-          # .. So remove those confounding quotes from around the ; 
+          # .. So remove those confounding quotes from around the ;
           # (also, that's the same email addresss with different case... so not sure why it's there)
           line = line.gsub /";"/, ';'
           row = CSV.parse(line, {:col_sep => '|'}).first
@@ -607,7 +645,7 @@ namespace :ingest do
         puts "issues: #{issues.to_json}"
       end
     end
-    
+
   end
 =end
 

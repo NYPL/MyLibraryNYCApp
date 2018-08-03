@@ -23,6 +23,9 @@
 # Ignore .dump
 /mylibnyc.dump
 
+# Ignore imported CSVs
+/data
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
