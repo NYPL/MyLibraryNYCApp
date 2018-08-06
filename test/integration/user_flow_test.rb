@@ -16,7 +16,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       last_name: user.last_name,
       email: email,
       pin: user.pin,
-      school_id: user.school_id
+      school_id: school.id
     }
     puts response.body
     assert_response :redirect
