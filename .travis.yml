@@ -8,6 +8,7 @@ before_install:
 - rvm install 2.2.10
 script: 
 - bundle install
+- psql -c "CREATE DATABASE mln_test_db;" -U postgres
 - rake db:migrate
 - ruby -I test test/unit/user_test.rb
 - ruby -I test test/integration/user_flow_test.rb
