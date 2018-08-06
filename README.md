@@ -11,7 +11,7 @@ Data
 
 To load data:
 
-1. Create postgres db and create `config/database.yml` with your creds. Don't add this file to git. 
+1. Create postgres db and create `config/database.yml` with your creds. Don't add this file to git.
 
 2. Load schema and data:
 
@@ -35,10 +35,10 @@ This server uses the 'development' branch from this repository, to share current
 
 Setting up the development server (and how to set up other servers, e.g. a staging server):
 
-1. Create app in AWS Elastic Beanstalk. To do so, run "eb init" in the root  directory of your repo. This will prompt a list of questions you need to answer.(if "eb" command is not installed, run "pip install awsebcli") 
+1. Create app in AWS Elastic Beanstalk. To do so, run "eb init" in the root  directory of your repo. This will prompt a list of questions you need to answer.(if "eb" command is not installed, run "pip install awsebcli")
 
 
-2. Next run the following command. Please add the appropriate substituions where you see [key]. The purpose of this command is to the deploy the environment on Elastic Beanstalk. You will be prompted a list of questions you need to answer. 
+2. Next run the following command. Please add the appropriate substituions where you see [key]. The purpose of this command is to the deploy the environment on Elastic Beanstalk. You will be prompted a list of questions you need to answer.
 
 ```
 eb create [environment_name] --single --instance_profile cloudwatchable-beanstalk --instance_type t2.small --cname [cname_name] --vpc.ec2subnets subnet-9ef736b3 --vpc.id vpc-dbc4f7bc --profile nypl-sandbox --keyname dgdvteam
@@ -81,8 +81,13 @@ In order to do so, follow the current steps.
 4. Scroll down to Environment properties, and please set your variables accordingly. 
 
 
-Testing 
-======================== 
+Server
+========================
+In many rails projects when you run the server with `rails s` Rails sets RAILS_ENV to "development".  If you do that with this app, you will connect to the development database on AWS (if you have permission to decrypt the value).  Instead, run `RAILS_ENV=local rails s` to start the server and `RAILS_ENV=local rails c` to run the console.
+
+
+Testing
+========================
 
 Currently in order to run the unit tests and integration tests, please run the following command while in the root directory.
 
