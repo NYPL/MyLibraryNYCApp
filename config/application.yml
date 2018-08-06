@@ -41,7 +41,7 @@ when 'qa'
 
 when 'test'
 
-  ENV['DATABASE_URL'] = "postgresql://localhost/postgres"
+  ENV['DATABASE_URL'] = "postgresql://localhost/mln_test_db"
   ENV['RACK_ENV'] = 'test'
   ENV['RAILS_ENV'] = 'test'
   ENV['CLIENT_ID'] = 'test'

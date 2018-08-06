@@ -18,7 +18,6 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       pin: user.pin,
       school_id: school.id
     }
-    puts response.body
     assert_response :redirect
     follow_redirect!
     assert 'div', 'Welcome! You have signed up successfully'
