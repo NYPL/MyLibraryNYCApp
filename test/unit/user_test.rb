@@ -13,8 +13,6 @@ class UserTest < ActiveSupport::TestCase
 
   user = crank!(:user)
 
-
-
   [generate_email].each do |new_email|
     test 'user model cannot be created without first name' do
       user_one = User.create(
