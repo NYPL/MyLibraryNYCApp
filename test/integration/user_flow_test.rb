@@ -1,23 +1,24 @@
 require 'test_helper'
 
 class UserFlowTest < ActionDispatch::IntegrationTest
-  first_name = Faker::Name.first_name
-  last_name = Faker::Name.last_name
+
   email = generate_email
-  pin = [1, 1, 1, 1].map! { (0..9).to_a.sample }.join
-  school_id = '1076'
+
+  user = crank!(:user)
 
   test 'create new user record and send request to microservice' do
     get '/users/signup'
     assert_select 'h1', 'Sign Up'
     post '/users',
+    # crank!(:user)
     user: {
-      first_name: first_name,
-      last_name: last_name,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: email,
-      pin: pin,
-      school_id: school_id
+      pin: user.pin,
+      school_id: user.school_id
     }
+    puts response.body
     assert_response :redirect
     follow_redirect!
     assert 'div', 'Welcome! You have signed up successfully'
