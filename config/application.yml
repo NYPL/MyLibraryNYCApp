@@ -46,7 +46,8 @@ when 'test'
   ENV['RAILS_ENV'] = 'test'
   ENV['CLIENT_ID'] = 'test'
   ENV['CLIENT_SECRET'] = 'test'
-  ENV['SECRET_KEY_BASE'] = 'test'
+  # Minimum length of this value is 30. 
+  ENV['SECRET_KEY_BASE'] = 'abcdefghijklmnopqrstuvwxyzabcd'
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
