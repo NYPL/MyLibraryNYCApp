@@ -6,7 +6,7 @@ class Cranky::Factory
       u.last_name  =  options[:first_name] || Faker::Name.last_name         
       u.email  = 'navrajnat@schools.nyc.gov'              
       u.pin =  options[:pin] || [1, 1, 1, 1].map! { (0..9).to_a.sample }.join
-      u.school_id = 1076
+      u.school_id = 9999
       u.password = 'password123'
       u.password_confirmation = 'password123'
     end
