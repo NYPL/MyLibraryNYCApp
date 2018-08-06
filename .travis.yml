@@ -7,7 +7,6 @@ before_install:
 - rvm install 2.2.10
 script: 
 - bundle install
-- bundle update rake
 - rake db:migrate
 - ruby -I test test/unit/user_test.rb
 deploy:
