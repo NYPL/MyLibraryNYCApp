@@ -5,7 +5,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
   email = generate_email
 
   school = crank(:school)
-  user = crank(:user)
+  user = crank!(:user)
 
   test 'create new user record and send request to microservice' do
     get '/users/signup'
