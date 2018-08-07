@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
   def assign_barcode
     Rails.logger.debug("assign_barcode: start")
     last_user = User.where('barcode < 27777099999999').order(:barcode).last
-    self.barcode = last_user.barcode + 1
+    self.update_attribute(:barcode,last_user.barcode + 1)
     Rails.logger.debug("assign_barcode: generated barcode #{self.barcode}")
   end
 
