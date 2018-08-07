@@ -11,8 +11,8 @@ class RegistrationsController < Devise::RegistrationsController
 		Rails.logger.debug("creating new user")
 		build_resource(sign_up_params)
 		if resource.valid?
-			begin
-				resource.send_request_to_patron_creator_service
+  		begin
+				resource.send_user_to_ils
 				resource.save
 				yield resource if block_given?
 				if resource.persisted?
