@@ -108,11 +108,20 @@ class User < ActiveRecord::Base
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
-      'barcodes' => [self.assign_barcode.to_s],
-      'patronType' => 151,
+      'patronType' => patron_type,
       'patronCodes' => {
         'pcode4' => -1
-      }
+      },
+      'barcodes' => [self.assign_barcode.to_s],
+      'addresses': [
+        {
+          'lines': [
+            "#{school.address_line_1}",
+            "#{school.address_line_2}"
+          ],
+          'type': 'a'
+        }
+      ],
     }
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
@@ -193,5 +202,9 @@ class User < ActiveRecord::Base
       )
       raise InvalidResponse, "Invalid status code of: #{response.code}"
     end
+  end
+
+  def patron_type
+    school.borough == 'QUEENS' ? 149 : 151
   end
 end
