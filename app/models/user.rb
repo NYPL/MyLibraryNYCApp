@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   # the record. 
   validates_format_of :email, with: /\@schools.nyc\.gov/, message: ' should end in @schools.nyc.gov', :on => :create
   validates_format_of :first_name, :last_name, :with => /^[a-z]+$/i
-  validates :alt_email, :uniqueness => true, :allow_blank => true, :allow_nil => true
+  validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   # Validation only occurs when a user record is being 
   # created on sign up. Does not occur when updating 
   # the record. 

@@ -10,7 +10,13 @@ gem 'test-unit'
 gem 'pg'
 
 gem 'webmock'
+gem 'client_side_validations'
+
 group :development do
+	gem 'pry-rails'
+end
+
+group :local do
 	gem 'pry-rails'
 end
 
