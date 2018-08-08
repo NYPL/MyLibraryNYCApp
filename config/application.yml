@@ -1,68 +1,58 @@
 # Add configuration values here, as shown below.
-#
-# pusher_app_id: "2954"
-# pusher_key: 7381a978f7dd7f9a1117
-# pusher_secret: abdc3b896a0ffb85d373
-# stripe_api_key: sk_test_2J0l093xOyW72XUYJHE4Dv2r
-# stripe_publishable_key: pk_test_ro9jV5SNwGb1yYlQfzG17LHK
-#
-# production:
-#   stripe_api_key: sk_live_EeHnL644i6zo4Iyq4v1KdV9H
-#   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
-
 
 <% require "aws_decrypt.rb"
-    case ENV['RAILS_ENV']
-    when 'local'
-      database_url = "postgresql://localhost/postgres"
-    when 'development'
-      database_url = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAASwwggEoBgkqhkiG9w0BBwagggEZMIIBFQIBADCCAQ4GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3apJFu88CTtQfpWdAgEQgIHg5FzviDrg2Qkl2HnO09j5KWORAq1CDtGaZtIATpvKoCHoxogGd4GyJ8M1/J/zHAtnapZiwe4AH22b3aUGQrQLDreu3t1kqp/4jVlkvz1Xa8+dCqeEeIsHgMXG1FTHrH3KZY27Fkg2mAHkJMlFI97oMoV8gj6O6UUfn/ZhNthrNkVSMZNZt2wFoZGXUC8s2rztJdnhQk1RusdDMp70+yoNwa470nOpXHNFoFHf1NVJ0Ih1HD8qSeViwWR7Q8sJSQCUYv9OPCGXkLNUWO1xNWY5d255dMrR/tSnEtugDNRXI1c=")
-    when 'qa'
-      database_url = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAANMwgdAGCSqGSIb3DQEHBqCBwjCBvwIBADCBuQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx6tEcBuoN27fOPXIECARCAgYvNwgZyieISwY5tDHwk/HEW+V2wvFvL4wygxOZr860yRtMOaZeUAW9IYjOLbPA5T5kk6R4NoZMTYsvEsql1W11f9ITfbyKlJhCniyOGlB7TXuf3Qx+YjFvzFXoiTgrmSXXX37pmwJ8ZWFtjYVBzw5T3UdotLXPI3CIX+oBe/o+Bnp4hCx5N9m59UCEf")
-    when 'test'
-      database_url = 'postgresql://localhost/mln_test'
-    end
+
+case ENV['RAILS_ENV']
+
+when 'local'
+
+ ENV['DATABASE_URL'] = "postgresql://localhost/postgres"
+ ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
+ ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
+ ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
+ ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
+
+when 'development'
+  
+  ENV['RACK_ENV'] = 'development'
+  ENV['RAILS_ENV'] = 'development'
+  ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAASwwggEoBgkqhkiG9w0BBwagggEZMIIBFQIBADCCAQ4GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3apJFu88CTtQfpWdAgEQgIHg5FzviDrg2Qkl2HnO09j5KWORAq1CDtGaZtIATpvKoCHoxogGd4GyJ8M1/J/zHAtnapZiwe4AH22b3aUGQrQLDreu3t1kqp/4jVlkvz1Xa8+dCqeEeIsHgMXG1FTHrH3KZY27Fkg2mAHkJMlFI97oMoV8gj6O6UUfn/ZhNthrNkVSMZNZt2wFoZGXUC8s2rztJdnhQk1RusdDMp70+yoNwa470nOpXHNFoFHf1NVJ0Ih1HD8qSeViwWR7Q8sJSQCUYv9OPCGXkLNUWO1xNWY5d255dMrR/tSnEtugDNRXI1c=")  
+  ENV['CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCL+6xESlcH6XPieZQIBEIAnue0eoIvwsVklKFk6Ss/15ozhEeOX57PLO7JzZ2C0VEftw0Wg6YWp")
+  ENV['CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz6OkwUOUwsV+igt9ICARCAQ0GQCQ1PahswCs4FO/oADmOgGh1ORhBstr88yYUp8eh2FHWTRsmrLRImou+9zqrdKLnN2qcMuY0RLqFplr/5YChbPgg=")
+  ENV['SENDGRID_USERNAME'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDD/C62QpqdcXGlEUxwIBEIAxVeOJrp9vOXRUAv0lh0jaAc7E+8eGFgnpZcOQbRJi7EtxQAJgmBYQHQ6tqEKKc4Hesg==")
+  ENV['SENDGRID_PASSWORD'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGY/97q+tGJGGG5iNwIBEIAx6+8g3UugGcZqK0oszFJ5l9QC7PVeLQ5aFOyKJKNnxUZKPMWgwGju5l6auy0KnheViQ==")
+  ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
+  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
+  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
+  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
+
+when 'qa'
+  
+  ENV['RACK_ENV'] = 'qa'
+  ENV['RAILS_ENV'] = 'qa'
+  ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAANMwgdAGCSqGSIb3DQEHBqCBwjCBvwIBADCBuQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx6tEcBuoN27fOPXIECARCAgYvNwgZyieISwY5tDHwk/HEW+V2wvFvL4wygxOZr860yRtMOaZeUAW9IYjOLbPA5T5kk6R4NoZMTYsvEsql1W11f9ITfbyKlJhCniyOGlB7TXuf3Qx+YjFvzFXoiTgrmSXXX37pmwJ8ZWFtjYVBzw5T3UdotLXPI3CIX+oBe/o+Bnp4hCx5N9m59UCEf")
+  ENV['CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKjWCFeFAdUNMdIDhQIBEIAn1FF0mYdxsNlM1WOEUyLGtjjpX42xgiSA1M8ui4kahfNsehZifUEj")
+  ENV['CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyT7AUGHHZGYCPxJ+UCARCAQ+dM+7Y22l3eOfrW4N+lkQ1ewHE6AFNi9nJTgrnAETk7Ovs+rX6NLSAUJLBKT+AIz6/r7/JxqJ1+1JD0zzHFhdZR0MU=")
+  ENV['SENDGRID_USERNAME'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDEA45HSC37NyEsF4CQIBEIAxk3c49w+4IWF9BvxCLx1qWKfUt8SoO70igksZuZ5EvkTfiZUgagCm5epix+fYHKjzfQ==")
+  ENV['SENDGRID_PASSWORD'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDMTIUyQTTKWpBZ/AtgIBEIAx4gZ/+20/y9A/jycWcIipLLP/eNISH0cI94UT9CiuclLVa3T//OLLjjWMu6vVz+4O1Q==")
+  ENV['SECRET_KEY_BASE'] =  AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyfTw+28EAedabm+G0CARCAgZuC7bP44+26scvrRSMqz+kN/5VWTo8kWMmvK/3sLqkAHfWP+3YhkqRjsUJxV+ajxIpFS5xcvOrXVsCFLx8AKIAfgu5WJfzpCyilyk0YefEb9Rc/CR4Kby4RguC9VHdRdacEVggV14UfGNVUJ9WEnMcIoBEnzqk/jw4zq1Md99f3bkuYEOH3Hu2exuigDQcGOPW9ARv69MgL1ePqFg==")
+  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
+  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons"
+  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
+
+when 'test'
+
+  ENV['DATABASE_URL'] = "postgresql://localhost/mln_test"
+  ENV['RACK_ENV'] = 'test'
+  ENV['RAILS_ENV'] = 'test'
+  ENV['CLIENT_ID'] = 'test'
+  ENV['CLIENT_SECRET'] = 'test'
+  # Minimum length of this value is 30. 
+  ENV['SECRET_KEY_BASE'] = 'abcdefghijklmnopqrstuvwxyzabcd'
+  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
+  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
+  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
+
+end 
+
 %>
-
-development: &development
-  RACK_ENV: "development"
-  RAILS_ENV: "development"
-  CLIENT_ID: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCL+6xESlcH6XPieZQIBEIAnue0eoIvwsVklKFk6Ss/15ozhEeOX57PLO7JzZ2C0VEftw0Wg6YWp"
-  CLIENT_SECRET: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz6OkwUOUwsV+igt9ICARCAQ0GQCQ1PahswCs4FO/oADmOgGh1ORhBstr88yYUp8eh2FHWTRsmrLRImou+9zqrdKLnN2qcMuY0RLqFplr/5YChbPgg="
-  ISSO_OAUTH_TOKEN_URL: "https://isso.nypl.org/oauth/token"
-  PATRON_MICROSERVICE_URL_V01: "https://dev-platform.nypl.org/api/v0.1/patrons"
-
-  # AWS Lambda we ask to register a patron in Sierra for us.
-  PATRON_MICROSERVICE_URL_V02: "https://dev-platform.nypl.org/api/v0.2/patrons"
-
-  SENDGRID_USERNAME: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDD/C62QpqdcXGlEUxwIBEIAxVeOJrp9vOXRUAv0lh0jaAc7E+8eGFgnpZcOQbRJi7EtxQAJgmBYQHQ6tqEKKc4Hesg=="
-  SENDGRID_PASSWORD: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGY/97q+tGJGGG5iNwIBEIAx6+8g3UugGcZqK0oszFJ5l9QC7PVeLQ5aFOyKJKNnxUZKPMWgwGju5l6auy0KnheViQ=="
-  SECRET_KEY_BASE: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A=="
-
-local:
-  <<: *development
-  DATABASE_URL: <%= database_url %>
-
-qa:
-  RACK_ENV: "qa"
-  RAILS_ENV: "qa"
-  CLIENT_ID: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKjWCFeFAdUNMdIDhQIBEIAn1FF0mYdxsNlM1WOEUyLGtjjpX42xgiSA1M8ui4kahfNsehZifUEj"
-  CLIENT_SECRET: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyT7AUGHHZGYCPxJ+UCARCAQ+dM+7Y22l3eOfrW4N+lkQ1ewHE6AFNi9nJTgrnAETk7Ovs+rX6NLSAUJLBKT+AIz6/r7/JxqJ1+1JD0zzHFhdZR0MU="
-  DATABASE_URL: <%= database_url %>
-  ISSO_OAUTH_TOKEN_URL: "https://isso.nypl.org/oauth/token"
-  PATRON_MICROSERVICE_URL_V01: "https://dev-platform.nypl.org/api/v0.1/patrons"
-  # AWS Lambda we ask to register a patron in Sierra for us.
-  PATRON_MICROSERVICE_URL_V02: "https://dev-platform.nypl.org/api/v0.2/patrons"
-  SENDGRID_USERNAME: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDEA45HSC37NyEsF4CQIBEIAxk3c49w+4IWF9BvxCLx1qWKfUt8SoO70igksZuZ5EvkTfiZUgagCm5epix+fYHKjzfQ=="
-  SENDGRID_PASSWORD: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDMTIUyQTTKWpBZ/AtgIBEIAx4gZ/+20/y9A/jycWcIipLLP/eNISH0cI94UT9CiuclLVa3T//OLLjjWMu6vVz+4O1Q=="
-  SECRET_KEY_BASE: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyfTw+28EAedabm+G0CARCAgZuC7bP44+26scvrRSMqz+kN/5VWTo8kWMmvK/3sLqkAHfWP+3YhkqRjsUJxV+ajxIpFS5xcvOrXVsCFLx8AKIAfgu5WJfzpCyilyk0YefEb9Rc/CR4Kby4RguC9VHdRdacEVggV14UfGNVUJ9WEnMcIoBEnzqk/jw4zq1Md99f3bkuYEOH3Hu2exuigDQcGOPW9ARv69MgL1ePqFg=="
-
-test:
-  RACK_ENV: "test"
-  CLIENT_ID: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGIwYAYJKoZIhvcNAQcGoFMwUQIBADBMBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGZr+4UWsYRsygu43AIBEIAffB7iAPvaUctKIur+3encRJWrmXCKrlwzdEYfBx5xyQ=="
-  CLIENT_SECRET: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGIwYAYJKoZIhvcNAQcGoFMwUQIBADBMBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDGZr+4UWsYRsygu43AIBEIAffB7iAPvaUctKIur+3encRJWrmXCKrlwzdEYfBx5xyQ=="
-  DATABASE_URL: <%= database_url %>
-  ISSO_OAUTH_TOKEN_URL: 'https://isso.nypl.org/oauth/token'
-  PATRON_MICROSERVICE_URL_V01: 'https://dev-platform.nypl.org/api/v0.1/patrons'
-  PATRON_MICROSERVICE_URL_V02: 'https://dev-platform.nypl.org/api/v0.2/patrons'
-  SECRET_KEY_BASE: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A=="
