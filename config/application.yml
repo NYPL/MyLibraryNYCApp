@@ -13,7 +13,7 @@ when 'local'
  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
 
 when 'development'
-
+  
   ENV['RACK_ENV'] = 'development'
   ENV['RAILS_ENV'] = 'development'
   ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAASwwggEoBgkqhkiG9w0BBwagggEZMIIBFQIBADCCAQ4GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3apJFu88CTtQfpWdAgEQgIHg5FzviDrg2Qkl2HnO09j5KWORAq1CDtGaZtIATpvKoCHoxogGd4GyJ8M1/J/zHAtnapZiwe4AH22b3aUGQrQLDreu3t1kqp/4jVlkvz1Xa8+dCqeEeIsHgMXG1FTHrH3KZY27Fkg2mAHkJMlFI97oMoV8gj6O6UUfn/ZhNthrNkVSMZNZt2wFoZGXUC8s2rztJdnhQk1RusdDMp70+yoNwa470nOpXHNFoFHf1NVJ0Ih1HD8qSeViwWR7Q8sJSQCUYv9OPCGXkLNUWO1xNWY5d255dMrR/tSnEtugDNRXI1c=")  
