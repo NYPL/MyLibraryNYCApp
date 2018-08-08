@@ -104,8 +104,8 @@ function validateEmailDomain(email){
 
 window.ClientSideValidations.callbacks.element.fail = function(element, message, callback) {
 	callback();
-	$(element).css('background', '#f6d6d8');
-	$(element).css('border','0.0625rem #97272c solid');
+	$(element).css('background', '#EEB4B8');
+	$(element).css('border','0.0625rem #45403A solid');
 	if(element[0].name == 'user[email]'){
 		$($("[for=user_email]")[1]).text('Enter a valid email address ending in "@schools.nyc.gov".')
 
