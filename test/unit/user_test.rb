@@ -5,8 +5,8 @@ class UserTest < ActiveSupport::TestCase
 
   setup do 
    @school = crank!(:school)
-   crank!(:user, :school_id => @school.id)
-   @user = crank(:user, :school_id => @school.id)
+   crank!(:user, school_id:  @school.id)
+   @user = crank(:user, school_id: @school.id)
   end 
 
   [generate_email].each do |new_email|

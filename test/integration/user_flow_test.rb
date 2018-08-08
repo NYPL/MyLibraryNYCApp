@@ -4,12 +4,12 @@ class UserFlowTest < ActionDispatch::IntegrationTest
  
 setup do 
    @school = crank!(:school)
-   @user = crank!(:user, :school_id => @school.id)
+   @user = crank!(:user, school_id: @school.id)
 end
 
   # Test that generated barcode is a 14-digit string, starting with '27777'.
   test "user method assign_barcode increments last valid barcode by 1" do
-    user_two = crank!(:user, :school_id => @school.id)
+    user_two = crank!(:user, school_id: @school.id)
     @user.assign_barcode
     assert(@user.barcode == 27777099999999)
   end
