@@ -647,6 +647,7 @@ GEM
     coffee-script-source (1.10.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
+    database_cleaner (1.7.0)
     cranky (1.1.0)
     devise (3.5.10)
       bcrypt (~> 3.0)
@@ -815,6 +816,7 @@ DEPENDENCIES
   aws-sdk
   client_side_validations
   coffee-rails (~> 3.2.1)
+  database_cleaner
   cranky
   devise
   faker

@@ -4,7 +4,9 @@ class UserTest < ActiveSupport::TestCase
   include AwsDecrypt
 
   setup do 
-   @user = crank(:user)
+   @school = crank!(:school)
+   crank!(:user, school_id:  @school.id)
+   @user = crank(:user, school_id: @school.id)
   end 
 
   [generate_email].each do |new_email|

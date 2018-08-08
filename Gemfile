@@ -32,6 +32,10 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+group :test do
+  gem 'database_cleaner'
+end
+
 gem "jquery-rails", "< 3.0.0"
 # gem 'jquery-rails'
 gem "font-awesome-rails"
