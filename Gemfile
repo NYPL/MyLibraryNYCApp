@@ -7,7 +7,7 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 gem 'test-unit'
-gem 'pg'
+gem 'pg', '~> 0.18'
 
 gem 'webmock'
 gem 'client_side_validations'
@@ -40,6 +40,7 @@ gem "jquery-rails", "< 3.0.0"
 # gem 'jquery-rails'
 gem "font-awesome-rails"
 gem 'devise'
+gem 'cranky'
 
 gem 'faker'
 gem 'rubocop'

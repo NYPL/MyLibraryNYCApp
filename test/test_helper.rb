@@ -2,6 +2,9 @@ ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'webmock/test_unit'
+require 'factories/user_factory'
+require 'factories/school_factory'
+
 include WebMock::API
 
 WebMock.disable_net_connect!(allow_localhost: true)

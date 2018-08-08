@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-  include AwsDecrypt
   include Exceptions
 
   # Include default devise modules. Others available are:
@@ -182,8 +181,8 @@ class User < ActiveRecord::Base
     response = HTTParty.post(ENV['ISSO_OAUTH_TOKEN_URL'],
       body: {
         grant_type: 'client_credentials',
-        client_id: AwsDecrypt.decrypt_kms(ENV['CLIENT_ID']),
-        client_secret: AwsDecrypt.decrypt_kms(ENV['CLIENT_SECRET'])
+        client_id: ENV['CLIENT_ID'],
+        client_secret: ENV['CLIENT_SECRET']
       })
     case response.code
     when 200
