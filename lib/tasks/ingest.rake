@@ -1,17 +1,16 @@
-
 require 'net/http'
 require 'uri'
 
-require 'csv'    
+require 'csv'
 
-namespace :ingest do 
+namespace :ingest do
 
   # Fetch latest data from biblio
   desc "Import new data"
   task :ingest, [:page, :limit, :just_id]  => :environment do |t, args|
     args.with_defaults(:page=> 1, :limit => 25, :just_id => nil)
 
-    page = args.page.to_i 
+    page = args.page.to_i
     page = 1 if page == 0
 
     limit = args.limit.to_i
@@ -27,7 +26,7 @@ namespace :ingest do
   desc "Update availability numbers for all sets"
   task :update_availability, [:start, :limit, :id]  => :environment do |t, args|
     args.with_defaults(:start => 0, :limit => nil, :id => nil)
-    start = args.start.to_i 
+    start = args.start.to_i
     limit = args.limit.to_i unless args.limit.nil?
     id = args.id
 
@@ -49,7 +48,7 @@ namespace :ingest do
   task :remove_teacher_sets, [] => :environment do |t, args|
     require 'csv'
 
-    path = 'db/data_update_dec2014/Dec15.2014-TeacherSetsToRemoveWebApp.csv'
+    path = 'db/data_update_dec2014/Dec15.2014-TeacherSetsToRemoveWebApp.csv' # TODO: remove hardcoding
 
     teacher_sets_not_found = []
 
@@ -63,7 +62,7 @@ namespace :ingest do
       if teacherSet.nil?
         puts "    Teacher Set not found: #{call_number}"
         teacher_sets_not_found << "#{call_number}"
-      else 
+      else
         puts "Deleting Teacher Set: #{call_number}"
         teacherSet.destroy
       end
@@ -76,16 +75,16 @@ namespace :ingest do
   # Updated for December 1st, 2014 release.
   desc "Import all teacher data from local csvs into users table"
   task :teachers, [] => :environment do |t, args|
-    require 'csv'    
+    require 'csv'
 
-    path = 'db/data_update_dec2014/Amie edits data phone app - Main Data.csv'
+    path = 'db/data_update_dec2014/Amie edits data phone app - Main Data.csv' # TODO: remove hardcoding
     create_users = []
     distinct_emails = []
     duplicate_emails = []
     update_users = []
 
     CSV.foreach(path) do |line|
-      # Sturm,Aliza,23333041038868,'kenny@bibliocommons.com',zm047,47 The American Sign Language And English Secondary School
+      # Example,Aliza,23333000000000,'example@example.com',zm047,47 Example School
       (last_name, first_name, barcode, email, school_code, school_name) = line
 
       next if email.nil? || email.strip.empty?
@@ -180,7 +179,7 @@ namespace :ingest do
       email.downcase!
 
       # If two emails given, e.g.:
-      # e.g. "...867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
+      # e.g. "...867"|"zx080"|"MYEXAMPLE@SCHOOLS.NYC.GOV";"MyExample@schools.nyc.gov"
       # .. save one email as alternate
       alt_email = nil
       if (emails = email.split(';')).size >= 2
@@ -200,7 +199,7 @@ namespace :ingest do
       user.school = u[:school]
       puts " user has custom school: #{user.school}" if user.school != u[:school]
       user.update_attribute :alt_email, alt_email unless alt_email.nil? or !user.alt_email.empty?
-      
+
       user.save
       puts "save user: #{email} exists ? #{user.persisted?}" if !user.persisted?
 
@@ -216,13 +215,13 @@ namespace :ingest do
   task :remove_teachers, [] => :environment do |t, args|
     require 'csv'
 
-    path = 'db/data_update_dec2014/Dec4.2014-DroppedEducators.csv'
+    path = 'db/data_update_dec2014/Dec4.2014-DroppedEducators.csv' # TODO: remove hardcoding
     deleted_users = []
     not_found_users = []
     no_emails = []
 
     CSV.foreach(path) do |line|
-      # ACOSTA,ANA,27777021508793,AAcosta4@schools.nyc.gov,zk053,P.S. K053
+      # ACOSTA,ANA,27777000000000,example@schools.nyc.gov,zk053,P.S. K053
       (last_name, first_name, barcode, email, school_code, school_name) = line
 
       if email.nil? || email.strip.empty?
@@ -246,11 +245,11 @@ namespace :ingest do
     puts "Users with no emails, #{no_emails.size}: #{no_emails}"
   end
 
-  # This use to be the :teachers task but it has been updated due to new 
+  # This use to be the :teachers task but it has been updated due to new
   # data set structure.
   desc "Import all teacher data from local csvs into users table"
   task :deprecated_teachers, [] => :environment do |t, args|
-    require 'csv'    
+    require 'csv'
 
     dumps_base = 'db/final-schools-dump'
 
@@ -264,7 +263,7 @@ namespace :ingest do
       if File.exists?(path)
         puts "Process teachers for #{code}"
         CSV.foreach(path) do |line|
-          # "p44607908",151,"KIM, DENISE",23333087938609,"zx445",9/27/2013,0,2,9/14/2011,"kim2@bxscience.edu"
+          # "p44607908",151,"KIM, DENISE",23333087938609,"zx445",9/27/2013,0,2,9/14/2011,"example@myschool.edu"
           (_number, _type, name, barcode, school_code, _n1, _n2, _d1, _d2, email) = line
           next if email.nil? || email.strip.empty?
 
@@ -289,7 +288,7 @@ namespace :ingest do
 
     add_emails = create_users.map { |u| u[:email].downcase }
     User.where("id IN (SELECT user_id FROM holds) OR updated_at > '2014-02-7'").each do |u|
-      if ! add_emails.include? u.email.downcase 
+      if ! add_emails.include? u.email.downcase
         puts " Keeping #{u.email} but why"
       end
     end
@@ -324,7 +323,7 @@ namespace :ingest do
       email.downcase!
 
       # If two emails given, e.g.:
-      # e.g. "...867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
+      # e.g. "...867"|"zx080"|"MYEXAMPLE@SCHOOLS.NYC.GOV";"MyExample@schools.nyc.gov"
       # .. save one email as alternate
       alt_email = nil
       if (emails = email.split(';')).size >= 2
@@ -344,7 +343,7 @@ namespace :ingest do
       user.school = u[:school]
       puts " user has custom school: #{user.school}" if user.school != u[:school]
       # user.update_attribute :alt_email, alt_email unless !user.alt_email.empty? or alt_email.nil?
-      
+
       # user.save
       puts "save user: #{email} exists ? #{user.persisted?}" if !user.persisted?
 
@@ -363,7 +362,7 @@ namespace :ingest do
 
   desc "Add and update list of participating schools"
   task :update_schools, [] => :environment do |t, args|
-    path = 'db/2016-october-update/participating_school_list-2016-2017.csv'
+    path = 'db/2016-october-update/participating_school_list-2016-2017.csv' # TODO: remove hardcoding
 
     CSV.foreach(path) do |line|
       (code, name) = line
@@ -375,7 +374,7 @@ namespace :ingest do
           puts "  referenced: #{name}"
           school.name = name
         end
-        
+
         school.active = true
         school.save
       else
@@ -389,9 +388,65 @@ namespace :ingest do
     end
   end
 
+  # This rake task will import new schools and override values for existing schools
+  # Example: `rake ingest:import_all_nyc_schools['data/public/2016_-_2017_School_Locations.csv']`
+  desc "Import all NYC schools"
+  task :import_all_nyc_schools, [:file_name] => :environment do |t, args|
+    csv_text = File.read(args.file_name)
+    rows = CSV.parse(csv_text, headers: true)
+    ActiveRecord::Base.transaction do
+      rows.each_with_index do |row, index|
+        row_hash = row.to_hash
+        school_name = row_hash['LOCATION_NAME'].strip
+        puts "Starting #{school_name}"
+        ['LOCATION_CODE', 'LOCATION_NAME', 'PRIMARY_ADDRESS_LINE_1', 'STATE_CODE', 'Location 1', 'PRINCIPAL_PHONE_NUMBER'].each do |column_header_name|
+          raise "The #{column_header_name} column is mislabeled or missing from the CSV." if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
+        end
+        zcode = "z#{row_hash['LOCATION_CODE'].strip}"
+        school = School.where(code: zcode).first_or_initialize
+        school.name = school.name || school_name
+        school.address_line_1 = school.address_line_1 || row_hash['PRIMARY_ADDRESS_LINE_1'].strip
+        school.state = school.state || row_hash['STATE_CODE'].strip
+        if row_hash['Location 1'].present?
+          address_line_2 = row_hash['Location 1'].split("\n")[0].strip # the latitude and longitude are on the second line of the cell
+          school.address_line_2 = school.address_line_2 || address_line_2
+          school.borough = borough(address_line_2)
+          school.postal_code = school.postal_code || address_line_2[-5..-1]
+        end
+        school.phone_number = school.phone_number || row_hash['PRINCIPAL_PHONE_NUMBER'].strip
+        if school.id.nil?
+          school.created_at = Time.zone.now
+          puts "Creating #{school.name}"
+        else
+          puts "Updating #{school.name}"
+        end
+        school.updated_at = Time.zone.now
+        school.save
+
+        break if Rails.env.test? && index == 2 # import_schools_test.rb assumes that the CSV only has one record
+      end
+    end
+  end
+
+  def borough(address_line_2)
+    if address_line_2.downcase.include?('manhattan')
+      'MANHATTAN'
+    elsif address_line_2.downcase.include?('queens')
+      'QUEENS'
+    elsif address_line_2.downcase.include?('brooklyn')
+      'BROOKLYN'
+    elsif address_line_2.downcase.include?('staten')
+      'STATEN ISLAND'
+    elsif address_line_2.downcase.include?('bronx')
+      'BRONX'
+    else
+      raise "Borough not found for #{address_line_2}"
+    end
+  end
+
   desc "Deactivate schools from authorized list"
   task :deactivate_schools, [] => :environment do |t, args|
-    path = 'db/2015SchoolUpdate/dropped-schools.csv'
+    path = 'db/2015SchoolUpdate/dropped-schools.csv' # TODO: remove hardcoding
 
     dropped_schools = []
     CSV.foreach(path) do |line|
@@ -422,7 +477,7 @@ namespace :ingest do
           puts "  existing:   #{school.name}"
           puts "  referenced: #{name}"
         end
-        
+
         school.active = true
         school.save
       end
@@ -436,7 +491,7 @@ namespace :ingest do
     new_schools = []
     CSV.foreach(path) do |line|
       (name, blank, code) = line
-      
+
       puts "#{code.downcase}"
       new_schools << "#{code.downcase}"
 
@@ -486,11 +541,11 @@ namespace :ingest do
   end
 
 
- 
+
 =begin
   desc "Import all teacher data from local csvs into users table"
   task :teachers, [] => :environment do |t, args|
-    require 'csv'    
+    require 'csv'
 
     dumps_base = 'db/teacher_dumps'
 
@@ -515,9 +570,9 @@ namespace :ingest do
         File.foreach(path) do |line|
           next if $. == 1
 
-          # This appears in one of the dumps: 
-          # "p55258827"|"151"|"EDWARDS, TESNA"|"27777016362867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
-          # .. So remove those confounding quotes from around the ; 
+          # This appears in one of the dumps:
+          # "p55258827"|"151"|"LASTNAME, FIRSTNAME"|"27777000000000"|"zx080"|"MYEXAMPLE@SCHOOLS.NYC.GOV";"MyExample@schools.nyc.gov"
+          # .. So remove those confounding quotes from around the ;
           # (also, that's the same email addresss with different case... so not sure why it's there)
           line = line.gsub /";"/, ';'
           row = CSV.parse(line, {:col_sep => '|'}).first
@@ -560,7 +615,7 @@ namespace :ingest do
           email.downcase!
 
           # If two emails given, e.g.:
-          # e.g. "...867"|"zx080"|"TEDWARD2@SCHOOLS.NYC.GOV";"TEdward2@schools.nyc.gov"
+          # e.g. "...867"|"zx080"|"MYEXAMPLE@SCHOOLS.NYC.GOV";"MyExample@schools.nyc.gov"
           # .. save one email as alternate
           alt_email = nil
           if (emails = email.split(';')).size >= 2
@@ -607,7 +662,7 @@ namespace :ingest do
         puts "issues: #{issues.to_json}"
       end
     end
-    
+
   end
 =end
 
