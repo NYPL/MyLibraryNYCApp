@@ -181,7 +181,6 @@ ActiveRecord::Schema.define(:version => 20180808160955) do
     t.integer  "total_copies"
     t.string   "primary_subject"
     t.string   "bnumber",                     :limit => 20
-    t.string   "test_column",                 :limit => 20
     t.string   "set_type",                    :limit => 20
     t.text     "contents"
   end
