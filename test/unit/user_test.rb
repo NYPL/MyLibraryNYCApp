@@ -8,7 +8,7 @@ class UserTest < ActiveSupport::TestCase
   last_name = Faker::Name.last_name
   email = generate_email
   pin = [1, 1, 1, 1].map! { (0..9).to_a.sample }.join
-  school_id = '1076'
+  school_id = School.create.id
   password = 'password123'
 
   # Create user objects in the database
