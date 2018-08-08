@@ -105,6 +105,7 @@ class User < ActiveRecord::Base
   end
 
 
+<<<<<<< HEAD
   def assign_barcode
     Rails.logger.debug("assign_barcode: start")
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
@@ -114,6 +115,8 @@ class User < ActiveRecord::Base
   end
 
 
+=======
+>>>>>>> e8935e5abc0df4b5d5fdc7efde8ee6e8d1e3b661
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -124,7 +127,11 @@ class User < ActiveRecord::Base
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
+<<<<<<< HEAD
       'barcodes' => [self.assign_barcode.to_s],
+=======
+      'barcodes' => [self.barcode.to_s],
+>>>>>>> e8935e5abc0df4b5d5fdc7efde8ee6e8d1e3b661
       'patronType' => 151,
       'patronCodes' => {
         'pcode4' => -1
