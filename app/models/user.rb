@@ -89,19 +89,12 @@ class User < ActiveRecord::Base
   end
 
 
-  def send_user_to_ils
-    Rails.logger.debug("send_user_to_ils: start")
-    assign_barcode
-    send_request_to_patron_creator_service
-  end
-
-
-
   def assign_barcode
     Rails.logger.debug("assign_barcode: start")
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
     self.update_attribute(:barcode, last_user_barcode + 1)
     Rails.logger.debug("assign_barcode: end | Generated barcode #{self.barcode}.")
+    return self.barcode
   end
 
 
@@ -111,10 +104,11 @@ class User < ActiveRecord::Base
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
   def send_request_to_patron_creator_service
+    Rails.logger.debug("send_user_to_patron_creator_service: start")
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
-      'barcodes' => [self.barcode.to_s],
+      'barcodes' => [self.assign_barcode.to_s],
       'patronType' => 151,
       'patronCodes' => {
         'pcode4' => -1

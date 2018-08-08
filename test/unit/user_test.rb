@@ -3,9 +3,10 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   include AwsDecrypt
 
-
   setup do 
-   @user = crank(:user)
+   @school = crank!(:school)
+   crank!(:user, :school_id => @school.id)
+   @user = crank(:user, :school_id => @school.id)
   end 
 
   [generate_email].each do |new_email|
@@ -68,6 +69,7 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     a 201 illustrating patron was created through
       patron creator microservice" do
+    crank!(:user, :school_id => @school.id)
     assert_true @user.send_request_to_patron_creator_service
   end
 
