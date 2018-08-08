@@ -15,6 +15,12 @@
   animation: spinner .6s linear infinite;
 }
 
+input[type="text"], input[type="alt_email"], input[type="email"], input[type="password"], textarea, select {
+  background: #EEEEED;
+  border: 1px solid #575047;
+  color:#303030;
+}
+
 #check_email_div{
   display:none;
 }
