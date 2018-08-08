@@ -89,13 +89,6 @@ class User < ActiveRecord::Base
   end
 
 
-  def send_user_to_ils
-    Rails.logger.debug("send_user_to_ils: start")
-    assign_barcode
-    send_request_to_patron_creator_service
-  end
-
-
   def assign_barcode
     Rails.logger.debug("assign_barcode: start")
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
