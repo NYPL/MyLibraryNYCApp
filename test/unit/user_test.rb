@@ -69,7 +69,6 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     a 201 illustrating patron was created through
       patron creator microservice" do
-    crank!(:user, :school_id => @school.id)
     assert_true @user.send_request_to_patron_creator_service
   end
 
