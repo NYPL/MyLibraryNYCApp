@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-  include AwsDecrypt
   include Exceptions
 
   # Include default devise modules. Others available are:
@@ -17,16 +16,16 @@ class User < ActiveRecord::Base
 
   validates :school, :first_name, :last_name, :presence => true
   validates :email, :uniqueness => true
-  # Validation only occurs when a user record is being 
-  # created on sign up. Does not occur when updating 
-  # the record. 
+  # Validation only occurs when a user record is being
+  # created on sign up. Does not occur when updating
+  # the record.
   validates_format_of :email, with: /\@schools.nyc\.gov/, message: ' should end in @schools.nyc.gov', :on => :create
   validates_format_of :first_name, :last_name, :with => /^[a-z]+$/i
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
-  # Validation only occurs when a user record is being 
-  # created on sign up. Does not occur when updating 
-  # the record. 
-  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." }, 
+  # Validation only occurs when a user record is being
+  # created on sign up. Does not occur when updating
+  # the record.
+  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
 
   has_many :holds
@@ -39,7 +38,7 @@ class User < ActiveRecord::Base
     self.password_confirmation ||= User.default_password
   end
 
-  #Current ticket this sprint to fix functionaility 
+  #Current ticket this sprint to fix functionaility
   #after_create :do_after_create
 
   # We don't require passwords, so just create a generic one, yay!
@@ -89,15 +88,31 @@ class User < ActiveRecord::Base
     UserMailer.unsubscribe(self).deliver
   end
 
+
+  def assign_barcode
+    Rails.logger.debug("assign_barcode: start")
+    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
+    self.update_attribute(:barcode, last_user_barcode + 1)
+    Rails.logger.debug("assign_barcode: end | Generated barcode #{self.barcode}.")
+    return self.barcode
+  end
+
+
+  # Sends a request to the patron creator microservice.
+  # Passes patron-specific information to the microservice s.a. name, email, and type.
+  # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
+  # a success/failure response.
+  # Accepts a response from the microservice, and returns.
   def send_request_to_patron_creator_service
+    Rails.logger.debug("send_user_to_patron_creator_service: start")
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
+      'barcodes' => [self.assign_barcode.to_s],
       'patronType' => 151,
       'patronCodes' => {
         'pcode4' => -1
-      },
-      'barcodes' => ["27777"]
+      }
     }
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
@@ -111,7 +126,7 @@ class User < ActiveRecord::Base
     when 201
       Rails.logger.debug(
         {
-          'status' => "The account with e-mail #{email} was 
+          'status' => "The account with e-mail #{email} was
            successfully created from the micro-service!"
         }
       )
@@ -152,7 +167,7 @@ class User < ActiveRecord::Base
       ).to_s
     else
       Rails.logger.debug "#{response}"
-    end 
+    end
     return response
   end
 
@@ -160,8 +175,8 @@ class User < ActiveRecord::Base
     response = HTTParty.post(ENV['ISSO_OAUTH_TOKEN_URL'],
       body: {
         grant_type: 'client_credentials',
-        client_id: AwsDecrypt.decrypt_kms(ENV['CLIENT_ID']),
-        client_secret: AwsDecrypt.decrypt_kms(ENV['CLIENT_SECRET'])
+        client_id: ENV['CLIENT_ID'],
+        client_secret: ENV['CLIENT_SECRET']
       })
     case response.code
     when 200
