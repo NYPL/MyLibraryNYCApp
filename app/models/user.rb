@@ -107,8 +107,12 @@ class User < ActiveRecord::Base
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
+      'pin' => pin,
       'patronType' => patron_type,
       'patronCodes' => {
+        'pcode1' => '-',
+        'pcode2' => '-',
+        'pcode3' => pcode3,
         'pcode4' => -1
       },
       'barcodes' => [self.assign_barcode.to_s],
@@ -205,5 +209,13 @@ class User < ActiveRecord::Base
 
   def patron_type
     school.borough == 'QUEENS' ? 149 : 151
+  end
+
+  def pcode3
+    return 1 if school.borough == 'BRONX'
+    return 2 if school.borough == 'MANHATTAN'
+    return 3 if school.borough == 'STATEN ISLAND'
+    return 4 if school.borough == 'BROOKLYN'
+    return 5 if school.borough == 'QUEENS'
   end
 end
