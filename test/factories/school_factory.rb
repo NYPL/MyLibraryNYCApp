@@ -16,3 +16,4 @@ class Cranky::Factory
     inherit(:school, code: 'zx' + rand.to_s[2..4], borough: 'BRONX')
   end
 end
+
