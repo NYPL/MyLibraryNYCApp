@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20180808160955) do
+ActiveRecord::Schema.define(:version => 20180809153347) do
 
 
   create_table "active_admin_comments", :force => true do |t|
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(:version => 20180808160955) do
     t.string   "primary_language"
     t.string   "call_number"
     t.text     "description"
-    t.string   "physical_description"
+    t.text     "physical_description"
     t.text     "notes"
     t.text     "statement_of_responsibility"
     t.string   "cover_uri"

@@ -101,14 +101,15 @@ function validateEmailDomain(email){
 }
 
 
-
 window.ClientSideValidations.callbacks.element.fail = function(element, message, callback) {
 	callback();
 	$(element).css('background', '#EEB4B8');
 	$(element).css('border','0.0625rem #45403A solid');
+	var element_id = $(element).attr('id'); 
+	$($('label[for=' + element_id + ']')[1]).attr('id', element_id + "_error")
 	if(element[0].name == 'user[email]'){
-		$($("[for=user_email]")[1]).text('Enter a valid email address ending in "@schools.nyc.gov".')
-
+		$($("[for=user_email]")[0]).text('Enter a valid email address ending in "@schools.nyc.gov".')
+		$($('label[for=' + element_id + ']')[0]).attr('id', element_id + "_error")
 	}
 }
 
@@ -117,6 +118,7 @@ window.ClientSideValidations.callbacks.element.pass = function(element, callback
 	$(element).css('border','1px solid #D0CDC8');
 	callback()
 }
+
 
 
 
