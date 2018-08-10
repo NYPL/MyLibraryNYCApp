@@ -34,4 +34,3 @@ end
   #   assert(/\A2777\d{10}\z/ === user.generate_barcode)
   # end
 
-end
