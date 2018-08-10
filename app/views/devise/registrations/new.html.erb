@@ -7,8 +7,8 @@
 
   <%= devise_error_messages! %>
   <div class="field-group">
-    <%= label_tag :email, "Your DOE email address" %>
-    <%= f.email_field :email, :autofocus => true %>
+    <%= label_tag :email, "Your DOE email address", :id => 'userEmail-label' %>
+    <%= f.email_field :email, :autofocus => true, "aria-labelledby" => 'userEmail-label user_email_error'  %>
     <div id='check_email_div'>
       <span class ='spinner'></span>
       <span id='check_email_span'>
@@ -20,26 +20,26 @@
     </span>
   </div>
   <div class="field-group">
-    <%= label_tag :alt_email, "Alternate E-mail Address (optional)" %>
-    <%= f.email_field :alt_email %> 
+    <%= label_tag :user_alt_email, "Alternate E-mail Address (optional)", :id => 'userAltEmail-label' %>
+    <%= f.email_field :alt_email, "aria-labelledby" => 'userAltEmail-label user_alt_email_error' %> 
   </div>
   <div class="field-group">
-    <%= label_tag :first_name, "First name" %>
-    <%= f.text_field :first_name %>
+    <%= label_tag :user_first_name, "First name", :id => 'userFirstName-label' %>
+    <%= f.text_field :first_name, "aria-labelledby" => 'userFirstName-label user_first_name_error' %>
   </div>
   <div class="field-group">
-    <%= label_tag :last_name, "Last name" %>
-    <%= f.text_field :last_name %>
-  </div>
-
-  <div class="field-group">
-    <%= label_tag :school_id, 'Your school:' %>
-    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }  %>
+    <%= label_tag :user_last_name, "Last name", :id => 'userLastName-label' %>
+    <%= f.text_field :last_name, "aria-labelledby" => 'userLastName-label user_last_name_error' %>
   </div>
 
   <div class="field-group">
-    <%= label_tag :pin, "PIN" %>
-    <%= f.text_field :pin %>
+    <%= label_tag :user_school_id, 'Your school:', :id => 'userSchool-label' %>
+    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }, "aria-labelledby" => 'userSchool-label user_school_error' %>
+  </div>
+
+  <div class="field-group">
+    <%= label_tag :user_pin, "PIN", :id => 'userPin-label' %>
+    <%= f.text_field :pin, "aria-labelledby" => 'userPin-label user_pin_error' %>
     <span>
     Your PIN serves as the password for your account. Make sure it is a number you will remember.    
     </span>

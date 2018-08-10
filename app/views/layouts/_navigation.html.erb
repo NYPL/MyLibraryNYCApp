@@ -4,7 +4,7 @@
     <% if user_signed_in? %>
     <%= link_to "<span>Dashboard</span>".html_safe, app_url, :class=>"link-home" %>
     <% else %>
-    <%= link_to "<span>Home</span>".html_safe, root_url, :class=>"link-home" %>
+    <%= link_to "<span>Home</span>".html_safe, root_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
     <% end %>
     <%= link_to "<i class='fa fa-question'></i> Help".html_safe, help_url %>
     <% if user_signed_in? %>
