@@ -1,11 +1,18 @@
 class Cranky::Factory
-  # Simple factory method to create a user instance, you would call this via crank(:user)
   def school
-    School.new do |u|
-      u.id  = [1,1,1,1].map!{|x| (0..9).to_a.sample}.join.to_i
-      u.name  =   "Antonia Pantoja Preparatory Academy: A College Boar..."        
-      u.code  = 'zx' + rand.to_s[2..4]             
-      u.active =  true
-    end
+    define name: "Queens Academy: College Prep",
+           address_line_1: '100 Main St',
+           address_line_2: 'Example, NY 10000',
+           code: 'z' + rand.to_s[2..4],
+           borough: 'Manhattan',
+           active: true
+  end
+
+  def queens_school
+    inherit(:school, code: 'zq' + rand.to_s[2..4], borough: 'QUEENS')
+  end
+
+  def bronx_school
+    inherit(:school, code: 'zx' + rand.to_s[2..4], borough: 'BRONX')
   end
 end
