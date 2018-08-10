@@ -1,4 +1,6 @@
 <html lang="en">
+
+<noscript>JavaScript is not enabled. Please contact your MyLibraryNYC administrator for help!</noscript>
 <h1>Sign Up</h1>
 
 <%= javascript_include_tag('sign_up_async_request.js') %>
@@ -50,7 +52,7 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "Sign Up", :class=> "button", :id =>'sign_up_button' %>
+    <%= f.submit "Sign Up", :class=> "button", :id =>'sign_up_button',   disabled: true %>
   </div>
 <% end %>
 
