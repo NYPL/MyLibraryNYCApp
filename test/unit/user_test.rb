@@ -3,16 +3,15 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   include AwsDecrypt
 
-  setup do 
-   @school = crank!(:school)
-   crank!(:user, school_id:  @school.id)
-   @user = crank(:user, school_id: @school.id)
-  end 
+  setup do
+    # create the first user with a barcode in range so that send_request_to_patron_creator_service will work
+    @user = crank(:queens_user, barcode: 27777011111111)
+  end
 
   [generate_email].each do |new_email|
     test 'user model cannot be created without first name' do
       @user.first_name = ""
-      @user.save 
+      @user.save
       assert_equal(@user.errors.messages[:first_name],["can't be blank", "is invalid"])
     end
   end
@@ -69,6 +68,7 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     a 201 illustrating patron was created through
       patron creator microservice" do
+    crank!(:queens_user, barcode: 27777011111111)
     assert_true @user.send_request_to_patron_creator_service
   end
 
@@ -83,5 +83,13 @@ class UserTest < ActiveSupport::TestCase
       @user.send_request_to_patron_creator_service
     end
     assert_equal('Invalid status code of: 500', exception.message)
+  end
+
+  test "Queens user's patron_type is set based on school's borough" do
+    assert(@user.patron_type == 149)
+  end
+
+  test "Bronx user's patron_type is set based on school's borough" do
+    assert(crank(:bronx_user).patron_type == 151)
   end
 end
