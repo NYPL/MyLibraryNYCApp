@@ -32,3 +32,8 @@ input[type="text"], input[type="alt_email"], input[type="email"], input[type="pa
 #sign_up_button:focusout{
 	background-color:grey;
 }
+
+#no-js-message{
+  padding-top:20px;
+  color:red;
+}
