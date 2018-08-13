@@ -116,7 +116,7 @@ window.ClientSideValidations.callbacks.element.pass = function(element, callback
 // This internal function enables the
 // the submit buttion if all validations are
 // passing.
-setInterval(function(){ 
+$('#user_email, #user_first_name, #user_last_name, #user_school_id, #user_pin ').on('focusout', function(){
 	if($('*[validation-passed="true"]').length == 6){
 		$("#sign_up_button").prop("disabled",false);
 		$("#sign_up_button").css("background-color","#af2228")
@@ -125,8 +125,12 @@ setInterval(function(){
 		}, function() {
 			$(this).css("opacity", 1.0);
 		})
+	} 
+	else {
+		$("#sign_up_button").off('hover');
+		$("#sign_up_button").prop('disabled','true')
 	}
-}, 2000);
+})
 
 
 
