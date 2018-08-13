@@ -14,7 +14,6 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :pin
 
-
   validates :school_id, :first_name, :last_name, :presence => true
   validates :email, :uniqueness => true
   # Validation only occurs when a user record is being
