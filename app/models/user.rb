@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   attr_accessor :pin
 
   validates :school, :first_name, :last_name, :presence => true
-  validates :email, :uniqueness => true
+  validates :email, :alt_email, :uniqueness => true
   # Validation only occurs when a user record is being
   # created on sign up. Does not occur when updating
   # the record.
