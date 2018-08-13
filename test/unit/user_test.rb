@@ -85,11 +85,19 @@ class UserTest < ActiveSupport::TestCase
     assert_equal('Invalid status code of: 500', exception.message)
   end
 
-  test "Queens user's patron_type is set based on school's borough" do
+  test "Queens patron's patron_type is set based on their school's borough" do
     assert(@user.patron_type == 149)
   end
 
-  test "Bronx user's patron_type is set based on school's borough" do
+  test "Bronx patron's patron_type is set based on their school's borough" do
     assert(crank(:bronx_user).patron_type == 151)
+  end
+
+  test "Queens patron's pcode3 is set based on their school's borough" do
+    assert(crank(:queens_user).pcode3 == 5)
+  end
+
+  test "Bronx patron's pcode3 is set based on their school's borough" do
+    assert(crank(:bronx_user).pcode3 == 1)
   end
 end
