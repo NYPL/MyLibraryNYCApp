@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-  :recoverable, :rememberable, :trackable, :validatable
+  :recoverable, :rememberable, :trackable, :validatable # this handles uniqueness of email automatically
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me,
@@ -108,8 +108,12 @@ class User < ActiveRecord::Base
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
+      'pin' => pin,
       'patronType' => patron_type,
       'patronCodes' => {
+        'pcode1' => '-',
+        'pcode2' => '-',
+        'pcode3' => pcode3,
         'pcode4' => -1
       },
       'barcodes' => [self.assign_barcode.to_s],
@@ -206,5 +210,13 @@ class User < ActiveRecord::Base
 
   def patron_type
     school.borough == 'QUEENS' ? 149 : 151
+  end
+
+  def pcode3
+    return 1 if school.borough == 'BRONX'
+    return 2 if school.borough == 'MANHATTAN'
+    return 3 if school.borough == 'STATEN ISLAND'
+    return 4 if school.borough == 'BROOKLYN'
+    return 5 if school.borough == 'QUEENS'
   end
 end
