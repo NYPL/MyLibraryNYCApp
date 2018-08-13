@@ -41,7 +41,7 @@
 
   <div class="field-group">
     <%= label_tag :user_school_id, 'Your school:', :id => 'userSchool-label' %>
-    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }, "aria-labelledby" => 'userSchool-label user_school_error', :include_blank => '-- Select A School -- ' %>
+    <%= f.select :school, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }, "aria-labelledby" => 'userSchool-label user_school_error', :include_blank => '-- Select A School -- ' %>
   </div>
 
   <div class="field-group">
