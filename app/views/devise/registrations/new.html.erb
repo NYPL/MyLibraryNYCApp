@@ -4,6 +4,19 @@
    <h3 id='no-js-message'>This form requires JavaScript. Your browser may not have JavaScript or it may be disabled. 
     Please try again with a JavaScript-enabled browser or email help@mylibrarynyc.org for assistance.
    </h3>
+
+   <style>
+   
+   form {
+   display:none; 
+   }
+
+   h1 {
+    display: :none;
+   }
+
+   </style>
+
 </noscript>
 
 <h1>Sign Up</h1>
@@ -28,7 +41,7 @@
   </div>
   <div class="field-group">
     <%= label_tag :user_alt_email, "Alternate email address (optional)", :id => 'userAltEmail-label' %>
-    <%= f.email_field :alt_email, "aria-labelledby" => 'userAltEmail-label user_alt_email_error', 'validation-passed' => 'true' %> 
+    <%= f.email_field :alt_email, "aria-labelledby" => 'userAltEmail-label user_alt_email_error' %> 
   </div>
   <div class="field-group">
     <%= label_tag :user_first_name, "First name", :id => 'userFirstName-label' %>
