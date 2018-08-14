@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   def assign_barcode
     Rails.logger.debug("assign_barcode: start")
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
-    self.update_attribute(:barcode, last_user_barcode + 1)
+    self.assign_attributes({ barcode: last_user_barcode + 1})
     Rails.logger.debug("assign_barcode: end | Generated barcode #{self.barcode}.")
     return self.barcode
   end
@@ -149,7 +149,7 @@ class User < ActiveRecord::Base
           'timestamp' => Time.now.iso8601
         }
       ).to_s
-      raise InvalidResponse, "Invalid status code of: #{response.code}"
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
 
