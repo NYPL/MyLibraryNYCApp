@@ -40,7 +40,6 @@ $( document ).ready(function() {
 					if (result.statusCode == 404) {
 
 						$(".spinner").css("display","none");
-						$('#user_email').attr('validation-passed',true)
 						$("#check_email_span").css({"margin-left":"0px","color":'green'})
 						$("#check_email_span").text("Success! We've confirmed that you don't already have a MyLibraryNYC account.");
 						$("#sign_up_button").prop("disabled",false);
