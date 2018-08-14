@@ -26,7 +26,7 @@
     </span>
   </div>
   <div class="field-group">
-    <%= label_tag :user_alt_email, "Alternate E-mail Address (optional)", :id => 'userAltEmail-label' %>
+    <%= label_tag :user_alt_email, "Alternate email address (optional)", :id => 'userAltEmail-label' %>
     <%= f.email_field :alt_email, "aria-labelledby" => 'userAltEmail-label user_alt_email_error', 'validation-passed' => 'true' %> 
   </div>
   <div class="field-group">
@@ -39,7 +39,7 @@
   </div>
 
   <div class="field-group">
-    <%= label_tag :user_school_id, 'Your school:', :id => 'userSchool-label' %>
+    <%= label_tag :user_school_id, 'Your school', :id => 'userSchool-label' %>
     <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }, "aria-labelledby" => 'userSchool-label user_school_error', :include_blank => '-- Select A School -- ' %>
   </div>
 
