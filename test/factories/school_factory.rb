@@ -4,7 +4,7 @@ class Cranky::Factory
            address_line_1: '100 Main St',
            address_line_2: 'Example, NY 10000',
            code: 'z' + rand.to_s[2..4],
-           borough: 'Manhattan',
+           borough: 'QUEENS',
            active: true
   end
 
