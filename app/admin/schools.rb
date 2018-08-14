@@ -16,13 +16,8 @@ ActiveAdmin.register School do
       [:name].each do |prop|
         row prop
       end
-      row :campus do
-        ad.campus
-      end
       row :borough do
-        if !ad.campus.nil?
-          ad.campus.borough
-        end
+        ad.borough
       end
       row :code do
         ad.code

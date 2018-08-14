@@ -24,7 +24,7 @@ ActiveAdmin.register TeacherSet do
       f.has_many :books, allow_destroy: false do |cf|
         cf.semantic_errors *cf.object.errors.keys
 =begin
-        if cf.object.errors[:base].size > 0
+        if cf.object.errors[:base].count > 0
           cf.object.errors[:base].each do |e|
             e.matching_api_items.each do |t|
               # f.inline_errors_for :base
@@ -34,8 +34,8 @@ ActiveAdmin.register TeacherSet do
           end
         end
 =end
-        if cf.object.errors[:base].size > 0
-          coll = cf.object.errors[:base].first.matching_api_items.map do |t| 
+        if cf.object.errors[:base].count > 0
+          coll = cf.object.errors[:base].first.matching_api_items.map do |t|
             label = []
             label << t['format']['name'] + ': ' unless t['format'].nil? || t['format']['name'].nil?
             label << t['title'] if t['title']
@@ -75,7 +75,7 @@ ActiveAdmin.register TeacherSet do
     end
 
     panel 'Holds' do
-      if set.holds.size == 0
+      if set.holds.count == 0
         div 'No holds have been placed for this teacher set.'
       else
         table_for set.holds do
@@ -93,8 +93,8 @@ ActiveAdmin.register TeacherSet do
       end
     end
 
-    if teacher_set.books.size > 0
-      panel "Books" do 
+    if teacher_set.books.count > 0
+      panel "Books" do
         table_for teacher_set.books do
           column 'Image' do |b| if b.image_uri.nil? then 'None' else link_to image_tag(b.image_uri(:small)), admin_book_path(b) end end
           column 'Title' do |b| link_to b.title, admin_book_path(b) end
