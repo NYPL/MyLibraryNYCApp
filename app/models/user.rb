@@ -37,9 +37,6 @@ class User < ActiveRecord::Base
     self.password_confirmation ||= User.default_password
   end
 
-  #Current ticket this sprint to fix functionaility
-  #after_create :do_after_create
-
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
     "mylibrarynyc"
@@ -68,19 +65,6 @@ class User < ActiveRecord::Base
 
   def multiple_barcodes?
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
-  end
-
-  def do_after_create
-    send_admin_notification_email
-    send_confirmation_email
-  end
-
-  def send_confirmation_email
-    UserMailer.confirmation(self).deliver
-  end
-
-  def send_admin_notification_email
-    UserMailer.admin_notification(self).deliver
   end
 
   def send_unsubscribe_notification_email
