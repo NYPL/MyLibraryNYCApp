@@ -11,8 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20180809153347) do
-
+ActiveRecord::Schema.define(:version => 20180810033347) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -130,6 +129,13 @@ ActiveRecord::Schema.define(:version => 20180809153347) do
   add_index "schools", ["active"], :name => "index_schools_on_active"
   add_index "schools", ["campus_id"], :name => "index_schools_on_campus_id"
   add_index "schools", ["code"], :name => "index_schools_on_code", :unique => true
+
+  create_table "sierra_code_zcode_matches", :force => true do |t|
+    t.integer  "sierra_code"
+    t.string   "zcode"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "subjects", :force => true do |t|
     t.string   "title",      :limit => 30

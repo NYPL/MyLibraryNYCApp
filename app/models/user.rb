@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
         'pcode1' => '-',
         'pcode2' => '-',
         'pcode3' => pcode3,
-        'pcode4' => -1
+        'pcode4' => pcode4
       },
       'barcodes' => [self.assign_barcode.to_s],
       'addresses': [
@@ -214,5 +214,9 @@ class User < ActiveRecord::Base
     return 3 if school.borough == 'STATEN ISLAND'
     return 4 if school.borough == 'BROOKLYN'
     return 5 if school.borough == 'QUEENS'
+  end
+
+  def pcode4 # This returns the sierra code, not the school's zcode
+    school.sierra_code
   end
 end
