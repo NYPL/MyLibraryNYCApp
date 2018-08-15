@@ -1,4 +1,6 @@
 class Cranky::Factory
+  require_relative 'school_factory'
+
   def user
     define first_name: options[:first_name] || Faker::Name.first_name,
            last_name: options[:last_name] || Faker::Name.last_name,
@@ -7,7 +9,7 @@ class Cranky::Factory
            password: 'password123',
            password_confirmation: 'password123',
            pin: 1234,
-           school: queens_school
+           school_id: crank!(:school).id
   end
 
   def queens_user
