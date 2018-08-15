@@ -37,6 +37,18 @@ deploy:
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: qa
+- provider: elasticbeanstalk
+  skip_cleanup: true
+  access_key_id: "$AWS_ACCESS_KEY_ID_PRODUCTION"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY_PRODUCTION"
+  region: us-east-1
+  app: my-library-nyc-app
+  env: my-library-nyc-app-production
+  bucket_name: elasticbeanstalk-us-east-1-946183545209
+  bucket_path: my-library-nyc-app-production
+  on:
+    repo: NYPL/MyLibraryNYCApp
+    branch: set_up_prod
 env:
   global:
   - secure: kU22NeR5MRu32K3YzAImTzC0G9Bzg2kIJ2PBtGkmlgWzWlhI54uqW/euTnOZc/1+0/9oYRv4uGavRWLdlO1oYJmGv09nYseLZJJzGP+QAxHptT9AlOt60q+m/FgkgunfGPF8NHiVSHYk30N79k7t1sKTEc2lcFTt2fAb8vDSwmA8HM1/gb22HaNFuCWolMG1AKQVNZ0bWLB1IM6cvIoWC0/R8jEvNYNlgfQkGzWGcnbtJmqlOeMsy3v4WMBzkMr8bdem07dGU6R6siJ3uvQMVwTYzpB/Qtgy1nXnnasZp5zaJxJYHM9O1sXnz+xy4DroGpHj0lkacKhoBP2Vg0U3eVSf/d+LE2yt0xD17vjXmwB027uvdUvsmRTto1BdjwPKxkes6wyjvYLp/Z8TJbnUNS716ZVSvY8ublCLTZERBleYB8ACQaRHJ3zJMvngi6tIOz5G0K5Xzl+8tpC4iAKNdRkBaMKGjLvlEJQsFC/6p9mCPipCx94Lgww6yzgSe6Yog0P9mv6JPJlUrlGNYP+Zit+e/nnjq71Iw/gteWwTZ3kWXRs0/jm4PnnbgY2h0oELJI2CGYP2Q3FaxuP9rhCtgRvwg8GI8ayvtb0CU3DTxQ4GtlsnSi//j+8HpRx1fpY9zv5GSUHradZ0R4kUD8MxHxAZ0a59kJyKEL1NILakuNc=
