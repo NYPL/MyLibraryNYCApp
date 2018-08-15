@@ -109,8 +109,6 @@ Currently in order to run the unit tests and integration tests, please run the f
 
 ```
 ruby -Itest test/unit/user_test.rb
-ruby -Itest test/unit/import_schools_test.rb
-```
-```
+ruby -Itest test/unit/ingest_rake_task_test.rb
 ruby -Itest test/integration/user_flow_test.rb
 ```
