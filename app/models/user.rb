@@ -107,7 +107,7 @@ class User < ActiveRecord::Base
     if pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
       true
     else
-      errors.add(:pin, 'format is invalid.')
+      errors.add(:pin, 'does not meet our requirements. Please try again.')
       false
     end
   end
