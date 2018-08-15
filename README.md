@@ -105,7 +105,7 @@ In many rails projects when you run the server with `rails s` Rails sets RAILS_E
 Testing
 ========================
 
-Currently in order to run the unit tests and integration tests, please run the following commands while in the root directory.
+For the unit tests and integration tests, please run the following commands while in the root directory.
 
 ```
 ruby -Itest test/unit/user_test.rb
