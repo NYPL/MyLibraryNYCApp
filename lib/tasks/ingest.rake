@@ -422,8 +422,6 @@ namespace :ingest do
         end
         school.updated_at = Time.zone.now
         school.save
-
-        break if Rails.env.test? && index == 2 # import_schools_test.rb assumes that the CSV only has one record
       end
     end
   end
@@ -441,6 +439,27 @@ namespace :ingest do
       'BRONX'
     else
       raise "Borough not found for #{address_line_2}"
+    end
+  end
+
+  # This rake task will overwrite all matches between sierra_codes and zcodes
+  # Example: `rake ingest:overwrite_sierra_code_zcode_matches['data/public/sierra_code_zcode_matches.csv']`
+  desc "Overwrite join table for sierra_codes and zcodes"
+  task :overwrite_sierra_code_zcode_matches, [:file_name] => :environment do |t, args|
+    csv_text = File.read(args.file_name)
+    rows = CSV.parse(csv_text, headers: true)
+    ActiveRecord::Base.transaction do
+      SierraCodeZcodeMatch.destroy_all
+      rows.each_with_index do |row, index|
+        row_hash = row.to_hash
+        sierra_code = row_hash['sierra_code'].strip
+        zcode = row_hash['zcode'].strip
+        puts "Creating #{sierra_code}"
+        ['sierra_code', 'zcode'].each do |column_header_name|
+          raise "The #{column_header_name} column is mislabeled or missing from the CSV." if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
+        end
+        SierraCodeZcodeMatch.create!(sierra_code: sierra_code, zcode: zcode)
+      end
     end
   end
 

@@ -6,6 +6,7 @@ class UserTest < ActiveSupport::TestCase
   setup do
     # create the first user with a barcode in range so that send_request_to_patron_creator_service will work
     @user = crank(:queens_user, barcode: 27777011111111)
+    SierraCodeZcodeMatch.create(sierra_code: 1, zcode: @user.school.code)
   end
 
   [generate_email].each do |new_email|
@@ -132,5 +133,11 @@ class UserTest < ActiveSupport::TestCase
 
   test "Bronx patron's pcode3 is set based on their school's borough" do
     assert(crank(:bronx_user).pcode3 == 1)
+  end
+
+  test "Patron's pcode4 is set based on their school's sierra_code" do
+    user = crank(:bronx_user)
+    SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
+    assert(user.pcode4 == user.school.sierra_code)
   end
 end
