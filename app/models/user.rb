@@ -97,6 +97,9 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
+  # Checks pin patterns against 
+  # the following examples:
+  # 1111, 2929, 0003, 5999. 
   def validate_pin_pattern
     if pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
       true
