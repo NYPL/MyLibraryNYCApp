@@ -100,6 +100,9 @@ class User < ActiveRecord::Base
   # Checks pin patterns against 
   # the following examples:
   # 1111, 2929, 0003, 5999. 
+  # Sierra will return the following
+  # error message if PIN is invalid:
+  # "PIN is not valid : PIN is trivial"
   def validate_pin_pattern
     if pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
       true
