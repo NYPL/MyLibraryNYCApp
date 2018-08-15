@@ -18,8 +18,6 @@ class User < ActiveRecord::Base
   # created on sign up. Does not occur when updating
   # the record.
   validates :school_id, :first_name, :last_name, :presence => true
-  validates :email, :uniqueness => true
-  validates :school, :first_name, :last_name, presence: true
   validates_format_of :email, with: /\@schools.nyc\.gov/, message: ' should end in @schools.nyc.gov', :on => :create
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@#\$%\^&*+_=]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
