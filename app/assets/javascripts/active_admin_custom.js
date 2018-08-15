@@ -109,3 +109,13 @@ $( document ).ready(function() {
 
 
 });
+
+function activateSchool(schoolId, activate) {
+  if (activate == true){
+    $(`#activate-school-${schoolId}-container`).hide();
+    $(`#inactivate-school-${schoolId}-container`).show();
+  } else {
+    $(`#inactivate-school-${schoolId}-container`).hide();
+    $(`#activate-school-${schoolId}-container`).show();
+  }
+};
