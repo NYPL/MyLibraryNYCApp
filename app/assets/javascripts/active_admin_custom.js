@@ -10,7 +10,7 @@ $( document ).ready(function() {
           " about your order please email: delivery@mylibrarynyc.org."}
       ],
       'pending_-_unavailable': [  
-        {name: 'Pending: Set in Unavailable', content: "Hello from MyLibraryNYC Fulfillment,\n\nWe received " +
+        {name: 'Pending: Set is Unavailable', content: "Hello from MyLibraryNYC Fulfillment,\n\nWe received " +
           "your Teacher Set order but we are unable to fulfill your request at this time. All copies of this " +
           "set are currently checked out and being used by other Educators.\n\nIf you would like help with " +
           "selecting another Teacher Set or would like to be placed in Queue to wait for this Teacher Set, please email: help@mylibrarynyc.org ."}
@@ -109,3 +109,13 @@ $( document ).ready(function() {
 
 
 });
+
+function activateSchool(schoolId, activate) {
+  if (activate == true){
+    $(`#activate-school-${schoolId}-container`).hide();
+    $(`#inactivate-school-${schoolId}-container`).show();
+  } else {
+    $(`#inactivate-school-${schoolId}-container`).hide();
+    $(`#activate-school-${schoolId}-container`).show();
+  }
+};

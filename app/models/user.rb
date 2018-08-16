@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
   validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
+  validate :validate_pin_pattern 
 
   has_many :holds
 
@@ -34,9 +35,6 @@ class User < ActiveRecord::Base
     self.password ||= User.default_password
     self.password_confirmation ||= User.default_password
   end
-
-  #Current ticket this sprint to fix functionaility
-  #after_create :do_after_create
 
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
@@ -68,19 +66,6 @@ class User < ActiveRecord::Base
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
 
-  def do_after_create
-    send_admin_notification_email
-    send_confirmation_email
-  end
-
-  def send_confirmation_email
-    UserMailer.confirmation(self).deliver
-  end
-
-  def send_admin_notification_email
-    UserMailer.admin_notification(self).deliver
-  end
-
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
@@ -94,6 +79,20 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
+  # Checks pin patterns against 
+  # the following examples:
+  # 1111, 2929, 0003, 5999. 
+  # Sierra will return the following
+  # error message if PIN is invalid:
+  # "PIN is not valid : PIN is trivial"
+  def validate_pin_pattern
+    if pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
+      true
+    else
+      errors.add(:pin, 'does not meet our requirements. Please try again.')
+      false
+    end
+  end
 
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.

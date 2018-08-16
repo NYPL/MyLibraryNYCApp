@@ -41,6 +41,30 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  [generate_email].each do |new_email|
+    test 'user model cannot be created with 4 of the same repeated digits as pin' do
+      @user.pin = "1111"
+      @user.save
+      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+    end
+  end
+
+  [generate_email].each do |new_email|
+    test 'user model cannot be created with alternate repeated digits as pin' do
+      @user.pin = "1212"
+      @user.save
+      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+    end
+  end
+
+  [generate_email].each do |new_email|
+    test 'user model cannot be created with 3 of the same repeated digits in a row as pin' do
+      @user.pin = "0007"
+      @user.save
+      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+    end
+  end
+
   [generate_email_without_valid_domain].each do |new_email|
     test 'should not save user without schools.nyc.gov domain in email' do
       @user.email = "testing@gmail.com"
