@@ -1,7 +1,5 @@
-
 namespace :tests do
 
-  # Fetch latest data from biblio
   desc "Run integration and unit tests"
   task :all => :environment do
   	system("ruby -Itest test/integration/user_flow_test.rb")
