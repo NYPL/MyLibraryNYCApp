@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created without first name' do
       @user.first_name = ""
       @user.save
-      assert_equal(@user.errors.messages[:first_name],["can't be blank", "is invalid"])
+      assert_equal(["can't be blank", "is invalid"], @user.errors.messages[:first_name])
     end
   end
 
@@ -20,7 +20,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created without last name' do
       @user.last_name = ""
       @user.save
-      assert_equal(@user.errors.messages[:last_name],["can't be blank", "is invalid"])
+      assert_equal(["can't be blank", "is invalid"], @user.errors.messages[:last_name])
     end
   end
 
@@ -28,7 +28,16 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created without pin' do
       @user.pin = ""
       @user.save
-      assert_equal(@user.errors.messages[:pin],["can't be blank", "requires numbers only.", "must be 4 digits."])
+      assert_equal(["can't be blank", "requires numbers only.", "must be 4 digits."], @user.errors.messages[:pin])
+    end
+  end
+
+  [generate_email].each do |new_email|
+    test 'user model cannot be created with an existing alternate e-mail address in database' do
+      @user.save
+      user_two = crank!(:user, alt_email: @user.alt_email)
+      user_two.save
+      assert_equal(["has already been taken"], user_two.errors.messages[:alt_email])
     end
   end
 
@@ -36,7 +45,7 @@ class UserTest < ActiveSupport::TestCase
     test 'should not save user without schools.nyc.gov domain in email' do
       @user.email = "testing@gmail.com"
       @user.save
-      assert_equal(@user.errors[:email],[" should end in @schools.nyc.gov"])
+      assert_equal([" should end in @schools.nyc.gov"], @user.errors[:email])
     end
   end
 
