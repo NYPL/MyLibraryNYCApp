@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   # the record.
   validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
+  validate :validate_pin_pattern 
 
   has_many :holds
 
@@ -80,6 +81,20 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
+  # Checks pin patterns against 
+  # the following examples:
+  # 1111, 2929, 0003, 5999. 
+  # Sierra will return the following
+  # error message if PIN is invalid:
+  # "PIN is not valid : PIN is trivial"
+  def validate_pin_pattern
+    if pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
+      true
+    else
+      errors.add(:pin, 'does not meet our requirements. Please try again.')
+      false
+    end
+  end
 
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.

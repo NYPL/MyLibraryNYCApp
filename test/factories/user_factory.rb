@@ -5,7 +5,7 @@ class Cranky::Factory
            email: ('a'..'z').to_a.shuffle[0, 8].join + Time.now.to_i.to_s + '@schools.nyc.gov',
            password: 'password123',
            password_confirmation: 'password123',
-           pin: 1234,
+           pin: '1234',
            school: queens_school
   end
 
