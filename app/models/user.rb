@@ -14,16 +14,14 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :pin
 
-  validates :school, :first_name, :last_name, :presence => true
-  # Validation only occurs when a user record is being
+  # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
   # the record.
+  validates :school_id, :first_name, :last_name, :presence => true
   validates_format_of :email, with: /\@schools.nyc\.gov/, message: ' should end in @schools.nyc.gov', :on => :create
-  validates_format_of :first_name, :last_name, :with => /^[a-z]+$/i
+  validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
-  # Validation only occurs when a user record is being
-  # created on sign up. Does not occur when updating
-  # the record.
+  validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
   validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
   validate :validate_pin_pattern 
@@ -76,7 +74,7 @@ class User < ActiveRecord::Base
   def assign_barcode
     Rails.logger.debug("assign_barcode: start")
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
-    self.update_attribute(:barcode, last_user_barcode + 1)
+    self.assign_attributes({ barcode: last_user_barcode + 1})
     Rails.logger.debug("assign_barcode: end | Generated barcode #{self.barcode}.")
     return self.barcode
   end
@@ -149,7 +147,7 @@ class User < ActiveRecord::Base
           'timestamp' => Time.now.iso8601
         }
       ).to_s
-      raise InvalidResponse, "Invalid status code of: #{response.code}"
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
 

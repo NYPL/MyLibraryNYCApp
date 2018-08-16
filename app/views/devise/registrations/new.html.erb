@@ -1,4 +1,24 @@
 <html lang="en">
+
+<noscript>
+   <h3 id='no-js-message'>This form requires JavaScript. Your browser may not have JavaScript or it may be disabled. 
+    Please try again with a JavaScript-enabled browser or email help@mylibrarynyc.org for assistance.
+   </h3>
+
+   <style>
+   
+   form {
+   display:none; 
+   }
+
+   h1 {
+    display: :none;
+   }
+
+   </style>
+
+</noscript>
+
 <h1>Sign Up</h1>
 
 <%= javascript_include_tag('sign_up_async_request.js') %>
@@ -20,7 +40,7 @@
     </span>
   </div>
   <div class="field-group">
-    <%= label_tag :user_alt_email, "Alternate E-mail Address (optional)", :id => 'userAltEmail-label' %>
+    <%= label_tag :user_alt_email, "Alternate email address (optional)", :id => 'userAltEmail-label' %>
     <%= f.email_field :alt_email, "aria-labelledby" => 'userAltEmail-label user_alt_email_error' %> 
   </div>
   <div class="field-group">
@@ -34,7 +54,7 @@
 
   <div class="field-group">
     <%= label_tag :user_school_id, 'Your school:', :id => 'userSchool-label' %>
-    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }, "aria-labelledby" => 'userSchool-label user_school_error' %>
+    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }, "aria-labelledby" => 'userSchool-label user_school_error', :include_blank => '-- Select A School -- ' %>
   </div>
 
   <div class="field-group">
@@ -50,7 +70,7 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "Sign Up", :class=> "button", :id =>'sign_up_button' %>
+    <%= f.submit "Sign Up", :class=> "button", :id =>'sign_up_button',   disabled: true %>
   </div>
 <% end %>
 
