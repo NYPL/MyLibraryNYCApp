@@ -1,28 +1,51 @@
-ActiveAdmin.register School do
+ActiveAdmin.register School do |aa|
   menu :priority => 5
   actions :all, except: [:destroy, :new] #just show
 
+  filter :name
+  filter :active
+
   index do
     column :name
-    column :active
+    column(:active, sortable: :active) do |school|
+      render(partial: 'schools/activation_links_container', locals: { school: school })
+    end
     default_actions
   end
 
-  filter :name
-  filter :active
+  action_item only: :show do
+    render(partial: 'schools/activation_links_container', locals: { school: school })
+  end
+
+  member_action :activate, method: :put do
+    school = School.find(params[:id])
+    school.active = true
+    school.save
+    if request.format == :html
+      redirect_to admin_school_path(school)
+    else
+      render js: "activateSchool(#{school.id}, true);"
+    end
+  end
+
+  member_action :inactivate, method: :put do
+    school = School.find(params[:id])
+    school.active = false
+    school.save
+    if request.format == :html
+      redirect_to admin_school_path(school)
+    else
+      render js: "activateSchool(#{school.id}, false);"
+    end
+  end
 
   show do |ad|
     attributes_table do
       [:name].each do |prop|
         row prop
       end
-      row :campus do
-        ad.campus
-      end
       row :borough do
-        if !ad.campus.nil?
-          ad.campus.borough
-        end
+        ad.borough
       end
       row :code do
         ad.code

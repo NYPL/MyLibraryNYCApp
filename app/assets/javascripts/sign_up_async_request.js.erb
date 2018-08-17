@@ -10,12 +10,12 @@ $( document ).ready(function() {
 			ajaxRequestArray.pop();
 		}
 
-		$("#sign_up_button").prop("disabled",true);
-		$("#sign_up_button").css("background-color","grey");
-		$(".spinner").css("display","block");
-		$("#check_email_div").css("display","block")
+		$("#sign_up_button").prop("disabled", true);
+		$("#sign_up_button").css("background-color", "grey");
+		$(".spinner").css("display", "block");
+		$("#check_email_div").css("display", "block")
 		$("#check_email_span").text("Validating email: " + $(this).val());
-		$("#check_email_span").css({"margin-left":"30px","color":"black"});
+		$("#check_email_span").css({"margin-left":"30px", "color":"black"});
 
 		try{
 
@@ -40,13 +40,10 @@ $( document ).ready(function() {
 					if (result.statusCode == 404) {
 
 						$(".spinner").css("display","none");
-
 						$("#check_email_span").css({"margin-left":"0px","color":'green'})
-						$("#check_email_span").text("Success! We've confirmed that you don't already have a MyLibraryNYC account."); 
-
+						$("#check_email_span").text("Success! We've confirmed that you don't already have a MyLibraryNYC account.");
 						$("#sign_up_button").prop("disabled",false);
 						$("#sign_up_button").css("background-color","#af2228")
-
 						$("#sign_up_button").hover(function(){
 							$(this).css("opacity", 0.9);
 						}, function() {
@@ -67,12 +64,12 @@ $( document ).ready(function() {
 				}
 			})
 			ajaxRequestArray.push(request)
-			
+
 		}
 		catch(err){
 			console.log("Invalid e-mail format.")
 		}
-})
+	})
 
 function handleError(){
 
@@ -86,7 +83,6 @@ function validateEmailFormat(email) {
 	if(re.test(email) == false){
 		$(".spinner").css("display","none");
 		$('#check_email_div').css("display","none");
-
 		throw new InvalidEmailFormatError("Invalid e-mail-format");
 	}
 }
@@ -95,7 +91,7 @@ function validateEmailDomain(email){
 	var domain = email.split('@')
 	if(domain[1] != "schools.nyc.gov"){
 		$(".spinner").css("display","none");
-	    $('#check_email_div').css("display","none");
+		$('#check_email_div').css("display","none");
 		throw new InvalidEmailDomainError("Invalid e-mail domain")
 	}
 }
@@ -113,6 +109,7 @@ window.ClientSideValidations.callbacks.element.fail = function(element, message,
 	}
 }
 
+
 window.ClientSideValidations.callbacks.element.pass = function(element, callback) {
 	$(element).css('background', '#E8E4E2');
 	$(element).css('border','1px solid #D0CDC8');
@@ -120,7 +117,4 @@ window.ClientSideValidations.callbacks.element.pass = function(element, callback
 }
 
 
-
-
-
-})	
+})

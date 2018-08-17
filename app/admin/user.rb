@@ -49,7 +49,7 @@ ActiveAdmin.register User do
     end
 
     panel 'Holds' do
-      if user.holds.size == 0
+      if user.holds.count == 0
         div 'No holds'
       else
         table_for user.holds do
