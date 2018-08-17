@@ -123,7 +123,6 @@ class User < ActiveRecord::Base
         }
       ],
     }
-    binding.pryq
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
