@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
   validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
-  validate :validate_pin_pattern, on: :create 
+  validate :validate_pin_pattern, on: :create
 
   has_many :holds
 
