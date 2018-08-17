@@ -1,11 +1,11 @@
-language: generic
-cache: bundler
+language: ruby
+cache:
+  directories:
+    - /home/travis/.rvm/
 rvm:
 - 2.2.10 
 services:
 - postgresql
-before_install:
-- rvm install 2.2.10
 script: 
 - bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
