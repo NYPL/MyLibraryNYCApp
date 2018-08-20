@@ -5,10 +5,17 @@ $( document ).ready(function() {
 
 	$('#user_email').on('focusout', function(){
 
+		if(localStorage.getItem("valid-email") == $('#user_email').val()){
+			$("#check_email_div").css("display", "block")
+			validEmailMessage();
+			return true
+		}
+
 		if(ajaxRequestArray.length > 0){
 			ajaxRequestArray[0].abort();
 			ajaxRequestArray.pop();
 		}
+
 
 		$("#sign_up_button").prop("disabled", true);
 		$("#sign_up_button").css("background-color", "grey");
@@ -39,16 +46,9 @@ $( document ).ready(function() {
 
 					if (result.statusCode == 404) {
 
-						$(".spinner").css("display","none");
-						$("#check_email_span").css({"margin-left":"0px","color":'green'})
-						$("#check_email_span").text("Success! We've confirmed that you don't already have a MyLibraryNYC account.");
-						$("#sign_up_button").prop("disabled",false);
-						$("#sign_up_button").css("background-color","#af2228")
-						$("#sign_up_button").hover(function(){
-							$(this).css("opacity", 0.9);
-						}, function() {
-							$(this).css("opacity", 1.0);
-						})
+						localStorage.setItem("valid-email", $('#user_email').val());
+						validEmailMessage()
+
 					}
 
 					if (result.statusCode != 200 && result.statusCode != 404) {
@@ -76,6 +76,21 @@ function handleError(){
 	$(".spinner").css("display","none");
 	$("#check_email_span").css({"margin-left":"0px","color": "red"})
 	$("#check_email_span").text("We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance.");
+}
+
+function validEmailMessage(){
+
+	$(".spinner").css("display","none");
+	$("#check_email_span").css({"margin-left":"0px","color":'green'})
+	$("#check_email_span").text("Success! We've confirmed that you don't already have a MyLibraryNYC account.");
+	$("#sign_up_button").prop("disabled",false);
+	$("#sign_up_button").css("background-color","#af2228")
+	$("#sign_up_button").hover(function(){
+		$(this).css("opacity", 0.9);
+	}, function() {
+		$(this).css("opacity", 1.0);
+	})
+
 }
 
 function validateEmailFormat(email) {
