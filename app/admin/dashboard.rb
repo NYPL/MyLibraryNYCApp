@@ -90,7 +90,7 @@ ActiveAdmin.register_page "Dashboard" do
     columns do 
       column do
         h2 "New"
-        if Hold.unseen.size == 0
+        if Hold.unseen.count == 0
           div 'No new holds'
         else
           i = 0
@@ -140,7 +140,7 @@ ActiveAdmin.register_page "Dashboard" do
     columns do
       column do
         h2 "Pending"
-        if Hold.pending.size == 0
+        if Hold.pending.count == 0
           div 'No Pending - Trouble holds'
         else
           i = 0
@@ -165,7 +165,7 @@ ActiveAdmin.register_page "Dashboard" do
     columns do
       column do
         h2 "Pending - In Transit Aux"
-        if Hold.transit.size == 0
+        if Hold.transit.count == 0
           div 'No Pending - In Transit Aux holds'
         else
           i = 0
@@ -190,7 +190,7 @@ ActiveAdmin.register_page "Dashboard" do
     columns do
       column do
         h2 "Pending - Trouble"
-        if Hold.trouble.size == 0
+        if Hold.trouble.count == 0
           div 'No Pending - Trouble holds'
         else
           i = 0
@@ -215,7 +215,7 @@ ActiveAdmin.register_page "Dashboard" do
     columns do
       column do
         h2 "Pending - Unavailable"
-        if Hold.unavailable.size == 0
+        if Hold.unavailable.count == 0
           div 'No Pending - Unavailable holds'
         else
           i = 0
