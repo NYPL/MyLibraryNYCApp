@@ -128,7 +128,7 @@ class User < ActiveRecord::Base
         'status' => 'Request send to patron creator service',
         'dataSent' => query
        }
-      )
+    )
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
