@@ -402,7 +402,7 @@ namespace :ingest do
         ['LOCATION_CODE', 'LOCATION_NAME', 'PRIMARY_ADDRESS_LINE_1', 'STATE_CODE', 'Location 1', 'PRINCIPAL_PHONE_NUMBER'].each do |column_header_name|
           raise "The #{column_header_name} column is mislabeled or missing from the CSV." if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
         end
-        zcode = "z#{row_hash['LOCATION_CODE'].strip}"
+        zcode = "z#{row_hash['LOCATION_CODE'].strip}".downcase
         school = School.where(code: zcode).first_or_initialize
         school.name = school.name || school_name
         school.address_line_1 = school.address_line_1 || row_hash['PRIMARY_ADDRESS_LINE_1'].strip
