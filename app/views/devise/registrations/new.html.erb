@@ -1,9 +1,9 @@
 <html lang="en">
 
 <noscript>
-   <h3 id='no-js-message'>This form requires JavaScript. Your browser may not have JavaScript or it may be disabled. 
+   <p id='no-js-message'>This form requires JavaScript. Your browser may not have JavaScript or it may be disabled. 
     Please try again with a JavaScript-enabled browser or email help@mylibrarynyc.org for assistance.
-   </h3>
+   </p>
 
    <style>
    
@@ -12,7 +12,7 @@
    }
 
    h1 {
-    display: :none;
+    visibility: hidden;
    }
 
    </style>
@@ -20,7 +20,6 @@
 </noscript>
 
 <h1>Sign Up</h1>
-
 <%= javascript_include_tag('sign_up_async_request.js') %>
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name),  validate: true) do |f| %>
@@ -53,7 +52,7 @@
   </div>
 
   <div class="field-group">
-    <%= label_tag :user_school_id, 'Your school:', :id => 'userSchool-label' %>
+    <%= label_tag :user_school_id, 'Your school', :id => 'userSchool-label' %>
     <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }, "aria-labelledby" => 'userSchool-label user_school_error', :include_blank => '-- Select A School -- ' %>
   </div>
 
