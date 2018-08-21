@@ -3,6 +3,7 @@
 app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location', 'Angularytics',
   function($http, $routeParams, $location, Angularytics) {
     var TeachSetListFactory = function() {
+      localStorage.clear();
       this.items = [];
       this.facets = [];
       this.busy = false; // whether service is *actually* busy    
