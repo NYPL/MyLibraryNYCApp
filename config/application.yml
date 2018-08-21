@@ -40,6 +40,21 @@ when 'qa'
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
 
+when 'production'
+
+  ENV['RACK_ENV'] = 'production'
+  ENV['RAILS_ENV'] = 'production'
+  ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAPMwgfAGCSqGSIb3DQEHBqCB4jCB3wIBADCB2QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyzTdVMhyqutO/fsX4CARCAgasVxmddpYC6YWNc39najXv2cf8cH0M5LsSaJKdeNR5CifdfFzre9dr5E0GiXj++koZgnYVQ2ObcmWGyv197K8/tqL8J9KGzjmNH0X/wzGRa/+QvU6JaESQFvjvRUV0QPdna3w6Q9X1RzwPt38zhFBy2Fs8WrZdfTh38QlNYb3993F86AT/Qz7at14AXUCPqdB+9QmoJxVNlQdbdkjqb7xStKSVhwK/mL3zc+Mk=")
+  ENV['CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHAwbgYJKoZIhvcNAQcGoGEwXwIBADBaBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDNqbzIl0LSaN0+sTGAIBEIAtfvp+zyD5N6JbmhDB7i2kz4IhqUw2fESCYBdyofNfdajNvLnS4W33kg7d/DoJ")
+  ENV['CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAI0wgYoGCSqGSIb3DQEHBqB9MHsCAQAwdgYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz0OkPHABGXC9ZgahwCARCAScqSPBEgNtcpfTmMoP8dAZueu7CbTmsObkpChmb/WPsVb7CXdpqkOyVtTK6OpIUod6ZrzIMmXtFzAXsZ59VDHk2vp4dvc79BqQw=")
+  ENV['SENDGRID_USERNAME'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDI4zFsfxxw6uQFfsLQIBEIAxo/bvFdOg3lhLu8Gm2012g1A4m+kfcjJjigIHeSuZImejaWbUM/iB3D4sCoJqSmhQLQ==")
+  ENV['SENDGRID_PASSWORD'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDG3JJu7AOnPtvxvTVQIBEIAxAJeb2OMJhuFlXy4lhUotKxWz7edjxq7UEaIxd4lf1eoXRoCLkbUNyHuuq1L2KSY1mw==")
+  ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAOkwgeYGCSqGSIb3DQEHBqCB2DCB1QIBADCBzwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAziDnf1k29bXx4B81QCARCAgaF2fDdTCt4eChzWHHpsUhAkN6Ufz94ZizJ08Rq6y/4RQ44bybOpPIesKv2UvTUL5Hk4TU7fkbhBr7e8ZFLZsp7Pxn2BjCZ4PMBB499R38NieVLI5a4g8C8499uFhuMeAOeJ6oqiOOM21nI8Cy17zmmDQfP0zVXjNr+0hOZtwR0QpbAlDl0z0ov21BfG3RrUTyIdLE/RqqARsfsRZB29Kcfcdg==")
+  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
+  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://platformdocs.nypl.org/api/v0.1/patrons"
+  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://platformdocs.nypl.org/api/v0.2/patrons"
+
+
 when 'test'
 
   ENV['DATABASE_URL'] = "postgresql://localhost/mln_test"
