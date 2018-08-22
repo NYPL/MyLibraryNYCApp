@@ -12,21 +12,6 @@ class CleanupSchoolCodes < ActiveRecord::Migration
         puts "Not deleting school with zcode: zk681 & space on end"
       end
 
-      # downcase and strip all school codes
-      School.all.each do |s|
-        puts s.code
-        begin
-          s.code = s.code.downcase.strip
-          s.save
-        rescue
-          puts "#{s.code} could not be downcased"
-        end
-      end
-
-      # upload missing schools
-      Rake::Task['ingest:import_all_nyc_schools'].invoke('data/public/2016_-_2017_School_Locations.csv')
-      Rake::Task['ingest:import_all_nyc_schools'].invoke('data/public/2016_-_2017_School_Locations2.csv')
-
       # delete schools not found in data.gov
       codes_for_schools_to_delete = [
         "zq496", "zk991", "zx520", "zx295", "zx541", "zx414", "zq494", "zm429", "zx203", "zk596",

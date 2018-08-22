@@ -28,7 +28,7 @@ class MergeDuplicateSchools < ActiveRecord::Migration
 
       # downcase all zcodes and change 'zz' to 'z'
       School.all.each do |school|
-        school.code = school.code.downcase.gsub('zz', 'z')
+        school.code = school.code.downcase.gsub('zz', 'z').strip
         school.save
       end
     end
