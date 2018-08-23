@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140303210646) do
+ActiveRecord::Schema.define(:version => 20180821102147) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -112,15 +112,30 @@ ActiveRecord::Schema.define(:version => 20140303210646) do
   add_index "holds", ["access_key"], :name => "index_holds_access_key", :unique => true
 
   create_table "schools", :force => true do |t|
-    t.string  "name"
-    t.integer "campus_id"
-    t.string  "code",      :limit => 8
-    t.boolean "active",                 :default => false
+    t.string   "name"
+    t.integer  "campus_id"
+    t.string   "code",           :limit => 8
+    t.boolean  "active",                      :default => false
+    t.string   "address_line_1"
+    t.string   "address_line_2"
+    t.string   "state"
+    t.string   "postal_code"
+    t.string   "phone_number"
+    t.string   "borough"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "schools", ["active"], :name => "index_schools_on_active"
   add_index "schools", ["campus_id"], :name => "index_schools_on_campus_id"
   add_index "schools", ["code"], :name => "index_schools_on_code", :unique => true
+
+  create_table "sierra_code_zcode_matches", :force => true do |t|
+    t.integer  "sierra_code"
+    t.string   "zcode"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "subjects", :force => true do |t|
     t.string   "title",      :limit => 30
@@ -159,7 +174,7 @@ ActiveRecord::Schema.define(:version => 20140303210646) do
     t.string   "availability"
     t.string   "isbn"
     t.string   "language"
-    t.string   "physical_description"
+    t.text     "physical_description"
     t.string   "primary_language"
     t.string   "publisher"
     t.string   "series"

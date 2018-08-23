@@ -3,98 +3,74 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   include AwsDecrypt
 
-  # Create sample test data
-  first_name = Faker::Name.first_name
-  last_name = Faker::Name.last_name
-  email = generate_email
-  pin = [1, 1, 1, 1].map! { (0..9).to_a.sample }.join
-  school_id = '1076'
-  password = 'password123'
-
-  # Create user objects in the database
-  user = User.create!(
-    first_name: first_name,
-    last_name: last_name,
-    email: email,
-    school_id: school_id,
-    password: password,
-    pin: pin,
-    password_confirmation: password
-  )
-
-  test 'user model can successfully be created' do
-    assert_instance_of User, user
-    assert(!user.id.nil?, 'New user model expected to be created')
+  setup do
+    # create the first user with a barcode in range so that send_request_to_patron_creator_service will work
+    @user = crank(:queens_user, barcode: 27777011111111)
+    SierraCodeZcodeMatch.create(sierra_code: 1, zcode: @user.school.code)
   end
 
   [generate_email].each do |new_email|
     test 'user model cannot be created without first name' do
-      user = User.create(
-        last_name: last_name,
-        email: new_email,
-        school_id: school_id,
-        password: password,
-        pin: pin,
-        password_confirmation: password
-      )
-      assert user.id.nil?
+      @user.first_name = ""
+      @user.save
+      assert_equal(["can't be blank", "is invalid"], @user.errors.messages[:first_name])
     end
   end
 
   [generate_email].each do |new_email|
     test 'user model cannot be created without last name' do
-      user = User.create(
-        first_name: first_name,
-        email: new_email,
-        school_id: school_id,
-        password: password,
-        pin: pin,
-        password_confirmation: password
-      )
-      assert user.id.nil?
+      @user.last_name = ""
+      @user.save
+      assert_equal(["can't be blank", "is invalid"], @user.errors.messages[:last_name])
     end
   end
 
   [generate_email].each do |new_email|
     test 'user model cannot be created without pin' do
-      user = User.create(
-        first_name: first_name,
-        last_name: last_name,
-        email: new_email,
-        school_id: school_id,
-        password: password,
-        password_confirmation: password
-      )
-      assert user.id.nil?
+      @user.pin = ""
+      @user.save
+      assert_equal(["can't be blank", "requires numbers only.", "must be 4 digits."], @user.errors.messages[:pin])
     end
   end
 
-  test 'cannot create a user object with an e-mail address already saved
-    in the database' do
-    user_two = User.create(
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      school_id: school_id,
-      password: password,
-      pin: pin,
-      password_confirmation: password
-    )
-    assert user_two.id.nil?
+  [generate_email].each do |new_email|
+    test 'user model cannot be created with an existing alternate e-mail address in database' do
+      @user.save
+      user_two = crank!(:user, alt_email: @user.alt_email)
+      user_two.save
+      assert_equal(["has already been taken"], user_two.errors.messages[:alt_email])
+    end
+  end
+
+  [generate_email].each do |new_email|
+    test 'user model cannot be created with 4 of the same repeated digits as pin' do
+      @user.pin = "1111"
+      @user.save
+      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+    end
+  end
+
+  [generate_email].each do |new_email|
+    test 'user model cannot be created with alternate repeated digits as pin' do
+      @user.pin = "1212"
+      @user.save
+      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+    end
+  end
+
+  [generate_email].each do |new_email|
+    test 'user model cannot be created with 3 of the same repeated digits in a row as pin' do
+      @user.pin = "0007"
+      @user.save
+      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+    end
   end
 
   [generate_email_without_valid_domain].each do |new_email|
     test 'should not save user without schools.nyc.gov domain in email' do
-      user_three = User.create(
-        first_name: first_name,
-        last_name: last_name,
-        email: new_email,
-        school_id: school_id,
-        password: password,
-        pin: pin,
-        password_confirmation: password
-      )
-      assert user_three.id.nil?
+      @user.email = "testing@gmail.com"
+      @user.save
+      assert_equal([" should end in @schools.nyc.gov"], @user.errors[:email])
     end
   end
 
@@ -102,7 +78,7 @@ class UserTest < ActiveSupport::TestCase
   # by mock_get_oauth_token_request
   test 'user method get_oauth_token is giving back an access token from
     ISSO NYPL service' do
-    token = user.get_oauth_token
+    token = @user.get_oauth_token
     assert !token.nil?
     assert token.present?
   end
@@ -111,7 +87,7 @@ class UserTest < ActiveSupport::TestCase
     test "user method get_email_records returns a 404 illustrating that
       e-mail hasn't been used yet by a patron" do
         mock_check_email_request(new_email)
-        response = user.get_email_records(new_email)
+        response = @user.get_email_records(new_email)
         expected_response = {
           'statusCode' => 404,
           'type' => 'exception',
@@ -126,7 +102,8 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     a 201 illustrating patron was created through
       patron creator microservice" do
-    assert_true user.send_request_to_patron_creator_service
+    crank!(:queens_user, barcode: 27777011111111)
+    assert_true @user.send_request_to_patron_creator_service
   end
 
   # Need to call twice, in order to receive the second response
@@ -135,10 +112,32 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     an exception illustrating patron was not created
       through patron creator micro-service" do
-    user.send_request_to_patron_creator_service
+    @user.send_request_to_patron_creator_service
     exception = assert_raise(Exceptions::InvalidResponse) do
-      user.send_request_to_patron_creator_service
+      @user.send_request_to_patron_creator_service
     end
     assert_equal('Invalid status code of: 500', exception.message)
+  end
+
+  test "Queens patron's patron_type is set based on their school's borough" do
+    assert(@user.patron_type == 149)
+  end
+
+  test "Bronx patron's patron_type is set based on their school's borough" do
+    assert(crank(:bronx_user).patron_type == 151)
+  end
+
+  test "Queens patron's pcode3 is set based on their school's borough" do
+    assert(crank(:queens_user).pcode3 == 5)
+  end
+
+  test "Bronx patron's pcode3 is set based on their school's borough" do
+    assert(crank(:bronx_user).pcode3 == 1)
+  end
+
+  test "Patron's pcode4 is set based on their school's sierra_code" do
+    user = crank(:bronx_user)
+    SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
+    assert(user.pcode4 == user.school.sierra_code)
   end
 end

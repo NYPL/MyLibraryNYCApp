@@ -1,7 +1,7 @@
 <div id="breadcrumb">
 	<%= link_to "Home", "/app#/teacher_sets" %> <i class="fa fa-angle-right"></i>
 	<% case request.fullpath %>
-	<% when "/account" %>
+	<% when "/account", "/users/edit" %>
 	Account
 	<% when "/help" %>
 	Help
@@ -9,7 +9,7 @@
 	Participating schools
 	<% when "/users/start" %>
   Get Started
-  <% when "/users/signup" %>
+  <% when "/users/signup", "/users" %>
   Sign Up
 	<% else %>
 	<%= request.fullpath %>
