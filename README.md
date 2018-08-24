@@ -65,7 +65,7 @@ When a developer, commits a change on the development branch or merges another b
 More documentation can be found here: [travis-confluence-page](https://confluence.nypl.org/display/WT/Travis-CI+Integration+with+MyLibraryNYC+to+AWS+Elastic+Beanstalk)
 
 
-Environmental Variables 
+Environment Variables 
 ========================
 
 
