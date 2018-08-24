@@ -1,8 +1,4 @@
 class School < ActiveRecord::Base
-
-  attr_accessible :name
-
-  belongs_to :campus
   has_many :users
 
   default_scope order('name ASC')
@@ -11,15 +7,15 @@ class School < ActiveRecord::Base
 
   def full_name(delim = ', ')
     n = name
-    if !campus.nil?
-      if campus.schools.size > 1
-        n += "#{delim}#{campus.name}"
-      end
-
-      if !campus.borough.nil?
-        n += "#{delim}#{campus.borough.name}"
-      end
-    end
+    n += "#{delim}#{borough}" if !borough.nil?
     n
+  end
+
+  # This looks up a SierraCodeZcodeMatch by the school's zcode (ie "zk003")
+  # and returns the sierra_code Sierra uses to lookup a zcode (ie "1")
+  def sierra_code
+    match = SierraCodeZcodeMatch.find_by_zcode(code)
+    return nil if !match
+    return match.sierra_code
   end
 end

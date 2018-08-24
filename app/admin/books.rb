@@ -21,7 +21,7 @@ ActiveAdmin.register Book do
     end
 
     h2 'Teacher Sets'
-    if book.teacher_sets.size > 0
+    if book.teacher_sets.count > 0
       table_for book.teacher_sets do
         column 'Title' do |s| link_to s.title, admin_teacher_set_path(s) end
         column 'Availability' do |s| link_to s.availability, admin_teacher_set_path(s) end

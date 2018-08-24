@@ -48,8 +48,8 @@ ActiveAdmin.register Hold do
     h2 "Status: #{ad.status}"
     h3 do link_to 'Change Status', new_admin_hold_change_path(:hold => ad) end
 
-    if ad.hold_changes.size > 0
-      table_for ad.hold_changes.order('created_at DESC') do 
+    if ad.hold_changes.count > 0
+      table_for ad.hold_changes.order('created_at DESC') do
         column 'Status ' do |c| link_to c.status, admin_hold_change_path(c) end
         column 'Admin' do |c| link_to c.admin_user.name, admin_hold_change_path(c) unless c.admin_user.nil? end
         column 'Date' do |c| c.created_at end
@@ -90,8 +90,8 @@ ActiveAdmin.register Hold do
       end
     end
 
-    if ad.teacher_set.books.size > 0
       panel "Books" do 
+    if ad.teacher_set.books.count > 0
         table_for ad.teacher_set.books do
           column 'Image' do |b| if b.image_uri.nil? then 'None' else link_to image_tag(b.image_uri(:small)), admin_book_path(b) end end
           column 'Title' do |b| link_to b.title, admin_book_path(b) end

@@ -1,61 +1,72 @@
+
 $( document ).ready(function() {
+
+	var ajaxRequestArray = []
 
 	$('#user_email').on('focusout', function(){
 
-		$("#sign_up_button").prop("disabled",true);
-		$("#sign_up_button").css("background-color","grey");
-		$(".spinner").css("display","block");
-		$("#check_email_div").css("display","block")
-		$("#check_email_span").text("Validating email.");
-		$("#check_email_span").css({"margin-left":"30px","color":"black"});
+		if(localStorage.getItem("valid-email") == $('#user_email').val()){
+			$("#check_email_div").css("display", "block")
+			showValidEmailMessage(true);
+			return true
+		}
 
-		validateEmailFormat($('#user_email').val());
-		validateEmailDomain($('#user_email').val());
+		if(ajaxRequestArray.length > 0){
+			ajaxRequestArray[0].abort();
+			ajaxRequestArray.pop();
+		}
 
-		$.ajax({
-			url: window.location.origin + "/check_email",
-			type: "GET",
-			data:{
-				email: $('#user_email').val()
-			},
-			success:function(result,options,thrownError){
 
-				if (result.statusCode == 200) {
+		$("#sign_up_button").prop("disabled", true);
+		$("#sign_up_button").css("background-color", "grey");
+		$(".spinner").css("display", "block");
+		$("#check_email_div").css("display", "block")
+		$("#check_email_span").text("Validating email: " + $(this).val());
+		$("#check_email_span").css({"margin-left":"30px", "color":"black"});
 
-					$(".spinner").css("display","none");
-					$("#check_email_span").css({"margin-left":"0px","color": "red"})
-					$("#check_email_span").text("An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance.");
-				}
+		try{
 
-				if (result.statusCode == 404) {
+			validateEmailFormat($('#user_email').val());
+			validateEmailDomain($('#user_email').val());
 
-					$(".spinner").css("display","none");
+			var request = $.ajax({
+				url: window.location.origin + "/check_email",
+				type: "GET",
+				data:{
+					email: $('#user_email').val()
+				},
+				success:function(result,options,thrownError){
 
-					$("#check_email_span").css({"margin-left":"0px","color":"#7FFF00"})
-					$("#check_email_span").text("Success! We've confirmed that you don't already have a MyLibraryNYC account."); 
+					if (result.statusCode == 200) {
 
-					$("#sign_up_button").prop("disabled",false);
-					$("#sign_up_button").css("background-color","#af2228")
+						showValidEmailMessage(false)
+					}
 
-					$("#sign_up_button").hover(function(){
-						$(this).css("opacity", 0.9);
-					}, function() {
-						$(this).css("opacity", 1.0);
-					})
-				}
+					if (result.statusCode == 404) {
 
-				if (result.statusCode != 200 && result.statusCode != 404) {
+						localStorage.setItem("valid-email", $('#user_email').val());
+						showValidEmailMessage(true)
+
+					}
+
+					if (result.statusCode != 200 && result.statusCode != 404) {
+
+						handleError();
+					}
+
+				},
+				error:function(result,options, thrownError){
 
 					handleError();
+
 				}
+			})
+			ajaxRequestArray.push(request)
 
-			},
-			error:function(result,options, thrownError){
-
-				handleError();
-
-			}
-		})
+		}
+		catch(err){
+			console.log("Invalid e-mail format.")
+		}
 	})
 
 function handleError(){
@@ -65,12 +76,33 @@ function handleError(){
 	$("#check_email_span").text("We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance.");
 }
 
+function showValidEmailMessage(isValid){
+
+	if(isValid == true){
+		$(".spinner").css("display","none");
+		$("#check_email_span").css({"margin-left":"0px","color":'green'})
+		$("#check_email_span").text("Success! We've confirmed that you don't already have a MyLibraryNYC account.");
+		$("#sign_up_button").prop("disabled",false);
+		$("#sign_up_button").css("background-color","#af2228")
+		$("#sign_up_button").hover(function(){
+			$(this).css("opacity", 0.9);
+		}, function() {
+			$(this).css("opacity", 1.0);
+		})
+	}
+	else {
+		$(".spinner").css("display","none");
+		$("#check_email_span").css({"margin-left":"0px","color": "red"})
+		$("#check_email_span").text("An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance.");
+	}
+
+}
+
 function validateEmailFormat(email) {
 	var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]     {1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	if(re.test(email) == false){
 		$(".spinner").css("display","none");
-		$("#check_email_span").css({"margin-left":"0px","color": "red"})
-		$("#check_email_span").text('Enter a valid email address ending in "@schools.nyc.gov"');
+		$('#check_email_div').css("display","none");
 		throw new InvalidEmailFormatError("Invalid e-mail-format");
 	}
 }
@@ -79,12 +111,30 @@ function validateEmailDomain(email){
 	var domain = email.split('@')
 	if(domain[1] != "schools.nyc.gov"){
 		$(".spinner").css("display","none");
-		$("#check_email_span").css({"margin-left":"0px","color": "red"})
-		$("#check_email_span").text('Enter a valid email address ending in "@schools.nyc.gov"');
+		$('#check_email_div').css("display","none");
 		throw new InvalidEmailDomainError("Invalid e-mail domain")
 	}
 }
- 
 
 
-})	
+window.ClientSideValidations.callbacks.element.fail = function(element, message, callback) {
+	callback();
+	$(element).css('background', '#EEB4B8');
+	$(element).css('border','0.0625rem #45403A solid');
+	var element_id = $(element).attr('id'); 
+	$($('label[for=' + element_id + ']')[1]).attr('id', element_id + "_error")
+	if(element[0].name == 'user[email]'){
+		$($("[for=user_email]")[0]).text('Enter a valid email address ending in "@schools.nyc.gov".')
+		$($('label[for=' + element_id + ']')[0]).attr('id', element_id + "_error")
+	}
+}
+
+
+window.ClientSideValidations.callbacks.element.pass = function(element, callback) {
+	$(element).css('background', '#E8E4E2');
+	$(element).css('border','1px solid #D0CDC8');
+	callback()
+}
+
+
+})

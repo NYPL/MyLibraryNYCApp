@@ -17,3 +17,4 @@
 //= require ./vendor/jquery.swipeshow.min
 //= require ./vendor/exacttarget
 //= require helpers
+//= require rails.validations

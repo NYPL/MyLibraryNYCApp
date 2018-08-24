@@ -1,11 +1,10 @@
 class User < ActiveRecord::Base
-  include AwsDecrypt
   include Exceptions
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-  :recoverable, :rememberable, :trackable, :validatable
+  :recoverable, :rememberable, :trackable, :validatable # this handles uniqueness of email automatically
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me,
@@ -15,19 +14,17 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :pin
 
-  validates :school, :first_name, :last_name, :presence => true
-  validates :email, :uniqueness => true
-  # Validation only occurs when a user record is being 
-  # created on sign up. Does not occur when updating 
-  # the record. 
+  # Validation's for email and pin only occurs when a user record is being
+  # created on sign up. Does not occur when updating
+  # the record.
+  validates :school_id, :first_name, :last_name, :presence => true
   validates_format_of :email, with: /\@schools.nyc\.gov/, message: ' should end in @schools.nyc.gov', :on => :create
-  validates_format_of :first_name, :last_name, :with => /^[a-z]+$/i
-  validates :alt_email, :uniqueness => true, :allow_blank => true, :allow_nil => true
-  # Validation only occurs when a user record is being 
-  # created on sign up. Does not occur when updating 
-  # the record. 
-  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." }, 
+  validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
+  validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
+  validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
+  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
+  validate :validate_pin_pattern, on: :create
 
   has_many :holds
 
@@ -38,9 +35,6 @@ class User < ActiveRecord::Base
     self.password ||= User.default_password
     self.password_confirmation ||= User.default_password
   end
-
-  #Current ticket this sprint to fix functionaility 
-  #after_create :do_after_create
 
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
@@ -72,33 +66,69 @@ class User < ActiveRecord::Base
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
 
-  def do_after_create
-    send_admin_notification_email
-    send_confirmation_email
-  end
-
-  def send_confirmation_email
-    UserMailer.confirmation(self).deliver
-  end
-
-  def send_admin_notification_email
-    UserMailer.admin_notification(self).deliver
-  end
-
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
 
+
+  def assign_barcode
+    Rails.logger.debug("assign_barcode: start")
+    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
+    self.assign_attributes({ barcode: last_user_barcode + 1})
+    Rails.logger.debug("assign_barcode: end | Generated barcode #{self.barcode}.")
+    return self.barcode
+  end
+
+  # Checks pin patterns against 
+  # the following examples:
+  # 1111, 2929, 0003, 5999. 
+  # Sierra will return the following
+  # error message if PIN is invalid:
+  # "PIN is not valid : PIN is trivial"
+  def validate_pin_pattern
+    if pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
+      true
+    else
+      errors.add(:pin, 'does not meet our requirements. Please try again.')
+      false
+    end
+  end
+
+  # Sends a request to the patron creator microservice.
+  # Passes patron-specific information to the microservice s.a. name, email, and type.
+  # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
+  # a success/failure response.
+  # Accepts a response from the microservice, and returns.
   def send_request_to_patron_creator_service
+    Rails.logger.debug("send_user_to_patron_creator_service: start")
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
-      'patronType' => 151,
+      'pin' => pin,
+      'patronType' => patron_type,
       'patronCodes' => {
-        'pcode4' => -1
+        'pcode1' => '-',
+        'pcode2' => '-',
+        'pcode3' => pcode3,
+        'pcode4' => pcode4
       },
-      'barcodes' => ["27777"]
+      'barcodes' => [self.assign_barcode.to_s],
+      'addresses': [
+        {
+          'lines': [
+            "#{school.address_line_1}",
+            "#{school.address_line_2}"
+          ],
+          'type': 'a'
+        }
+      ],
     }
+    Rails.logger.debug(
+       {
+        'status' => 'Request send to patron creator service',
+        'dataSent' => query
+       }
+    )
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
@@ -111,7 +141,7 @@ class User < ActiveRecord::Base
     when 201
       Rails.logger.debug(
         {
-          'status' => "The account with e-mail #{email} was 
+          'status' => "The account with e-mail #{email} was
            successfully created from the micro-service!"
         }
       )
@@ -123,7 +153,7 @@ class User < ActiveRecord::Base
           'timestamp' => Time.now.iso8601
         }
       ).to_s
-      raise InvalidResponse, "Invalid status code of: #{response.code}"
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
 
@@ -152,7 +182,7 @@ class User < ActiveRecord::Base
       ).to_s
     else
       Rails.logger.debug "#{response}"
-    end 
+    end
     return response
   end
 
@@ -160,8 +190,8 @@ class User < ActiveRecord::Base
     response = HTTParty.post(ENV['ISSO_OAUTH_TOKEN_URL'],
       body: {
         grant_type: 'client_credentials',
-        client_id: AwsDecrypt.decrypt_kms(ENV['CLIENT_ID']),
-        client_secret: AwsDecrypt.decrypt_kms(ENV['CLIENT_SECRET'])
+        client_id: ENV['CLIENT_ID'],
+        client_secret: ENV['CLIENT_SECRET']
       })
     case response.code
     when 200
@@ -178,5 +208,21 @@ class User < ActiveRecord::Base
       )
       raise InvalidResponse, "Invalid status code of: #{response.code}"
     end
+  end
+
+  def patron_type
+    school.borough == 'QUEENS' ? 149 : 151
+  end
+
+  def pcode3
+    return 1 if school.borough == 'BRONX'
+    return 2 if school.borough == 'MANHATTAN'
+    return 3 if school.borough == 'STATEN ISLAND'
+    return 4 if school.borough == 'BROOKLYN'
+    return 5 if school.borough == 'QUEENS'
+  end
+
+  def pcode4 # This returns the sierra code, not the school's zcode
+    school.sierra_code
   end
 end
