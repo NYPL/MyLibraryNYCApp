@@ -82,6 +82,8 @@ When a developer, commits a change on the development branch or merges another b
 More documentation can be found here: [travis-confluence-page](https://confluence.nypl.org/display/WT/Travis-CI+Integration+with+MyLibraryNYC+to+AWS+Elastic+Beanstalk)
 
 
+
+========================
 Environment Variables
 ========================
 
@@ -97,11 +99,13 @@ In order to do so, follow the current steps.
 4. Scroll down to Environment properties, and please set your variables accordingly.
 
 
+========================
 Server
 ========================
 In many rails projects when you run the server with `rails s` Rails sets RAILS_ENV to "development".  If you do that with this app, you will connect to the development database on AWS (if you have permission to decrypt the value).  Instead, run `RAILS_ENV=local rails s` to start the server and `RAILS_ENV=local rails c` to run the console.
 
 
+========================
 Testing
 ========================
 
