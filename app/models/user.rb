@@ -79,6 +79,7 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
+  
   # Checks pin patterns against
   # the following examples:
   # 1111, 2929, 0003, 5999.

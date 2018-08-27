@@ -11,7 +11,6 @@ when 'local'
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
-  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCL+6xESlcH6XPieZQIBEIAnue0eoIvwsVklKFk6Ss/15ozhEeOX57PLO7JzZ2C0VEftw0Wg6YWp")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz6OkwUOUwsV+igt9ICARCAQ0GQCQ1PahswCs4FO/oADmOgGh1ORhBstr88yYUp8eh2FHWTRsmrLRImou+9zqrdKLnN2qcMuY0RLqFplr/5YChbPgg=")
   ENV['SENDGRID_USERNAME'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAHQwcgYJKoZIhvcNAQcGoGUwYwIBADBeBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDJxPFfCo9pwPF2HOyAIBEIAxEBvqtE/FlLp9Q4uHyyEAWMoG+Nv4P64p2RCT2bJOTmtQqQSdoQYWdIrDywJCsknVwA==")
