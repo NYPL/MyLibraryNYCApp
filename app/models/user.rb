@@ -79,9 +79,10 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
-  # Checks pin patterns against 
+  
+  # Checks pin patterns against
   # the following examples:
-  # 1111, 2929, 0003, 5999. 
+  # 1111, 2929, 0003, 5999.
   # Sierra will return the following
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
@@ -122,6 +123,14 @@ class User < ActiveRecord::Base
           'type': 'a'
         }
       ],
+      "phones": [{
+        "number": school.phone_number,
+        "type": "t"
+      }],
+      "varFields": [{
+        "fieldTag": "o",
+        "content": school.name
+      }]
     }
     Rails.logger.debug(
        {
@@ -190,8 +199,8 @@ class User < ActiveRecord::Base
     response = HTTParty.post(ENV['ISSO_OAUTH_TOKEN_URL'],
       body: {
         grant_type: 'client_credentials',
-        client_id: ENV['CLIENT_ID'],
-        client_secret: ENV['CLIENT_SECRET']
+        client_id: ENV['ISSO_CLIENT_ID'],
+        client_secret: ENV['ISSO_CLIENT_SECRET']
       })
     case response.code
     when 200

@@ -5,6 +5,8 @@ class School < ActiveRecord::Base
 
   scope :active, -> { where(active: true) }
 
+  # Full name of school + comma & borough if borough is present.
+  # Comma can be overridden with any other punctuation mark that is passed in as the one argument.
   def full_name(delim = ', ')
     n = name
     n += "#{delim}#{borough}" if !borough.nil?
