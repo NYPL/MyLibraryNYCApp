@@ -83,6 +83,8 @@ More documentation can be found here: [travis-confluence-page](https://confluenc
 
 
 Environment Variables
+========================
+
 Once the application is deployed on AWS Elastic Beanstalk, you need to set environment variables within the environment.
 
 Specifically, setting the `ENV['DATABASE_URL']` is critical in order for the application to function properly and also to not throw you any errors.
