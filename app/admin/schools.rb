@@ -1,4 +1,4 @@
-ActiveAdmin.register School do |aa|
+ActiveAdmin.register School do
   menu :priority => 5
   actions :all, except: [:destroy, :new] #just show
 
