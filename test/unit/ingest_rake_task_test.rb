@@ -9,7 +9,7 @@ class IngestRakeTaskTest < ActiveSupport::TestCase
 
   test 'rake ingest:import_all_nyc_schools imports a school successfully' do
     Rake::Task["ingest:import_all_nyc_schools"].invoke('data/public/for_unit_test_2016_-_2017_School_Locations.csv')
-    zcode = 'zM015'
+    zcode = 'zm015'
     school = School.find_by_code(zcode)
     assert school.state == 'NY'
     assert school.address_line_2 == 'MANHATTAN, NY 10009'

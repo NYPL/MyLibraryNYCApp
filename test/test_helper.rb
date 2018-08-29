@@ -10,6 +10,10 @@ include WebMock::API
 WebMock.disable_net_connect!(allow_localhost: true)
 
 
+class ActionController::TestCase
+  include Devise::TestHelpers
+end
+
 class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service
 
