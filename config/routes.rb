@@ -25,6 +25,7 @@ MyLibraryNYC::Application.routes.draw do
   match 'settings' => 'settings#index'
   match 'account' => 'settings#index', :as => :account
   match 'help' => 'home#help', :as => :help
+  get 'exceptions' => 'exceptions#render_error', :as => :render_error
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
   
   # Sample resource route (maps HTTP verbs to controller actions automatically):
