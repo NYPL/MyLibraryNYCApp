@@ -1,9 +1,5 @@
 <% flash.each_with_index do |(name, msg), i| %>
- <% if name == :registration_error %>
-  <div id="alert-<%=i%>" data-alert class="alert main-alert fade-in-out-longer <%= name %>">
- <% else %>
-  <div id="alert-<%=i%>" data-alert class="alert main-alert fade-in-out <%= name %>">
-    <% end %>
-       <%= msg %>
+  <div id="alert-<%=i%>" data-alert class="alert main-alert <%= (name == :registration_error ? 'fade-in-out-longer' : 'fade-in-out') %> <%= name %>">
+    <%= msg %>
   </div>
 <% end %>
