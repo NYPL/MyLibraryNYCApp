@@ -15,7 +15,7 @@
 
   <div class="field-group">
     <%= f.label 'Your school:' %>
-    <%= f.select :school_id, School.all.map { |s| [s.name, s.id] }  %>
+    <%= f.select :school_id, School.active.map { |s| [s.name, s.id] }  %>
     <%# f.autocomplete_field :school, autocomplete_school_name_path %>
   </div>
 
