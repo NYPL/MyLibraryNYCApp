@@ -1,0 +1,11 @@
+<div id="error-page">
+  <div class="sentence-case-header">We've encountered an error.</div>
+  <br>
+  For assistance, please email <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a><br> with the following information.<br>
+  <div id="error-page-details">
+    <b>Technical Information</b><br>
+    Status Code: <%= @status_code %><br>
+    User ID: <%= current_user.id if current_user %><br>
+    Time: <%= Time.zone.now %><br>
+  </div>
+</h3>

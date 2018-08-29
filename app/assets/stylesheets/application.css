@@ -20,4 +20,5 @@
  *= require teacher_sets
  *= require books
  *= require signup
+ *= require errors
  */

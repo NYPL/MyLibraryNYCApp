@@ -37,6 +37,11 @@ module MyLibraryNYC
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
+    # custom error pages
+    config.exceptions_app = lambda do |env|
+      ExceptionsController.action(:render_error).call(env)
+    end
+
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 

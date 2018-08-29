@@ -1,17 +1,19 @@
-<div id="breadcrumb">
-	<%= link_to "Home", "/app#/teacher_sets" %> <i class="fa fa-angle-right"></i>
-	<% case request.fullpath %>
-	<% when "/account", "/users/edit" %>
-	Account
-	<% when "/help" %>
-	Help
-	<% when "/schools" %>
-	Participating schools
-	<% when "/users/start" %>
-  Get Started
-  <% when "/users/signup", "/users" %>
-  Sign Up
-	<% else %>
-	<%= request.fullpath %>
-	<% end %>
-</div>
+<% unless @hide_breadcrumbs %>
+	<div id="breadcrumb">
+		<%= link_to "Home", "/app#/teacher_sets" %> <i class="fa fa-angle-right"></i>
+		<% case request.fullpath %>
+		<% when "/account", "/users/edit" %>
+		Account
+		<% when "/help" %>
+		Help
+		<% when "/schools" %>
+		Participating schools
+		<% when "/users/start" %>
+	  Get Started
+	  <% when "/users/signup", "/users" %>
+	  Sign Up
+		<% else %>
+		<%= request.fullpath %>
+		<% end %>
+	</div>
+<% end %>
