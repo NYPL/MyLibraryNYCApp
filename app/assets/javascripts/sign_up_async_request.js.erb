@@ -37,9 +37,10 @@ $( document ).ready(function() {
 				},
 				success:function(result,options,thrownError){
 
-					if (result.statusCode == 200) {
+					if (result.statusCode == 200 || result.statusCode == 409) {
 
-						showValidEmailMessage(false)
+				        showValidEmailMessage(false);
+
 					}
 
 					if (result.statusCode == 404) {
@@ -49,7 +50,7 @@ $( document ).ready(function() {
 
 					}
 
-					if (result.statusCode != 200 && result.statusCode != 404) {
+					if (result.statusCode != 200 && result.statusCode != 404 && result.statusCode != 409) {
 
 						handleError();
 					}
