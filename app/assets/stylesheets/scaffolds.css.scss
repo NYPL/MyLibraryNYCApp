@@ -187,6 +187,13 @@ pre {
     @include animation(fade-in-out-alert 5s);
     @include transition(max-height, 0.5s);
   }
+  &.fade-in-out-longer {
+    padding: 0;
+    overflow: hidden;
+    max-height: 0;
+    @include animation(fade-in-out-alert 15s);
+    @include transition(max-height, 0.5s);
+  }
 }
 #error_explanation {
   background: $highlight;
