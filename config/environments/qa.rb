@@ -3,5 +3,7 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.perform_deliveries = true
 
+  config.force_ssl = true
+
   Rails.env = 'qa'
 end

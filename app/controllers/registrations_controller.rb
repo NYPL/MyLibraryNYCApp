@@ -38,7 +38,7 @@ class RegistrationsController < Devise::RegistrationsController
 			render :template => '/devise/registrations/new'
 		end
 	rescue Exceptions::InvalidResponse
-		set_flash_message :notice, :invalid_response if is_flashing_format?
+		set_flash_message :registration_error, :invalid_response if is_flashing_format?
 		render :template => '/devise/registrations/new'
 	end
 
