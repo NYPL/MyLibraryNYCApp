@@ -25,4 +25,4 @@
 
 # 	sh 'rake db:migrate'
 
-end 
+# end 
