@@ -56,9 +56,11 @@ class HoldsController < ApplicationController
       set = TeacherSet.find(params[:teacher_set_id])
       @hold = set.holds.build(params[:hold])
       @hold.user = current_user
+
       unless params[:settings].nil?
         current_user.update_attributes(params[:settings])
       end
+      
       respond_to do |format|
         if @hold.save
           format.html { redirect_to hold_url(@hold.access_key), notice: 'Your order has been received by our system and will soon be delivered to your school.<br/><br/>Check your email inbox for a message with further details.' }
