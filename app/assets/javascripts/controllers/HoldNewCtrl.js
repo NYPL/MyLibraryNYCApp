@@ -38,6 +38,7 @@ app.controller('HoldNewCtrl', [ '$scope', '$routeParams', '$http', '$location', 
         });
       // Otherwise, just submit the form
       } else {
+        window.location = '/teacher_sets/' + $scope.teacher_set_id
         $scope.submitForm();
       }
     });
