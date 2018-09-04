@@ -81,7 +81,11 @@ class Hold < ActiveRecord::Base
   end
 
   def send_admin_notification_email
-    HoldMailer.admin_notification(self).deliver
+    begin
+      HoldMailer.admin_notification(self).deliver
+    rescue => exception 
+      raise exception
+    end 
   end
 
   def send_confirmation_email

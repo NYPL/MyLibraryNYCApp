@@ -8,6 +8,7 @@ app.controller('HoldNewCtrl', [ '$scope', '$routeParams', '$http', '$location', 
     $scope.busy = false;
     $scope.$location = $location;
     $scope.loaded = false;
+    $scope.errorMessage = '';
     
     // Retrieve new hold / teacher set   
     $http.get('/holds/new.json?teacher_set_id='+$scope.teacher_set_id).success(function(data) {
@@ -52,6 +53,8 @@ app.controller('HoldNewCtrl', [ '$scope', '$routeParams', '$http', '$location', 
           $location.path('/holds/'+resp.hold.access_key).search({new_order: 1}); 
         }
         $scope.busy = false;       
+      }).error(function(resp){
+         $scope.errorMessage = resp.error
       });      
     }
   }
