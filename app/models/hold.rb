@@ -81,6 +81,7 @@ class Hold < ActiveRecord::Base
   end
 
   def send_admin_notification_email
+    return if Rails.env.development? || Rails.env.local?
     HoldMailer.admin_notification(self).deliver
   end
 
