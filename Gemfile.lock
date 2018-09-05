@@ -1,6 +1,6 @@
 GIT
-  remote: git://github.com/nypl/activeadmin.git
-  revision: 587ef9236c1c553f53b282319e2b1c06bec7b091
+  remote: https://github.com/nypl/activeadmin.git
+  revision: 0af7e7cf7ab2c3a332b6d0110c6d35e4498a4e1d
   specs:
     activeadmin (0.6.6)
       arbre (~> 1.0)

@@ -53,7 +53,7 @@ gem 'addressable'
 gem 'nokogiri'
 
 # gem 'kaminari'
-gem 'activeadmin', github: "nypl/activeadmin"
+gem 'activeadmin', :git => 'https://github.com/nypl/activeadmin.git'
 gem 'meta_search',    '>= 1.1.0.pre'
 
 gem 'yaml_db'
