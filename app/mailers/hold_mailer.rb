@@ -10,15 +10,13 @@ class HoldMailer < ActionMailer::Base
       @hold = hold
       @user = hold.user
       @teacher_set = hold.teacher_set
-
+      @break = "abc" + 123
       emails = AdminUser.pluck(:email)
       Rails.logger.debug("#{LOG_TAG}.admin_notification: About to send hold order notification email on #{@teacher_set.title or 'unknown'} to #{@user.email or 'unknown'}")
       mail(:to => emails, :subject => "New Order from #{@user.email or 'unknown'} for #{@teacher_set.title or 'unknown'}")
     rescue => exception
-      # something went wrong.  perhaps either user or teacher set aren't filled properly.
-      # or maybe the email couldn't be sent out.
       Rails.logger.error("#{LOG_TAG}.admin_notification: Cannot send hold order notification email.  Backtrace=#{exception.backtrace}.")
-      raise
+      raise exception
     end
   end
 
@@ -34,8 +32,6 @@ class HoldMailer < ActionMailer::Base
       Rails.logger.debug("#{LOG_TAG}.confirmation: About to send hold order notification email to #{@user.email}")
       mail(:to => @user.contact_email, :subject => "Your order confirmation for #{@teacher_set.title}")
     rescue => exception
-      # something went wrong.  perhaps either user or teacher set aren't filled properly.
-      # or maybe the email couldn't be sent out.
       Rails.logger.error("#{LOG_TAG}.confirmation: Cannot send hold order notification email.  Backtrace=#{exception.backtrace}.")
       # NOTE:  Will not re-raise the exception, the teacher notification email isn't essential.
     end
