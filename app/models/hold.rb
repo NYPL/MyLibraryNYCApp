@@ -1,4 +1,5 @@
 class Hold < ActiveRecord::Base
+  LOG_TAG = "Hold"
 
   attr_accessible :date_required
 
@@ -15,6 +16,7 @@ class Hold < ActiveRecord::Base
   scope :unseen, -> { where(status: 'new') }
   scope :new_or_pending, -> { where(status: ['new','pending']) }
 
+  before_create :do_before_create
   after_create :do_after_create
 
   STATUS_LABEL = {
@@ -43,12 +45,33 @@ class Hold < ActiveRecord::Base
     puts "closing hold: #{self.inspect}"
   end
 
+
+  ##
+  # Sends an email to BookOps, announcing the teacher set reservation.
+  # Since this email is a requirement, we make sure it went out before saving a hold.
+  def do_before_create
+    begin
+      send_admin_notification_email
+    rescue Exception => exception
+      # If BookOps hasn't been asked to fulfill the order, we cannot mark this hold as
+      # having been made.  Stop, and display an error message to the user.
+      Rails.logger.error("#{LOG_TAG}.do_before_create: #{exception.message}.")
+
+      # this will get caught in the angular controller, and passed to the template to display as error message to user
+      self.errors.add(:hold_error, "No hold for you!")
+
+      # don't save this hold in the db
+      return false
+    end
+  end
+
+
   def do_after_create
     generate_access_key
     send_confirmation_email
     recalculate_set_availability
-    send_admin_notification_email
   end
+
 
   def name
     if !teacher_set.nil?
@@ -56,18 +79,24 @@ class Hold < ActiveRecord::Base
     end
   end
 
+
   # After hold is created, recalculate teacher_set availability string in case
-  # this hold was placed on last avail copy
+  # this hold was placed on the last available copy.
   #
   # We're only doing this when hold is created or status changes to pending
   # because a status change to closed means hold was filled, which the
   # ingest:update_availabilities cron should pick up in the normal course of
   # things after caches clear
+  #
+  # NOTE: This set availability calculation is provisional.  The source of truth
+  # is Sierra.  When we run updates on teacher set data from Sierra to MyLibraryNYC,
+  # those updates supercede any determinations made in this method.
   def recalculate_set_availability
     if ['new','pending','transit','trouble','unavailable'].include? status
       teacher_set.recalculate_availability
     end
   end
+
 
   # Generate unique 20 digit code, prefixed with id, to allow cancellation without signing in
   def generate_access_key
@@ -75,16 +104,25 @@ class Hold < ActiveRecord::Base
     save!
   end
 
-  # Should be placed in email communication for refernece
+
+  ##
+  # Should be placed in email communication for reference.
+  # TODO: Does this actually get used?  Look into.
   def order_number
     "#{self.created_at.strftime('%Y%m%d')}.#{self.id}"
   end
 
+
+  ##
+  # Asks the hold_mailer to send a notificaion email to BookOps.
   def send_admin_notification_email
     return if Rails.env.development? || Rails.env.local?
     HoldMailer.admin_notification(self).deliver
   end
 
+
+  ##
+  # Asks the hold_mailer to send a notification email to the teacher ordering the dataset.
   def send_confirmation_email
     HoldMailer.confirmation(self).deliver
   end

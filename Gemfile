@@ -13,11 +13,14 @@ gem 'webmock'
 gem 'client_side_validations'
 
 group :development do
-	gem 'pry-rails'
+	gem 'pry-nav'
+  gem 'pry-rails'
 end
 
 group :local do
+  gem 'pry-nav'
 	gem 'pry-rails'
+  gem 'pry-stack_explorer'
 end
 
 # Gems used only for assets and not required
