@@ -1,36 +1,37 @@
 <div class="animate-in-container" ng-show="confirm_contact_info">
 
-  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include> 
+  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include>
   <h1>Order This Teacher Set</h1>
-  
+
+  <div ng-if="errorMessage">{{errorMessage}}</div>
   <div class="ts-banner subject subject-{{ts.subject_key}}">
     <i class="fa"></i>
     <h3>{{ts.title}}</h3>
   </div>
-  
+
   <hr />
   <div class="form">
     <p class="alert hold-alert">
     Please confirm your contact email address and school
     </p>
-  
+
     <label><strong>Preferred contact email address</strong></label>
     <div class="field-group date-group">
       <span class="error" ng-show="formData.contact_email.$error.required">Required!</span>
       <input placeholder="Email address" type="email" ng-model="formData.settings.alt_email" required />
     </div>
-  
+
     <label><strong>Your school</strong></label>
     <div class="field-group date-group">
       <select id="school" ng-model="formData.settings.school_id" ng-options="s.id as s.name for s in schools" required ></select>
     </div>
-    
+
   </div>
-  
+
   <hr ng-show="confirm_contact_info" />
-  
+
   <p>Click below to order this teacher set. We will fulfill your order as soon as it's available.</p>
-  
+
   <ng-include src="'/templates/holds/_form.html'"></ng-include>
 
 </div>

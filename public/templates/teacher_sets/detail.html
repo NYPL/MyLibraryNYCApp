@@ -1,13 +1,15 @@
 <div class="animate-in-container" ng-show="loaded">
-  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include> 
+  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include>
   <div class="row">
     <div id="teacher_set" class="column">
+      <div ng-if="errorMessage">{{errorMessage}}</div>
       <div class="ts-banner subject subject-{{ts.subject_key}}">
         <i class="fa"></i>
         <h3>{{ts.title}}</h3>
-      </div> 
+      </div>
       <div class="ts-actions">
         <div data-ng-show="!active_hold && is_available">
+
           <a ng-click="doReserve()" class="button secondary">{{ts.availability_string}} - Order now!</a>
           <p>Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.</p>
         </div>
@@ -20,7 +22,7 @@
             You have placed a <a href="#/holds/{{active_hold.access_key}}">hold</a> on this Teacher Set. If you need multiple copies of this Teacher Set, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
           </p>
         </div>
-      </div>    
+      </div>
       <p class="ts-description">{{ts.description}}</p>
       <h3 ng-show="ts.books"><ng-pluralize count="ts.books.length" when="{'1': '1 Title', 'other': '{} Titles'}"></ng-pluralize></h3>
       <ul class="ts-book-list" ng-class="{'ts-copy-list': ts.set_type=='single' && ts.books.length==1}">
@@ -41,29 +43,29 @@
         <h3>Contents</h3>
         <pre>{{ts.contents}}</pre>
       </div>
-            
+
       <hr />
-      
-      <div class="ts-details">      
-        <dl>        
+
+      <div class="ts-details">
+        <dl>
           <dt ng-show="ts.suitabilities_string">Suggested Grade Range</dt>
           <dd>{{ts.suitabilities_string}}</dd>
           <dt ng-show="ts.publication_date">Publication Date</dt>
-          <dd>{{ts.publication_date}}</dd>       
+          <dd>{{ts.publication_date}}</dd>
           <dt ng-show="ts.primary_language">Primary Language</dt>
           <dd>{{ts.primary_language}}</dd>
           <dt ng-show="ts.physical_description">Physical Description</dt>
-          <dd>{{ts.physical_description}}</dd>    
+          <dd>{{ts.physical_description}}</dd>
           <dt ng-show="ts.teacher_set_notes.length > 0 || ts.statement_of_responsibility">Notes</dt>
           <dd class="notes" ng-repeat="note in ts.teacher_set_notes">{{note.content}}</dd>
         </dl>
-      </div>      
-      
+      </div>
+
       <a ng-click="moreList = !moreList" ng-show="!moreList"><i class="fa fa-plus-circle"></i> See More</a>
-      <div class="ts-details ts-more-details" ng-class="{'show': moreList}">      
+      <div class="ts-details ts-more-details" ng-class="{'show': moreList}">
         <dl>
           <dt ng-show="ts.call_number">Call Number</dt>
-          <dd>{{ts.call_number}}</dd>          
+          <dd>{{ts.call_number}}</dd>
           <dt ng-show="ts.edition">Edition</dt>
           <dd>{{ts.edition}}</dd>
           <dt ng-show="ts.isbn">ISBN</dt>

@@ -11,6 +11,8 @@ class HoldMailer < ActionMailer::Base
       @user = hold.user
       @teacher_set = hold.teacher_set
 
+      raise RuntimeError.new("You messed up!")
+
       emails = AdminUser.pluck(:email)
       Rails.logger.debug("#{LOG_TAG}.admin_notification: About to send hold order notification email on #{@teacher_set.title or 'unknown'} to #{@user.email or 'unknown'}")
       mail(:to => emails, :subject => "New Order from #{@user.email or 'unknown'} for #{@teacher_set.title or 'unknown'}")
