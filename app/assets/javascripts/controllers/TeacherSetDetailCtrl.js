@@ -6,6 +6,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
     $scope.moreList = false;
     $scope.formData = { original_path: $location.path() + '?' + $.param($routeParams) };
     $scope.$location = $location;
+    $scope.errorMessage = '';
 
     $scope.busy = false;
     $scope.loaded = false;
@@ -18,13 +19,14 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $scope.ts.books = data.teacher_set.books
       $scope.user = data.teacher_set.user
       $scope.loaded = true;
+
     });
     
     $scope.autoReserve = function() {
       if ($scope.busy) return;
       $scope.busy = true;
       Angularytics.trackEvent('Teacher Sets', 'clicked reserve', $scope.teacher_set_id);
-      $http.post('/teacher_sets/'+$scope.teacher_set_id+'/holds.json', $scope.formData).success(function(resp) {        
+      $http.post('/teacher_sets/'+$scope.teacher_set_id+'/holds.json', $scope.formData).success(function(resp) {
         if ( resp.redirect_to ) {
           window.location = resp.redirect_to;
         } else {
@@ -34,7 +36,9 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
         $scope.busy = false;       
 
         Angularytics.trackEvent('Teacher Sets', 'placed reservation', $scope.teacher_set_id)
-      });      
+      }).error(function(resp) {
+           $scope.errorMessage = resp.error
+      })
     };
     
     $scope.doReserve = function(){      
