@@ -9,7 +9,7 @@
 File.open 'db/seed-data.sql', 'r' do |f|
   connection = ActiveRecord::Base.connection
   connection.tables.each do |table|
-    connection.execute("TRUNCATE #{table}") unless ['schema_migrations','holds','users'].include? table
+    connection.execute("TRUNCATE #{table}") unless ['schema_migrations','holds','users','sierra_code_zcode_matches'].include? table
   end
 
   statements = f.read.split(/;$/)
@@ -18,6 +18,7 @@ File.open 'db/seed-data.sql', 'r' do |f|
  
   ActiveRecord::Base.transaction do
     statements.each do |statement|
+      puts statement
       connection.execute(statement)
     end
   end
