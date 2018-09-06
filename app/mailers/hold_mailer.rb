@@ -9,6 +9,7 @@ class HoldMailer < ActionMailer::Base
     begin
       @hold = hold
       @user = hold.user
+      @break = '123' + 123
       @teacher_set = hold.teacher_set
       emails = AdminUser.pluck(:email)
       Rails.logger.debug("#{LOG_TAG}.admin_notification: About to send hold order notification email on #{@teacher_set.title or 'unknown'} to #{@user.email or 'unknown'}")
