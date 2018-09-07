@@ -3,13 +3,13 @@ cache:
   directories:
     - /home/travis/.rvm/
 rvm:
-- 2.2.10 
+- 2.2.10
 services:
 - postgresql
-script: 
+script:
 - bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
-- rake db:migrate
+- bundle exec rake db:migrate
 - ruby -Itest test/unit/user_test.rb
 - ruby -Itest test/unit/ingest_rake_task_test.rb
 - ruby -Itest test/integration/user_flow_test.rb
@@ -50,7 +50,7 @@ deploy:
   bucket_path: my-library-nyc-app-production
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: master 
+    branch: master
 env:
   global:
   - secure: kU22NeR5MRu32K3YzAImTzC0G9Bzg2kIJ2PBtGkmlgWzWlhI54uqW/euTnOZc/1+0/9oYRv4uGavRWLdlO1oYJmGv09nYseLZJJzGP+QAxHptT9AlOt60q+m/FgkgunfGPF8NHiVSHYk30N79k7t1sKTEc2lcFTt2fAb8vDSwmA8HM1/gb22HaNFuCWolMG1AKQVNZ0bWLB1IM6cvIoWC0/R8jEvNYNlgfQkGzWGcnbtJmqlOeMsy3v4WMBzkMr8bdem07dGU6R6siJ3uvQMVwTYzpB/Qtgy1nXnnasZp5zaJxJYHM9O1sXnz+xy4DroGpHj0lkacKhoBP2Vg0U3eVSf/d+LE2yt0xD17vjXmwB027uvdUvsmRTto1BdjwPKxkes6wyjvYLp/Z8TJbnUNS716ZVSvY8ublCLTZERBleYB8ACQaRHJ3zJMvngi6tIOz5G0K5Xzl+8tpC4iAKNdRkBaMKGjLvlEJQsFC/6p9mCPipCx94Lgww6yzgSe6Yog0P9mv6JPJlUrlGNYP+Zit+e/nnjq71Iw/gteWwTZ3kWXRs0/jm4PnnbgY2h0oELJI2CGYP2Q3FaxuP9rhCtgRvwg8GI8ayvtb0CU3DTxQ4GtlsnSi//j+8HpRx1fpY9zv5GSUHradZ0R4kUD8MxHxAZ0a59kJyKEL1NILakuNc=

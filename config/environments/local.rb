@@ -35,8 +35,8 @@ MyLibraryNYC::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-development.us-east-1.elasticbeanstalk.com' }
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.perform_deliveries = true
 
-  Rails.env = 'development'
+  Rails.env = 'local'
 end
