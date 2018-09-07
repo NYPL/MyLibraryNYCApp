@@ -45,9 +45,9 @@ class Hold < ActiveRecord::Base
 
   def do_after_create
     generate_access_key
+    send_admin_notification_email
     send_confirmation_email
     recalculate_set_availability
-    send_admin_notification_email
   end
 
   def name
@@ -63,6 +63,10 @@ class Hold < ActiveRecord::Base
   # because a status change to closed means hold was filled, which the
   # ingest:update_availabilities cron should pick up in the normal course of
   # things after caches clear
+  #
+  # NOTE: This set availability calculation is provisional.  The source of truth
+  # is Sierra.  When we run updates on teacher set data from Sierra to MyLibraryNYC,
+  # those updates supercede any determinations made in this method.
   def recalculate_set_availability
     if ['new','pending','transit','trouble','unavailable'].include? status
       teacher_set.recalculate_availability
@@ -75,16 +79,22 @@ class Hold < ActiveRecord::Base
     save!
   end
 
-  # Should be placed in email communication for refernece
+  ##
+  # Should be placed in email communication for reference.
+  # TODO: Does this actually get used?  Look into
   def order_number
     "#{self.created_at.strftime('%Y%m%d')}.#{self.id}"
   end
-
+  
+  ##
+  # Asks the hold_mailer to send a notificaion email to BookOps.
   def send_admin_notification_email
     return if Rails.env.development? || Rails.env.local?
     HoldMailer.admin_notification(self).deliver
   end
 
+  ##
+  # Asks the hold_mailer to send a notification email to the teacher ordering the dataset.
   def send_confirmation_email
     HoldMailer.confirmation(self).deliver
   end

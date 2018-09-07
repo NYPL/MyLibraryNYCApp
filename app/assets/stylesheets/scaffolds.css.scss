@@ -217,7 +217,7 @@ pre {
   overflow: hidden;
   @include transition(all, 0.3s);
   &.on {
-    max-height: 3000px;
+    max-height: none;
   }
 }
 
