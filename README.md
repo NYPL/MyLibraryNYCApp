@@ -96,6 +96,12 @@ In order to do so, follow the current steps.
 3. Click on Configuration and then Software.
 4. Scroll down to Environment properties, and please set your variables accordingly.
 
+Most of the environment variables get set in the .ebextensions files.  The .ebextensions files get executed in alphabetic order,
+e.g. "00_environment.config" will execute before "01_cloudwatch_agent_config.config".
+
+Most .ebextensions settings will override whatever you set in the console.  The 07_https-nypl-digital-dev.config is an exception.
+If you add it after the EB project is set up in AWS, then 07_https-nypl-digital-dev.config will be ignored.  
+
 
 Server
 ========================
@@ -113,4 +119,3 @@ ruby -Itest test/unit/ingest_rake_task_test.rb
 ruby -Itest test/integration/user_flow_test.rb
 ruby -Itest test/functional/exceptions_controller_test.rb
 ```
- 

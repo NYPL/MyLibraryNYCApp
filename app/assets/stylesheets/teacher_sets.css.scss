@@ -658,6 +658,18 @@
   content: "\f001"; // musics
 }
 
+.fa-caret-down:before, .fa-caret-right:before {
+  position: absolute;
+  margin-top: .2em;
+}
+
+.fa {
+  display: inline;
+}
+
+.facet-label {
+  margin-left: .7em;
+
 .error-message {
   padding-bottom:20px;
   color: red;
