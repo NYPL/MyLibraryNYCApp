@@ -35,6 +35,8 @@ MyLibraryNYC::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  config.action_mailer.delivery_method = :aws_sdk
+
   client = Aws::SES::Client.new(region: 'us-east-1')
 
   config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-development.us-east-1.elasticbeanstalk.com' }
