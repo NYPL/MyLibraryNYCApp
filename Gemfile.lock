@@ -391,6 +391,9 @@ GEM
     aws-sdk-pricing (1.1.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
+    aws-sdk-rails (2.0.1)
+      aws-sdk-ses (~> 1)
+      railties (>= 3)
     aws-sdk-rds (1.23.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
@@ -833,6 +836,7 @@ DEPENDENCIES
   activeadmin (= 0.6.6.1)!
   addressable
   aws-sdk
+  aws-sdk-rails
   client_side_validations
   coffee-rails (~> 3.2.1)
   cranky
