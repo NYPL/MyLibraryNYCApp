@@ -1,6 +1,6 @@
 class HoldMailer < ActionMailer::Base
   LOG_TAG = "HoldMailer"
-  default :from => "orders@mylibrarynyc.org"
+  default from: "orders@mylibrarynyc.org"
 
   ##
   # Sends an email to BookOps, letting them know
