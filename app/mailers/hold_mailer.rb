@@ -29,7 +29,7 @@ class HoldMailer < ActionMailer::Base
       @user = hold.user
       @teacher_set = hold.teacher_set
       Rails.logger.debug("#{LOG_TAG}.confirmation: About to send hold order notification email to #{@user.email}")
-      mail(:from => "orders@mylibrarynyc.org", :to => @user.contact_email, :subject => "Your order confirmation for #{@teacher_set.title}")
+      mail(:from => "help@mylibrarynyc.org", :to => @user.contact_email, :subject => "Your order confirmation for #{@teacher_set.title}")
     rescue => exception
       Rails.logger.error("#{LOG_TAG}.confirmation: Cannot send hold order notification email.  Backtrace=#{exception.backtrace}.")
       # NOTE:  Will not re-raise the exception, the teacher notification email isn't essential.
