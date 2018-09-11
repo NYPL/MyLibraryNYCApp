@@ -52,7 +52,7 @@ class HoldsController < ApplicationController
   end
 
   def create
-    # begin
+      begin
       set = TeacherSet.find(params[:teacher_set_id])
       @hold = set.holds.build(params[:hold])
       @hold.user = current_user
