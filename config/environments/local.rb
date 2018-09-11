@@ -35,20 +35,6 @@ MyLibraryNYC::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default :charset => "utf-8"
-
-  config.action_mailer.smtp_settings = {
-   :port =>           '587',
-   :address =>        'email-smtp.us-east-1.amazonaws.com',
-   :user_name =>      ENV['SMTP_USERNAME'],
-   :password =>       ENV['SMTP_PASSWORD'],
-   :domain =>         'mylibrarynyc.org',
-   :authentication => :plain
-  }
-
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   Rails.env = 'local'
