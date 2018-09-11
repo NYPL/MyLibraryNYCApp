@@ -70,12 +70,12 @@ class HoldsController < ApplicationController
           format.json { render json: @hold.errors, status: :unprocessable_entity }
         end
       end
-    # rescue => exception
-    #   respond_to do |format|
-    #       format.json {   render json: {error: "We've encountered an error and were unable to confirm your order. Please try again later or email help@mylibrarynyc.org for assistance.
-    #         "}.to_json, status: 500}
-    #   end
-    # end
+    rescue => exception
+      respond_to do |format|
+          format.json {   render json: {error: "We've encountered an error and were unable to confirm your order. Please try again later or email help@mylibrarynyc.org for assistance.
+            "}.to_json, status: 500}
+      end
+    end
   end
 
   def update
