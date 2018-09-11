@@ -37,6 +37,10 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.delivery_method = :aws_sdk
 
   client = Aws::SES::Client.new(region: 'us-east-1')
+  Rails.logger.debug "*** client.config ***"
+  Rails.logger.debug client.config
+  Rails.logger.error "*** client.config ***"
+  Rails.logger.error client.config
 
   config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-development.us-east-1.elasticbeanstalk.com' }
   config.action_mailer.perform_deliveries = true
