@@ -2,6 +2,10 @@ ActiveAdmin.register User do
   menu :priority => 6
   actions :all
 
+  before_create do |user|
+    user.send_request_to_patron_creator_service if user.valid? # if not valid, errors will show on the form
+  end
+
   index do
     column :email
     column :current_sign_in_at
@@ -22,27 +26,31 @@ ActiveAdmin.register User do
       f.input :first_name
       f.input :last_name
       f.input :email
-      f.input :barcode
       f.input :alt_email
-      f.input :alt_barcodes
+      if f.object.new_record?
+        f.input :barcode, label: raw('Barcode<br>(leave blank to auto-assign)')
+      else
+        f.input :barcode
+      end
+      f.input :pin, label: raw("4-digit PIN<br> It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)")
     end
     f.actions
   end
 
-  show do |ad|
+  show title: proc{|user| user.name(true) } do |user|
 
     attributes_table do
       row :contact_email do
-        link_to ad.contact_email, ad.contact_email
+        link_to user.contact_email, user.contact_email
       end
       row :school do
-        if ad.school.nil?
+        if user.school.nil?
           'No school selected'
         else
-          link_to "#{ad.school.code}: #{ad.school.full_name(' / ')}", admin_school_path(ad.school)
+          link_to "#{user.school.code}: #{user.school.full_name(' / ')}", admin_school_path(user.school)
         end
       end
-      row :doe_email do ad.email end
+      row :doe_email do user.email end
       [:barcode, :alt_barcodes, :first_name, :last_name, :updated_at, :current_sign_in_at, :last_sign_in_at].each do |prop|
         row prop
       end
@@ -69,4 +77,9 @@ ActiveAdmin.register User do
 
   end
 
+  controller do
+    def edit # the edit page title has to be handled this way, source: https://github.com/activeadmin/activeadmin/wiki/Set-page-title
+      @page_title = resource.name(true)
+    end
+  end
 end
