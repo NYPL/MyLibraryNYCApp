@@ -9,7 +9,7 @@ services:
 script: 
 - bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
-- rake db:migrate
+- bundle exec rake db:migrate
 - ruby -Itest test/unit/user_test.rb
 - ruby -Itest test/unit/ingest_rake_task_test.rb
 - ruby -Itest test/integration/user_flow_test.rb
