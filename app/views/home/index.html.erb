@@ -1,15 +1,6 @@
-<% content_for :head do %>  
-<script>
-// Exacttarget: Track page
-_et.track("Homepage", "<data amt=\"1\" unit=\"Views\" accumulate=\"true\" />");
-</script> 
-<% end %>
-
 <%= render "shared/tutorial" %>
 
 <div class="call-to-action">
   <%= link_to "Explore Teacher Sets", app_url, :class=>"button" %>
   <%= link_to "Learn more about MyLibraryNYC", 'http://mylibrarynyc.org', :class=>"button learn-more-btn" %>
 </div>
-
-
