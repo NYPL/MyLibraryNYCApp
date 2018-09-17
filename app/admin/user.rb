@@ -6,6 +6,23 @@ ActiveAdmin.register User do
     user.send_request_to_patron_creator_service if user.valid? # if not valid, errors will show on the form
   end
 
+  csv do
+    column :id
+    column :email
+    column :current_sign_in_at
+    column :last_sign_in_at
+    column :created_at
+    column :updated_at
+    column :barcode
+    column :first_name
+    column :last_name
+    column :alt_email
+    column :alt_barcodes
+    column(:school_name) { |user| user.school.name}
+    column(:school_borough) { |user| user.school.borough}
+    column(:school_code) { |user| user.school.code}
+  end
+
   index do
     column :email
     column :current_sign_in_at
