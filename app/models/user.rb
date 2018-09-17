@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
-  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
+  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
   validate :validate_pin_pattern, on: :create
 
@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
   def validate_pin_pattern
-    if pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
+    if pin && pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
       true
     else
       errors.add(:pin, 'does not meet our requirements. Please try again.')
@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.assign_barcode.to_s],
+      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode.to_s],
       'addresses': [
         {
           'lines': [
