@@ -1,5 +1,4 @@
 ActionMailer::Base.delivery_method = :smtp	
-ActionMailer::Base.perform_deliveries = true	
 
 ActionMailer::Base.smtp_settings = {	
   address:        'email-smtp.us-east-1.amazonaws.com',
