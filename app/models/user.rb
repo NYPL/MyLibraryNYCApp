@@ -116,7 +116,7 @@ class User < ActiveRecord::Base
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
-      'pin' => '1234',
+      'pin' => pin,
       'patronType' => patron_type,
       'patronCodes' => {
         'pcode1' => '-',
