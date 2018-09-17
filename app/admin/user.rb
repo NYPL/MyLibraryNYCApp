@@ -18,9 +18,9 @@ ActiveAdmin.register User do
     column :last_name
     column :alt_email
     column :alt_barcodes
-    column(:school_name) { |user| user.school.name}
-    column(:school_borough) { |user| user.school.borough}
-    column(:school_code) { |user| user.school.code}
+    column(:school_name) { |user| user.school.present? ? user.school.name : '' }
+    column(:school_borough) { |user| user.school.present? ? user.school.borough : ''}
+    column(:school_code) { |user| user.school.present? ? user.school.code : ''}
   end
 
   index do
