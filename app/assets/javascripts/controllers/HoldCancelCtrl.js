@@ -1,10 +1,10 @@
 'use strict';
 
-app.controller('HoldCancelCtrl', [ '$scope', '$routeParams', '$http', '$location', 'Angularytics',
-    function($scope, $routeParams, $http, $location, Angularytics) {
+app.controller('HoldCancelCtrl', [ '$scope', '$routeParams', '$http', '$location',
+  function($scope, $routeParams, $http, $location) {
     $scope.hold_id = $routeParams.id;
     $scope.action_label = "Cancel My Order";
-    $scope.formData = { original_path: $location.path() };  
+    $scope.formData = { original_path: $location.path() };
     $scope.formData.hold = {};
     $scope.$location = $location;
     $scope.loaded = false;
@@ -15,7 +15,7 @@ app.controller('HoldCancelCtrl', [ '$scope', '$routeParams', '$http', '$location
         window.location = data.redirect_to;
         return false;
       }
-      
+
       $scope.hold = data.hold;
       $scope.ts = data.teacher_set;
       $scope.ts.teacher_set_notes = data.teacher_set_notes;
@@ -27,23 +27,21 @@ app.controller('HoldCancelCtrl', [ '$scope', '$routeParams', '$http', '$location
       $scope.formData.hold_change = {};
       $scope.formData.hold_change.comment = '';
       $scope.formData.hold_change.status = 'cancelled';
-      
+
       $scope.loaded = true;
     });
 
     // Update hold
     $scope.submitForm = function(){
       $http.put('/teacher_sets/'+$scope.ts.id+'/holds/'+$scope.hold.access_key+'.json', $scope.formData).success(function(data) {
-        var hold = data.hold;   
+        var hold = data.hold;
         if ( hold.redirect_to ) {
           window.location = hold.redirect_to;
         } else {
-          $location.path('/holds/'+hold.access_key).search({}); 
+          $location.path('/holds/'+hold.access_key).search({});
         }
-
-        Angularytics.trackEvent('Teacher Sets', 'cancelled reservation', $scope.teacher_set_id)
       });
     };
-    
+
   }
 ]);

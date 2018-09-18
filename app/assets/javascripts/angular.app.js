@@ -1,7 +1,7 @@
 'use strict';
 
 // The main app module
-var app = angular.module('MyLibraryNYCApp',['ngRoute','ngCookies','infinite-scroll','scroll-event','slider-grades','angularytics']);
+var app = angular.module('MyLibraryNYCApp',['ngRoute','ngCookies','infinite-scroll','scroll-event','slider-grades']);
 
 // URL parsing for breadcrumb
 app.filter('regex', function() {
@@ -16,8 +16,8 @@ app.filter('regex', function() {
 });
 
 // Define routes here
-app.config([ '$locationProvider', '$routeProvider', '$httpProvider', 'AngularyticsProvider',
-  function($locationProvider, $routeProvider, $httpProvider, AngularyticsProvider) {
+app.config([ '$locationProvider', '$routeProvider', '$httpProvider',
+  function($locationProvider, $routeProvider, $httpProvider) {
     // $locationProvider.html5Mode(true);
     $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
     $routeProvider.
@@ -49,35 +49,5 @@ app.config([ '$locationProvider', '$routeProvider', '$httpProvider', 'Angularyti
       otherwise({
         redirectTo: '/teacher_sets'
       });
-    AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
   }
 ]);
-
-app.run(['Angularytics', '$http', function(Angularytics, $http) {
-  Angularytics.init();
-
-  // First load, set analytics custom dimensions: user_id and school
-  $http.get('/settings.json').success(function(settings) {      
-    
-    // Analytics maintinas these internal names for these custom dimensions:
-    var dimensionKeyMap = {
-      user_id: 'dimension1',
-      school: 'dimension2',
-    }
-    
-    var props = {}
-    props[dimensionKeyMap.user_id] = 'anon';
-    props[dimensionKeyMap.school] = 'none';
-
-    if(settings) {
-      props[dimensionKeyMap.user_id] = settings.id;
-      if(settings.school)
-        props[dimensionKeyMap.school] = settings.school.name;
-    }
-
-    // console.log('set analytics vals: ', props);
-    window.ga('set', props);
-
-
-  });
-}]);
