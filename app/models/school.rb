@@ -5,6 +5,8 @@ class School < ActiveRecord::Base
 
   scope :active, -> { where(active: true) }
 
+  attr_accessible :name, :code, :active, :address_line_1, :address_line_2, :state, :postal_code, :phone_number, :borough
+  
   # Full name of school + comma & borough if borough is present.
   # Comma can be overridden with any other punctuation mark that is passed in as the one argument.
   def full_name(delim = ', ')
