@@ -446,6 +446,7 @@ namespace :ingest do
   # Example: `rake ingest:overwrite_sierra_code_zcode_matches['data/public/sierra_code_zcode_matches.csv']`
   desc "Overwrite join table for sierra_codes and zcodes"
   task :overwrite_sierra_code_zcode_matches, [:file_name] => :environment do |t, args|
+    puts "starting overwrite_sierra_code_zcode_matches"
     csv_text = File.read(args.file_name)
     rows = CSV.parse(csv_text, headers: true)
     ActiveRecord::Base.transaction do
@@ -454,11 +455,16 @@ namespace :ingest do
         row_hash = row.to_hash
         sierra_code = row_hash['sierra_code'].strip
         zcode = row_hash['zcode'].strip
-        puts "Creating #{sierra_code}"
+        puts "Creating sierra code #{sierra_code}"
         ['sierra_code', 'zcode'].each do |column_header_name|
           raise "The #{column_header_name} column is mislabeled or missing from the CSV." if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
         end
+        puts "No need to raise an error.  FYI, the zcode of #{zcode} is in Sierra but not in MLN." unless School.find_by_code(zcode)
         SierraCodeZcodeMatch.create!(sierra_code: sierra_code, zcode: zcode)
+      end
+      School.all.each do |school|
+        # We will raise the error below to prevent a teacher signing up for a school that isn't represented in Sierra's lookup table
+        raise "A SierraCodeZcodeMatch is missing for the school with this zcode: #{school.code}" unless SierraCodeZcodeMatch.find_by_zcode(school.code) || Rails.env.test?
       end
     end
   end
