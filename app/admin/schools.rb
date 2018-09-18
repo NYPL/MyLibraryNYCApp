@@ -8,13 +8,13 @@ ActiveAdmin.register School do
   index do
     column :name
     column(:active, sortable: :active) do |school|
-      render(partial: 'schools/activation_links_container', locals: { school: school })
+      render(partial: 'schools/activation_links_container', locals: { school: school, action: 'index' })
     end
     default_actions
   end
 
   action_item only: :show do
-    render(partial: 'schools/activation_links_container', locals: { school: school })
+    render(partial: 'schools/activation_links_container', locals: { school: school, action: 'show' })
   end
 
   member_action :activate, method: :put do

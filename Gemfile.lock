@@ -722,6 +722,7 @@ GEM
     multipart-post (2.0.0)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
+    nypl_log_formatter (0.1.2)
     open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
     parallel (1.12.1)
@@ -846,6 +847,7 @@ DEPENDENCIES
   json
   meta_search (>= 1.1.0.pre)
   nokogiri
+  nypl_log_formatter
   open_uri_redirections
   pg (~> 0.18)
   pry-rails

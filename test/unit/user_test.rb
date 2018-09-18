@@ -29,7 +29,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created without pin' do
       @user.pin = ""
       @user.save
-      assert_equal(["can't be blank", "requires numbers only.", "must be 4 digits."], @user.errors.messages[:pin])
+      assert_equal(["can't be blank", "may only contain numbers", "must be 4 digits."], @user.errors.messages[:pin])
     end
   end
 

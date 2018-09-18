@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
-  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "requires numbers only." },
+  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
   validate :validate_pin_pattern, on: :create
 
@@ -72,10 +72,23 @@ class User < ActiveRecord::Base
 
 
   def assign_barcode
-    Rails.logger.debug("assign_barcode: start")
+    Rails.logger.debug(
+      "Begin assigning barcode to #{self.email}",
+      method: "assign_barcode",
+      status: "start",
+      user: {email: self.email}
+      )
+
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
     self.assign_attributes({ barcode: last_user_barcode + 1})
-    Rails.logger.debug("assign_barcode: end | Generated barcode #{self.barcode}.")
+
+    Rails.logger.debug(
+      "Barcode has been assigned to #{self.email}",
+      method: "assign_barcode",
+      status: "end",
+      barcode: "#{self.barcode}",
+      user: {email: self.email}
+      )
     return self.barcode
   end
 
@@ -86,7 +99,7 @@ class User < ActiveRecord::Base
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
   def validate_pin_pattern
-    if pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
+    if pin && pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
       true
     else
       errors.add(:pin, 'does not meet our requirements. Please try again.')
@@ -100,7 +113,6 @@ class User < ActiveRecord::Base
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
   def send_request_to_patron_creator_service
-    Rails.logger.debug("send_user_to_patron_creator_service: start")
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
@@ -112,7 +124,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.assign_barcode.to_s],
+      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode.to_s],
       'addresses': [
         {
           'lines': [
@@ -132,11 +144,12 @@ class User < ActiveRecord::Base
       }]
     }
     Rails.logger.debug(
-       {
-        'status' => 'Request send to patron creator service',
-        'dataSent' => query
-       }
+        'Request sent to patron creator service',
+         method: 'send_request_to_patron_creator_service',
+         status: 'start',
+         dataSent: query
     )
+
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
@@ -145,26 +158,27 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
+
     case response.code
     when 201
       Rails.logger.debug(
-        {
-          'status' => "The account with e-mail #{email} was
-           successfully created from the micro-service!"
-        }
+           status: "The account with e-mail #{email} was
+           successfully created from the micro-service!",
+           statusCode: response.code
       )
     else
-      Rails.logger.error JSON.parse(response.body).merge!(
-        {
-          'level' => 'Error',
-          'level_code' => 3,
-          'timestamp' => Time.now.iso8601
-        }
-      ).to_s
+      Rails.logger.error(
+           "An error has occured when sending a request to the patron creator service",
+           statusCode: response.code,
+           responseData: response.body 
+      )
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
 
+  # 404 - no records with the same e-mail were found
+  # 409 - more then 1 record with the same e-mail was found
+  # 200 - 1 record with the same e-mail was found
   def get_email_records(email)
     query = {
       'email' => email
@@ -180,18 +194,33 @@ class User < ActiveRecord::Base
         }
     )
     response = JSON.parse(response.body)
-    if response['statusCode'] != 404
-      Rails.logger.error response.merge!(
-        {
-          'level' => 'Error',
-          'level_code' => 3,
-          'timestamp' => Time.now.iso8601
-        }
-      ).to_s
+    case response['statusCode']
+    when 404
+      Rails.logger.debug(
+        "No records found with the e-mail #{email} in Sierra database",
+        statusCode: response['statusCode'],
+        user: { email: email }
+        )
+    when 409
+      Rails.logger.error(
+         "The following e-mail #{email} has more then 1 record in the Sierra database with the same e-mail",
+        statusCode: response['statusCode'],
+         user: { email: email }
+        )
+    when 200 
+      Rails.logger.error(
+         "The following e-mail #{email} has 1 other record in the Sierra database with the same e-mail",
+         statusCode: response['statusCode'],
+         user: { email: email }
+      )
     else
-      Rails.logger.debug "#{response}"
+      Rails.logger.error(
+         "#{response}",
+         statusCode: response['statusCode'],
+         user: { email: email }
+        )
     end
-    return response
+      return response
   end
 
   def get_oauth_token
@@ -203,16 +232,16 @@ class User < ActiveRecord::Base
       })
     case response.code
     when 200
+      Rails.logger.debug(
+        'Token successfully received',
+        statusCode: response.code
+        )
       return JSON.parse(response.body)['access_token']
     else
       Rails.logger.error(
-        {
-          message: 'Error in receiving response from ISSO NYPL TOKEN SERVICE',
-          type: 'Error',
-          level_code: 3,
-          timestamp: Time.now.iso8601,
-          statusCode: response.code
-        }
+        'Error in receiving response from ISSO NYPL TOKEN SERVICE',
+        responseData: "#{response.body}",
+        statusCode: response.code
       )
       raise InvalidResponse, "Invalid status code of: #{response.code}"
     end
@@ -230,7 +259,8 @@ class User < ActiveRecord::Base
     return 5 if school.borough == 'QUEENS'
   end
 
-  def pcode4 # This returns the sierra code, not the school's zcode
+  # This returns the sierra code, not the school's zcode
+  def pcode4
     school.sierra_code
   end
 end

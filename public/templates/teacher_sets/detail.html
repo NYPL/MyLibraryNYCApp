@@ -26,11 +26,11 @@
       <h3 ng-show="ts.books"><ng-pluralize count="ts.books.length" when="{'1': '1 Title', 'other': '{} Titles'}"></ng-pluralize></h3>
       <ul class="ts-book-list" ng-class="{'ts-copy-list': ts.set_type=='single' && ts.books.length==1}">
         <li ng-repeat="copy in [1,2,3,4,5]" ng-if="ts.set_type=='single' && ts.books.length==1">
-          <a><img ng-show="ts.books[0].cover_uri" src="{{ts.books[0].cover_uri}}" /></a>
+          <a><img ng-show="ts.books[0].cover_uri" ng-src="{{ts.books[0].cover_uri}}" /></a>
         </li>
         <li ng-repeat="book in ts.books">
           <a href="#/books/{{book.id}}">
-            <img ng-show="book.cover_uri" src="{{book.cover_uri}}" title="{{book.title}}" />
+            <img ng-show="book.cover_uri" ng-src="{{book.cover_uri}}" title="{{book.title}}"/>
             <span ng-hide="book.cover_uri">{{book.title}}</span>
           </a>
         </li>
