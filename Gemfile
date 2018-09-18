@@ -25,6 +25,7 @@ gem 'test-unit'
 gem 'will_paginate', '~> 3.0'
 gem 'webmock'
 gem 'yaml_db'
+gem 'nypl_log_formatter'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails',   '~> 3.2.3'
