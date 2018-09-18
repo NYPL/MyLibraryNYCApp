@@ -15,6 +15,5 @@
 //= require jquery-ui
 //= require ./vendor/jquery.ui.touch-punch.min
 //= require ./vendor/jquery.swipeshow.min
-//= require ./vendor/exacttarget
 //= require helpers
 //= require rails.validations
