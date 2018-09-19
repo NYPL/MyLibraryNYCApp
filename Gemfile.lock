@@ -705,6 +705,11 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     libv8 (3.16.14.19)
+    lograge (0.3.6)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
+    logstash-event (1.2.02)
     mail (2.5.5)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -722,7 +727,6 @@ GEM
     multipart-post (2.0.0)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
-    nypl_log_formatter (0.1.2)
     open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
     parallel (1.12.1)
@@ -845,9 +849,10 @@ DEPENDENCIES
   httparty
   jquery-rails (< 3.0.0)
   json
+  lograge
+  logstash-event
   meta_search (>= 1.1.0.pre)
   nokogiri
-  nypl_log_formatter
   open_uri_redirections
   pg (~> 0.18)
   pry-rails

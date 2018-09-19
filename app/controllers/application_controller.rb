@@ -1,5 +1,21 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+
+  def append_info_to_payload(payload)
+    super
+    payload[:host] = request.host
+    case payload[:status] 
+    when 200 
+      payload[:level] = "INFO"
+    when payload[:status]  > 200 && payload[:status]  < 400 
+      payload[:level] = "DEBUG"
+    when payload[:status]  > 400 
+      payload[:level] = "WARNING"
+    when payload[:status]  >= 500 
+      payload[:level] = "ERROR"
+    end 
+  end
+  
   
   def after_sign_in_path_for(resource)
     redirect_url = app_url
@@ -36,5 +52,6 @@ class ApplicationController < ActionController::Base
       redirect_to "#{app_url}##{request.fullpath}"
     end
   end
-  
+
+
 end

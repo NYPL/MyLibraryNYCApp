@@ -10,6 +10,21 @@ MyLibraryNYC::Application.configure do
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
+
+  config.lograge.enabled = true
+  config.lograge.logger = ActiveSupport::BufferedLogger.new("log/my-library-nyc-application.log")
+  config.lograge.custom_options = lambda do |event|
+    # capture some specific timing values you are interested in
+    {:host => event.payload[:host]}
+  end
+    # config.lograge.keep_original_rails_log = true
+
+
+
+  #config.lograge.keep_original_rails_log = true
+  config.lograge.formatter = Lograge::Formatters::Logstash.new
+
+
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
@@ -23,7 +38,7 @@ MyLibraryNYC::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   # # Turn off asset pipline information showing in logs 
-  # config.assets.logger = false 
+  # config.assets.logger = true 
 
   # Raise exception on mass assignment protection for Active Record models
   config.active_record.mass_assignment_sanitizer = :strict
