@@ -38,10 +38,5 @@ app.controller('HoldDetailCtrl', [ '$scope', '$routeParams', '$http', '$location
         }
       });
     };
-
-    if ($routeParams.new_order) {
-      $scope.tracking_url = _et.getTrackingUrl("Order Page", "<data amt=\"1\" unit=\"Orders\" accumulate=\"true\" />");
-    }
-
   }
 ]);

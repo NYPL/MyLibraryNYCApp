@@ -22,5 +22,6 @@
     <%= yield %>
   </div>
   <%= render "layouts/footer" %>
+  <%= render "layouts/timeout" if current_user %>
 </body>
 </html>

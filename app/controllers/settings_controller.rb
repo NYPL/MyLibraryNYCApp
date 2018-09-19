@@ -1,12 +1,11 @@
 class SettingsController < ApplicationController
 
   def index
-
     unless user_signed_in?
       flash[:error] = "You must be logged in to access this page"
       session[:redirect_after_login] = "/users/edit"
-      puts "format: ", request.format
-      redirect_to new_user_session_path if request.format == 'html'
+      redirect_to new_user_session_path
+      return
     end
 
     unless params[:settings].nil?

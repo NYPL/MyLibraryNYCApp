@@ -2,9 +2,10 @@ class User < ActiveRecord::Base
   include Exceptions
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :registerable,
-  :recoverable, :rememberable, :trackable, :validatable # this handles uniqueness of email automatically
+  :recoverable, :rememberable, :trackable, :validatable, # this handles uniqueness of email automatically
+  :timeoutable # adds session["warden.user.user.session"]["last_request_at"] which we use in sessions_controller
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me,
