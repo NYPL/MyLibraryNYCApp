@@ -37,5 +37,4 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-development.us-east-1.elasticbeanstalk.com' }
   config.action_mailer.perform_deliveries = false  
 
-  Rails.env = "dev"
 end
