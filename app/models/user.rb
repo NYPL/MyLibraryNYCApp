@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   include Exceptions
+  include LogWrapper
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
@@ -73,23 +74,25 @@ class User < ActiveRecord::Base
 
 
   def assign_barcode
-    Rails.logger.debug(
-      "Begin assigning barcode to #{self.email}",
-      method: "assign_barcode",
-      status: "start",
-      user: {email: self.email}
-      )
+    LogWrapper.log('DEBUG',
+      {
+       'message' => "Begin assigning barcode to #{self.email}",
+       'method' => "assign_barcode",
+       'status' => "start",
+       'user' => {email: self.email}
+      })
 
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
-    Rails.logger.debug(
-      "Barcode has been assigned to #{self.email}",
-      method: "assign_barcode",
-      status: "end",
-      barcode: "#{self.barcode}",
-      user: {email: self.email}
-      )
+    LogWrapper.log('DEBUG',
+      {
+       'message' => "Barcode has been assigned to #{self.email}",
+       'method' => "assign_barcode",
+       'status' => "end",
+       'barcode' => "#{self.barcode}",
+       'user' => {email: self.email}
+      })
     return self.barcode
   end
 
@@ -144,12 +147,13 @@ class User < ActiveRecord::Base
         "content": school.name
       }]
     }
-    Rails.logger.debug(
-        'Request sent to patron creator service',
-         method: 'send_request_to_patron_creator_service',
-         status: 'start',
-         dataSent: query
-    )
+    LogWrapper.log('DEBUG',
+      {
+       'message' => 'Request sent to patron creator service',
+       'method' => 'send_request_to_patron_creator_service',
+       'status' => 'start',
+       'dataSent' => query
+      })
 
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
@@ -162,17 +166,19 @@ class User < ActiveRecord::Base
 
     case response.code
     when 201
-      Rails.logger.debug(
-           status: "The account with e-mail #{email} was
+      LogWrapper.log('DEBUG',
+        {
+          'message' => "The account with e-mail #{email} was
            successfully created from the micro-service!",
-           statusCode: response.code
-      )
+          'status' => response.code
+        })
     else
-      Rails.logger.error(
-           "An error has occured when sending a request to the patron creator service",
-           statusCode: response.code,
-           responseData: response.body 
-      )
+      LogWrapper.log('ERROR',
+        {
+          'message' => "An error has occured when sending a request to the patron creator service",
+          'status' => response.code,
+          'responseData' => response.body 
+        })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
@@ -197,29 +203,33 @@ class User < ActiveRecord::Base
     response = JSON.parse(response.body)
     case response['statusCode']
     when 404
-      Rails.logger.debug(
-        "No records found with the e-mail #{email} in Sierra database",
-        statusCode: response['statusCode'],
-        user: { email: email }
-        )
+      LogWrapper.log('DEBUG',
+        {
+         'message' => "No records found with the e-mail #{email} in Sierra database",
+         'status' => response['statusCode'],
+         'user' =>  { email: email }
+        })
     when 409
-      Rails.logger.error(
-         "The following e-mail #{email} has more then 1 record in the Sierra database with the same e-mail",
-        statusCode: response['statusCode'],
-         user: { email: email }
-        )
+      LogWrapper.log('DEBUG',
+        {
+         'message' => "The following e-mail #{email} has more then 1 record in the Sierra database with the same e-mail",
+         'status' => response['statusCode'],
+         'user' => { email: email }
+        })
     when 200 
-      Rails.logger.error(
-         "The following e-mail #{email} has 1 other record in the Sierra database with the same e-mail",
-         statusCode: response['statusCode'],
-         user: { email: email }
-      )
+      LogWrapper.log('DEBUG',
+        {
+         'message' => "The following e-mail #{email} has 1 other record in the Sierra database with the same e-mail",
+         'status' => response['statusCode'],
+         'user' => { email: email }
+        })
     else
-      Rails.logger.error(
-         "#{response}",
-         statusCode: response['statusCode'],
-         user: { email: email }
-        )
+      LogWrapper.log('ERROR',
+        {   
+         'message' => "#{response}",
+         'status' => response['statusCode'],
+         'user' => { email: email }
+        })
     end
       return response
   end
@@ -231,18 +241,22 @@ class User < ActiveRecord::Base
         client_id: ENV['ISSO_CLIENT_ID'],
         client_secret: ENV['ISSO_CLIENT_SECRET']
       })
+
     case response.code
     when 200
-      Rails.logger.debug(
-        'Token successfully received',
-        statusCode: response.code
-        )
+      LogWrapper.log('INFO',
+        {
+        'message' => 'Token successfully received',
+        'statusCode'=> response.code,
+        })
       return JSON.parse(response.body)['access_token']
     else
-      Rails.logger.error(
-        'Error in receiving response from ISSO NYPL TOKEN SERVICE',
-        responseData: "#{response.body}",
-        statusCode: response.code
+     LogWrapper.log('ERROR',
+       {
+       'message' => 'Error in receiving response from ISSO NYPL TOKEN SERVICE',
+       'responseData' => "#{response.body}",
+       'status' => response.code
+       }
       )
       raise InvalidResponse, "Invalid status code of: #{response.code}"
     end

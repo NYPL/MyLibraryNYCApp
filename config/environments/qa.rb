@@ -5,5 +5,4 @@ MyLibraryNYC::Application.configure do
 
   config.force_ssl = true
 
-  Rails.env = 'qa'
 end
