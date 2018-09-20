@@ -13,7 +13,6 @@
   <%= javascript_include_tag "application" %>
   <%= javascript_include_tag "application-angular" %>
   <%= csrf_meta_tags %>
-
 </head>
 <body class="body-<%= controller.controller_name %>-<%= controller.action_name %>">
   <%= render "layouts/navigation" %>
@@ -22,5 +21,6 @@
     <%= yield %>
   </div>
   <%= render "layouts/footer" %>
+  <%= render "layouts/timeout" if current_user %>
 </body>
 </html>
