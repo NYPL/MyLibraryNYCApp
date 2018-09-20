@@ -1,4 +1,4 @@
-module Wrapper 
+module LogWrapper 
 
 	# Wrapper module server's as a wrapper to 
 	# add output to the log file. 
@@ -6,7 +6,7 @@ module Wrapper
 	# A string passed in as level and a hash
 	# passed in as message. Please look at 
 	# examples from the user.rb model. 
-	
+
 	def self.log(level,message)
 
 	severity_levels = 

@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   include Exceptions
-  include Wrapper
+  include LogWrapper
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
 
 
   def assign_barcode
-    Wrapper.log('DEBUG',
+    LogWrapper.log('DEBUG',
       {
        'message' => "Begin assigning barcode to #{self.email}",
        'method' => "assign_barcode",
@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
-    Wrapper.log('DEBUG',
+    LogWrapper.log('DEBUG',
       {
        'message' => "Barcode has been assigned to #{self.email}",
        'method' => "assign_barcode",
@@ -146,7 +146,7 @@ class User < ActiveRecord::Base
         "content": school.name
       }]
     }
-    Wrapper.log('DEBUG',
+    LogWrapper.log('DEBUG',
       {
        'message' => 'Request sent to patron creator service',
        'method' => 'send_request_to_patron_creator_service',
@@ -165,14 +165,14 @@ class User < ActiveRecord::Base
 
     case response.code
     when 201
-      Wrapper.log('DEBUG',
+      LogWrapper.log('DEBUG',
         {
           'message' => "The account with e-mail #{email} was
            successfully created from the micro-service!",
           'status' => response.code
         })
     else
-      Wrapper.log('ERROR',
+      LogWrapper.log('ERROR',
         {
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
@@ -202,28 +202,28 @@ class User < ActiveRecord::Base
     response = JSON.parse(response.body)
     case response['statusCode']
     when 404
-      Wrapper.log('DEBUG',
+      LogWrapper.log('DEBUG',
         {
          'message' => "No records found with the e-mail #{email} in Sierra database",
          'status' => response['statusCode'],
          'user' =>  { email: email }
         })
     when 409
-      Wrapper.log('DEBUG',
+      LogWrapper.log('DEBUG',
         {
          'message' => "The following e-mail #{email} has more then 1 record in the Sierra database with the same e-mail",
          'status' => response['statusCode'],
          'user' => { email: email }
         })
     when 200 
-      Wrapper.log('DEBUG',
+      LogWrapper.log('DEBUG',
         {
          'message' => "The following e-mail #{email} has 1 other record in the Sierra database with the same e-mail",
          'status' => response['statusCode'],
          'user' => { email: email }
         })
     else
-      Wrapper.log('ERROR',
+      LogWrapper.log('ERROR',
         {   
          'message' => "#{response}",
          'status' => response['statusCode'],
@@ -243,14 +243,14 @@ class User < ActiveRecord::Base
 
     case response.code
     when 200
-      Wrapper.log('INFO',
+      LogWrapper.log('INFO',
         {
         'message' => 'Token successfully received',
         'statusCode'=> response.code,
         })
       return JSON.parse(response.body)['access_token']
     else
-     Wrapper.log('ERROR',
+     LogWrapper.log('ERROR',
        {
        'message' => 'Error in receiving response from ISSO NYPL TOKEN SERVICE',
        'responseData' => "#{response.body}",
