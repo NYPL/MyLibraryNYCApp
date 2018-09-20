@@ -22,8 +22,8 @@ MyLibraryNYC::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
-  # # Turn off asset pipline information showing in logs 
-  # config.assets.logger = true 
+  # Turn off asset pipline information showing in logs 
+  # config.assets.logger = false 
 
   # Raise exception on mass assignment protection for Active Record models
   config.active_record.mass_assignment_sanitizer = :strict
