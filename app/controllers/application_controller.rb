@@ -52,6 +52,4 @@ class ApplicationController < ActionController::Base
       redirect_to "#{app_url}##{request.fullpath}"
     end
   end
-
-
 end
