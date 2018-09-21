@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(:version => 20180928145516) do
     t.string   "bnumber",                     :limit => 20
     t.string   "set_type",                    :limit => 20
     t.text     "contents"
+    t.string   "last_book_change"
   end
 
   add_index "teacher_sets", ["availability"], :name => "index_teacher_sets_availaibilty"
@@ -231,5 +232,17 @@ ActiveRecord::Schema.define(:version => 20180928145516) do
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "versions", :force => true do |t|
+    t.string   "item_type",                   :null => false
+    t.integer  "item_id",        :limit => 8, :null => false
+    t.string   "event",                       :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+    t.text     "object_changes"
+  end
+
+  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
 
 end
