@@ -8,8 +8,8 @@ class Book < ActiveRecord::Base
   # attr_accessor :matching_api_items
 
 	# has_and_belongs_to_many :authors
-	has_many :books_in_sets, :dependent => :destroy
-	has_many :teacher_sets, through: :books_in_sets
+	has_many :teacher_set_books, :dependent => :destroy
+	has_many :teacher_sets, through: :teacher_set_books
 
   validate do |book|
     BookValidator.new(book).validate

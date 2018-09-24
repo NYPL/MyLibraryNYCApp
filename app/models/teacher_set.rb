@@ -10,8 +10,8 @@ class TeacherSet < ActiveRecord::Base
   attr_accessor :subject, :subject_key, :suitabilities_string, :note_summary, :note_string, :slug
 
   has_many :teacher_set_notes #, :as => :notes
-  has_many :books_in_sets, :dependent => :destroy
-  has_many :books, :through => :books_in_sets, :order => 'books_in_sets.rank ASC'
+  has_many :teacher_set_books, :dependent => :destroy
+  has_many :books, :through => :teacher_set_books, :order => 'teacher_set_books.rank ASC'
 
   has_and_belongs_to_many :subjects
 
@@ -500,7 +500,7 @@ class TeacherSet < ActiveRecord::Base
         cat_item = Book.catalog_item(cat_item['id'])
         book = Book.upsert_from_catalog_item cat_item
         puts "     Adding book #{book.title}"
-        self.books_in_sets.push BooksInSet.create(:book => book, :teacher_set => self, :rank => i)
+        self.teacher_set_books.push TeacherSetBook.create(:book => book, :teacher_set => self, :rank => i)
 
         successes += 1
       end
@@ -520,7 +520,7 @@ class TeacherSet < ActiveRecord::Base
         isbns = n.at_css('td.marcTagData').text.sub(/^\$a/,'').strip.split ' '
 
         puts "  Adding books by marc 944 field"
-        BooksInSet.destroy_for_set self.id
+        TeacherSetBook.destroy_for_set self.id
         self.add_books_by_isbns isbns
 
         self.update_attributes :set_type => isbns.size == 1 ? 'single' : 'multi'
@@ -546,7 +546,7 @@ class TeacherSet < ActiveRecord::Base
       list = self.class.api_call "lists/#{list_id}"
       # puts "got list data: #{list.inspect}"
 
-      BooksInSet.destroy_for_set self.id
+      TeacherSetBook.destroy_for_set self.id
       if list.nil? || list['list'].nil? || list['list']['list_items'].nil?
         puts "    No list items found for #{list_id}: #{list.inspect}"
 
@@ -555,7 +555,7 @@ class TeacherSet < ActiveRecord::Base
         list['list']['list_items'].each_with_index do |item, i|
           book = Book.update_by_catalog_id item['title']['id'].to_i
           puts "    Adding book #{i}: #{book.title}"
-          self.books_in_sets.push BooksInSet.create(:book => book, :teacher_set => self, :rank => i)
+          self.teacher_set_books.push TeacherSetBook.create(:book => book, :teacher_set => self, :rank => i)
           # Book.upsert_from_catalog_item item
           # item = api_call 'titles', item['title']['id']
           # puts "got bigger item: #{item.inspect}"
