@@ -8,13 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="google-site-verification" content="mAHyiTqiyVJ_7ZySPu4ohaiJsgnlGlHmP6Tfyd6fGQI" />
-  
+
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= yield :head %>
   <%= csrf_meta_tags %>
-  <%= render 'layouts/analytics' %>
-
 </head>
 <body>
   <%= render "layouts/navigation" %>
@@ -24,6 +22,6 @@
     <%= yield %>
   </div>
   <%= render "layouts/footer" %>
+  <%= render "layouts/timeout" if current_user %>
 </body>
 </html>
-

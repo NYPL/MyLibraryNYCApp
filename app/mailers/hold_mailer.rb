@@ -10,15 +10,12 @@ class HoldMailer < ActionMailer::Base
       @hold = hold
       @user = hold.user
       @teacher_set = hold.teacher_set
-
       emails = AdminUser.pluck(:email)
       Rails.logger.debug("#{LOG_TAG}.admin_notification: About to send hold order notification email on #{@teacher_set.title or 'unknown'} to #{@user.email or 'unknown'}")
       mail(:to => emails, :subject => "New Order from #{@user.email or 'unknown'} for #{@teacher_set.title or 'unknown'}")
     rescue => exception
-      # something went wrong.  perhaps either user or teacher set aren't filled properly.
-      # or maybe the email couldn't be sent out.
       Rails.logger.error("#{LOG_TAG}.admin_notification: Cannot send hold order notification email.  Backtrace=#{exception.backtrace}.")
-      raise
+      raise exception
     end
   end
 
@@ -34,22 +31,21 @@ class HoldMailer < ActionMailer::Base
       Rails.logger.debug("#{LOG_TAG}.confirmation: About to send hold order notification email to #{@user.email}")
       mail(:to => @user.contact_email, :subject => "Your order confirmation for #{@teacher_set.title}")
     rescue => exception
-      # something went wrong.  perhaps either user or teacher set aren't filled properly.
-      # or maybe the email couldn't be sent out.
       Rails.logger.error("#{LOG_TAG}.confirmation: Cannot send hold order notification email.  Backtrace=#{exception.backtrace}.")
       # NOTE:  Will not re-raise the exception, the teacher notification email isn't essential.
     end
   end
 
 
-  def status_change(hold, status, message)
+  def status_change(hold, status, details)
     @hold = hold
     @hold.status = status
     @user = hold.user
     @teacher_set = hold.teacher_set
-    @message = message
+    @details = details
+    admin_emails = AdminUser.pluck(:email)
     Rails.logger.debug("status_change: About to send hold order notification email to #{@user.email}")
-    mail(:to => @user.contact_email, :subject => "Your teacher set order status for #{@teacher_set.title}")
+    mail(:to => @user.contact_email, :subject => "Order #{@hold.status} | Your teacher set order for #{@teacher_set.title}", :bcc => admin_emails)
   end
 
 end

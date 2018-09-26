@@ -1,0 +1,22 @@
+<script>
+  function PeriodicalQuery() {
+    $.ajax({
+      url: '/timeout_check',
+      type: 'GET',
+      success: handleResponse
+    });
+  };
+
+  function handleResponse(response) {
+    if (response['timeout_status'] == 'no_current_user') {
+      return;
+    } else if (response['timeout_status'] == 'timeout_warning') {
+      $('#timeout-warning').slideDown('fast');
+    } else if (response['timeout_status'] == 'timed_out') {
+      window.location.href = '/users/start';
+    }
+    setTimeout(PeriodicalQuery, (5 * 1000 * 60));
+  };
+
+  setTimeout(PeriodicalQuery, (5 * 1000 * 60));
+</script>

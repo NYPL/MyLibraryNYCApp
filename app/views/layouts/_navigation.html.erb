@@ -2,16 +2,29 @@
   <div class="container">
     <%= link_to "<i class='fa fa-book'></i> Learn More".html_safe, 'http://mylibrarynyc.org', :class=>"link-learn-more" %>
     <% if user_signed_in? %>
-    <%= link_to "<span>Dashboard</span>".html_safe, app_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
+      <%= link_to "<span>Dashboard</span>".html_safe, app_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
     <% else %>
-    <%= link_to "<span>Home</span>".html_safe, root_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
+      <%= link_to "<span>Home</span>".html_safe, root_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
     <% end %>
     <%= link_to "<i class='fa fa-question'></i> Help".html_safe, help_url %>
     <% if user_signed_in? %>
-    <%= link_to "<i class='fa fa-user'></i> Account".html_safe, account_url %>
+      <%= link_to "<i class='fa fa-user'></i> Account".html_safe, account_url %>
     <% else %>
-    <%= link_to "<i class='fa fa-user'></i> Sign In".html_safe, new_user_session_path %>
+      <%= link_to "<i class='fa fa-user'></i> Sign In".html_safe, new_user_session_path %>
     <% end %>
   </div>
 </nav>
 
+<div id="timeout-warning">
+  Your session is about to expire.
+  <span id="extend-session-link" onClick="extendSession();">Extend my session</span>.
+  <iframe id="extend-session-iframe" src="/extend_session_iframe" width="100" height="100" style="display:none;">
+    <!-- We reload this iframe when a user needs to extend a session. That resets -->
+  </iframe>
+  <script>
+    function extendSession() {
+      document.getElementById('extend-session-iframe').contentDocument.location.reload(true);
+      $('#timeout-warning').hide();
+    }
+  </script>
+</div>

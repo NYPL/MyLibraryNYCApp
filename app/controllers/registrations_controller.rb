@@ -1,5 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
 	  include Exceptions
+	  include LogWrapper
 
 	# When a user inputs information into the signup form, the data gets sent to the create method/action.
 	# Currently we overide the devise create method to add some customization. The original method
@@ -8,7 +9,7 @@ class RegistrationsController < Devise::RegistrationsController
 	# In addition, overriding the method allows us to validate the incoming data from the form, send the data
 	# to the microservice, and create a record on MyLibraryNYC depending on if the microservice is working properly.
 	def create
-		Rails.logger.debug("creating new user")
+		LogWrapper.log('INFO','message' => "Creating new user record")
 		build_resource(sign_up_params)
 		if resource.valid?
   		begin

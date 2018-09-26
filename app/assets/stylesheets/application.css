@@ -21,4 +21,5 @@
  *= require books
  *= require signup
  *= require errors
+ *= require shared
  */

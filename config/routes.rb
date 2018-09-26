@@ -1,14 +1,21 @@
 MyLibraryNYC::Application.routes.draw do
- 
-  devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations }
-  
+
+  devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
+
+  devise_scope :user do
+    match 'timeout_check' => 'sessions#timeout_check', via: :get
+    match 'timeout' => 'sessions#timeout', via: :get
+  end
+
+  get 'extend_session_iframe' => 'home#extend_session_iframe'
+
   resources :teacher_sets do
     resources :holds
   end
   resources :books
   resources :schools, :only => [:index]
   match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel
-  resources :holds  
+  resources :holds
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -27,7 +34,7 @@ MyLibraryNYC::Application.routes.draw do
   match 'help' => 'home#help', :as => :help
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
-  
+
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
@@ -67,7 +74,7 @@ MyLibraryNYC::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => 'home#index'
- 
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 

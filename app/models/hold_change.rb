@@ -8,15 +8,15 @@ class HoldChange < ActiveRecord::Base
   belongs_to :admin_user
 
   after_save :do_after_save
-  
+
   def do_after_save
     update_hold
     send_change_status_email
   end
-  
+
   def send_change_status_email
-    # deliver email if there's a comment and status has been changed to error, pending, or closed
-    HoldMailer.status_change(hold, status, comment).deliver if !comment.blank? and ['error', 'pending', 'closed', 'cancelled'].include? status
+    # deliver email if status has been changed to error, pending, closed, or cancelled
+    HoldMailer.status_change(hold, status, comment).deliver if ['error', 'pending', 'closed', 'cancelled'].include? status
   end
 
   def update_hold
@@ -24,5 +24,5 @@ class HoldChange < ActiveRecord::Base
     hold.status = status
     hold.save
   end
-  
+
 end
