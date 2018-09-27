@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20180913135147) do
+ActiveRecord::Schema.define(:version => 20180924150408) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -65,15 +65,6 @@ ActiveRecord::Schema.define(:version => 20180913135147) do
   end
 
   add_index "books", ["title"], :name => "index_books_title"
-
-  create_table "books_in_sets", :force => true do |t|
-    t.integer "book_id",        :limit => 8,                :null => false
-    t.integer "teacher_set_id", :limit => 8
-    t.integer "rank",           :limit => 2, :default => 0, :null => false
-  end
-
-  add_index "books_in_sets", ["book_id"], :name => "index_books_in_sets_book_id"
-  add_index "books_in_sets", ["teacher_set_id"], :name => "index_books_in_sets_teacher_set_id"
 
   create_table "boroughs", :force => true do |t|
     t.string   "name"
@@ -152,6 +143,15 @@ ActiveRecord::Schema.define(:version => 20180913135147) do
 
   add_index "subjects_teacher_sets", ["subject_id", "teacher_set_id"], :name => "index_subjects_teacher_sets_on_subject_id_and_teacher_set_id"
   add_index "subjects_teacher_sets", ["teacher_set_id"], :name => "index_subjects_teacher_sets_on_teacher_set_id"
+
+  create_table "teacher_set_books", :force => true do |t|
+    t.integer "book_id",        :limit => 8,                :null => false
+    t.integer "teacher_set_id", :limit => 8
+    t.integer "rank",           :limit => 2, :default => 0, :null => false
+  end
+
+  add_index "teacher_set_books", ["book_id"], :name => "index_teacher_set_books_book_id"
+  add_index "teacher_set_books", ["teacher_set_id"], :name => "index_teacher_set_books_teacher_set_id"
 
   create_table "teacher_set_notes", :force => true do |t|
     t.integer  "teacher_set_id", :limit => 8
