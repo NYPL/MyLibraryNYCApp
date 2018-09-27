@@ -78,6 +78,15 @@ MyLibraryNYC::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
+  namespace :api do
+    namespace :v1 do
+      post '/teacher_set' => 'bibs#create_or_update_teacher_set'
+      delete '/teacher_set' => 'bibs#delete_teacher_set'
+      post '/book' => 'bibs#create_or_update_book'
+      delete '/book' => 'bibs#delete_book'
+    end
+  end
+
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
