@@ -20,6 +20,8 @@ class TeacherSet < ActiveRecord::Base
   accepts_nested_attributes_for :books, :allow_destroy => true
   validates_associated :books
 
+  validates_uniqueness_of :bnumber
+
   before_create :make_slug
 
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
