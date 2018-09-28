@@ -80,10 +80,8 @@ MyLibraryNYC::Application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      post '/teacher_set' => 'bibs#create_or_update_teacher_set'
-      delete '/teacher_set' => 'bibs#delete_teacher_set'
-      post '/book' => 'bibs#create_or_update_book'
-      delete '/book' => 'bibs#delete_book'
+      post '/teacher_sets' => 'bibs#create_or_update_teacher_sets'
+      delete '/teacher_sets' => 'bibs#delete_teacher_sets'
     end
   end
 
