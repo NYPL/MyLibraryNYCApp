@@ -15,9 +15,12 @@ app.controller('HoldCancelCtrl', [ '$scope', '$routeParams', '$http', '$location
         window.location = data.redirect_to;
         return false;
       }
-
       if (data.hold.status == "cancelled"){
-        $('#cancel-text').html("This current order of <strong>" + data.teacher_set.title + "</strong> has already beeen cancelled!")
+        if (data.teacher_set.title == null){
+           $('#cancel-text').html("This order is already cancelled.")
+        } else {
+           $('#cancel-text').html("This current order of <strong>" + data.teacher_set.title + "</strong> has already beeen cancelled!")
+        }
         $('#cancel-button').prop("disabled",true);
         $('#cancel-button').css('background-color', 'grey')
       }

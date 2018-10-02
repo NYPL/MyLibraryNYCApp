@@ -10,6 +10,7 @@ class HoldsController < ApplicationController
 
   # GET /holds/1.json
   def show
+    puts "this is show"
     # @hold = Hold.find(params[:id])
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
@@ -73,7 +74,7 @@ class HoldsController < ApplicationController
     rescue => exception
       respond_to do |format|
           format.json {   render json: {error: "We've encountered an error and were unable to confirm your order. Please try again later or email help@mylibrarynyc.org for assistance.
-            "}.to_json, status: 500}
+            ", rails_error_message: exception.message}.to_json, status: 500}
       end
     end
   end
