@@ -21,8 +21,8 @@ app.controller('HoldCancelCtrl', [ '$scope', '$routeParams', '$http', '$location
         } else {
            $('#cancel-text').html("This current order of <strong>" + data.teacher_set.title + "</strong> has already beeen cancelled!")
         }
-        $('#cancel-button').prop("disabled",true);
-        $('#cancel-button').css('background-color', 'grey')
+         $('#cancel-button').prop("disabled",true);
+         $('#cancel-button').css('background-color', 'grey')
       }
 
       $scope.hold = data.hold;
