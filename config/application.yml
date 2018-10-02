@@ -6,7 +6,7 @@ case ENV['RAILS_ENV']
 
 when 'local'
 
-  ENV['DATABASE_URL'] = "postgresql://localhost/postgres"
+  ENV['DATABASE_URL'] = "postgresql://localhost/mylibnyc_local"
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
