@@ -4,6 +4,8 @@ require 'rails/test_help'
 require 'webmock/test_unit'
 require 'factories/user_factory'
 require 'factories/school_factory'
+require 'factories/book_factory'
+require 'factories/teacher_set_factory'
 
 include WebMock::API
 

@@ -1,23 +1,27 @@
 #encoding: UTF-8
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
+  has_paper_trail
+  before_save :disable_papertrail
+  before_update :enable_papertrail
+  after_save :enable_papertrail
 
   attr_accessible :slug, :grade_begin, :grade_end, :availability, :call_number, :description, :details_url, :edition, :id,
                   :isbn, :language, :lexile_begin, :lexile_end, :notes, :physical_description, :primary_language, :publication_date,
                   :publisher, :series, :statement_of_responsibility, :sub_title, :title, :books_attributes,
-                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents
+                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents, :last_book_change
 
   attr_accessor :subject, :subject_key, :suitabilities_string, :note_summary, :note_string, :slug
 
   has_many :teacher_set_notes #, :as => :notes
   has_many :teacher_set_books, :dependent => :destroy
   has_many :books, :through => :teacher_set_books, :order => 'teacher_set_books.rank ASC'
+  has_many :holds
 
   has_and_belongs_to_many :subjects
 
-  has_many :holds
-
   accepts_nested_attributes_for :books, :allow_destroy => true
+
   validates_associated :books
 
   validates_uniqueness_of :bnumber

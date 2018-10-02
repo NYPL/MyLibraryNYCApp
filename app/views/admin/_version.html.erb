@@ -1,0 +1,98 @@
+<% if !resource.versions.empty? %>
+  <% if resource.versions.length.to_i > 0 %>
+    <% if params[:version] %>
+      <!-- Display version ID -->
+      <b>This is version <%= "#{params[:version].to_i}" %>.</b><br>
+      <% if params[:version].to_i == 1 %>
+        <% time = resource.created_at %>
+      <% else %>
+        <% time = resource.versions[(params[:version].to_i - 2)].created_at %>
+      <% end %>
+      saved <%= time_ago_in_words(time) %> ago<br>
+      <%= time %>
+    <% else %>
+      <!-- Without a version specified, we show the current version. -->
+      <b>Current Version</b><br>
+      saved <%= time_ago_in_words(resource.updated_at) %> ago<br>
+      <%= resource.updated_at %>
+    <% end %>
+    <br>
+
+    <!-- The changeset is a hash of changed values.  Example: {"title"=>["Spyfall 4", "Spyfall 5"]} -->
+    <% if !params[:version] && !resource.versions.empty? %>
+      <!-- Without a version specified in the params, show the changes made by the current version. -->
+      <% changeset = resource.versions[-1].changeset %>
+    <% elsif params[:version] && params[:version] != '1' %>
+      <!--
+        "A version stores the object as it looked before the change." Source: https://github.com/paper-trail-gem/paper_trail#terminator-and-originator
+        PaperTrail does not create an initial version for teacher sets that are already in the database,
+        Changing the original teacher set will trigger the creation of the first PaperTrail version,
+        which stores the data from the original version but has the timestamp which refers to the time
+        that original verison was changed to something else.
+        Each version has a changeset attribute which shows what changed when this version was created.
+        If the user wants to see what changed leading up to second version, they will request params[:version] = 2,
+        and we will show them the changeset for the first saved version which is first in the array of resource.versions, so we call
+        resource.versions[0] so that's why we subtract 2 below.
+      -->
+      <% changeset = resource.versions[(params[:version].to_i - 2)].changeset %>
+    <% end %>
+    <% if changeset.present? %>
+      <br>
+      <b>Data changed by this version</b><br>
+      <% changeset.keys.each do |key| %>
+        <% next if key == 'updated_at' %>
+        <% if key == 'last_book_change' # applies only to teacher sets %>
+          <% change_record = changeset[key][1] # change_record example: "deleted-20609673052-Title goes here" %>
+          <% change_action = change_record.split('-')[0] %>
+          <% changed_book_id = change_record.split('-')[1] %>
+          <% changed_book_title = change_record.split('-')[2] %>
+
+          <%= change_action.upcase %> BOOK:<br>
+          <% if change_action == 'deleted' %>
+            <%= changed_book_title %><br>
+          <% else %>
+            <%= link_to changed_book_title, admin_book_path(changed_book_id) %><br>
+          <% end %>
+        <% else %>
+          <% next if changeset[key][0].blank? && changeset[key][1].blank? # otherwise changing from nil to empty string will show %>
+          <%= key.titleize.upcase %>:<br>
+          <% changeset[key].each do |value| %>
+            &bull; <%= value.present? ? value : '(none)' %><br>
+          <% end %>
+        <% end %>
+        <br>
+      <% end %>
+    <% end %>
+
+    <% if (params[:version] && params[:version].to_i > 1) || !params[:version] %>
+      <% previous_version = (params[:version] ? params[:version].to_i - 1 : resource.versions.length) %>
+      <%= link_to "Previous", { :version => previous_version } %> |
+    <% else %>
+      <br>
+      No Previous |
+    <% end %>
+
+    <% if (params[:version] && params[:version].to_i < resource.versions.length) %>
+      <% next_version = (params[:version] ? params[:version].to_i + 1 : resource.versions.length) %>
+      <%= link_to "Next", { :version => next_version } %> |
+    <% end %>
+
+    <% if params[:version] %>
+      <%= link_to "Current" %> |
+    <% end %>
+
+    <% if resource.versions.length > 0 %>
+      <% all_versions_string = "All #{resource.versions.length + 1} Versions" %>
+      <% if resource.class.name == 'TeacherSet' %>
+        <%= link_to all_versions_string, history_admin_teacher_set_path(resource) %>
+      <% elsif resource.class.name == 'Book' %>
+        <%= link_to all_versions_string, history_admin_book_path(resource) %>
+      <% end %>
+    <% else %>
+    <% end %>
+
+  <% end %>
+<% else %>
+  <%= resource.updated_at %><br>
+   This is the only version.
+<% end %>

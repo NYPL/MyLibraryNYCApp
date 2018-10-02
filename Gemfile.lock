@@ -14,6 +14,15 @@ GIT
       rails (>= 3.0.0, < 4)
       sass (~> 3.1)
 
+GIT
+  remote: git://github.com/paper-trail-gem/paper_trail.git
+  revision: a59be6df201303e525feafe60f453bc4dc83331a
+  branch: 5-stable
+  specs:
+    paper_trail (5.2.3)
+      activerecord (>= 3.0, < 6.0)
+      request_store (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -774,6 +783,8 @@ GEM
       ffi (>= 0.5.0, < 2)
     rdoc (3.9.5)
     ref (2.0.0)
+    request_store (1.4.1)
+      rack (>= 1.4)
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
     rubocop (0.58.2)
@@ -856,6 +867,7 @@ DEPENDENCIES
   meta_search (>= 1.1.0.pre)
   nokogiri
   open_uri_redirections
+  paper_trail!
   pg (~> 0.18)
   pry-rails
   rails (= 3.2.22.5)

@@ -1,0 +1,152 @@
+link href: '/assets/active_admin.css', media: 'screen', rel: 'stylesheet', type: 'text/css'
+link href: '/assets/admin_history.css', media: 'screen', rel: 'stylesheet', type: 'text/css'
+
+versions = assigns[:versions]
+
+# hard-code the header is the easiest way to include it
+div class: "header", id: "header" do
+  h1 class: "site_title", id: "site_title" do
+    'My Library NYC'
+  end
+  ul class: "header-item tabs", id: "tabs" do
+    li id: "dashboard" do
+      a href: "/admin/dashboard" do
+        'Dashboard'
+      end
+    end
+    li id: "holds" do
+      a href: "/admin/holds" do
+        'Holds'
+      end
+    end
+    li id: "teacher_sets", class: "#{assigns[:versioned_object].class.name == 'TeacherSet' ? 'current' : ''}" do
+      a href: "/admin/teacher_sets" do
+        'Teacher Set'
+      end
+    end
+    li id: "books", class: "#{assigns[:versioned_object].class.name == 'Book' ? 'current' : ''}" do
+      a href: "/admin/books" do
+        'Book'
+      end
+    end
+    li id: "schools" do
+      a href: "/admin/schools" do
+        'School'
+      end
+    end
+    li id: "users" do
+      a href: "/admin/users" do
+        'User'
+      end
+    end
+    li id: "admin_users" do
+      a href: "/admin/admin_users" do
+        'Admin User'
+      end
+    end
+  end
+
+  ul class: "header-item tabs", id: "utility_nav" do
+    li id: "current_user" do
+      a href: "/admin/admin_users/#{current_admin_user.id}" do
+        'labs@nypl.org'
+      end
+    end
+    li id: "logout" do
+      a href: "/admin/logout", data: { method: "get" } do
+        'Logout'
+      end
+    end
+  end
+end
+
+panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{assigns[:versioned_object].title}".html_safe do
+  table style: 'padding:0px 10px 0px 10px;' do
+    # create the table's header row
+    tr do
+      th 'ID' do; end
+      th 'Changes' do; end
+      th 'Date Changed' do; end
+    end
+    (1..(versions.count)).each do |version_number|
+      # loop through each version to create a new row in the table
+      tr do
+        td do
+          if assigns[:versioned_object].class.name == 'TeacherSet'
+            link_to "Version #{version_number}", admin_teacher_set_path(assigns[:versioned_object], version: version_number)
+          elsif assigns[:versioned_object].class.name == 'Book'
+            link_to "Version #{version_number}", admin_book_path(assigns[:versioned_object], version: version_number)
+          end
+        end
+        td do
+          if version_number == 1
+            'Created'
+          else
+            output = ''
+            # example of a version's changeset: {"title"=>["Native American History Reference Collection.", "Native American History Reference Collection 2"], "updated_at"=>["2018-09-25T18:33:52.245Z", "2018-09-25T19:51:55.739Z"]}
+            versions[version_number - 2].changeset.each do |k, v|
+              # note that the contents of this block are duplicated below
+              next if k == 'updated_at' # we don't need to show updated_at in this column
+              if k == 'last_book_change'
+                changed_book_action = v[1].split('-')[0]
+                changed_book_id = v[1].split('-')[1]
+                changed_book_title = v[1].split('-')[2]
+                if changed_book_action != 'removed'
+                  begin
+                    changed_book_title = (link_to(changed_book_title, admin_book_path(changed_book_id)))
+                  rescue
+                  end
+                end
+                output += "BOOK<br>&bull; #{changed_book_action}: #{changed_book_title} (ID##{changed_book_id})<br><br>"
+              elsif v[0].present? || v[1].present?
+                output += "#{k.upcase}<br>&bull; #{v[0]}<br>&bull; #{v[1]}<br><br>"
+              end
+            end
+            output.html_safe
+          end
+        end
+        td do
+          time = if version_number == 1
+                   assigns[:versioned_object].created_at
+                 else
+                   versions[version_number - 2].created_at
+                 end
+          "#{time_ago_in_words(time)} ago<br>#{time}".html_safe
+        end
+      end
+    end
+    tr do
+      td do
+        # always show the current version in the last row
+        link_to "Current Version", admin_teacher_set_path(assigns[:versioned_object])
+      end
+      td do
+        output = ''
+        # always show the current version in the last row
+        versions[-1].changeset.each do |k, v|
+          # note that the contents of this block are duplicated above
+          next if k == 'updated_at' # we don't need to show updated_at in this column
+          if k == 'last_book_change'
+            changed_book_action = v[1].split('-')[0]
+            changed_book_id = v[1].split('-')[1]
+            changed_book_title = v[1].split('-')[2]
+            if changed_book_action != 'removed'
+              begin
+                changed_book_title = (link_to(changed_book_title, admin_book_path(changed_book_id)))
+              rescue
+              end
+            end
+            output += "BOOK<br>&bull; #{changed_book_action}: #{changed_book_title} (ID##{changed_book_id})<br><br>"
+          elsif v[0].present? || v[1].present?
+            output += "#{k.upcase}<br>&bull; #{v[0]}<br>&bull; #{v[1]}<br><br>"
+          end
+        end
+        output.html_safe
+      end
+      td do
+        time = assigns[:versioned_object].updated_at
+        "#{time_ago_in_words(time)} ago<br>#{time}".html_safe
+      end
+    end
+  end
+end
