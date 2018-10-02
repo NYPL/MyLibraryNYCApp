@@ -10,7 +10,6 @@ class HoldsController < ApplicationController
 
   # GET /holds/1.json
   def show
-    puts "this is show"
     # @hold = Hold.find(params[:id])
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
