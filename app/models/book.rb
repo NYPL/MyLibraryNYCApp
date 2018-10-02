@@ -5,14 +5,13 @@ class Book < ActiveRecord::Base
   before_update :enable_papertrail
   after_save :enable_papertrail
 
-  attr_accessible :call_number, :cover_uri, :description, :details_url, :format, :id, :isbn, :notes, :physical_description, :primary_language, :publication_date, :statement_of_responsibility, :sub_title, :title, :catalog_choice
+  attr_accessible :call_number, :cover_uri, :description, :details_url, :format, :id, :isbn, :notes, :physical_description, :primary_language, :publication_date, :statement_of_responsibility, :sub_title, :title, :catalog_choice, :bnumber
   attr_accessor :catalog_choice
   # attr_accessor :matching_api_items
 
 	# has_and_belongs_to_many :authors
 	has_many :teacher_set_books, :dependent => :destroy
 	has_many :teacher_sets, through: :teacher_set_books
-  validates_uniqueness_of :bnumber
 
   # turn this off this obsolete validation so that we can run tests on book creation; otherwise you get this error: `Need to set ENVs`
   # validate do |book|
@@ -22,6 +21,8 @@ class Book < ActiveRecord::Base
   # turn off this obsolete callback so that we can run tests on book creation; otherwise you get this error: `Need to set ENVs`
   # after_save :populate_missing_data
   after_commit :create_teacher_set_version_on_update, on: :update
+
+  validates_uniqueness_of :bnumber, allow_blank: true
 
   def populate_missing_data
     if self.details_url.nil?
