@@ -12,7 +12,6 @@ class Book < ActiveRecord::Base
 	# has_and_belongs_to_many :authors
 	has_many :teacher_set_books, :dependent => :destroy
 	has_many :teacher_sets, through: :teacher_set_books
-  validates_uniqueness_of :bnumber
 
   # turn this off this obsolete validation so that we can run tests on book creation; otherwise you get this error: `Need to set ENVs`
   # validate do |book|
