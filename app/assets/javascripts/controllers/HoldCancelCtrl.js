@@ -11,15 +11,13 @@ app.controller('HoldCancelCtrl', [ '$scope', '$routeParams', '$http', '$location
 
     // Retrieve hold
     $http.get('/holds/'+$scope.hold_id+'.json?' + $.param($scope.formData)).success(function(data) {
-
       if ( data.redirect_to ) {
         window.location = data.redirect_to;
         return false;
       }
 
       if (data.hold.status == "cancelled"){
-        var cancelTextElement = document.getElementById('cancel-text')
-        cancelTextElement.innerHTML = "This current order of <strong>" + data.teacher_set.title + "</strong> has already beeen cancelled!"
+        $('#cancel-text').html("This current order of <strong>" + data.teacher_set.title + "</strong> has already beeen cancelled!")
         $('#cancel-button').prop("disabled",true);
         $('#cancel-button').css('background-color', 'grey')
       }
