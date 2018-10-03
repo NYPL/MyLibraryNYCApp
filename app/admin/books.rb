@@ -1,22 +1,10 @@
 ActiveAdmin.register Book do
+  actions :show, :index
 
   menu :priority => 4
   sidebar :versions, :partial => "admin/version", :only => :show
 
-  controller do
-    def create
-      # We have books already in the db. Paper Trail does not create initial versions for existing objects,
-      # so we do not want to create initial versions for any objects created through the admin interface.
-      # The first time we create a Paper Trail version for any object will then be the first time that object is edited
-      # (via the admin interface or API).
-      PaperTrail.enabled = false
-      super
-      PaperTrail.enabled = true
-    end
-  end
-
   index do
-    default_actions
     column :cover_uri do |book|
       image_tag book.image_uri :small
     end
