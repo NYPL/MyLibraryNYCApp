@@ -55,7 +55,9 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def make_slug
-    self.slug ||= [self.title.parameterize, rand(36**6).to_s(36)].join("-")
+    # check for nil title otherwise parameterize will fail
+    parameterized_title = (self.title || '').parameterize
+    self.slug ||= [parameterized_title, rand(36**6).to_s(36)].join("-")
   end
 
   # Poor man's subject... TODO: replace with column in DB
@@ -665,4 +667,34 @@ class TeacherSet < ActiveRecord::Base
   end
 =end
 
+  # Recieve JSON related to a teacher_set.
+  # For each ISBN, ensure there is an associated book.
+  # Disassociate books that are no longer in the teacher set.
+  def update_included_book_list(teacher_set_record)
+    # Gather all ISBNs.
+    return unless teacher_set_record['varFields']
+    isbns = []
+    teacher_set_record['varFields'].each do |var_field|
+      next unless var_field['marcTag'] == '944'
+      next unless var_field['subfields'] && var_field['subfields'][0] && var_field['subfields'][0]['content']
+      isbns = var_field['subfields'][0]['content'].split(' ')
+    end
+
+    # Delete teacher_set_books records for books with an ISBN that is not in the teacher_set's list of ISBNs.
+    return if isbns.empty?
+    self.teacher_set_books.each do |teacher_set_book|
+      if !teacher_set_book.book || (teacher_set_book.book.isbn.present? && !isbns.include?(teacher_set_book.book.isbn))
+        teacher_set_book.destroy
+      end
+    end
+
+    # Create a book if one does not yet exist for that ISBN.
+    # Associate the book to the teacher set by creating a TeacherSetBook record if one does not yet exist.
+    # Update all books in the teacher set.
+    isbns.each do |isbn|
+      book = Book.find_by_isbn(isbn) || Book.create(isbn: isbn)
+      TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
+      book.update_from_isbn
+    end
+  end
 end

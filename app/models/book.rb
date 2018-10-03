@@ -144,4 +144,8 @@ class Book < ActiveRecord::Base
       teacher_set.update_attributes(last_book_change: "updated-#{self.id}-#{self.title}")
     end
   end
+
+  def update_from_isbn
+    # later we will call the BibService to get more fields for this new book
+  end
 end
