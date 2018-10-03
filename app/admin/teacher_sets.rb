@@ -1,4 +1,6 @@
 ActiveAdmin.register TeacherSet do
+  actions :show, :index
+
   menu :priority => 3
   sidebar :versions, :partial => "admin/version", :only => :show
 
@@ -12,7 +14,6 @@ ActiveAdmin.register TeacherSet do
   end
 
   index do
-    default_actions
     [:title, :availability, :created_at, :updated_at].each do |prop|
       column prop
     end
