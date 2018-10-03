@@ -99,7 +99,7 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
                 end
                 output += "BOOK<br>&bull; #{changed_book_action}: #{changed_book_title} (ID##{changed_book_id})<br><br>"
               elsif v[0].present? || v[1].present?
-                output += "#{k.upcase}<br>&bull; #{v[0]}<br>&bull; #{v[1]}<br><br>"
+                output += "#{k.upcase}<br>&bull; Old: #{v[0]}<br>&bull; New: #{v[1]}<br><br>"
               end
             end
             output.html_safe
@@ -138,7 +138,7 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
             end
             output += "BOOK<br>&bull; #{changed_book_action}: #{changed_book_title} (ID##{changed_book_id})<br><br>"
           elsif v[0].present? || v[1].present?
-            output += "#{k.upcase}<br>&bull; #{v[0]}<br>&bull; #{v[1]}<br><br>"
+            output += "#{k.upcase}<br>&bull; Old: #{v[0]}<br>&bull; New: #{v[1]}<br><br>"
           end
         end
         output.html_safe
