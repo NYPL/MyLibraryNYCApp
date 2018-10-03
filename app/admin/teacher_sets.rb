@@ -14,9 +14,12 @@ ActiveAdmin.register TeacherSet do
   end
 
   index do
-    [:title, :availability, :created_at, :updated_at].each do |prop|
-      column prop
+    column :title do |teacher_set|
+      link_to(teacher_set.title, admin_teacher_set_path(teacher_set))
     end
+    column :availability
+    column :created_at
+    column :updated_at
   end
 
   # This method creates a link that we refer to in _version.html.erb this way: history_admin_teacher_set_path(resource)

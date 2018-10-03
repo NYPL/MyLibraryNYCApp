@@ -6,11 +6,13 @@ ActiveAdmin.register Book do
 
   index do
     column :cover_uri do |book|
-      image_tag book.image_uri :small
+      link_to((image_tag book.image_uri :small), admin_book_path(book))
     end
-    [:title, :statement_of_responsibility, :call_number].each do |prop|
-      column prop
+    column :title do |book|
+      link_to(book.title, admin_book_path(book))
     end
+    column :statement_of_responsibility
+    column :call_number
   end
 
   # This method creates a link that we refer to in _version.html.erb this way: history_admin_book_path(resource)
