@@ -1,4 +1,6 @@
-class HoldsController < ApplicationController
+class HoldsController < ApplicationController  
+  include LogWrapper
+
   
   before_filter :redirect_to_angular, only: [:show, :new, :cancel]
   before_filter :check_ownership, only: [:show, :update]
@@ -56,7 +58,6 @@ class HoldsController < ApplicationController
       set = TeacherSet.find(params[:teacher_set_id])
       @hold = set.holds.build(params[:hold])
       @hold.user = current_user
-
       unless params[:settings].nil?
         current_user.update_attributes(params[:settings])
       end
@@ -74,6 +75,7 @@ class HoldsController < ApplicationController
       respond_to do |format|
           format.json {   render json: {error: "We've encountered an error and were unable to confirm your order. Please try again later or email help@mylibrarynyc.org for assistance.
             ", rails_error_message: exception.message}.to_json, status: 500}
+      LogWrapper.log('ERROR','message' => exception.message)
       end
     end
   end
