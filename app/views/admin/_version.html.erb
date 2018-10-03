@@ -47,7 +47,7 @@
           <% changed_book_id = change_record.split('-')[1] %>
           <% changed_book_title = change_record.split('-')[2] %>
 
-          <%= change_action.upcase %> BOOK:<br>
+          <b><%= change_action.upcase %> BOOK:</b><br>
           <% if change_action == 'deleted' %>
             <%= changed_book_title %><br>
           <% else %>
@@ -55,9 +55,9 @@
           <% end %>
         <% else %>
           <% next if changeset[key][0].blank? && changeset[key][1].blank? # otherwise changing from nil to empty string will show %>
-          <%= key.titleize.upcase %>:<br>
-          <% changeset[key].each do |value| %>
-            &bull; <%= value.present? ? value : '(none)' %><br>
+          <b><%= key.titleize.upcase %>:</b><br>
+          <% changeset[key].each_with_index do |value, index| %>
+            &bull; <b><%= (index == 0 ? 'Old:' : 'New:') %></b> <%= value.present? ? value : '(none)' %><br>
           <% end %>
         <% end %>
         <br>
