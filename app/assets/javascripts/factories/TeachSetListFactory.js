@@ -58,7 +58,6 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
       this.queryString = this.parameterize(params);
       this.facetString = this.getFacetString(params);
       $http.get('/teacher_sets.json?'+this.queryString).success(function(data) {
-        // console.log(data);
         // append results to current results
         $.merge(that.items, data.teacher_sets);
         // only load facets once
@@ -70,6 +69,7 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
         }
         that.busy = false;
         that.cancelBusyMessage();
+        that.lastTeacherSetCount = data.teacher_sets.length
       });
     };
 
@@ -95,10 +95,10 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
     };
 
     TeachSetListFactory.prototype.nextPage = function() {
+      if (this.lastTeacherSetCount == 0) return;
       if (this.busy) return;
       this.page++;
       this.queryParams.page = this.page;
-      // console.log('Loading page '+this.page);
       this.doRequest(this.queryParams);
     };
 
