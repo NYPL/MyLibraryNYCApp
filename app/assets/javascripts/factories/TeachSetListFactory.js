@@ -50,7 +50,6 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
 
     TeachSetListFactory.prototype.doRequest = function(params){
       if (this.busy) return;
-      if (this.lastTeacherSetCount == 0) return;
       params = params || this.queryParams;
       var that = this;
       this.busy = true;
@@ -96,6 +95,7 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
     };
 
     TeachSetListFactory.prototype.nextPage = function() {
+      if (this.lastTeacherSetCount == 0) return;
       if (this.busy) return;
       this.page++;
       this.queryParams.page = this.page;
