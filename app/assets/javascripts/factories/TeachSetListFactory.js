@@ -71,7 +71,6 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
         that.busy = false;
         that.cancelBusyMessage();
         that.lastTeacherSetCount = data.teacher_sets.length
-
       });
     };
 
