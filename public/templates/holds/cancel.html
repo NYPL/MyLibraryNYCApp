@@ -2,7 +2,7 @@
   <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include> 
   <h1>Cancel Your Order</h1>
   
-  <p class="alert hold-alert">
+  <p id='cancel-text' class="alert hold-alert">
     Please confirm. Are you sure you want to cancel this order for <strong>{{ts.title}}</strong>?
   </p>
   <form ng-submit="submitForm()">
@@ -12,7 +12,7 @@
     </div>
     
     <div class="actions">
-      <input class="button" type="submit" value="{{action_label}}" />
+      <input id='cancel-button' class="button" type="submit" value="{{action_label}}" />
     </div>
   
   </form>

@@ -16,6 +16,7 @@ app.controller('HoldCancelCtrl', [ '$scope', '$routeParams', '$http', '$location
         return false;
       }
 
+
       $scope.hold = data.hold;
       $scope.ts = data.teacher_set;
       $scope.ts.teacher_set_notes = data.teacher_set_notes;

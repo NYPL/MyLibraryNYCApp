@@ -223,6 +223,7 @@ class User < ActiveRecord::Base
          'status' => response['statusCode'],
          'user' => { email: email }
         })
+      response = {statusCode: 200, message: 'This e-mail address already exists!'}
     else
       LogWrapper.log('ERROR',
         {   
