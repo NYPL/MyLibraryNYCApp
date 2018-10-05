@@ -14,14 +14,6 @@ GIT
       rails (>= 3.0.0, < 4)
       sass (~> 3.1)
 
-GIT
-  remote: git://github.com/paper-trail-gem/paper_trail.git
-  revision: a59be6df201303e525feafe60f453bc4dc83331a
-  branch: 5-stable
-  specs:
-    paper_trail (5.2.3)
-      activerecord (>= 3.0, < 6.0)
-      request_store (~> 1.1)
 
 GEM
   remote: https://rubygems.org/

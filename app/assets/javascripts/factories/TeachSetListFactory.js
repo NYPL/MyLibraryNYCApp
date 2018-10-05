@@ -99,6 +99,8 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
       if (this.busy) return;
       this.page++;
       this.queryParams.page = this.page;
+
+      // console.log('Loading page '+this.page);
       this.doRequest(this.queryParams);
     };
 
