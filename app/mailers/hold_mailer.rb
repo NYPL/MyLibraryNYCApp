@@ -43,9 +43,8 @@ class HoldMailer < ActionMailer::Base
     @user = hold.user
     @teacher_set = hold.teacher_set
     @details = details
-    admin_emails = AdminUser.pluck(:email)
     Rails.logger.debug("status_change: About to send hold order notification email to #{@user.email}")
-    mail(:to => @user.contact_email, :subject => "Order #{@hold.status} | Your teacher set order for #{@teacher_set.title}", :bcc => admin_emails)
+    mail(:to => @user.contact_email, :subject => "Order #{@hold.status} | Your teacher set order for #{@teacher_set.title}")
   end
 
 end
