@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/teacher_sets": {
+    "/teacher_sets": {
       "x-swagger-router-controller": "bibs",
       "post": {
         "tags": [
