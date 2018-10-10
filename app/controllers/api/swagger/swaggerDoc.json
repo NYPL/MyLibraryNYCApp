@@ -4,7 +4,7 @@
     "version": "0.2.1",
     "title": "my-library-nyc-bib-updater"
   },
-  "host": "localhost:3001",
+  "host": "localhost:3000",
   "basePath": "/api/v1",
   "schemes": [
     "http"
