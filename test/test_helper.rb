@@ -54,7 +54,7 @@ class ActiveSupport::TestCase
     stub_request(:get, 'https://dev-platform.nypl.org/api/v0.1/patrons?email=' +
     email)
       .to_return(status: 200, body: {
-        'statusCode' => 404,
+        'status' => 404,
         'type' => 'exception',
         'message' => 'No matching record found',
         'error' => [],
