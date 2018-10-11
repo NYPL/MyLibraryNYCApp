@@ -318,6 +318,9 @@
       "type": "array",
       "items": {
         "type": "object",
+        "required": [
+          "id"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -346,70 +349,6 @@
           "deleted": {
             "type": "string",
             "example": true
-          },
-          "locations": {
-            "type": "array",
-            "example": []
-          },
-          "suppressed": {
-            "type": "string",
-            "example": null
-          },
-          "lang": {
-            "type": "string",
-            "example": null
-          },
-          "title": {
-            "type": "string",
-            "example": null
-          },
-          "author": {
-            "type": "string",
-            "example": null
-          },
-          "materialType": {
-            "type": "string",
-            "example": null
-          },
-          "bibLevel": {
-            "type": "string",
-            "example": null
-          },
-          "publishYear": {
-            "type": "string",
-            "example": null
-          },
-          "catalogDate": {
-            "type": "string",
-            "example": null
-          },
-          "country": {
-            "type": "string",
-            "example": null
-          },
-          "normTitle": {
-            "type": "string",
-            "example": null
-          },
-          "normAuthor": {
-            "type": "string",
-            "example": null
-          },
-          "standardNumbers": {
-            "type": "array",
-            "example": []
-          },
-          "controlNumber": {
-            "type": "string",
-            "example": ""
-          },
-          "fixedFields": {
-            "type": "object",
-            "example": {}
-          },
-          "varFields": {
-            "type": "array",
-            "example": []
           }
         }
       }
