@@ -89,7 +89,7 @@ class UserTest < ActiveSupport::TestCase
         mock_check_email_request(new_email)
         response = @user.get_email_records(new_email)
         expected_response = {
-          'statusCode' => 404,
+          'status' => 404,
           'type' => 'exception',
           'message' => 'No matching record found',
           'error' => [],
