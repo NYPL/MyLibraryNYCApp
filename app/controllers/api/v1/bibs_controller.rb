@@ -92,8 +92,6 @@ class Api::V1::BibsController < ApplicationController
   end
 
   def set_request_body
-    # binding.pry
-    # request_body = request.body.read
-    @request_body = params[:_json] || JSON.parse(request_body)
+    @request_body = params[:_json] || JSON.parse(request.body.read)
   end
 end
