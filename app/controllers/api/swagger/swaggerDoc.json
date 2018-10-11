@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "0.2.1",
-    "title": "my-library-nyc-bib-updater"
+    "title": "my-library-nyc"
   },
   "host": "localhost:3000",
   "basePath": "/api/v1",
@@ -29,7 +29,7 @@
           {
             "name": "teacher_set_data",
             "in": "body",
-            "description": "The information of the new teacher set",
+            "description": "The information for the new teacher set",
             "required": true,
             "schema": {
               "$ref": "#/definitions/BibCreatorUpdater"
@@ -68,14 +68,14 @@
         "tags": [
           "mylibrarynyc_bibs"
         ],
-        "summary": "Delete a bib (teacher_set or book) in MyLibraryNYC",
+        "summary": "Delete a bib (teacher_set) in MyLibraryNYC",
         "description": "Delete a bib in MyLibraryNYC.",
         "operationId": "bibs_deleterV1",
         "parameters": [
           {
             "name": "bib_data",
             "in": "body",
-            "description": "The information of a deleted bib",
+            "description": "The information for a deleted bib",
             "required": true,
             "schema": {
               "$ref": "#/definitions/BibsDeleterDataV1"
@@ -114,158 +114,162 @@
   },
   "definitions": {
     "BibCreatorUpdater": {
-      "required": [
-        "id"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "21323534"
-        },
-        "nyplSource": {
-          "type": "string",
-          "example": "sierra-nypl"
-        },
-        "nyplType": {
-          "type": "string",
-          "example": "bib"
-        },
-        "updatedDate": {
-          "type": "string",
-          "example": "2018-09-19T12:00:45-04:00"
-        },
-        "createdDate": {
-          "type": "string",
-          "example": "2008-12-24T03:16:00-05:00"
-        },
-        "deletedDate": {
-          "type": "string",
-          "example": null
-        },
-        "deleted": {
-          "type": "string",
-          "example": false
-        },
-        "locations": {
-          "$ref": "#/definitions/LocationModel"
-        },
-        "suppressed": {
-          "type": "string",
-          "example": false
-        },
-        "lang": {
-          "type": "object",
-          "example": [
-            {
-              "code": "eng",
-              "named": "English"
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "21323534"
+          },
+          "nyplSource": {
+            "type": "string",
+            "example": "sierra-nypl"
+          },
+          "nyplType": {
+            "type": "string",
+            "example": "bib"
+          },
+          "updatedDate": {
+            "type": "string",
+            "example": "2018-09-19T12:00:45-04:00"
+          },
+          "createdDate": {
+            "type": "string",
+            "example": "2008-12-24T03:16:00-05:00"
+          },
+          "deletedDate": {
+            "type": "string",
+            "example": null
+          },
+          "deleted": {
+            "type": "string",
+            "example": false
+          },
+          "locations": {
+            "$ref": "#/definitions/LocationModel"
+          },
+          "suppressed": {
+            "type": "string",
+            "example": false
+          },
+          "lang": {
+            "type": "object",
+            "example": [
+              {
+                "code": "eng",
+                "named": "English"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "example": "Books for Reading and Sharing - Elementary School!"
+          },
+          "author": {
+            "type": "string",
+            "example": ""
+          },
+          "materialType": {
+            "type": "object",
+            "example": [
+              {
+                "code": "8",
+                "value": "TEACHER SET"
+              }
+            ]
+          },
+          "bibLevel": {
+            "type": "object",
+            "example": [
+              {
+                "code": "m",
+                "value": "MONOGRAPH"
+              }
+            ]
+          },
+          "publishYear": {
+            "type": "string",
+            "example": null
+          },
+          "catalogDate": {
+            "type": "string",
+            "example": "2017-08-23"
+          },
+          "country": {
+            "type": "object",
+            "example": [
+              {
+                "code": "xx ",
+                "name": "Unknown or undetermined"
+              }
+            ]
+          },
+          "normTitle": {
+            "type": "string",
+            "example": "books for reading and sharing elementary school"
+          },
+          "normAuthor": {
+            "type": "string",
+            "example": ""
+          },
+          "standardNumbers": {
+            "type": "string",
+            "example": []
+          },
+          "controlledNumbers": {
+            "type": "string",
+            "example": ""
+          },
+          "fixedFields": {
+            "type": "object",
+            "example": {
+              "24": {
+                "label": "Language",
+                "value": "eng",
+                "display": "English"
+              },
+              "25": {
+                "label": "Skip",
+                "value": "0",
+                "display": null
+              }
             }
-          ]
-        },
-        "title": {
-          "type": "string",
-          "example": "Books for Reading and Sharing - Elementary School!"
-        },
-        "author": {
-          "type": "string",
-          "example": ""
-        },
-        "materialType": {
-          "type": "object",
-          "example": [
-            {
-              "code": "8",
-              "value": "TEACHER SET"
-            }
-          ]
-        },
-        "bibLevel": {
-          "type": "object",
-          "example": [
-            {
-              "code": "m",
-              "value": "MONOGRAPH"
-            }
-          ]
-        },
-        "publishYear": {
-          "type": "string",
-          "example": null
-        },
-        "catalogDate": {
-          "type": "string",
-          "example": "2017-08-23"
-        },
-        "country": {
-          "type": "object",
-          "example": [
-            {
-              "code": "xx ",
-              "name": "Unknown or undetermined"
-            }
-          ]
-        },
-        "normTitle": {
-          "type": "string",
-          "example": "books for reading and sharing elementary school"
-        },
-        "normAuthor": {
-          "type": "string",
-          "example": ""
-        },
-        "standardNumbers": {
-          "type": "string",
-          "example": []
-        },
-        "controlledNumbers": {
-          "type": "string",
-          "example": ""
-        },
-        "fixedFields": {
-          "type": "object",
-          "example": {
-            "24": {
-              "label": "Language",
-              "value": "eng",
-              "display": "English"
-            },
-            "25": {
-              "label": "Skip",
-              "value": "0",
-              "display": null
-            }
+          },
+          "varFields": {
+            "type": "object",
+            "example": [
+              {
+                "fieldTag": "c",
+                "marcTag": "091",
+                "ind1": " ",
+                "ind2": " ",
+                "content": null,
+                "subfields": [
+                  {
+                    "tag": "a",
+                    "content": "Teacher Set ELA A Books 4"
+                  }
+                ]
+              },
+              {
+                "fieldTag": "d",
+                "marcTag": "650",
+                "ind1": " ",
+                "ind2": "0",
+                "content": null,
+                "subfields": [
+                  {
+                    "tag": "a",
+                    "content": "Picture books for children."
+                  }
+                ]
+              }
+            ]
           }
-        },
-        "varFields": {
-          "type": "object",
-          "example": [
-            {
-              "fieldTag": "c",
-              "marcTag": "091",
-              "ind1": " ",
-              "ind2": " ",
-              "content": null,
-              "subfields": [
-                {
-                  "tag": "a",
-                  "content": "Teacher Set ELA A Books 4"
-                }
-              ]
-            },
-            {
-              "fieldTag": "d",
-              "marcTag": "650",
-              "ind1": " ",
-              "ind2": "0",
-              "content": null,
-              "subfields": [
-                {
-                  "tag": "a",
-                  "content": "Picture books for children."
-                }
-              ]
-            }
-          ]
         }
       }
     },
@@ -311,98 +315,102 @@
       "example": {}
     },
     "BibsDeleterDataV1": {
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "17053989"
-        },
-        "nyplSource": {
-          "type": "string",
-          "example": "sierra-nypl"
-        },
-        "nyplTpe": {
-          "type": "string",
-          "example": "bib"
-        },
-        "updatedDate": {
-          "type": "string",
-          "example": "2017-08-25T06:32:01-04:00"
-        },
-        "createdDate": {
-          "type": "string",
-          "example": null
-        },
-        "deletedDate": {
-          "type": "string",
-          "example": "2012-06-08"
-        },
-        "deleted": {
-          "type": "string",
-          "example": true
-        },
-        "locations": {
-          "type": "array",
-          "example": []
-        },
-        "suppressed": {
-          "type": "string",
-          "example": null
-        },
-        "lang": {
-          "type": "string",
-          "example": null
-        },
-        "title": {
-          "type": "string",
-          "example": null
-        },
-        "author": {
-          "type": "string",
-          "example": null
-        },
-        "materialType": {
-          "type": "string",
-          "example": null
-        },
-        "bibLevel": {
-          "type": "string",
-          "example": null
-        },
-        "publishYear": {
-          "type": "string",
-          "example": null
-        },
-        "catalogDate": {
-          "type": "string",
-          "example": null
-        },
-        "country": {
-          "type": "string",
-          "example": null
-        },
-        "normTitle": {
-          "type": "string",
-          "example": null
-        },
-        "normAuthor": {
-          "type": "string",
-          "example": null
-        },
-        "standardNumbers": {
-          "type": "array",
-          "example": []
-        },
-        "controlNumber": {
-          "type": "string",
-          "example": ""
-        },
-        "fixedFields": {
-          "type": "object",
-          "example": {}
-        },
-        "varFields": {
-          "type": "array",
-          "example": []
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "17053989"
+          },
+          "nyplSource": {
+            "type": "string",
+            "example": "sierra-nypl"
+          },
+          "nyplTpe": {
+            "type": "string",
+            "example": "bib"
+          },
+          "updatedDate": {
+            "type": "string",
+            "example": "2017-08-25T06:32:01-04:00"
+          },
+          "createdDate": {
+            "type": "string",
+            "example": null
+          },
+          "deletedDate": {
+            "type": "string",
+            "example": "2012-06-08"
+          },
+          "deleted": {
+            "type": "string",
+            "example": true
+          },
+          "locations": {
+            "type": "array",
+            "example": []
+          },
+          "suppressed": {
+            "type": "string",
+            "example": null
+          },
+          "lang": {
+            "type": "string",
+            "example": null
+          },
+          "title": {
+            "type": "string",
+            "example": null
+          },
+          "author": {
+            "type": "string",
+            "example": null
+          },
+          "materialType": {
+            "type": "string",
+            "example": null
+          },
+          "bibLevel": {
+            "type": "string",
+            "example": null
+          },
+          "publishYear": {
+            "type": "string",
+            "example": null
+          },
+          "catalogDate": {
+            "type": "string",
+            "example": null
+          },
+          "country": {
+            "type": "string",
+            "example": null
+          },
+          "normTitle": {
+            "type": "string",
+            "example": null
+          },
+          "normAuthor": {
+            "type": "string",
+            "example": null
+          },
+          "standardNumbers": {
+            "type": "array",
+            "example": []
+          },
+          "controlNumber": {
+            "type": "string",
+            "example": ""
+          },
+          "fixedFields": {
+            "type": "object",
+            "example": {}
+          },
+          "varFields": {
+            "type": "array",
+            "example": []
+          }
         }
       }
     },
