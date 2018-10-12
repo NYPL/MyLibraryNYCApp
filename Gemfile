@@ -29,6 +29,7 @@ gem 'webmock'
 gem 'yaml_db'
 gem "lograge"
 gem "logstash-event"
+gem 'rack-cors'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails',   '~> 3.2.3'
