@@ -389,9 +389,10 @@ namespace :ingest do
   end
 
   # This rake task will import new schools and override values for existing schools
-  # Example: `rake ingest:import_all_nyc_schools['data/public/2016_-_2017_School_Locations.csv']`
+  # Example: `rake ingest:import_all_nyc_schools['data/public/2016_-_2017_School_Locations.csv', false]`
+  # The second argument is for whether the schools should be activated or not.
   desc "Import all NYC schools"
-  task :import_all_nyc_schools, [:file_name] => :environment do |t, args|
+  task :import_all_nyc_schools, [:file_name, :activate] => :environment do |t, args|
     csv_text = File.read(args.file_name)
     rows = CSV.parse(csv_text, headers: true)
     ActiveRecord::Base.transaction do
@@ -407,8 +408,9 @@ namespace :ingest do
         school.name = school.name || school_name
         school.address_line_1 = school.address_line_1 || row_hash['PRIMARY_ADDRESS_LINE_1'].strip
         school.state = school.state || row_hash['STATE_CODE'].strip
+        school.active = true if args.activate == true
         if row_hash['Location 1'].present?
-          address_line_2 = row_hash['Location 1'].split("\n")[0].strip # the latitude and longitude are on the second line of the cell
+          address_line_2 = row_hash['Location 1'].split("\n")[0].strip # sometimes the latitude and longitude are on the second line of the cell in CSV
           school.address_line_2 = school.address_line_2 || address_line_2
           school.borough = borough(address_line_2)
           school.postal_code = school.postal_code || address_line_2[-5..-1]
@@ -442,7 +444,8 @@ namespace :ingest do
     end
   end
 
-  # This rake task will overwrite all matches between sierra_codes and zcodes
+  # This rake task will destroy and re-create all matches between sierra_codes and zcodes
+  # Consequently, each existing code will get a new primary key but nothing depends on that primary key.
   # Example: `rake ingest:overwrite_sierra_code_zcode_matches['data/public/sierra_code_zcode_matches.csv']`
   desc "Overwrite join table for sierra_codes and zcodes"
   task :overwrite_sierra_code_zcode_matches, [:file_name] => :environment do |t, args|
@@ -463,8 +466,9 @@ namespace :ingest do
         SierraCodeZcodeMatch.create!(sierra_code: sierra_code, zcode: zcode)
       end
       School.all.each do |school|
-        # We will raise the error below to prevent a teacher signing up for a school that isn't represented in Sierra's lookup table
-        raise "A SierraCodeZcodeMatch is missing for the school with this zcode: #{school.code}" unless SierraCodeZcodeMatch.find_by_zcode(school.code) || Rails.env.test?
+        # Then ensure all schools have a SierraCodeZcodeMatch by raising the error below
+        # to prevent a teacher signing up for a school that isn't represented in Sierra's lookup table (would cause an error when they place a hold on a book)
+        raise "A SierraCodeZcodeMatch is missing for school ##{school.id} #{school.name} with this zcode: #{school.code}" unless school.code == 'MLNSTAFF' || SierraCodeZcodeMatch.find_by_zcode(school.code) || Rails.env.test?
       end
     end
   end
