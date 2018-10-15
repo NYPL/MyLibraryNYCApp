@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include Exceptions
   include LogWrapper
+  include Oauth
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
@@ -159,7 +160,7 @@ class User < ActiveRecord::Base
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
       headers:
-        { 'Authorization' => "Bearer #{get_oauth_token}",
+        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
           'Content-Type' => 'application/json' },
       timeout: 10
     )
@@ -177,7 +178,7 @@ class User < ActiveRecord::Base
         {
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
-          'responseData' => response.body 
+          'responseData' => response.body
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
@@ -196,7 +197,7 @@ class User < ActiveRecord::Base
       query: query,
       headers:
         {
-          'Authorization' => "Bearer #{get_oauth_token}",
+          'Authorization' => "Bearer #{Oauth.get_oauth_token}",
           'Content-Type' => 'application/json'
         }
     )
@@ -216,7 +217,7 @@ class User < ActiveRecord::Base
          'status' => response['statusCode'],
          'user' => { email: email }
         })
-    when 200 
+    when 200
       LogWrapper.log('DEBUG',
         {
          'message' => "The following e-mail #{email} has 1 other record in the Sierra database with the same e-mail",
@@ -226,41 +227,13 @@ class User < ActiveRecord::Base
       response = {statusCode: 200, message: 'This e-mail address already exists!'}
     else
       LogWrapper.log('ERROR',
-        {   
+        {
          'message' => "#{response}",
          'status' => response['statusCode'],
          'user' => { email: email }
         })
     end
       return response
-  end
-
-  def get_oauth_token
-    response = HTTParty.post(ENV['ISSO_OAUTH_TOKEN_URL'],
-      body: {
-        grant_type: 'client_credentials',
-        client_id: ENV['ISSO_CLIENT_ID'],
-        client_secret: ENV['ISSO_CLIENT_SECRET']
-      })
-
-    case response.code
-    when 200
-      LogWrapper.log('INFO',
-        {
-        'message' => 'Token successfully received',
-        'statusCode'=> response.code,
-        })
-      return JSON.parse(response.body)['access_token']
-    else
-     LogWrapper.log('ERROR',
-       {
-       'message' => 'Error in receiving response from ISSO NYPL TOKEN SERVICE',
-       'responseData' => "#{response.body}",
-       'status' => response.code
-       }
-      )
-      raise InvalidResponse, "Invalid status code of: #{response.code}"
-    end
   end
 
   def patron_type
