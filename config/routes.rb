@@ -79,8 +79,8 @@ MyLibraryNYC::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  post 'api/v0.1/teacher_sets' => 'api/v01/bibs#create_or_update_teacher_sets'
-  delete 'api/v0.1/teacher_sets' => 'api/v01/bibs#delete_teacher_sets'
+  post 'api/v0.1/teacher-sets' => 'api/v01/bibs#create_or_update_teacher_sets'
+  delete 'api/v0.1/teacher-sets' => 'api/v01/bibs#delete_teacher_sets'
 
   # See how all your routes lay out with "rake routes"
 
