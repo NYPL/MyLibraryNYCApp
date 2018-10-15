@@ -1302,7 +1302,7 @@ TWO_TEACHER_SETS_TO_DELETE = [{
 
 class Api::BibsControllerTest < ActionController::TestCase
   def setup
-    @controller = Api::V1::BibsController.new
+    @controller = Api::V01::BibsController.new
   end
 
   # test 'respond with 400 if request body is missing' do
