@@ -146,6 +146,6 @@ class Book < ActiveRecord::Base
   end
 
   def update_from_isbn
-    # later we will call the BibService to get more fields for this new book
+    # TODO: call the BibService to update this book with its current data in the ILS
   end
 end

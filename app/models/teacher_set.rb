@@ -17,8 +17,8 @@ class TeacherSet < ActiveRecord::Base
   has_many :teacher_set_books, :dependent => :destroy
   has_many :books, :through => :teacher_set_books, :order => 'teacher_set_books.rank ASC'
   has_many :holds
-
-  has_and_belongs_to_many :subjects
+  has_many :subject_teacher_sets, dependent: :delete_all
+  has_many :subjects, through: :subject_teacher_sets
 
   accepts_nested_attributes_for :books, :allow_destroy => true
 
@@ -102,7 +102,7 @@ class TeacherSet < ActiveRecord::Base
         clauses << "#{table_name}.#{c} ILIKE ?"
       end
       # Match on topics too:
-      clauses << "#{table_name}.id IN (SELECT _S2T.teacher_set_id FROM subjects _S INNER JOIN subjects_teacher_sets _S2T ON _S2T.subject_id=_S.id WHERE _S.title ILIKE ?)"
+      clauses << "#{table_name}.id IN (SELECT _S2T.teacher_set_id FROM subjects _S INNER JOIN subject_teacher_sets _S2T ON _S2T.subject_id=_S.id WHERE _S.title ILIKE ?)"
 
       vals = [].fill("%#{params[:keyword]}%", 0, clauses.length)
       sets = sets.where(clauses.join(' OR '), *vals)
@@ -137,7 +137,7 @@ class TeacherSet < ActiveRecord::Base
         # Each selected Subject facet requires it's own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
-        sets = sets.joins("INNER JOIN subjects_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND #{join_alias}.subject_id=#{s}")
+        sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND #{join_alias}.subject_id=#{s}")
       end
     end
 
@@ -217,7 +217,7 @@ class TeacherSet < ActiveRecord::Base
       topics_facets = {:label => 'topics', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       # Restrict to min_count_for_facet (5) if no topics currently selected
-      if !_qry.to_sql.include?('JOIN subjects_teacher_sets')
+      if !_qry.to_sql.include?('JOIN subject_teacher_sets')
         _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       # .. otherwise restrict to 3
       else
@@ -695,6 +695,41 @@ class TeacherSet < ActiveRecord::Base
       book = Book.find_by_isbn(isbn) || Book.create(isbn: isbn)
       TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
       book.update_from_isbn
+    end
+  end
+
+  # This is called from the bibs_controller.
+  # Delete all records for a teacher set in the join table SubjectTeacherSet, then
+  # create new records (and subjects if they do not exist) in that join table.
+  def update_subjects(subject_teacher_sets_string)
+    self.subject_teacher_sets.map(&:subject).each do |subject|
+      subject.destroy
+    end
+    return if subject_teacher_sets_string.blank?
+    subject_teacher_sets_string.split(',').each do |subject_name|
+      subject_name = subject_name.strip
+      subject = Subject.find_or_create_by_title(subject_name)
+      SubjectTeacherSet.create(teacher_set_id: self.id, subject_id: subject.id)
+    end
+
+    prune_subjects
+  end
+
+  # Delete all subjects that do not have any records in the join table, because they are not associated with any teacher sets
+  def prune_subjects
+    Subject.all.each do |subject|
+      subject.destroy if SubjectTeacherSet.where(subject_id: subject.id).empty?
+    end
+  end
+
+  # This is called from the bibs_controller.
+  # Delete all records for a teacher set in the join table SubjectTeacherSet, then
+  # create new records (and subjects if they do not exist) in that join table.
+  def update_notes(teacher_set_notes_string)
+    TeacherSetNote.where(teacher_set_id: self.id).destroy_all
+    return if teacher_set_notes_string.blank?
+    teacher_set_notes_string.split(',').each do |note_content|
+      TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
   end
 end
