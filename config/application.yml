@@ -10,6 +10,7 @@ when 'local'
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
+  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/bibs"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCL+6xESlcH6XPieZQIBEIAnue0eoIvwsVklKFk6Ss/15ozhEeOX57PLO7JzZ2C0VEftw0Wg6YWp")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz6OkwUOUwsV+igt9ICARCAQ0GQCQ1PahswCs4FO/oADmOgGh1ORhBstr88yYUp8eh2FHWTRsmrLRImou+9zqrdKLnN2qcMuY0RLqFplr/5YChbPgg=")
@@ -24,6 +25,7 @@ when 'development'
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
+  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/bibs"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCL+6xESlcH6XPieZQIBEIAnue0eoIvwsVklKFk6Ss/15ozhEeOX57PLO7JzZ2C0VEftw0Wg6YWp")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz6OkwUOUwsV+igt9ICARCAQ0GQCQ1PahswCs4FO/oADmOgGh1ORhBstr88yYUp8eh2FHWTRsmrLRImou+9zqrdKLnN2qcMuY0RLqFplr/5YChbPgg=")
@@ -38,6 +40,7 @@ when 'qa'
   ENV['SECRET_KEY_BASE'] =  AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyfTw+28EAedabm+G0CARCAgZuC7bP44+26scvrRSMqz+kN/5VWTo8kWMmvK/3sLqkAHfWP+3YhkqRjsUJxV+ajxIpFS5xcvOrXVsCFLx8AKIAfgu5WJfzpCyilyk0YefEb9Rc/CR4Kby4RguC9VHdRdacEVggV14UfGNVUJ9WEnMcIoBEnzqk/jw4zq1Md99f3bkuYEOH3Hu2exuigDQcGOPW9ARv69MgL1ePqFg==")
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
+  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/bibs"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKjWCFeFAdUNMdIDhQIBEIAn1FF0mYdxsNlM1WOEUyLGtjjpX42xgiSA1M8ui4kahfNsehZifUEj")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyT7AUGHHZGYCPxJ+UCARCAQ+dM+7Y22l3eOfrW4N+lkQ1ewHE6AFNi9nJTgrnAETk7Ovs+rX6NLSAUJLBKT+AIz6/r7/JxqJ1+1JD0zzHFhdZR0MU=")
@@ -52,6 +55,7 @@ when 'production'
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAOkwgeYGCSqGSIb3DQEHBqCB2DCB1QIBADCBzwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAziDnf1k29bXx4B81QCARCAgaF2fDdTCt4eChzWHHpsUhAkN6Ufz94ZizJ08Rq6y/4RQ44bybOpPIesKv2UvTUL5Hk4TU7fkbhBr7e8ZFLZsp7Pxn2BjCZ4PMBB499R38NieVLI5a4g8C8499uFhuMeAOeJ6oqiOOM21nI8Cy17zmmDQfP0zVXjNr+0hOZtwR0QpbAlDl0z0ov21BfG3RrUTyIdLE/RqqARsfsRZB29Kcfcdg==")
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://platform.nypl.org/api/v0.2/patrons"
+  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/bibs"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKjWCFeFAdUNMdIDhQIBEIAn1FF0mYdxsNlM1WOEUyLGtjjpX42xgiSA1M8ui4kahfNsehZifUEj")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyT7AUGHHZGYCPxJ+UCARCAQ+dM+7Y22l3eOfrW4N+lkQ1ewHE6AFNi9nJTgrnAETk7Ovs+rX6NLSAUJLBKT+AIz6/r7/JxqJ1+1JD0zzHFhdZR0MU=")

@@ -1882,7 +1882,7 @@ class Api::BibsControllerTest < ActionController::TestCase
     assert TeacherSetBook.count == 6 # some records are deleted in the join table (compare to 20 records above)
     assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}", "b#{BNUMBER2}"]
 
-    # confirm all fields are updated
+    # confirm all teacher_set_fields are updated
     first_teacher_set = TeacherSet.first
     assert first_teacher_set.title.present?
     assert first_teacher_set.call_number.present?
@@ -1901,7 +1901,23 @@ class Api::BibsControllerTest < ActionController::TestCase
     assert first_teacher_set.lexile_end.present?
     assert first_teacher_set.availability.present?
     assert first_teacher_set.teacher_set_notes.any?
-    assert first_teacher_set.subject_teacher_sets.map(&:subject).any? # for some reason, this syntax won't work: `first_teacher_set.subjects.any?`
+
+    # for some reason, this syntax won't work: `first_teacher_set.subjects.any?`
+    assert first_teacher_set.subject_teacher_sets.map(&:subject).any?
+
+    # confirm all book attributes are updated for the first book
+    # other books won't get updated since they have duplicate bnumbers in the mock JSON we use for this test
+    last_book = Book.find(1)
+    assert last_book.bnumber.present?
+    assert last_book.title.present?
+    assert last_book.publication_date.present?
+    assert last_book.primary_language.present?
+    assert last_book.details_url.present?
+    assert last_book.call_number.present?
+    assert last_book.description.present?
+    assert last_book.physical_description.present?
+    assert last_book.format.present?
+    assert last_book.cover_uri.present?
   end
 
   # test "should not create a teacher set if required field is missing (ie title)" do
