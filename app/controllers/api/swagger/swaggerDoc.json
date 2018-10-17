@@ -5,7 +5,7 @@
     "title": "my-library-nyc"
   },
   "host": "localhost:3000",
-  "basePath": "/api/v1",
+  "basePath": "/api",
   "schemes": [
     "http"
   ],
@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/teacher_sets": {
+    "/v0.1/mylibrarynyc/teacher-sets": {
       "x-swagger-router-controller": "bibs",
       "post": {
         "tags": [

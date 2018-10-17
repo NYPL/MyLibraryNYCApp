@@ -1,4 +1,4 @@
-class Api::V1::BibsController < ApplicationController
+class Api::V01::BibsController < ApplicationController
   include LogWrapper
   before_filter :set_request_body
 
