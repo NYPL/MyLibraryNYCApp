@@ -2001,31 +2001,8 @@ class Api::BibsControllerTest < ActionController::TestCase
     assert first_teacher_set.availability.present?
     assert first_teacher_set.teacher_set_notes.any?
     assert first_teacher_set.subject_teacher_sets.count == 2 # for some reason, this syntax won't work: `first_teacher_set.subjects.any?`
-  end
-
-  test "should not create a teacher set if required field is missing (ie title)" do
-    Book.destroy_all
-    TeacherSet.destroy_all
-    post 'create_or_update_teacher_sets', { _json: TEACHER_SET_WITH_TITLE_MISSING }
-    assert_response :success
-    assert Book.count == 0
-    assert TeacherSet.count == 0
     # for some reason, this syntax won't work: `first_teacher_set.subjects.any?`
     assert first_teacher_set.subject_teacher_sets.map(&:subject).any?
-
-    # confirm all book attributes are updated for the first book
-    # other books won't get updated since they have duplicate bnumbers in the mock JSON we use for this test
-    last_book = Book.find(1)
-    assert last_book.bnumber.present?
-    assert last_book.title.present?
-    assert last_book.publication_date.present?
-    assert last_book.primary_language.present?
-    assert last_book.details_url.present?
-    assert last_book.call_number.present?
-    assert last_book.description.present?
-    assert last_book.physical_description.present?
-    assert last_book.format.present?
-    assert last_book.cover_uri.present?
   end
 
   test "should not create a teacher set if required field is missing (ie title)" do

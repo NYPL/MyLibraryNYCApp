@@ -723,8 +723,8 @@ class TeacherSet < ActiveRecord::Base
   end
 
   # This is called from the bibs_controller.
-  # Delete all records for a teacher set in the join table SubjectTeacherSet, then
-  # create new records (and subjects if they do not exist) in that join table.
+  # Delete all records for a teacher set in the table TeacherSetNotes, then
+  # create new records in that table.
   def update_notes(teacher_set_notes_string)
     TeacherSetNote.where(teacher_set_id: self.id).destroy_all
     return if teacher_set_notes_string.blank?
