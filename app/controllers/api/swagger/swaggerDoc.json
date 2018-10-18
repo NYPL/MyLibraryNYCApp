@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/v0.1/teacher-sets": {
+    "/v0.1/mylibrarynyc/teacher-sets": {
       "x-swagger-router-controller": "bibs",
       "post": {
         "tags": [
