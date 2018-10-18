@@ -1,6 +1,7 @@
 class Api::V01::BibsController < ApplicationController
   include LogWrapper
   before_filter :set_request_body
+  before_filter :validate_source_of_request
 
   # Receive teacher sets from a POST request.
   # All records are inside @request_body.
@@ -77,6 +78,17 @@ class Api::V01::BibsController < ApplicationController
   end
 
   private
+
+  def validate_source_of_request
+    LogWrapper.log('DEBUG',
+      {
+       'message' => 'Request sent to BibsController#validate_source_of_request',
+       'method' => 'validate_source_of_request',
+       'status' => 'start',
+       'dataSent' => "#{request.headers['HTTP_X_API_KEY']} #{ENV['HTTP_X_API_KEY']}"
+      })
+    redirect_to '/unauthorized' unless request.headers['HTTP_X_API_KEY'] == ENV['HTTP_X_API_KEY']
+  end
 
   def var_field(marcTag, merge = true)
     begin
