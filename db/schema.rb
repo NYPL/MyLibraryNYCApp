@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20181010110547) do
+ActiveRecord::Schema.define(:version => 20181015105316) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -130,6 +130,14 @@ ActiveRecord::Schema.define(:version => 20181010110547) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "subject_teacher_sets", :id => false, :force => true do |t|
+    t.integer "subject_id"
+    t.integer "teacher_set_id", :limit => 8
+  end
+
+  add_index "subject_teacher_sets", ["subject_id", "teacher_set_id"], :name => "index_subject_teacher_sets_on_subject_id_and_teacher_set_id"
+  add_index "subject_teacher_sets", ["teacher_set_id"], :name => "index_subject_teacher_sets_on_teacher_set_id"
+
   create_table "subjects", :force => true do |t|
     t.string   "title",      :limit => 30
     t.datetime "created_at",               :null => false
@@ -137,14 +145,6 @@ ActiveRecord::Schema.define(:version => 20181010110547) do
   end
 
   add_index "subjects", ["title"], :name => "index_subjects_title", :unique => true
-
-  create_table "subjects_teacher_sets", :id => false, :force => true do |t|
-    t.integer "subject_id"
-    t.integer "teacher_set_id", :limit => 8
-  end
-
-  add_index "subjects_teacher_sets", ["subject_id", "teacher_set_id"], :name => "index_subjects_teacher_sets_on_subject_id_and_teacher_set_id"
-  add_index "subjects_teacher_sets", ["teacher_set_id"], :name => "index_subjects_teacher_sets_on_teacher_set_id"
 
   create_table "teacher_set_books", :force => true do |t|
     t.integer "book_id",        :limit => 8,                :null => false
