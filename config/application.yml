@@ -69,7 +69,6 @@ when 'production'
 when 'test'
 
   ENV['DATABASE_URL'] = "postgresql://localhost/mln_test"
-  ENV['HTTP_X_API_KEY'] = 'b2417653cbf8495ea3dc0415fdd0f453adeabc2b'
   ENV['RACK_ENV'] = 'test'
   ENV['RAILS_ENV'] = 'test'
   # Minimum length of this value is 30.
