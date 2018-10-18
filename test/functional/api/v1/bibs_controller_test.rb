@@ -1857,10 +1857,10 @@ class Api::BibsControllerTest < ActionController::TestCase
     @controller = Api::V01::BibsController.new
   end
 
-  # test 'respond with 400 if request body is missing' do
-  #   post 'create_or_update_teacher_sets'
-  #   assert response.status == 400
-  # end
+  test 'respond with 400 if request body is missing' do
+    post 'create_or_update_teacher_sets'
+    assert response.status == 400
+  end
 
   test "should update teacher set attributes and create associated books" do
     Book.destroy_all
@@ -1920,19 +1920,19 @@ class Api::BibsControllerTest < ActionController::TestCase
     assert last_book.cover_uri.present?
   end
 
-  # test "should not create a teacher set if required field is missing (ie title)" do
-  #   Book.destroy_all
-  #   TeacherSet.destroy_all
-  #   post 'create_or_update_teacher_sets', { _json: TEACHER_SET_WITH_TITLE_MISSING }
-  #   assert_response :success
-  #   assert Book.count == 0
-  #   assert TeacherSet.count == 0
-  # end
-  #
-  # test "should delete teacher sets when given a bib number" do
-  #   TeacherSet.where(bnumber: "b#{BNUMBER1}").first_or_create
-  #   delete 'delete_teacher_sets', { _json: TWO_TEACHER_SETS_TO_DELETE }
-  #   assert_response :success
-  #   assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}"]
-  # end
+  test "should not create a teacher set if required field is missing (ie title)" do
+    Book.destroy_all
+    TeacherSet.destroy_all
+    post 'create_or_update_teacher_sets', { _json: TEACHER_SET_WITH_TITLE_MISSING }
+    assert_response :success
+    assert Book.count == 0
+    assert TeacherSet.count == 0
+  end
+
+  test "should delete teacher sets when given a bib number" do
+    TeacherSet.where(bnumber: "b#{BNUMBER1}").first_or_create
+    delete 'delete_teacher_sets', { _json: TWO_TEACHER_SETS_TO_DELETE }
+    assert_response :success
+    assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}"]
+  end
 end
