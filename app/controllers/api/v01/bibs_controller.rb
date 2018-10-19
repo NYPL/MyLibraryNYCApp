@@ -86,10 +86,10 @@ class Api::V01::BibsController < ApplicationController
        'message' => 'Request sent to BibsController#validate_source_of_request',
        'method' => 'validate_source_of_request',
        'status' => 'start',
-       'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']} request.headers['HTTP-X-API-KEY']:#{request.headers['HTTP-X-API-KEY']} ENV['HTTP_X_API_KEY']:#{ENV['HTTP_X_API_KEY']}"
+       'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
       })
 
-    redirect_to '/api/unauthorized' unless Rails.env.test? || request.headers['X-API-Key'] == ENV['HTTP_X_API_KEY']
+    redirect_to '/api/unauthorized' unless Rails.env.test? || request.headers['X-API-Key'] == ENV['API_GATEWAY_HEADER_KEY']
   end
 
   def var_field(marcTag, merge = true)
