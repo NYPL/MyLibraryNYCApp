@@ -1,4 +1,5 @@
 class Book < ActiveRecord::Base
+  # NOTE: The ISBN field in the database refers to a standard number; sometimes this is an ISBN.
   include CatalogItemMethods
   include Oauth
   has_paper_trail
