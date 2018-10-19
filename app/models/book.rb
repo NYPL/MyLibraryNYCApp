@@ -147,6 +147,7 @@ class Book < ActiveRecord::Base
 
   def update_from_isbn
     response = send_request_to_bibs_microservice
+    return if !@book_found
     book_attributes = JSON.parse(response)['data'][0]
     self.update_attributes(
       bnumber: book_attributes['id'],
@@ -183,9 +184,17 @@ class Book < ActiveRecord::Base
 
     case response.code
     when 200
+      @book_found = true
       LogWrapper.log('DEBUG',
         {
           'message' => "The bibs service responded with the book JSON.",
+          'status' => response.code
+        })
+    when 404
+      @book_found = false
+      LogWrapper.log('ERROR',
+        {
+          'message' => "The bibs service could not find the book with ISBN=#{isbn}",
           'status' => response.code
         })
     else
