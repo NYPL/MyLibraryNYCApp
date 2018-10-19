@@ -149,7 +149,7 @@ class Book < ActiveRecord::Base
   def update_from_isbn
     response = send_request_to_bibs_microservice
     return if !@book_found
-    book_attributes = JSON.parse(response)['data'][0]
+    book_attributes = JSON.parse(response.body)['data'][0]
     self.update_attributes(
       bnumber: book_attributes['id'],
       title: book_attributes['title'],
