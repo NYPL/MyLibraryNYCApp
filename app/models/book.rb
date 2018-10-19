@@ -1,5 +1,7 @@
 class Book < ActiveRecord::Base
+  # NOTE: The ISBN field in the database refers to a standard number; sometimes this is an ISBN.
   include CatalogItemMethods
+  include Oauth
   has_paper_trail
   before_save :disable_papertrail
   before_update :enable_papertrail
@@ -82,7 +84,6 @@ class Book < ActiveRecord::Base
 		self
   end
 
-
   def self.catalog_item(id)
     resp = self.api_call "titles/#{id}"
     # puts "cat item: #{resp.to_json}"
@@ -146,6 +147,75 @@ class Book < ActiveRecord::Base
   end
 
   def update_from_isbn
-    # later we will call the BibService to get more fields for this new book
+    response = send_request_to_bibs_microservice
+    return if !@book_found
+    book_attributes = JSON.parse(response.body)['data'][0]
+    self.update_attributes(
+      bnumber: book_attributes['id'],
+      title: book_attributes['title'],
+      publication_date: book_attributes['publishYear'],
+      primary_language: (book_attributes['lang'] ? book_attributes['lang']['name'] : nil),
+      details_url: "http://catalog.nypl.org/record=b#{book_attributes['id']}~S1",
+      call_number: var_field(book_attributes, '091'),
+      description: var_field(book_attributes, '520'),
+      physical_description: var_field(book_attributes, '300'),
+      format: var_field(book_attributes, '020'),
+      cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}"
+    )
+  end
+
+  private
+
+  # Sends a request to the bibs microservice.
+  def send_request_to_bibs_microservice
+    LogWrapper.log('DEBUG',
+      {
+       'message' => 'Request sent to bibs service',
+       'method' => 'send_request_to_bibs_microservice',
+       'status' => 'start',
+       'dataSent' => "https://platform.nypl.org/api/v0.1/bibs?standardNumber=#{isbn}"
+      })
+    response = HTTParty.get(
+      "https://platform.nypl.org/api/v0.1/bibs?standardNumber=#{isbn}",
+      headers:
+        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
+          'Content-Type' => 'application/json' },
+      timeout: 10
+    )
+
+    case response.code
+    when 200
+      @book_found = true
+      LogWrapper.log('DEBUG',
+        {
+          'message' => "The bibs service responded with the book JSON.",
+          'status' => response.code
+        })
+    when 404
+      @book_found = false
+      LogWrapper.log('ERROR',
+        {
+          'message' => "The bibs service could not find the book with ISBN=#{isbn}",
+          'status' => response.code
+        })
+    else
+      LogWrapper.log('ERROR',
+        {
+          'message' => "An error has occured when sending a request to the bibs service",
+          'status' => response.code,
+          'responseData' => response.body
+        })
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+    end
+
+    return response
+  end
+
+  def var_field(book_attributes, marcTag)
+    begin
+      book_attributes['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].map{ |x| x['content']}.join(', ')
+    rescue
+      return nil
+    end
   end
 end
