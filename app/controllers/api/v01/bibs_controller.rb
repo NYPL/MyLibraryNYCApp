@@ -83,11 +83,20 @@ class Api::V01::BibsController < ApplicationController
   def validate_source_of_request
     LogWrapper.log('DEBUG',
       {
+       'message' => 'OCTOBER 19 TESTING',
+       'method' => 'validate_source_of_request',
+       'status' => 'start',
+       'dataSent' => "#{request.headers}"
+      })
+
+    LogWrapper.log('DEBUG',
+      {
        'message' => 'Request sent to BibsController#validate_source_of_request',
        'method' => 'validate_source_of_request',
        'status' => 'start',
        'dataSent' => "#{request.headers['HTTP_X_API_KEY']} #{ENV['HTTP_X_API_KEY']}"
       })
+
     redirect_to '/api/unauthorized' unless Rails.env.test? || request.headers['HTTP_X_API_KEY'] == ENV['HTTP_X_API_KEY']
   end
 
