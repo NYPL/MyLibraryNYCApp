@@ -88,7 +88,7 @@ class Api::V01::BibsController < ApplicationController
        'status' => 'start',
        'dataSent' => "#{request.headers['HTTP_X_API_KEY']} #{ENV['HTTP_X_API_KEY']}"
       })
-    redirect_to '/unauthorized' unless Rails.env.test? || request.headers['HTTP_X_API_KEY'] == ENV['HTTP_X_API_KEY']
+    redirect_to '/api/unauthorized' unless Rails.env.test? || request.headers['HTTP_X_API_KEY'] == ENV['HTTP_X_API_KEY']
   end
 
   def var_field(marcTag, merge = true)

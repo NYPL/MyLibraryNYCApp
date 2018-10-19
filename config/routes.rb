@@ -81,7 +81,7 @@ MyLibraryNYC::Application.routes.draw do
 
   post 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#create_or_update_teacher_sets'
   delete 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#delete_teacher_sets'
-  get 'api/unauthorized' => 'api/v0.1/general#unauthorized'
+  get 'api/unauthorized' => 'api/v01/general#unauthorized'
 
   # See how all your routes lay out with "rake routes"
 
