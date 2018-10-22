@@ -11,7 +11,7 @@ class HoldMailer < ActionMailer::Base
       @hold = hold
       @user = hold.user
       @teacher_set = hold.teacher_set
-      emails = AdminUser.pluck(:email)
+      emails = AdminUser.where(email_notifications:true).pluck(:email)
       LogWrapper.log('DEBUG', {
         'message' => "About to send hold order admin notification email on #{@teacher_set.title or 'unknown'} to #{@user.email or 'unknown'}",
         'method' => 'HoldMailer teacher_set_update_missing_required_fields'
