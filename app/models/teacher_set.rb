@@ -707,7 +707,8 @@ class TeacherSet < ActiveRecord::Base
     end
     return if subject_name_array.blank?
     subject_name_array.each do |subject_name|
-      subject_name = subject_name.strip
+      # There's a max of 30 characters in the database
+      subject_name = subject_name.strip[0..29]
       subject = Subject.find_or_create_by_title(subject_name)
       SubjectTeacherSet.create(teacher_set_id: self.id, subject_id: subject.id)
     end
