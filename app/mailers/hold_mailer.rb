@@ -14,13 +14,13 @@ class HoldMailer < ActionMailer::Base
       emails = AdminUser.pluck(:email)
       LogWrapper.log('DEBUG', {
         'message' => "About to send hold order admin notification email on #{@teacher_set.title or 'unknown'} to #{@user.email or 'unknown'}",
-        'method' => 'HoldMailer teacher_set_update_missing_required_fields'
+        'method' => 'HoldMailer admin_notification'
       })
       mail(:to => emails, :subject => "New Order from #{@user.email or 'unknown'} for #{@teacher_set.title or 'unknown'}")
     rescue => exception
       LogWrapper.log('ERROR', {
         'message' => "Cannot send hold order admin notification email.  Backtrace=#{exception.backtrace}.",
-        'method' => 'HoldMailer teacher_set_update_missing_required_fields'
+        'method' => 'HoldMailer admin_notification'
       })
       raise exception
     end
