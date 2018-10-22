@@ -9,7 +9,7 @@ class AdminMailer < ActionMailer::Base
       @action_name = action_name
       @request_body = request_body
       @error_code_and_message = error_code_and_message
-      emails = AdminUser.pluck(:email)
+      emails = AdminUser.where(email_notifications:true).pluck(:email)
       LogWrapper.log('DEBUG', {
         'message' => "About to send failed_bibs_controller_api_request email",
         'method' => 'AdminMailerfailed_bibs_controller_api_request'
@@ -31,7 +31,7 @@ class AdminMailer < ActionMailer::Base
       @title = title
       @physical_description = physical_description
       @description = description
-      emails = AdminUser.pluck(:email)
+      emails = AdminUser.where(email_notifications:true).pluck(:email)
       LogWrapper.log('DEBUG', {
         'message' => "About to send failed_bibs_controller_api_request email",
         'method' => 'AdminMailer teacher_set_update_missing_required_fields'
