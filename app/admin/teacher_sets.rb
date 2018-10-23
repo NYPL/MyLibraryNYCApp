@@ -22,7 +22,7 @@ ActiveAdmin.register TeacherSet do
     column :title do |teacher_set|
       link_to(teacher_set.title, admin_teacher_set_path(teacher_set))
     end
-    column('Available', :admin_availability, sortable: :admin_availability) do |teacher_set|
+    column('Available', :availability, sortable: :availability) do |teacher_set|
       render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'index' })
     end
     column :created_at
@@ -46,7 +46,7 @@ ActiveAdmin.register TeacherSet do
 
   member_action :make_available, method: :put do
     teacher_set = TeacherSet.find(params[:id])
-    teacher_set.admin_availability = true
+    teacher_set.availability = true
     teacher_set.save
     if request.format == :html
       redirect_to admin_teacher_set_path(teacher_set)
@@ -57,18 +57,7 @@ ActiveAdmin.register TeacherSet do
 
   member_action :make_unavailable, method: :put do
     teacher_set = TeacherSet.find(params[:id])
-    teacher_set.admin_availability = false
-    teacher_set.save
-    if request.format == :html
-      redirect_to admin_teacher_set_path(teacher_set)
-    else
-      render js: "makeAvailableTeacherSet(#{teacher_set.id}, false);"
-    end
-  end
-
-  member_action :make_unavailable, method: :put do
-    teacher_set = TeacherSet.find(params[:id])
-    teacher_set.admin_availability = false
+    teacher_set.availability = false
     teacher_set.save
     if request.format == :html
       redirect_to admin_teacher_set_path(teacher_set)
@@ -82,7 +71,7 @@ ActiveAdmin.register TeacherSet do
     f.inputs do
       f.input :total_copies
       f.input :available_copies
-      f.input :admin_availability, label: 'Available'
+      f.input :availability, label: 'Available'
     end
     f.actions
   end
@@ -110,9 +99,6 @@ ActiveAdmin.register TeacherSet do
       teacher_set_version = teacher_set
     end
 
-    # Availability on the line below was based on item availability and set by the scraper.
-    # Now that the scraper is turned off, we use admin_availability, set in the admin dashboard.
-    # h2 "Availability: #{teacher_set.availability}"
     attributes_table do
       row 'Biblio page' do link_to(teacher_set_version.details_url, teacher_set_version.details_url, target:'_blank') end
       row 'Call Number' do teacher_set_version.call_number end
