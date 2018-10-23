@@ -23,9 +23,8 @@ class Api::V01::BibsController < ApplicationController
       bnumber = teacher_set_record['id']
       title = teacher_set_record['title']
       physical_description = var_field('300')
-      description = var_field('520')
-      if bnumber.blank? || title.blank? || physical_description.blank? || description.blank?
-        AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description, description).deliver
+      if bnumber.blank? || title.blank? || physical_description.blank?
+        AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description).deliver
         next
       end
 
@@ -33,7 +32,7 @@ class Api::V01::BibsController < ApplicationController
       teacher_set.update_attributes(
         title: title,
         call_number: var_field('091'),
-        description: description,
+        description: var_field('520'),
         edition: var_field('250'),
         isbn: var_field('020'),
         primary_language: fixed_field('24'),
