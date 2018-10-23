@@ -66,19 +66,6 @@ ActiveAdmin.register TeacherSet do
     end
   end
 
-  form do |f|
-    f.semantic_errors *f.object.errors.keys
-    f.inputs "Details" do
-      f.input :title
-    end
-    f.inputs "Description" do
-      f.input :description, :input_html => { :rows=> 3 }
-    end
-    f.inputs "Call Number" do
-      f.input :call_number
-    end
-  end
-
   member_action :make_unavailable, method: :put do
     teacher_set = TeacherSet.find(params[:id])
     teacher_set.admin_availability = false

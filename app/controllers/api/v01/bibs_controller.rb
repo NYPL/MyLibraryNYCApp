@@ -9,7 +9,7 @@ class Api::V01::BibsController < ApplicationController
   def create_or_update_teacher_sets
     error_code_and_message = validate_request
     if error_code_and_message.any?
-      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name)
+      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name).deliver
       render_error(error_code_and_message)
     end
     return if error_code_and_message.any?
@@ -25,7 +25,7 @@ class Api::V01::BibsController < ApplicationController
       physical_description = var_field('300')
       description = var_field('520')
       if bnumber.blank? || title.blank? || physical_description.blank? || description.blank?
-        AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description, description)
+        AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description, description).deliver
         next
       end
 
@@ -61,7 +61,7 @@ class Api::V01::BibsController < ApplicationController
   def delete_teacher_sets
     error_code_and_message = validate_request
     if error_code_and_message.any?
-      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name)
+      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name).deliver
       render_error(error_code_and_message)
       return
     end
