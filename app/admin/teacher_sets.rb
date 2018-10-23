@@ -1,5 +1,10 @@
 ActiveAdmin.register TeacherSet do
-  actions :show, :index
+  # The line below was causing an error on the teacher set index page.
+  # Even after we remove it, we can still search by teacher sets, so it should be removed.
+  # All default filters remain in the sidebar when you use this syntax to remove one filter.
+  remove_filter :subject_teacher_sets
+
+  actions :index, :show, :edit, :update
 
   menu :priority => 3
   sidebar :versions, :partial => "admin/version", :only => :show
@@ -17,7 +22,9 @@ ActiveAdmin.register TeacherSet do
     column :title do |teacher_set|
       link_to(teacher_set.title, admin_teacher_set_path(teacher_set))
     end
-    column :availability
+    column('Available', :admin_availability, sortable: :admin_availability) do |teacher_set|
+      render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'index' })
+    end
     column :created_at
     column :updated_at
   end
@@ -29,58 +36,53 @@ ActiveAdmin.register TeacherSet do
     render partial: 'admin/history'
   end
 
+  action_item only: [:show] do
+    render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'show' })
+  end
+
+  action_item only: [:show] do
+    render(partial: 'teacher_sets/edit_button_container', locals: { teacher_set: teacher_set })
+  end
+
+  member_action :make_available, method: :put do
+    teacher_set = TeacherSet.find(params[:id])
+    teacher_set.admin_availability = true
+    teacher_set.save
+    if request.format == :html
+      redirect_to admin_teacher_set_path(teacher_set)
+    else
+      render js: "makeAvailableTeacherSet(#{teacher_set.id}, true);"
+    end
+  end
+
+  member_action :make_unavailable, method: :put do
+    teacher_set = TeacherSet.find(params[:id])
+    teacher_set.admin_availability = false
+    teacher_set.save
+    if request.format == :html
+      redirect_to admin_teacher_set_path(teacher_set)
+    else
+      render js: "makeAvailableTeacherSet(#{teacher_set.id}, false);"
+    end
+  end
+
+  member_action :make_unavailable, method: :put do
+    teacher_set = TeacherSet.find(params[:id])
+    teacher_set.admin_availability = false
+    teacher_set.save
+    if request.format == :html
+      redirect_to admin_teacher_set_path(teacher_set)
+    else
+      render js: "makeAvailableTeacherSet(#{teacher_set.id}, false);"
+    end
+  end
+
   form do |f|
     f.semantic_errors *f.object.errors.keys
-    f.inputs "Details" do
-      f.input :title
-    end
-    f.inputs "Description" do
-      f.input :description, :input_html => { :rows=> 3 }
-    end
-    f.inputs "Call Number" do
-      f.input :call_number
-    end
     f.inputs do
-      f.has_many :books, allow_destroy: false do |cf|
-        cf.semantic_errors *cf.object.errors.keys
-=begin
-        if cf.object.errors[:base].count > 0
-          cf.object.errors[:base].each do |e|
-            e.matching_api_items.each do |t|
-              # f.inline_errors_for :base
-              # cf.div 'Title', :type=>:radio
-              cf.input :catalog_choices
-            end
-          end
-        end
-=end
-        if cf.object.errors[:base].count > 0
-          coll = cf.object.errors[:base].first.matching_api_items.map do |t|
-            label = []
-            label << t['format']['name'] + ': ' unless t['format'].nil? || t['format']['name'].nil?
-            label << t['title'] if t['title']
-            label << 'by ' + t['authors'].map { |a| a['name'] }.join('; ') unless t['authors'].nil? || t['authors'].empty?
-            label << ' (isbn ' + t['isbns'].first + ')' unless t['isbns'].nil?
-            label = label.join ' '
-            label = label.truncate 80
-            biblio_id = t['id']
-            [label, biblio_id]
-          end
-          coll << ['None of these', '']
-          cf.input :catalog_choice, :label => 'Please Select Item', :as => :radio, :collection => coll, :input_html => {:data => {:titles => cf.object.errors[:base].first.matching_api_items}}
-        end
-
-        if !cf.object.id.nil?
-          cf.input :title, :input_html => {:disabled => true}
-          cf.input :_destroy, :as => :boolean, :label => "Delete?"
-
-        else
-          cf.input :title
-          cf.input :statement_of_responsibility, :label => 'Author Last Name', :input_html => { :rows=> 3 }
-          cf.input :isbn, :label => 'ISBN (if known)'
-        end
-        cf.form_buffers.last
-      end
+      f.input :total_copies
+      f.input :available_copies
+      f.input :admin_availability, label: 'Available'
     end
     f.actions
   end
@@ -108,7 +110,9 @@ ActiveAdmin.register TeacherSet do
       teacher_set_version = teacher_set
     end
 
-    h2 "Availability: #{teacher_set.availability}"
+    # Availability on the line below was based on item availability and set by the scraper.
+    # Now that the scraper is turned off, we use admin_availability, set in the admin dashboard.
+    # h2 "Availability: #{teacher_set.availability}"
     attributes_table do
       row 'Biblio page' do link_to(teacher_set_version.details_url, teacher_set_version.details_url, target:'_blank') end
       row 'Call Number' do teacher_set_version.call_number end
@@ -122,6 +126,8 @@ ActiveAdmin.register TeacherSet do
       row 'Physical Description' do teacher_set_version.physical_description end
       row 'Publisher' do teacher_set_version.publisher end
       row 'Series' do teacher_set_version.series end
+      row 'Total Copies' do teacher_set_version.total_copies end
+      row 'Available Copies' do teacher_set_version.available_copies end
     end
 
     panel 'Holds' do

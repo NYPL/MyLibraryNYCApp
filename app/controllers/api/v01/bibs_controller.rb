@@ -9,7 +9,7 @@ class Api::V01::BibsController < ApplicationController
   def create_or_update_teacher_sets
     error_code_and_message = validate_request
     if error_code_and_message.any?
-      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name)
+      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name).deliver
       render_error(error_code_and_message)
     end
     return if error_code_and_message.any?
@@ -23,9 +23,8 @@ class Api::V01::BibsController < ApplicationController
       bnumber = teacher_set_record['id']
       title = teacher_set_record['title']
       physical_description = var_field('300')
-      description = var_field('520')
-      if bnumber.blank? || title.blank? || physical_description.blank? || description.blank?
-        AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description, description)
+      if bnumber.blank? || title.blank? || physical_description.blank?
+        AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description).deliver
         next
       end
 
@@ -33,7 +32,7 @@ class Api::V01::BibsController < ApplicationController
       teacher_set.update_attributes(
         title: title,
         call_number: var_field('091'),
-        description: description,
+        description: var_field('520'),
         edition: var_field('250'),
         isbn: var_field('020'),
         primary_language: fixed_field('24'),
@@ -42,10 +41,10 @@ class Api::V01::BibsController < ApplicationController
         primary_subject: var_field('690', false),
         physical_description: physical_description,
         details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
-        grade_begin: grades(var_field('521'))[0],
-        grade_end: grades(var_field('521'))[1],
-        # lexile_begin: lexiles(var_field('521'))[0], # TODO: both grades and lexiles are in 521; research how to know which is which.  See b20798106 which hashas both.
-        # lexile_end: lexiles(var_field('521'))[1],
+        grade_begin: grade_or_lexile_array('grade')[0],
+        grade_end: grade_or_lexile_array('grade')[1],
+        lexile_begin: grade_or_lexile_array('lexile')[0],
+        lexile_end: grade_or_lexile_array('lexile')[1],
         availability: 'available',
         available_copies: 999
       )
@@ -61,7 +60,7 @@ class Api::V01::BibsController < ApplicationController
   def delete_teacher_sets
     error_code_and_message = validate_request
     if error_code_and_message.any?
-      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name)
+      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name).deliver
       render_error(error_code_and_message)
       return
     end
@@ -161,22 +160,16 @@ class Api::V01::BibsController < ApplicationController
     }.to_json
   end
 
-  # turn grades into arrays
-  def grades(string)
-    if string.blank?
-      return ''
-    else
-      return string.gsub('.', '').split('-')
+  def grade_or_lexile_array(return_grade_or_lexile)
+    grade_and_lexile_json = all_var_fields('521', 'content')
+    return '' if grade_and_lexile_json.blank?
+
+    grade_and_lexile_json.each do |grade_or_lexile_json|
+      if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
+        return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
+      elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
+        return grade_or_lexile_json.gsub('.', '').split('-')
+      end
     end
   end
-
-  # turn lexiles into arrays
-  # commented out until we have more investigation of lexiles
-  # def lexiles(string)
-  #   if string.blank?
-  #     return ''
-  #   else
-  #     return string.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
-  #   end
-  # end
 end
