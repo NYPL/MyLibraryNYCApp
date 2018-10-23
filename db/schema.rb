@@ -14,6 +14,7 @@
 
 ActiveRecord::Schema.define(:version => 20181022145330) do
 
+
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
     t.string   "resource_type", :null => false
