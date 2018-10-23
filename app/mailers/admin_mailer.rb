@@ -25,12 +25,11 @@ class AdminMailer < ActionMailer::Base
   end
 
   # Sends an email to let admins know that creating/updating a specific bib record failed
-  def teacher_set_update_missing_required_fields(bnumber, title, physical_description, description)
+  def teacher_set_update_missing_required_fields(bnumber, title, physical_description)
     begin
       @bnumber = bnumber
       @title = title
       @physical_description = physical_description
-      @description = description
       emails = AdminUser.pluck(:email)
       LogWrapper.log('DEBUG', {
         'message' => "About to send failed_bibs_controller_api_request email",
