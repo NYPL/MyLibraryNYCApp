@@ -119,3 +119,13 @@ function activateSchool(schoolId, activate) {
     $('#activate-school-' + schoolId + '-container').show();
   }
 };
+
+function makeAvailableTeacherSet(teacherSetId, make_available) {
+  if (make_available == true){
+    $('#make-available-teacher-set-' + teacherSetId + '-container').hide();
+    $('#make-unavailable-teacher-set-' + teacherSetId + '-container').show();
+  } else {
+    $('#make-unavailable-teacher-set-' + teacherSetId + '-container').hide();
+    $('#make-available-teacher-set-' + teacherSetId + '-container').show();
+  }
+};

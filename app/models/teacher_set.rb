@@ -9,7 +9,7 @@ class TeacherSet < ActiveRecord::Base
   attr_accessible :slug, :grade_begin, :grade_end, :availability, :call_number, :description, :details_url, :edition, :id,
                   :isbn, :language, :lexile_begin, :lexile_end, :notes, :physical_description, :primary_language, :publication_date,
                   :publisher, :series, :statement_of_responsibility, :sub_title, :title, :books_attributes,
-                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents, :last_book_change
+                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents, :last_book_change, :admin_availability
 
   attr_accessor :subject, :subject_key, :suitabilities_string, :note_summary, :note_string, :slug
 
@@ -732,5 +732,10 @@ class TeacherSet < ActiveRecord::Base
     teacher_set_notes_string.split(',').each do |note_content|
       TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
+  end
+
+  # Override availability (set by scraper) with admin_availability (set in admin dashboard)
+  def availability
+    return self.admin_availability
   end
 end
