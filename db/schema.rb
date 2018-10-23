@@ -11,8 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
-ActiveRecord::Schema.define(:version => 20181022145330) do
+ActiveRecord::Schema.define(:version => 20181023165547) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -195,7 +194,6 @@ ActiveRecord::Schema.define(:version => 20181022145330) do
     t.string   "set_type",                    :limit => 20
     t.text     "contents"
     t.string   "last_book_change"
-    t.boolean  "admin_availability",                        :default => true
   end
 
   add_index "teacher_sets", ["availability"], :name => "index_teacher_sets_availaibilty"
