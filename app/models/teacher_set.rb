@@ -733,4 +733,9 @@ class TeacherSet < ActiveRecord::Base
       TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
   end
+
+  # Override availability (set by scraper) with admin_availability (set in admin dashboard)
+  def availability
+    return self.admin_availability
+  end
 end

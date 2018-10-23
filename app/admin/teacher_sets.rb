@@ -1,4 +1,9 @@
 ActiveAdmin.register TeacherSet do
+  # The line below was causing an error on the teacher set index page.
+  # Even after we remove it, we can still search by teacher sets, so it should be removed.
+  # All default filters remain in the sidebar when you use this syntax to remove one filter.
+  remove_filter :subject_teacher_sets
+
   actions :show, :index
 
   menu :priority => 3
@@ -17,7 +22,9 @@ ActiveAdmin.register TeacherSet do
     column :title do |teacher_set|
       link_to(teacher_set.title, admin_teacher_set_path(teacher_set))
     end
-    column :availability
+    column('Available', :admin_availability, sortable: :admin_availability) do |teacher_set|
+      render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'index' })
+    end
     column :created_at
     column :updated_at
   end
@@ -27,6 +34,32 @@ ActiveAdmin.register TeacherSet do
     @versioned_object = TeacherSet.find(params[:id])
     @versions = PaperTrail::Version.where(item_type: 'TeacherSet', item_id: @versioned_object.id).order('created_at ASC')
     render partial: 'admin/history'
+  end
+
+  action_item only: :show do
+    render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'show' })
+  end
+
+  member_action :make_available, method: :put do
+    teacher_set = TeacherSet.find(params[:id])
+    teacher_set.admin_availability = true
+    teacher_set.save
+    if request.format == :html
+      redirect_to admin_teacher_set_path(teacher_set)
+    else
+      render js: "makeAvailableTeacherSet(#{teacher_set.id}, true);"
+    end
+  end
+
+  member_action :make_unavailable, method: :put do
+    teacher_set = TeacherSet.find(params[:id])
+    teacher_set.admin_availability = false
+    teacher_set.save
+    if request.format == :html
+      redirect_to admin_teacher_set_path(teacher_set)
+    else
+      render js: "makeAvailableTeacherSet(#{teacher_set.id}, false);"
+    end
   end
 
   form do |f|
@@ -108,7 +141,9 @@ ActiveAdmin.register TeacherSet do
       teacher_set_version = teacher_set
     end
 
-    h2 "Availability: #{teacher_set.availability}"
+    # Availability on the line below was based on item availability and set by the scraper.
+    # Now that the scraper is turned off, we use admin_availability, set in the admin dashboard.
+    # h2 "Availability: #{teacher_set.availability}"
     attributes_table do
       row 'Biblio page' do link_to(teacher_set_version.details_url, teacher_set_version.details_url, target:'_blank') end
       row 'Call Number' do teacher_set_version.call_number end
