@@ -46,7 +46,7 @@ ActiveAdmin.register TeacherSet do
 
   member_action :make_available, method: :put do
     teacher_set = TeacherSet.find(params[:id])
-    teacher_set.availability = true
+    teacher_set.availability = 'available'
     teacher_set.save
     if request.format == :html
       redirect_to admin_teacher_set_path(teacher_set)
@@ -57,7 +57,7 @@ ActiveAdmin.register TeacherSet do
 
   member_action :make_unavailable, method: :put do
     teacher_set = TeacherSet.find(params[:id])
-    teacher_set.availability = false
+    teacher_set.availability = 'unavailable'
     teacher_set.save
     if request.format == :html
       redirect_to admin_teacher_set_path(teacher_set)
