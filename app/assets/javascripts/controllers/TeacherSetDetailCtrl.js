@@ -13,13 +13,13 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
 
     $http.get('/teacher_sets/'+$scope.teacher_set_id+'.json').success(function(data) {
       $scope.ts = data.teacher_set;
-      $scope.is_available = (data.teacher_set.availability=="available");
+      $scope.is_available = data.teacher_set.availability == 'available';
+      $scope.ts.availability_string = data.teacher_set.availability;
       $scope.active_hold = data.teacher_set.active_hold;
       $scope.ts.teacher_set_notes = data.teacher_set.teacher_set_notes
       $scope.ts.books = data.teacher_set.books
       $scope.user = data.teacher_set.user
       $scope.loaded = true;
-
     });
 
     $scope.autoReserve = function() {
