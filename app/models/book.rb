@@ -173,15 +173,16 @@ class Book < ActiveRecord::Base
        'message' => 'Request sent to bibs service',
        'method' => 'send_request_to_bibs_microservice',
        'status' => 'start',
-       'dataSent' => "https://platform.nypl.org/api/v0.1/bibs?standardNumber=#{isbn}"
+       'dataSent' => ENV['BIBS_MICROSERVICE_URL_V01'] + "?standardNumber=#{isbn}"
       })
     response = HTTParty.get(
-      "https://platform.nypl.org/api/v0.1/bibs?standardNumber=#{isbn}",
+      ENV['BIBS_MICROSERVICE_URL_V01'] + "?standardNumber=#{isbn}",
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
           'Content-Type' => 'application/json' },
       timeout: 10
     )
+
 
     case response.code
     when 200
