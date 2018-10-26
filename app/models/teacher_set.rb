@@ -702,6 +702,9 @@ class TeacherSet < ActiveRecord::Base
   # Delete all records for a teacher set in the join table SubjectTeacherSet, then
   # create new records (and subjects if they do not exist) in that join table.
   def update_subjects_via_api(subject_name_array)
+    # teacher_set.rb facets_for_query uses cached results of each query
+    Rails.cache.clear
+
     self.subject_teacher_sets.map(&:subject).each do |subject|
       subject.destroy
     end
