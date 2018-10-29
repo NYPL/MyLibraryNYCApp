@@ -178,7 +178,7 @@ class User < ActiveRecord::Base
         {
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
-          'responseData' => response.body
+          'responseData' => response.body 
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end

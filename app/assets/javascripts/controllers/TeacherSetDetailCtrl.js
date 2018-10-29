@@ -20,6 +20,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $scope.ts.books = data.teacher_set.books
       $scope.user = data.teacher_set.user
       $scope.loaded = true;
+
     });
 
     $scope.autoReserve = function() {
