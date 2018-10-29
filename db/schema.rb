@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20180913135147) do
+ActiveRecord::Schema.define(:version => 20181023165547) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -29,18 +29,19 @@ ActiveRecord::Schema.define(:version => 20180913135147) do
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
   create_table "admin_users", :force => true do |t|
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "email",                  :default => "",   :null => false
+    t.string   "encrypted_password",     :default => "",   :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          :default => 0,  :null => false
+    t.integer  "sign_in_count",          :default => 0,    :null => false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+    t.boolean  "email_notifications",    :default => true
   end
 
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
@@ -60,20 +61,13 @@ ActiveRecord::Schema.define(:version => 20180913135147) do
     t.text     "notes"
     t.text     "statement_of_responsibility"
     t.string   "cover_uri"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.string   "bnumber",                     :limit => 20
   end
 
+  add_index "books", ["bnumber"], :name => "index_books_bnumber"
   add_index "books", ["title"], :name => "index_books_title"
-
-  create_table "books_in_sets", :force => true do |t|
-    t.integer "book_id",        :limit => 8,                :null => false
-    t.integer "teacher_set_id", :limit => 8
-    t.integer "rank",           :limit => 2, :default => 0, :null => false
-  end
-
-  add_index "books_in_sets", ["book_id"], :name => "index_books_in_sets_book_id"
-  add_index "books_in_sets", ["teacher_set_id"], :name => "index_books_in_sets_teacher_set_id"
 
   create_table "boroughs", :force => true do |t|
     t.string   "name"
@@ -137,6 +131,14 @@ ActiveRecord::Schema.define(:version => 20180913135147) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "subject_teacher_sets", :id => false, :force => true do |t|
+    t.integer "subject_id"
+    t.integer "teacher_set_id", :limit => 8
+  end
+
+  add_index "subject_teacher_sets", ["subject_id", "teacher_set_id"], :name => "index_subject_teacher_sets_on_subject_id_and_teacher_set_id"
+  add_index "subject_teacher_sets", ["teacher_set_id"], :name => "index_subject_teacher_sets_on_teacher_set_id"
+
   create_table "subjects", :force => true do |t|
     t.string   "title",      :limit => 30
     t.datetime "created_at",               :null => false
@@ -145,13 +147,14 @@ ActiveRecord::Schema.define(:version => 20180913135147) do
 
   add_index "subjects", ["title"], :name => "index_subjects_title", :unique => true
 
-  create_table "subjects_teacher_sets", :id => false, :force => true do |t|
-    t.integer "subject_id"
+  create_table "teacher_set_books", :force => true do |t|
+    t.integer "book_id",        :limit => 8,                :null => false
     t.integer "teacher_set_id", :limit => 8
+    t.integer "rank",           :limit => 2, :default => 0, :null => false
   end
 
-  add_index "subjects_teacher_sets", ["subject_id", "teacher_set_id"], :name => "index_subjects_teacher_sets_on_subject_id_and_teacher_set_id"
-  add_index "subjects_teacher_sets", ["teacher_set_id"], :name => "index_subjects_teacher_sets_on_teacher_set_id"
+  add_index "teacher_set_books", ["book_id"], :name => "index_teacher_set_books_book_id"
+  add_index "teacher_set_books", ["teacher_set_id"], :name => "index_teacher_set_books_teacher_set_id"
 
   create_table "teacher_set_notes", :force => true do |t|
     t.integer  "teacher_set_id", :limit => 8
@@ -190,9 +193,11 @@ ActiveRecord::Schema.define(:version => 20180913135147) do
     t.string   "bnumber",                     :limit => 20
     t.string   "set_type",                    :limit => 20
     t.text     "contents"
+    t.string   "last_book_change"
   end
 
   add_index "teacher_sets", ["availability"], :name => "index_teacher_sets_availaibilty"
+  add_index "teacher_sets", ["bnumber"], :name => "index_teacher_sets_bnumber", :unique => true
   add_index "teacher_sets", ["grade_begin", "grade_end"], :name => "index_teacher_sets_grades"
   add_index "teacher_sets", ["lexile_begin", "lexile_end"], :name => "index_teacher_sets_lexile"
   add_index "teacher_sets", ["primary_subject"], :name => "index_primary_subject"
@@ -228,5 +233,17 @@ ActiveRecord::Schema.define(:version => 20180913135147) do
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "versions", :force => true do |t|
+    t.string   "item_type",                   :null => false
+    t.integer  "item_id",        :limit => 8, :null => false
+    t.string   "event",                       :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+    t.text     "object_changes"
+  end
+
+  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
 
 end

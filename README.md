@@ -115,7 +115,10 @@ For the unit tests and integration tests, please run the following commands whil
 
 ```
 ruby -Itest test/unit/user_test.rb
+ruby -Itest test/unit/book_test.rb
+ruby -Itest test/unit/teacher_set_test.rb
 ruby -Itest test/unit/ingest_rake_task_test.rb
 ruby -Itest test/integration/user_flow_test.rb
 ruby -Itest test/functional/exceptions_controller_test.rb
+ruby -Itest test/functional/api/v01/bibs_controller_test.rb
 ```

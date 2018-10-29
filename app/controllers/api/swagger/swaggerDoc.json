@@ -1,0 +1,434 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.2.1",
+    "title": "my-library-nyc"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v0.1/mylibrarynyc/teacher-sets": {
+      "x-swagger-router-controller": "bibs",
+      "post": {
+        "tags": [
+          "mylibrarynyc_bibs"
+        ],
+        "summary": "Create/Update a Teacher Set",
+        "description": "Create/Update a new teacher set record",
+        "operationId": "",
+        "parameters": [
+          {
+            "name": "teacher_set_data",
+            "in": "body",
+            "description": "The information for the new teacher set",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BibCreatorUpdater"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/BibCreatorUpdaterResponseV1"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/BibsCreatorUpdater400ErrorResponseV1"
+            }
+          },
+          "500": {
+            "description": "Generic server error",
+            "schema": {
+              "$ref": "#/definitions/BibsCreatorUpdater500ErrorResponseV1"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_auth": [
+              "openid write:bib"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "mylibrarynyc_bibs"
+        ],
+        "summary": "Delete a bib (teacher_set) in MyLibraryNYC",
+        "description": "Delete a bib in MyLibraryNYC.",
+        "operationId": "bibs_deleterV1",
+        "parameters": [
+          {
+            "name": "bib_data",
+            "in": "body",
+            "description": "The information for a deleted bib",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BibsDeleterDataV1"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/BibsDeleterResponseV1"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/BibsDeleter400ErrorResponseV1"
+            }
+          },
+          "500": {
+            "description": "Generic server error",
+            "schema": {
+              "$ref": "#/definitions/BibsDeleter500ErrorResponseV1"
+            }
+          }
+        },
+        "security": [
+          {
+            "api_auth": [
+              "openid write:bib"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "BibCreatorUpdater": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "21323534"
+          },
+          "nyplSource": {
+            "type": "string",
+            "example": "sierra-nypl"
+          },
+          "nyplType": {
+            "type": "string",
+            "example": "bib"
+          },
+          "updatedDate": {
+            "type": "string",
+            "example": "2018-09-19T12:00:45-04:00"
+          },
+          "createdDate": {
+            "type": "string",
+            "example": "2008-12-24T03:16:00-05:00"
+          },
+          "deletedDate": {
+            "type": "string",
+            "example": null
+          },
+          "deleted": {
+            "type": "string",
+            "example": false
+          },
+          "locations": {
+            "$ref": "#/definitions/LocationModel"
+          },
+          "suppressed": {
+            "type": "string",
+            "example": false
+          },
+          "lang": {
+            "type": "object",
+            "example": [
+              {
+                "code": "eng",
+                "named": "English"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "example": "Books for Reading and Sharing - Elementary School!"
+          },
+          "author": {
+            "type": "string",
+            "example": ""
+          },
+          "materialType": {
+            "type": "object",
+            "example": [
+              {
+                "code": "8",
+                "value": "TEACHER SET"
+              }
+            ]
+          },
+          "bibLevel": {
+            "type": "object",
+            "example": [
+              {
+                "code": "m",
+                "value": "MONOGRAPH"
+              }
+            ]
+          },
+          "publishYear": {
+            "type": "string",
+            "example": null
+          },
+          "catalogDate": {
+            "type": "string",
+            "example": "2017-08-23"
+          },
+          "country": {
+            "type": "object",
+            "example": [
+              {
+                "code": "xx ",
+                "name": "Unknown or undetermined"
+              }
+            ]
+          },
+          "normTitle": {
+            "type": "string",
+            "example": "books for reading and sharing elementary school"
+          },
+          "normAuthor": {
+            "type": "string",
+            "example": ""
+          },
+          "standardNumbers": {
+            "type": "string",
+            "example": []
+          },
+          "controlledNumbers": {
+            "type": "string",
+            "example": ""
+          },
+          "fixedFields": {
+            "type": "object",
+            "example": {
+              "24": {
+                "label": "Language",
+                "value": "eng",
+                "display": "English"
+              },
+              "25": {
+                "label": "Skip",
+                "value": "0",
+                "display": null
+              }
+            }
+          },
+          "varFields": {
+            "type": "object",
+            "example": [
+              {
+                "fieldTag": "c",
+                "marcTag": "091",
+                "ind1": " ",
+                "ind2": " ",
+                "content": null,
+                "subfields": [
+                  {
+                    "tag": "a",
+                    "content": "Teacher Set ELA A Books 4"
+                  }
+                ]
+              },
+              {
+                "fieldTag": "d",
+                "marcTag": "650",
+                "ind1": " ",
+                "ind2": "0",
+                "content": null,
+                "subfields": [
+                  {
+                    "tag": "a",
+                    "content": "Picture books for children."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "BibCreatorUpdaterResponseV1": {
+      "properties": {
+        "teacher_sets": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "bnumber": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "example": [
+            {
+              "id": 21480353052907,
+              "bnumber": "b21323539",
+              "title": "Books for Reading and Sharing - Elementary School!"
+            },
+            {
+              "id": 107,
+              "bnumber": "b21323535",
+              "title": "Title 2"
+            }
+          ]
+        }
+      }
+    },
+    "BibsCreatorUpdater400ErrorResponseV1": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "request body is missing"
+        }
+      }
+    },
+    "BibsCreatorUpdater500ErrorResponseV1": {
+      "example": {}
+    },
+    "BibsDeleterDataV1": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "17053989"
+          },
+          "nyplSource": {
+            "type": "string",
+            "example": "sierra-nypl"
+          },
+          "nyplTpe": {
+            "type": "string",
+            "example": "bib"
+          },
+          "updatedDate": {
+            "type": "string",
+            "example": "2017-08-25T06:32:01-04:00"
+          },
+          "createdDate": {
+            "type": "string",
+            "example": null
+          },
+          "deletedDate": {
+            "type": "string",
+            "example": "2012-06-08"
+          },
+          "deleted": {
+            "type": "string",
+            "example": true
+          }
+        }
+      }
+    },
+    "BibsDeleterResponseV1": {
+      "properties": {
+        "teacher_sets": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "bnumber": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "example": [
+            {
+              "id": 21480353052907,
+              "bnumber": "b21480353",
+              "title": "LEGO City Undercover  [video game]"
+            }
+          ]
+        }
+      }
+    },
+    "BibsDeleter400ErrorResponseV1": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "request body is missing"
+        }
+      }
+    },
+    "BibsDeleter500ErrorResponseV1": {
+      "example": {}
+    },
+    "LocationModel": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "example": [
+          {
+            "code": "fe",
+            "name": "58th Street"
+          },
+          {
+            "code": "fej",
+            "name": "58th Street Children"
+          }
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "bibs",
+      "description": "Bibs API"
+    }
+  ],
+  "securityDefinitions": {
+    "api_auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://isso.nypl.org/oauth/authorize",
+      "tokenUrl": "https://isso.nypl.org/oauth/token",
+      "scopes": {
+        "openid write:bib": "Creating/Updating/Deleting Bib access"
+      }
+    }
+  }
+}

@@ -3,6 +3,6 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { host:  'my-library-nyc-app-qa.us-east-1.elasticbeanstalk.com' }
   config.action_mailer.perform_deliveries = true
 
-  config.force_ssl = true
+  config.force_ssl = false
 
 end

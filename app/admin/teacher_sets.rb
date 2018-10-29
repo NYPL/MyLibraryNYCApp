@@ -1,94 +1,136 @@
 ActiveAdmin.register TeacherSet do
+  # The line below was causing an error on the teacher set index page.
+  # Even after we remove it, we can still search by teacher sets, so it should be removed.
+  # All default filters remain in the sidebar when you use this syntax to remove one filter.
+  remove_filter :subject_teacher_sets
+
+  actions :index, :show, :edit, :update
 
   menu :priority => 3
+  sidebar :versions, :partial => "admin/version", :only => :show
 
-  index do 
-    default_actions
-    [:title, :availability, :created_at, :updated_at].each do |prop|
-      column prop
+  controller do
+    def create
+      # Please refer to the comment about Paper Trail in admin/book.rb.
+      PaperTrail.enabled = false
+      super
+      PaperTrail.enabled = true
+    end
+  end
+
+  index do
+    column :title do |teacher_set|
+      link_to(teacher_set.title, admin_teacher_set_path(teacher_set))
+    end
+    column('Available', :availability, sortable: :availability) do |teacher_set|
+      render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'index' })
+    end
+    column :created_at
+    column :updated_at
+  end
+
+  # This method creates a link that we refer to in _version.html.erb this way: history_admin_teacher_set_path(resource)
+  member_action :history do
+    @versioned_object = TeacherSet.find(params[:id])
+    @versions = PaperTrail::Version.where(item_type: 'TeacherSet', item_id: @versioned_object.id).order('created_at ASC')
+    render partial: 'admin/history'
+  end
+
+  action_item only: [:show] do
+    render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'show' })
+  end
+
+  action_item only: [:show] do
+    render(partial: 'teacher_sets/edit_button_container', locals: { teacher_set: teacher_set })
+  end
+
+  member_action :make_available, method: :put do
+    teacher_set = TeacherSet.find(params[:id])
+    teacher_set.availability = 'available'
+    teacher_set.save
+    if request.format == :html
+      redirect_to admin_teacher_set_path(teacher_set)
+    else
+      render js: "makeAvailableTeacherSet(#{teacher_set.id}, true);"
+    end
+  end
+
+  member_action :make_unavailable, method: :put do
+    teacher_set = TeacherSet.find(params[:id])
+    teacher_set.availability = 'unavailable'
+    teacher_set.save
+    if request.format == :html
+      redirect_to admin_teacher_set_path(teacher_set)
+    else
+      render js: "makeAvailableTeacherSet(#{teacher_set.id}, false);"
     end
   end
 
   form do |f|
     f.semantic_errors *f.object.errors.keys
-    f.inputs "Details" do
-      f.input :title
-    end
-    f.inputs "Description" do
-      f.input :description, :input_html => { :rows=> 3 }
-    end
-    f.inputs "Call Number" do
-      f.input :call_number
-    end
     f.inputs do
-      f.has_many :books, allow_destroy: false do |cf|
-        cf.semantic_errors *cf.object.errors.keys
-=begin
-        if cf.object.errors[:base].count > 0
-          cf.object.errors[:base].each do |e|
-            e.matching_api_items.each do |t|
-              # f.inline_errors_for :base
-              # cf.div 'Title', :type=>:radio
-              cf.input :catalog_choices
-            end
-          end
-        end
-=end
-        if cf.object.errors[:base].count > 0
-          coll = cf.object.errors[:base].first.matching_api_items.map do |t|
-            label = []
-            label << t['format']['name'] + ': ' unless t['format'].nil? || t['format']['name'].nil?
-            label << t['title'] if t['title']
-            label << 'by ' + t['authors'].map { |a| a['name'] }.join('; ') unless t['authors'].nil? || t['authors'].empty?
-            label << ' (isbn ' + t['isbns'].first + ')' unless t['isbns'].nil?
-            label = label.join ' '
-            label = label.truncate 80
-            biblio_id = t['id']
-            [label, biblio_id]
-          end
-          coll << ['None of these', '']
-          cf.input :catalog_choice, :label => 'Please Select Item', :as => :radio, :collection => coll, :input_html => {:data => {:titles => cf.object.errors[:base].first.matching_api_items}}
-        end
-
-        if !cf.object.id.nil?
-          cf.input :title, :input_html => {:disabled => true}
-          cf.input :_destroy, :as => :boolean, :label => "Delete?"
-
-        else
-          cf.input :title
-          cf.input :statement_of_responsibility, :label => 'Author Last Name', :input_html => { :rows=> 3 }
-          cf.input :isbn, :label => 'ISBN (if known)'
-        end
-        cf.form_buffers.last
-      end
+      f.input :total_copies
+      f.input :available_copies
+      f.input :availability, label: 'Available'
     end
     f.actions
   end
 
-  show do |set|
-    h2 "Availability: #{set.availability}"
-    attributes_table do
-      row 'Biblio page' do link_to(set.details_url, set.details_url, target:'_blank') end
-      [:call_number, :description, :edition, :publication_date, :statement_of_responsibility, :sub_title, :isbn, :language, :physical_description, :publisher, :series].each do |prop|
-        row prop
+  # The proc below sets the page title to title of the version if there is a version specified in the parameters
+  show title: Proc.new{
+      teacher_set_with_versions = TeacherSet.includes(versions: :item).find(params[:id])
+      if params[:version]
+        # title of a version of the teacher set
+        version = teacher_set_with_versions.versions[(params[:version].to_i - 1).to_i].reify
+        version.title
+      else
+        # the current teacher set title
+        teacher_set_with_versions.title
       end
+    } do |teacher_set|
+
+    return if params[:version] == '0'
+
+    # choose which version's data to display
+    if params[:version]
+      teacher_set_with_versions = TeacherSet.includes(versions: :item).find(params[:id])
+      teacher_set_version = teacher_set_with_versions.versions[(params[:version].to_i - 1).to_i].reify
+    else
+      teacher_set_version = teacher_set
+    end
+
+    attributes_table do
+      row 'Biblio page' do link_to(teacher_set_version.details_url, teacher_set_version.details_url, target:'_blank') end
+      row 'Call Number' do teacher_set_version.call_number end
+      row 'Description' do teacher_set_version.description end
+      row 'Edition' do teacher_set_version.edition end
+      row 'Publication Date' do teacher_set_version.publication_date end
+      row 'Statement of Responsibility' do teacher_set_version.statement_of_responsibility end
+      row 'Sub Title' do teacher_set_version.sub_title end
+      row 'ISBN' do teacher_set_version.isbn end
+      row 'Language' do teacher_set_version.language end
+      row 'Physical Description' do teacher_set_version.physical_description end
+      row 'Publisher' do teacher_set_version.publisher end
+      row 'Series' do teacher_set_version.series end
+      row 'Total Copies' do teacher_set_version.total_copies end
+      row 'Available Copies' do teacher_set_version.available_copies end
     end
 
     panel 'Holds' do
-      if set.holds.count == 0
-        div 'No holds have been placed for this teacher set.'
+      if teacher_set.holds.count == 0
+        div 'No holds have been placed for this teacher teacher set.'
       else
-        table_for set.holds do
-          column 'Status ' do |h| link_to h.status, admin_hold_path(h) end
-          column 'Teacher' do |h|
-            if !h.user.nil?
-              link_to h.user.email, admin_hold_path(h)
+        table_for teacher_set.holds do
+          column 'Status ' do |hold| link_to hold.status, admin_hold_path(hold) end
+          column 'Teacher' do |hold|
+            if !hold.user.nil?
+              link_to hold.user.email, admin_hold_path(hold)
             else
               "Missing user data"
             end
           end
-          column 'Date Required' do |h| link_to h.date_required, admin_hold_path(h) end
-          column 'Created' do |h| h.created_at end
+          column 'Date Required' do |hold| link_to hold.date_required, admin_hold_path(hold) end
+          column 'Created' do |hold| hold.created_at end
         end
       end
     end
@@ -96,12 +138,11 @@ ActiveAdmin.register TeacherSet do
     if teacher_set.books.count > 0
       panel "Books" do
         table_for teacher_set.books do
-          column 'Image' do |b| if b.image_uri.nil? then 'None' else link_to image_tag(b.image_uri(:small)), admin_book_path(b) end end
-          column 'Title' do |b| link_to b.title, admin_book_path(b) end
-          column 'Author(s)' do |b| link_to b.statement_of_responsibility, admin_book_path(b) end
+          column 'Image' do |book| if book.image_uri.nil? then 'None' else link_to image_tag(book.image_uri(:small)), admin_book_path(book) end end
+          column 'Title' do |book| link_to book.title, admin_book_path(book) end
+          column 'Author(s)' do |book| link_to book.statement_of_responsibility, admin_book_path(book) end
         end
       end
     end
-
-  end  
+  end
 end

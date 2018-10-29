@@ -7,6 +7,21 @@ module CatalogItemMethods
 
   # CATALOG_DOMAIN = 'catalog.nypl.org'
 
+  def disable_papertrail
+    # If we don't turn off papertrail here, then a new version is created when a book is created by getting added to a teacher set.
+    # To be consistent with teacher sets, we are not creating versions when an object is created.
+    # We don't create versions for initially created objects, because there are existing objects in the db that did not get their initial version.
+    PaperTrail.enabled = false
+    return true
+  end
+
+  def enable_papertrail
+    # We always want new versions for updated books and teacher_sets, so we enable PaperTrail here.
+    # before_update happens after before_save so it overrides the disabling that happens in before_save.
+    # Source: https://guides.rubyonrails.org/active_record_callbacks.html
+    PaperTrail.enabled = true
+  end
+
   def self.included base
     base.send :include, InstanceMethods
     base.extend ClassMethods
@@ -51,13 +66,23 @@ module CatalogItemMethods
 
       ret
     end
+
+    def update_bnumber!
+      if self.details_url && self.details_url.include?('record=')
+        self.bnumber = self.details_url.split('record=')[1].split('~')[0]
+        self.save
+      elsif self.details_url && self.details_url.include?('bibliocommons.com/item/show/') && self.details_url[-2..-1] == '052'
+        self.bnumber = self.details_url.split('bibliocommons.com/item/show/')[1].gsub('052', '')
+        self.save
+      end
+    end
   end
 
   module ClassMethods
 
     def api_call(endpoint, params={}, kill_cache=false, retries=0)
       p = {}
-      
+
 
       url = 'https://api.bibliocommons.com/v1'
       url += "/#{endpoint}"
@@ -94,11 +119,11 @@ module CatalogItemMethods
 
       # Error response?
       if resp.nil? || resp.to_s.size < 35 || resp.keys.include?('error')
-        Rails.cache.delete(key) 
+        Rails.cache.delete(key)
 
         # Don't retry indefinitely
         if retries < BIBLIO_API_RETRIES
-          
+
           puts "WARNING: BIBLIO API FAILED (/#{endpoint}) #{retries + 1} time(s). Waiting #{BIBLIO_API_RETRY_WAIT}s to retry"
           sleep BIBLIO_API_RETRY_WAIT
 

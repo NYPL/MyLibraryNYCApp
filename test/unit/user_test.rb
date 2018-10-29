@@ -78,7 +78,7 @@ class UserTest < ActiveSupport::TestCase
   # by mock_get_oauth_token_request
   test 'user method get_oauth_token is giving back an access token from
     ISSO NYPL service' do
-    token = @user.get_oauth_token
+    token = Oauth.get_oauth_token
     assert !token.nil?
     assert token.present?
   end
@@ -89,7 +89,7 @@ class UserTest < ActiveSupport::TestCase
         mock_check_email_request(new_email)
         response = @user.get_email_records(new_email)
         expected_response = {
-          'statusCode' => 404,
+          'status' => 404,
           'type' => 'exception',
           'message' => 'No matching record found',
           'error' => [],

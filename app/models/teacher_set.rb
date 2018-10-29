@@ -1,24 +1,30 @@
 #encoding: UTF-8
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
+  has_paper_trail
+  before_save :disable_papertrail
+  before_update :enable_papertrail
+  after_save :enable_papertrail
 
   attr_accessible :slug, :grade_begin, :grade_end, :availability, :call_number, :description, :details_url, :edition, :id,
                   :isbn, :language, :lexile_begin, :lexile_end, :notes, :physical_description, :primary_language, :publication_date,
                   :publisher, :series, :statement_of_responsibility, :sub_title, :title, :books_attributes,
-                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents
+                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents, :last_book_change
 
   attr_accessor :subject, :subject_key, :suitabilities_string, :note_summary, :note_string, :slug
 
   has_many :teacher_set_notes #, :as => :notes
-  has_many :books_in_sets, :dependent => :destroy
-  has_many :books, :through => :books_in_sets, :order => 'books_in_sets.rank ASC'
-
-  has_and_belongs_to_many :subjects
-
+  has_many :teacher_set_books, :dependent => :destroy
+  has_many :books, :through => :teacher_set_books, :order => 'teacher_set_books.rank ASC'
   has_many :holds
+  has_many :subject_teacher_sets, dependent: :delete_all
+  has_many :subjects, through: :subject_teacher_sets
 
   accepts_nested_attributes_for :books, :allow_destroy => true
+
   validates_associated :books
+
+  validates_uniqueness_of :bnumber
 
   before_create :make_slug
 
@@ -49,7 +55,9 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def make_slug
-    self.slug ||= [self.title.parameterize, rand(36**6).to_s(36)].join("-")
+    # check for nil title otherwise parameterize will fail
+    parameterized_title = (self.title || '').parameterize
+    self.slug ||= [parameterized_title, rand(36**6).to_s(36)].join("-")
   end
 
   # Poor man's subject... TODO: replace with column in DB
@@ -94,7 +102,7 @@ class TeacherSet < ActiveRecord::Base
         clauses << "#{table_name}.#{c} ILIKE ?"
       end
       # Match on topics too:
-      clauses << "#{table_name}.id IN (SELECT _S2T.teacher_set_id FROM subjects _S INNER JOIN subjects_teacher_sets _S2T ON _S2T.subject_id=_S.id WHERE _S.title ILIKE ?)"
+      clauses << "#{table_name}.id IN (SELECT _S2T.teacher_set_id FROM subjects _S INNER JOIN subject_teacher_sets _S2T ON _S2T.subject_id=_S.id WHERE _S.title ILIKE ?)"
 
       vals = [].fill("%#{params[:keyword]}%", 0, clauses.length)
       sets = sets.where(clauses.join(' OR '), *vals)
@@ -129,7 +137,7 @@ class TeacherSet < ActiveRecord::Base
         # Each selected Subject facet requires it's own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
-        sets = sets.joins("INNER JOIN subjects_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND #{join_alias}.subject_id=#{s}")
+        sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND #{join_alias}.subject_id=#{s}")
       end
     end
 
@@ -209,7 +217,7 @@ class TeacherSet < ActiveRecord::Base
       topics_facets = {:label => 'topics', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       # Restrict to min_count_for_facet (5) if no topics currently selected
-      if !_qry.to_sql.include?('JOIN subjects_teacher_sets')
+      if !_qry.to_sql.include?('JOIN subject_teacher_sets')
         _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       # .. otherwise restrict to 3
       else
@@ -500,7 +508,7 @@ class TeacherSet < ActiveRecord::Base
         cat_item = Book.catalog_item(cat_item['id'])
         book = Book.upsert_from_catalog_item cat_item
         puts "     Adding book #{book.title}"
-        self.books_in_sets.push BooksInSet.create(:book => book, :teacher_set => self, :rank => i)
+        self.teacher_set_books.push TeacherSetBook.create(:book => book, :teacher_set => self, :rank => i)
 
         successes += 1
       end
@@ -520,7 +528,7 @@ class TeacherSet < ActiveRecord::Base
         isbns = n.at_css('td.marcTagData').text.sub(/^\$a/,'').strip.split ' '
 
         puts "  Adding books by marc 944 field"
-        BooksInSet.destroy_for_set self.id
+        TeacherSetBook.destroy_for_set self.id
         self.add_books_by_isbns isbns
 
         self.update_attributes :set_type => isbns.size == 1 ? 'single' : 'multi'
@@ -546,7 +554,7 @@ class TeacherSet < ActiveRecord::Base
       list = self.class.api_call "lists/#{list_id}"
       # puts "got list data: #{list.inspect}"
 
-      BooksInSet.destroy_for_set self.id
+      TeacherSetBook.destroy_for_set self.id
       if list.nil? || list['list'].nil? || list['list']['list_items'].nil?
         puts "    No list items found for #{list_id}: #{list.inspect}"
 
@@ -555,7 +563,7 @@ class TeacherSet < ActiveRecord::Base
         list['list']['list_items'].each_with_index do |item, i|
           book = Book.update_by_catalog_id item['title']['id'].to_i
           puts "    Adding book #{i}: #{book.title}"
-          self.books_in_sets.push BooksInSet.create(:book => book, :teacher_set => self, :rank => i)
+          self.teacher_set_books.push TeacherSetBook.create(:book => book, :teacher_set => self, :rank => i)
           # Book.upsert_from_catalog_item item
           # item = api_call 'titles', item['title']['id']
           # puts "got bigger item: #{item.inspect}"
@@ -659,4 +667,73 @@ class TeacherSet < ActiveRecord::Base
   end
 =end
 
+  # Recieve JSON related to a teacher_set.
+  # For each ISBN, ensure there is an associated book.
+  # Disassociate books that are no longer in the teacher set.
+  def update_included_book_list(teacher_set_record)
+    # Gather all ISBNs.
+    return unless teacher_set_record['varFields']
+    isbns = []
+    teacher_set_record['varFields'].each do |var_field|
+      next unless var_field['marcTag'] == '944'
+      next unless var_field['subfields'] && var_field['subfields'][0] && var_field['subfields'][0]['content']
+      isbns = var_field['subfields'][0]['content'].split(' ')
+    end
+
+    # Delete teacher_set_books records for books with an ISBN that is not in the teacher_set's list of ISBNs.
+    return if isbns.empty?
+    self.teacher_set_books.each do |teacher_set_book|
+      if !teacher_set_book.book || (teacher_set_book.book.isbn.present? && !isbns.include?(teacher_set_book.book.isbn))
+        teacher_set_book.destroy
+      end
+    end
+
+    # Create a book if one does not yet exist for that ISBN.
+    # Associate the book to the teacher set by creating a TeacherSetBook record if one does not yet exist.
+    # Update all books in the teacher set.
+    isbns.each do |isbn|
+      book = Book.find_by_isbn(isbn) || Book.create(isbn: isbn)
+      TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
+      book.update_from_isbn
+    end
+  end
+
+  # This is called from the bibs_controller.
+  # Delete all records for a teacher set in the join table SubjectTeacherSet, then
+  # create new records (and subjects if they do not exist) in that join table.
+  def update_subjects_via_api(subject_name_array)
+    # teacher_set.rb facets_for_query uses cached results of each query
+    Rails.cache.clear unless Rails.env.test?
+
+    self.subject_teacher_sets.map(&:subject).each do |subject|
+      subject.destroy
+    end
+    return if subject_name_array.blank?
+    subject_name_array.each do |subject_name|
+      # There's a max of 30 characters in the database
+      subject_name = subject_name.strip[0..29]
+      subject = Subject.find_or_create_by_title(subject_name)
+      SubjectTeacherSet.create(teacher_set_id: self.id, subject_id: subject.id)
+    end
+
+    prune_subjects
+  end
+
+  # Delete all subjects that do not have any records in the join table, because they are not associated with any teacher sets
+  def prune_subjects
+    Subject.all.each do |subject|
+      subject.destroy if SubjectTeacherSet.where(subject_id: subject.id).empty?
+    end
+  end
+
+  # This is called from the bibs_controller.
+  # Delete all records for a teacher set in the table TeacherSetNotes, then
+  # create new records in that table.
+  def update_notes(teacher_set_notes_string)
+    TeacherSetNote.where(teacher_set_id: self.id).destroy_all
+    return if teacher_set_notes_string.blank?
+    teacher_set_notes_string.split(',').each do |note_content|
+      TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
+    end
+  end
 end

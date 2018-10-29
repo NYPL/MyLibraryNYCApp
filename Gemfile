@@ -19,6 +19,7 @@ gem 'json'
 gem 'meta_search', '>= 1.1.0.pre'
 gem 'nokogiri'
 gem 'open_uri_redirections'
+gem 'paper_trail', github: 'paper-trail-gem/paper_trail', branch: '5-stable'
 gem 'pg', '~> 0.18'
 gem 'rubocop'
 gem 'sendgrid-ruby', '~> 1.1.6'
@@ -28,6 +29,7 @@ gem 'webmock'
 gem 'yaml_db'
 gem "lograge"
 gem "logstash-event"
+gem 'rack-cors'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails',   '~> 3.2.3'

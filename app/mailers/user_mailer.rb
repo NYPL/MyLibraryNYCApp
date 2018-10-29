@@ -1,4 +1,5 @@
 class UserMailer < ActionMailer::Base
+  include LogWrapper
   LOG_TAG = "UserMailer"
 
   default :from => "noreply@mylibrarynyc.org"
@@ -9,11 +10,18 @@ class UserMailer < ActionMailer::Base
   def unsubscribe(user)
     begin
       @user = user
-      Rails.logger.debug("#{LOG_TAG}.unsubscribe: About to send unsubscribe confirmation email to #{@user.email or 'unknown'}")
+      LogWrapper.log('DEBUG', {
+        'message' => "About to send unsubscribe confirmation email to #{@user.email or 'unknown'}",
+        'method' => 'UserMailer unsubscribe'
+      })
       mail(:to => @user.contact_email, :subject => "You have now unsubscribed from MyLibraryNyc.")
     rescue => exception
       # something went wrong.  perhaps the user isn't set properly, or maybe the email couldn't be sent out.
-      Rails.logger.error("#{LOG_TAG}.unsubscribe: Cannot send notification email.  Backtrace=#{exception.backtrace}.")
+      Rails.logger.error("#{LOG_TAG}.unsubscribe: ")
+      LogWrapper.log('ERROR', {
+        'message' => "Cannot send unsubscribe confirmation email.  Backtrace=#{exception.backtrace}.",
+        'method' => 'UserMailer unsubscribe'
+      })
       raise
     end
   end

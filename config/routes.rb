@@ -32,6 +32,7 @@ MyLibraryNYC::Application.routes.draw do
   match 'settings' => 'settings#index'
   match 'account' => 'settings#index', :as => :account
   match 'help' => 'home#help', :as => :help
+  get '/docs/mylibrarynyc', to: 'home#swagger_docs'
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
 
@@ -77,6 +78,10 @@ MyLibraryNYC::Application.routes.draw do
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
+
+  post 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#create_or_update_teacher_sets'
+  delete 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#delete_teacher_sets'
+  get 'api/unauthorized' => 'api/v01/general#unauthorized'
 
   # See how all your routes lay out with "rake routes"
 
