@@ -30,6 +30,10 @@ ActiveAdmin.register_page "Dashboard" do
         'teacher_sets.title ASC'
       when 'p_set_desc'
         'teacher_sets.title DESC'
+      when 'p_created_at_asc'
+        'created_at ASC'
+      when 'p_created_at_desc'
+        'created_at DESC'
       else
         nil
       end
@@ -55,6 +59,10 @@ ActiveAdmin.register_page "Dashboard" do
         'teacher_sets.title ASC'
       when 'set_desc'
         'teacher_sets.title DESC'
+      when 'created_at_asc'
+        'created_at ASC'
+      when 'created_at_desc'
+        'created_at DESC'
       else
         nil
       end
@@ -87,7 +95,7 @@ ActiveAdmin.register_page "Dashboard" do
     pending_trouble = Hold.trouble
     pending_unavailable = Hold.unavailable
 
-    columns do 
+    columns do
       column do
         h2 "New"
         if Hold.unseen.count == 0
@@ -150,7 +158,7 @@ ActiveAdmin.register_page "Dashboard" do
             column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-            column 'Date', sortable: :created_at do |h|
+            column 'Date', sortable: :p_created_at do |h|
               if !h.nil?
                 link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               else
@@ -175,7 +183,7 @@ ActiveAdmin.register_page "Dashboard" do
             column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-            column 'Date', sortable: :created_at do |h|
+            column 'Date', sortable: :p_created_at do |h|
               if !h.nil?
                 link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               else
@@ -200,7 +208,7 @@ ActiveAdmin.register_page "Dashboard" do
             column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-            column 'Date', sortable: :created_at do |h|
+            column 'Date', sortable: :p_created_at do |h|
               if !h.nil?
                 link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               else
@@ -225,7 +233,7 @@ ActiveAdmin.register_page "Dashboard" do
             column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-            column 'Date', sortable: :created_at do |h|
+            column 'Date', sortable: :p_created_at do |h|
               if !h.nil?
                 link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               else
@@ -237,6 +245,6 @@ ActiveAdmin.register_page "Dashboard" do
       end
 
     end
- 
+
   end # content
 end
