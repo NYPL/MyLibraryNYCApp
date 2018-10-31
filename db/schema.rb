@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20181023165547) do
+ActiveRecord::Schema.define(:version => 20181031160130) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -48,14 +48,14 @@ ActiveRecord::Schema.define(:version => 20181023165547) do
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
 
   create_table "books", :force => true do |t|
-    t.string   "title"
-    t.string   "sub_title"
-    t.string   "format"
-    t.string   "details_url"
+    t.text     "title"
+    t.text     "sub_title"
+    t.text     "format"
+    t.text     "details_url"
     t.string   "publication_date"
     t.string   "isbn"
     t.string   "primary_language"
-    t.string   "call_number"
+    t.text     "call_number"
     t.text     "description"
     t.text     "physical_description"
     t.text     "notes"
@@ -166,21 +166,21 @@ ActiveRecord::Schema.define(:version => 20181023165547) do
   add_index "teacher_set_notes", ["teacher_set_id"], :name => "index_book_set_notes_on_book_set_id"
 
   create_table "teacher_sets", :force => true do |t|
-    t.string   "title"
+    t.text     "title"
     t.string   "call_number"
     t.text     "description"
-    t.string   "details_url"
-    t.string   "edition"
+    t.text     "details_url"
+    t.text     "edition"
     t.datetime "publication_date"
-    t.string   "statement_of_responsibility"
-    t.string   "sub_title"
+    t.text     "statement_of_responsibility"
+    t.text     "sub_title"
     t.string   "availability"
     t.string   "isbn"
     t.string   "language"
     t.text     "physical_description"
     t.string   "primary_language"
-    t.string   "publisher"
-    t.string   "series"
+    t.text     "publisher"
+    t.text     "series"
     t.integer  "grade_begin",                 :limit => 2
     t.integer  "grade_end",                   :limit => 2
     t.integer  "lexile_begin"
@@ -191,9 +191,9 @@ ActiveRecord::Schema.define(:version => 20181023165547) do
     t.integer  "total_copies"
     t.string   "primary_subject"
     t.string   "bnumber",                     :limit => 20
-    t.string   "set_type",                    :limit => 20
+    t.text     "set_type"
     t.text     "contents"
-    t.string   "last_book_change"
+    t.text     "last_book_change"
   end
 
   add_index "teacher_sets", ["availability"], :name => "index_teacher_sets_availaibilty"
