@@ -1,5 +1,8 @@
 class Hold < ActiveRecord::Base
 
+  # add a quick filter scope to ActiveAdmin oldest unfulfilled hold orders first.
+  scope :new_holds, where(:status=>"new")
+
   attr_accessible :date_required
 
   validates_presence_of :teacher_set_id, :user_id
@@ -85,7 +88,7 @@ class Hold < ActiveRecord::Base
   def order_number
     "#{self.created_at.strftime('%Y%m%d')}.#{self.id}"
   end
-  
+
   ##
   # Asks the hold_mailer to send a notificaion email to BookOps.
   def send_admin_notification_email
