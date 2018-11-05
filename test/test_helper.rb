@@ -1311,6 +1311,900 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
   }
 ]
 
+ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS = [
+  {
+    "id": "#{BNUMBER1}",
+    "nyplSource": "sierra-nypl",
+    "nyplType": "bib",
+    "updatedDate": "2017-08-23T20:22:13-04:00",
+    "createdDate": "2017-08-23T14:46:46-04:00",
+    "deletedDate": nil,
+    "deleted": false,
+    "locations": [
+      {
+        "code": "ed",
+        "name": "LSC Educator Collection"
+      }
+    ],
+    "suppressed": false,
+    "lang": {
+      "code": "eng",
+      "name": "English"
+    },
+    "title": "Books for Reading and Sharing - Elementary School! 1",
+    "author": "",
+    "materialType": {
+      "code": "8",
+      "value": "TEACHER SET"
+    },
+    "bibLevel": {
+      "code": "m",
+      "value": "MONOGRAPH"
+    },
+    "publishYear": nil,
+    "catalogDate": "2017-08-23",
+    "country": {
+      "code": "xx ",
+      "name": "Unknown or undetermined"
+    },
+    "normTitle": "books for reading and sharing elementary school",
+    "normAuthor": "",
+    "standardNumbers": [],
+    "controlNumber": "",
+    "fixedFields": {
+      "24": {
+        "label": "Language",
+        "value": "eng",
+        "display": "English"
+      },
+      "25": {
+        "label": "Skip",
+        "value": "0",
+        "display": nil
+      },
+      "26": {
+        "label": "Location",
+        "value": "ed   ",
+        "display": "LSC Educator Collection"
+      },
+      "27": {
+        "label": "COPIES",
+        "value": "0",
+        "display": nil
+      },
+      "28": {
+        "label": "Cat. Date",
+        "value": "2017-08-23",
+        "display": nil
+      },
+      "29": {
+        "label": "Bib Level",
+        "value": "m",
+        "display": "MONOGRAPH"
+      },
+      "30": {
+        "label": "Material Type",
+        "value": "8",
+        "display": "TEACHER SET"
+      },
+      "31": {
+        "label": "Bib Code 3",
+        "value": "-",
+        "display": nil
+      },
+      "80": {
+        "label": "Record Type",
+        "value": "b",
+        "display": nil
+      },
+      "81": {
+        "label": "Record Number",
+        "value": "21323534",
+        "display": nil
+      },
+      "83": {
+        "label": "Created Date",
+        "value": "2017-08-23T14:46:46Z",
+        "display": nil
+      },
+      "84": {
+        "label": "Updated Date",
+        "value": "2017-08-23T20:22:13Z",
+        "display": nil
+      },
+      "85": {
+        "label": "No. of Revisions",
+        "value": "2",
+        "display": nil
+      },
+      "86": {
+        "label": "Agency",
+        "value": "1",
+        "display": nil
+      },
+      "89": {
+        "label": "Country",
+        "value": "xx ",
+        "display": "Unknown or undetermined"
+      },
+      "98": {
+        "label": "PDATE",
+        "value": "2017-08-23T20:20:00Z",
+        "display": nil
+      },
+      "107": {
+        "label": "MARC Type",
+        "value": " ",
+        "display": nil
+      }
+    },
+    "varFields": [
+      {
+        "fieldTag": "c",
+        "marcTag": "091",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Teacher Set ELA A Books 4"
+          }
+        ]
+      },
+      {
+        "fieldTag": "d",
+        "marcTag": "650",
+        "ind1": " ",
+        "ind2": "1",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Political activists."
+          }
+        ]
+      },
+      {
+        "fieldTag": "d",
+        "marcTag": "650",
+        "ind1": " ",
+        "ind2": "1",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Race relations."
+          }
+        ]
+      },
+      {
+        "fieldTag": "d",
+        "marcTag": "690",
+        "ind1": "0",
+        "ind2": "7",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "English Language Arts."
+          },
+          {
+            "tag": "2",
+            "content": "local"
+          }
+        ]
+      },
+      {
+        "fieldTag": "n",
+        "marcTag": "500",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "2 copies of 10 titles."
+          }
+        ]
+      },
+      {
+        "fieldTag": "n",
+        "marcTag": "505",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+          }
+        ]
+      },
+      {
+        "fieldTag": "n",
+        "marcTag": "520",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+          }
+        ]
+      },
+      {
+        "fieldTag": "e",
+        "marcTag": "250",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "1st Hyperion Paperbacks ed."
+          }
+        ]
+      },
+      {
+        "fieldTag": "i",
+        "marcTag": "020",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "9781489813930"
+          }
+        ]
+      },
+      {
+        "fieldTag": "p",
+        "marcTag": "260",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "McHenry, Ill. :"
+          },
+          {
+            "tag": "b",
+            "content": "Follett Library Resources,"
+          },
+          {
+            "tag": "c",
+            "content": "2013."
+          }
+        ]
+      },
+      {
+        "fieldTag": "n",
+        "marcTag": "521",
+        "ind1": "2",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "K-1."
+          }
+        ]
+      },
+      {
+        "fieldTag": "n",
+        "marcTag": "521",
+        "ind1": "2",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "1-2."
+          }
+        ]
+      },
+      {
+        "fieldTag": "n",
+        "marcTag": "521",
+        "ind1": "8",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "70L-500L"
+          },
+          {
+            "tag": "b",
+            "content": "Lexile"
+          }
+        ]
+      },
+      {
+        "fieldTag": "r",
+        "marcTag": "300",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "20 v."
+          }
+        ]
+      },
+      {
+        "fieldTag": "s",
+        "marcTag": "490",
+        "ind1": "0",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Teacher Sets: MyLibraryNYC Program"
+          }
+        ]
+      },
+      {
+        "fieldTag": "t",
+        "marcTag": "245",
+        "ind1": "0",
+        "ind2": "0",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "Books for Reading and Sharing - Elementary School! 2"
+          }
+        ]
+      },
+      {
+        "fieldTag": "u",
+        "marcTag": "246",
+        "ind1": "3",
+        "ind2": "0",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "English Language Arts: Books for Reading and Sharing - Elementary School! Gr. 1-2 (Teacher Set)."
+          }
+        ]
+      },
+      {
+        "fieldTag": "y",
+        "marcTag": "901",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "ed"
+          },
+          {
+            "tag": "b",
+            "content": "SEL"
+          }
+        ]
+      },
+      {
+        "fieldTag": "y",
+        "marcTag": "944",
+        "ind1": " ",
+        "ind2": " ",
+        "content": nil,
+        "subfields": [
+          {
+            "tag": "a",
+            "content": "123456789"
+          }
+        ]
+      },
+      {
+        "fieldTag": "_",
+        "marcTag": nil,
+        "ind1": nil,
+        "ind2": nil,
+        "content": "00000nam  2200000 a 4500",
+        "subfields": nil
+      }
+    ]
+  }
+]
+
+# This is the book for this teacher set: ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS
+JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG = '{
+  "data": [
+    {
+      "id": "18888888",
+      "nyplSource": "sierra-nypl",
+      "nyplType": "bib",
+      "updatedDate": "2016-02-15T03:03:46-05:00",
+      "createdDate": "2011-03-31T14:07:37-04:00",
+      "deletedDate": null,
+      "deleted": false,
+      "locations": [
+        {
+          "code": "bca",
+          "name": "Bronx Library Center Adult"
+        }
+      ],
+      "suppressed": false,
+      "lang": {
+        "code": "fre",
+        "name": "French"
+      },
+      "title": "Title is intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
+      "author": "Arrighi, Olivier.",
+      "materialType": {
+        "code": "a",
+        "value": "BOOK/TEXT"
+      },
+      "bibLevel": {
+        "code": "m",
+        "value": "MONOGRAPH"
+      },
+      "publishYear": 2010,
+      "catalogDate": "2011-03-31",
+      "country": {
+        "code": "fr ",
+        "name": "France"
+      },
+      "normTitle": "pasé on bel nwel lieutenant simeoni roman policier",
+      "normAuthor": "arrighi olivier",
+      "standardNumbers": [
+        "This ISBN intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
+        "2917623268"
+      ],
+      "controlNumber": "696084229",
+      "fixedFields": {
+        "24": {
+          "label": "Language",
+          "value": "fre",
+          "display": "French"
+        },
+        "25": {
+          "label": "Skip",
+          "value": "0",
+          "display": null
+        },
+        "26": {
+          "label": "Location",
+          "value": "bca  ",
+          "display": "Bronx Library Center Adult"
+        },
+        "27": {
+          "label": "COPIES",
+          "value": "2",
+          "display": null
+        },
+        "28": {
+          "label": "Cat. Date",
+          "value": "2011-03-31",
+          "display": null
+        },
+        "29": {
+          "label": "Bib Level",
+          "value": "m",
+          "display": "MONOGRAPH"
+        },
+        "30": {
+          "label": "Material Type",
+          "value": "a",
+          "display": "BOOK/TEXT"
+        },
+        "31": {
+          "label": "Bib Code 3",
+          "value": "-",
+          "display": null
+        },
+        "80": {
+          "label": "Record Type",
+          "value": "b",
+          "display": null
+        },
+        "81": {
+          "label": "Record Number",
+          "value": "18888888",
+          "display": null
+        },
+        "83": {
+          "label": "Created Date",
+          "value": "2011-03-31T14:07:37Z",
+          "display": null
+        },
+        "84": {
+          "label": "Updated Date",
+          "value": "2016-02-15T03:03:46Z",
+          "display": null
+        },
+        "85": {
+          "label": "No. of Revisions",
+          "value": "6",
+          "display": null
+        },
+        "86": {
+          "label": "Agency",
+          "value": "1",
+          "display": null
+        },
+        "89": {
+          "label": "Country",
+          "value": "fr ",
+          "display": "France"
+        },
+        "98": {
+          "label": "PDATE",
+          "value": "2016-02-14T06:26:14Z",
+          "display": null
+        },
+        "107": {
+          "label": "MARC Type",
+          "value": " ",
+          "display": null
+        }
+      },
+      "varFields": [
+        {
+          "fieldTag": "n",
+          "marcTag": "520",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been anything but terminal, but when Augustus Waters suddenly appears at the Cancer Kid Support Group, Hazels story is about to be rewritten."
+            }
+          ]
+        },
+        {
+          "fieldTag": "a",
+          "marcTag": "100",
+          "ind1": "1",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "Arrighi, Olivier."
+            }
+          ]
+        },
+        {
+          "fieldTag": "c",
+          "marcTag": "091",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "p",
+              "content": "Fre"
+            },
+            {
+              "tag": "a",
+              "content": "FIC"
+            },
+            {
+              "tag": "c",
+              "content": "A"
+            }
+          ]
+        },
+        {
+          "fieldTag": "i",
+          "marcTag": "020",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "9782917623268 (pbk.)"
+            }
+          ]
+        },
+        {
+          "fieldTag": "i",
+          "marcTag": "020",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "2917623268 (pbk.)"
+            }
+          ]
+        },
+        {
+          "fieldTag": "l",
+          "marcTag": "035",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "(OCoLC)696084229"
+            }
+          ]
+        },
+        {
+          "fieldTag": "o",
+          "marcTag": "001",
+          "ind1": " ",
+          "ind2": " ",
+          "content": "696084229",
+          "subfields": null
+        },
+        {
+          "fieldTag": "p",
+          "marcTag": "260",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "Lamentin :"
+            },
+            {
+              "tag": "b",
+              "content": "Caraïbéditions,"
+            },
+            {
+              "tag": "c",
+              "content": "c2010."
+            }
+          ]
+        },
+        {
+          "fieldTag": "r",
+          "marcTag": "300",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "236 p. ;"
+            },
+            {
+              "tag": "c",
+              "content": "22 cm."
+            }
+          ]
+        },
+        {
+          "fieldTag": "s",
+          "marcTag": "490",
+          "ind1": "0",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "Polar"
+            }
+          ]
+        },
+        {
+          "fieldTag": "t",
+          "marcTag": "245",
+          "ind1": "1",
+          "ind2": "0",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "Pasé on bel Nwel lieutenant Simeoni! :"
+            },
+            {
+              "tag": "b",
+              "content": "roman policier /"
+            },
+            {
+              "tag": "c",
+              "content": "Olivier Arrighi."
+            }
+          ]
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "003",
+          "ind1": " ",
+          "ind2": " ",
+          "content": "OCoLC",
+          "subfields": null
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "005",
+          "ind1": " ",
+          "ind2": " ",
+          "content": "20110330110134.0",
+          "subfields": null
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "008",
+          "ind1": " ",
+          "ind2": " ",
+          "content": "101229s2010    fr     g      000 1 fre dnamIa ",
+          "subfields": null
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "040",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "AUXAM"
+            },
+            {
+              "tag": "c",
+              "content": "AUXAM"
+            },
+            {
+              "tag": "d",
+              "content": "NYP"
+            }
+          ]
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "049",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "NYPP"
+            }
+          ]
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "901",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "rbf"
+            },
+            {
+              "tag": "b",
+              "content": "CMC"
+            },
+            {
+              "tag": "c",
+              "content": "CATBL"
+            }
+          ]
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "901",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "MARS"
+            }
+          ]
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "946",
+          "ind1": " ",
+          "ind2": " ",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "a",
+              "content": "m"
+            }
+          ]
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "949",
+          "ind1": " ",
+          "ind2": "1",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "l",
+              "content": "wfa0l"
+            },
+            {
+              "tag": "i",
+              "content": "33333804031256"
+            },
+            {
+              "tag": "t",
+              "content": "102"
+            },
+            {
+              "tag": "s",
+              "content": "b"
+            },
+            {
+              "tag": "p",
+              "content": "$10.00"
+            },
+            {
+              "tag": "v",
+              "content": "CATBL/CMC/rbf"
+            }
+          ]
+        },
+        {
+          "fieldTag": "y",
+          "marcTag": "949",
+          "ind1": " ",
+          "ind2": "1",
+          "content": null,
+          "subfields": [
+            {
+              "tag": "l",
+              "content": "bca0l"
+            },
+            {
+              "tag": "i",
+              "content": "33333804031249"
+            },
+            {
+              "tag": "t",
+              "content": "102"
+            },
+            {
+              "tag": "s",
+              "content": "b"
+            },
+            {
+              "tag": "p",
+              "content": "$10.00"
+            },
+            {
+              "tag": "v",
+              "content": "CATBL/CMC/rbf"
+            }
+          ]
+        },
+        {
+          "fieldTag": "_",
+          "marcTag": null,
+          "ind1": null,
+          "ind2": null,
+          "content": "00000nam  2200301Ia 4500",
+          "subfields": null
+        }
+      ]
+    }
+  ],
+  "count": 1,
+  "totalCount": 0,
+  "statusCode": 200,
+  "debugInfo": []
+}'
+
 TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
   {
     "id": "#{BNUMBER1}",
@@ -2684,6 +3578,13 @@ class ActiveSupport::TestCase
           }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {}
       )
     end
+    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?standardNumber=123456789").
+      with(
+        headers: {
+        'Authorization'=>'Bearer testoken',
+        'Content-Type'=>'application/json'
+        }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {}
+    )
   end
 
 end

@@ -149,19 +149,27 @@ class Book < ActiveRecord::Base
   def update_from_isbn
     response = send_request_to_bibs_microservice
     return if !@book_found
-    book_attributes = JSON.parse(response.body)['data'][0]
-    self.update_attributes(
-      bnumber: book_attributes['id'],
-      title: book_attributes['title'],
-      publication_date: book_attributes['publishYear'],
-      primary_language: (book_attributes['lang'] ? book_attributes['lang']['name'] : nil),
-      details_url: "http://catalog.nypl.org/record=b#{book_attributes['id']}~S1",
-      call_number: var_field(book_attributes, '091'),
-      description: var_field(book_attributes, '520'),
-      physical_description: var_field(book_attributes, '300'),
-      format: var_field(book_attributes, '020'),
-      cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}"
-    )
+    begin
+      book_attributes = JSON.parse(response.body)['data'][0]
+      self.update_attributes(
+        bnumber: book_attributes['id'],
+        title: book_attributes['title'],
+        publication_date: book_attributes['publishYear'],
+        primary_language: (book_attributes['lang'] ? book_attributes['lang']['name'] : nil),
+        details_url: "http://catalog.nypl.org/record=b#{book_attributes['id']}~S1",
+        call_number: var_field(book_attributes, '091'),
+        description: var_field(book_attributes, '520'),
+        physical_description: var_field(book_attributes, '300'),
+        format: var_field(book_attributes, '020'),
+        cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}"
+      )
+    rescue => exception
+      # catch any error such as string field is receiving more than 255 characters or an expected attribute is missing
+      LogWrapper.log('ERROR', {
+        'message' => "#{exception.message[0..200]}...\nBacktrace=#{exception.backtrace}.",
+        'method' => 'method'
+      })
+    end
   end
 
   private
