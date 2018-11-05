@@ -16,7 +16,7 @@ class TeacherSet < ActiveRecord::Base
   has_many :teacher_set_notes #, :as => :notes
   has_many :teacher_set_books, :dependent => :destroy
   has_many :books, :through => :teacher_set_books, :order => 'teacher_set_books.rank ASC'
-  has_many :holds
+  has_many :holds, :dependent => :destroy
   has_many :subject_teacher_sets, dependent: :delete_all
   has_many :subjects, through: :subject_teacher_sets
 
