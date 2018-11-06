@@ -1,5 +1,9 @@
 A bibs controller API request failed with this data:<br>
 <br>
+<% if @teacher_set %>
+  <p>Teacher Set ID: <%= @teacher_set.id %></p>
+  <p>Teacher Set Title: <%= @teacher_set.title %></p>
+<% end %>
 <p>Action Name: <%= @action_name %></p>
 <p>Error Code and Message: <%= @error_code_and_message %></p>
 <p>Request Body: <%= @request_body %></p>

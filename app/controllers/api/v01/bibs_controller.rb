@@ -9,7 +9,7 @@ class Api::V01::BibsController < ApplicationController
   def create_or_update_teacher_sets
     error_code_and_message = validate_request
     if error_code_and_message.any?
-      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name).deliver
+      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name, nil).deliver
       render_error(error_code_and_message)
     end
     return if error_code_and_message.any?
@@ -29,28 +29,49 @@ class Api::V01::BibsController < ApplicationController
       end
 
       teacher_set = TeacherSet.where(bnumber: "b#{bnumber}").first_or_initialize
-      teacher_set.update_attributes(
-        title: title,
-        call_number: var_field('091'),
-        description: var_field('520'),
-        edition: var_field('250'),
-        isbn: var_field('020'),
-        primary_language: fixed_field('24'),
-        publisher: var_field('260'),
-        contents: var_field('505'),
-        primary_subject: var_field('690', false),
-        physical_description: physical_description,
-        details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
-        grade_begin: grade_or_lexile_array('grade')[0],
-        grade_end: grade_or_lexile_array('grade')[1],
-        lexile_begin: grade_or_lexile_array('lexile')[0],
-        lexile_end: grade_or_lexile_array('lexile')[1],
-        availability: 'available',
-        available_copies: 999
-      )
-      teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
-      teacher_set.update_notes(var_field('500', true))
-      teacher_set.update_included_book_list(teacher_set_record)
+      # make the teacher set available if it is newly created (.persisted? means that it's saved in the db):
+      teacher_set.update_attributes(availability: 'available') if !teacher_set.persisted?
+      begin
+        teacher_set.update_attributes(
+          title: title,
+          call_number: var_field('091'),
+          description: var_field('520'),
+          edition: var_field('250'),
+          isbn: var_field('020'),
+          primary_language: fixed_field('24'),
+          publisher: var_field('260'),
+          contents: var_field('505'),
+          primary_subject: var_field('690', false),
+          physical_description: physical_description,
+          details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
+          grade_begin: grade_or_lexile_array('grade')[0],
+          grade_end: grade_or_lexile_array('grade')[1],
+          lexile_begin: grade_or_lexile_array('lexile')[0],
+          lexile_end: grade_or_lexile_array('lexile')[1],
+          available_copies: 999
+        )
+      rescue => exception
+        log_error('create_or_update_teacher_sets', e)
+        AdminMailer.failed_bibs_controller_api_request(@request_body, "One attribute may be too long.  Error: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+      end
+      begin
+        teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
+      rescue => exception
+        log_error('create_or_update_teacher_sets', e)
+        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating subjects via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+      end
+      begin
+        teacher_set.update_notes(var_field('500', true))
+      rescue => exception
+        log_error('create_or_update_teacher_sets', e)
+        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating notes via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+      end
+      begin
+        teacher_set.update_included_book_list(teacher_set_record)
+      rescue => exception
+        log_error('create_or_update_teacher_sets', e)
+        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating the associated book records via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+      end
       saved_teacher_sets << teacher_set
     end
 
@@ -60,7 +81,7 @@ class Api::V01::BibsController < ApplicationController
   def delete_teacher_sets
     error_code_and_message = validate_request
     if error_code_and_message.any?
-      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name).deliver
+      AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name, nil).deliver
       render_error(error_code_and_message)
       return
     end
@@ -78,6 +99,13 @@ class Api::V01::BibsController < ApplicationController
   end
 
   private
+
+  def log_error(method, exception)
+    LogWrapper.log('ERROR', {
+      'message' => "#{exception.message[0..200]}...\nBacktrace=#{exception.backtrace}.",
+      'method' => 'method'
+    })
+  end
 
   def validate_source_of_request
     LogWrapper.log('DEBUG',

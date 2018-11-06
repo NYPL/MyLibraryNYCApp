@@ -4,14 +4,15 @@ class AdminMailer < ActionMailer::Base
   default :from => "no-reply@mylibrarynyc.org"
 
   # Sends an email to let admins know that a request to create/update a bib(s) failed
-  def failed_bibs_controller_api_request(request_body, error_code_and_message, action_name)
+  def failed_bibs_controller_api_request(request_body, error_code_and_message, action_name, teacher_set)
     begin
+      @teacher_set = teacher_set
       @action_name = action_name
       @request_body = request_body
       @error_code_and_message = error_code_and_message
       emails = AdminUser.where(email_notifications:true).pluck(:email)
       LogWrapper.log('DEBUG', {
-        'message' => "About to send failed_bibs_controller_api_request email",
+        'message' => "About to send failed_bibs_controller_api_request email.\n@error_code_and_message: #{@error_code_and_message || 'nil'}",
         'method' => 'AdminMailerfailed_bibs_controller_api_request'
       })
       mail(:to => emails, :subject => "Problem occurred updating bib from Sierra")

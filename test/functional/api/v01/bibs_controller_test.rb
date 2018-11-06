@@ -10,6 +10,13 @@ class Api::BibsControllerTest < ActionController::TestCase
     assert response.status == 400
   end
 
+  test "should update teacher set even if an associate book has a field that is too long" do
+    TeacherSet.destroy_all
+    post 'create_or_update_teacher_sets', { _json: ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS }
+    assert_response :success
+    assert TeacherSet.count > 0
+  end
+
   test "should update teacher set attributes and create associated books" do
     Book.destroy_all
     TeacherSet.destroy_all
