@@ -4,6 +4,53 @@ ActiveAdmin.register TeacherSet do
   # All default filters remain in the sidebar when you use this syntax to remove one filter.
   remove_filter :subject_teacher_sets
 
+  # To make page loading faster and smoother, we'll remove unnecessary filters.
+  remove_filter :versions
+  remove_filter :teacher_set_notes
+  remove_filter :holds
+  remove_filter :details_url
+  remove_filter :edition
+  remove_filter :publication_date
+  remove_filter :statement_of_responsibility
+  remove_filter :physical_description
+  remove_filter :contents
+  remove_filter :teacher_set_books
+  remove_filter :books
+
+  # Once we start specifying particular formats for the filters,
+  # we are obliged to explicitly name all the filters we want to use.
+  filter :bnumber
+  filter :call_number
+  filter :isbn
+
+  filter :title
+  filter :sub_title
+  filter :description
+
+  filter :books_title, as: :string
+  filter :subjects_title, as: :string
+  filter :primary_subject
+
+  filter :grade_begin
+  filter :grade_end
+  filter :lexile_begin
+  filter :lexile_end
+
+  filter :availability
+  filter :available_copies
+  filter :total_copies
+
+  filter :publisher
+  filter :series
+  filter :language
+  filter :primary_language
+
+  filter :created_at
+  filter :updated_at
+  filter :last_book_change
+
+
+
   actions :index, :show, :edit, :update
 
   menu :priority => 3
