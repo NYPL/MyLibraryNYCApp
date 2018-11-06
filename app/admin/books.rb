@@ -1,4 +1,32 @@
 ActiveAdmin.register Book do
+
+  # To make page loading faster and smoother, we'll remove unnecessary filters.
+  remove_filter :versions
+  remove_filter :teacher_set_books
+  remove_filter :format
+  remove_filter :details_url
+  remove_filter :notes
+  remove_filter :statement_of_responsibility
+  remove_filter :cover_uri
+
+  filter :isbn
+  filter :call_number
+
+  filter :title
+  filter :sub_title
+  filter :teacher_sets_title, as: :string
+
+  filter :description
+  filter :physical_description
+
+  filter :primary_language
+
+  filter :publication_date
+  filter :created_at
+  filter :updated_at
+
+
+
   actions :show, :index
 
   menu :priority => 4
