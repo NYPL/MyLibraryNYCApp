@@ -44,10 +44,10 @@ class Api::V01::BibsController < ApplicationController
           primary_subject: var_field('690', false),
           physical_description: physical_description,
           details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
-          grade_begin: grade_or_lexile_array('grade')[0],
-          grade_end: grade_or_lexile_array('grade')[1],
-          lexile_begin: grade_or_lexile_array('lexile')[0],
-          lexile_end: grade_or_lexile_array('lexile')[1],
+          grade_begin: grade_or_lexile_array('grade')[0] || '',
+          grade_end: grade_or_lexile_array('grade')[1] || '',
+          lexile_begin: grade_or_lexile_array('lexile')[0] || '',
+          lexile_end: grade_or_lexile_array('lexile')[1] || '',
           available_copies: 999
         )
       rescue => exception
@@ -195,10 +195,14 @@ class Api::V01::BibsController < ApplicationController
     return '' if grade_and_lexile_json.blank?
 
     grade_and_lexile_json.each do |grade_or_lexile_json|
-      if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
-        return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
-      elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
-        return grade_or_lexile_json.gsub('.', '').split('-')
+      begin
+        if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
+          return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
+        elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
+          return grade_or_lexile_json.gsub('.', '').split('-')
+        end
+      rescue
+        []
       end
     end
   end
