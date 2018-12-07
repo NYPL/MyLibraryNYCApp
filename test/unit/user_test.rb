@@ -66,6 +66,9 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+
+  ## NOTE:  We manage allowed email addresses dynamically now, but schools.nyc.gov
+  # is to always be allowed, and it's OK not to test registration success for the others.
   [generate_email_without_valid_domain].each do |new_email|
     test 'should not save user without schools.nyc.gov domain in email' do
       @user.email = "testing@gmail.com"

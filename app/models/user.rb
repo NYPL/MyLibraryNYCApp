@@ -17,6 +17,9 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :pin
 
+  # TODO: doc
+  #@allowed_email_patterns = '/\@schools.nyc\.gov/'
+
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
   # the record.
@@ -38,6 +41,13 @@ class User < ActiveRecord::Base
     self.password ||= User.default_password
     self.password_confirmation ||= User.default_password
   end
+
+  #def self.validate_email_pattern
+  #  # validates :one, :two, :presence => true, :if => :condition_testing?
+  #  #!(one == 0 && two == 1)
+  #  return(true)
+  #validates_format_of :email, :with => Proc.new { |a| (a.email == 'daryachernikhova@nypl.org') }, message: ' should end in @schools.nyc.gov', :on => :create
+  #end
 
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
