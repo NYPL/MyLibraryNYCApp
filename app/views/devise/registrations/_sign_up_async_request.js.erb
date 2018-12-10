@@ -1,5 +1,3 @@
-console.log("hello world")
-
 
 $( document ).ready(function() {
 
@@ -114,9 +112,9 @@ function validateEmailFormat(email) {
 <% allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern) %>
 function validateEmailDomain(email) {
 	var domain = email.split('@');
-  var allowed_email_patterns = <%= raw allowed_email_patterns %>;
-  // pre-pending with @, because we think it's clearer on the Admin side to be adding
-  // email domains starting with "@" signs (helps explain what we mean by "domain")
+	var allowed_email_patterns = <%= raw allowed_email_patterns %>;
+	// pre-pending with @, because we think it's clearer on the Admin side to be adding
+	// email domains starting with "@" signs (helps explain what we mean by "domain")
   var email_domain_is_allowed = allowed_email_patterns.includes('@' + domain[1]);
 
 	if (!email_domain_is_allowed) {
