@@ -1,6 +1,16 @@
 class SessionsController < Devise::SessionsController
   layout 'empty', :only => [ :timeout_check ]
 
+  ## The user has just (re)logged in.  Reflect the time in the user's DB record.
+  def create
+    super
+    current_user.last_sign_in_at = Time.zone.now
+    current_user.save
+  end
+
+
+  ## Checks if the user's session has been timed out.
+  # If yes, then gives a visual notification to the user.
   def timeout_check
     # session["warden.user.user.session"] comes from adding timeoutable to the user model
     # example: {"last_request_at"=>1537283353}
