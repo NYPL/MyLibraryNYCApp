@@ -9,7 +9,7 @@ namespace :sync_users do
   # For each user, see if they exist in the MLN database.
   # If they do, and if the MLN user was created within the last month, while the Sierra user has been there for longer than that,
   # then this is a user account manually fixed by the Library Outreach team.
-  # call like this:  RAILS_ENV=local rake check_user_fixes:check_mismatch['db/migrate/20181128_sierra_mln_user_accounts.csv',2,1,'23333090060508']
+  # call like this:  RAILS_ENV=local rake check_user_fixes:check_mismatch['data/private/20181128_sierra_mln_user_accounts.csv',2,1,'23333090060508']
   desc "Check manually made account fixes"
   task :check_user_fixes, [:file_name, :start, :limit, :barcode]  => :environment do |t, args|
     # if barcode is set, then only checks that barcode for Sierra-MLN mismatch
@@ -20,7 +20,7 @@ namespace :sync_users do
 
     csv_barcode = args.barcode
 
-    # Example:  'db/migrate/20181128_sierra_mln_user_accounts.csv'
+    # Example:  'data/private/20181128_sierra_mln_user_accounts.csv'
     csv_path = args.file_name
 
     # \u03EA is a unicode character that will never happen in our Sierra output file.
@@ -47,14 +47,14 @@ namespace :sync_users do
       sierra_created = sierra_created.chomp('"').reverse.chomp('"').reverse
 
       # if a barcode was passed, we're looking for that barcode, and should stop processing once we find it.
-      if (!csv_barcode.nil? && csv_barcode == barcode)
+      if (!csv_barcode.present? && csv_barcode == barcode)
         csv_start = $.
         csv_limit = 1
       end
 
       # is there a user in the mln database that matches this user from Sierra?
       mln_user = User.find_by_barcode(barcode)
-      if !mln_user.nil?
+      if !mln_user.present?
         # Yes, there is.  Now see if the user was created in MLN over the last month, while being old in Sierra.
 
         # was the user created after a month ago in mln database?
@@ -83,7 +83,7 @@ namespace :sync_users do
   # For each user, see if they exist in the MLN database.
   # If they do not, then output the user, so we can review them later.
   # TODO:  later functionality -- write to db a new user.
-  # call like this:  RAILS_ENV=local rake sync_users:ingest_mismatched_sierra_users['db/migrate/20181128_sierra_mln_user_accounts.csv',2,1,'23333090060508']
+  # call like this:  RAILS_ENV=local rake sync_users:ingest_mismatched_sierra_users['data/private/20181128_sierra_mln_user_accounts.csv',2,1,'23333090060508']
   # @param safetyoff -- manually set this in the task call, to really truly write to the DB (a destructive change)
   desc "Check and Automatically Fix Sierra-MLN mismatch"
   task :ingest_mismatched_sierra_users, [:file_name, :start, :limit, :barcode, :safetyoff]  => :environment do |t, args|
@@ -99,7 +99,7 @@ namespace :sync_users do
 
     csv_barcode = args.barcode
 
-    # Example:  'db/migrate/20181128_sierra_mln_user_accounts.csv'
+    # Example:  'data/private/20181128_sierra_mln_user_accounts.csv'
     csv_path = args.file_name
 
     mln_fixed_users = []
