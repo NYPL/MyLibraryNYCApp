@@ -73,7 +73,7 @@ class UserTest < ActiveSupport::TestCase
     test 'should not save user without schools.nyc.gov domain in email' do
       @user.email = "testing@gmail.com"
       @user.save
-      assert_equal([" should end in @schools.nyc.gov or another participating school address"], @user.errors[:email])
+      assert_equal(["should end in @schools.nyc.gov or another participating school address"], @user.errors[:email])
     end
   end
 
