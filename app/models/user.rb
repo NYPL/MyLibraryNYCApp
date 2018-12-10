@@ -17,14 +17,13 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :pin
 
-  # TODO: doc
-  #@allowed_email_patterns = '/\@schools.nyc\.gov/'
 
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
   # the record.
   validates :school_id, :first_name, :last_name, :presence => true
-  validates_format_of :email, with: /\@schools.nyc\.gov/, message: ' should end in @schools.nyc.gov', :on => :create
+  validate :validate_email_pattern, :on => :create
+
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
@@ -42,12 +41,27 @@ class User < ActiveRecord::Base
     self.password_confirmation ||= User.default_password
   end
 
-  #def self.validate_email_pattern
-  #  # validates :one, :two, :presence => true, :if => :condition_testing?
-  #  #!(one == 0 && two == 1)
-  #  return(true)
-  #validates_format_of :email, :with => Proc.new { |a| (a.email == 'daryachernikhova@nypl.org') }, message: ' should end in @schools.nyc.gov', :on => :create
-  #end
+
+  ## NOTE: Validation methods, including this one, are called twice when
+  # making new user from the admin interface. While not a behavior we want,
+  # it doesn't currently pose a problem.
+  def validate_email_pattern
+    if (!defined?(email) || (email == nil) || !email.index('@'))
+      errors.add(:email, 'is required and should end in @schools.nyc.gov or another participating school address')
+      false
+    end
+
+    allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern)
+
+    index = email.index('@')
+    if (allowed_email_patterns.include? email[index..-1])
+      true
+    else
+      errors.add(:email, 'should end in @schools.nyc.gov or another participating school address')
+      false
+    end
+  end
+
 
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
