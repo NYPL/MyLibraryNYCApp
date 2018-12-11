@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   include LogWrapper
   include Oauth
 
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -49,7 +50,7 @@ class User < ActiveRecord::Base
       errors.add(:email, 'is required and should end in @schools.nyc.gov or another participating school address')
       return false
     end
-    email = email.downcase.strip
+    email.downcase.strip
 
     allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern)
 
