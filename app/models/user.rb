@@ -22,14 +22,13 @@ class User < ActiveRecord::Base
   # created on sign up. Does not occur when updating
   # the record.
   validates :school_id, :first_name, :last_name, :presence => true
-  validate :validate_email_pattern, :on => :create
-
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
   validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
   validate :validate_pin_pattern, on: :create
+  validate :validate_email_pattern, :on => :create
 
   has_many :holds
 
@@ -46,6 +45,7 @@ class User < ActiveRecord::Base
   # making new user from the admin interface. While not a behavior we want,
   # it doesn't currently pose a problem.
   def validate_email_pattern
+    puts "validate_email_pattern start"
     if (!defined?(email) || (email == nil) || !email.index('@'))
       errors.add(:email, 'is required and should end in @schools.nyc.gov or another participating school address')
       false
@@ -128,6 +128,7 @@ class User < ActiveRecord::Base
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
   def validate_pin_pattern
+    puts "validate_pin_pattern start"
     if pin && pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
       true
     else
