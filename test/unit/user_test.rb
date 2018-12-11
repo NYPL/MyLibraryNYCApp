@@ -7,6 +7,7 @@ class UserTest < ActiveSupport::TestCase
     # create the first user with a barcode in range so that send_request_to_patron_creator_service will work
     @user = crank(:queens_user, barcode: 27777011111111)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: @user.school.code)
+    AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
   end
 
   [generate_email].each do |new_email|
