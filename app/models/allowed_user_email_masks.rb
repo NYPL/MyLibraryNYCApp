@@ -11,4 +11,10 @@ class AllowedUserEmailMasks < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email_pattern, :active, :created_at, :updated_at
 
+  before_create :normalize_email_strings
+  before_update :normalize_email_strings
+
+  def normalize_email_strings
+    self.email_pattern = self.email_pattern.downcase.strip
+  end
 end

@@ -45,20 +45,20 @@ class User < ActiveRecord::Base
   # making new user from the admin interface. While not a behavior we want,
   # it doesn't currently pose a problem.
   def validate_email_pattern
-    puts "validate_email_pattern start"
-    if (!defined?(email) || (email == nil) || !email.index('@'))
+    if (!defined?(email) || email.blank? || !email.index('@'))
       errors.add(:email, 'is required and should end in @schools.nyc.gov or another participating school address')
-      false
+      return false
     end
+    email = email.downcase.strip
 
     allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern)
 
     index = email.index('@')
-    if (allowed_email_patterns.include? email[index..-1])
-      true
+    if (index && (allowed_email_patterns.include? email[index..-1]))
+      return true
     else
       errors.add(:email, 'should end in @schools.nyc.gov or another participating school address')
-      false
+      return false
     end
   end
 
@@ -128,7 +128,6 @@ class User < ActiveRecord::Base
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
   def validate_pin_pattern
-    puts "validate_pin_pattern start"
     if pin && pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
       true
     else
