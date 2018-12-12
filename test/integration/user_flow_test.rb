@@ -2,6 +2,7 @@ require 'test_helper'
 
 class UserFlowTest < ActionDispatch::IntegrationTest
   test "user method assign_barcode increments last valid barcode by 1" do
+    AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
     user_one = crank!(:user, barcode: 27777000000099)
     user_two = crank(:user)
     user_two.assign_barcode
@@ -27,5 +28,4 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       assert 'div', 'Welcome! You have signed up successfully'
     end
   end
-end 
-
+end
