@@ -11,6 +11,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
 
   [generate_email].each do |new_email|
     test 'create new user record and send request to microservice' do
+      AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
       user = crank!(:user, barcode: 27777000000000)
       SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
       get '/users/signup'
