@@ -2,6 +2,7 @@ require 'test_helper'
 
 class UserFlowTest < ActionDispatch::IntegrationTest
   test "user method assign_barcode increments last valid barcode by 1" do
+    AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
     user_one = crank!(:user, barcode: 27777000000099)
     user_two = crank(:user)
     user_two.assign_barcode
@@ -10,6 +11,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
 
   [generate_email].each do |new_email|
     test 'create new user record and send request to microservice' do
+      AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
       user = crank!(:user, barcode: 27777000000000)
       SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
       get '/users/signup'
@@ -27,5 +29,4 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       assert 'div', 'Welcome! You have signed up successfully'
     end
   end
-end 
-
+end

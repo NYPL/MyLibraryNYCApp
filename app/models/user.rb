@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   include LogWrapper
   include Oauth
 
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -17,17 +18,18 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :pin
 
+
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
   # the record.
   validates :school_id, :first_name, :last_name, :presence => true
-  validates_format_of :email, with: /\@schools.nyc\.gov/, message: ' should end in @schools.nyc.gov', :on => :create
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
   validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
   validate :validate_pin_pattern, on: :create
+  validate :validate_email_pattern, :on => :create
 
   has_many :holds
 
@@ -38,6 +40,29 @@ class User < ActiveRecord::Base
     self.password ||= User.default_password
     self.password_confirmation ||= User.default_password
   end
+
+
+  ## NOTE: Validation methods, including this one, are called twice when
+  # making new user from the admin interface. While not a behavior we want,
+  # it doesn't currently pose a problem.
+  def validate_email_pattern
+    if (!defined?(email) || email.blank? || !email.index('@'))
+      errors.add(:email, 'is required and should end in @schools.nyc.gov or another participating school address')
+      return false
+    end
+    email.downcase.strip
+
+    allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern)
+
+    index = email.index('@')
+    if (index && (allowed_email_patterns.include? email[index..-1]))
+      return true
+    else
+      errors.add(:email, 'should end in @schools.nyc.gov or another participating school address')
+      return false
+    end
+  end
+
 
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
