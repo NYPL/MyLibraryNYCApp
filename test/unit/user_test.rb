@@ -7,6 +7,7 @@ class UserTest < ActiveSupport::TestCase
     # create the first user with a barcode in range so that send_request_to_patron_creator_service will work
     @user = crank(:queens_user, barcode: 27777011111111)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: @user.school.code)
+    AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
   end
 
   [generate_email].each do |new_email|
@@ -66,11 +67,14 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+
+  ## NOTE:  We manage allowed email addresses dynamically now, but schools.nyc.gov
+  # is to always be allowed, and it's OK not to test registration success for the others.
   [generate_email_without_valid_domain].each do |new_email|
     test 'should not save user without schools.nyc.gov domain in email' do
       @user.email = "testing@gmail.com"
       @user.save
-      assert_equal([" should end in @schools.nyc.gov"], @user.errors[:email])
+      assert_equal(["should end in @schools.nyc.gov or another participating school address"], @user.errors[:email])
     end
   end
 

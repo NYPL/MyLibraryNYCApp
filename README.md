@@ -110,6 +110,10 @@ In many rails projects when you run the server with `rails s` Rails sets RAILS_E
 
 Testing
 ========================
+First, set up a test database:
+bundle exec rake db:drop RAILS_ENV=test
+bundle exec rake db:create RAILS_ENV=test
+bundle exec rake db:schema:load RAILS_ENV=test
 
 For the unit tests and integration tests, please run the following commands while in the root directory.
 
@@ -122,3 +126,8 @@ ruby -Itest test/integration/user_flow_test.rb
 ruby -Itest test/functional/exceptions_controller_test.rb
 ruby -Itest test/functional/api/v01/bibs_controller_test.rb
 ```
+
+NOTE:  You might want to pre-pend each command with some environment setup, s.a.:
+`RAILS_ENV=local bundle exec rake db:schema:load RAILS_ENV=test`
+and
+`RAILS_ENV=local ruby -Itest test/unit/user_test.rb`
