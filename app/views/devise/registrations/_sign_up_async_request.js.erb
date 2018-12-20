@@ -108,12 +108,19 @@ function validateEmailFormat(email) {
 	}
 }
 
-function validateEmailDomain(email){
-	var domain = email.split('@')
-	if(domain[1] != "schools.nyc.gov"){
+
+<% allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern) %>
+function validateEmailDomain(email) {
+	var domain = email.split('@');
+	var allowed_email_patterns = <%= raw allowed_email_patterns %>;
+	// pre-pending with @, because we think it's clearer on the Admin side to be adding
+	// email domains starting with "@" signs (helps explain what we mean by "domain")
+  var email_domain_is_allowed = allowed_email_patterns.includes('@' + domain[1]);
+
+	if (!email_domain_is_allowed) {
 		$(".spinner").css("display","none");
 		$('#check_email_div').css("display","none");
-		throw new InvalidEmailDomainError("Invalid e-mail domain")
+		throw new InvalidEmailDomainError("Invalid e-mail domain");
 	}
 }
 
@@ -122,10 +129,10 @@ window.ClientSideValidations.callbacks.element.fail = function(element, message,
 	callback();
 	$(element).css('background', '#EEB4B8');
 	$(element).css('border','0.0625rem #45403A solid');
-	var element_id = $(element).attr('id'); 
+	var element_id = $(element).attr('id');
 	$($('label[for=' + element_id + ']')[1]).attr('id', element_id + "_error")
 	if(element[0].name == 'user[email]'){
-		$($("[for=user_email]")[0]).text('Enter a valid email address ending in "@schools.nyc.gov".')
+		$($("[for=user_email]")[0]).text('Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.')
 		$($('label[for=' + element_id + ']')[0]).attr('id', element_id + "_error")
 	}
 }
