@@ -39,7 +39,11 @@ group :assets do # Gems used only for assets and not required in production envi
 end
 
 group :development, :local do
+  gem 'pry', '>= 0.10.0'
 	gem 'pry-rails'
+  gem 'pry-remote'
+  gem 'pry-nav', '>= 0.2.4'
+  gem 'pry-rescue'
 end
 
 group :test do
