@@ -23,13 +23,17 @@ class Api::V01::BibsController < ApplicationController
       bnumber = teacher_set_record['id']
       title = teacher_set_record['title']
       physical_description = var_field('300')
+
       if bnumber.blank? || title.blank? || physical_description.blank?
         AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description).deliver
         next
       end
 
       teacher_set = TeacherSet.where(bnumber: "b#{bnumber}").first_or_initialize
+
       # make the teacher set available if it is newly created (.persisted? means that it's saved in the db):
+      # TODO: In the future, availability information will come through in its own stream, and hard-coding
+      # availability rules into the code will need to go away.  Labeling this code line as potential tech debt.
       teacher_set.update_attributes(availability: 'available') if !teacher_set.persisted?
       begin
         teacher_set.update_attributes(
@@ -109,6 +113,9 @@ class Api::V01::BibsController < ApplicationController
     })
   end
 
+
+  # Requests to the MLN teacher set-updating api must come from our verified lambdas,
+  # unless are being tested or developed.
   def validate_source_of_request
     LogWrapper.log('DEBUG',
       {
@@ -118,7 +125,7 @@ class Api::V01::BibsController < ApplicationController
        'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
       })
 
-    redirect_to '/api/unauthorized' unless Rails.env.test? || request.headers['X-API-Key'] == ENV['API_GATEWAY_HEADER_KEY']
+    redirect_to '/api/unauthorized' unless Rails.env.test? || Rails.env.local? || request.headers['X-API-Key'] == ENV['API_GATEWAY_HEADER_KEY']
   end
 
   def var_field(marcTag, merge = true)

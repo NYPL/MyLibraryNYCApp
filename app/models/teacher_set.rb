@@ -62,13 +62,6 @@ class TeacherSet < ActiveRecord::Base
 
   # Poor man's subject... TODO: replace with column in DB
   def subject
-=begin
-    if title.include? ":"
-      title.split(":").first
-    else
-      "Arts"
-    end
-=end
     primary_subject
   end
 
@@ -134,7 +127,7 @@ class TeacherSet < ActiveRecord::Base
     # Internal name for "Tags" is subject
     unless params[:topics].nil?
       params[:topics].each_with_index do |s, i|
-        # Each selected Subject facet requires it's own join:
+        # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
         sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND #{join_alias}.subject_id=#{s}")
@@ -167,10 +160,12 @@ class TeacherSet < ActiveRecord::Base
   def self.facets_for_query(qry)
     cache_key = qry.to_sql.sub /\ LIMIT.*/, ''
     cache_key = Digest::MD5.hexdigest cache_key.parameterize
-    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 1.day do
+    # TODO: don't commit the hour cache, the expiry should be 1.day.
+    # TODO: take this cache expiration timeout constant out into a properties file.
+    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 1.hour do
       facets = []
 
-      # Facets for langauage, availability, type, and subject are pretty basic GROUPBYs:
+      # Facets for language, availability, type, and subject are pretty basic GROUPBYs:
       [
         { :label => 'language',
           :column => :primary_language
@@ -343,6 +338,7 @@ class TeacherSet < ActiveRecord::Base
 
     if self.bnumber.nil?
       url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=c&searcharg=#{URI::encode(self.call_number)}"
+      # TODO: take the 1.day constant out into a properties file.
       content = self.class.scrape_content url, 1.day
       # puts "  Getting by call num: #{url}"
       # sleep 0.5
@@ -439,6 +435,7 @@ class TeacherSet < ActiveRecord::Base
   def update_subjects
     subjects.clear
 
+    # TODO: take the 1.day constant out into a properties file.
     links = self.class.scrape_css self.details_url, '.further_list a', 1.day
     links.each do |n|
       next if n.text.include? 'Teacher Set'
@@ -522,6 +519,7 @@ class TeacherSet < ActiveRecord::Base
     scrape_url = "http://any.bibliocommons.com/item/catalogue_info/#{id}"
 
     # First try pulling books from marc record:
+    # TODO: take the 1.day constant out into a properties file.
     rows = self.class.scrape_css scrape_url, '#marc_details tr', 1.day
     rows.each do |n|
       if (tag_col = n.at_css('td.marcTag')) && tag_col.text.strip == '944'
@@ -705,10 +703,19 @@ class TeacherSet < ActiveRecord::Base
     # teacher_set.rb facets_for_query uses cached results of each query
     Rails.cache.clear unless Rails.env.test?
 
-    self.subject_teacher_sets.map(&:subject).each do |subject|
-      subject.destroy
-    end
     return if subject_name_array.blank?
+
+    # record the list of current teacher set <--> subject associations,
+    # so we can prune the subjects later.
+    old_subjects = Array.new
+    self.subjects.each do |subject|
+      old_subjects.push(subject.id)
+    end
+
+    # delete the current teacher set <--> subject associations,
+    # so we can remake them fresh from the bib info.
+    self.subjects.clear
+
     subject_name_array.each do |subject_name|
       # There's a max of 30 characters in the database
       subject_name = subject_name.strip[0..29]
@@ -716,13 +723,18 @@ class TeacherSet < ActiveRecord::Base
       SubjectTeacherSet.create(teacher_set_id: self.id, subject_id: subject.id)
     end
 
-    prune_subjects
+    prune_subjects(old_subjects)
   end
 
-  # Delete all subjects that do not have any records in the join table, because they are not associated with any teacher sets
-  def prune_subjects
-    Subject.all.each do |subject|
-      subject.destroy if SubjectTeacherSet.where(subject_id: subject.id).empty?
+
+  # Delete old subjects that do not have any records in the join table,
+  # because they are not associated with any teacher sets.
+  def prune_subjects(subject_id_array)
+    subject_id_array.each do |subject_id|
+      found_subject = Subject.find(subject_id)
+      if (found_subject and SubjectTeacherSet.where(subject_id: subject_id).empty?)
+        found_subject.destroy
+      end
     end
   end
 
