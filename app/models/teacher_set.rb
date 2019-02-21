@@ -722,20 +722,39 @@ class TeacherSet < ActiveRecord::Base
     self.subjects.clear
 
     subject_name_array.each do |subject_name|
-      # There's a max of 30 characters in the database
-      subject_name = subject_name.strip[0..29]
-
-      # strip leading and trailing whitespace
-      subject_name = subject_name.strip()
-
-      # if the subject ends in a period (something metadata rules can require), strip the period
-      subject_name = subject_name.gsub(/\.$/, '')
+      subject_name = clean_subject_string(subject_name)
 
       subject = Subject.find_or_create_by_title(subject_name)
       SubjectTeacherSet.create(teacher_set_id: self.id, subject_id: subject.id)
     end
 
     prune_subjects(old_subjects)
+  end
+
+
+  # Clean up the primary subject field to match the subjects table title string rules.
+  # We do this, because there's some filtering that goes on, matching the teacher_set.primary_subject
+  # to the subjects.title, and we want to make sure the string follow some conventions.
+  def clean_primary_subject()
+    self.primary_subject = self.clean_subject_string(self.primary_subject)
+  end
+
+
+  # Any text massaging, such as constraining word length,
+  # trimming, etc. go here.
+  def clean_subject_string(old_subject_string)
+    return if new_subject_string.blank?
+
+    # There's a max of 30 characters in the database
+    new_subject_string = old_subject_string.strip[0..29]
+
+    # strip leading and trailing whitespace
+    new_subject_string = new_subject_string.strip()
+
+    # if the subject ends in a period (something metadata rules can require), strip the period
+    new_subject_string = new_subject_string.gsub(/\.$/, '')
+
+    return new_subject_string
   end
 
 
