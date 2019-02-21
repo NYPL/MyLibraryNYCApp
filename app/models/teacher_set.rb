@@ -432,6 +432,10 @@ class TeacherSet < ActiveRecord::Base
     self.update_attribute :availability, status
   end
 
+
+  # Probably old and unused.
+  # Are you looking for the code that updates subjects when a teacher set is updated in Sierra,
+  # and the bib record is sent to the MLN API?  Look at the update_subjects_via_api method.
   def update_subjects
     subjects.clear
 
@@ -447,7 +451,7 @@ class TeacherSet < ActiveRecord::Base
       title = title.split(/( \W |\()/)[0]
       title = title.truncate 30
       title.strip!
-      puts "    Adding subject: #{title}#{title != _t ? " (orig \"#{_t}\")" : ''}"
+      #puts "    Adding subject: #{title}#{title != _t ? " (orig \"#{_t}\")" : ''}"
 
       subject = Subject.find_or_create_by_title title
       # subject.teacher_sets << self unless subject.teacher_sets.include? self
@@ -696,6 +700,7 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+
   # This is called from the bibs_controller.
   # Delete all records for a teacher set in the join table SubjectTeacherSet, then
   # create new records (and subjects if they do not exist) in that join table.
@@ -717,13 +722,39 @@ class TeacherSet < ActiveRecord::Base
     self.subjects.clear
 
     subject_name_array.each do |subject_name|
-      # There's a max of 30 characters in the database
-      subject_name = subject_name.strip[0..29]
+      subject_name = clean_subject_string(subject_name)
+
       subject = Subject.find_or_create_by_title(subject_name)
       SubjectTeacherSet.create(teacher_set_id: self.id, subject_id: subject.id)
     end
 
     prune_subjects(old_subjects)
+  end
+
+
+  # Clean up the primary subject field to match the subjects table title string rules.
+  # We do this, because there's some filtering that goes on, matching the teacher_set.primary_subject
+  # to the subjects.title, and we want to make sure the string follow some conventions.
+  def clean_primary_subject()
+    self.primary_subject = self.clean_subject_string(self.primary_subject)
+  end
+
+
+  # Any text massaging, such as constraining word length,
+  # trimming, etc. go here.
+  def clean_subject_string(old_subject_string)
+    return if old_subject_string.blank?
+
+    # There's a max of 30 characters in the database
+    new_subject_string = old_subject_string.strip[0..29]
+
+    # strip leading and trailing whitespace
+    new_subject_string = new_subject_string.strip()
+
+    # if the subject ends in a period (something metadata rules can require), strip the period
+    new_subject_string = new_subject_string.gsub(/\.$/, '')
+
+    return new_subject_string
   end
 
 
