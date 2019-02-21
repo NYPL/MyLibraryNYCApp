@@ -743,7 +743,7 @@ class TeacherSet < ActiveRecord::Base
   # Any text massaging, such as constraining word length,
   # trimming, etc. go here.
   def clean_subject_string(old_subject_string)
-    return if new_subject_string.blank?
+    return if old_subject_string.blank?
 
     # There's a max of 30 characters in the database
     new_subject_string = old_subject_string.strip[0..29]
