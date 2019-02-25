@@ -1,6 +1,8 @@
 #encoding: UTF-8
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
+  include LogWrapper
+
   has_paper_trail
   before_save :disable_papertrail
   before_update :enable_papertrail
@@ -705,6 +707,15 @@ class TeacherSet < ActiveRecord::Base
   # Delete all records for a teacher set in the join table SubjectTeacherSet, then
   # create new records (and subjects if they do not exist) in that join table.
   def update_subjects_via_api(subject_name_array)
+    LogWrapper.log('ERROR', {
+      'message' => 'Darya sent me an error',
+      'method' => 'method'
+    })
+    LogWrapper.log('DEBUG', {
+      'message' => 'Darya sent me a debug',
+      'method' => 'method'
+    })
+
     # teacher_set.rb facets_for_query uses cached results of each query
     Rails.cache.clear unless Rails.env.test?
 
