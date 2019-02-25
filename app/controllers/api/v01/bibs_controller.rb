@@ -109,115 +109,124 @@ class Api::V01::BibsController < ApplicationController
     render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
   end
 
+
   private
 
-  def log_error(method, exception)
-    message = (exception && exception.message ? exception.message[0..200] : 'exception or exception message missing')
-    backtrace = (exception ? exception.backtrace : 'exception missing')
-    LogWrapper.log('ERROR', {
-      'message' => "#{message}...\nBacktrace=#{backtrace}.",
-      'method' => 'method'
-    })
-  end
+    # Requests to the MLN teacher set-updating api must come from our verified lambdas,
+    # unless are being tested or developed.
+    def validate_source_of_request
+      LogWrapper.log('DEBUG',
+        {
+         'message' => 'Request sent to BibsController#validate_source_of_request',
+         'method' => 'validate_source_of_request',
+         'status' => 'start',
+         'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
+        })
 
-
-  # Requests to the MLN teacher set-updating api must come from our verified lambdas,
-  # unless are being tested or developed.
-  def validate_source_of_request
-    LogWrapper.log('DEBUG',
-      {
-       'message' => 'Request sent to BibsController#validate_source_of_request',
-       'method' => 'validate_source_of_request',
-       'status' => 'start',
-       'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
-      })
-
-    redirect_to '/api/unauthorized' unless Rails.env.test? || Rails.env.local? || request.headers['X-API-Key'] == ENV['API_GATEWAY_HEADER_KEY']
-  end
-
-  def var_field(marcTag, merge = true)
-    begin
-      if merge == true
-        @teacher_set_record['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].map{ |x| x['content']}.join(', ')
-      else
-        @teacher_set_record['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].detect{ |hash| hash['tag'] == 'a' }['content']
-      end
-    rescue
-      return nil
+      redirect_to '/api/unauthorized' unless Rails.env.test? || Rails.env.local? || request.headers['X-API-Key'] == ENV['API_GATEWAY_HEADER_KEY']
     end
-  end
 
-  def all_var_fields(marcTag, tag)
-    begin
-      @teacher_set_record['varFields'].select{ |hash| hash['marcTag'] == marcTag }.map{|x| x['subfields'][0]['content']}
-    rescue
-      return nil
-    end
-  end
-
-  def fixed_field(marcTag)
-    begin
-      @teacher_set_record['fixedFields'][marcTag]['display']
-    rescue
-      return nil
-    end
-  end
-
-  # build saved_teacher_sets_json_array for the response body
-  def saved_teacher_sets_json_array(saved_teacher_sets)
-    return [] if saved_teacher_sets.empty?
-    saved_teacher_sets_json_array = []
-    saved_teacher_sets.each do |saved_ts|
-      saved_teacher_sets_json_array << { id: saved_ts.id, bnumber: saved_ts.bnumber, title: saved_ts.title }
-    end
-    saved_teacher_sets_json_array
-  end
-
-  # set the @request_body instance variable so it can be used in other methods; check for parsing errors.
-  def set_request_body
-    begin
-      @request_body = params[:_json] || JSON.parse(request.body.read)
-    rescue => e
-      @parsing_error = e
-    end
-  end
-
-  # this validates that the request is in the correct format
-  def validate_request
-    if @parsing_error
-      return [400, "Parsing error: #{@parsing_error}"]
-    elsif !@request_body || @request_body.empty?
-      return [400, "Request body is empty."]
-    end
-    return []
-  end
-
-  # log the error and render it back to the lambda
-  def render_error(error_code_and_message)
-    LogWrapper.log('ERROR', {
-      'message' => error_code_and_message[1],
-      'method' => "#{controller_name}##{action_name}",
-      'status' => error_code_and_message[0]
-    })
-    render status: error_code_and_message[0], json: {
-      message: error_code_and_message[1]
-    }.to_json
-  end
-
-  def grade_or_lexile_array(return_grade_or_lexile)
-    grade_and_lexile_json = all_var_fields('521', 'content')
-    return '' if grade_and_lexile_json.blank?
-
-    grade_and_lexile_json.each do |grade_or_lexile_json|
+    def var_field(marcTag, merge = true)
       begin
-        if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
-          return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
-        elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
-          return grade_or_lexile_json.gsub('.', '').split('-')
+        if merge == true
+          @teacher_set_record['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].map{ |x| x['content']}.join(', ')
+        else
+          @teacher_set_record['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].detect{ |hash| hash['tag'] == 'a' }['content']
         end
       rescue
-        []
+        return nil
       end
     end
-  end
+
+    def all_var_fields(marcTag, tag)
+      begin
+        @teacher_set_record['varFields'].select{ |hash| hash['marcTag'] == marcTag }.map{|x| x['subfields'][0]['content']}
+      rescue
+        return nil
+      end
+    end
+
+    def fixed_field(marcTag)
+      begin
+        @teacher_set_record['fixedFields'][marcTag]['display']
+      rescue
+        return nil
+      end
+    end
+
+    # build saved_teacher_sets_json_array for the response body
+    def saved_teacher_sets_json_array(saved_teacher_sets)
+      return [] if saved_teacher_sets.empty?
+      saved_teacher_sets_json_array = []
+      saved_teacher_sets.each do |saved_ts|
+        saved_teacher_sets_json_array << { id: saved_ts.id, bnumber: saved_ts.bnumber, title: saved_ts.title }
+      end
+      saved_teacher_sets_json_array
+    end
+
+    # set the @request_body instance variable so it can be used in other methods; check for parsing errors.
+    def set_request_body
+      begin
+        @request_body = params[:_json] || JSON.parse(request.body.read)
+      rescue => e
+        @parsing_error = e
+      end
+    end
+
+    # this validates that the request is in the correct format
+    def validate_request
+      if @parsing_error
+        return [400, "Parsing error: #{@parsing_error}"]
+      elsif !@request_body || @request_body.empty?
+        return [400, "Request body is empty."]
+      end
+      return []
+    end
+
+
+    # Prepare and write an error message to the application log.
+    def log_error(method, exception)
+      if method.blank?
+        method = "#{controller_name or 'unknown_controller'}##{action_name or 'unknown_action'}"
+
+      message = (exception && exception.message ? exception.message[0..200] : 'exception or exception message missing')
+      backtrace = (exception ? exception.backtrace : 'exception missing')
+      LogWrapper.log('ERROR', {
+        'message' => "#{message}...\nBacktrace=#{backtrace}.",
+        'method' => method
+      })
+    end
+
+
+    # log the error and render it back to the lambda
+    def render_error(error_code_and_message)
+      LogWrapper.log('ERROR', {
+        'message' => error_code_and_message[1],
+        'method' => "#{controller_name}##{action_name}",
+        'status' => error_code_and_message[0]
+      })
+      render status: error_code_and_message[0], json: {
+        message: error_code_and_message[1]
+      }.to_json
+    end
+
+
+    def grade_or_lexile_array(return_grade_or_lexile)
+      grade_and_lexile_json = all_var_fields('521', 'content')
+      return '' if grade_and_lexile_json.blank?
+
+      grade_and_lexile_json.each do |grade_or_lexile_json|
+        begin
+          if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
+            return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
+          elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
+            return grade_or_lexile_json.gsub('.', '').split('-')
+          end
+        rescue
+          []
+        end
+      end
+    end
+
+  # end private methods
 end
