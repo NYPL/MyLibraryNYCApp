@@ -189,6 +189,7 @@ class Api::V01::BibsController < ApplicationController
     def log_error(method, exception)
       if method.blank?
         method = "#{controller_name or 'unknown_controller'}##{action_name or 'unknown_action'}"
+      end
 
       message = (exception && exception.message ? exception.message[0..200] : 'exception or exception message missing')
       backtrace = (exception ? exception.backtrace : 'exception missing')
