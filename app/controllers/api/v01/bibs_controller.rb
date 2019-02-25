@@ -1,5 +1,6 @@
 class Api::V01::BibsController < ApplicationController
   include LogWrapper
+
   before_filter :set_request_body
   before_filter :validate_source_of_request
 

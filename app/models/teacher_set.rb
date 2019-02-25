@@ -1,6 +1,8 @@
 #encoding: UTF-8
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
+  include LogWrapper
+
   has_paper_trail
   before_save :disable_papertrail
   before_update :enable_papertrail
