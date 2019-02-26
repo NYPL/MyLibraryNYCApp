@@ -8,6 +8,8 @@ class Api::V01::BibsController < ApplicationController
   # All records are inside @request_body.
   # Find or create a teacher set in the MLN db and its associated books.
   def create_or_update_teacher_sets
+    LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets.start','method' => 'bibs_controller.create_or_update_teacher_sets'})
+
     error_code_and_message = validate_request
     if error_code_and_message.any?
       AdminMailer.failed_bibs_controller_api_request(@request_body, error_code_and_message, action_name, nil).deliver
@@ -84,7 +86,9 @@ class Api::V01::BibsController < ApplicationController
         log_error('create_or_update_teacher_sets', exception)
         AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating the associated book records via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
       end
+
       saved_teacher_sets << teacher_set
+      LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets:finished making teacher set','method' => 'bibs_controller.create_or_update_teacher_sets'})
     end
 
     render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
