@@ -162,7 +162,7 @@ class TeacherSet < ActiveRecord::Base
   def self.facets_for_query(qry)
     cache_key = qry.to_sql.sub /\ LIMIT.*/, ''
     cache_key = Digest::MD5.hexdigest cache_key.parameterize
-    # TODO: don't commit the hour cache, the expiry should be 1.day.
+    # NOTE: the expiry was 1.day, changing to 1.hour to see teacher set fixes in human-administered time.
     # TODO: take this cache expiration timeout constant out into a properties file.
     facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 1.hour do
       facets = []
@@ -341,7 +341,8 @@ class TeacherSet < ActiveRecord::Base
     if self.bnumber.nil?
       url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=c&searcharg=#{URI::encode(self.call_number)}"
       # TODO: take the 1.day constant out into a properties file.
-      content = self.class.scrape_content url, 1.day
+      # NOTE: the expiry was 1.day, changing to 1.hour to see fixes in human-administered time.
+      content = self.class.scrape_content url, 1.hour
       # puts "  Getting by call num: #{url}"
       # sleep 0.5
       doc = Nokogiri::HTML(content)
@@ -442,7 +443,8 @@ class TeacherSet < ActiveRecord::Base
     subjects.clear
 
     # TODO: take the 1.day constant out into a properties file.
-    links = self.class.scrape_css self.details_url, '.further_list a', 1.day
+    # NOTE: the expiry was 1.day, changing to 1.hour to see fixes in human-administered time.
+    links = self.class.scrape_css self.details_url, '.further_list a', 1.hour
     links.each do |n|
       next if n.text.include? 'Teacher Set'
       next if n.text.include? 'Adultery'
@@ -741,6 +743,7 @@ class TeacherSet < ActiveRecord::Base
   # to the subjects.title, and we want to make sure the string follow some conventions.
   def clean_primary_subject()
     self.primary_subject = self.clean_subject_string(self.primary_subject)
+    self.save
     LogWrapper.log('DEBUG', {'message' => 'clean_primary_subject.end','method' => 'teacher_set.clean_primary_subject'})
   end
 
