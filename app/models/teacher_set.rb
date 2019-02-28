@@ -162,9 +162,9 @@ class TeacherSet < ActiveRecord::Base
   def self.facets_for_query(qry)
     cache_key = qry.to_sql.sub /\ LIMIT.*/, ''
     cache_key = Digest::MD5.hexdigest cache_key.parameterize
-    # NOTE: the expiry was 1.day, changing to 1.hour to see teacher set fixes in human-administered time.
+    # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
     # TODO: take this cache expiration timeout constant out into a properties file.
-    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 1.hour do
+    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
       facets = []
 
       # Facets for language, availability, type, and subject are pretty basic GROUPBYs:
@@ -341,8 +341,8 @@ class TeacherSet < ActiveRecord::Base
     if self.bnumber.nil?
       url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=c&searcharg=#{URI::encode(self.call_number)}"
       # TODO: take the 1.day constant out into a properties file.
-      # NOTE: the expiry was 1.day, changing to 1.hour to see fixes in human-administered time.
-      content = self.class.scrape_content url, 1.hour
+      # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
+      content = self.class.scrape_content url, 8.hour
       # puts "  Getting by call num: #{url}"
       # sleep 0.5
       doc = Nokogiri::HTML(content)
@@ -443,8 +443,8 @@ class TeacherSet < ActiveRecord::Base
     subjects.clear
 
     # TODO: take the 1.day constant out into a properties file.
-    # NOTE: the expiry was 1.day, changing to 1.hour to see fixes in human-administered time.
-    links = self.class.scrape_css self.details_url, '.further_list a', 1.hour
+    # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
+    links = self.class.scrape_css self.details_url, '.further_list a', 8.hour
     links.each do |n|
       next if n.text.include? 'Teacher Set'
       next if n.text.include? 'Adultery'
