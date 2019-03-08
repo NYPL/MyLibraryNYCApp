@@ -727,11 +727,13 @@ class TeacherSet < ActiveRecord::Base
     # so we can remake them fresh from the bib info.
     self.subjects.clear
 
+    # Create all the subjects and teacher_set <--> subject associations specified in the bib 
+    # record we're processing, ignoring duplicate associations.
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)
 
       subject = Subject.find_or_create_by_title(subject_name)
-      SubjectTeacherSet.create(teacher_set_id: self.id, subject_id: subject.id)
+      subject_teacher_set = SubjectTeacherSet.find_or_create_by_teacher_set_id_and_subject_id(teacher_set_id: self.id, subject_id: subject.id)
     end
 
     prune_subjects(old_subjects)
