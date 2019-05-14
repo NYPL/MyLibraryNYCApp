@@ -5,7 +5,6 @@ class TeacherSetSerializer < ActiveModel::Serializer
              :available_copies
   has_many :teacher_set_notes
   has_many :books
-  has_many :holds
 
   # If controller specifies :include_books=>false for perf, don't include books 
   def include_books?

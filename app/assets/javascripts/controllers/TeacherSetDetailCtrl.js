@@ -18,6 +18,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $scope.active_hold = data.teacher_set.active_hold;
       $scope.ts.teacher_set_notes = data.teacher_set.teacher_set_notes
       $scope.ts.books = data.teacher_set.books
+      $scope.ts.holds = data.teacher_set.holds
       $scope.user = data.teacher_set.user
       $scope.loaded = true;
     });

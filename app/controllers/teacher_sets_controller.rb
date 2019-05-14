@@ -66,7 +66,9 @@ class TeacherSetsController < ApplicationController
     render json: {
       :teacher_set => @set,
       :active_hold => @active_hold,
-      :user => current_user
+      :user => current_user,
+      #Display's only  status 'new' holds count in teacher set page.
+      :holds => @set.holds.collect{|i| i.status  if i.status == 'new'}.compact.length
       # :teacher_set_notes => @set.teacher_set_notes,
       # :books => @set.books
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"
