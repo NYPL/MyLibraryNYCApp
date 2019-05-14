@@ -7,7 +7,7 @@
         <i class="fa"></i>
         <h3>{{ts.title}}</h3>
       </div>
-
+      
       <div class="ts-actions">
         <div ng-show='ts.available_copies' align="center" style="font-weight:bold"> {{ts.available_copies}} of {{ts.total_copies}} Available | {{ts.holds.length}} sets pending</div>
         <div data-ng-show="!active_hold && is_available">
