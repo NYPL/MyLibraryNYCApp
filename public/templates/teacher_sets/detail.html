@@ -6,8 +6,10 @@
       <div class="ts-banner subject subject-{{ts.subject_key}}">
         <i class="fa"></i>
         <h3>{{ts.title}}</h3>
-      </div> 
+      </div>
+
       <div class="ts-actions">
+        <div ng-show='ts.available_copies' align="center" style="font-weight:bold"> {{ts.available_copies}} of {{ts.total_copies}} Available | {{ts.holds.length}} sets pending</div>
         <div data-ng-show="!active_hold && is_available">
           <a ng-click="doReserve()" class="button secondary">{{ts.availability_string}} - Order now!</a>
           <p>Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.</p>
