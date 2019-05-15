@@ -1,7 +1,8 @@
 class TeacherSetSerializer < ActiveModel::Serializer
   cached
 
-  attributes :id, :availability, :availability_string, :description, :details_url, :primary_language, :subject_key, :title, :suitabilities_string, :call_number, :physical_description, :set_type, :contents
+  attributes :id, :availability, :availability_string, :description, :details_url, :primary_language, :subject_key, :title, :suitabilities_string, :call_number, :physical_description, :set_type, :contents, :total_copies,
+             :available_copies
   has_many :teacher_set_notes
   has_many :books
 
