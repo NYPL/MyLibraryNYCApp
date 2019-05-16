@@ -1,5 +1,5 @@
 class TeacherSetsController < ApplicationController
-  
+
   before_filter :redirect_to_angular, only: [:index, :show]
 
   # GET /teacher_sets.json
@@ -10,9 +10,9 @@ class TeacherSetsController < ApplicationController
 
     # Determine what facets are selected based on query string
     @facets.each do |f|
-      f[:items].each do |v|        
+      f[:items].each do |v|
         k = f[:label].underscore
-        v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)        
+        v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)
       end
     end
 
@@ -27,12 +27,12 @@ class TeacherSetsController < ApplicationController
         q[:lexile_begin] = params[:lexile_begin] if params[:lexile_begin]
         q[:lexile_end] = params[:lexile_end] if params[:lexile_end]
 
-        @facets.each do |ff| 
+        @facets.each do |ff|
           ll = ff[:label].underscore
           q[ll] = []
           ff[:items].each do |vv|
             # if current facet
-            if ll == l && vv == v 
+            if ll == l && vv == v
               # add if not selected
               q[ll] << vv[:value] if !vv[:selected]
             else
@@ -42,7 +42,7 @@ class TeacherSetsController < ApplicationController
           if q[ll].empty?
             q.delete ll
           end
-        end         
+        end
         v[:q] = q
         v[:path] = teacher_sets_path(v[:q])
       end

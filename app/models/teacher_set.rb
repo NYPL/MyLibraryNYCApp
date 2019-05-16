@@ -159,12 +159,15 @@ class TeacherSet < ActiveRecord::Base
     sets
   end
 
+
+  # This is the query that's called to load teacher sets into the list.html webpage.
   def self.facets_for_query(qry)
+    #binding.pry
     cache_key = qry.to_sql.sub /\ LIMIT.*/, ''
     cache_key = Digest::MD5.hexdigest cache_key.parameterize
     # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
     # TODO: take this cache expiration timeout constant out into a properties file.
-    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
+    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 1.second do
       facets = []
 
       # Facets for language, availability, type, and subject are pretty basic GROUPBYs:
@@ -198,6 +201,7 @@ class TeacherSet < ActiveRecord::Base
             :label => label,
             :count => count
           }
+        #binding.pry
 
         end
 
@@ -214,6 +218,7 @@ class TeacherSet < ActiveRecord::Base
       topics_facets = {:label => 'topics', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       # Restrict to min_count_for_facet (5) if no topics currently selected
+      #binding.pry
       if !_qry.to_sql.include?('JOIN subject_teacher_sets')
         _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       # .. otherwise restrict to 3
@@ -662,18 +667,8 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
-=begin
-  def as_json(opts={})
-    ret = {}
-    [:id, :availability, :description, :details_url, :primary_language, :primary_subject, :title].each do |p|
-      ret[p] = self[p]
-    end
-    ret[:suitabilities_string] = suitabilities_string
-    ret
-  end
-=end
 
-  # Recieve JSON related to a teacher_set.
+  # Receive JSON related to a teacher_set.
   # For each ISBN, ensure there is an associated book.
   # Disassociate books that are no longer in the teacher set.
   def update_included_book_list(teacher_set_record)
@@ -727,7 +722,7 @@ class TeacherSet < ActiveRecord::Base
     # so we can remake them fresh from the bib info.
     self.subjects.clear
 
-    # Create all the subjects and teacher_set <--> subject associations specified in the bib 
+    # Create all the subjects and teacher_set <--> subject associations specified in the bib
     # record we're processing, ignoring duplicate associations.
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)

@@ -4,6 +4,6 @@ class Subject < ActiveRecord::Base
   has_many :subject_teacher_sets, dependent: :delete_all
   has_many :teacher_sets, through: :subject_teacher_sets
 
-  MIN_COUNT_FOR_FACET = 5
+  MIN_COUNT_FOR_FACET = 1
 
 end
