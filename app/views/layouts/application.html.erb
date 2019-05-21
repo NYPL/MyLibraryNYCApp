@@ -14,10 +14,22 @@
   <%= yield :head %>
   <%= csrf_meta_tags %>
 </head>
+
+<!-- QA TRACKING CODE -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140633607-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140633607-1');
+</script>
+
 <body>
   <%= render "layouts/navigation" %>
   <%= render "layouts/messaging" %>
-  <div id="main" class="container <%= controller.controller_name %>-<%= controller.action_name %>">
+  <div id="main" class="container <%= controller.controller_name %>-<%= controller.action_name %>">dddddddd
     <%= render "layouts/breadcrumb" unless controller.controller_name == "home" && controller.action_name == "index" %>
     <%= yield %>
   </div>
