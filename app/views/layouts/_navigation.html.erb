@@ -29,13 +29,26 @@
   </script>
 </div>
 
-<!-- QA TRACKING CODE -->
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140633607-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-140633607-1');
-</script>
+<% if ENV['RACK_ENV'] == 'development' %>
+  <script type="text/javascript">
+    //Development TRACKING CODE --> After testing need to remove development GA script.
+    //Global site tag (ga.js) - Google Analytics -->
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-140652232-1', {'allowAnchor': true});
+    ga('send', 'pageview', { 'page': location.pathname + location.search + location.hash});
+  </script>
+<% elsif ENV['RACK_ENV'] == 'production' %>
+  <script type="text/javascript">
+    // Development TRACKING CODE 
+    // Global site tag (ga.js) - Google Analytics 
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-1420324-121', {'allowAnchor': true});
+    ga('send', 'pageview', { 'page': location.pathname + location.search + location.hash});
+  </script>
+<% end %>
