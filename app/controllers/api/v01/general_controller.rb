@@ -50,6 +50,20 @@ class Api::V01::GeneralController < ApplicationController
     }.to_json
   end
 
+  # Prepare and write an error message to the application log.
+  def log_error(method, exception)
+    if method.blank?
+      method = "#{controller_name or 'unknown_controller'}##{action_name or 'unknown_action'}"
+    end
+
+    message = (exception && exception.message ? exception.message[0..200] : 'exception or exception message missing')
+    backtrace = (exception ? exception.backtrace : 'exception missing')
+    LogWrapper.log('ERROR', {
+      'message' => "#{message}...\nBacktrace=#{backtrace}.",
+      'method' => method
+    })
+  end
+
   def api_response_builder(http_status, http_response)
     render status: http_status, json: http_response 
   end

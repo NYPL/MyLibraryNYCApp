@@ -12,7 +12,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         AdminMailer.failed_items_controller_api_request(@request_body, error_code_and_message, action_name).deliver
         render_error(error_code_and_message)
       end
-      return if error_code_and_message.any?
+      return error_code_and_message if error_code_and_message.any?
       http_response = { items: 'OK'}
       api_response_builder(http_status, http_response)
     rescue => exception
