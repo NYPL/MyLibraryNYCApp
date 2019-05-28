@@ -13,10 +13,18 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         AdminMailer.failed_items_controller_api_request(@request_body, error_code_and_message, action_name).deliver
         render_error(error_code_and_message)
       end
+      return if error_code_and_message.any?
       total_count, available_count, t_set_bnumber = fetch_items_available_and_total_count
-      render_error([404, "bibIds are empty."]) unless t_set_bnumber.present?
-      teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}") 
-      render_error([404, "bibIds are not found in MLN DB."]) unless teacher_set.present?
+      
+      unless t_set_bnumber.present?
+        render_error([404, "bibIds are empty."]) 
+        return
+      end
+      teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
+      unless teacher_set.present?
+        render_error([404, "bibIds are not found in MLN DB."])
+        return
+      end 
       teacher_set.update_available_and_total_count(total_count, available_count)
       http_response = {items: 'OK'}
       LogWrapper.log('INFO','message' => "Items availability successfully updated")

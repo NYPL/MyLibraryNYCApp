@@ -25,6 +25,7 @@ class Api::V01::GeneralController < ApplicationController
     return []
   end
 
+  private
   # Requests to the MLN teacher set-updating api must come from our verified lambdas,
   # unless are being tested or developed.
   def validate_source_of_request
@@ -46,7 +47,7 @@ class Api::V01::GeneralController < ApplicationController
       'method' => "#{controller_name}##{action_name}",
       'status' => error_code_and_message[0]
     })
-    return api_response_builder(error_code_and_message[0], {errors: error_code_and_message[1]})
+    return api_response_builder(error_code_and_message[0], {message: error_code_and_message[1]}.to_json)
   end
 
   # Prepare and write an error message to the application log.
