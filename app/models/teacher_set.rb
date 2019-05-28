@@ -789,4 +789,9 @@ class TeacherSet < ActiveRecord::Base
       TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
   end
+
+  def update_available_and_total_count(total_ct, available_ct)
+    availability_string = (available_ct.to_i > 0) ?  AVAILABILITY_LABELS['available']  : AVAILABILITY_LABELS['unavailable'] 
+    self.update_attributes(total_copies: total_ct, available_copies: available_ct, availability: availability_string)
+  end
 end
