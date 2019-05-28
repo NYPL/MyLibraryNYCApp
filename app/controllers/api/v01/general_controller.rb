@@ -5,7 +5,8 @@ class Api::V01::GeneralController < ApplicationController
     render json: { 'message': 'Unauthorized message from MLN Api::V01::GeneralController' }, status: 401
   end
 
-  # set the @request_body instance variable so it can be used in other methods; check for parsing errors.
+  # set the @request_body instance variable so it can be used in other methods; 
+  #check for parsing errors.
   def set_request_body
     begin
       @request_body = params[:_json] || JSON.parse(request.body.read)
@@ -45,9 +46,7 @@ class Api::V01::GeneralController < ApplicationController
       'method' => "#{controller_name}##{action_name}",
       'status' => error_code_and_message[0]
     })
-    render status: error_code_and_message[0], json: {
-      message: error_code_and_message[1]
-    }.to_json
+    return api_response_builder(error_code_and_message[0], error_code_and_message[1])
   end
 
   # Prepare and write an error message to the application log.

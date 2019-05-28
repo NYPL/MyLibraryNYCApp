@@ -8,7 +8,6 @@ class Api::ItemsControllerTest < MiniTest::Test
   before do
     @controller = Api::V01::ItemsController.new
     @mintest_mock1 = MiniTest::Mock.new
-    @general_controller = Api::V01::GeneralController.new
   end
 
   describe '#test update availability' do
