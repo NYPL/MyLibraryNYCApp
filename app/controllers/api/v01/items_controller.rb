@@ -26,7 +26,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
     end
   end
 
-  #Parsing the json, fetching the available,total count and t_set_bnumber.
+  #Fetching available,total count and t_set_bnumber.
   def fetch_items_available_and_total_count
     availble_count = 0
     total_count  = 0
