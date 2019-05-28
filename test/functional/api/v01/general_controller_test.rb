@@ -34,4 +34,21 @@ class Api::GeneralControllerTest < MiniTest::Test
       assert_equal(error_message[1], resp[:json])
     end
   end
+
+  describe '#validate request' do
+    it 'test validate request' do
+      resp = @controller.validate_request
+      expected_resp = [400, "Request body is empty."]
+      assert_equal(expected_resp[0], resp[0])
+      assert_equal(expected_resp[1], resp[1])
+    end
+  end
+
+  describe '#validate source of request' do
+    it 'test validate request' do
+      exception = OpenStruct.new(message: 'error occured', backtrace: 'error' ) 
+      resp = @controller.log_error(__method__, exception)
+      assert_equal(true, resp)
+    end
+  end
 end
