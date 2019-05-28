@@ -44,8 +44,8 @@ class Api::GeneralControllerTest < MiniTest::Test
     end
   end
 
-  describe '#validate source of request' do
-    it 'test validate request' do
+  describe '#log error' do
+    it 'test log error' do
       exception = OpenStruct.new(message: 'error occured', backtrace: 'error' ) 
       resp = @controller.log_error(__method__, exception)
       assert_equal(true, resp)
