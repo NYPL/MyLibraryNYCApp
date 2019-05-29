@@ -733,6 +733,7 @@ GEM
     mime-types (1.25.1)
     mimemagic (0.3.2)
     mini_portile2 (2.3.0)
+    minitest (5.6.1)
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -877,6 +878,7 @@ DEPENDENCIES
   lograge
   logstash-event
   meta_search (>= 1.1.0.pre)
+  minitest (~> 5.6.1)
   nokogiri
   open_uri_redirections
   paper_trail!
