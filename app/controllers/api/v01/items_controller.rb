@@ -36,7 +36,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
       teacher_set.update_available_and_total_count(total_count, available_count)
       http_response = {items: 'OK'}
       LogWrapper.log('INFO','message' => "Items availability successfully updated")
-      api_response_builder(http_status, http_response)
+      api_response_builder(http_status, http_response.to_json)
     rescue => exception
       log_error('update_availability', exception)
     end
