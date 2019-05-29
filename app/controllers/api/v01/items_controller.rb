@@ -4,11 +4,15 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   before_filter :set_request_body
   before_filter :validate_source_of_request
 
-  #Here Updating the available_copies, total copies in Teacher Set table.
-  #Parsing Json than fetching available, total count and teachet set 'bnumber'
-  #IF bibIds are not present in Json raising error message like: "bibIds are empty."
-  #If 'bnumber' record not present in MLN DB rasing  error message  like: "bibIds are not found in MLN DB."
-  #Based on 'bnumber' fecthing teacherset record from MLN DB and updating available, total count in MLN DB.
+  # Updates the available_copies, total_copies, and availability fields on a teacher_set.
+  # Receives a list of items from a POST request, each item represented by a JSON record.
+  # All records are inside @request_body.
+  # Parses the item bodies to retrieve the bib id.  For each valid item, sends a request to the Bib Service for all of the items belonging to that bib.
+  # For each item in the returned list, parses the JSON body, to retrieve the due_date.  If the due_date is not null, counts the item as "unavailable".  
+  # Adds up the total number of items, and the number of items available, and updates the teacher_set fields accordingly.
+  # On error finding local data, writes a message to the error log, but returns a success to the calling lambda.  
+  # On error communicating with the Bib Service, returns a failure to the calling lambda (triggering a re-try).
+
   def update_availability
     begin
       http_status = 200
