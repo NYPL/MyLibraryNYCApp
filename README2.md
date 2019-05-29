@@ -1,4 +1,4 @@
-How to get Sendgrid running with a dev version hosted on Heroku
+How to get Sendgrid running with a dev version hosted on Heroku (NOTE: We're no longer using Sendgrid for all mailings.)
 ========================================================================
 
 While logged into Heroku on the command line (using the same email registered under Sendgrid) please run:
