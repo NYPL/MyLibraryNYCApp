@@ -50,7 +50,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
     @request_body['data'].each do |item|
       total_count += 1
       availble_count += 1 unless item['status']['duedate'].present?
-      t_set_bnumber = item['bibIds'].join 
+      t_set_bnumber = item['bibIds'][0] 
     end
     LogWrapper.log('INFO','message' => "TeacherSet availble_count: #{availble_count}, total_count: #{total_count}")
     return total_count, availble_count, t_set_bnumber
