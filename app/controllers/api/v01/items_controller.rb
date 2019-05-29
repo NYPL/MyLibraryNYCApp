@@ -42,17 +42,18 @@ class Api::V01::ItemsController < Api::V01::GeneralController
     end
   end #method ends
 
-  #Fetching available,total count and t_set_bnumber.
-  def fetch_items_available_and_total_count
-    availble_count = 0
+  #Gets available,total count and t_set_bnumber.
+  #Gets latest teacherset number from @request_body Json.
+  def get_items_available_and_total_count
+    available_count = 0
     total_count  = 0
     t_set_bnumber = nil
     @request_body['data'].each do |item|
       total_count += 1
-      availble_count += 1 unless item['status']['duedate'].present?
-      t_set_bnumber = item['bibIds'].join 
+      available_count += 1 unless item['status']['duedate'].present?
+      t_set_bnumber = item['bibIds'][0] 
     end
-    LogWrapper.log('INFO','message' => "TeacherSet availble_count: #{availble_count}, total_count: #{total_count}")
-    return total_count, availble_count, t_set_bnumber
+    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}, bnumber: #{available_count}")
+    return total_count, available_count, t_set_bnumber
   end
 end
