@@ -5,6 +5,8 @@ class Api::V01::GeneralController < ApplicationController
     render json: { 'message': 'Unauthorized message from MLN Api::V01::GeneralController' }, status: 401
   end
 
+  private
+  
   # set the @request_body instance variable so it can be used in other methods; 
   #check for parsing errors.
   def set_request_body
@@ -25,7 +27,6 @@ class Api::V01::GeneralController < ApplicationController
     return []
   end
 
-  private
   # Requests to the MLN teacher set-updating api must come from our verified lambdas,
   # unless are being tested or developed.
   def validate_source_of_request

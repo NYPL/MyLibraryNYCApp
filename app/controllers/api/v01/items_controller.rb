@@ -5,9 +5,14 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   before_filter :validate_source_of_request
 
   #Here Updating the available_copies, total copies in Teacher Set table.
+  #Parsing Json than fetching available, total count and teachet set 'bnumber'
+  #IF bibIds are not present in Json raising error message like: "bibIds are empty."
+  #If 'bnumber' record not present in MLN DB rasing  error message  like: "bibIds are not found in MLN DB."
+  #Based on 'bnumber' fecthing teacherset record from MLN DB and updating available, total count in MLN DB.
   def update_availability
     begin
       http_status = 200
+      LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => action_name})
       error_code_and_message = validate_request
       if error_code_and_message.any?
         AdminMailer.failed_items_controller_api_request(@request_body, error_code_and_message, action_name).deliver
