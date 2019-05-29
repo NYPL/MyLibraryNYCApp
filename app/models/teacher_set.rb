@@ -30,6 +30,9 @@ class TeacherSet < ActiveRecord::Base
 
   before_create :make_slug
 
+  AVAILABLE = 'available'
+  UNAVAILABLE = 'unavailable'
+
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
 
@@ -790,9 +793,9 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
-  #Updating available count, total count and availability_string
+  # Updates the available_count, total_count, and availability fields in the teacher_set table with passed-in values.
   def update_available_and_total_count(total_ct, available_ct)
-    availability_string = (available_ct.to_i > 0) ?  AVAILABILITY_LABELS['available']  : AVAILABILITY_LABELS['unavailable'] 
+    availability_string = (available_ct.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
     self.update_attributes(total_copies: total_ct, available_copies: available_ct, availability: availability_string)
   end
 end

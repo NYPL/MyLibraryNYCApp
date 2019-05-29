@@ -12,36 +12,35 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   # Adds up the total number of items, and the number of items available, and updates the teacher_set fields accordingly.
   # On error finding local data, writes a message to the error log, but returns a success to the calling lambda.  
   # On error communicating with the Bib Service, returns a failure to the calling lambda (triggering a re-try).
-
   def update_availability
     begin
       http_status = 200
-      LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => action_name})
+      LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}"})
       error_code_and_message = validate_request
       if error_code_and_message.any?
         AdminMailer.failed_items_controller_api_request(@request_body, error_code_and_message, action_name).deliver
         render_error(error_code_and_message)
       end
       return if error_code_and_message.any?
-      total_count, available_count, t_set_bnumber = fetch_items_available_and_total_count
+      # total_count, available_count, t_set_bnumber = fetch_items_available_and_total_count
       
-      unless t_set_bnumber.present?
-        render_error([404, "bibIds are empty."]) 
-        return
-      end
-      teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
-      unless teacher_set.present?
-        render_error([404, "bibIds are not found in MLN DB."])
-        return
-      end 
-      teacher_set.update_available_and_total_count(total_count, available_count)
+      # unless t_set_bnumber.present?
+      #   render_error([404, "bibIds are empty."]) 
+      #   return
+      # end
+      # teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
+      # unless teacher_set.present?
+      #   render_error([404, "bibIds are not found in MLN DB."])
+      #   return
+      # end 
+      # teacher_set.update_available_and_total_count(total_count, available_count)
       http_response = {items: 'OK'}
       LogWrapper.log('INFO','message' => "Items availability successfully updated")
       api_response_builder(http_status, http_response)
     rescue => exception
       log_error('update_availability', exception)
     end
-  end
+  end #method ends
 
   #Fetching available,total count and t_set_bnumber.
   def fetch_items_available_and_total_count
