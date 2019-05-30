@@ -11,8 +11,9 @@ class Api::ItemsControllerTest < MiniTest::Test
     @mintest_mock2 = MiniTest::Mock.new
   end
 
-  describe '#test update availability' do
-
+  # Update availability method parses the item bodies to retrieve the bib id.
+  # TEST1: Bib id not present in item body raise the bnumber not found in MLN db.
+  describe '#test update availability method' do
     it 'test error message for update availability; bnumber not found in MLN db' do
       resp = nil
       error_message = [404, "bibIds are not found in MLN DB."]
@@ -36,7 +37,9 @@ class Api::ItemsControllerTest < MiniTest::Test
       @mintest_mock2.verify
     end
 
-    it 'test error message for update availability; parsing error' do
+    # Update availability method missing the item bodies.
+    # TEST2: IF Request body is missing test parsing error message.
+    it 'test parsing error for update availability method' do
       error_message = [400, "Parsing error: 765: unexpected token at ''"]
       error_resp = [status: error_message[0], json: { message: error_message[1]}]
       resp = nil
