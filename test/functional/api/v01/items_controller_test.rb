@@ -50,6 +50,7 @@ class Api::ItemsControllerTest < MiniTest::Test
         end
       end
       assert_nil(resp)
+      @mintest_mock1.verify
     end
   end
 end
