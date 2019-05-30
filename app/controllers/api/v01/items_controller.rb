@@ -22,37 +22,38 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         render_error(error_code_and_message)
       end
       return if error_code_and_message.any?
-      # total_count, available_count, t_set_bnumber = fetch_items_available_and_total_count
+      total_count, available_count, t_set_bnumber = fetch_items_available_and_total_count
       
-      # unless t_set_bnumber.present?
-      #   render_error([404, "bibIds are empty."]) 
-      #   return
-      # end
-      # teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
-      # unless teacher_set.present?
-      #   render_error([404, "bibIds are not found in MLN DB."])
-      #   return
-      # end 
-      # teacher_set.update_available_and_total_count(total_count, available_count)
+      unless t_set_bnumber.present?
+        render_error([404, "bibIds are empty."]) 
+        return
+      end
+      teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
+      unless teacher_set.present?
+        render_error([404, "bibIds are not found in MLN DB."])
+        return
+      end 
+      teacher_set.update_available_and_total_count(total_count, available_count)
       http_response = {items: 'OK'}
       LogWrapper.log('INFO','message' => "Items availability successfully updated")
-      api_response_builder(http_status, http_response)
+      api_response_builder(http_status, http_response.to_json)
     rescue => exception
       log_error('update_availability', exception)
     end
   end #method ends
 
-  #Fetching available,total count and t_set_bnumber.
-  def fetch_items_available_and_total_count
-    availble_count = 0
+  #Gets available,total count and t_set_bnumber.
+  #Gets latest teacherset number from @request_body Json.
+  def get_items_available_and_total_count
+    available_count = 0
     total_count  = 0
     t_set_bnumber = nil
     @request_body['data'].each do |item|
       total_count += 1
-      availble_count += 1 unless item['status']['duedate'].present?
-      t_set_bnumber = item['bibIds'].join 
+      available_count += 1 unless item['status']['duedate'].present?
+      t_set_bnumber = item['bibIds'][0] 
     end
-    LogWrapper.log('INFO','message' => "TeacherSet availble_count: #{availble_count}, total_count: #{total_count}")
-    return total_count, availble_count, t_set_bnumber
+    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}, bnumber: #{available_count}")
+    return total_count, available_count, t_set_bnumber
   end
 end
