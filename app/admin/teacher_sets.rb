@@ -51,7 +51,7 @@ ActiveAdmin.register TeacherSet do
 
 
 
-  actions :index, :show, :edit, :update
+  actions :index, :show, :update
 
   menu :priority => 3
   sidebar :versions, :partial => "admin/version", :only => :show
@@ -83,13 +83,13 @@ ActiveAdmin.register TeacherSet do
     render partial: 'admin/history'
   end
 
-  action_item only: [:show] do
-    render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'show' })
-  end
+  # action_item only: [:show] do
+  #   render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'show' })
+  # end
 
-  action_item only: [:show] do
-    render(partial: 'teacher_sets/edit_button_container', locals: { teacher_set: teacher_set })
-  end
+  # action_item only: [:show] do
+  #   render(partial: 'teacher_sets/edit_button_container', locals: { teacher_set: teacher_set })
+  # end
 
   member_action :make_available, method: :put do
     teacher_set = TeacherSet.find(params[:id])
