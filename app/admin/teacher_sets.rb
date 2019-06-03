@@ -69,9 +69,6 @@ ActiveAdmin.register TeacherSet do
     column :title do |teacher_set|
       link_to(teacher_set.title, admin_teacher_set_path(teacher_set))
     end
-    column('Available', :availability, sortable: :availability) do |teacher_set|
-      render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'index' })
-    end
     column :created_at
     column :updated_at
   end
