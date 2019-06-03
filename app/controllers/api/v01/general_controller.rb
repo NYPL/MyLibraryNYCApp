@@ -6,8 +6,8 @@ class Api::V01::GeneralController < ApplicationController
   end
 
   private
-  
-  # set the @request_body instance variable so it can be used in other methods; 
+
+  # set the @request_body instance variable so it can be used in other methods;
   #check for parsing errors.
   def set_request_body
     begin
@@ -34,7 +34,7 @@ class Api::V01::GeneralController < ApplicationController
       {
        'message' => "Request sent to #{params["controller"]}Controller#validate_source_of_request",
        'method' => 'validate_source_of_request',
-       'status' => 'start',
+       'status' => "start, Rails.env=#{Rails.env}, (Rails.env.test? || Rails.env.local?)=#{(Rails.env.test? || Rails.env.local?)}",
        'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
       })
 
@@ -66,6 +66,6 @@ class Api::V01::GeneralController < ApplicationController
   end
 
   def api_response_builder(http_status, http_response)
-    render status: http_status, json: http_response 
+    render status: http_status, json: http_response
   end
 end
