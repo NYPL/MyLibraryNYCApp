@@ -61,6 +61,14 @@ Setting up the development server (and how to set up other servers, e.g. a stagi
 eb create [environment_name] --single --instance_profile cloudwatchable-beanstalk --instance_type t2.micro --cname [cname_name] --vpc.ec2subnets subnet-9ef736b3 --vpc.id vpc-dbc4f7bc --profile nypl-sandbox --keyname dgdvteam --tags Project=MyLibraryNyc,Environment=development
 ```
 
+Make sure the following environment variables are set in your EB environment configuration:
+BUNDLE_WITHOUT=test:development
+LOGGING=debug
+RACK_ENV=development
+RAILS_ENV=development
+RAILS_SKIP_ASSET_COMPILATION=false
+RAILS_SKIP_MIGRATIONS=false
+
 
 How to deploy to this server:
 
