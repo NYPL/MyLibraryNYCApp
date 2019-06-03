@@ -6,10 +6,20 @@ require 'factories/user_factory'
 require 'factories/school_factory'
 require 'factories/book_factory'
 require 'factories/teacher_set_factory'
+require 'pry'
 
 include WebMock::API
 
 WebMock.disable_net_connect!(allow_localhost: true)
+
+require 'minitest'
+require 'minitest/assertions'
+require 'minitest/autorun'
+require 'stringio'
+
+require 'active_support'
+require 'active_support/core_ext'
+require 'logger'
 
 MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
   "data": [
