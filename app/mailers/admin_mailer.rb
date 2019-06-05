@@ -25,6 +25,24 @@ class AdminMailer < ActionMailer::Base
     end
   end
 
+  # Sends an email to let admins know that a request to create/update a bib(s) failed
+  def failed_items_controller_api_request(error_code_and_message)
+    begin
+      emails = AdminUser.where(email_notifications:true).pluck(:email)
+      LogWrapper.log('DEBUG', {
+        'message' => "About to send failed_items_controller_api_request email.\n@error_code_and_message: #{@error_code_and_message || 'nil'}",
+        'method' => 'AdminMailer.failed_items_controller_api_request'
+      })
+      mail(:to => emails, :subject => "Problem occurred while getting items from Sierra")
+    rescue => exception
+      LogWrapper.log('ERROR', {
+        'message' => "Cannot send failed_items_controller_api_request notification email.  Backtrace=#{exception.backtrace}.",
+        'method' => 'AdminMailer.failed_items_controller_api_request'
+      })
+      raise exception
+    end
+  end
+
   # Sends an email to let admins know that creating/updating a specific bib record failed
   def teacher_set_update_missing_required_fields(bnumber, title, physical_description)
     begin

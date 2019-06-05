@@ -22,7 +22,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         render_error(error_code_and_message)
       end
       return if error_code_and_message.any?
-      total_count, available_count, t_set_bnumber = parse_items_available_and_total_count
+      t_set_bnumber, nypl_source = parse_item_bib_id_and_nypl_source
 
       unless t_set_bnumber.present?
         render_error([404, "bibIds are empty."])
@@ -33,30 +33,33 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         render_error([404, "bibIds are not found in MLN DB."])
         return
       end
-      teacher_set.update_available_and_total_count(total_count, available_count)
-      http_response = {items: 'OK'}
+      begin
+        response = teacher_set.update_available_and_total_count(t_set_bnumber, nypl_source)
+        http_status = response['statusCode']
+        http_message = {message: response['message'] || 'OK'}
+      rescue => exception
+        http_status = 500
+        error_message = "Error while getting items records via API: #{exception.message[0..200]}..."
+        http_message = {message: error_message}
+        log_error('update_availability', exception)
+        AdminMailer.failed_items_controller_api_request(error_message).deliver
+      end
       LogWrapper.log('INFO','message' => "Items availability successfully updated")
-      api_response_builder(http_status, http_response.to_json)
+      api_response_builder(http_status, http_message)
     rescue => exception
       log_error('update_availability', exception)
     end
   end #method ends
 
-
-  # Reads item JSON, for each item in the list of items in the @request_body.
-  # Parses out the items' duedate, which determines if an item is available or not.
-  # Calculates the total number of items in the list, the number of items that are
-  # available to lend, and the bib number these items belong to.
-  def parse_items_available_and_total_count
-    available_count = 0
-    total_count  = 0
+  # Reads item JSON, Parses out the items t_set_bnumber and nypl_source
+  def parse_item_bib_id_and_nypl_source
     t_set_bnumber = nil
+    nypl_source = nil
     @request_body['data'].each do |item|
-      total_count += 1
-      available_count += 1 unless item['status']['duedate'].present?
       t_set_bnumber = item['bibIds'][0]
+      nypl_source = item['nyplSource']
     end
-    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}, bnumber: #{available_count}")
-    return total_count, available_count, t_set_bnumber
+    return t_set_bnumber, nypl_source
   end
 end
+

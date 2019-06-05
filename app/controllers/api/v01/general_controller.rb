@@ -65,7 +65,7 @@ class Api::V01::GeneralController < ApplicationController
     })
   end
 
-  def api_response_builder(http_status, http_response)
+  def api_response_builder(http_status, http_response=nil)
     render status: http_status, json: http_response
   end
 end
