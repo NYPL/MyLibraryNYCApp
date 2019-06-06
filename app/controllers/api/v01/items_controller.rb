@@ -14,23 +14,22 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   # On error communicating with the Bib Service, returns a failure to the calling lambda (triggering a re-try).
   def update_availability
     begin
-      http_status = 200
       LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}"})
       error_code_and_message = validate_request
       if error_code_and_message.any?
-        AdminMailer.failed_items_controller_api_request(@request_body, error_code_and_message, action_name).deliver
+        AdminMailer.failed_items_controller_api_request(error_code_and_message).deliver
         render_error(error_code_and_message)
       end
       return if error_code_and_message.any?
       t_set_bnumber, nypl_source = parse_item_bib_id_and_nypl_source
 
       unless t_set_bnumber.present?
-        render_error([404, "bibIds are empty."])
+        render_error([404, "BIB id is empty."])
         return
       end
       teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
       unless teacher_set.present?
-        render_error([404, "bibIds are not found in MLN DB."])
+        render_error([404, "BIB id not found in MLN DB."])
         return
       end
       begin
@@ -51,6 +50,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
     end
   end #method ends
 
+  # All records are inside @request_body.
   # Reads item JSON, Parses out the items t_set_bnumber and nypl_source
   def parse_item_bib_id_and_nypl_source
     t_set_bnumber = nil

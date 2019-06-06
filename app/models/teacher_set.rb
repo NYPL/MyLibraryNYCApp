@@ -793,6 +793,10 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+  # Calls Bib service for items.
+  # Parses out the items duedate, which determines if an item is available or not.
+  # Calculates the total number of items and available items in the list
+  # Updated MLN DB with Total copies and available copies.
   def update_available_and_total_count(bibid, nypl_source)
     response = send_request_to_bibs_microservice(bibid, nypl_source)
     return response if !@items_found
@@ -803,9 +807,9 @@ class TeacherSet < ActiveRecord::Base
     self.update_attributes(total_copies: total_ct, available_copies: available_ct, availability: availability_string)
   end
 
-  # Parses out the items' duedate, which determines if an item is available or not.
+  # Parses out the items duedate, which determines if an item is available or not.
   # Calculates the total number of items in the list, the number of items that are
-  # available to lend, and the bib number these items belong to.
+  # available to lend.
   def parse_items_available_and_total_count(response)
     available_count = 0
     total_count  = 0
@@ -859,7 +863,6 @@ class TeacherSet < ActiveRecord::Base
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
-
     return response
   end
 end
