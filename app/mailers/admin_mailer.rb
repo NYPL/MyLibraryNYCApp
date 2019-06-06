@@ -47,11 +47,8 @@ class AdminMailer < ActionMailer::Base
   end
 
   # Sends an email to let admins know that a request to update item availability has failed.
-  def failed_items_controller_api_request(request_body, error_code_and_message, action_name)
+  def failed_items_controller_api_request(error_code_and_message)
     begin
-      @action_name = action_name
-      @request_body = request_body
-      @error_code_and_message = error_code_and_message
       emails = AdminUser.where(email_notifications:true).pluck(:email)
       LogWrapper.log('DEBUG', {
         'message' => "About to send failed_items_controller_api_request email.\n@error_code_and_message: #{@error_code_and_message || 'nil'}",

@@ -14,49 +14,57 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   # On error communicating with the Bib Service, returns a failure to the calling lambda (triggering a re-try).
   def update_availability
     begin
-      http_status = 200
       LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}"})
       error_code_and_message = validate_request
       if error_code_and_message.any?
-        AdminMailer.failed_items_controller_api_request(@request_body, error_code_and_message, action_name).deliver
+        AdminMailer.failed_items_controller_api_request(error_code_and_message).deliver
         render_error(error_code_and_message)
       end
       return if error_code_and_message.any?
-      total_count, available_count, t_set_bnumber = parse_items_available_and_total_count
+      t_set_bnumber, nypl_source = parse_item_bib_id_and_nypl_source(@request_body)
 
       unless t_set_bnumber.present?
-        render_error([404, "bibIds are empty."])
+        render_error([404, "BIB id is empty."])
+        return
+      end
+      unless nypl_source.present?
+        render_error([404, "NYPL source is empty."])
         return
       end
       teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
       unless teacher_set.present?
-        render_error([404, "bibIds are not found in MLN DB."])
+        render_error([404, "BIB id not found in MLN DB."])
         return
       end
-      teacher_set.update_available_and_total_count(total_count, available_count)
-      http_response = {items: 'OK'}
-      LogWrapper.log('INFO','message' => "Items availability successfully updated")
-      api_response_builder(http_status, http_response.to_json)
+
+      begin
+        response = teacher_set.update_available_and_total_count(t_set_bnumber, nypl_source)
+        http_status = response['statusCode']
+        http_response = {message: response['message'] || 'OK'}
+      rescue => exception
+        error_message = "Error while getting item records via API: #{exception.message[0..200]}, Bnumber: #{t_set_bnumber}"
+        AdminMailer.failed_items_controller_api_request(error_message).deliver
+        render_error([500, error_message])
+        return
+      end
     rescue => exception
-      log_error('update_availability', exception)
+      render_error([500, "Error occured: #{exception.message[0..200]}, Bnumber: #{t_set_bnumber}"])
+      return
     end
+    LogWrapper.log('INFO','message' => "Items availability successfully updated")
+    api_response_builder(http_status, http_response.to_json)
   end #method ends
 
-
-  # Reads item JSON, for each item in the list of items in the @request_body.
-  # Parses out the items' duedate, which determines if an item is available or not.
-  # Calculates the total number of items in the list, the number of items that are
-  # available to lend, and the bib number these items belong to.
-  def parse_items_available_and_total_count
-    available_count = 0
-    total_count  = 0
+  # All records are inside @request_body.
+  # Reads item JSON, Parses out the item t_set_bnumber and nypl_source
+  def parse_item_bib_id_and_nypl_source(request_body)
     t_set_bnumber = nil
-    @request_body['data'].each do |item|
-      total_count += 1
-      available_count += 1 unless item['status']['duedate'].present?
+    nypl_source = nil
+    request_body['data'].each do |item|
       t_set_bnumber = item['bibIds'][0]
+      nypl_source = item['nyplSource']
     end
-    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}, bnumber: #{available_count}")
-    return total_count, available_count, t_set_bnumber
+    return t_set_bnumber, nypl_source
   end
 end
+

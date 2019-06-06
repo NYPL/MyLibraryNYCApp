@@ -793,9 +793,80 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
-  # Updates the available_count, total_count, and availability fields in the teacher_set table with passed-in values.
-  def update_available_and_total_count(total_ct, available_ct)
-    availability_string = (available_ct.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
-    self.update_attributes(total_copies: total_ct, available_copies: available_ct, availability: availability_string)
+  # Calls Bib service for items.
+  # Parses out the items duedate, items code is '-' which determines if an item is available or not.
+  # Calculates the total number of items and available items in the list
+  # Updated MLN DB with Total copies and available copies.
+  def update_available_and_total_count(bibid, nypl_source)
+    response = send_request_to_bibs_microservice(bibid, nypl_source)
+    return response if !@items_found
+    total_count, available_count = parse_items_available_and_total_count(response)
+    availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
+    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count},
+    availability: #{availability_string}")
+    self.update_attributes(total_copies: total_count, available_copies: available_count, availability: availability_string)
+    return response
+  end
+
+  # Parses out the items duedate, items code is '-' which determines if an item is available or not.
+  # Calculates the total number of items in the list, the number of items that are
+  # available to lend.
+  def parse_items_available_and_total_count(response)
+    available_count = 0
+    total_count  = 0
+    response['data'].each do |item|
+      total_count += 1
+      available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
+    end
+    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
+    return total_count, available_count
+  end
+
+  private
+
+  # Sends a request to the bibs microservice.
+  def send_request_to_bibs_microservice(bibid, nypl_source)
+    items_url = "/#{nypl_source}/#{bibid}/items"
+    LogWrapper.log('DEBUG',
+      {
+       'message' => 'Request sent to bibs service',
+       'method' => 'send_request_to_bibs_microservice',
+       'status' => 'start',
+       'dataSent' => ENV['BIBS_MICROSERVICE_URL_V01'] + items_url
+      })
+    response = HTTParty.get(
+      ENV['BIBS_MICROSERVICE_URL_V01'] + items_url,
+      headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' },
+      timeout: 10
+    )
+
+    case response.code
+    when 200
+      @items_found = true
+      LogWrapper.log('DEBUG',
+        {
+          'message' => "The bibs service responded with the Items JSON.",
+          'method' => 'send_request_to_bibs_microservice',
+          'status' => response.code
+        })
+    when 404
+      @items_found = false
+      LogWrapper.log('ERROR',
+        {
+          'message' => "The bibs service could not find the Items with bibid=#{bibid}",
+          'method' => 'send_request_to_bibs_microservice',
+          'status' => response.code
+        })
+    else
+      LogWrapper.log('ERROR',
+        {
+          'message' => "An error has occured when sending a request to the bibs service",
+          'method' => 'send_request_to_bibs_microservice',
+          'status' => response.code,
+          'responseData' => response.body
+        })
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+    end
+    return response
   end
 end
