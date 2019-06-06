@@ -841,7 +841,7 @@ class TeacherSet < ActiveRecord::Base
 
     case response.code
     when 200
-      @items_found = false
+      @items_found = true
       LogWrapper.log('DEBUG',
         {
           'message' => "The bibs service responded with the Items JSON.",
