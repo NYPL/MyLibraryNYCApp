@@ -801,10 +801,10 @@ class TeacherSet < ActiveRecord::Base
     response = send_request_to_bibs_microservice(bibid, nypl_source)
     return response if !@items_found
     total_count, available_count = parse_items_available_and_total_count(response)
-    availability_string = (available_ct.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
+    availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count},
     availability: #{availability_string}")
-    self.update_attributes(total_copies: total_ct, available_copies: available_ct, availability: availability_string)
+    self.update_attributes(total_copies: total_ct, available_copies: available_count, availability: availability_string)
   end
 
   # Parses out the items duedate, which determines if an item is available or not.
