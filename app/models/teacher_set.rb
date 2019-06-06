@@ -794,7 +794,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
   # Calls Bib service for items.
-  # Parses out the items duedate, which determines if an item is available or not.
+  # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items and available items in the list
   # Updated MLN DB with Total copies and available copies.
   def update_available_and_total_count(bibid, nypl_source)
@@ -808,7 +808,7 @@ class TeacherSet < ActiveRecord::Base
     return response
   end
 
-  # Parses out the items duedate, which determines if an item is available or not.
+  # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items in the list, the number of items that are
   # available to lend.
   def parse_items_available_and_total_count(response)
