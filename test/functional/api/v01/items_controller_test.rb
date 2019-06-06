@@ -16,15 +16,16 @@ class Api::ItemsControllerTest < MiniTest::Test
   describe '#test update availability method' do
     it 'test error message for update availability; bnumber not found in MLN db' do
       resp = nil
-      error_message = [404, "bibIds are not found in MLN DB."]
+      error_message = [404, "BIB id not found in MLN DB"]
       @mintest_mock1.expect(:call, [nil])
       total_count = 6
       available_count = 5
       t_set_bnumber = '45678'
-      @mintest_mock2.expect(:call, [total_count, available_count, t_set_bnumber])
+      nypl_source = 'seirra-nypl'
+      @mintest_mock2.expect(:call, [t_set_bnumber, nypl_source])
 
       @controller.stub :validate_request, @mintest_mock1 do
-        @controller.stub :fetch_items_available_and_total_count, @mintest_mock2 do
+        @controller.stub :parse_item_bib_id_and_nypl_source, @mintest_mock2 do
           TeacherSet.stub :find_by_bnumber, [], ["b#{t_set_bnumber}"] do
             @controller.stub :render_error, [error_message[0], error_message[1]], error_message do
               resp = @controller.update_availability
@@ -55,5 +56,33 @@ class Api::ItemsControllerTest < MiniTest::Test
       assert_nil(resp)
       @mintest_mock1.verify
     end
+  end
+
+  # Reads item JSON, Parses out the item t_set_bnumber and nypl_source
+  describe '#parse req body item bibid and nypl_source method' do
+    it 'test parse bibid and nypl source' do
+      
+    end
+  end
+
+  private
+
+  def req_body_for_item
+    { 'data' => [ {
+          'nyplSource' => 'sierra-nypl', 
+          'bibIds' => [
+            '21480355'
+          ],
+          'status' => {
+            'code' => '-', 
+            'display' => 'AVAILABLE', 
+            'duedate' => '2011-04-26T16:16:00-04:00'
+          },
+        } ],
+      'count' => 1,
+      'totalCount' => 1,
+      'statusCode' => 200,
+      'debugInfo' => []
+    }
   end
 end
