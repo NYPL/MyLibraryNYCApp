@@ -16,7 +16,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
     begin
       LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}"})
       error_code_and_message = validate_request
-      if error_code_and_message.any?
+      if error_code_and_message1.any?
         AdminMailer.failed_items_controller_api_request(error_code_and_message).deliver
         render_error(error_code_and_message)
       end
@@ -27,11 +27,16 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         render_error([404, "BIB id is empty."])
         return
       end
+      unless nypl_source.present?
+        render_error([404, "NYPL source is empty."])
+        return
+      end
       teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
       unless teacher_set.present?
         render_error([404, "BIB id not found in MLN DB."])
         return
       end
+
       begin
         response = teacher_set.update_available_and_total_count(t_set_bnumber, nypl_source)
         http_status = response['statusCode']
@@ -43,11 +48,15 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         log_error('update_availability', exception)
         AdminMailer.failed_items_controller_api_request(error_message).deliver
       end
-      LogWrapper.log('INFO','message' => "Items availability successfully updated")
-      api_response_builder(http_status, http_response.to_json)
     rescue => exception
       log_error('update_availability', exception)
+      http_status = 500
+      error_message = "Error occured: #{exception.message[0..200]}..."
+      http_response = {message: error_message}
     end
+    LogWrapper.log('INFO','message' => "Items availability successfully updated")
+    api_response_builder(http_status, http_response.to_json)
+
   end #method ends
 
   # All records are inside @request_body.
