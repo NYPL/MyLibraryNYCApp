@@ -35,23 +35,23 @@ class Api::V01::ItemsController < Api::V01::GeneralController
       begin
         response = teacher_set.update_available_and_total_count(t_set_bnumber, nypl_source)
         http_status = response['statusCode']
-        http_message = {message: response['message'] || 'OK'}
+        http_response = {message: response['message'] || 'OK'}
       rescue => exception
         http_status = 500
-        error_message = "Error while getting items records via API: #{exception.message[0..200]}..."
-        http_message = {message: error_message}
+        error_message = "Error while getting item records via API: #{exception.message[0..200]}..."
+        http_response = {message: error_message}
         log_error('update_availability', exception)
         AdminMailer.failed_items_controller_api_request(error_message).deliver
       end
       LogWrapper.log('INFO','message' => "Items availability successfully updated")
-      api_response_builder(http_status, http_message)
+      api_response_builder(http_status, http_response.to_json)
     rescue => exception
       log_error('update_availability', exception)
     end
   end #method ends
 
   # All records are inside @request_body.
-  # Reads item JSON, Parses out the items t_set_bnumber and nypl_source
+  # Reads item JSON, Parses out the item t_set_bnumber and nypl_source
   def parse_item_bib_id_and_nypl_source
     t_set_bnumber = nil
     nypl_source = nil
