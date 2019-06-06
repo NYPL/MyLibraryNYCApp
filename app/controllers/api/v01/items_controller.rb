@@ -16,7 +16,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
     begin
       LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}"})
       error_code_and_message = validate_request
-      if error_code_and_message1.any?
+      if error_code_and_message.any?
         AdminMailer.failed_items_controller_api_request(error_code_and_message).deliver
         render_error(error_code_and_message)
       end
@@ -42,21 +42,17 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         http_status = response['statusCode']
         http_response = {message: response['message'] || 'OK'}
       rescue => exception
-        http_status = 500
-        error_message = "Error while getting item records via API: #{exception.message[0..200]}..."
-        http_response = {message: error_message}
-        log_error('update_availability', exception)
+        error_message = "Error while getting item records via API: #{exception.message[0..200]}, Bnumber: #{t_set_bnumber}"
         AdminMailer.failed_items_controller_api_request(error_message).deliver
+        render_error([500, error_message])
+        return
       end
     rescue => exception
-      log_error('update_availability', exception)
-      http_status = 500
-      error_message = "Error occured: #{exception.message[0..200]}..."
-      http_response = {message: error_message}
+      render_error([500, "Error occured: #{exception.message[0..200]}, Bnumber: #{t_set_bnumber}"])
+      return
     end
     LogWrapper.log('INFO','message' => "Items availability successfully updated")
     api_response_builder(http_status, http_response.to_json)
-
   end #method ends
 
   # All records are inside @request_body.

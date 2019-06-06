@@ -815,7 +815,7 @@ class TeacherSet < ActiveRecord::Base
     total_count  = 0
     response['data'].each do |item|
       total_count += 1
-      available_count += 1 unless item['status']['duedate'].present?
+      available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
     end
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
     return total_count, available_count
@@ -845,6 +845,7 @@ class TeacherSet < ActiveRecord::Base
       LogWrapper.log('DEBUG',
         {
           'message' => "The bibs service responded with the Items JSON.",
+          'method' => 'send_request_to_bibs_microservice',
           'status' => response.code
         })
     when 404
@@ -852,12 +853,14 @@ class TeacherSet < ActiveRecord::Base
       LogWrapper.log('ERROR',
         {
           'message' => "The bibs service could not find the Items with bibid=#{bibid}",
+          'method' => 'send_request_to_bibs_microservice',
           'status' => response.code
         })
     else
       LogWrapper.log('ERROR',
         {
           'message' => "An error has occured when sending a request to the bibs service",
+          'method' => 'send_request_to_bibs_microservice',
           'status' => response.code,
           'responseData' => response.body
         })
