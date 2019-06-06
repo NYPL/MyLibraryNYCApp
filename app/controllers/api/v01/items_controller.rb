@@ -21,7 +21,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         render_error(error_code_and_message)
       end
       return if error_code_and_message.any?
-      t_set_bnumber, nypl_source = parse_item_bib_id_and_nypl_source
+      t_set_bnumber, nypl_source = parse_item_bib_id_and_nypl_source(@request_body)
 
       unless t_set_bnumber.present?
         render_error([404, "BIB id is empty."])
@@ -57,10 +57,10 @@ class Api::V01::ItemsController < Api::V01::GeneralController
 
   # All records are inside @request_body.
   # Reads item JSON, Parses out the item t_set_bnumber and nypl_source
-  def parse_item_bib_id_and_nypl_source
+  def parse_item_bib_id_and_nypl_source(request_body)
     t_set_bnumber = nil
     nypl_source = nil
-    @request_body['data'].each do |item|
+    request_body['data'].each do |item|
       t_set_bnumber = item['bibIds'][0]
       nypl_source = item['nyplSource']
     end
