@@ -804,7 +804,7 @@ class TeacherSet < ActiveRecord::Base
     availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count},
     availability: #{availability_string}")
-    self.update_attributes(total_copies: total_ct, available_copies: available_count, availability: availability_string)
+    self.update_attributes(total_copies: total_count, available_copies: available_count, availability: availability_string)
   end
 
   # Parses out the items duedate, which determines if an item is available or not.
