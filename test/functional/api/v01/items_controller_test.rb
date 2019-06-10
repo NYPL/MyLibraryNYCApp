@@ -61,7 +61,11 @@ class Api::ItemsControllerTest < MiniTest::Test
   # Reads item JSON, Parses out the item t_set_bnumber and nypl_source
   describe '#parse req body item bibid and nypl_source method' do
     it 'test parse bibid and nypl source' do
-      
+      resp = @controller.parse_item_bib_id_and_nypl_source(req_body_for_item)
+      bib_id = '21480355'
+      nypl_source = 'sierra-nypl'
+      assert_equal(resp[0], bib_id)
+      assert_equal(resp[1], nypl_source)
     end
   end
 
