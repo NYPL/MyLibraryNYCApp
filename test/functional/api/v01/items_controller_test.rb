@@ -16,26 +16,22 @@ class Api::ItemsControllerTest < MiniTest::Test
   describe '#test update availability method' do
     it 'test error message for update availability; bnumber not found in MLN db' do
       resp = nil
-      error_message = [404, "BIB id not found in MLN DB"]
-      @mintest_mock1.expect(:call, [nil])
+      error_message = [404, "BIB id is empty."]
+      @mintest_mock1.expect(:call, nil)
       total_count = 6
       available_count = 5
-      t_set_bnumber = '45678'
-      nypl_source = 'seirra-nypl'
-      @mintest_mock2.expect(:call, [t_set_bnumber, nypl_source])
-
+      t_set_bnumber = '21480355'
+      nypl_source = 'sierra-nypl'
+      @mintest_mock2.expect(:call, [nil, nypl_source], [bibid_missing_req_body_for_item])
       @controller.stub :validate_request, @mintest_mock1 do
         @controller.stub :parse_item_bib_id_and_nypl_source, @mintest_mock2 do
-          TeacherSet.stub :find_by_bnumber, [], ["b#{t_set_bnumber}"] do
-            @controller.stub :render_error, [error_message[0], error_message[1]], error_message do
-              resp = @controller.update_availability
-            end
+          @controller.stub :render_error, [error_message[0], error_message[1]], [error_message] do
+            resp = @controller.update_availability
           end
         end
       end
       assert_nil(resp)
       @mintest_mock1.verify
-      @mintest_mock2.verify
     end
 
     # Update availability method missing the item bodies.
@@ -48,7 +44,7 @@ class Api::ItemsControllerTest < MiniTest::Test
       @mintest_mock1.expect(:call, error_message)
       @controller.stub :validate_request, @mintest_mock1 do
         AdminMailer.stub :failed_items_controller_api_request, mail_resp, [{"test1": "test2"}, error_message, 'update_availability'] do
-          @controller.stub :render_error, [error_message[0], error_message[1]], error_message do
+          @controller.stub :render_error, [error_message[0], error_message[1]], [error_message] do
             resp = @controller.update_availability
           end
         end
@@ -77,6 +73,23 @@ class Api::ItemsControllerTest < MiniTest::Test
           'bibIds' => [
             '21480355'
           ],
+          'status' => {
+            'code' => '-', 
+            'display' => 'AVAILABLE', 
+            'duedate' => '2011-04-26T16:16:00-04:00'
+          },
+        } ],
+      'count' => 1,
+      'totalCount' => 1,
+      'statusCode' => 200,
+      'debugInfo' => []
+    }
+  end
+
+  def bibid_missing_req_body_for_item
+    { 'data' => [ {
+          'nyplSource' => 'sierra-nypl', 
+          'bibIds' => [],
           'status' => {
             'code' => '-', 
             'display' => 'AVAILABLE', 

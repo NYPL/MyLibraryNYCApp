@@ -45,7 +45,6 @@ class TeacherSetTest < MiniTest::Test
       available_count = 2
 
       @mintest_mock1.expect(:call, [bib_id_not_found_response, false], [bib_id, nypl_source])
-      @mintest_mock2.expect(:call, [total_count, available_count], [bib_id_not_found_response])
 
       @model.stub :send_request_to_bibs_microservice, @mintest_mock1 do
         resp = @model.update_available_and_total_count(bib_id, nypl_source)
