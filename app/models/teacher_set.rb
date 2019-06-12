@@ -798,8 +798,8 @@ class TeacherSet < ActiveRecord::Base
   # Calculates the total number of items and available items in the list
   # Updated MLN DB with Total copies and available copies.
   def update_available_and_total_count(bibid, nypl_source)
-    response = send_request_to_bibs_microservice(bibid, nypl_source)
-    return response if !@items_found
+    response, items_found = send_request_to_bibs_microservice(bibid, nypl_source)
+    return response if !items_found
     total_count, available_count = parse_items_available_and_total_count(response)
     availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count},
@@ -842,7 +842,7 @@ class TeacherSet < ActiveRecord::Base
 
     case response.code
     when 200
-      @items_found = true
+      items_found = true
       LogWrapper.log('DEBUG',
         {
           'message' => "The bibs service responded with the Items JSON.",
@@ -850,7 +850,7 @@ class TeacherSet < ActiveRecord::Base
           'status' => response.code
         })
     when 404
-      @items_found = false
+      items_found = false
       LogWrapper.log('ERROR',
         {
           'message' => "The bibs service could not find the Items with bibid=#{bibid}",
@@ -867,6 +867,6 @@ class TeacherSet < ActiveRecord::Base
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
-    return response
+    return response, items_found
   end
 end
