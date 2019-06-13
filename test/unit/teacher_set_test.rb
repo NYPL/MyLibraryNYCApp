@@ -11,6 +11,15 @@ class TeacherSetTest < MiniTest::Test
     @mintest_mock2 = MiniTest::Mock.new
   end
   
+  describe 'updating a teacher set creates a version' do
+    it 'test updating a teacher set creates a version' do
+      teacher_set = crank!(:teacher_set)
+
+      teacher_set.update_attributes(title: 'Title2')
+      assert PaperTrail::Version.count == 1
+    end
+  end
+
   #Calls Bibs service 
   #Calculates the total number of items and available items in the BIb service response
   describe 'test update available and total count method' do
