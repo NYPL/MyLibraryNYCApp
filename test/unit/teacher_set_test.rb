@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TeacherSetTest < MiniTest::Test
+class TeacherSetTest < ActiveSupport::TestCase
 
   extend Minitest::Spec::DSL
   include LogWrapper
@@ -16,11 +16,7 @@ class TeacherSetTest < MiniTest::Test
     it 'test creating a teacher set does not create a version, because papertrail is turned off' do
       # we turn it off this way in app/admin/teacher_sets.rb for creating new sets via the admin dashboard
       teacher_set = crank!(:teacher_set)
-      if ENV['RAILS_ENV'] == 'development'
-        assert_equal(1, PaperTrail::Version.count)
-      else
-        assert_equal(0, PaperTrail::Version.count)
-      end
+      assert_equal(0, PaperTrail::Version.count)
     end
   end
 
