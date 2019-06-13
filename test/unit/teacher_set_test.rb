@@ -11,15 +11,6 @@ class TeacherSetTest < MiniTest::Test
     @mintest_mock2 = MiniTest::Mock.new
   end
   
-
-  describe 'creating a teacher set does not create a version, because papertrail is turned off' do
-    it 'test creating a teacher set does not create a version, because papertrail is turned off' do
-      # we turn it off this way in app/admin/teacher_sets.rb for creating new sets via the admin dashboard
-      teacher_set = crank!(:teacher_set)
-      assert PaperTrail::Version.count == 0
-    end
-  end
-
   describe 'updating a teacher set creates a version' do
     it 'test updating a teacher set creates a version' do
       teacher_set = crank!(:teacher_set)
