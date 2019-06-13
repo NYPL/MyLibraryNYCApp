@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TeacherSetTest < MiniTest::Test
+class TeacherSetTest < ActiveSupport::TestCase
 
   extend Minitest::Spec::DSL
   include LogWrapper
