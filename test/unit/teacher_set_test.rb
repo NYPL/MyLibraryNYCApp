@@ -16,7 +16,11 @@ class TeacherSetTest < MiniTest::Test
     it 'test creating a teacher set does not create a version, because papertrail is turned off' do
       # we turn it off this way in app/admin/teacher_sets.rb for creating new sets via the admin dashboard
       teacher_set = crank!(:teacher_set)
-      assert PaperTrail::Version.count == 0
+      if ENV['RAILS_ENV'] == 'development'
+        assert_equal(1, PaperTrail::Version.count)
+      else
+        assert_equal(0, PaperTrail::Version.count)
+      end
     end
   end
 
@@ -25,7 +29,7 @@ class TeacherSetTest < MiniTest::Test
       teacher_set = crank!(:teacher_set)
 
       teacher_set.update_attributes(title: 'Title2')
-      assert PaperTrail::Version.count == 1
+      assert_equal(1, PaperTrail::Version.count)
     end
   end
 
