@@ -815,7 +815,7 @@ class TeacherSet < ActiveRecord::Base
     available_count = 0
     total_count  = 0
     response['data'].each do |item|
-      total_count += 1 unless (item['status']['code'].present? && item['status']['code'] == 'w')
+      total_count += 1 unless (item['status']['code'].present? &&  ['w', 'm', 'k'].include?(item['status']['code']))
       available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
     end
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
