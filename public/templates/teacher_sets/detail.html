@@ -13,11 +13,11 @@
         <div id='total_available_copies' align="center" style="font-weight:bold"> {{ts.available_copies}} of 
           {{ts.total_copies}} Available | {{ts.new_holds_count}} sets pending
         </div><p style="white-space: pre"></p>
-        <div data-ng-show="ts.is_copies_available && is_available ">
+        <div data-ng-show="ts.is_copies_available">
           <a ng-click="doReserve()" class="button secondary">{{ts.availability_string}} - Order now!</a>
           <p>Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.</p>
         </div>
-        <div data-ng-show="!ts.is_copies_available && !is_available">
+        <div data-ng-show="!ts.is_copies_available">
           <a class="button queue disabled">{{ts.availability_string}}</a>
           <p data-ng-show="">
             This Teacher Set is unavailable. As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
