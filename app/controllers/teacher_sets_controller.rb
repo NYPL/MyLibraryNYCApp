@@ -68,6 +68,7 @@ class TeacherSetsController < ApplicationController
       :user => current_user,
       # Count the number of new holds on this teacher set, and pass through so the front end can estimate availability.
       :new_holds_count => @set.holds.collect{|i| i.status  if i.status == 'new'}.compact.length,
+      #is_copies_available flag calculating from teacherset available_copies count.
       :is_copies_available => @set.is_copies_available(@set.available_copies)
       # :teacher_set_notes => @set.teacher_set_notes,
       # :books => @set.books
