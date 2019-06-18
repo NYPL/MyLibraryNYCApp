@@ -14,7 +14,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
     $http.get('/teacher_sets/'+$scope.teacher_set_id+'.json').success(function(data) {
       $scope.ts = data.teacher_set;
       $scope.ts.available_copies = Number(data.teacher_set.available_copies);
-      $scope.ts.is_copies_available = data.teacher_set.is_copies_available;
+      $scope.is_copies_available = data.teacher_set.is_copies_available;
       $scope.ts.total_copies = Number(data.teacher_set.total_copies)
       $scope.is_available = data.teacher_set.availability == 'available';
       $scope.ts.availability_string = data.teacher_set.availability;
