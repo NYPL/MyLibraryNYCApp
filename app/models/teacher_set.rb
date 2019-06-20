@@ -803,7 +803,7 @@ class TeacherSet < ActiveRecord::Base
     total_count, available_count = parse_items_available_and_total_count(response)
     availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count},
-    availability: #{availability_string}")
+    availability: #{availability_string}", b_number: "#{bibid}")
     self.update_attributes(total_copies: total_count, available_copies: available_count, availability: availability_string)
     return response
   end

@@ -51,7 +51,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
       render_error([500, "Error occured: #{exception.message[0..200]}, Bnumber: #{t_set_bnumber}"])
       return
     end
-    LogWrapper.log('INFO','message' => "Items availability successfully updated")
+    LogWrapper.log('INFO','message' => "Items availability successfully updated. Bnumber: #{t_set_bnumber}")
     api_response_builder(http_status, http_response.to_json)
   end #method ends
 
