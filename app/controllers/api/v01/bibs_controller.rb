@@ -36,7 +36,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
       # Calls Bib service for items.
       # Calculates the total number of items and available items in the list.     
-      ts_avaiable_ct_info = teacher_set.get_items_count_from_bibs_service(bnumber, teacher_set_record['nyplSource'])
+      ts_items_info = teacher_set.get_items_info_from_bibs_service(bnumber, teacher_set_record['nyplSource'])
+
       begin
         teacher_set.update_attributes(
           title: title,
@@ -54,9 +55,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
           grade_end: grade_or_lexile_array('grade')[1] || '',
           lexile_begin: grade_or_lexile_array('lexile')[0] || '',
           lexile_end: grade_or_lexile_array('lexile')[1] || '',
-          available_copies: ts_avaiable_ct_info[:available_count],
-          total_copies: ts_avaiable_ct_info[:total_count],
-          availability: ts_avaiable_ct_info[:availability_string]
+          available_copies: ts_items_info[:available_count],
+          total_copies: ts_items_info[:total_count],
+          availability: ts_items_info[:availability_string]
         )
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)

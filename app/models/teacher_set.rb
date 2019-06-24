@@ -798,7 +798,7 @@ class TeacherSet < ActiveRecord::Base
   # Calculates the total number of items and available items in the list
   # Updated MLN DB with Total copies and available copies.
   def update_available_and_total_count(bibid, nypl_source)
-    response = get_items_count_from_bibs_service(bibid, nypl_source)
+    response = get_items_info_from_bibs_service(bibid, nypl_source)
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{response[:available_count]}, total_count: #{response[:total_count]},
     availability: #{response[:availability_string]}", b_number: "#{bibid}")
     self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count], 
@@ -807,8 +807,8 @@ class TeacherSet < ActiveRecord::Base
   end
 
   # Calls Bib service for items.
-  def get_items_count_from_bibs_service(bibid, nypl_source)
-    bibs_resp, items_found = send_request_to_bibs_microservice('bibid', nypl_source)
+  def get_items_info_from_bibs_service(bibid, nypl_source)
+    bibs_resp, items_found = send_request_to_bibs_microservice(bibid, nypl_source)
     return {bibs_resp: bibs_resp} if !items_found
     total_count, available_count = parse_items_available_and_total_count(bibs_resp)
     availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
