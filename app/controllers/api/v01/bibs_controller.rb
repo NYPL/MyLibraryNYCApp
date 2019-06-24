@@ -34,10 +34,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
       teacher_set = TeacherSet.where(bnumber: "b#{bnumber}").first_or_initialize
 
-      # make the teacher set available if it is newly created (.persisted? means that it's saved in the db):
-      # TODO: In the future, availability information will come through in its own stream, and hard-coding
-      # availability rules into the code will need to go away.  Labeling this code line as potential tech debt.
-      teacher_set.update_attributes(availability: 'available') if !teacher_set.persisted?
+      # Calls Bib service for items.
+      # Calculates the total number of items and available items in the list.     
+      ts_avaiable_ct_info = teacher_set.get_items_count_from_bibs_service(bnumber, teacher_set_record['nyplSource'])
       begin
         teacher_set.update_attributes(
           title: title,
@@ -55,7 +54,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
           grade_end: grade_or_lexile_array('grade')[1] || '',
           lexile_begin: grade_or_lexile_array('lexile')[0] || '',
           lexile_end: grade_or_lexile_array('lexile')[1] || '',
-          available_copies: 999
+          available_copies: ts_avaiable_ct_info[:available_count],
+          total_copies: ts_avaiable_ct_info[:total_count],
+          availability: ts_avaiable_ct_info[:availability_string]
         )
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
