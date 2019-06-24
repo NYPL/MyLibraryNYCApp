@@ -67,8 +67,6 @@ class TeacherSetsController < ApplicationController
       :teacher_set => @set,
       :active_hold => @active_hold,
       :user => current_user,
-      # Count the number of new holds on this teacher set, and pass through so the front end can estimate availability.
-      :new_holds_count => @set.holds.collect{|i| i.status  if i.status == 'new'}.compact.length
       # :teacher_set_notes => @set.teacher_set_notes,
       # :books => @set.books
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"

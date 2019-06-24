@@ -34,10 +34,10 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
       teacher_set = TeacherSet.where(bnumber: "b#{bnumber}").first_or_initialize
 
-      # make the teacher set available if it is newly created (.persisted? means that it's saved in the db):
-      # TODO: In the future, availability information will come through in its own stream, and hard-coding
-      # availability rules into the code will need to go away.  Labeling this code line as potential tech debt.
-      teacher_set.update_attributes(availability: 'available') if !teacher_set.persisted?
+      # Calls Bib service for items.
+      # Calculates the total number of items and available items in the list.     
+      ts_items_info = teacher_set.get_items_info_from_bibs_service(bnumber, teacher_set_record['nyplSource'])
+
       begin
         teacher_set.update_attributes(
           title: title,
@@ -55,7 +55,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
           grade_end: grade_or_lexile_array('grade')[1] || '',
           lexile_begin: grade_or_lexile_array('lexile')[0] || '',
           lexile_end: grade_or_lexile_array('lexile')[1] || '',
-          available_copies: 999
+          available_copies: ts_items_info[:available_count],
+          total_copies: ts_items_info[:total_count],
+          availability: ts_items_info[:availability_string]
         )
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
@@ -88,7 +90,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
 
       saved_teacher_sets << teacher_set
-      LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets:finished making teacher set','method' => 'bibs_controller.create_or_update_teacher_sets'})
+      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
+        'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
 
     render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
