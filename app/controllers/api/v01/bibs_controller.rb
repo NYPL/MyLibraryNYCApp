@@ -90,7 +90,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
 
       saved_teacher_sets << teacher_set
-      LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets:finished making teacher set','method' => 'bibs_controller.create_or_update_teacher_sets'})
+      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
+        'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
 
     render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
