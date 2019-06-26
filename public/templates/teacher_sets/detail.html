@@ -11,7 +11,7 @@
       <div class="ts-actions">
         <!-- Displays the number of available copies, total number of copies in stock, and number of recent not-yet-processed holds.  -->
         <div id='total_available_copies' align="center" style="font-weight:bold"> {{ts.available_copies}} of 
-          {{ts.total_copies}} Available | {{ts.new_holds_count}} sets pending
+          {{ts.total_copies}} Available
         </div><p style="white-space: pre"></p>
         <div data-ng-show="ts.available_copies > 0 && !active_hold && is_available ">
           <a ng-click="doReserve()" class="button secondary">{{ts.availability_string}} - Order now!</a>
