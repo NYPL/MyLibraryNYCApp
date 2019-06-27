@@ -60,7 +60,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   def parse_item_bib_id_and_nypl_source(request_body)
     t_set_bnumber = nil
     nypl_source = nil
-    request_body['data'].each do |item|
+    request_body.each do |item|
       t_set_bnumber = item['bibIds'][0]
       nypl_source = item['nyplSource']
     end
