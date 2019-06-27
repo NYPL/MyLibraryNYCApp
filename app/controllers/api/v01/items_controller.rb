@@ -14,7 +14,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   # On error communicating with the Bib Service, returns a failure to the calling lambda (triggering a re-try).
   def update_availability
     begin
-      LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}"})
+      LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}", "requestBody" => @request_body })
       error_code_and_message = validate_request
       if error_code_and_message.any?
         AdminMailer.failed_items_controller_api_request(error_code_and_message).deliver
@@ -60,7 +60,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   def parse_item_bib_id_and_nypl_source(request_body)
     t_set_bnumber = nil
     nypl_source = nil
-    request_body['data'].each do |item|
+    request_body.each do |item|
       t_set_bnumber = item['bibIds'][0]
       nypl_source = item['nyplSource']
     end
