@@ -72,7 +72,7 @@ class TeacherSetsController < ApplicationController
       :teacher_set => @set,
       :active_hold => @active_hold,
       :user => current_user,
-      :allowed_quantities => (1..max_copies_requestable).to_a
+      :allowed_quantities => (1..max_copies_requestable.to_i).to_a
       # :teacher_set_notes => @set.teacher_set_notes,
       # :books => @set.books
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"
