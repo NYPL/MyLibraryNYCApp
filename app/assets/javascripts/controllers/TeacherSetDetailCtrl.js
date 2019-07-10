@@ -19,8 +19,10 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $scope.ts.availability_string = data.teacher_set.availability;
       $scope.active_hold = data.teacher_set.active_hold;
       $scope.ts.teacher_set_notes = data.teacher_set.teacher_set_notes
+      $scope.allowed_quantities = data.teacher_set.allowed_quantities;
       $scope.ts.books = data.teacher_set.books
       $scope.user = data.teacher_set.user
+      $scope.quantity = Number(data.teacher_set.allowed_quantities[0]);
       $scope.loaded = true;
     });
 
@@ -30,12 +32,17 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $http.post('/teacher_sets/'+$scope.teacher_set_id+'/holds.json', $scope.formData).success(function(resp) {
         if ( resp.redirect_to ) {
           window.location = resp.redirect_to;
-        } else {
-          $location.path('/holds/'+resp.hold.access_key).search({new_order: 1});
         }
-        $scope.busy = false;
-      }).error(function(resp) {
-           $scope.errorMessage = resp.error
+        $scope.holdsUrl = {original_path: "/holds/"+resp.hold.access_key, 
+                     query_params: {id: resp.hold.access_key, quantity: $scope.quantity }};
+
+        $http.put('/teacher_sets/'+$scope.teacher_set_id+'/holds/'+resp.hold.access_key+'.json', $scope.holdsUrl).success(function(hold) {
+          if ( hold.redirect_to ) {
+            window.location = hold.redirect_to;
+          } else {
+            $location.path('/holds/'+resp.hold.access_key).search({});
+          }
+        });
       })
     };
 

@@ -15,7 +15,6 @@ class HoldsController < ApplicationController
     # @hold = Hold.find(params[:id])
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
-
 =begin
     render json: {
       :teacher_set => @hold.teacher_set,
@@ -85,6 +84,13 @@ class HoldsController < ApplicationController
     @hold = Hold.find_by_access_key(params[:id])
     puts "update? #{@hold}"
 
+    if params['query_params'].present? && params['query_params']['quantity'].present?
+      @hold.quantity = params['query_params']['quantity'].to_i
+      @hold.save!
+      @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - params['query_params']['quantity'].to_i
+      @hold.teacher_set.save!
+    end
+   
     unless (c = params[:hold_change]).nil?
       if c[:status] == 'cancelled'
         puts "cancelling hold: #{c} => #{@hold}"
