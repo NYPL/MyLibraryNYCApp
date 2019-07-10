@@ -165,6 +165,7 @@ ActiveAdmin.register TeacherSet do
               "Missing user data"
             end
           end
+          column 'Quantity' do |hold| hold.quantity end
           column 'Date Required' do |hold| link_to hold.date_required, admin_hold_path(hold) end
           column 'Created' do |hold| hold.created_at end
         end

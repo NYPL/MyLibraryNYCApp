@@ -34,7 +34,7 @@ ActiveAdmin.register Hold do
 
     default_actions
 
-    [:status, :teacher_set, :created_at, :updated_at].each do |prop|
+    [:status, :teacher_set, :quantity, :created_at, :updated_at].each do |prop|
       column prop
     end
 
@@ -120,7 +120,7 @@ ActiveAdmin.register Hold do
           "Teacher set deleted. Please cancel the hold."
         end
       end
-      [:date_required, :created_at, :updated_at].each do |prop|
+      [:quantity, :date_required, :created_at, :updated_at].each do |prop|
         row prop
       end
     end
