@@ -65,7 +65,7 @@ class TeacherSetsController < ApplicationController
 
     max_copies_requestable = ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
     if max_copies_requestable.to_i >= @set.available_copies.to_i
-      max_copies_requestable = @set.available_copies
+      max_copies_requestable = @set.available_copies.to_i
     end
 
     render json: {
