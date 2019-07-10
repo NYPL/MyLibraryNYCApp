@@ -15,9 +15,9 @@
   <hr />
   
   <p>
-    <strong>Quantity</strong><br />{{hold.quantity}} <br />
-    <strong>Status</strong><br />{{hold.status_label}} <br />
-    <strong>Placed</strong><br />{{hold.created_at_pretty}}
+    <strong>Quantity</strong><br/>{{hold.quantity}}<br/>
+    <strong>Status</strong><br/>{{hold.status_label}}<br/>
+    <strong>Placed</strong><br/>{{hold.created_at_pretty}}
   </p>
   <p ng-show="hold.status == 'new'">
     <a href="/app#/holds/{{hold.access_key}}/cancel" class="button">{{action_label}}</a>
