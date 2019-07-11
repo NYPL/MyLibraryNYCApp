@@ -808,6 +808,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.10.0)
+    ruby_dig (0.0.2)
     safe_yaml (1.0.4)
     sass (3.5.7)
       sass-listen (~> 4.0.0)
@@ -891,6 +892,7 @@ DEPENDENCIES
   rack-cors
   rails (= 3.2.22.5)
   rubocop
+  ruby_dig
   sass-rails (~> 3.2.3)
   sendgrid-ruby (~> 1.1.6)
   test-unit

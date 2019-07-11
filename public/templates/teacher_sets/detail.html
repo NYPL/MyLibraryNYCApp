@@ -9,23 +9,30 @@
       </div>
       
       <div class="ts-actions">
+        <span class="order_button_padding"> <b>ORDER NOW! </b>&nbsp;&nbsp;{{ts.available_copies}} of 
+            {{ts.total_copies}} available
+        </span>
+        <p style="white-space: pre"></p>
         <!-- Displays the number of available copies, total number of copies in stock, and number of recent not-yet-processed holds.  -->
-        <div id='total_available_copies' align="center" style="font-weight:bold"> {{ts.available_copies}} of 
-          {{ts.total_copies}} Available
-        </div><p style="white-space: pre"></p>
-        <div data-ng-show="ts.available_copies > 0 && !active_hold && is_available ">
-          <a ng-click="doReserve()" class="button secondary">{{ts.availability_string}} - Order now!</a>
-          <p>Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.</p>
+        <div class="order_button_padding" data-ng-show="ts.available_copies > 0 && is_available">
+          <select class="quantity-select-button" ng-model="quantity">
+            <option ng-repeat="option in allowed_quantities" value="{{option}}">{{option}}</option>
+          </select>&nbsp;
+          <a ng-click="doReserve()" class="order_button secondary">Order</a>
         </div>
-        <div data-ng-show="active_hold || !is_available">
-          <a class="button queue disabled">{{ts.availability_string}}</a>
-          <p data-ng-show="!active_hold">
-            This Teacher Set is unavailable. As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
-          </p>
-          <p ng-show="active_hold">
-            You have placed a <a href="#/holds/{{active_hold.access_key}}">hold</a> on this Teacher Set. If you need multiple copies of this Teacher Set, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
-          </p>
+        <p data-ng-show="ts.available_copies > 0 && is_available">Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.</p>
+        <div class="order_button_padding" data-ng-show="!is_available && ts.available_copies <= 0">
+          <select class="quantity-select-button" ng-model="quantity">
+            <option ng-repeat="option in allowed_quantities" value="{{option}}">{{option}}</option>
+          </select>&nbsp;
+          <a class="order_button queue disabled secondary">Order</a>
         </div>
+        <p data-ng-show="!is_available && ts.available_copies <= 0">
+          This Teacher Set is unavailable. As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
+        </p>
+        <p ng-show="active_hold">
+          You have placed a <a href="#/holds/{{active_hold.access_key}}">hold</a> on this Teacher Set. If you need multiple copies of this Teacher Set, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
+        </p>
       </div>    
       <p class="ts-description">{{ts.description}}</p>
       <h3 ng-show="ts.books"><ng-pluralize count="ts.books.length" when="{'1': '1 Title', 'other': '{} Titles'}"></ng-pluralize></h3>

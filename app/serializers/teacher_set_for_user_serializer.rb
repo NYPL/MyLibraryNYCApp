@@ -4,6 +4,7 @@ class TeacherSetForUserSerializer < ActiveModel::Serializer
     ret = set_serializer_hash
     ret[:active_hold] = hold_serializer_hash
     ret[:user] = user_serializer_hash
+    ret[:allowed_quantities] = object[:allowed_quantities]
     ret
   end
 
