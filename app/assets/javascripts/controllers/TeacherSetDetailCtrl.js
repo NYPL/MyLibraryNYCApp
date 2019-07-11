@@ -20,7 +20,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $scope.allowed_quantities = data.teacher_set.allowed_quantities;
       $scope.ts.books = data.teacher_set.books
       $scope.user = data.teacher_set.user
-      $scope.quantity = Number(data.teacher_set.allowed_quantities[0]);
+      $scope.quantity = data.teacher_set.allowed_quantities.length > 0 ? data.teacher_set.allowed_quantities[0] : 0 
       $scope.loaded = true;
     });
 

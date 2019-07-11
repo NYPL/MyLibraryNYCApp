@@ -58,25 +58,25 @@ class HoldsController < ApplicationController
       @hold = set.holds.build(params[:hold])
       @hold.user = current_user
 
-    if params[:query_params].present? && params[:query_params][:quantity].present?
-      @hold.quantity = params[:query_params][:quantity].to_i
-      @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - params[:query_params][:quantity].to_i
-      @hold.teacher_set.save!
-    end
-
-    unless params[:settings].nil?
-      current_user.update_attributes(params[:settings])
-    end
-    
-    respond_to do |format|
-      if @hold.save
-        format.html { redirect_to hold_url(@hold.access_key), notice: 'Your order has been received by our system and will soon be delivered to your school.<br/><br/>Check your email inbox for a message with further details.' }
-        format.json { render json: @hold, status: :created, location: @hold }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @hold.errors, status: :unprocessable_entity }
+      unless params[:settings].nil?
+        current_user.update_attributes(params[:settings])
       end
-    end
+
+      if params[:query_params].present? && params[:query_params][:quantity].present?
+        @hold.quantity = params[:query_params][:quantity].to_i
+        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - params[:query_params][:quantity].to_i
+        @hold.teacher_set.save!
+      end
+      
+      respond_to do |format|
+        if @hold.save
+          format.html { redirect_to hold_url(@hold.access_key), notice: 'Your order has been received by our system and will soon be delivered to your school.<br/><br/>Check your email inbox for a message with further details.' }
+          format.json { render json: @hold, status: :created, location: @hold }
+        else
+          format.html { render action: "new" }
+          format.json { render json: @hold.errors, status: :unprocessable_entity }
+        end
+      end
     rescue => exception
       respond_to do |format|
           format.json {   render json: {error: "We've encountered an error and were unable to confirm your order. Please try again later or email help@mylibrarynyc.org for assistance.
