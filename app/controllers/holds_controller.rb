@@ -57,7 +57,6 @@ class HoldsController < ApplicationController
       set = TeacherSet.find(params[:teacher_set_id])
       @hold = set.holds.build(params[:hold])
       @hold.user = current_user
-
       unless params[:settings].nil?
         current_user.update_attributes(params[:settings])
       end
@@ -90,7 +89,7 @@ class HoldsController < ApplicationController
     # @hold = Hold.find(params[:id])
     @hold = Hold.find_by_access_key(params[:id])
     puts "update? #{@hold}"
-   
+
     unless (c = params[:hold_change]).nil?
       if c[:status] == 'cancelled'
         puts "cancelling hold: #{c} => #{@hold}"
