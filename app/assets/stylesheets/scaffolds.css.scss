@@ -135,7 +135,7 @@ pre {
   }
 }
 
-.small_button {
+.order_button {
   width: auto;
   margin: 0 auto;
   padding: 3px 45px 3px 45px;
@@ -164,7 +164,7 @@ pre {
     background: lighten($blue,5%);
   }
 }
-.small_button.secondary {
+.order_button.secondary {
   background: $blue;
   &:hover {
     background: lighten($blue,5%);
@@ -453,13 +453,13 @@ footer {
   }
 }
 
-.small_button.queue {
+.order_button.queue {
   background: #D75B25;
 }
-.small_button.disabled {
+.order_button.disabled {
   @include opacity(0.5);
 }
-.small_button.queue {
+.order_button.queue {
   background: $orange;
   &:hover {
     background: lighten($orange,5%);
