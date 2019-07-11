@@ -1,3 +1,5 @@
+require 'ruby_dig'
+
 class HoldsController < ApplicationController  
   include LogWrapper
 
@@ -52,6 +54,8 @@ class HoldsController < ApplicationController
     }
   end
 
+  #Create holds and update quantity column in holds.
+  #Calculate available copies from quantity saves in teacherset table.
   def create
     begin
       set = TeacherSet.find(params[:teacher_set_id])
@@ -61,9 +65,10 @@ class HoldsController < ApplicationController
         current_user.update_attributes(params[:settings])
       end
 
-      if params[:query_params].present? && params[:query_params][:quantity].present?
-        @hold.quantity = params[:query_params][:quantity].to_i
-        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - params[:query_params][:quantity].to_i
+      quantity = params.dig(:query_params, :quantity)
+      if quantity
+        @hold.quantity = quantity.to_i
+        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
         @hold.teacher_set.save!
       end
       
