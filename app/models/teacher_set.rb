@@ -59,7 +59,7 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
-  def teacher_set_holds_count(user)
+  def holds_count_for_user(user)
     holds.where(:user_id => user.id).collect{|i| i.quantity}.inject(:+)
   end
 
