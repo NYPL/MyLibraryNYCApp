@@ -57,9 +57,7 @@ class TeacherSetsController < ApplicationController
   # GET /teacher_sets/1.json
   def show
     @set = TeacherSet.find(params[:id])
-
     @active_hold = nil
-    is_ordered_max_quantity_ts = false
 
     #Max copies value is configured in elastic beanstalk.
     #Max_copies_requestable is the maximum number of teachersets can request.
@@ -70,21 +68,20 @@ class TeacherSetsController < ApplicationController
     end
 
     #ts_holds_count is the number of holds currently held in the database for this teacher set.
-    ts_holds_count = @set.teacher_set_holds_count(current_user)
-
-    #is_ordered_max_quantity is a boolean value. Based on this flag disabled the order button in teacherset page.
-    #Button should be disabled after teacher has ordered maximum.
-    is_ordered_max_quantity_ts = true if ts_holds_count.to_i >= max_copies_requestable.to_i
+    ts_holds_count = @set.holds_count_for_user(current_user)
 
     #Teacher set available copies less than configured value, we should show ts available_copies count in teacherset order dropdown.
     max_copies_requestable = [max_copies_requestable - ts_holds_count.to_i, @set.available_copies.to_i].min
+
+    #is_ordered_max_quantity is a boolean value. Based on this flag disabled the order button in teacherset page.
+    #Button should be disabled after teacher has ordered maximum.
+    allowed_quantities = (ts_holds_count.to_i >= max_copies_requestable.to_i)? [] : (1..max_copies_requestable.to_i).to_a
 
     render json: {
       :teacher_set => @set,
       :active_hold => @active_hold,
       :user => current_user,
-      :allowed_quantities => (1..max_copies_requestable.to_i).to_a,
-      :is_ordered_max_quantity_ts => is_ordered_max_quantity_ts
+      :allowed_quantities => allowed_quantities,
       # :teacher_set_notes => @set.teacher_set_notes,
       # :books => @set.books
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"
