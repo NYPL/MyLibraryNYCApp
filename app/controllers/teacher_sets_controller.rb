@@ -61,7 +61,7 @@ class TeacherSetsController < ApplicationController
     @active_hold = nil
     is_ordered_max_quantity = false
 
-    #Max copies is configured value(in elastic beanstalk). Based on this number teacher can order maximun number of sets.
+    #Max copies value is configured(in elastic beanstalk). Based on this number teacher can order maximun number of sets.
     max_copies_requestable = ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
 
     if @set.held_by? current_user
