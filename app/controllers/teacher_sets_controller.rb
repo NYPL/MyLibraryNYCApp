@@ -59,32 +59,32 @@ class TeacherSetsController < ApplicationController
     @set = TeacherSet.find(params[:id])
 
     @active_hold = nil
-    is_ordered_max_quantity = false
+    is_ordered_max_quantity_ts = false
 
-    #Max copies value is configured(in elastic beanstalk). Based on this number teacher can order maximun number of sets.
+    #Max copies value is configured in elastic beanstalk.
+    #Max_copies_requestable is the maximum number of teachersets can request.
     max_copies_requestable = ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
 
     if @set.held_by? current_user
       @active_hold = @set.pending_holds_for_user(current_user).first
     end
 
-    #Calculates max ordered teacher set quantity from holds table.
-    ts_holds_count = @set.teacher_set_holds_count
-    is_ordered_max_quantity = true if ts_holds_count.to_i >= max_copies_requestable.to_i
+    #ts_holds_count is the number of holds currently held in the database for this teacher set.
+    ts_holds_count = @set.teacher_set_holds_count(current_user)
+
+    #is_ordered_max_quantity is a boolean value. Based on this flag disabled the order button in teacherset page.
+    #Button should be disabled after teacher has ordered maximum.
+    is_ordered_max_quantity_ts = true if ts_holds_count.to_i >= max_copies_requestable.to_i
 
     #Teacher set available copies less than configured value, we should show ts available_copies count in teacherset order dropdown.
-    if max_copies_requestable.to_i >= @set.available_copies.to_i && ts_holds_count.to_i <= 0
-      max_copies_requestable = @set.available_copies.to_i
-    elsif ts_holds_count.to_i >= 0
-      max_copies_requestable = [max_copies_requestable - ts_holds_count.to_i, @set.available_copies.to_i].min
-    end
+    max_copies_requestable = [max_copies_requestable - ts_holds_count.to_i, @set.available_copies.to_i].min
 
     render json: {
       :teacher_set => @set,
       :active_hold => @active_hold,
       :user => current_user,
       :allowed_quantities => (1..max_copies_requestable.to_i).to_a,
-      :is_ordered_max_quantity => is_ordered_max_quantity
+      :is_ordered_max_quantity_ts => is_ordered_max_quantity_ts
       # :teacher_set_notes => @set.teacher_set_notes,
       # :books => @set.books
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"
