@@ -58,6 +58,7 @@ class TeacherSetsController < ApplicationController
   def show
     @set = TeacherSet.find(params[:id])
     @active_hold = nil
+    user_has_ordered_max = false
 
     #Max copies value is configured in elastic beanstalk.
     #Max_copies_requestable is the maximum number of teachersets can request.
@@ -69,13 +70,13 @@ class TeacherSetsController < ApplicationController
 
     #ts_holds_count is the number of holds currently held in the database for this teacher set.
     ts_holds_count = @set.holds_count_for_user(current_user)
+    user_has_ordered_max = (ts_holds_count.to_i >= max_copies_requestable.to_i)
 
     #Teacher set available copies less than configured value, we should show ts available_copies count in teacherset order dropdown.
     max_copies_requestable = [max_copies_requestable.to_i - ts_holds_count.to_i, @set.available_copies.to_i].min
 
     #Button should be disabled after teacher has ordered maximum.
-
-    allowed_quantities = (ts_holds_count.to_i >= max_copies_requestable.to_i)? [] : (1..max_copies_requestable.to_i).to_a
+    allowed_quantities = user_has_ordered_max ? [] : (1..max_copies_requestable.to_i).to_a
 
     render json: {
       :teacher_set => @set,
