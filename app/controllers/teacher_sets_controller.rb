@@ -59,20 +59,32 @@ class TeacherSetsController < ApplicationController
     @set = TeacherSet.find(params[:id])
 
     @active_hold = nil
+    is_ordered_max_quantity = false
+
+    #Max copies is configured value(in elastic beanstalk). Based on this number teacher can order maximun number of sets.
+    max_copies_requestable = ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
+
     if @set.held_by? current_user
       @active_hold = @set.pending_holds_for_user(current_user).first
     end
 
-    max_copies_requestable = ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
-    if max_copies_requestable.to_i >= @set.available_copies.to_i
+    #Calculates max ordered teacher set quantity from holds table.
+    ts_holds_count = @set.teacher_set_holds_count
+    is_ordered_max_quantity = true if ts_holds_count.to_i >= max_copies_requestable.to_i
+
+    #Teacher set available copies less than configured value, we should show ts available_copies count in teacherset order dropdown.
+    if max_copies_requestable.to_i >= @set.available_copies.to_i && ts_holds_count.to_i <= 0
       max_copies_requestable = @set.available_copies.to_i
+    elsif ts_holds_count.to_i >= 0
+      max_copies_requestable = [max_copies_requestable - ts_holds_count.to_i, @set.available_copies.to_i].min
     end
 
     render json: {
       :teacher_set => @set,
       :active_hold => @active_hold,
       :user => current_user,
-      :allowed_quantities => (1..max_copies_requestable.to_i).to_a
+      :allowed_quantities => (1..max_copies_requestable.to_i).to_a,
+      :is_ordered_max_quantity => is_ordered_max_quantity
       # :teacher_set_notes => @set.teacher_set_notes,
       # :books => @set.books
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"

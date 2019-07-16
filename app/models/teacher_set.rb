@@ -59,6 +59,10 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+  def teacher_set_holds_count
+     holds.collect{|i| i.quantity}.inject(:+)
+  end
+
   def make_slug
     # check for nil title otherwise parameterize will fail
     parameterized_title = (self.title || '').parameterize
