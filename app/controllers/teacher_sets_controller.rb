@@ -71,10 +71,10 @@ class TeacherSetsController < ApplicationController
     ts_holds_count = @set.holds_count_for_user(current_user)
 
     #Teacher set available copies less than configured value, we should show ts available_copies count in teacherset order dropdown.
-    max_copies_requestable = [max_copies_requestable - ts_holds_count.to_i, @set.available_copies.to_i].min
+    max_copies_requestable = [max_copies_requestable.to_i - ts_holds_count.to_i, @set.available_copies.to_i].min
 
     #Button should be disabled after teacher has ordered maximum.
-    
+
     allowed_quantities = (ts_holds_count.to_i >= max_copies_requestable.to_i)? [] : (1..max_copies_requestable.to_i).to_a
 
     render json: {
