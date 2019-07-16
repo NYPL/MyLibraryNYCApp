@@ -70,7 +70,6 @@ class TeacherSetsController < ApplicationController
     #ts_holds_count is the number of holds currently held in the database for this teacher set.
     ts_holds_count = @set.holds_count_for_user(current_user)
 
-    binding.pry
     #Teacher set available copies less than configured value, we should show ts available_copies count in teacherset order dropdown.
     max_copies_requestable = [max_copies_requestable.to_i - ts_holds_count.to_i, @set.available_copies.to_i].min
 
