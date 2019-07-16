@@ -59,8 +59,8 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
-  def teacher_set_holds_count
-     holds.collect{|i| i.quantity}.inject(:+)
+  def teacher_set_holds_count(user)
+    holds.where(:user_id => user.id).collect{|i| i.quantity}.inject(:+)
   end
 
   def make_slug

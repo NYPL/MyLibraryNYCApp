@@ -5,7 +5,7 @@ class TeacherSetForUserSerializer < ActiveModel::Serializer
     ret[:active_hold] = hold_serializer_hash
     ret[:user] = user_serializer_hash
     ret[:allowed_quantities] = object[:allowed_quantities]
-    ret[:is_ordered_max_copies] = object[:is_ordered_max_copies]
+    ret[:is_ordered_max_quantity_ts] = object[:is_ordered_max_quantity_ts]
     ret
   end
 
