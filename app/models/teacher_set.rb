@@ -437,7 +437,7 @@ class TeacherSet < ActiveRecord::Base
   # to update the availability string to 'Available' or 'All copies in use'
   def recalculate_availability
     copies = self.available_copies
-    #Below code need to discuss with Darya. Right now its effecting with new functionality.
+    #Below code need to discuss with Darya.
     #copies -= self.new_or_pending_holds.count
     status = copies > 0 ? 'available' : 'unavailable'
     self.update_attribute :availability, status
