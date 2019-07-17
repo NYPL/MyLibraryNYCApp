@@ -18,6 +18,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $scope.active_hold = data.teacher_set.active_hold;
       $scope.ts.teacher_set_notes = data.teacher_set.teacher_set_notes
       $scope.allowed_quantities = data.teacher_set.allowed_quantities;
+      $scope.user_has_ordered_max =  data.teacher_set.allowed_quantities.length <= 0
       $scope.ts.books = data.teacher_set.books
       $scope.user = data.teacher_set.user
       $scope.quantity = data.teacher_set.allowed_quantities.length > 0 ? data.teacher_set.allowed_quantities[0] : 0 

@@ -59,6 +59,11 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+  def holds_count_for_user(user)
+    return unless user
+    holds.where(:user_id => user.id).collect{|i| i.quantity}.inject(:+)
+  end
+
   def make_slug
     # check for nil title otherwise parameterize will fail
     parameterized_title = (self.title || '').parameterize
@@ -433,7 +438,8 @@ class TeacherSet < ActiveRecord::Base
   # to update the availability string to 'Available' or 'All copies in use'
   def recalculate_availability
     copies = self.available_copies
-    copies -= self.new_or_pending_holds.count
+    #Below code need to discuss with Darya.
+    #copies -= self.new_or_pending_holds.count
     status = copies > 0 ? 'available' : 'unavailable'
     self.update_attribute :availability, status
   end
