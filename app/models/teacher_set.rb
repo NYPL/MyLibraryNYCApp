@@ -60,6 +60,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def holds_count_for_user(user)
+    return unless user
     holds.where(:user_id => user.id).collect{|i| i.quantity}.inject(:+)
   end
 
