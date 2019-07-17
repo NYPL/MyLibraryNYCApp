@@ -82,7 +82,7 @@ class TeacherSetsController < ApplicationController
       :teacher_set => @set,
       :active_hold => @active_hold,
       :user => current_user,
-      :allowed_quantities => allowed_quantities,
+      :allowed_quantities => allowed_quantities
       # :teacher_set_notes => @set.teacher_set_notes,
       # :books => @set.books
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"
