@@ -65,13 +65,11 @@ class HoldsController < ApplicationController
       unless params[:settings].nil?
         current_user.update_attributes(params[:settings])
       end
-
-      quantity = params.dig(:query_params, :quantity)
-      if quantity
-        @hold.quantity = quantity.to_i
-        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
-        @hold.teacher_set.save!
-      end
+      
+      quantity = params.dig(:query_params, :quantity) ? params.dig(:query_params, :quantity) : @hold.quantity
+      @hold.quantity = quantity.to_i
+      @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
+      @hold.teacher_set.save!
       
       respond_to do |format|
         if @hold.save
