@@ -59,10 +59,12 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+  #Current user Teacher set holds count
   def holds_count_for_user(user)
     holds_for_user(user).collect{|i| i.quantity}.inject(:+)
   end
 
+  #Current user Teacher set holds
   def holds_for_user(user)
     return [] unless user
     holds.where(:user_id => user.id)
