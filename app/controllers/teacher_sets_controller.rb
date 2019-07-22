@@ -88,6 +88,16 @@ class TeacherSetsController < ApplicationController
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"
   end
 
+  #Gets teacherset holds from database.
+  def teacher_set_holds
+    @set = TeacherSet.find(params[:id])
+    @holds = @set.holds_for_user(current_user)
+    respond_to do |format|
+      format.html
+      format.json { render json: resp }
+    end
+  end
+
 =begin
   # GET /teacher_sets/new
   # GET /teacher_sets/new.json
