@@ -15,6 +15,8 @@ MyLibraryNYC::Application.routes.draw do
   resources :books
   resources :schools, :only => [:index]
   match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel
+  match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', :as => :teacher_set_holds
+
   resources :holds
 
   # The priority is based upon order of creation:
