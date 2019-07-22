@@ -94,7 +94,6 @@ class TeacherSetsController < ApplicationController
     @holds = @set.holds_for_user(current_user)
     respond_to do |format|
       format.html
-      format.json { render json: resp }
     end
   end
 
