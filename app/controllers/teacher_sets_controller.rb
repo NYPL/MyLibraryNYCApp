@@ -92,9 +92,6 @@ class TeacherSetsController < ApplicationController
   def teacher_set_holds
     @set = TeacherSet.find(params[:id])
     @holds = @set.holds_for_user(current_user)
-    respond_to do |format|
-      format.html
-    end
   end
 
 =begin
