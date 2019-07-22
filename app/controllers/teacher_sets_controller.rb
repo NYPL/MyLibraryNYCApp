@@ -88,7 +88,7 @@ class TeacherSetsController < ApplicationController
     }, serializer: TeacherSetForUserSerializer, root: "teacher_set"
   end
 
-  #Gets teacherset holds from database.
+  #Gets current user teacherset holds from database.
   def teacher_set_holds
     @set = TeacherSet.find(params[:id])
     @holds = @set.holds_for_user(current_user)

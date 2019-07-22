@@ -1,5 +1,5 @@
 <div class="row">
   <hr />
-  <h2>My Teacher Set Orders</h2>
-  <%= render "holds/list" %>
+  <h2><%= @holds.last.teacher_set.title %></h2>
+  <%= render "holds/list", hide_title: true %>
 </div>
