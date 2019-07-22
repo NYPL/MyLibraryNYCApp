@@ -11,10 +11,10 @@
   </thead>
   <tbody>
   <% @holds.each do |hold| %>
-    <% if !hold.teacher_set.nil? %>
+    <% unless hold.teacher_set.nil? %>
       <tr>
         <td class="date"><%= link_to (hold.created_at.strftime("%b %-d, %Y")), hold_path(hold.access_key), :title => "view order details" %></td>
-        <% if !local_assigns[:hide_title] %>
+        <% unless local_assigns[:hide_title] %>
           <td class="title"><%= link_to hold.teacher_set.title, hold.teacher_set, :title => "view teacher set details" %></td>
         <% end %>
         <td class="status"><%= hold.quantity %></td>
