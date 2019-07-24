@@ -138,3 +138,9 @@ NOTE:  You might want to pre-pend each command with some environment setup, s.a.
 `RAILS_ENV=local bundle exec rake db:schema:load RAILS_ENV=test`
 and
 `RAILS_ENV=local ruby -Itest test/unit/user_test.rb`
+
+
+Order Multiple Teacher Sets Configuration
+========================
+```MAXIMUM_COPIES_REQUESTABLE :5  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maximum teacherset orders, we can update in AWS ElasticBeanstalk Configuration.
+```
