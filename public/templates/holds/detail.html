@@ -1,9 +1,8 @@
 <div class="animate-in-container" ng-show="loaded">
   <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include> 
   <h1>Your Order</h1>
-  
   <p class="alert hold-alert" ng-show="hold.status == 'cancelled'">
-    Your order has been cancelled.
+    Your order has been cancelled. If you want to reorder this Teacher Set please contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
   </p>
   
   <p class="alert hold-alert" ng-show="hold.status == 'new'">
@@ -15,8 +14,9 @@
   <hr />
   
   <p>
-    <strong>Status</strong><br />{{hold.status_label}} <br />
-    <strong>Placed</strong><br />{{hold.created_at_pretty}}
+    <strong>Quantity</strong><br/>{{hold.quantity}}<br/>
+    <strong>Status</strong><br/>{{hold.status_label}}<br/>
+    <strong>Placed</strong><br/>{{hold.created_at_pretty}}
   </p>
   <p ng-show="hold.status == 'new'">
     <a href="/app#/holds/{{hold.access_key}}/cancel" class="button">{{action_label}}</a>

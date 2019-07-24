@@ -1,5 +1,5 @@
 <p>
-  <%= link_to @user.email, "mailto:#{@user.email}" %> has ordered the following teacher set:<br />
+  <%= link_to @user.email, "mailto:#{@user.email}" %> has ordered <%= pluralize(@hold.quantity, 'copy') %> of the following teacher set:<br />
   <%= link_to @teacher_set.title, teacher_set_url(@teacher_set) %>.
 
 <p>

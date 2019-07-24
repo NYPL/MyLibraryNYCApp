@@ -1,4 +1,4 @@
-class Api::V01::BibsController < ApplicationController
+class Api::V01::BibsController < Api::V01::GeneralController
   include LogWrapper
 
   before_filter :set_request_body
@@ -34,10 +34,10 @@ class Api::V01::BibsController < ApplicationController
 
       teacher_set = TeacherSet.where(bnumber: "b#{bnumber}").first_or_initialize
 
-      # make the teacher set available if it is newly created (.persisted? means that it's saved in the db):
-      # TODO: In the future, availability information will come through in its own stream, and hard-coding
-      # availability rules into the code will need to go away.  Labeling this code line as potential tech debt.
-      teacher_set.update_attributes(availability: 'available') if !teacher_set.persisted?
+      # Calls Bib service for items.
+      # Calculates the total number of items and available items in the list.     
+      ts_items_info = teacher_set.get_items_info_from_bibs_service(bnumber, teacher_set_record['nyplSource'])
+
       begin
         teacher_set.update_attributes(
           title: title,
@@ -55,7 +55,9 @@ class Api::V01::BibsController < ApplicationController
           grade_end: grade_or_lexile_array('grade')[1] || '',
           lexile_begin: grade_or_lexile_array('lexile')[0] || '',
           lexile_end: grade_or_lexile_array('lexile')[1] || '',
-          available_copies: 999
+          available_copies: ts_items_info[:available_count],
+          total_copies: ts_items_info[:total_count],
+          availability: ts_items_info[:availability_string]
         )
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
@@ -88,7 +90,8 @@ class Api::V01::BibsController < ApplicationController
       end
 
       saved_teacher_sets << teacher_set
-      LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets:finished making teacher set','method' => 'bibs_controller.create_or_update_teacher_sets'})
+      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
+        'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
 
     render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
@@ -116,20 +119,6 @@ class Api::V01::BibsController < ApplicationController
 
 
   private
-
-    # Requests to the MLN teacher set-updating api must come from our verified lambdas,
-    # unless are being tested or developed.
-    def validate_source_of_request
-      LogWrapper.log('DEBUG',
-        {
-         'message' => 'Request sent to BibsController#validate_source_of_request',
-         'method' => 'validate_source_of_request',
-         'status' => 'start',
-         'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
-        })
-
-      redirect_to '/api/unauthorized' unless Rails.env.test? || Rails.env.local? || request.headers['X-API-Key'] == ENV['API_GATEWAY_HEADER_KEY']
-    end
 
     def var_field(marcTag, merge = true)
       begin
@@ -168,54 +157,6 @@ class Api::V01::BibsController < ApplicationController
       end
       saved_teacher_sets_json_array
     end
-
-    # set the @request_body instance variable so it can be used in other methods; check for parsing errors.
-    def set_request_body
-      begin
-        @request_body = params[:_json] || JSON.parse(request.body.read)
-      rescue => e
-        @parsing_error = e
-      end
-    end
-
-    # this validates that the request is in the correct format
-    def validate_request
-      if @parsing_error
-        return [400, "Parsing error: #{@parsing_error}"]
-      elsif !@request_body || @request_body.empty?
-        return [400, "Request body is empty."]
-      end
-      return []
-    end
-
-
-    # Prepare and write an error message to the application log.
-    def log_error(method, exception)
-      if method.blank?
-        method = "#{controller_name or 'unknown_controller'}##{action_name or 'unknown_action'}"
-      end
-
-      message = (exception && exception.message ? exception.message[0..200] : 'exception or exception message missing')
-      backtrace = (exception ? exception.backtrace : 'exception missing')
-      LogWrapper.log('ERROR', {
-        'message' => "#{message}...\nBacktrace=#{backtrace}.",
-        'method' => method
-      })
-    end
-
-
-    # log the error and render it back to the lambda
-    def render_error(error_code_and_message)
-      LogWrapper.log('ERROR', {
-        'message' => error_code_and_message[1],
-        'method' => "#{controller_name}##{action_name}",
-        'status' => error_code_and_message[0]
-      })
-      render status: error_code_and_message[0], json: {
-        message: error_code_and_message[1]
-      }.to_json
-    end
-
 
     def grade_or_lexile_array(return_grade_or_lexile)
       grade_and_lexile_json = all_var_fields('521', 'content')

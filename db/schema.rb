@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20181206203557) do
+ActiveRecord::Schema.define(:version => 20190701173109) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20181206203557) do
     t.datetime "created_at",                                      :null => false
     t.datetime "updated_at",                                      :null => false
     t.string   "access_key",     :limit => 30
+    t.integer  "quantity",                     :default => 1
   end
 
   add_index "holds", ["access_key"], :name => "index_holds_access_key", :unique => true

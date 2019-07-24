@@ -1,3 +1,5 @@
+require 'ruby_dig'
+
 class HoldsController < ApplicationController  
   include LogWrapper
 
@@ -15,7 +17,6 @@ class HoldsController < ApplicationController
     # @hold = Hold.find(params[:id])
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
-
 =begin
     render json: {
       :teacher_set => @hold.teacher_set,
@@ -53,6 +54,8 @@ class HoldsController < ApplicationController
     }
   end
 
+  #Create holds and update quantity column in holds.
+  #Calculate available copies from quantity saves in teacherset table.
   def create
     begin
       set = TeacherSet.find(params[:teacher_set_id])
@@ -62,6 +65,11 @@ class HoldsController < ApplicationController
       unless params[:settings].nil?
         current_user.update_attributes(params[:settings])
       end
+      
+      quantity = params.dig(:query_params, :quantity) ? params.dig(:query_params, :quantity) : @hold.quantity
+      @hold.quantity = quantity.to_i
+      @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
+      @hold.teacher_set.save!
       
       respond_to do |format|
         if @hold.save

@@ -54,12 +54,19 @@ Setting up the development server (and how to set up other servers, e.g. a stagi
 
 1. Create app in AWS Elastic Beanstalk. To do so, run "eb init" in the root  directory of your repo. This will prompt a list of questions you need to answer.(if "eb" command is not installed, run "pip install awsebcli")
 
-
 2. Next run the following command. Please add the appropriate substitutions where you see [key]. The purpose of this command is to the deploy the environment on Elastic Beanstalk. You will be prompted a list of questions you need to answer.
 
 ```
-eb create [environment_name] --single --instance_profile cloudwatchable-beanstalk --instance_type t2.small --cname [cname_name] --vpc.ec2subnets subnet-9ef736b3 --vpc.id vpc-dbc4f7bc --profile nypl-sandbox --keyname dgdvteam
+eb create [environment_name] --single --instance_profile cloudwatchable-beanstalk --instance_type t2.micro --cname [cname_name] --vpc.ec2subnets subnet-9ef736b3 --vpc.id vpc-dbc4f7bc --profile nypl-sandbox --keyname dgdvteam --tags Project=MyLibraryNyc,Environment=development
 ```
+
+Make sure the following environment variables are set in your EB environment configuration:
+BUNDLE_WITHOUT=test:development
+LOGGING=debug
+RACK_ENV=development
+RAILS_ENV=development
+RAILS_SKIP_ASSET_COMPILATION=false
+RAILS_SKIP_MIGRATIONS=false
 
 
 How to deploy to this server:
@@ -131,3 +138,9 @@ NOTE:  You might want to pre-pend each command with some environment setup, s.a.
 `RAILS_ENV=local bundle exec rake db:schema:load RAILS_ENV=test`
 and
 `RAILS_ENV=local ruby -Itest test/unit/user_test.rb`
+
+
+Order Multiple Teacher Sets Configuration
+========================
+```MAXIMUM_COPIES_REQUESTABLE :5  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maximum teacherset orders, we can update in AWS ElasticBeanstalk Configuration.
+```
