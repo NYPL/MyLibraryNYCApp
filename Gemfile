@@ -30,6 +30,8 @@ gem 'yaml_db'
 gem "lograge"
 gem "logstash-event"
 gem 'rack-cors'
+gem 'minitest', '~> 5.6.1'
+gem 'ruby_dig'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails',   '~> 3.2.3'

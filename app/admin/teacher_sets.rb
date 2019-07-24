@@ -51,7 +51,7 @@ ActiveAdmin.register TeacherSet do
 
 
 
-  actions :index, :show, :edit, :update
+  actions :index, :show, :update
 
   menu :priority => 3
   sidebar :versions, :partial => "admin/version", :only => :show
@@ -69,9 +69,6 @@ ActiveAdmin.register TeacherSet do
     column :title do |teacher_set|
       link_to(teacher_set.title, admin_teacher_set_path(teacher_set))
     end
-    column('Available', :availability, sortable: :availability) do |teacher_set|
-      render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'index' })
-    end
     column :created_at
     column :updated_at
   end
@@ -81,14 +78,6 @@ ActiveAdmin.register TeacherSet do
     @versioned_object = TeacherSet.find(params[:id])
     @versions = PaperTrail::Version.where(item_type: 'TeacherSet', item_id: @versioned_object.id).order('created_at ASC')
     render partial: 'admin/history'
-  end
-
-  action_item only: [:show] do
-    render(partial: 'teacher_sets/availability_links_container', locals: { teacher_set: teacher_set, action: 'show' })
-  end
-
-  action_item only: [:show] do
-    render(partial: 'teacher_sets/edit_button_container', locals: { teacher_set: teacher_set })
   end
 
   member_action :make_available, method: :put do
@@ -176,6 +165,7 @@ ActiveAdmin.register TeacherSet do
               "Missing user data"
             end
           end
+          column 'Quantity' do |hold| hold.quantity end
           column 'Date Required' do |hold| link_to hold.date_required, admin_hold_path(hold) end
           column 'Created' do |hold| hold.created_at end
         end

@@ -86,6 +86,7 @@ ActiveAdmin.register User do
               "This teacher set no longer exists."
             end
           end
+          column 'Quantity' do |h| h.quantity end
           column 'Date Required' do |h| link_to h.date_required, admin_hold_path(h) end
           column 'Created' do |h| h.created_at end
         end

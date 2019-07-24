@@ -134,7 +134,37 @@ pre {
     color: $white;
   }
 }
+
+.order_button {
+  width: auto;
+  margin: 0 auto;
+  padding: 3px 45px 3px 45px;
+  font-size: 1em;
+  font-weight: normal;
+  // line-height: 2;
+  text-align: center;
+  // white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background: $red;
+  color: $white;
+  border: none;
+  border-radius: 8px;  
+  text-decoration: none;
+  text-transform: uppercase;
+  &:hover {
+    background: lighten($red,5%);
+    color: $white;
+  }
+  border: 1px solid #000000;
+}
 .button.secondary {
+  background: $blue;
+  &:hover {
+    background: lighten($blue,5%);
+  }
+}
+.order_button.secondary {
   background: $blue;
   &:hover {
     background: lighten($blue,5%);
@@ -423,3 +453,15 @@ footer {
   }
 }
 
+.order_button.queue {
+  background: #D75B25;
+}
+.order_button.disabled {
+  @include opacity(0.5);
+}
+.order_button.queue {
+  background: $orange;
+  &:hover {
+    background: lighten($orange,5%);
+  }
+}
