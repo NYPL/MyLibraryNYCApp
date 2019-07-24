@@ -23,6 +23,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $scope.user = data.teacher_set.user
       $scope.quantity = data.teacher_set.allowed_quantities.length > 0 ? data.teacher_set.allowed_quantities[0] : 0 
       $scope.loaded = true;
+
     });
 
     $scope.autoReserve = function() {
