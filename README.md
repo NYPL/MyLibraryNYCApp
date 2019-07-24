@@ -142,5 +142,5 @@ and
 
 Order Multiple Teacher Sets Configuration
 ========================
-```MAXIMUM_COPIES_REQUESTABLE :5  - This is configuration value in AWS ElasticBeanstalk
+```MAXIMUM_COPIES_REQUESTABLE :5  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maximum teacherset orders, we can update in AWS ElasticBeanstalk Configuration.
 ```
