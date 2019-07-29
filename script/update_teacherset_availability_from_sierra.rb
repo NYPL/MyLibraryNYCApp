@@ -25,7 +25,7 @@ def update_teacher_set_real_time_available_total_count
   end
 
   total_time = Time.now - start_time
-  puts "TotalteachersetsCount: #{TeacherSet.count}", "UpdatedTeacheraSetCount: #{success_bib_ids.count.to_i + failure_bib_ids.count.to_i + not_found_ids.count.to_i}"
+  puts "TotalteachersetsCountFromDB: #{TeacherSet.count}"
   puts "successIdsCount: #{success_bib_ids.count}", "failureIds: #{failure_bib_ids}", "failureIdsCount: #{failure_bib_ids.count}", "notFoundIds: #{not_found_ids}", "notFoundIdsCount: #{not_found_ids.count}", "totalTime: #{total_time}"
   puts "errorMessages: #{error_messages}"
 end
