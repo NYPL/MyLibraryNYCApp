@@ -7,7 +7,7 @@ def update_teacher_set_real_time_available_total_count
   TeacherSet.find_each do |ts|
     next if !ts.bnumber
     begin
-      bib_id = '20025647'
+      bib_id = ts.bnumber.gsub('b', '')
       puts "Bib id: #{bib_id}"
       bibs_resp = ts.update_available_and_total_count(bib_id, 'sierra-nypl')
       if bibs_resp[:bibs_resp]['statusCode'] == 200
