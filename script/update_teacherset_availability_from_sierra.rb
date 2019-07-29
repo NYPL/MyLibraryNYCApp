@@ -29,3 +29,4 @@ def update_teacher_set_real_time_available_total_count
   puts "successIdsCount: #{success_bib_ids.count}", "failureIds: #{failure_bib_ids}", "failureIdsCount: #{failure_bib_ids.count}", "notFoundIds: #{not_found_ids}", "notFoundIdsCount: #{not_found_ids.count}", "totalTime: #{total_time}"
   puts "errorMessages: #{error_messages}"
 end
+update_teacher_set_real_time_available_total_count
