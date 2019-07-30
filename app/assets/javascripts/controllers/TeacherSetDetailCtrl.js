@@ -33,6 +33,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
 
       $http.post('/teacher_sets/'+$scope.teacher_set_id+'/holds.json', $scope.formData).success(function(resp) {
         if ( resp.redirect_to ) {
+          $scope.is_school_active = resp.is_school_active
           window.location = resp.redirect_to;
         } else {
           $location.path('/holds/'+resp.hold.access_key).search({new_order: 1});
