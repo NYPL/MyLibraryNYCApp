@@ -38,7 +38,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
           $location.path('/holds/'+resp.hold.access_key).search({new_order: 1});
         }
         $scope.busy = false;
-        $scope.is_school_inactive = resp.is_school_active == false
+        $scope.is_school_active = resp.is_school_active
       }).error(function(resp) {
         $scope.errorMessage = resp.error
       })
