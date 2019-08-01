@@ -13,13 +13,13 @@ class AdminMailer < ActionMailer::Base
       emails = AdminUser.where(email_notifications:true).pluck(:email)
       LogWrapper.log('DEBUG', {
         'message' => "About to send failed_bibs_controller_api_request email.\n@error_code_and_message: #{@error_code_and_message || 'nil'}",
-        'method' => 'AdminMailerfailed_bibs_controller_api_request'
+        'method' => 'AdminMailer.failed_bibs_controller_api_request'
       })
       mail(:to => emails, :subject => "Problem occurred updating bib from Sierra")
     rescue => exception
       LogWrapper.log('ERROR', {
         'message' => "Cannot send failed_bibs_controller_api_request notification email.  Backtrace=#{exception.backtrace}.",
-        'method' => 'AdminMailer failed_bibs_controller_api_request'
+        'method' => 'AdminMailer.failed_bibs_controller_api_request'
       })
       raise exception
     end
@@ -41,6 +41,24 @@ class AdminMailer < ActionMailer::Base
       LogWrapper.log('ERROR', {
         'message' => "Cannot send failed_bibs_controller_api_request notification email.  Backtrace=#{exception.backtrace}.",
         'method' => 'AdminMailer teacher_set_update_missing_required_fields'
+      })
+      raise exception
+    end
+  end
+
+  # Sends an email to let admins know that a request to update item availability has failed.
+  def failed_items_controller_api_request(error_code_and_message)
+    begin
+      emails = AdminUser.where(email_notifications:true).pluck(:email)
+      LogWrapper.log('DEBUG', {
+        'message' => "About to send failed_items_controller_api_request email.\n@error_code_and_message: #{@error_code_and_message || 'nil'}",
+        'method' => 'AdminMailer.failed_items_controller_api_request'
+      })
+      mail(:to => emails, :subject => "Problem occurred updating bib availability")
+    rescue => exception
+      LogWrapper.log('ERROR', {
+        'message' => "Cannot send failed_items_controller_api_request notification email.  Backtrace=#{exception.backtrace}.",
+        'method' => 'AdminMailer.failed_items_controller_api_request'
       })
       raise exception
     end

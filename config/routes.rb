@@ -15,6 +15,8 @@ MyLibraryNYC::Application.routes.draw do
   resources :books
   resources :schools, :only => [:index]
   match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel
+  match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', :as => :teacher_set_holds
+
   resources :holds
 
   # The priority is based upon order of creation:
@@ -81,6 +83,9 @@ MyLibraryNYC::Application.routes.draw do
 
   post 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#create_or_update_teacher_sets'
   delete 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#delete_teacher_sets'
+
+  post 'api/v0.1/mylibrarynyc/item-availability' => 'api/v01/items#update_availability'
+
   get 'api/unauthorized' => 'api/v01/general#unauthorized'
 
   # See how all your routes lay out with "rake routes"
