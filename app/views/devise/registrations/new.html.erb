@@ -26,27 +26,7 @@
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name),  validate: true) do |f| %>
 
-<!-- Below code for custom error messages. 
-    Because Devise gem display same attributes from database.
-    eg: 'Pin does not meet our requirements. Please try again' instead of this error message
-    display  'PIN(here PIN is capital letters) does not meet our requirements. Please try again.'
- -->  
- <% 
-    error_msg_hash = {}
-    if resource.errors.messages[:alt_email].present?
-      error_msg_hash[:alt_email] = ['Alternate email '.concat(resource.errors.messages[:alt_email].join)]
-    end
-
-    if resource.errors.messages[:pin].present?
-      error_msg_hash[:pin] = ['PIN '.concat(resource.errors.messages[:pin].join)]
-    end
-
-    if resource.errors.messages[:email].present?
-      error_msg_hash[:email] = [resource.errors.messages[:email].join]
-    end
-  %>
-
-  <%= custom_devise_error_messages(error_msg_hash) %>
+  <%= custom_devise_error_messages(local_assigns[:error_msg_hash]) %>
   <div class="field-group">
     <%= label_tag :email, "Your DOE email address", :id => 'userEmail-label' %>
     <%= f.email_field :email, :autofocus => true, "aria-labelledby" => 'userEmail-label user_email_error'  %>
