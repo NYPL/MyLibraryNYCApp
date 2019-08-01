@@ -56,7 +56,7 @@ class RegistrationsController < Devise::RegistrationsController
   # Because Devise gem display same attributes from database.
   # eg: 'Pin does not meet our requirements. Please try again' instead of this error message
   # display  'PIN(here PIN is capital letters) does not meet our requirements. Please try again.'
-
+  # Eg: resource.errors = @messages={:alt_email=>["has already been taken"], :pin=>["does not meet our requirements. Please try again."]}>
   def error_msg_hash
     error_msg_hash = {}
     if resource.errors.messages[:alt_email].present?
