@@ -68,7 +68,7 @@ class RegistrationsController < Devise::RegistrationsController
     end
 
     if resource.errors.messages[:email].present?
-      error_msg_hash[:email] = [resource.errors.messages[:email].join]
+      error_msg_hash[:email] = ['Email '.concat(resource.errors.messages[:email].join)]
     end
     error_msg_hash
   end
