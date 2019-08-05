@@ -60,7 +60,7 @@ class RegistrationsController < Devise::RegistrationsController
   def error_msg_hash
     error_msg_hash = {}
     if resource.errors.messages[:alt_email].present?
-      error_msg_hash[:alt_email] = ['Alternate email '.concat(resource.errors.messages[:alt_email].join)]
+      error_msg_hash[:alt_email] = ['Alternate email '.concat("#{resource.errors.messages[:alt_email].join}.")]
     end
 
     if resource.errors.messages[:pin].present?
@@ -68,7 +68,7 @@ class RegistrationsController < Devise::RegistrationsController
     end
 
     if resource.errors.messages[:email].present?
-      error_msg_hash[:email] = ['Email '.concat(resource.errors.messages[:email].join)]
+      error_msg_hash[:email] = ['Email '.concat("#{resource.errors.messages[:email].join}.")]
     end
     error_msg_hash
   end
