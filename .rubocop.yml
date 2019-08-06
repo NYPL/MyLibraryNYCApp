@@ -1,10 +1,1 @@
-# inherit_from: .rubocop_todo.yml
-inherit_gem:
-  mad_rubocop: .rubocop.yml
-AllCops:
-  TargetRubyVersion: 2.2.10
-  Include:
-    - 'Gemfile'
-    - 'Rakefile'
-Style/FrozenStringLiteralComment:
-  Enabled: false 
+inherit_from: .rubocop_todo.yml
