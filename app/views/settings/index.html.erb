@@ -17,7 +17,7 @@
 
   <div class="field-group">
     <%= f.label 'Your school:' %>
-    <%= f.select :school_id, @schools, "aria-labelledby" => 'userSchool-label user_school_error', :include_blank => '-- Select A School -- ' %>
+    <%= f.select :school_id, @schools %>
   </div>
   <%= f.hidden_field :current_password, :value => User.default_password.to_s %>
   <div class="actions">
