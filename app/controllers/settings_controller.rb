@@ -16,7 +16,7 @@ class SettingsController < ApplicationController
     end
 
     resp = {}
-    #Active schools frm school DB.
+    #Active schools from school table.
     @schools = School.active.map do |s| 
       [s.name + " (#{s.code[1..-1].upcase})", s.id] 
     end
