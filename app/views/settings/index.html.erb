@@ -17,11 +17,9 @@
 
   <div class="field-group">
     <%= f.label 'Your school:' %>
-    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }  %>
+    <%= f.select :school_id, @schools %>
   </div>
-
   <%= f.hidden_field :current_password, :value => User.default_password.to_s %>
-
   <div class="actions">
     <%= f.submit "Update Settings", :class=> "button" %>
   </div>
