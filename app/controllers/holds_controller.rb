@@ -1,31 +1,26 @@
 require 'ruby_dig'
 
-class HoldsController < ApplicationController  
+class HoldsController < ApplicationController
   include LogWrapper
 
-  
   before_filter :redirect_to_angular, only: [:show, :new, :cancel]
   before_filter :check_ownership, only: [:show, :update]
-  before_filter :require_login, only: [:index, :new, :create]  
+  before_filter :require_login, only: [:index, :new, :create, :check_ownership]
+
 
   def index
+    LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/holds_controller.rb.index'})
     redirect_to root_url
   end
 
+
   # GET /holds/1.json
   def show
-    # @hold = Hold.find(params[:id])
+    LogWrapper.log('DEBUG', {'message' => 'show.start', 'method' => 'app/controllers/holds_controller.rb.show'})
+
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
-=begin
-    render json: {
-      :teacher_set => @hold.teacher_set,
-      :active_hold => @hold,
-      :user => current_user
-      # :teacher_set_notes => @set.teacher_set_notes,
-      # :books => @set.books
-    }, serializer: HoldSerializer
-=end
+
     render json: {
       :hold => @hold,
       :teacher_set => @hold.teacher_set,
@@ -33,8 +28,10 @@ class HoldsController < ApplicationController
     }, serializer: HoldExtendedSerializer, root: false
   end
 
+
   # GET /holds/new.json
   def new
+    LogWrapper.log('DEBUG', {'message' => 'new.start', 'method' => 'app/controllers/holds_controller.rb.new'})
     @hold = Hold.new
     @hold.teacher_set = TeacherSet.find params[:teacher_set_id]
     render json: {
@@ -42,9 +39,11 @@ class HoldsController < ApplicationController
       :teacher_set => @hold.teacher_set
     }
   end
-  
+
+
   # GET /holds/1/cancel.json
   def cancel
+    LogWrapper.log('DEBUG', {'message' => 'cancel.start', 'method' => 'app/controllers/holds_controller.rb.cancel'})
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
     render json: {
@@ -54,13 +53,16 @@ class HoldsController < ApplicationController
     }
   end
 
+
   #Create holds and update quantity column in holds.
   #Calculate available copies from quantity saves in teacherset table.
   def create
+    LogWrapper.log('DEBUG', {'message' => 'create.start', 'method' => 'app/controllers/holds_controller.rb.create'})
+
     begin
-      #If currentuser school is inactive display error message and redirect to same page. 
+      #If currentuser school is inactive display error message and redirect to same page.
       is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
-      
+
       if !is_school_active
         render json: {:redirect_to => "#{app_url}#/teacher_sets/#{params[:teacher_set_id]}", :is_school_active => is_school_active}
         return
@@ -72,12 +74,12 @@ class HoldsController < ApplicationController
       unless params[:settings].nil?
         current_user.update_attributes(params[:settings])
       end
-      
+
       quantity = params.dig(:query_params, :quantity) ? params.dig(:query_params, :quantity) : @hold.quantity
       @hold.quantity = quantity.to_i
       @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
       @hold.teacher_set.save!
-      
+
       respond_to do |format|
         if @hold.save
           format.html { redirect_to hold_url(@hold.access_key), notice: 'Your order has been received by our system and will soon be delivered to your school.<br/><br/>Check your email inbox for a message with further details.' }
@@ -96,14 +98,15 @@ class HoldsController < ApplicationController
     end
   end
 
+
   def update
-    # @hold = Hold.find(params[:id])
+    LogWrapper.log('DEBUG', {'message' => 'update.start', 'method' => 'app/controllers/holds_controller.rb.update'})
+
     @hold = Hold.find_by_access_key(params[:id])
-    puts "update? #{@hold}"
 
     unless (c = params[:hold_change]).nil?
       if c[:status] == 'cancelled'
-        puts "cancelling hold: #{c} => #{@hold}"
+        LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
         @hold.cancel! c[:comment]
       end
     end
@@ -118,18 +121,19 @@ class HoldsController < ApplicationController
       end
     end
   end
-  
+
+
   protected
 
   def check_ownership
+    LogWrapper.log('DEBUG', {'message' => 'check_ownership.start', 'method' => 'app/controllers/holds_controller.rb.check_ownership'})
     @hold = Hold.find_by_access_key(params[:id])
-    # @hold = Hold.find(params[:id])
-    
+
     if not user_signed_in?
       require_login
-      
+
     elsif @hold.user != current_user
-      flash[:error] = "You don't have permission to view/edit that order"      
+      flash[:error] = "You don't have permission to view/edit that order"
       respond_to do |format|
         format.html {
           redirect_to root_url
@@ -140,4 +144,5 @@ class HoldsController < ApplicationController
       end
     end
   end
+
 end
