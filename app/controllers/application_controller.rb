@@ -35,10 +35,10 @@ class ApplicationController < ActionController::Base
     # (PB: Uncommenting this out because I can't find a login flow that it effects. I think observed issue may have been something else..)
     redirect_url = admin_dashboard_path if !resource.nil? && resource.is_a?(AdminUser)
 
-    #if session[:redirect_after_login]
-    #  redirect_url = session[:redirect_after_login]
-    #  session.delete(:redirect_after_login)
-    #end
+    # if session[:redirect_after_login]
+    #   redirect_url = session[:redirect_after_login]
+    #   session.delete(:redirect_after_login)
+    # end
 
     redirect_url
   end
