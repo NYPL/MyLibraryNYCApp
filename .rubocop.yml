@@ -5,10 +5,16 @@ Documentation:
   Description: "Document classes and non-namespace modules."
   Enabled: false
 
+Layout/AlignHash:
+  Enabled: false
+
 Layout/EmptyLines:
   Enabled: false
 
 Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundMethodBody:
   Enabled: false
 
 Layout/EmptyLineBetweenDefs:
@@ -41,5 +47,8 @@ Style/BlockDelimiters:
 Style/BracesAroundHashParameters:
   Enabled: false
 
+Style/NegatedIf:
+  Enabled: false
+  
 Style/Not:
   Enabled: false
