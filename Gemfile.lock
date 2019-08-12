@@ -805,7 +805,7 @@ GEM
       rack (>= 1.4)
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
-    rubocop (0.58.2)
+    rubocop (0.59.2)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -898,7 +898,7 @@ DEPENDENCIES
   pry-stack_explorer
   rack-cors
   rails (= 3.2.22.5)
-  rubocop
+  rubocop (~> 0.59.1)
   ruby_dig
   sass-rails (~> 3.2.3)
   sendgrid-ruby (~> 1.1.6)
