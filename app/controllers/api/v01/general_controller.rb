@@ -8,7 +8,7 @@ class Api::V01::GeneralController < ApplicationController
   private
 
   # set the @request_body instance variable so it can be used in other methods;
-  #check for parsing errors.
+  # check for parsing errors.
   def set_request_body
     begin
       @request_body = params[:_json] || JSON.parse(request.body.read)
@@ -23,7 +23,7 @@ class Api::V01::GeneralController < ApplicationController
     if @parsing_error
       return [400, "Parsing error: #{@parsing_error}"]
     elsif !@request_body || @request_body.empty?
-      return [400, "Request body is empty."]
+      return [400, 'Request body is empty.']
     end
     return []
   end
@@ -32,12 +32,11 @@ class Api::V01::GeneralController < ApplicationController
   # Requests to the MLN teacher set-updating api must come from our verified lambdas,
   # unless are being tested or developed.
   def validate_source_of_request
-    LogWrapper.log('DEBUG',
-      {
-       'message' => "Request sent to #{params["controller"]}Controller#validate_source_of_request",
-       'method' => 'validate_source_of_request',
-       'status' => "start, Rails.env=#{Rails.env}, (Rails.env.test? || Rails.env.local?)=#{(Rails.env.test? || Rails.env.local?)}",
-       'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
+    LogWrapper.log('DEBUG', {
+        'message' => "Request sent to #{params['controller']}Controller#validate_source_of_request",
+        'method' => 'validate_source_of_request',
+        'status' => "start, Rails.env=#{Rails.env}, (Rails.env.test? || Rails.env.local?)=#{(Rails.env.test? || Rails.env.local?)}",
+        'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
       })
 
     redirect_to '/api/unauthorized' unless Rails.env.test? || Rails.env.local? || request.headers['X-API-Key'] == ENV['API_GATEWAY_HEADER_KEY']

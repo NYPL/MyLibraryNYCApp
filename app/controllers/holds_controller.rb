@@ -14,6 +14,7 @@ class HoldsController < ApplicationController
   end
 
 
+  ##
   # GET /holds/1.json
   def show
     LogWrapper.log('DEBUG', {'message' => 'show.start', 'method' => 'app/controllers/holds_controller.rb.show'})
@@ -22,49 +23,52 @@ class HoldsController < ApplicationController
     head 401 if @hold.nil?
 
     render json: {
-      :hold => @hold,
-      :teacher_set => @hold.teacher_set,
-      :teacher_set_notes => @hold.teacher_set.teacher_set_notes
+      hold: @hold,
+      teacher_set: @hold.teacher_set,
+      teacher_set_notes: @hold.teacher_set.teacher_set_notes
     }, serializer: HoldExtendedSerializer, root: false
   end
 
 
+  ##
   # GET /holds/new.json
   def new
     LogWrapper.log('DEBUG', {'message' => 'new.start', 'method' => 'app/controllers/holds_controller.rb.new'})
     @hold = Hold.new
     @hold.teacher_set = TeacherSet.find params[:teacher_set_id]
     render json: {
-      :hold => @hold,
-      :teacher_set => @hold.teacher_set
+      hold: @hold,
+      teacher_set: @hold.teacher_set
     }
   end
 
 
+  ##
   # GET /holds/1/cancel.json
   def cancel
     LogWrapper.log('DEBUG', {'message' => 'cancel.start', 'method' => 'app/controllers/holds_controller.rb.cancel'})
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
     render json: {
-      :hold => @hold,
-      :teacher_set => @hold.teacher_set,
-      :teacher_set_notes => @hold.teacher_set.teacher_set_notes
+      hold: @hold,
+      teacher_set: @hold.teacher_set,
+      teacher_set_notes: @hold.teacher_set.teacher_set_notes
     }
   end
 
 
-  #Create holds and update quantity column in holds.
-  #Calculate available copies from quantity saves in teacherset table.
+  ##
+  # Create holds and update quantity column in holds.
+  # Calculate available copies from quantity saves in teacherset table.
   def create
     LogWrapper.log('DEBUG', {'message' => 'create.start', 'method' => 'app/controllers/holds_controller.rb.create'})
 
     begin
-      #If currentuser school is inactive display error message and redirect to same page.
+      # If currentuser school is inactive display error message and redirect to same page.
       is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
 
       if !is_school_active
-        render json: {:redirect_to => "#{app_url}#/teacher_sets/#{params[:teacher_set_id]}", :is_school_active => is_school_active}
+        render json: {redirect_to: "#{app_url}#/teacher_sets/#{params[:teacher_set_id]}", is_school_active: is_school_active}
         return
       end
 
@@ -86,15 +90,16 @@ class HoldsController < ApplicationController
           format.html { redirect_to hold_url(@hold.access_key), notice: 'Your order has been received by our system and will soon be delivered to your school.<br/><br/>Check your email inbox for a message with further details.' }
           format.json { render json: @hold, status: :created, location: @hold }
         else
-          format.html { render action: "new" }
+          format.html { render action: 'new' }
           format.json { render json: @hold.errors, status: :unprocessable_entity }
         end
       end
     rescue => exception
       respond_to do |format|
-        format.json {   render json: {error: "We've encountered an error and were unable to confirm your order. Please try again later or email help@mylibrarynyc.org for assistance.
-          ", rails_error_message: exception.message}.to_json, status: 500}
-        LogWrapper.log('ERROR','message' => exception.message)
+        format.json {
+          render json: { error: "We've encountered an error and were unable to confirm your order. Please try again later or email help@mylibrarynyc.org for assistance.",
+          rails_error_message: exception.message }.to_json, status: 500 }
+        LogWrapper.log('ERROR', 'message' => exception.message)
       end
     end
   end
@@ -117,7 +122,7 @@ class HoldsController < ApplicationController
         format.html { redirect_to @hold, notice: 'Your order was successfully updated.' }
         format.json { render json: @hold }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @hold.errors, status: :unprocessable_entity }
       end
     end
@@ -140,7 +145,7 @@ class HoldsController < ApplicationController
           redirect_to root_url
         }
         format.json {
-          render json: {:redirect_to => app_url}
+          render json: { redirect_to: app_url }
         }
       end
     end
