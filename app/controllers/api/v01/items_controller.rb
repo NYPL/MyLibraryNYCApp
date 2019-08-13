@@ -17,7 +17,8 @@ class Api::V01::ItemsController < Api::V01::GeneralController
       LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}", "requestBody" => @request_body })
       error_code_and_message = validate_request
       if error_code_and_message.any?
-        AdminMailer.failed_items_controller_api_request(error_code_and_message).deliver
+        # don't send an alert email for now
+        # AdminMailer.failed_items_controller_api_request(error_code_and_message).deliver
         render_error(error_code_and_message)
       end
       return if error_code_and_message.any?
@@ -67,4 +68,3 @@ class Api::V01::ItemsController < Api::V01::GeneralController
     return t_set_bnumber, nypl_source
   end
 end
-
