@@ -9,7 +9,7 @@ gem 'auto-session-timeout'
 gem 'aws-sdk'
 gem 'client_side_validations'
 gem 'cranky'
-gem 'devise'
+gem 'devise', '>= 3.5.10'
 gem 'faker'
 gem 'figaro'
 gem 'font-awesome-rails'
@@ -46,6 +46,7 @@ group :development, :local do
   gem 'pry-remote'
   gem 'pry-nav', '>= 0.2.4'
   gem 'pry-rescue'
+  gem 'pry-stack_explorer'
 end
 
 group :test do
