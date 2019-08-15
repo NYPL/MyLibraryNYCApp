@@ -9,7 +9,7 @@ def update_teacher_set_real_time_available_total_count
     begin
       bib_id = ts.bnumber.gsub('b', '')
       puts "Bib id: #{bib_id}"
-      bibs_resp = ts.update_available_and_total_count(bib_id, 'sierra-nypl')
+      bibs_resp = ts.update_available_and_total_count(bib_id)
       if bibs_resp[:bibs_resp]['statusCode'] == 200
         success_bib_ids << bib_id
       else

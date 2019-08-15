@@ -39,7 +39,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
       end
 
       begin
-        response = teacher_set.update_available_and_total_count(t_set_bnumber, nypl_source)
+        response = teacher_set.update_available_and_total_count(t_set_bnumber)
         http_status = response[:bibs_resp]['statusCode']
         http_response = {message: response[:bibs_resp]['message'] || 'OK'}
       rescue => exception
