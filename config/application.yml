@@ -9,9 +9,10 @@ when 'local'
   ENV['DATABASE_URL'] = "postgresql://localhost/mylibnyc_local"
   ENV['API_GATEWAY_HEADER_KEY'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAydkErOQnDmhq+LmN8CARCAQ6BaEialZwZtZrF9XDXGVq0hJHo8lVgwDMyjtOXAaYQ5Z9Z7O/9XU3hLUND7c6uagr+RwAXD8arCtKAzJbfhpO7BL1I=")
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
-  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
-  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
-  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/bibs"
+  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons"
+  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
+  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/bibs" #Development services is not working. So using qa urls.
+  ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCL+6xESlcH6XPieZQIBEIAnue0eoIvwsVklKFk6Ss/15ozhEeOX57PLO7JzZ2C0VEftw0Wg6YWp")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz6OkwUOUwsV+igt9ICARCAQ0GQCQ1PahswCs4FO/oADmOgGh1ORhBstr88yYUp8eh2FHWTRsmrLRImou+9zqrdKLnN2qcMuY0RLqFplr/5YChbPgg=")
@@ -25,9 +26,10 @@ when 'development'
   ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAASwwggEoBgkqhkiG9w0BBwagggEZMIIBFQIBADCCAQ4GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3apJFu88CTtQfpWdAgEQgIHg5FzviDrg2Qkl2HnO09j5KWORAq1CDtGaZtIATpvKoCHoxogGd4GyJ8M1/J/zHAtnapZiwe4AH22b3aUGQrQLDreu3t1kqp/4jVlkvz1Xa8+dCqeEeIsHgMXG1FTHrH3KZY27Fkg2mAHkJMlFI97oMoV8gj6O6UUfn/ZhNthrNkVSMZNZt2wFoZGXUC8s2rztJdnhQk1RusdDMp70+yoNwa470nOpXHNFoFHf1NVJ0Ih1HD8qSeViwWR7Q8sJSQCUYv9OPCGXkLNUWO1xNWY5d255dMrR/tSnEtugDNRXI1c=")
   ENV['API_GATEWAY_HEADER_KEY'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAydkErOQnDmhq+LmN8CARCAQ6BaEialZwZtZrF9XDXGVq0hJHo8lVgwDMyjtOXAaYQ5Z9Z7O/9XU3hLUND7c6uagr+RwAXD8arCtKAzJbfhpO7BL1I=")
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
-  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
-  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
-  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/bibs"
+  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons" #Development services is not working. So using qa urls.
+  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
+  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/bibs"
+  ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCL+6xESlcH6XPieZQIBEIAnue0eoIvwsVklKFk6Ss/15ozhEeOX57PLO7JzZ2C0VEftw0Wg6YWp")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz6OkwUOUwsV+igt9ICARCAQ0GQCQ1PahswCs4FO/oADmOgGh1ORhBstr88yYUp8eh2FHWTRsmrLRImou+9zqrdKLnN2qcMuY0RLqFplr/5YChbPgg=")
@@ -44,6 +46,7 @@ when 'qa'
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
   ENV['BIBS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/bibs"
+  ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKjWCFeFAdUNMdIDhQIBEIAn1FF0mYdxsNlM1WOEUyLGtjjpX42xgiSA1M8ui4kahfNsehZifUEj")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyT7AUGHHZGYCPxJ+UCARCAQ+dM+7Y22l3eOfrW4N+lkQ1ewHE6AFNi9nJTgrnAETk7Ovs+rX6NLSAUJLBKT+AIz6/r7/JxqJ1+1JD0zzHFhdZR0MU=")
@@ -60,6 +63,7 @@ when 'production'
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://platform.nypl.org/api/v0.2/patrons"
   ENV['BIBS_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/bibs"
+  ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/items"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKjWCFeFAdUNMdIDhQIBEIAn1FF0mYdxsNlM1WOEUyLGtjjpX42xgiSA1M8ui4kahfNsehZifUEj")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyT7AUGHHZGYCPxJ+UCARCAQ+dM+7Y22l3eOfrW4N+lkQ1ewHE6AFNi9nJTgrnAETk7Ovs+rX6NLSAUJLBKT+AIz6/r7/JxqJ1+1JD0zzHFhdZR0MU=")
@@ -76,8 +80,9 @@ when 'test'
   ENV['ISSO_CLIENT_SECRET'] = 'test'
   ENV['SECRET_KEY_BASE'] = 'abcdefghijklmnopqrstuvwxyzabcd'
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
-  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://dev-platform.nypl.org/api/v0.1/patrons"
-  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://dev-platform.nypl.org/api/v0.2/patrons"
+  ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons" #Development services is not working. So using qa urls.
+  ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
+  ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
   ENV['BIBS_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/bibs"
 
 end

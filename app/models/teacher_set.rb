@@ -810,8 +810,8 @@ class TeacherSet < ActiveRecord::Base
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items and available items in the list
   # Updated MLN DB with Total copies and available copies.
-  def update_available_and_total_count(bibid, nypl_source)
-    response = get_items_info_from_bibs_service(bibid, nypl_source)
+  def update_available_and_total_count(bibid)
+    response = get_items_info_from_bibs_service(bibid)
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{response[:available_count]}, total_count: #{response[:total_count]},
     availability: #{response[:availability_string]}", b_number: "#{bibid}")
     self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count], 
@@ -820,8 +820,8 @@ class TeacherSet < ActiveRecord::Base
   end
 
   # Calls Bib service for items.
-  def get_items_info_from_bibs_service(bibid, nypl_source)
-    bibs_resp, items_found = send_request_to_bibs_microservice(bibid, nypl_source)
+  def get_items_info_from_bibs_service(bibid)
+    bibs_resp, items_found = send_request_to_items_microservice(bibid)
     return {bibs_resp: bibs_resp} if !items_found
     total_count, available_count = parse_items_available_and_total_count(bibs_resp)
     availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
@@ -844,49 +844,51 @@ class TeacherSet < ActiveRecord::Base
 
   private
 
-  # Sends a request to the bibs microservice.
-  def send_request_to_bibs_microservice(bibid, nypl_source)
-    items_url = "/#{nypl_source}/#{bibid}/items"
-    LogWrapper.log('DEBUG',
-      {
-       'message' => 'Request sent to bibs service',
-       'method' => 'send_request_to_bibs_microservice',
-       'status' => 'start',
-       'dataSent' => ENV['BIBS_MICROSERVICE_URL_V01'] + items_url
-      })
-    response = HTTParty.get(
-      ENV['BIBS_MICROSERVICE_URL_V01'] + items_url,
-      headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' },
-      timeout: 10
-    )
+  #Sends a request to the items microservice.
+  #Calling items service api by pagination, fetching 25 items by each call pushing into array.
+  #If its getting less than 25 items by items service call, we are not calling again.
+  def send_request_to_items_microservice(bibid,offset=nil,response=nil,items_hash={})
+    limit = 25
+    offset = offset.nil? ? 0 : offset += 1
+    request_offset = limit.to_i * offset.to_i
+    items_found = response && response.code == 200
 
-    case response.code
-    when 200
-      items_found = true
-      LogWrapper.log('DEBUG',
-        {
-          'message' => "The bibs service responded with the Items JSON.",
-          'method' => 'send_request_to_bibs_microservice',
-          'status' => response.code
-        })
-    when 404
-      items_found = false
-      LogWrapper.log('ERROR',
-        {
-          'message' => "The bibs service could not find the Items with bibid=#{bibid}",
-          'method' => 'send_request_to_bibs_microservice',
-          'status' => response.code
-        })
+    if response && (response.code != 200 || response['data'].size.to_i < limit)
+      return items_hash, items_found
     else
-      LogWrapper.log('ERROR',
+      items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
+      response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
+      headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
+
+      if response.code == 200
+        items_hash['data'] ||= []
+        items_hash['data'] << response['data']
+        items_hash['data'].flatten!
+        LogWrapper.log('DEBUG',
         {
-          'message' => "An error has occured when sending a request to the bibs service",
-          'method' => 'send_request_to_bibs_microservice',
+          'message' => "Response from item services api",
+          'method' => 'send_request_to_items_microservice',
           'status' => response.code,
-          'responseData' => response.body
+          'responseData' => response.message
         })
-      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+      elsif response.code == 404
+        items_hash = response
+        LogWrapper.log('DEBUG',
+        {
+          'message' => "The items service could not find the Items with bibid=#{bibid}",
+          'method' => 'send_request_to_items_microservice',
+          'status' => response.code
+        })
+      else
+        LogWrapper.log('ERROR',
+        {
+          'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
+          'method' => 'send_request_to_items_microservice',
+          'status' => response.code
+        })
+      end
     end
-    return response, items_found
+    #Recursive call
+    send(__method__, bibid, offset, response, items_hash)
   end
 end
