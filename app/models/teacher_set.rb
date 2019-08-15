@@ -845,7 +845,7 @@ class TeacherSet < ActiveRecord::Base
   private
 
   #Sends a request to the items microservice.
-  #Calling items service by pagination, fetching 25 items by each call.
+  #Calling items service api by pagination, fetching 25 items by each call pushing into array.
   #If its getting less than 25 items by items service call, we are not calling again.
   def send_request_to_items_microservice(bibid,offset=nil,response=nil,items_hash={})
     limit = 25
