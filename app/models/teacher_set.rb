@@ -888,6 +888,7 @@ class TeacherSet < ActiveRecord::Base
         })
       end
     end
+    #Recursive call
     send(__method__, bibid, offset, response, items_hash)
   end
 end
