@@ -49,7 +49,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         return
       end
     rescue => exception
-      render_error([500, "Error occured: #{exception.message[0..200], backtrace: exception.backtrace}, Bnumber: #{t_set_bnumber}"])
+      render_error([500, "Error occured: #{exception.message[0..200]}, Bnumber: #{t_set_bnumber}"])
       return
     end
     LogWrapper.log('INFO','message' => "Items availability successfully updated. Bnumber: #{t_set_bnumber}")
