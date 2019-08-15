@@ -860,21 +860,34 @@ class TeacherSet < ActiveRecord::Base
       response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
       headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
 
-      LogWrapper.log('DEBUG',
+      if response.code == 200
+        items_hash['data'] ||= []
+        items_hash['data'] << response['data']
+        items_hash['data'].flatten!
+        LogWrapper.log('DEBUG',
         {
           'message' => "Response from item services api",
           'method' => 'send_request_to_items_microservice',
           'status' => response.code,
           'responseData' => response.message
         })
-      if response.code == 200
-        items_hash['data'] ||= []
-        items_hash['data'] << response['data']
-        items_hash['data'].flatten!
-      else
+      elsif response.code == 404
         items_hash = response
+        LogWrapper.log('DEBUG',
+        {
+          'message' => "The items service could not find the Items with bibid=#{bibid}",
+          'method' => 'send_request_to_items_microservice',
+          'status' => response.code
+        })
+      else
+        LogWrapper.log('ERROR',
+        {
+          'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
+          'method' => 'send_request_to_items_microservice',
+          'status' => response.code
+        })
       end
-      send(__method__, bibid, offset, response, items_hash)
     end
+    send(__method__, bibid, offset, response, items_hash)
   end
 end
