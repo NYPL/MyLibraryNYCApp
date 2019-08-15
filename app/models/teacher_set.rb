@@ -845,6 +845,8 @@ class TeacherSet < ActiveRecord::Base
   private
 
   #Sends a request to the items microservice.
+  #Calling items service by pagination, fetching 25 items by each call.
+  #If its getting less than 25 items by items service call, we are not calling again.
   def send_request_to_items_microservice(bibid,offset=nil,response=nil,items_hash={})
     limit = 25
     offset = offset.nil? ? 0 : offset += 1
@@ -863,10 +865,8 @@ class TeacherSet < ActiveRecord::Base
           'message' => "Response from item services api",
           'method' => 'send_request_to_items_microservice',
           'status' => response.code,
-          'responseData' => response.body
+          'responseData' => response.message
         })
-
-
       if response.code == 200
         items_hash['data'] ||= []
         items_hash['data'] << response['data']
@@ -874,7 +874,6 @@ class TeacherSet < ActiveRecord::Base
       else
         items_hash = response
       end
-      binding.pry
       send(__method__, bibid, offset, response, items_hash)
     end
   end
