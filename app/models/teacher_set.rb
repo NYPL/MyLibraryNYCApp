@@ -851,18 +851,18 @@ class TeacherSet < ActiveRecord::Base
     limit = 25
     offset = offset.nil? ? 0 : offset += 1
     request_offset = limit.to_i * offset.to_i
-    items_found = response && response.code == 200
+    items_found = response && (response.code == 200 || items_hash['data'].present?)
 
-    if response && (response.code != 200 || response['data'].size.to_i < limit)
+    if response && (response.code != 200 || items_hash['data'].size.to_i < limit)
       return items_hash, items_found
     else
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
       response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
       headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
 
-      if response.code == 200
+      if response.code == 200 || items_hash['data'].present?
         items_hash['data'] ||= []
-        items_hash['data'] << response['data']
+        items_hash['data'] << response['data'] if response['data'].present?
         items_hash['data'].flatten!
         LogWrapper.log('DEBUG',
         {
