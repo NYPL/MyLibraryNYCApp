@@ -196,7 +196,7 @@ pre {
   background: $highlight;
   margin: $basePadding/2 0 $basePadding;
   text-align: center;
-  padding: 10px 0;
+  padding: $basePadding*2 0;
   line-height: 20px;
   margin-bottom: 0;
   @include clearfix();
@@ -209,6 +209,20 @@ pre {
   }
   &.main-alert {
     margin-top: 0px;
+  }
+  &.fade-in-out {
+    padding: 0;
+    overflow: hidden;
+    max-height: 0;
+    @include animation(fade-in-out-alert 5s);
+    @include transition(max-height, 0.5s);
+  }
+  &.fade-in-out-longer {
+    padding: 0;
+    overflow: hidden;
+    max-height: 0;
+    @include animation(fade-in-out-alert 15s);
+    @include transition(max-height, 0.5s);
   }
 }
 #error_explanation {
