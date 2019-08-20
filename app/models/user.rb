@@ -84,8 +84,7 @@ class User < ActiveRecord::Base
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:email)
-      #where(conditions).where(["lower(email) = :value OR lower(alt_email) = :value", { :value => login.downcase }]).first
-      where(conditions).where(["email = :value OR alt_email = :value", { :value => login.downcase }]).first
+      where(conditions).where(["lower(email) = :value OR lower(alt_email) = :value", { :value => login.downcase }]).first
     else
       where(conditions).first
     end
@@ -204,7 +203,7 @@ class User < ActiveRecord::Base
         {
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
-          'responseData' => response.body
+          'responseData' => response.body 
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
