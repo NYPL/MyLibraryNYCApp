@@ -853,7 +853,7 @@ class TeacherSet < ActiveRecord::Base
     request_offset = limit.to_i * offset.to_i
     items_found = response && (response.code == 200 || items_hash['data'].present?)
 
-    if response && (response.code != 200 || items_hash['data'].size.to_i < limit)
+    if response && (response.code != 200 || (items_hash['data'].present? && response['data'].size.to_i < limit))
       return items_hash, items_found
     else
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
