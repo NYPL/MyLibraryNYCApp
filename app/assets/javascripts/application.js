@@ -18,8 +18,13 @@
 //= require helpers
 //= require rails.validations
 
-// application.js file functions will not work for anugular.
-// Onclick on main div hide errormessage div
+
+// Makes the success/error alert at the top of the page disappear, 
+// when the user clicks anywhere on the body of the page.
+
+// WARNING:  application.js file functions will not work on angular-coded pages.
+// For those pages, look for similar functionality in the hideErrorDiv() function.
+
 $(document).ready(function() {
   $("#main").click(function(){
     $("#error_messages_id").hide();
