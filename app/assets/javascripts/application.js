@@ -18,7 +18,9 @@
 //= require helpers
 //= require rails.validations
 
-$(document).ready(function() { 
+// application.js file functions will not work for anugular.
+// Onclick on main div hides errormessage div
+$(document).ready(function() {
   $("#main").click(function(){
     $("#error_messages_id").hide();
   });
