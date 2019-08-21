@@ -17,3 +17,9 @@
 //= require ./vendor/jquery.swipeshow.min
 //= require helpers
 //= require rails.validations
+
+$(document).ready(function() { 
+  $("#main").click(function(){
+    $("#error_messages_id").hide();
+  });
+}); 
