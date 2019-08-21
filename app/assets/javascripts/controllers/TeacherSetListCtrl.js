@@ -38,6 +38,7 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
       $scope.hideFacets();
     }
 
+    // Onclick on main div hide errormessage div
     $scope.hideErrorDiv = function(){
       $('#error_messages_id').hide();
     }
