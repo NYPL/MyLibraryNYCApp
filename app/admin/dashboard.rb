@@ -34,6 +34,10 @@ ActiveAdmin.register_page "Dashboard" do
         'created_at ASC'
       when 'p_created_at_desc'
         'created_at DESC'
+      when 'p_quantity_asc'
+        'quantity ASC'
+      when 'p_quantity_desc'
+        'quantity DESC'
       else
         nil
       end
@@ -63,6 +67,10 @@ ActiveAdmin.register_page "Dashboard" do
         'created_at ASC'
       when 'created_at_desc'
         'created_at DESC'
+      when 'quantity_asc'
+        'quantity ASC'
+      when 'quantity_desc'
+        'quantity DESC'
       else
         nil
       end
@@ -121,7 +129,7 @@ ActiveAdmin.register_page "Dashboard" do
               end
             end
 
-            column 'Quantity', sortable: :call_number do |h|
+            column 'Quantity', sortable: :quantity do |h|
               h.quantity
             end
 
