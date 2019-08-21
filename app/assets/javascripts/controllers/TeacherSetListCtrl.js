@@ -37,5 +37,9 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
     } else {
       $scope.hideFacets();
     }
+
+    $scope.hideErrorDiv = function(){
+      $('#error_messages_id').hide();
+    }
   }
 ]);
