@@ -37,5 +37,11 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
     } else {
       $scope.hideFacets();
     }
+
+    /** Makes the success/error alert at the top of the page disappear, 
+    when the user clicks anywhere on the body of the page. */
+    $scope.hideErrorDiv = function(){
+      $('#error_messages_id').hide();
+    }
   }
 ]);
