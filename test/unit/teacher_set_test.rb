@@ -62,10 +62,10 @@ class TeacherSetTest < ActiveSupport::TestCase
       total_count = 2 
       available_count = 2
 
-      @mintest_mock1.expect(:call, [bib_id_not_found_response, false], [bib_id, nypl_source])
+      @mintest_mock1.expect(:call, [bib_id_not_found_response, false], [bib_id])
 
       @model.stub :send_request_to_bibs_microservice, @mintest_mock1 do
-        resp = @model.update_available_and_total_count(bib_id, nypl_source)
+        resp = @model.update_available_and_total_count(bib_id)
       end
       assert_equal(bib_id_not_found_response, resp)
     end

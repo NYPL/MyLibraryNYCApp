@@ -142,5 +142,31 @@ and
 
 Order Multiple Teacher Sets Configuration
 ========================
-```MAXIMUM_COPIES_REQUESTABLE :5  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maximum teacherset orders, we can update in AWS ElasticBeanstalk Configuration.
+```
+MAXIMUM_COPIES_REQUESTABLE :5  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maximum teacherset orders, we can update in AWS ElasticBeanstalk Configuration.
+```
+
+
+Rubocop
+========================
+```
+Running rubocop with no arguments will check all Ruby source files in the current directory:
+
+rubocop
+
+Alternatively you can pass rubocop a list of files and directories to check:
+
+rubocop folder_name/file_name.rb
+```
+
+
+Emails
+========================
+```
+Emailing notifications out of MyLibraryNYC is done through the AWS Simple Email Service.  We turn emails off on the development and local servers by setting
+
+config.action_mailer.perform_deliveries = false
+in config/environments/development.rb and local.rb
+
+So if you want to test mailing locally, turn the perform_deliveries back on.
 ```
