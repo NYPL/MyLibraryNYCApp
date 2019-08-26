@@ -652,6 +652,8 @@ GEM
     aws-sigv2 (1.0.1)
     aws-sigv4 (1.0.3)
     bcrypt (3.1.12)
+    binding_of_caller (0.8.0)
+      debug_inspector (>= 0.0.1)
     bourbon (3.2.4)
       sass (~> 3.2)
       thor
@@ -670,6 +672,7 @@ GEM
       safe_yaml (~> 1.0.0)
     cranky (1.1.0)
     database_cleaner (1.7.0)
+    debug_inspector (0.0.3)
     devise (3.5.10)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -764,6 +767,9 @@ GEM
     pry-rescue (1.4.5)
       interception (>= 0.5)
       pry
+    pry-stack_explorer (0.4.9.3)
+      binding_of_caller (>= 0.7)
+      pry (>= 0.9.11)
     public_suffix (3.0.2)
     rack (1.4.7)
     rack-cache (1.8.0)
@@ -799,7 +805,7 @@ GEM
       rack (>= 1.4)
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
-    rubocop (0.58.2)
+    rubocop (0.59.2)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -869,7 +875,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   cranky
   database_cleaner
-  devise
+  devise (>= 3.5.10)
   faker
   figaro
   font-awesome-rails
@@ -889,9 +895,10 @@ DEPENDENCIES
   pry-rails
   pry-remote
   pry-rescue
+  pry-stack_explorer
   rack-cors
   rails (= 3.2.22.5)
-  rubocop
+  rubocop (~> 0.59.1)
   ruby_dig
   sass-rails (~> 3.2.3)
   sendgrid-ruby (~> 1.1.6)

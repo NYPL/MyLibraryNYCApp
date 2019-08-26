@@ -4,6 +4,8 @@ cache:
     - /home/travis/.rvm/
 rvm:
 - 2.2.10
+before_script:
+  - bundle exec rubocop
 services:
 - postgresql
 script:

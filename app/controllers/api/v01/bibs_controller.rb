@@ -36,7 +36,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
       # Calls Bib service for items.
       # Calculates the total number of items and available items in the list.     
-      ts_items_info = teacher_set.get_items_info_from_bibs_service(bnumber, teacher_set_record['nyplSource'])
+      ts_items_info = teacher_set.get_items_info_from_bibs_service(bnumber)
 
       begin
         teacher_set.update_attributes(

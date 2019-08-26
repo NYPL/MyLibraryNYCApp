@@ -23,6 +23,7 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
       $scope.user = data.teacher_set.user
       $scope.quantity = data.teacher_set.allowed_quantities.length > 0 ? data.teacher_set.allowed_quantities[0] : 0 
       $scope.loaded = true;
+
     });
 
     $scope.autoReserve = function() {
@@ -54,5 +55,11 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
         $location.path("/holds/new").search({teacher_set_id: $scope.teacher_set_id});
       }
     };
+
+    /** Makes the success/error alert at the top of the page disappear, 
+    when the user clicks anywhere on the body of the page. */
+    $scope.hideErrorDiv = function(){
+      $('#error_messages_id').hide();
+    }
   }
 ]);

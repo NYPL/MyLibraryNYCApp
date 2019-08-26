@@ -9,7 +9,7 @@ gem 'auto-session-timeout'
 gem 'aws-sdk'
 gem 'client_side_validations'
 gem 'cranky'
-gem 'devise'
+gem 'devise', '>= 3.5.10'
 gem 'faker'
 gem 'figaro'
 gem 'font-awesome-rails'
@@ -21,7 +21,7 @@ gem 'nokogiri'
 gem 'open_uri_redirections'
 gem 'paper_trail', github: 'paper-trail-gem/paper_trail', branch: '5-stable'
 gem 'pg', '~> 0.18'
-gem 'rubocop'
+gem 'rubocop','~> 0.59.1', require: false
 gem 'sendgrid-ruby', '~> 1.1.6'
 gem 'test-unit'
 gem 'will_paginate', '~> 3.0'
@@ -46,6 +46,7 @@ group :development, :local do
   gem 'pry-remote'
   gem 'pry-nav', '>= 0.2.4'
   gem 'pry-rescue'
+  gem 'pry-stack_explorer'
 end
 
 group :test do
