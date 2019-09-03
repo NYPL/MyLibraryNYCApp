@@ -411,8 +411,8 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
-  def update_availability
 
+  def update_availability
     available_copies = 0
     total_copies = 0
 
@@ -538,6 +538,7 @@ class TeacherSet < ActiveRecord::Base
     puts "  #{successes} of #{isbns.size} ISBNs resolved to catalog items"
   end
 
+
   def update_books
     puts "  Update books for #{id}"
     scrape_url = "http://any.bibliocommons.com/item/catalogue_info/#{id}"
@@ -622,12 +623,6 @@ class TeacherSet < ActiveRecord::Base
         # If debugging a specific id, skip all except for that id
         next if !just_id.nil? && id != just_id
 
-=begin
-        if self.exists? id
-          s = self.find id
-          next if !s.description.empty?
-        end
-=end
         set = upsert_from_catalog_id id
         # Comment out to get the list of teacher sets not in the app faster
         if !set.nil?
@@ -675,24 +670,15 @@ class TeacherSet < ActiveRecord::Base
 
     puts "New: #{new.size}: #{new.join ', '}"
     puts "Done"
-
   end
 
-=begin
-  def as_json(opts={})
-    ret = {}
-    [:id, :availability, :description, :details_url, :primary_language, :primary_subject, :title].each do |p|
-      ret[p] = self[p]
-    end
-    ret[:suitabilities_string] = suitabilities_string
-    ret
-  end
-=end
 
-  # Recieve JSON related to a teacher_set.
+  # Receive JSON related to a teacher_set.
   # For each ISBN, ensure there is an associated book.
   # Disassociate books that are no longer in the teacher set.
   def update_included_book_list(teacher_set_record)
+    LogWrapper.log('DEBUG', {'message' => 'update_included_book_list.start', 'method' => 'app/models/teacher_set.rb.update_included_book_list'})
+
     # Gather all ISBNs.
     return unless teacher_set_record['varFields']
     isbns = []
@@ -715,7 +701,9 @@ class TeacherSet < ActiveRecord::Base
     # Update all books in the teacher set.
     isbns.each do |isbn|
       book = Book.find_by_isbn(isbn) || Book.create(isbn: isbn)
-      TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
+      TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create do |obj|
+        LogWrapper.log('DEBUG', {'message' => "teacher_set [id=#{@self.id or 'unknown'}] created a new book record [isbn=#{@isbn or 'unknown'}]", 'method' => 'app/models/teacher_set.rb.update_included_book_list'})
+      end
       book.update_from_isbn
     end
   end
@@ -743,7 +731,7 @@ class TeacherSet < ActiveRecord::Base
     # so we can remake them fresh from the bib info.
     self.subjects.clear
 
-    # Create all the subjects and teacher_set <--> subject associations specified in the bib 
+    # Create all the subjects and teacher_set <--> subject associations specified in the bib
     # record we're processing, ignoring duplicate associations.
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)
@@ -814,7 +802,7 @@ class TeacherSet < ActiveRecord::Base
     response = get_items_info_from_bibs_service(bibid)
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{response[:available_count]}, total_count: #{response[:total_count]},
     availability: #{response[:availability_string]}", b_number: "#{bibid}")
-    self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count], 
+    self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count],
       availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
   end
