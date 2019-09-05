@@ -65,13 +65,12 @@ class HoldsController < ApplicationController
 
     begin
       # If currentuser school is inactive display error message and redirect to same page.
-      # is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
+      is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
       
-      # Below code is required, after fixing the crawler bots email issue enable this code.
-      # if !is_school_active
-      #   render json: {:redirect_to => "#{app_url}#/teacher_sets/#{params[:teacher_set_id]}", :is_school_active => is_school_active}
-      #   return
-      # end
+      if !is_school_active
+        render json: {:redirect_to => "#{app_url}#/teacher_sets/#{params[:teacher_set_id]}", :is_school_active => is_school_active}
+        return
+      end
 
       set = TeacherSet.find(params[:teacher_set_id])
       @hold = set.holds.build(params[:hold])
