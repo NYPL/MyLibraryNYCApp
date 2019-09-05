@@ -1,17 +1,27 @@
 <nav class="navigation" role="navigation">
   <div class="container">
-    <%= link_to "<i class='fa fa-book'></i> Learn More".html_safe, 'http://mylibrarynyc.org', :class=>"link-learn-more" %>
     <% if user_signed_in? %>
       <%= link_to "<span>Dashboard</span>".html_safe, app_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
     <% else %>
       <%= link_to "<span>Home</span>".html_safe, root_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
     <% end %>
+
+    <a href="app#/about/participating-schools" class="link-learn-more"><i class="fa fa-book"></i>Participating <br/>Schools</a>
+
+    <a href="app#/about/contacts-links" class="link-learn-more"><i class="fa fa-question"></i>Contact</a>
+
+    <%= link_to "<i class='fa fa-book'></i> Learn More".html_safe, 'app#/index', :class=>"link-learn-more" %>
+
+    <a href="app#/about/about-mylibrarynyc" class="link-learn-more"><i class="fa fa-question"></i>About</a>
+
     <%= link_to "<i class='fa fa-question'></i> Help".html_safe, help_url %>
+
     <% if user_signed_in? %>
       <%= link_to "<i class='fa fa-user'></i> Account".html_safe, account_url %>
     <% else %>
       <%= link_to "<i class='fa fa-user'></i> Sign In".html_safe, new_user_session_path %>
     <% end %>
+
   </div>
 </nav>
 
@@ -31,7 +41,7 @@
 
 <script type="text/javascript">
   // Production Tracking Code
-  // Global site tag (ga.js) - Google Analytics 
+  // Global site tag (ga.js) - Google Analytics
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

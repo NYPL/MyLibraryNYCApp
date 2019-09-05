@@ -46,6 +46,22 @@ app.config([ '$locationProvider', '$routeProvider', '$httpProvider',
         templateUrl: '/templates/books/detail.html',
         controller: 'BookDetailCtrl'
       }).
+      when('/about/participating-schools', {
+        templateUrl: '/templates/about/participating_schools.html',
+        controller: 'ParticipatingSchoolsCtrl'
+      }).
+      when('/about/about-mylibrarynyc', {
+        templateUrl: '/templates/about/static_about.html',
+        controller: 'StaticAboutCtrl'
+      }).
+      when('/about/contacts-links', {
+        templateUrl: '/templates/about/static_contact.html',
+        controller: 'StaticContactCtrl'
+      }).
+      when('/index', {
+        templateUrl: '/templates/home/static_index.html',
+        controller: 'StaticIndexCtrl'
+      }).
       otherwise({
         redirectTo: '/teacher_sets'
       });
