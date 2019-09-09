@@ -71,7 +71,7 @@ class TeacherSetsController < ApplicationController
     user_has_ordered_max = false
 
     #Displays unique titles in teachersets page.
-    ts_books = @set.books
+    ts_books = @set.books.uniq_by(&:cover_uri)
 
     # Max copies value is configured in elastic beanstalk.
     # Max_copies_requestable is the maximum number of teachersets can request.
