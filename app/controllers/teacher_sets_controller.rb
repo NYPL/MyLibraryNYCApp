@@ -71,6 +71,13 @@ class TeacherSetsController < ApplicationController
     user_has_ordered_max = false
 
     #Displays unique titles in teachersets page.
+    books = []
+    TeacherSet.all.each do |ts|
+      if ts.books.collect{|b| b.cover_uri}.uniq!
+        books << ts.books.uniq_by{|b| b.isbn}.collect{|i| [i.isbn, i.bnumber]}
+      end
+    end
+
     ts_books = @set.books.uniq_by(&:cover_uri)
 
     # Max copies value is configured in elastic beanstalk.
