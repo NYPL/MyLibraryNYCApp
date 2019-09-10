@@ -715,6 +715,8 @@ class TeacherSet < ActiveRecord::Base
     # Update all books in the teacher set.
     isbns.each do |isbn|
       book = Book.find_by_isbn(isbn) || Book.create(isbn: isbn)
+      TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
+      book.update_from_isbn
     end
   end
 
