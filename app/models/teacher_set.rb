@@ -714,12 +714,7 @@ class TeacherSet < ActiveRecord::Base
     # Associate the book to the teacher set by creating a TeacherSetBook record if one does not yet exist.
     # Update all books in the teacher set.
     isbns.each do |isbn|
-      book = Book.find_by_isbn(isbn)
-      unless book.present?
-        book = Book.create(isbn: isbn)
-      end
-      TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
-      book.update_from_isbn
+      book = Book.find_by_isbn(isbn) || Book.create(isbn: isbn)
     end
   end
 
