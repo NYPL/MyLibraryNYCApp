@@ -781,8 +781,7 @@ class TeacherSet < ActiveRecord::Base
     new_subject_string = new_subject_string.strip()
 
     # if the subject ends in a period (something metadata rules can require), strip the period
-    new_subject_string = new_subject_string.gsub(/\.$/, '')
-
+    new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
     return new_subject_string
   end
 
