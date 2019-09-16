@@ -34,6 +34,8 @@ module CatalogItemMethods
         if grade_end.nil? || grade_end == 0
           ret << "Grade #{grade_begin}+"
         else
+          grade_begin = (grade_begin.to_i == TeacherSet::PRE_K_VAL)? 'Pre-K' : (grade_begin.to_i == TeacherSet::K_VAL)? 'K' : grade_begin
+          grade_end = (grade_end.to_i == TeacherSet::PRE_K_VAL) ? 'Pre-K' : (grade_end.to_i == TeacherSet::K_VAL)? 'K' : grade_end
           ret << "Grades #{grade_begin} - #{grade_end}"
         end
       end

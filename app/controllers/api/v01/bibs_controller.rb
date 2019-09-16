@@ -4,6 +4,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
   before_filter :set_request_body
   before_filter :validate_source_of_request
 
+  PRE_K_VAL = -2
+  K_VAL = -1
   # Receive teacher sets from a POST request.
   # All records are inside @request_body.
   # Find or create a teacher set in the MLN db and its associated books.
@@ -167,7 +169,13 @@ class Api::V01::BibsController < Api::V01::GeneralController
           if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
             return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
           elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
-            return grade_or_lexile_json.gsub('.', '').split('-')
+            if grade_or_lexile_json.include?('Pre-K')
+              return [PRE_K_VAL, grade_or_lexile_json.gsub('.', '').split('Pre-K')[1]]
+            elsif grade_or_lexile_json.include?('K')
+              return [K_VAL, grade_or_lexile_json.gsub('.', '').split('K')[1]]
+            else
+              return grade_or_lexile_json.gsub('.', '').split('-')
+            end
           end
         rescue
           []
