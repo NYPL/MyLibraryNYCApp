@@ -9,8 +9,9 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
     $scope.min_grade = $scope.grades[0];
     $scope.max_grade = $scope.grades[$scope.grades.length-1];
     $scope.grade_values = [];
-    $scope.grade_values[0] = $scope.teacher_sets.queryParams.grade_begin || $scope.min_grade
+    $scope.grade_values[0] = $scope.teacher_sets.queryParams.grade_begin || $scope.min_grade;
     $scope.grade_values[1] = $scope.teacher_sets.queryParams.grade_end || $scope.max_grade;
+    $scope.grade_filter1 =  $scope.grade_values[0] == -2? 'Pre K' :  $scope.grade_values[0] == -1 ? 'K' :  $scope.grade_values[0]
 
     $scope.onGradeSliderStop = function(grade_begin, grade_end){
       $scope.teacher_sets.doGrades(grade_begin, grade_end);
