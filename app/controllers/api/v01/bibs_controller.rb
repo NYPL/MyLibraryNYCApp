@@ -4,8 +4,6 @@ class Api::V01::BibsController < Api::V01::GeneralController
   before_filter :set_request_body
   before_filter :validate_source_of_request
 
-  PRE_K_VAL = -2
-  K_VAL = -1
   # Receive teacher sets from a POST request.
   # All records are inside @request_body.
   # Find or create a teacher set in the MLN db and its associated books.
@@ -54,7 +52,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           physical_description: physical_description,
           details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
           grade_begin: grade_or_lexile_array('grade')[0] || '', # If Grade value is Pre-K saves as -2 and Grade value is 'K' saves as -1 in TeacherSet table.
-          grade_end: grade_or_lexile_array('grade')[1] || '', # If Grade value is Pre-K saves as -2 and Grade value is 'K' saves as -1 in TeacherSet table.
+          grade_end: grade_or_lexile_array('grade')[1] || '', 
           lexile_begin: grade_or_lexile_array('lexile')[0] || '',
           lexile_end: grade_or_lexile_array('lexile')[1] || '',
           available_copies: ts_items_info[:available_count],
