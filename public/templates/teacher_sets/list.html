@@ -17,7 +17,7 @@
         <div class="facetGroup" ng-show="!hideFacet">
           <a href="#/" class="button xsmall clear-filters" ng-show="teacher_sets.facetString">Clear Filters <i class='fa fa-times-circle'></i></a>
           <div class="ui-slider">
-            <h3><a>&nbsp; &nbsp;Grades {{grade_values[0]||'K'}}&ndash;{{grade_values[1]}}</a></h3>
+            <h3><a>&nbsp; &nbsp;Grades {{grade_values[0] == -2? 'Pre K' : grade_values[0] == -1 ? 'K' : grade_values[0]}}&ndash;{{grade_values[1]}}</a></h3>
             <div slider-grades grades="grades"></div>
           </div>
           <div ng-repeat="facet in teacher_sets.facets">
