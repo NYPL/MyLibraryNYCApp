@@ -160,17 +160,15 @@ class TeacherSet < ActiveRecord::Base
       sets = sets.where("set_type = ?", params[:type])
     end
 
-    if !params[:language].nil? && params[:language].size > 0
+    if params[:language].present?
       sets = sets.where("language IN (?) OR primary_language IN (?)", params[:language], params[:language])
     end
     if !params[:availability].nil? && params[:availability].size > 0
-      sets = sets.where("#{:availability} IN (?)", params[:availability])
+      sets = sets.where("availability IN (?)", params[:availability])
     end
 
     # Sort most available first with id as tie breaker to ensure consistent sorts
     sets = sets.order('availability ASC, available_copies DESC, id DESC')
-
-    # puts "::: SQL: #{sets.to_sql}"
 
     sets
   end
@@ -220,7 +218,6 @@ class TeacherSet < ActiveRecord::Base
         facets << facets_group
       end
 
-      #binding.pry
       # Collect primary subjects for restricting topics
       primary_subjects = []
       unless (subjects_facet = facets.select { |f| f[:label] == 'subject' }).nil?
