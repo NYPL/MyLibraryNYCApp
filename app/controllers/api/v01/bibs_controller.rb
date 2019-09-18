@@ -7,7 +7,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
   # Receive teacher sets from a POST request.
   # All records are inside @request_body.
   # Find or create a teacher set in the MLN db and its associated books.
-  PREK_ARR = ['PRE K', 'PRE-K', 'PREK']
+  PREK_ARR = ['PRE K', 'PRE-K', 'PREK'].freeze
   def create_or_update_teacher_sets
     LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets.start','method' => 'bibs_controller.create_or_update_teacher_sets'})
 
@@ -197,6 +197,13 @@ class Api::V01::BibsController < Api::V01::GeneralController
   # Grades = {Pre-K => -2, K => -1}
   def grade_val(val)
     return unless val.present?
-    (val == 'K')? -1 : (PREK_ARR.include?(val)? -2 : val.to_i
+    if val == 'K'
+      -1
+    elsif PREK_ARR.include?(val)
+      -2
+    else
+      val.to_i
+    end
   end
+
 end
