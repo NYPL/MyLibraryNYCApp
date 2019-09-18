@@ -31,10 +31,11 @@ module CatalogItemMethods
     def suitabilities
       ret = []
       unless grade_begin.nil?
+        g_begin = grade_begin
         if grade_end.nil? || grade_end == 0
+          grade_begin = grade_val(g_begin)
           ret << "Grade #{grade_begin}+"
         else
-          g_begin = grade_begin
           g_end = grade_end
           grade_begin = grade_val(g_begin)
           grade_end = grade_val(g_end)
