@@ -7,6 +7,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
   # Receive teacher sets from a POST request.
   # All records are inside @request_body.
   # Find or create a teacher set in the MLN db and its associated books.
+  PREK_ARR = ['PRE K', 'PRE-K', 'PREK']
   def create_or_update_teacher_sets
     LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets.start','method' => 'bibs_controller.create_or_update_teacher_sets'})
 
@@ -171,10 +172,16 @@ class Api::V01::BibsController < Api::V01::GeneralController
           if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
             return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
           elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
-            if grade_or_lexile_json.include?('Pre-K')
-              return [TeacherSet::PRE_K_VAL, grade_or_lexile_json.gsub('.', '').split('Pre-K')[1]]
-            elsif grade_or_lexile_json.include?('K')
-              return [TeacherSet::K_VAL, grade_or_lexile_json.gsub('.', '').split('K')[1]]
+            if grade_or_lexile_json.upcase.include?('PRE')
+              # Prek values: ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek'] - supporting these values only
+              PREK_ARR.each do |val|
+                grades = grade_or_lexile_json.upcase.gsub('.', '').split("#{val}-")
+                return [TeacherSet::PRE_K_VAL, grade_val(grades[1])] if grades.length > 1
+              end
+            elsif grade_or_lexile_json.upcase.include?('K')
+              # K values: [K, k] - supporting these values only
+              grade = grade_or_lexile_json.upcase.gsub('.', '').split('K-')[1]
+              return [TeacherSet::K_VAL, grade_val(grade)]
             else
               return grade_or_lexile_json.gsub('.', '').split('-')
             end
@@ -186,4 +193,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
     end
 
   # end private methods
+
+  def grade_val(val)
+    return unless val.present?
+    (val == 'K')? -1 : (PREK_ARR.include?(val)? -2 : val.to_i
+  end
 end
