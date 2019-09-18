@@ -194,6 +194,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
   # end private methods
 
+  # Grades = {Pre-K => -2, K => -1}
   def grade_val(val)
     return unless val.present?
     (val == 'K')? -1 : (PREK_ARR.include?(val)? -2 : val.to_i
