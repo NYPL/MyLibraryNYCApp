@@ -172,9 +172,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
             return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
           elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
             if grade_or_lexile_json.include?('Pre-K')
-              return [PRE_K_VAL, grade_or_lexile_json.gsub('.', '').split('Pre-K')[1]]
+              return [TeacherSet::PRE_K_VAL, grade_or_lexile_json.gsub('.', '').split('Pre-K')[1]]
             elsif grade_or_lexile_json.include?('K')
-              return [K_VAL, grade_or_lexile_json.gsub('.', '').split('K')[1]]
+              return [TeacherSet::K_VAL, grade_or_lexile_json.gsub('.', '').split('K')[1]]
             else
               return grade_or_lexile_json.gsub('.', '').split('-')
             end
