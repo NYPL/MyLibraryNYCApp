@@ -39,7 +39,7 @@ module CatalogItemMethods
           g_end = grade_end
           grade_begin = grade_val(g_begin)
           grade_end = grade_val(g_end)
-          ret << "Grades #{grade_begin} - #{grade_end}"
+          ret << "Grades #{grade_begin} to #{grade_end}"
         end
       end
       unless lexile_begin.nil? or true # removing lexiles
