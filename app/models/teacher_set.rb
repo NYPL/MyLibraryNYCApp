@@ -33,8 +33,8 @@ class TeacherSet < ActiveRecord::Base
   AVAILABLE = 'available'
   UNAVAILABLE = 'unavailable'
 
-  PRE_K_VAL = -2
-  K_VAL = -1
+  PRE_K_VAL = -1
+  K_VAL = 0
 
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
