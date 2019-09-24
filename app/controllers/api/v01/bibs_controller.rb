@@ -52,7 +52,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           primary_subject: var_field('690', false),
           physical_description: physical_description,
           details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
-          grade_begin: grade_or_lexile_array('grade')[0] || '', # If Grade value is Pre-K saves as -2 and Grade value is 'K' saves as -1 in TeacherSet table.
+          grade_begin: grade_or_lexile_array('grade')[0] || '', # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
           grade_end: grade_or_lexile_array('grade')[1] || '', 
           lexile_begin: grade_or_lexile_array('lexile')[0] || '',
           lexile_end: grade_or_lexile_array('lexile')[1] || '',
@@ -161,8 +161,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
 
     # Grades filter supports Pre-K and K
-    # Grades = {Pre-K => -2, K => -1}
-    # If Grade value is Pre-K saves as -2 and Grade value is 'K' saves as -1 in TeacherSet table.
+    # Grades = {Pre-K => -1, K => 0}
+    # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
     def grade_or_lexile_array(return_grade_or_lexile)
       grade_and_lexile_json = all_var_fields('521', 'content')
       return '' if grade_and_lexile_json.blank?
@@ -194,7 +194,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
   # end private methods
 
-  # Grades = {Pre-K => -2, K => -1}
+  # Grades = {Pre-K => -1, K => 0}
   def grade_val(val)
     return unless val.present?
     if val == 'K'

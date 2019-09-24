@@ -6,9 +6,9 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
     $scope.$location = $location;
     $scope.teacher_sets = new TeachSetListFactory();
     // Grade filter supports Pre-k and K 
-    // Pre-k value is -2
-    // K value is -1
-    $scope.grades = [-2,-1,1,2,3,4,5,6,7,8,9,10,11,12];
+    // Pre-k value is -1
+    // K value is 0
+    $scope.grades = [-1,0,1,2,3,4,5,6,7,8,9,10,11,12];
     $scope.min_grade = $scope.grades[0];
     $scope.max_grade = $scope.grades[$scope.grades.length-1];
     $scope.grade_values = [];
