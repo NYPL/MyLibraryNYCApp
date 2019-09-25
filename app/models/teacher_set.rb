@@ -123,8 +123,7 @@ class TeacherSet < ActiveRecord::Base
 
     [:grade_begin, :grade_end, :lexile_begin, :lexile_end].each do |k|
       next if params[k].nil?
-      params[k] = params[k].to_i
-      params[k] = nil if params[k] == 0
+      params[k] = params[k].to_i if params[k].present?
     end
 
     # Grade & Lexile ranges:
