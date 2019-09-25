@@ -130,6 +130,8 @@ class TeacherSet < ActiveRecord::Base
     # If grade/lexile range specified, ensure sets have ranges that cover some part of specified range
     # e.g. grade_begin=4&grade_end=6 returns sets with ranges 4-6, 4-5, 5-7, 6-8, 5-null, etc.
     # e.g. grade_begin=8&grade_end=[null] returns sets with ranges 8-12, 8-null, etc.
+    # e.g. grades = {Pre-K => -1, K => 0}
+    # e.g. grade_begin=-1&grade_end=0 returns sets with ranges Pre-k to 1, Pre-k to K, K-3, etc.
     # Note these clauses purposefully include sets with null grade/lexile ranges by stakeholder request
     ['grade','lexile'].each do |prop|
       begin_prop = "#{prop}_begin"
