@@ -32,7 +32,7 @@ module CatalogItemMethods
       ret = []
       unless grade_begin.nil?
         g_begin = grade_begin
-        if grade_end.nil? || grade_end == 0
+        if grade_end.nil?
           grade_begin = grade_val(g_begin)
           ret << "Grade #{grade_begin}+"
         else
@@ -52,6 +52,7 @@ module CatalogItemMethods
       ret
     end
 
+    # Grades = {Pre-K => -1, K => 0}
     def grade_val(grade)
       return 'Pre-K' if grade == TeacherSet::PRE_K_VAL
 
