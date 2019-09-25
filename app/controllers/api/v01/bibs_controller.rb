@@ -198,9 +198,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
   def grade_val(val)
     return unless val.present?
     if val == 'K'
-      -1
+      TeacherSet::K_VAL
     elsif PREK_ARR.include?(val)
-      -2
+      TeacherSet::PRE_K_VAL
     else
       val.to_i
     end
