@@ -60,6 +60,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           total_copies: ts_items_info[:total_count],
           availability: ts_items_info[:availability_string]
         )
+        binding.pry
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
         AdminMailer.failed_bibs_controller_api_request(@request_body, "One attribute may be too long.  Error: #{exception.message[0..200]}...", action_name, teacher_set).deliver
