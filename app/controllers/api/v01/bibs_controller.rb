@@ -198,6 +198,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
   # "marcTag": "521" {"tag": "a", "content": "11-12" } if field does not match with grades returns 'Pre-K +'.
   # eg: ["dd", "11-444", "Z", "1130L"] -  only 11 is matched with supporting grades. It returns 11 +
   # eg: ["9", "11-444", "Z", "1130L"] -  9 and 11 matched with supporting grades. It returns 9 +
+  # eg: ["9", "114-4", "Z", "1130L"] -  4 matched with supporting grades. It returns 4 +
 
   def get_grades(grade_and_lexile_json)
     grades = GRADES_1_12 + PREK_K_GRADES
@@ -208,10 +209,12 @@ class Api::V01::BibsController < Api::V01::GeneralController
       if grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
         grades_arr << grade
         return grades_arr
-      elsif !grades.include?(grade_arr[0])
+      elsif !grades.include?(grade_arr[0]) && !grades.include?(grade_arr[1])
         prek_arr << TeacherSet::PRE_K_VAL
       elsif grades.include?(grade_arr[0]) && !grades.include?(grade_arr[1])
         return [grade_arr[0]]
+      elsif !grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
+        return [grade_arr[1]]
       else
         next
       end
