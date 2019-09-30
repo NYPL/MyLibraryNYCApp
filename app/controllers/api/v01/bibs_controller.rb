@@ -159,15 +159,14 @@ class Api::V01::BibsController < Api::V01::GeneralController
       saved_teacher_sets_json_array
     end
 
-
     # Grades filter supports Pre-K and K
     # Grades = {Pre-K => -1, K => 0}
     # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
     def grade_or_lexile_array(return_grade_or_lexile)
       grade_and_lexile_json = all_var_fields('521', 'content')
       return '' if grade_and_lexile_json.blank?
-
-      grade_and_lexile_json.each do |grade_or_lexile_json|
+      grades_resp = get_grades(grade_and_lexile_json)
+      grades_resp.each do |grade_or_lexile_json|
         begin
           if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
             return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
@@ -192,7 +191,33 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
     end
 
-  # end private methods
+  # Supporting only below grades 
+  GRADES_1_12 = %w[1 2 3 4 5 6 7 8 9 10 11 12].freeze
+  PREK_K_GRADES = ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek', 'K', 'k'].freeze
+
+  # "marcTag": "521" {"tag": "a", "content": "11-12" } if field does not match with grades returns 'Pre-K +'.
+  # eg: ["dd", "11-444", "Z", "1130L"] -  only 11 is matched with supporting grades. It returns 11 +
+  # eg: ["9", "11-444", "Z", "1130L"] -  9 and 11 matched with supporting grades. It returns 9 +
+
+  def get_grades(grade_and_lexile_json)
+    grades = GRADES_1_12 + PREK_K_GRADES
+    grades_arr = []
+    prek_arr = []
+    grade_and_lexile_json.each do |grade|
+      grade_arr = grade.gsub('.', '').split('-')
+      if grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
+        grades_arr << grade
+        return grades_arr
+      elsif !grades.include?(grade_arr[0])
+        prek_arr << TeacherSet::PRE_K_VAL
+      elsif grades.include?(grade_arr[0]) && !grades.include?(grade_arr[1])
+        return [grade_arr[0]]
+      else
+        next
+      end
+    end
+    prek_arr.uniq
+  end
 
   # Grades = {Pre-K => -1, K => 0}
   def grade_val(val)
@@ -205,5 +230,6 @@ class Api::V01::BibsController < Api::V01::GeneralController
       val.to_i
     end
   end
+  # end private methods
 
 end

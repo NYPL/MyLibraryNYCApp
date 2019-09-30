@@ -159,7 +159,7 @@ class TeacherSet < ActiveRecord::Base
     unless params[:subject].nil?
       sets = sets.where("primary_subject = ?", params[:subject])
     end
-    
+
     # Internal name for "set type" is set_type
     unless params['set type'].nil?
       sets = sets.where("set_type = ?", params['set type'].join())
