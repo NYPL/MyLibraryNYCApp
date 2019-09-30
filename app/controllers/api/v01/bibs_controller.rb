@@ -191,16 +191,16 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
     end
 
-  #Supporting only below grades 
-  GRADES_1_12 = ['1','2','3','4','5','6','7','8','9','10','11','12'];
-  PREK_K_GRADES =  ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek', 'K', 'k']
+  # Supporting only below grades 
+  GRADES_1_12 = %w[1 2 3 4 5 6 7 8 9 10 11 12].freeze
+  PREK_K_GRADES = ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek', 'K', 'k'].freeze
 
-  #"marcTag": "521" {"tag": "a", "content": "11-12" } if field does not match with grades returns 'Pre-K +'.
-  #eg: ["dd", "11-444", "Z", "1130L"] -  only 11 is matched with supporting grades. It returns 11 +
-  #eg: ["9", "11-444", "Z", "1130L"] -  9 and 11 matched with supporting grades. It returns 9 +
+  # "marcTag": "521" {"tag": "a", "content": "11-12" } if field does not match with grades returns 'Pre-K +'.
+  # eg: ["dd", "11-444", "Z", "1130L"] -  only 11 is matched with supporting grades. It returns 11 +
+  # eg: ["9", "11-444", "Z", "1130L"] -  9 and 11 matched with supporting grades. It returns 9 +
 
   def get_grades(grade_and_lexile_json)
-    grades = GRADES_1_12  + PREK_K_GRADES
+    grades = GRADES_1_12 + PREK_K_GRADES
     grades_arr = []
     prek_arr = []
     grade_and_lexile_json.each do |grade|
