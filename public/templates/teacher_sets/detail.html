@@ -5,7 +5,7 @@
     <div id="teacher_set" class="column">
       <div class="school_inactive_message" data-ng-show="is_school_active == false">
       According to our records, your school no longer participates in the MyLibraryNYC program.
-      please contact <a href="https://slsa-nys.org/about-us/directory/name/leanne-ellis/" target="_blank">Leanne Ellis</a> for further assistance.	
+      please contact <a href="https://slsa-nys.org/about-us/directory/name/leanne-ellis/" target="_blank">Leanne Ellis</a> for further assistance.
       </div>
 
       <div class="ts-banner subject subject-{{ts.subject_key}}">
@@ -69,6 +69,10 @@
           <dd>{{ts.publication_date}}</dd>
           <dt ng-show="ts.primary_language">Primary Language</dt>
           <dd>{{ts.primary_language}}</dd>
+
+          <dt ng-show="ts.language && ts.language != ts.primary_language">Other Languages</dt>
+          <dd ng-show="ts.language && ts.language != ts.primary_language">{{ts.language}}</dd>
+
           <dt ng-show="ts.physical_description">Physical Description</dt>
           <dd>{{ts.physical_description}}</dd>
           <dt ng-show="ts.teacher_set_notes.length > 0 || ts.statement_of_responsibility">Notes</dt>

@@ -33,6 +33,9 @@ class TeacherSet < ActiveRecord::Base
   AVAILABLE = 'available'
   UNAVAILABLE = 'unavailable'
 
+  PRE_K_VAL = -1
+  K_VAL = 0
+
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
 
@@ -120,14 +123,15 @@ class TeacherSet < ActiveRecord::Base
 
     [:grade_begin, :grade_end, :lexile_begin, :lexile_end].each do |k|
       next if params[k].nil?
-      params[k] = params[k].to_i
-      params[k] = nil if params[k] == 0
+      params[k] = params[k].to_i if params[k].present?
     end
 
     # Grade & Lexile ranges:
     # If grade/lexile range specified, ensure sets have ranges that cover some part of specified range
     # e.g. grade_begin=4&grade_end=6 returns sets with ranges 4-6, 4-5, 5-7, 6-8, 5-null, etc.
     # e.g. grade_begin=8&grade_end=[null] returns sets with ranges 8-12, 8-null, etc.
+    # e.g. grades = {Pre-K => -1, K => 0}
+    # e.g. grade_begin=-1&grade_end=0 returns sets with ranges Pre-k to 1, Pre-k to K, K-3, etc.
     # Note these clauses purposefully include sets with null grade/lexile ranges by stakeholder request
     ['grade','lexile'].each do |prop|
       begin_prop = "#{prop}_begin"
@@ -155,21 +159,21 @@ class TeacherSet < ActiveRecord::Base
     unless params[:subject].nil?
       sets = sets.where("primary_subject = ?", params[:subject])
     end
-    # Internal name for "Type" is set_type
-    unless params[:type].nil?
-      sets = sets.where("set_type = ?", params[:type])
+
+    # Internal name for "set type" is set_type
+    unless params['set type'].nil?
+      sets = sets.where("set_type = ?", params['set type'].join())
     end
 
-    [:language, :availability].each do |prop|
-      if !params[prop].nil? && params[prop].size > 0
-        sets = sets.where("#{prop} IN (?)", params[prop])
-      end
+    if params[:language].present?
+      sets = sets.where("language IN (?) OR primary_language IN (?)", params[:language], params[:language])
+    end
+    if !params[:availability].nil? && params[:availability].size > 0
+      sets = sets.where("availability IN (?)", params[:availability])
     end
 
     # Sort most available first with id as tie breaker to ensure consistent sorts
     sets = sets.order('availability ASC, available_copies DESC, id DESC')
-
-    # puts "::: SQL: #{sets.to_sql}"
 
     sets
   end
@@ -228,13 +232,10 @@ class TeacherSet < ActiveRecord::Base
       # Tags
       topics_facets = {:label => 'topics', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
-      # Restrict to min_count_for_facet (5) if no topics currently selected
-      if !_qry.to_sql.include?('JOIN subject_teacher_sets')
-        _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
-      # .. otherwise restrict to 3
-      else
-        _qry = _qry.having('count(*) >= ?', 3)
-      end
+      # Restrict to min_count_for_facet (5). Used to only activate if no topics currently selected,
+      # but let's make it 5 consistently now.
+      #if !_qry.to_sql.include?('JOIN subject_teacher_sets')
+      _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       _qry.count.each do |(vals, count)|
         (label, val) = vals
         topics_facets[:items] << {
@@ -678,18 +679,8 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
-=begin
-  def as_json(opts={})
-    ret = {}
-    [:id, :availability, :description, :details_url, :primary_language, :primary_subject, :title].each do |p|
-      ret[p] = self[p]
-    end
-    ret[:suitabilities_string] = suitabilities_string
-    ret
-  end
-=end
 
-  # Recieve JSON related to a teacher_set.
+  # Receive JSON related to a teacher_set.
   # For each ISBN, ensure there is an associated book.
   # Disassociate books that are no longer in the teacher set.
   def update_included_book_list(teacher_set_record)
@@ -743,7 +734,7 @@ class TeacherSet < ActiveRecord::Base
     # so we can remake them fresh from the bib info.
     self.subjects.clear
 
-    # Create all the subjects and teacher_set <--> subject associations specified in the bib 
+    # Create all the subjects and teacher_set <--> subject associations specified in the bib
     # record we're processing, ignoring duplicate associations.
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)
@@ -778,8 +769,7 @@ class TeacherSet < ActiveRecord::Base
     new_subject_string = new_subject_string.strip()
 
     # if the subject ends in a period (something metadata rules can require), strip the period
-    new_subject_string = new_subject_string.gsub(/\.$/, '')
-
+    new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
     return new_subject_string
   end
 
@@ -814,7 +804,7 @@ class TeacherSet < ActiveRecord::Base
     response = get_items_info_from_bibs_service(bibid)
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{response[:available_count]}, total_count: #{response[:total_count]},
     availability: #{response[:availability_string]}", b_number: "#{bibid}")
-    self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count], 
+    self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count],
       availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
   end
