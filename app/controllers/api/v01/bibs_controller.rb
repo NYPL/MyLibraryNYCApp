@@ -204,7 +204,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
     grades = GRADES_1_12 + PREK_K_GRADES
     grades_arr = []
     prek_arr = []
-    grade_and_lexile_json.each do |grade|
+    grade_and_lexile_json.each do |gd|
+      grade = gd.strip()
       grade_arr = grade.gsub('.', '').split('-')
       if grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
         grades_arr << grade
