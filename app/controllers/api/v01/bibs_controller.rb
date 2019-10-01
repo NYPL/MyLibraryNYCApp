@@ -206,6 +206,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
     prek_arr = []
     grade_and_lexile_json.each do |gd|
       grade = gd.strip()
+      return [grade] if grade.upcase.include?('PRE')
       grade_arr = grade.gsub('.', '').split('-')
       if grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
         grades_arr << grade
