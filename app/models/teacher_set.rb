@@ -770,9 +770,12 @@ class TeacherSet < ActiveRecord::Base
 
     # if the subject ends in a period (something metadata rules can require), strip the period
     new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
-    return new_subject_string
-  end
 
+    #New subject string is empty returns nil
+    return unless new_subject_string.present?
+
+    return new_subject_string 
+  end
 
   # Delete old subjects that do not have any records in the join table,
   # because they are not associated with any teacher sets.
