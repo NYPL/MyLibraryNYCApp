@@ -11,9 +11,9 @@ class User < ActiveRecord::Base
   :timeoutable # adds session["warden.user.user.session"]["last_request_at"] which we use in sessions_controller
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me,
-  :barcode, :alt_barcodes, :first_name, :last_name, :alt_email,
-  :school_id, :pin
+  #attr_accessible :email, :password, :password_confirmation, :remember_me,
+  #:barcode, :alt_barcodes, :first_name, :last_name, :alt_email,
+  #:school_id, :pin
 
   # Makes getters and setters
   attr_accessor :pin
@@ -203,7 +203,7 @@ class User < ActiveRecord::Base
         {
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
-          'responseData' => response.body 
+          'responseData' => response.body
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end

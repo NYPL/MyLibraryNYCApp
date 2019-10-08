@@ -9,7 +9,7 @@
 # users (teachers) can sign up for MLN accounts with.
 class AllowedUserEmailMasks < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email_pattern, :active, :created_at, :updated_at
+  #attr_accessible :email_pattern, :active, :created_at, :updated_at
 
   before_create :normalize_email_strings
   before_update :normalize_email_strings

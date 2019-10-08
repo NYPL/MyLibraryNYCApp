@@ -8,16 +8,16 @@ class TeacherSet < ActiveRecord::Base
   before_update :enable_papertrail
   after_save :enable_papertrail
 
-  attr_accessible :slug, :grade_begin, :grade_end, :availability, :call_number, :description, :details_url, :edition, :id,
-                  :isbn, :language, :lexile_begin, :lexile_end, :notes, :physical_description, :primary_language, :publication_date,
-                  :publisher, :series, :statement_of_responsibility, :sub_title, :title, :books_attributes,
-                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents, :last_book_change
+  #attr_accessible :slug, :grade_begin, :grade_end, :availability, :call_number, :description, :details_url, :edition, :id,
+  #                :isbn, :language, :lexile_begin, :lexile_end, :notes, :physical_description, :primary_language, :publication_date,
+  #                :publisher, :series, :statement_of_responsibility, :sub_title, :title, :books_attributes,
+  #                :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents, :last_book_change
 
   attr_accessor :subject, :subject_key, :suitabilities_string, :note_summary, :note_string, :slug
 
   has_many :teacher_set_notes #, :as => :notes
   has_many :teacher_set_books, :dependent => :destroy
-  has_many :books, :through => :teacher_set_books, :order => 'teacher_set_books.rank ASC'
+  has_many :books, :through => :teacher_set_books #, :order => 'teacher_set_books.rank ASC'
   has_many :holds
   has_many :subject_teacher_sets, dependent: :delete_all
   has_many :subjects, through: :subject_teacher_sets
@@ -774,7 +774,7 @@ class TeacherSet < ActiveRecord::Base
     #New subject string is empty returns nil
     return unless new_subject_string.present?
 
-    return new_subject_string 
+    return new_subject_string
   end
 
   # Delete old subjects that do not have any records in the join table,

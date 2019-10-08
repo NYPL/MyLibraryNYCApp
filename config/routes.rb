@@ -3,8 +3,8 @@ MyLibraryNYC::Application.routes.draw do
   devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
 
   devise_scope :user do
-    match 'timeout_check' => 'sessions#timeout_check', via: :get
-    match 'timeout' => 'sessions#timeout', via: :get
+    get 'timeout_check' => 'sessions#timeout_check'
+    get 'timeout' => 'sessions#timeout'
   end
 
   get 'extend_session_iframe' => 'home#extend_session_iframe'
@@ -14,8 +14,8 @@ MyLibraryNYC::Application.routes.draw do
   end
   resources :books
   resources :schools, :only => [:index]
-  match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel
-  match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', :as => :teacher_set_holds
+  match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel, via: [:get, :post]
+  get 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds'
 
   resources :holds
 
@@ -30,10 +30,10 @@ MyLibraryNYC::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
   get '/check_email', to: 'users#check_email'
-  match 'app' => 'angular#index', :as => :app
-  match 'settings' => 'settings#index'
-  match 'account' => 'settings#index', :as => :account
-  match 'help' => 'home#help', :as => :help
+  match 'app' => 'angular#index', :as => :app, via: [:get, :post]
+  match 'settings' => 'settings#index', via: [:get, :post]
+  match 'account' => 'settings#index', :as => :account, via: [:get, :post]
+  match 'help' => 'home#help', :as => :help, via: [:get, :post]
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name

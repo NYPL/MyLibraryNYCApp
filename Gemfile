@@ -1,41 +1,43 @@
-ruby '2.2.10'
+ruby '2.5.0'
 
 source 'https://rubygems.org'
-gem 'rails', '3.2.22.5'
-gem 'activeadmin', '0.6.6.1', github: 'nypl/activeadmin'
+gem 'rails', '5.0.7.1'
+gem 'actionpack', '5.0.7.1'
+gem 'activeadmin', '2.4.0'
+gem 'activemodel', '5.0.7.1'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'addressable'
 gem 'auto-session-timeout'
 gem 'aws-sdk'
-gem 'client_side_validations'
+gem 'client_side_validations', '16.0.3'
 gem 'cranky'
-gem 'devise', '>= 3.5.10'
+gem 'devise', '>= 4.0.0'
 gem 'faker'
 gem 'figaro'
 gem 'font-awesome-rails'
 gem 'httparty'
-gem 'jquery-rails', '< 3.0.0'
+gem 'jquery-rails', '> 4.0'
 gem 'json'
-gem 'meta_search', '>= 1.1.0.pre'
+gem "lograge"
+gem "logstash-event"
+gem 'meta_search'
+gem 'minitest', '~> 5.6.1'
 gem 'nokogiri'
 gem 'open_uri_redirections'
 gem 'paper_trail', github: 'paper-trail-gem/paper_trail', branch: '5-stable'
 gem 'pg', '~> 0.18'
+gem 'rack-cors'
 gem 'rubocop','~> 0.59.1', require: false
+gem 'ruby_dig'
 gem 'sendgrid-ruby', '~> 1.1.6'
 gem 'test-unit'
 gem 'will_paginate', '~> 3.0'
 gem 'webmock'
 gem 'yaml_db'
-gem "lograge"
-gem "logstash-event"
-gem 'rack-cors'
-gem 'minitest', '~> 5.6.1'
-gem 'ruby_dig'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails'
+  gem 'coffee-rails'
   gem 'therubyracer', :platforms => :ruby # https://github.com/sstephenson/execjs#readme for more supported runtimes for ExecJS
   gem 'uglifier', '>= 1.0.3'
 end

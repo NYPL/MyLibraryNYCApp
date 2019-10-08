@@ -7,7 +7,7 @@ class Book < ActiveRecord::Base
   before_update :enable_papertrail
   after_save :enable_papertrail
 
-  attr_accessible :call_number, :cover_uri, :description, :details_url, :format, :id, :isbn, :notes, :physical_description, :primary_language, :publication_date, :statement_of_responsibility, :sub_title, :title, :catalog_choice, :bnumber
+  #attr_accessible :call_number, :cover_uri, :description, :details_url, :format, :id, :isbn, :notes, :physical_description, :primary_language, :publication_date, :statement_of_responsibility, :sub_title, :title, :catalog_choice, :bnumber
   attr_accessor :catalog_choice
   # attr_accessor :matching_api_items
 
