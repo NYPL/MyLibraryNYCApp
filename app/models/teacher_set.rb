@@ -225,7 +225,7 @@ class TeacherSet < ActiveRecord::Base
         facets << facets_group
       end
 
-      # Collect primary subjects for restricting topics
+      # Collect primary subjects for restricting subjects
       primary_subjects = []
 
       unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
