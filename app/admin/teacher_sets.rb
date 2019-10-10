@@ -29,7 +29,7 @@ ActiveAdmin.register TeacherSet do
 
   filter :books_title, as: :string
   filter :subjects_title, as: :string
-  filter :primary_subject
+  filter :area_of_study
 
   filter :grade_begin
   filter :grade_end

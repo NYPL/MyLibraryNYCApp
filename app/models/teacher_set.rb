@@ -11,7 +11,7 @@ class TeacherSet < ActiveRecord::Base
   attr_accessible :slug, :grade_begin, :grade_end, :availability, :call_number, :description, :details_url, :edition, :id,
                   :isbn, :language, :lexile_begin, :lexile_end, :notes, :physical_description, :primary_language, :publication_date,
                   :publisher, :series, :statement_of_responsibility, :sub_title, :title, :books_attributes,
-                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents, :last_book_change
+                  :available_copies, :total_copies, :area_of_study, :bnumber, :set_type, :contents, :last_book_change
 
   attr_accessor :subject, :subject_key, :suitabilities_string, :note_summary, :note_string, :slug
 
@@ -82,7 +82,7 @@ class TeacherSet < ActiveRecord::Base
 
   # Poor man's subject... TODO: replace with column in DB
   def subject
-    primary_subject
+    area_of_study
   end
 
   def has_subject(title)
@@ -104,6 +104,8 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def self.for_query(params)
+    params['area_of_study'] = params.delete("area of study")
+    params['set_type'] = params.delete("set type")
     sets = self.paginate(:page => params[:page])
 
     unless params[:keyword].nil? || params[:keyword].empty?
@@ -155,14 +157,14 @@ class TeacherSet < ActiveRecord::Base
       end
     end
 
-    # Internal name for "Subject" is primary_subject
-    unless params[:subject].nil?
-      sets = sets.where("primary_subject = ?", params[:subject])
+    # Internal name for "Subject" is area_of_study
+    unless params['area_of_study'].nil?
+      sets = sets.where("area_of_study = ?", params['area_of_study'])
     end
 
     # Internal name for "set type" is set_type
-    unless params['set type'].nil?
-      sets = sets.where("set_type = ?", params['set type'].join())
+    unless params['set_type'].nil?
+      sets = sets.where("set_type = ?", params['set_type'].join())
     end
 
     if params[:language].present?
@@ -199,8 +201,8 @@ class TeacherSet < ActiveRecord::Base
           :column => 'set_type',
           :value_map => self::SET_TYPE_LABELS
         },
-        { :label => 'subject',
-          :column => 'primary_subject'
+        { :label => 'area of study',
+          :column => 'area_of_study'
         }
       ].each do |config|
 
@@ -225,12 +227,13 @@ class TeacherSet < ActiveRecord::Base
 
       # Collect primary subjects for restricting topics
       primary_subjects = []
-      unless (subjects_facet = facets.select { |f| f[:label] == 'subject' }).nil?
+
+      unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
         primary_subjects = subjects_facet.first[:items].map { |s| s[:label] }
       end
 
       # Tags
-      topics_facets = {:label => 'topics', :items => []}
+      topics_facets = {:label =>  'subjects', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       # Restrict to min_count_for_facet (5). Used to only activate if no topics currently selected,
       # but let's make it 5 consistently now.
@@ -248,7 +251,7 @@ class TeacherSet < ActiveRecord::Base
 
       # Specify desired order of facets:
       facets.sort_by! do |f|
-        ind = ['subject','topics','language','type','availability'].index f[:label]
+        ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
         ind.nil? ? 1000 : ind
       end
 
@@ -487,7 +490,7 @@ class TeacherSet < ActiveRecord::Base
       subject.sub! /\ \(Teacher Set\)/, ''
 
       # Determine popularity of subject
-      subject_popularity = self.class.where(:primary_subject => subject).count
+      subject_popularity = self.class.where(:area_of_study => subject).count
     end
 
     new_title = "" + self.title
@@ -498,7 +501,7 @@ class TeacherSet < ActiveRecord::Base
       # puts "  ..Unpopular subject: #{subject} with #{subject_popularity} instances for title #{title}"
 
       # Look at popular primary_subjects and choose one that intersects with self.subjects
-      self.class.group(:primary_subject).having('count(*) >= 10').count.each do |(label,count)|
+      self.class.group(:area_of_study).having('count(*) >= 10').count.each do |(label,count)|
         if self.has_subject label
           subject = label
         end
@@ -509,7 +512,7 @@ class TeacherSet < ActiveRecord::Base
     end
 
     self.update_attributes({
-      :primary_subject => subject,
+      :area_of_study => subject,
       :title => new_title
     })
 
@@ -747,11 +750,11 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
-  # Clean up the primary subject field to match the subjects table title string rules.
-  # We do this, because there's some filtering that goes on, matching the teacher_set.primary_subject
+  # Clean up the area_of_study field to match the subjects table title string rules.
+  # We do this, because there's some filtering that goes on, matching the teacher_set.area_of_study
   # to the subjects.title, and we want to make sure the string follow some conventions.
   def clean_primary_subject()
-    self.primary_subject = self.clean_subject_string(self.primary_subject)
+    self.area_of_study = self.clean_subject_string(self.area_of_study)
     self.save
     LogWrapper.log('DEBUG', {'message' => 'clean_primary_subject.end','method' => 'teacher_set.clean_primary_subject'})
   end
