@@ -49,7 +49,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           primary_language: fixed_field('24'),
           publisher: var_field('260'),
           contents: var_field('505'),
-          primary_subject: var_field('690', false),
+          area_of_study: var_field('690', false),
           physical_description: physical_description,
           details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
           grade_begin: grade_or_lexile_array('grade')[0] || '', # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
@@ -65,7 +65,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         AdminMailer.failed_bibs_controller_api_request(@request_body, "One attribute may be too long.  Error: #{exception.message[0..200]}...", action_name, teacher_set).deliver
       end
       begin
-        # clean up the primary subject field to match the subject field string rules
+        # clean up the area of study field to match the subject field string rules
         teacher_set.clean_primary_subject()
       rescue => exception
         log_error('clean_primary_subject', exception)
