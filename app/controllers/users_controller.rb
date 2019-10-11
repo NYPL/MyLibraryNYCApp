@@ -18,4 +18,16 @@ class UsersController < ApplicationController
     render :json => User.new.get_email_records(params[:email])
   end
 
+
+  def create
+    User.create(user_params)
+  end
+
+  private
+
+  # Strong parameters: protect object creation and allow mass assignment.
+  def user_params
+    params.require(:email, :encrypted_password).permit(:email, :password, :password_confirmation, :remember_me,
+    :barcode, :alt_barcodes, :first_name, :last_name, :alt_email, :school_id, :pin)
+  end
 end

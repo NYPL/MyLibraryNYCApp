@@ -3,8 +3,6 @@ class Hold < ActiveRecord::Base
   # add a quick filter scope to ActiveAdmin oldest unfulfilled hold orders first.
   scope :new_holds, -> { where(:status=>"new") }
 
-  #attr_accessible :date_required
-
   validates_presence_of :teacher_set_id, :user_id
 
   belongs_to :teacher_set

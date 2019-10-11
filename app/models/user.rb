@@ -10,11 +10,6 @@ class User < ActiveRecord::Base
   :recoverable, :rememberable, :trackable, :validatable, # this handles uniqueness of email automatically
   :timeoutable # adds session["warden.user.user.session"]["last_request_at"] which we use in sessions_controller
 
-  # Setup accessible (or protected) attributes for your model
-  #attr_accessible :email, :password, :password_confirmation, :remember_me,
-  #:barcode, :alt_barcodes, :first_name, :last_name, :alt_email,
-  #:school_id, :pin
-
   # Makes getters and setters
   attr_accessor :pin
 
