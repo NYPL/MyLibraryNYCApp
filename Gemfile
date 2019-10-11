@@ -17,6 +17,7 @@ gem 'figaro'
 gem 'font-awesome-rails'
 gem 'httparty'
 gem 'jquery-rails', '> 4.0'
+gem 'jquery-ui-rails'
 gem 'json'
 gem "lograge"
 gem "logstash-event"

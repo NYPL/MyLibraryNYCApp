@@ -22,9 +22,6 @@ MyLibraryNYC::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
-  # Turn off asset pipline information showing in logs
-  config.assets.logger = true
-
   # Raise exception on mass assignment protection for Active Record models
   #config.active_record.mass_assignment_sanitizer = :strict
 
@@ -41,4 +38,9 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.perform_deliveries = false
 
+  config.logger = Logger.new(STDOUT)
+  config.logger.level = Logger::DEBUG
+
+  # Turn off asset pipline information showing in logs
+  config.assets.logger = true
 end

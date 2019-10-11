@@ -68,4 +68,6 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default_url_options = { :host => 'sets.mylibrarynyc.org' }
 
+  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
+  config.logger.level = Logger::INFO
 end

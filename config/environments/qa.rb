@@ -5,4 +5,6 @@ MyLibraryNYC::Application.configure do
 
   config.force_ssl = false
 
+  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
+  config.logger.level = Logger::INFO
 end
