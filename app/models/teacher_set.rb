@@ -104,8 +104,6 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def self.for_query(params)
-    params['area_of_study'] = params.delete("area of study")
-    params['set_type'] = params.delete("set type")
     sets = self.paginate(:page => params[:page])
 
     unless params[:keyword].nil? || params[:keyword].empty?
@@ -158,13 +156,13 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Subject" is area_of_study
-    unless params['area_of_study'].nil?
-      sets = sets.where("area_of_study = ?", params['area_of_study'])
+    unless params['area of study'].nil?
+      sets = sets.where("area_of_study = ?", params['area of study'].join())
     end
 
     # Internal name for "set type" is set_type
-    unless params['set_type'].nil?
-      sets = sets.where("set_type = ?", params['set_type'].join())
+    unless params['set type'].nil?
+      sets = sets.where("set_type = ?", params['set type'].join())
     end
 
     if params[:language].present?
