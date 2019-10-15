@@ -21,7 +21,6 @@ gem 'jquery-ui-rails'
 gem 'json'
 gem "lograge"
 gem "logstash-event"
-gem 'meta_search'
 gem 'minitest', '~> 5.6.1'
 gem 'nokogiri'
 gem 'open_uri_redirections'
