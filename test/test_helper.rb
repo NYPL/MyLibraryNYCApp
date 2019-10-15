@@ -7,6 +7,7 @@ require 'factories/school_factory'
 require 'factories/book_factory'
 require 'factories/teacher_set_factory'
 require 'pry'
+require 'pry-stack_explorer'
 
 include WebMock::API
 

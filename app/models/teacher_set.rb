@@ -33,6 +33,9 @@ class TeacherSet < ActiveRecord::Base
   AVAILABLE = 'available'
   UNAVAILABLE = 'unavailable'
 
+  PRE_K_VAL = -1
+  K_VAL = 0
+
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
 
@@ -120,14 +123,15 @@ class TeacherSet < ActiveRecord::Base
 
     [:grade_begin, :grade_end, :lexile_begin, :lexile_end].each do |k|
       next if params[k].nil?
-      params[k] = params[k].to_i
-      params[k] = nil if params[k] == 0
+      params[k] = params[k].to_i if params[k].present?
     end
 
     # Grade & Lexile ranges:
     # If grade/lexile range specified, ensure sets have ranges that cover some part of specified range
     # e.g. grade_begin=4&grade_end=6 returns sets with ranges 4-6, 4-5, 5-7, 6-8, 5-null, etc.
     # e.g. grade_begin=8&grade_end=[null] returns sets with ranges 8-12, 8-null, etc.
+    # e.g. grades = {Pre-K => -1, K => 0}
+    # e.g. grade_begin=-1&grade_end=0 returns sets with ranges Pre-k to 1, Pre-k to K, K-3, etc.
     # Note these clauses purposefully include sets with null grade/lexile ranges by stakeholder request
     ['grade','lexile'].each do |prop|
       begin_prop = "#{prop}_begin"
@@ -155,21 +159,21 @@ class TeacherSet < ActiveRecord::Base
     unless params[:subject].nil?
       sets = sets.where("primary_subject = ?", params[:subject])
     end
-    # Internal name for "Type" is set_type
-    unless params[:type].nil?
-      sets = sets.where("set_type = ?", params[:type])
+
+    # Internal name for "set type" is set_type
+    unless params['set type'].nil?
+      sets = sets.where("set_type = ?", params['set type'].join())
     end
 
-    [:language, :availability].each do |prop|
-      if !params[prop].nil? && params[prop].size > 0
-        sets = sets.where("#{prop} IN (?)", params[prop])
-      end
+    if params[:language].present?
+      sets = sets.where("language IN (?) OR primary_language IN (?)", params[:language], params[:language])
+    end
+    if !params[:availability].nil? && params[:availability].size > 0
+      sets = sets.where("availability IN (?)", params[:availability])
     end
 
     # Sort most available first with id as tie breaker to ensure consistent sorts
     sets = sets.order('availability ASC, available_copies DESC, id DESC')
-
-    # puts "::: SQL: #{sets.to_sql}"
 
     sets
   end
@@ -228,13 +232,10 @@ class TeacherSet < ActiveRecord::Base
       # Tags
       topics_facets = {:label => 'topics', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
-      # Restrict to min_count_for_facet (5) if no topics currently selected
-      if !_qry.to_sql.include?('JOIN subject_teacher_sets')
-        _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
-      # .. otherwise restrict to 3
-      else
-        _qry = _qry.having('count(*) >= ?', 3)
-      end
+      # Restrict to min_count_for_facet (5). Used to only activate if no topics currently selected,
+      # but let's make it 5 consistently now.
+      #if !_qry.to_sql.include?('JOIN subject_teacher_sets')
+      _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       _qry.count.each do |(vals, count)|
         (label, val) = vals
         topics_facets[:items] << {
@@ -678,18 +679,8 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
-=begin
-  def as_json(opts={})
-    ret = {}
-    [:id, :availability, :description, :details_url, :primary_language, :primary_subject, :title].each do |p|
-      ret[p] = self[p]
-    end
-    ret[:suitabilities_string] = suitabilities_string
-    ret
-  end
-=end
 
-  # Recieve JSON related to a teacher_set.
+  # Receive JSON related to a teacher_set.
   # For each ISBN, ensure there is an associated book.
   # Disassociate books that are no longer in the teacher set.
   def update_included_book_list(teacher_set_record)
@@ -743,7 +734,7 @@ class TeacherSet < ActiveRecord::Base
     # so we can remake them fresh from the bib info.
     self.subjects.clear
 
-    # Create all the subjects and teacher_set <--> subject associations specified in the bib 
+    # Create all the subjects and teacher_set <--> subject associations specified in the bib
     # record we're processing, ignoring duplicate associations.
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)
@@ -778,8 +769,7 @@ class TeacherSet < ActiveRecord::Base
     new_subject_string = new_subject_string.strip()
 
     # if the subject ends in a period (something metadata rules can require), strip the period
-    new_subject_string = new_subject_string.gsub(/\.$/, '')
-
+    new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
     return new_subject_string
   end
 
@@ -810,18 +800,18 @@ class TeacherSet < ActiveRecord::Base
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items and available items in the list
   # Updated MLN DB with Total copies and available copies.
-  def update_available_and_total_count(bibid, nypl_source)
-    response = get_items_info_from_bibs_service(bibid, nypl_source)
+  def update_available_and_total_count(bibid)
+    response = get_items_info_from_bibs_service(bibid)
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{response[:available_count]}, total_count: #{response[:total_count]},
     availability: #{response[:availability_string]}", b_number: "#{bibid}")
-    self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count], 
+    self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count],
       availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
   end
 
   # Calls Bib service for items.
-  def get_items_info_from_bibs_service(bibid, nypl_source)
-    bibs_resp, items_found = send_request_to_bibs_microservice(bibid, nypl_source)
+  def get_items_info_from_bibs_service(bibid)
+    bibs_resp, items_found = send_request_to_items_microservice(bibid)
     return {bibs_resp: bibs_resp} if !items_found
     total_count, available_count = parse_items_available_and_total_count(bibs_resp)
     availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
@@ -844,49 +834,51 @@ class TeacherSet < ActiveRecord::Base
 
   private
 
-  # Sends a request to the bibs microservice.
-  def send_request_to_bibs_microservice(bibid, nypl_source)
-    items_url = "/#{nypl_source}/#{bibid}/items"
-    LogWrapper.log('DEBUG',
-      {
-       'message' => 'Request sent to bibs service',
-       'method' => 'send_request_to_bibs_microservice',
-       'status' => 'start',
-       'dataSent' => ENV['BIBS_MICROSERVICE_URL_V01'] + items_url
-      })
-    response = HTTParty.get(
-      ENV['BIBS_MICROSERVICE_URL_V01'] + items_url,
-      headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' },
-      timeout: 10
-    )
+  #Sends a request to the items microservice.
+  #Calling items service api by pagination, fetching 25 items by each call pushing into array.
+  #If its getting less than 25 items by items service call, we are not calling again.
+  def send_request_to_items_microservice(bibid,offset=nil,response=nil,items_hash={})
+    limit = 25
+    offset = offset.nil? ? 0 : offset += 1
+    request_offset = limit.to_i * offset.to_i
+    items_found = response && (response.code == 200 || items_hash['data'].present?)
 
-    case response.code
-    when 200
-      items_found = true
-      LogWrapper.log('DEBUG',
-        {
-          'message' => "The bibs service responded with the Items JSON.",
-          'method' => 'send_request_to_bibs_microservice',
-          'status' => response.code
-        })
-    when 404
-      items_found = false
-      LogWrapper.log('ERROR',
-        {
-          'message' => "The bibs service could not find the Items with bibid=#{bibid}",
-          'method' => 'send_request_to_bibs_microservice',
-          'status' => response.code
-        })
+    if response && (response.code != 200 || (items_hash['data'].present? && response['data'].size.to_i < limit))
+      return items_hash, items_found
     else
-      LogWrapper.log('ERROR',
+      items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
+      response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
+      headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
+
+      if response.code == 200 || items_hash['data'].present?
+        items_hash['data'] ||= []
+        items_hash['data'] << response['data'] if response['data'].present?
+        items_hash['data'].flatten!
+        LogWrapper.log('DEBUG',
         {
-          'message' => "An error has occured when sending a request to the bibs service",
-          'method' => 'send_request_to_bibs_microservice',
+          'message' => "Response from item services api",
+          'method' => 'send_request_to_items_microservice',
           'status' => response.code,
-          'responseData' => response.body
+          'responseData' => response.message
         })
-      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+      elsif response.code == 404
+        items_hash = response
+        LogWrapper.log('DEBUG',
+        {
+          'message' => "The items service could not find the Items with bibid=#{bibid}",
+          'method' => 'send_request_to_items_microservice',
+          'status' => response.code
+        })
+      else
+        LogWrapper.log('ERROR',
+        {
+          'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
+          'method' => 'send_request_to_items_microservice',
+          'status' => response.code
+        })
+      end
     end
-    return response, items_found
+    #Recursive call
+    send(__method__, bibid, offset, response, items_hash)
   end
 end

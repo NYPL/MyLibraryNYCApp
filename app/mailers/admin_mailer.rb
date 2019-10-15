@@ -1,7 +1,7 @@
 class AdminMailer < ActionMailer::Base
   include LogWrapper
   LOG_TAG = "AdminMailer"
-  default :from => "no-reply@mylibrarynyc.org"
+  default :from => '"MyLibraryNYC Admin" <no-reply@mylibrarynyc.org>'
 
   # Sends an email to let admins know that a request to create/update a bib(s) failed
   def failed_bibs_controller_api_request(request_body, error_code_and_message, action_name, teacher_set)
@@ -46,6 +46,8 @@ class AdminMailer < ActionMailer::Base
     end
   end
 
+
+  ##
   # Sends an email to let admins know that a request to update item availability has failed.
   def failed_items_controller_api_request(error_code_and_message)
     begin
