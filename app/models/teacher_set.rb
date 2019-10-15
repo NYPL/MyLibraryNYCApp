@@ -148,8 +148,8 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Tags" is subject
-    unless params[:topics].nil?
-      params[:topics].each_with_index do |s, i|
+    unless params[:subjects].nil?
+      params[:subjects].each_with_index do |s, i|
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
@@ -233,21 +233,22 @@ class TeacherSet < ActiveRecord::Base
       end
 
       # Tags
-      topics_facets = {:label =>  'subjects', :items => []}
+      subjects_facets = {:label =>  'subjects', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
-      # Restrict to min_count_for_facet (5). Used to only activate if no topics currently selected,
+      # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
       # but let's make it 5 consistently now.
       #if !_qry.to_sql.include?('JOIN subject_teacher_sets')
       _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       _qry.count.each do |(vals, count)|
         (label, val) = vals
-        topics_facets[:items] << {
+        subjects_facets[:items] << {
           :value => val,
           :label => label,
           :count => count
         }
       end
-      facets << topics_facets
+
+      facets << subjects_facets
 
       # Specify desired order of facets:
       facets.sort_by! do |f|
