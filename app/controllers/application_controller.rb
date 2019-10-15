@@ -6,17 +6,16 @@ class ApplicationController < ActionController::Base
   def append_info_to_payload(payload)
     super
     payload[:host] = request.host
-    #console.log('payload[:host]')
-    #case payload[:status]
-    #when 200
-    #  payload[:level] = "INFO"
-    #when payload[:status]  > 200 && payload[:status]  < 400
-    #  payload[:level] = "DEBUG"
-    #when payload[:status]  > 400
-    #  payload[:level] = "WARNING"
-    #when payload[:status]  >= 500
-    #  payload[:level] = "ERROR"
-    #end
+    case payload[:status]
+    when 200
+      payload[:level] = "INFO"
+    when payload[:status]  > 200 && payload[:status]  < 400
+      payload[:level] = "DEBUG"
+    when payload[:status]  > 400
+      payload[:level] = "WARNING"
+    when payload[:status]  >= 500
+      payload[:level] = "ERROR"
+    end
   end
 
 
