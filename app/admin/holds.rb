@@ -32,7 +32,7 @@ ActiveAdmin.register Hold do
   index do
     column "#" do i += 1 end
 
-    default_actions
+    actions
 
     [:status, :teacher_set, :quantity, :created_at, :updated_at].each do |prop|
       column prop

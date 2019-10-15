@@ -10,11 +10,13 @@ ActiveAdmin.register School do
     column(:active, sortable: :active) do |school|
       render(partial: 'schools/activation_links_container', locals: { school: school, action: 'index' })
     end
-    default_actions
+    actions
   end
 
   action_item only: :show do
-    render(partial: 'schools/activation_links_container', locals: { school: school, action: 'show' })
+    # Note: commented out to stop schools list crashing after rails upgrade.
+    # Not sure this line doesn't need to come back, will need to qa a bit.
+    #render(partial: 'schools/activation_links_container', locals: { school: school, action: 'show' })
   end
 
   member_action :activate, method: :put do
