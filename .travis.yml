@@ -3,26 +3,26 @@ cache:
   directories:
     - /home/travis/.rvm/
 rvm:
-- 2.5.0
+- 2.5.0  # 2019-10-16: updated for rails upgrade
 before_install:
-  - rvm use 2.5.0 --install --binary --fuzzy
+  - rvm use 2.5.0 --install --binary --fuzzy  # 2019-10-16: added to fix errors when upgrading rails env
   #- gem update --system
   #- gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
   - gem --version
   #- gem install bundler:2.5.0
   #- gem install bundler:1.17.3
   #- gem pristine bundler
-  - gem install bundler -v '< 2'
-  - gem --version
-  - "bundle config --global github.https true"
+  - gem install bundler -v '< 2'  # 2019-10-16: added to fix errors when upgrading rails env
+  - "bundle config --global github.https true"  # 2019-10-16: added to fix errors when upgrading rails env
 before_script:
-  # - bundle exec rubocop
+  # - bundle exec rubocop  # 2019-10-16: TODO: bring back, the commenting out is temporary to fix errors when upgrading rails env
 services:
 - postgresql
 script:
 - bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
 - bundle exec rake db:migrate
+- bundle exec rake db:migrate RAILS_ENV=test # 2019-10-16: added to fix errors when upgrading rails env
 - ruby -Itest test/unit/user_test.rb
 - ruby -Itest test/unit/book_test.rb
 - ruby -Itest test/unit/teacher_set_test.rb
