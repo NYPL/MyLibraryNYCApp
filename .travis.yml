@@ -6,6 +6,8 @@ rvm:
 - 2.5.0
 before_install:
   - "bundle config --global github.https true"
+  - gem update --system
+  - gem --version
 before_script:
   - bundle exec rubocop
 services:
