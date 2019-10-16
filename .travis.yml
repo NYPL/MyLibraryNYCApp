@@ -3,16 +3,17 @@ cache:
   directories:
     - /home/travis/.rvm/
 rvm:
-- 2.5.0
+- 1.29.3
 before_install:
-  - gem pristine bundler
-  - rvm use 2.5.0 --install --binary --fuzzy
+  - rvm use 1.29.3 --install --binary --fuzzy
   #- gem update --system
-  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  #- gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
   - gem --version
   #- gem install bundler:2.5.0
   #- gem install bundler:1.17.3
+  - gem pristine bundler
   - gem install bundler -v '< 2'
+  - gem --version
   - "bundle config --global github.https true"
 before_script:
   - bundle exec rubocop
