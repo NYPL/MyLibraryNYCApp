@@ -774,8 +774,6 @@ class TeacherSet < ActiveRecord::Base
     new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
 
     return new_subject_string if new_subject_string.present?
-    
-    return nil
   end
 
   # Delete old subjects that do not have any records in the join table,
