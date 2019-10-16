@@ -20,7 +20,7 @@ before_script:
 services:
 - postgresql
 script:
-#- bundle install
+- bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
 - bundle exec rake db:migrate
 - ruby -Itest test/unit/user_test.rb
