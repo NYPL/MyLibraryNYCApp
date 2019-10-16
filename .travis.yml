@@ -3,7 +3,7 @@ cache:
   directories:
     - /home/travis/.rvm/
 rvm:
-- 2.5.0
+- 2.5
 before_install:
   - "bundle config --global github.https true"
   - gem update --system
