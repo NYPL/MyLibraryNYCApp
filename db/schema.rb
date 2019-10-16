@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20191009151624) do
     t.datetime "updated_at",                                null: false
   end
 
-  create_table "books", id: :bigserial, force: :cascade do |t|
+  create_table "books", force: :cascade do |t|
     t.text     "title"
     t.text     "sub_title"
     t.text     "format"
@@ -165,7 +165,7 @@ ActiveRecord::Schema.define(version: 20191009151624) do
     t.index ["teacher_set_id"], name: "index_book_set_notes_on_book_set_id", using: :btree
   end
 
-  create_table "teacher_sets", id: :bigserial, force: :cascade do |t|
+  create_table "teacher_sets", force: :cascade do |t|
     t.text     "title"
     t.string   "call_number",                 limit: 255
     t.text     "description"
@@ -227,7 +227,6 @@ ActiveRecord::Schema.define(version: 20191009151624) do
     t.string   "home_library",           limit: 6
     t.integer  "school_id"
     t.text     "alt_barcodes"
-    t.index "lower((email)::text), lower((alt_email)::text)", name: "index_users_on_email_or_alt_email_lower", using: :btree
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
