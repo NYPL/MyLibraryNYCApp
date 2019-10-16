@@ -16,7 +16,7 @@ before_install:
   - gem --version
   - "bundle config --global github.https true"
 before_script:
-  - bundle exec rubocop
+  # - bundle exec rubocop
 services:
 - postgresql
 script:
