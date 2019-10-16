@@ -11,7 +11,7 @@ before_install:
   - gem --version
   #- gem install bundler:2.5.0
   #- gem install bundler:1.17.3
-  - gem pristine bundler
+  #- gem pristine bundler
   - gem install bundler -v '< 2'
   - gem --version
   - "bundle config --global github.https true"
