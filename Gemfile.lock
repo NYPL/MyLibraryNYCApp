@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/paper-trail-gem/paper_trail.git
+  remote: https://github.com/paper-trail-gem/paper_trail.git
   revision: a59be6df201303e525feafe60f453bc4dc83331a
   branch: 5-stable
   specs:
