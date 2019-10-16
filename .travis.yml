@@ -16,6 +16,7 @@ before_install:
   - "bundle config --global github.https true"  # 2019-10-16: added to fix errors when upgrading rails env
 before_script:
   # - bundle exec rubocop  # 2019-10-16: TODO: bring back, the commenting out is temporary to fix errors when upgrading rails env
+  - bundle exec rake db:migrate RAILS_ENV=test # 2019-10-16: added to fix errors when upgrading rails env
 services:
 - postgresql
 script:
