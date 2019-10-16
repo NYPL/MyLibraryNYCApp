@@ -9,6 +9,7 @@ before_install:
   - gem update --system
   - gem --version
   #- gem install bundler:2.5.0
+  #- gem install bundler:1.17.3
   - gem install bundler -v '< 2'
   - "bundle config --global github.https true"
 before_script:
@@ -16,7 +17,7 @@ before_script:
 services:
 - postgresql
 script:
-- bundle install
+#- bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
 - bundle exec rake db:migrate
 - ruby -Itest test/unit/user_test.rb
