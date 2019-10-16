@@ -5,8 +5,10 @@ cache:
 rvm:
 - 2.5.0
 before_install:
+  - gem pristine bundler
   - rvm use 2.5.0 --install --binary --fuzzy
-  - gem update --system
+  #- gem update --system
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
   - gem --version
   #- gem install bundler:2.5.0
   #- gem install bundler:1.17.3
