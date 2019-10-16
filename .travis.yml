@@ -3,7 +3,9 @@ cache:
   directories:
     - /home/travis/.rvm/
 rvm:
-- 2.2.10
+- 2.5.0
+before_install:
+  - "bundle config --global github.https true"
 before_script:
   - bundle exec rubocop
 services:
