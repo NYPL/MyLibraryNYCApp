@@ -99,8 +99,6 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def self.for_query(params)
-    params['area_of_study'] = params.delete("area of study")
-    params['set_type'] = params.delete("set type")
     sets = self.paginate(:page => params[:page])
 
     unless params[:keyword].nil? || params[:keyword].empty?
@@ -143,8 +141,8 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Tags" is subject
-    unless params[:topics].nil?
-      params[:topics].each_with_index do |s, i|
+    unless params[:subjects].nil?
+      params[:subjects].each_with_index do |s, i|
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
@@ -153,13 +151,13 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Subject" is area_of_study
-    unless params['area_of_study'].nil?
-      sets = sets.where("area_of_study = ?", params['area_of_study'])
+    unless params['area of study'].nil?
+      sets = sets.where("area_of_study = ?", params['area of study'].join())
     end
 
     # Internal name for "set type" is set_type
-    unless params['set_type'].nil?
-      sets = sets.where("set_type = ?", params['set_type'].join())
+    unless params['set type'].nil?
+      sets = sets.where("set_type = ?", params['set type'].join())
     end
 
     if params[:language].present?
@@ -228,21 +226,22 @@ class TeacherSet < ActiveRecord::Base
       end
 
       # Tags
-      topics_facets = {:label =>  'subjects', :items => []}
+      subjects_facets = {:label =>  'subjects', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
-      # Restrict to min_count_for_facet (5). Used to only activate if no topics currently selected,
+      # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
       # but let's make it 5 consistently now.
       #if !_qry.to_sql.include?('JOIN subject_teacher_sets')
       _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
       _qry.count.each do |(vals, count)|
         (label, val) = vals
-        topics_facets[:items] << {
+        subjects_facets[:items] << {
           :value => val,
           :label => label,
           :count => count
         }
       end
-      facets << topics_facets
+
+      facets << subjects_facets
 
       # Specify desired order of facets:
       facets.sort_by! do |f|
@@ -769,10 +768,7 @@ class TeacherSet < ActiveRecord::Base
     # if the subject ends in a period (something metadata rules can require), strip the period
     new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
 
-    #New subject string is empty returns nil
-    return unless new_subject_string.present?
-
-    return new_subject_string
+    return new_subject_string if new_subject_string.present?
   end
 
   # Delete old subjects that do not have any records in the join table,
