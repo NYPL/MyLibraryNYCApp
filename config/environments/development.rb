@@ -39,4 +39,6 @@ MyLibraryNYC::Application.configure do
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::DEBUG
+
+  config.eager_load = false
 end
