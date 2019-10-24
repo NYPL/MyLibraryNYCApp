@@ -2,9 +2,12 @@ ruby '2.5.0'
 
 source 'https://rubygems.org'
 gem 'rails', '5.0.7.1'
+#gem 'rails', '5.1.5'
 gem 'actionpack', '5.0.7.1'
+#gem 'actionpack', '5.1.5'
 gem 'activeadmin', '2.4.0'
 gem 'activemodel', '5.0.7.1'
+#gem 'activemodel', '5.1.5'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'addressable'
 gem 'auto-session-timeout'
@@ -21,7 +24,6 @@ gem 'jquery-ui-rails'
 gem 'json'
 gem "lograge"
 gem "logstash-event"
-gem 'minitest', '~> 5.6.1'
 gem 'nokogiri'
 gem 'open_uri_redirections'
 gem 'paper_trail', github: 'paper-trail-gem/paper_trail', branch: '5-stable'
@@ -52,5 +54,7 @@ group :development, :local do
 end
 
 group :test do
+  gem 'minitest', '~> 5.6.1'
+  #gem 'minitest', '~> 5.12.2'
   gem 'database_cleaner'
 end

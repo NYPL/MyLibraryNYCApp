@@ -36,4 +36,6 @@ MyLibraryNYC::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.action_mailer.perform_deliveries = false
+
+  config.eager_load = false
 end
