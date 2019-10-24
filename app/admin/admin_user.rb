@@ -30,4 +30,13 @@ ActiveAdmin.register AdminUser do
     end
     f.actions
   end
+
+  #Setting up Strong Parameters
+  #You must specify permitted_params within your admin_user ActiveAdmin resource which reflects a admin_user's expected params.
+  controller do
+    def permitted_params
+      params.permit admin_user: [:email, :password, :password_confirmation, :email_notifications, :remember_me]
+    end
+  end
 end
+
