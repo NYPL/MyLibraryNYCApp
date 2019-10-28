@@ -1,6 +1,13 @@
-ruby '2.5.0'
+ruby '2.5.7'
 
 source 'https://rubygems.org'
+
+# force pre-2.0 Bundler to use https on github
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
+
 gem 'rails', '5.0.7.1'
 #gem 'rails', '5.1.5'
 gem 'actionpack', '5.0.7.1'

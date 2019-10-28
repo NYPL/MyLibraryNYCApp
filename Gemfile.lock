@@ -1150,7 +1150,7 @@ DEPENDENCIES
   yaml_db
 
 RUBY VERSION
-   ruby 2.5.0p0
+   ruby 2.5.7p206
 
 BUNDLED WITH
    1.17.1
