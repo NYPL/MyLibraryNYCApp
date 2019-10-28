@@ -39,7 +39,7 @@ deploy:
   app: my-library-nyc-app
   env: my-library-nyc-app-development
   bucket_name: elasticbeanstalk-us-east-1-224280085904
-  bucket_path: my-library-nyc-app-development
+  bucket_path: my-library-nyc-app-devo
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: upgrading_rails_version
