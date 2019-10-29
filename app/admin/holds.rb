@@ -180,4 +180,12 @@ ActiveAdmin.register Hold do
     end
   end
 
+  controller do
+    #Setting up Strong Parameters
+    #You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
+    def permitted_params
+      params.permit hold: [:date_required]
+    end
+  end
+
 end
