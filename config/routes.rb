@@ -30,10 +30,12 @@ MyLibraryNYC::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
   get '/check_email', to: 'users#check_email'
-  get 'app' => 'angular#index', :as => :app
+  match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
+
   get 'settings' => 'settings#index'
-  get 'account' => 'settings#index', :as => :account
-  #match 'account' => 'settings#index', :as => :account, via: [:get, :post]
+
+  match 'account' => 'settings#index', :as => :account, via: [:get, :post]
+
   get 'help' => 'home#help', :as => :help
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
