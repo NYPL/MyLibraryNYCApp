@@ -42,7 +42,7 @@ deploy:
   bucket_path: my-library-nyc-devo
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: development
+    branch: upgrading_rails_version
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
