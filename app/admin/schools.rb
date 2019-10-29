@@ -55,4 +55,12 @@ ActiveAdmin.register School do
     end
   end
 
+  controller do
+    #Setting up Strong Parameters
+    #You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
+    def permitted_params
+      params.permit school: [:name, :code, :active, :address_line_1, :address_line_2, :state, :postal_code, :phone_number, :borough]
+    end
+  end
+
 end
