@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191009151624) do
+ActiveRecord::Schema.define(version: 20191031152524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20191009151624) do
     t.datetime "updated_at",                                null: false
   end
 
-  create_table "books", force: :cascade do |t|
+  create_table "books", id: :bigserial, force: :cascade do |t|
     t.text     "title"
     t.text     "sub_title"
     t.text     "format"
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 20191009151624) do
   create_table "schools", force: :cascade do |t|
     t.string   "name",           limit: 255
     t.integer  "campus_id"
-    t.string   "code",           limit: 8
+    t.string   "code",           limit: 32
     t.boolean  "active",                     default: false
     t.string   "address_line_1", limit: 255
     t.string   "address_line_2", limit: 255
@@ -165,7 +165,7 @@ ActiveRecord::Schema.define(version: 20191009151624) do
     t.index ["teacher_set_id"], name: "index_book_set_notes_on_book_set_id", using: :btree
   end
 
-  create_table "teacher_sets", force: :cascade do |t|
+  create_table "teacher_sets", id: :bigserial, force: :cascade do |t|
     t.text     "title"
     t.string   "call_number",                 limit: 255
     t.text     "description"
