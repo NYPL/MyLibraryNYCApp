@@ -774,7 +774,7 @@ class TeacherSet < ActiveRecord::Base
     new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
 
     # If new_subject_string is empty, return nil, else return new_subject_string.
-    return unless new_subject_string.present?	
+    return unless new_subject_string.present?
 
     return new_subject_string 
   end
