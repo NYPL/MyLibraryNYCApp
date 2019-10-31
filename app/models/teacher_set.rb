@@ -773,8 +773,8 @@ class TeacherSet < ActiveRecord::Base
     # if the subject ends in a period (something metadata rules can require), strip the period
     new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
 
-    #New subject string is empty returns nil
-    return unless new_subject_string.present?
+    # If new_subject_string is empty, return nil, else return new_subject_string.
+    return unless new_subject_string.present?	
 
     return new_subject_string 
   end
