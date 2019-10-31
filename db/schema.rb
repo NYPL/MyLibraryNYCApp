@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20191009151624) do
+ActiveRecord::Schema.define(:version => 20191031152524) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -116,8 +116,8 @@ ActiveRecord::Schema.define(:version => 20191009151624) do
   create_table "schools", :force => true do |t|
     t.string   "name"
     t.integer  "campus_id"
-    t.string   "code",           :limit => 8
-    t.boolean  "active",                      :default => false
+    t.string   "code",           :limit => 32
+    t.boolean  "active",                       :default => false
     t.string   "address_line_1"
     t.string   "address_line_2"
     t.string   "state"
