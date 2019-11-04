@@ -1,4 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
+  before_action :configure_permitted_parameters
+
   include Exceptions
   include LogWrapper
 
@@ -71,6 +73,17 @@ class RegistrationsController < Devise::RegistrationsController
       error_msg_hash[:email] = ['Email '.concat("#{resource.errors.messages[:email].join}.")]
     end
     error_msg_hash
+  end
+
+  private
+
+  def sign_up_params
+    devise_parameter_sanitizer.sanitize(:sign_up)
+  end
+
+  #Configure permitted parameters for devise
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :alt_email, :school_id, :pin])
   end
 end
 
