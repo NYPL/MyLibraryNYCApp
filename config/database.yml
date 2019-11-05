@@ -4,9 +4,11 @@ require 'cgi'
 require 'uri'
 
 begin
+  puts "about to parse url"
   uri = URI.parse(ENV["DATABASE_URL"])
+  puts "parsed url"
 rescue URI::InvalidURIError
-  raise "Invalid DATABASE_URL: [#{ENV['DATABASE_URL']}]"
+  raise "Invalid DATABASE_URL: hello#{ENV['DATABASE_URL']}world"
 end
 
 raise "No RACK_ENV or RAILS_ENV found" unless ENV["RAILS_ENV"] || ENV["RACK_ENV"]
