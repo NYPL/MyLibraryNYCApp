@@ -1076,7 +1076,7 @@ GEM
     test-unit (3.3.4)
       power_assert
     therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
+      libv8 (~> 3.16.14.19)
       ref
     thor (0.20.3)
     thread_safe (0.3.6)
