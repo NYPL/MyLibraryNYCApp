@@ -5,8 +5,9 @@ require 'uri'
 
 begin
   puts "about to parse url"
+  LogWrapper.log('WARNING', {'message' => 'DATABASE_URL: before parsing the URL', 'method' => 'database.yml load'})
   uri = URI.parse(ENV["DATABASE_URL"])
-  LogWrapper.log('WARNING', {'message' => 'I parsed the URL', 'method' => 'database.yml load'})
+  LogWrapper.log('WARNING', {'message' => "DATABASE_URL: after parsing the URL=[#{uri}]", 'method' => 'database.yml load'})
   puts "parsed url=#{uri}hi"
 
 rescue URI::InvalidURIError
