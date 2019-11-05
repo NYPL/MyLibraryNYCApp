@@ -6,7 +6,7 @@ require 'uri'
 begin
   puts "about to parse url"
   uri = URI.parse(ENV["DATABASE_URL"])
-  puts "parsed url"
+  puts "parsed url=#{uri}hi"
 rescue URI::InvalidURIError
   raise "Invalid DATABASE_URL: hello#{ENV['DATABASE_URL']}world"
 end
