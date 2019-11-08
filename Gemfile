@@ -47,7 +47,7 @@ gem 'yaml_db'
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
   gem 'coffee-rails'
-  gem 'therubyracer', :platforms => :ruby # https://github.com/sstephenson/execjs#readme for more supported runtimes for ExecJS
+  #gem 'therubyracer', :platforms => :ruby # https://github.com/sstephenson/execjs#readme for more supported runtimes for ExecJS
   #gem 'mini-racer'
   gem 'libv8', '3.16.14.15'
   gem 'uglifier', '>= 1.0.3'

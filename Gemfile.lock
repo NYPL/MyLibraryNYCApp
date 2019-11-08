@@ -1027,7 +1027,6 @@ GEM
       activesupport (>= 5.0)
       i18n
       polyamorous (= 2.3.0)
-    ref (2.0.0)
     regexp_parser (1.6.0)
     regexp_property_values (1.0.0)
     request_store (1.4.1)
@@ -1075,9 +1074,6 @@ GEM
       sprockets (>= 3.0.0)
     test-unit (3.3.4)
       power_assert
-    therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
-      ref
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -1144,7 +1140,6 @@ DEPENDENCIES
   sass-rails
   sendgrid-ruby (~> 1.1.6)
   test-unit
-  therubyracer
   uglifier (>= 1.0.3)
   webmock
   will_paginate (~> 3.0)
