@@ -15,7 +15,7 @@ MyLibraryNYC::Application.routes.draw do
   resources :books
   resources :schools, :only => [:index]
   match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel, via: [:get, :post]
-  get 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds'
+  match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
 
   resources :holds
 
@@ -32,9 +32,9 @@ MyLibraryNYC::Application.routes.draw do
   get '/check_email', to: 'users#check_email'
   match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
 
-  get 'settings' => 'settings#index'
+  match 'settings' => 'settings#index', via: [:get, :patch, :post]
 
-  match 'account' => 'settings#index', :as => :account, via: [:get, :post]
+  match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post]
 
   get 'help' => 'home#help', :as => :help
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'
