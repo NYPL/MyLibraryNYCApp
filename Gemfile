@@ -21,7 +21,7 @@ gem 'auto-session-timeout'
 gem 'aws-sdk'
 gem 'client_side_validations', '16.0.3'
 gem 'cranky'
-gem 'devise', '>= 4.0.0'
+gem 'devise', '>= 4.4.3'
 gem 'faker'
 gem 'figaro'
 gem 'font-awesome-rails'
@@ -48,7 +48,8 @@ group :assets do # Gems used only for assets and not required in production envi
   gem 'sass-rails'
   gem 'coffee-rails'
   gem 'therubyracer', :platforms => :ruby # https://github.com/sstephenson/execjs#readme for more supported runtimes for ExecJS
-  gem 'libv8', '~> 3.16.14.15'
+  #gem 'mini-racer'
+  gem 'libv8', '3.16.14.15'
   gem 'uglifier', '>= 1.0.3'
 end
 

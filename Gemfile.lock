@@ -940,7 +940,7 @@ GEM
       activerecord
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
-    libv8 (3.16.14.19-x86_64-darwin-17)
+    libv8 (3.16.14.15)
     lograge (0.11.2)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -1115,7 +1115,7 @@ DEPENDENCIES
   coffee-rails
   cranky
   database_cleaner
-  devise (>= 4.0.0)
+  devise (>= 4.4.3)
   faker
   figaro
   font-awesome-rails
@@ -1123,7 +1123,7 @@ DEPENDENCIES
   jquery-rails (> 4.0)
   jquery-ui-rails
   json
-  libv8 (~> 3.16.14.15)
+  libv8 (= 3.16.14.15)
   lograge
   logstash-event
   minitest (~> 5.6.1)
