@@ -3542,8 +3542,7 @@ class ActiveSupport::TestCase
   # 404 statusCode if the e-mail hasn't been created in Sierra.
   # TODO: Need to add 200 if the e-mail has been created
   def mock_check_email_request(email)
-    stub_request(:get, 'https://dev-platform.nypl.org/api/v0.1/patrons?email=' +
-    email)
+    stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?email=" + email)
       .to_return(status: 200, body: {
         'status' => 404,
         'type' => 'exception',
@@ -3558,7 +3557,7 @@ class ActiveSupport::TestCase
   # to 'https://dev-platform.nypl.org/api/v0.2/patrons' and returns a
   # status of success if Sierra API created a patron record.
   def mock_send_request_to_patron_creator_service
-    stub_request(:post, 'https://dev-platform.nypl.org/api/v0.2/patrons')
+    stub_request(:post, ENV['PATRON_MICROSERVICE_URL_V02'])
       .to_return(
         {
           status: 201,
@@ -3581,7 +3580,7 @@ class ActiveSupport::TestCase
   # status of success if Sierra API finds the bib record.
   def send_request_to_bibs_microservice
     20.times do |x|
-      stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?standardNumber=#{ 9781896580601 + x }").
+      stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=#{ 9781896580601 + x }").
         with(
           headers: {
       	  'Authorization'=>'Bearer testoken',
@@ -3589,7 +3588,7 @@ class ActiveSupport::TestCase
           }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {}
       )
     end
-    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?standardNumber=123456789").
+    stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=123456789").
       with(
         headers: {
         'Authorization'=>'Bearer testoken',
