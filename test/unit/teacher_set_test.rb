@@ -40,17 +40,17 @@ class TeacherSetTest < ActiveSupport::TestCase
       total_count = 2 
       available_count = 2
 
-      @mintest_mock1.expect(:call, [bib_items_response, true], [bib_id, nypl_source])
+      @mintest_mock1.expect(:call, [bib_items_response, true], [bib_id])
       @mintest_mock2.expect(:call, [total_count, available_count], [bib_items_response])
 
-      @model.stub :send_request_to_bibs_microservice, @mintest_mock1 do
+      @model.stub :send_request_to_items_microservice, @mintest_mock1 do
         @model.stub :parse_items_available_and_total_count, @mintest_mock2 do
           @model.stub :update_attributes, true, [total_copies: total_count, available_copies: available_count, availability: 'available'] do
-            resp = @model.update_available_and_total_count(bib_id, nypl_source)
+            resp = @model.update_available_and_total_count(bib_id)
           end
         end
       end
-      assert_equal(bib_items_response, resp)
+      assert_equal(bib_items_response, resp[:bibs_resp]) 
     end
 
     #Test:2 Bibid is not found in bibs service
@@ -64,10 +64,10 @@ class TeacherSetTest < ActiveSupport::TestCase
 
       @mintest_mock1.expect(:call, [bib_id_not_found_response, false], [bib_id])
 
-      @model.stub :send_request_to_bibs_microservice, @mintest_mock1 do
+      @model.stub :send_request_to_items_microservice, @mintest_mock1 do
         resp = @model.update_available_and_total_count(bib_id)
       end
-      assert_equal(bib_id_not_found_response, resp)
+      assert_equal(bib_id_not_found_response, resp[:bibs_resp])
     end
   end
   
