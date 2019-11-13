@@ -114,14 +114,14 @@ ActiveRecord::Schema.define(:version => 20191031152524) do
   create_table "schools", force: :cascade do |t|
     t.string   "name",           limit: 255
     t.integer  "campus_id"
-    t.string   "code",           :limit => 32
-    t.boolean  "active",                       :default => false
-    t.string   "address_line_1"
-    t.string   "address_line_2"
-    t.string   "state"
-    t.string   "postal_code"
-    t.string   "phone_number"
-    t.string   "borough"
+    t.string   "code",           limit: 32
+    t.boolean  "active",                     default: false
+    t.string   "address_line_1", limit: 255
+    t.string   "address_line_2", limit: 255
+    t.string   "state",          limit: 255
+    t.string   "postal_code",    limit: 255
+    t.string   "phone_number",   limit: 255
+    t.string   "borough",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["active"], name: "index_schools_on_active", using: :btree
