@@ -37,9 +37,9 @@ deploy:
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_DEVELOPMENT"
   region: us-east-1
   app: my-library-nyc-app
-  env: my-library-nyc-app-dev25
+  env: my-library-nyc-app-dev-1002
   bucket_name: elasticbeanstalk-us-east-1-224280085904
-  bucket_path: my-library-nyc-app-dev25
+  bucket_path: my-library-nyc-app-dev-1002
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: upgrading_rails_version
