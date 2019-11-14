@@ -109,5 +109,9 @@ class RegistrationsController < Devise::RegistrationsController
   def user_params
     params.require(:user).permit(:alt_email, :school_id)
   end
-end
 
+  #Configure permitted parameters for devise
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :alt_email, :school_id, :pin])
+  end
+end
