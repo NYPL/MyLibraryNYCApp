@@ -48,27 +48,27 @@ class RegistrationsController < Devise::RegistrationsController
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
-  # def update
-  #   #Here Updates current user alt_email and schooid.
-  #   current_user.alt_email = user_params["alt_email"] if user_params["alt_email"].present? 
-  #   current_user.school_id =  user_params["school_id"] if user_params["school_id"].present?
-  #   current_user.save!
+  def update
+    #Here Updates current user alt_email and schooid.
+    current_user.alt_email = user_params["alt_email"] if user_params["alt_email"].present? 
+    current_user.school_id =  user_params["school_id"] if user_params["school_id"].present?
+    current_user.save!
 
-  #   self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
-  #   prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
-  #   resource_updated = update_resource(resource, account_update_params)
-  #   yield resource if block_given?
-  #   if resource_updated
-  #     set_flash_message_for_update(resource, prev_unconfirmed_email)
-  #     bypass_sign_in resource, scope: resource_name if sign_in_after_change_password?
+    self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
+    prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
+    resource_updated = update_resource(resource, account_update_params)
+    yield resource if block_given?
+    if resource_updated
+      set_flash_message_for_update(resource, prev_unconfirmed_email)
+      bypass_sign_in resource, scope: resource_name if sign_in_after_change_password?
 
-  #     respond_with resource, location: after_update_path_for(resource)
-  #   else
-  #     clean_up_passwords resource
-  #     set_minimum_password_length
-  #     respond_with resource
-  #   end
-  # end
+      respond_with resource, location: after_update_path_for(resource)
+    else
+      clean_up_passwords resource
+      set_minimum_password_length
+      respond_with resource
+    end
+  end
 
   def after_update_path_for(resource)
     redirect_url = account_url
@@ -106,12 +106,13 @@ class RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.sanitize(:sign_up)
   end
 
-  # def user_params
-  #   params.require(:user).permit(:alt_email, :school_id)
-  # end
+  def user_params
+    params.require(:user).permit(:alt_email, :school_id)
+  end
 
-  #Configure permitted parameters for devise
+    #Configure permitted parameters for devise
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :alt_email, :school_id, :pin])
   end
 end
+
