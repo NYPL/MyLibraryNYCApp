@@ -43,6 +43,7 @@ class Api::BibsControllerTest < ActiveSupport::TestCase
         end
       end
       assert_equal(resp, data)
+      @mintest_mock1.verify
     end
   end
 
@@ -67,7 +68,6 @@ class Api::BibsControllerTest < ActiveSupport::TestCase
           end
         end
       end
-      binding.pry
       assert_nil(resp)
       @mintest_mock1.verify
     end
@@ -88,6 +88,7 @@ class Api::BibsControllerTest < ActiveSupport::TestCase
         end
       end
       assert_equal(resp, data)
+      @mintest_mock1.verify
     end
   end
 
@@ -95,5 +96,5 @@ class Api::BibsControllerTest < ActiveSupport::TestCase
   def bib_api_request_body
     [ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS[0].stringify_keys]
   end
-  
 end
+
