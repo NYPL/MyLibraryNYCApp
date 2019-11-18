@@ -1,79 +1,99 @@
 require 'test_helper'
 
-class Api::BibsControllerTest < ActionController::TestCase
-  def setup
+class Api::BibsControllerTest < ActiveSupport::TestCase
+  extend Minitest::Spec::DSL
+
+  before do
+    @mintest_mock1 = MiniTest::Mock.new
     @controller = Api::V01::BibsController.new
   end
 
-  test 'respond with 400 if request body is missing' do
-    post 'create_or_update_teacher_sets'
-    assert response.status == 400
+  describe 'create_or_update_teacher_sets with 400 response' do
+    it 'respond with 400 if request body is missing' do
+      error_message = [400, "Parsing error: 765: unexpected token at ''"]
+      @mintest_mock1.expect(:call, error_message)
+      resp = nil
+      mail_resp = OpenStruct.new(Message: '123', Multipart: false)
+      AdminMailer.stub :failed_items_controller_api_request, mail_resp, [{"test1": "test2"}, error_message, 'update_availability'] do
+        @controller.stub :render_error, [error_message[0], error_message[1]], [error_message] do
+          @controller.stub :validate_request, @mintest_mock1 do
+            resp = @controller.create_or_update_teacher_sets
+          end
+        end
+      end
+      assert_nil(resp)
+      @mintest_mock1.verify
+    end
   end
 
-  test "should update teacher set even if an associate book has a field that is too long" do
-    TeacherSet.destroy_all
-    post 'create_or_update_teacher_sets', { _json: ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS }
-    assert_response :success
-    assert TeacherSet.count > 0
+  describe 'test create_or_update_teacher_sets with 200 response' do
+    it 'respond with 200 if request body is present' do
+      @request_body = {"22" => '333'}
+      teacherset_obj = OpenStruct.new(id: '998')
+      @controller.instance_variable_set(:@request_body, bib_api_request_body)
+      @mintest_mock1.expect(:call, [])
+      resp = nil
+      data = {status: 200, json: { teacher_sets: ['data'] }.to_json}
+
+      @controller.stub :api_response_builder, data, [200, { teacher_sets: ['data'] }] do
+        TeacherSet.stub :first_or_initialize, teacherset_obj do
+          @controller.stub :validate_request, @mintest_mock1 do
+            resp = @controller.create_or_update_teacher_sets
+          end
+        end
+      end
+      assert_equal(resp, data)
+    end
   end
 
-  test "should update teacher set attributes and create associated books" do
-    Book.destroy_all
-    TeacherSet.destroy_all
-    post 'create_or_update_teacher_sets', { _json: TWO_TEACHER_SETS_WITH_10_ISBNS_EACH }
-    assert_response :success
-    assert Book.count == 20
-    assert TeacherSet.count == 2
-    assert TeacherSet.first.books.count == 10
-    assert TeacherSetBook.count == 20 # each teacher set has 10 books
-    assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}", "b#{BNUMBER2}"]
-
-    # simulate an update which removes seven books from each teacher_set
-    post 'create_or_update_teacher_sets', { _json: TWO_TEACHER_SETS_WITH_3_ISBNS_EACH }
-    assert_response :success
-    assert Book.count == 20 # no change to books but TeacherSetBooks decrease
-    assert TeacherSet.count == 2 # no change
-    assert TeacherSet.first.books.count == 3
-    assert TeacherSetBook.count == 6 # some records are deleted in the join table (compare to 20 records above)
-    assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}", "b#{BNUMBER2}"]
-
-    # confirm all teacher_set_fields are updated
-    first_teacher_set = TeacherSet.first
-    assert first_teacher_set.title.present?
-    assert first_teacher_set.call_number.present?
-    assert first_teacher_set.description.present?
-    assert first_teacher_set.edition.present?
-    assert first_teacher_set.isbn.present?
-    assert first_teacher_set.primary_language.present?
-    assert first_teacher_set.publisher.present?
-    assert first_teacher_set.contents.present?
-    assert first_teacher_set.primary_subject.present?
-    assert first_teacher_set.physical_description.present?
-    assert first_teacher_set.details_url.present?
-    assert_equal 0, first_teacher_set.grade_begin
-    assert_equal 1, first_teacher_set.grade_end
-    assert_equal 70, first_teacher_set.lexile_begin
-    assert_equal 500, first_teacher_set.lexile_end
-    assert first_teacher_set.availability.present?
-    assert first_teacher_set.teacher_set_notes.any?
-    assert first_teacher_set.subject_teacher_sets.count == 2
-    # for some reason, this syntax won't work: `first_teacher_set.subjects.any?`
-    assert first_teacher_set.subject_teacher_sets.map(&:subject).any?
+  describe 'test get grades' do
+    it 'get grades' do
+      grade_and_lexile_json = ["9", "114-4", "Z", "1130L"]
+      resp = @controller.send(:get_grades, grade_and_lexile_json)
+      assert_equal(resp, [grade_and_lexile_json[0]])
+    end
   end
 
-  test "should not create a teacher set if required field is missing (ie title)" do
-    Book.destroy_all
-    TeacherSet.destroy_all
-    post 'create_or_update_teacher_sets', { _json: TEACHER_SET_WITH_TITLE_MISSING }
-    assert_response :success
-    assert Book.count == 0
-    assert TeacherSet.count == 0
+  describe 'test delete teacher_sets' do
+    it 'delete teacher_sets error message' do
+      error_message = [400, "Parsing error: 765: unexpected token at ''"]
+      @mintest_mock1.expect(:call, error_message)
+      resp = nil
+      mail_resp = OpenStruct.new(Message: '123', Multipart: false)
+      AdminMailer.stub :failed_bibs_controller_api_request, mail_resp, [{"test1": "test2"}, error_message, 'update_availability'] do
+        @controller.stub :render_error, [error_message[0], error_message[1]], [error_message] do
+          @controller.stub :validate_request, @mintest_mock1 do
+            resp = @controller.delete_teacher_sets
+          end
+        end
+      end
+      binding.pry
+      assert_nil(resp)
+      @mintest_mock1.verify
+    end
+
+    it 'test delete teacher_sets success response' do
+      data = {status: 200, json: { teacher_sets: ['data'] }.to_json}
+      @mintest_mock1.expect(:call, [])
+      @controller.instance_variable_set(:@request_body, bib_api_request_body)
+      teacherset_obj = OpenStruct.new(id: '998')
+      resp = nil
+      mail_resp = OpenStruct.new(Message: '123', Multipart: false)
+      binding.pry
+      @controller.stub :api_response_builder, data, [200, { teacher_sets: ['data'] }] do
+        @controller.stub :validate_request, @mintest_mock1 do
+          TeacherSet.stub :new, teacherset_obj do
+            resp = @controller.delete_teacher_sets
+          end
+        end
+      end
+      assert_equal(resp, data)
+    end
   end
 
-  test "should delete teacher sets when given a bib number" do
-    TeacherSet.where(bnumber: "b#{BNUMBER1}").first_or_create
-    delete 'delete_teacher_sets', { _json: TWO_TEACHER_SETS_TO_DELETE }
-    assert_response :success
-    assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}"]
+  private
+  def bib_api_request_body
+    [ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS[0].stringify_keys]
   end
+  
 end
