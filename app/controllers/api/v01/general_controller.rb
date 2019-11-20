@@ -62,7 +62,7 @@ class Api::V01::GeneralController < ApplicationController
       method = "#{controller_name or 'unknown_controller'}##{action_name or 'unknown_action'}"
     end
 
-    message = (exception && exception.message ? exception.message[0..200] : 'exception or exception message missing')
+    message = (exception && exception&.message ? exception.message[0..200] : 'exception or exception message missing')
     backtrace = (exception ? exception.backtrace : 'exception missing')
     LogWrapper.log('ERROR', {
       'message' => "#{message}...\nBacktrace=#{backtrace}.",

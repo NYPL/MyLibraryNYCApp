@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 MyLibraryNYC::Application.routes.draw do
 
   devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }

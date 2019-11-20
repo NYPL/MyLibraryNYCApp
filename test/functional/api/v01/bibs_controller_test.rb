@@ -98,5 +98,3 @@ class Api::BibsControllerTest < ActiveSupport::TestCase
     [ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS[0].stringify_keys]
   end
 end
-
-
