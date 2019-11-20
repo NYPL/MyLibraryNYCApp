@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters
 
@@ -49,9 +51,9 @@ class RegistrationsController < Devise::RegistrationsController
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
   def update
-    #Here Updates current user alt_email and schooid.
+    # Here Updates current user alt_email and schooid.
     current_user.alt_email = user_params["alt_email"] if user_params["alt_email"].present? 
-    current_user.school_id =  user_params["school_id"] if user_params["school_id"].present?
+    current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
     current_user.save!
 
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
@@ -110,7 +112,7 @@ class RegistrationsController < Devise::RegistrationsController
     params.require(:user).permit(:alt_email, :school_id)
   end
 
-    #Configure permitted parameters for devise
+  # Configure permitted parameters for devise
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :alt_email, :school_id, :pin])
   end

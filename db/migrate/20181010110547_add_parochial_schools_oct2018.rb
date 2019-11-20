@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddParochialSchoolsOct2018 < ActiveRecord::Migration
   def up
     # First create the new schools by adding them to a CSV like this.

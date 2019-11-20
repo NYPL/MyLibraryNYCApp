@@ -78,8 +78,6 @@ class Api::BibsControllerTest < ActiveSupport::TestCase
       @controller.instance_variable_set(:@request_body, bib_api_request_body)
       teacherset_obj = OpenStruct.new(id: '998')
       resp = nil
-      mail_resp = OpenStruct.new(Message: '123', Multipart: false)
-      binding.pry
       @controller.stub :api_response_builder, data, [200, { teacher_sets: ['data'] }] do
         @controller.stub :validate_request, @mintest_mock1 do
           TeacherSet.stub :new, teacherset_obj do
@@ -93,8 +91,10 @@ class Api::BibsControllerTest < ActiveSupport::TestCase
   end
 
   private
+
   def bib_api_request_body
     [ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS[0].stringify_keys]
   end
 end
+
 

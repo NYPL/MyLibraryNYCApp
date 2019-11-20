@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CleanUpBooksAndTeacherSets < ActiveRecord::Migration
   def up
     ActiveRecord::Base.transaction do

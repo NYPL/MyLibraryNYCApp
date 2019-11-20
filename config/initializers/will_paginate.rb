@@ -1,3 +1,4 @@
+
 if defined?(WillPaginate)
   module WillPaginate
     module ActiveRecord

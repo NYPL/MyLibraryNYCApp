@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HoldExtendedSerializer < ActiveModel::Serializer
 
   def serializable_hash

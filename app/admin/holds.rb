@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Hold do
 
   menu :priority => 2
@@ -83,7 +85,7 @@ ActiveAdmin.register Hold do
     h2 "Status: #{ad.status}"
     h3 do link_to 'Change Status', new_admin_hold_change_path(:hold => ad) end
 
-    if ad.hold_changes.count > 0
+    if ad.hold_changes.count.positive?
       table_for ad.hold_changes.order('created_at DESC') do
         column 'Status ' do |c| link_to c.status, admin_hold_change_path(c) end
         column 'Admin' do |c| link_to c.admin_user.name, admin_hold_change_path(c) unless c.admin_user.nil? end
@@ -126,7 +128,7 @@ ActiveAdmin.register Hold do
     end
 
     panel "Books" do
-      if ad.teacher_set.books.count > 0
+      if ad.teacher_set.books.count.positive?
         table_for ad.teacher_set.books do
           column 'Image' do |b| if b.image_uri.nil? then 'None' else link_to image_tag(b.image_uri(:small)), admin_book_path(b) end end
           column 'Title' do |b| link_to b.title, admin_book_path(b) end
@@ -150,7 +152,7 @@ ActiveAdmin.register Hold do
     end
 
     column 'Set' do |h|
-      if !h.teacher_set.nil?
+      if h.teacher_set.present?
         h.teacher_set.title
       else
         "This teacher set no longer exist."
@@ -158,7 +160,7 @@ ActiveAdmin.register Hold do
     end
 
     column 'Call Number' do |h|
-      if !h.teacher_set.nil?
+      if h.teacher_set.present?
         h.teacher_set.call_number
       end
     end

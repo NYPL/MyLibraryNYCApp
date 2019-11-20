@@ -9,12 +9,9 @@ git_source(:github) do |repo_name|
 end
 
 gem 'rails', '5.0.7.1'
-#gem 'rails', '5.1.5'
 gem 'actionpack', '5.0.7.1'
-#gem 'actionpack', '5.1.5'
 gem 'activeadmin', '2.4.0'
 gem 'activemodel', '5.0.7.1'
-#gem 'activemodel', '5.1.5'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'addressable'
 gem 'auto-session-timeout'
@@ -64,6 +61,5 @@ end
 
 group :test do
   gem 'minitest', '~> 5.6.1'
-  #gem 'minitest', '~> 5.12.2'
   gem 'database_cleaner'
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TEACHER SET FIELDS WE ARE LEAVING AS STRING:
 # :primary_subject
 # :call_number

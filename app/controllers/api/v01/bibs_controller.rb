@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V01::BibsController < Api::V01::GeneralController
   include LogWrapper
 

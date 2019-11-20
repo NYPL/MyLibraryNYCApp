@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register AdminUser do
   menu :priority => 100
 
@@ -31,8 +33,8 @@ ActiveAdmin.register AdminUser do
     f.actions
   end
 
-  #Setting up Strong Parameters
-  #You must specify permitted_params within your admin_user ActiveAdmin resource which reflects a admin_user's expected params.
+  # Setting up Strong Parameters
+  # You must specify permitted_params within your admin_user ActiveAdmin resource which reflects a admin_user's expected params.
   controller do
     def permitted_params
       params.permit admin_user: [:email, :password, :password_confirmation, :email_notifications, :remember_me]

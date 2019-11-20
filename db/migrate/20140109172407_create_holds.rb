@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateHolds < ActiveRecord::Migration
   def change
     create_table :holds do |t|
