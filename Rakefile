@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # !/usr/bin/env rake
 # Add your own tasks in files placed in lib/tasks ending in .rake,

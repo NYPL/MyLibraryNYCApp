@@ -91,7 +91,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def subject_key
-    subject.parameterize unless subject.nil?
+    subject.parameterize if subject.present?
   end
 
   def suitabilities_string
@@ -146,7 +146,7 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Tags" is subject
-    unless params[:subjects].nil?
+    if params[:subjects].present?
       params[:subjects].each_with_index do |s, i|
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
@@ -156,7 +156,7 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Subject" is area_of_study
-    unless params['area of study'].nil?
+    if params['area of study'].present?
       sets = sets.where("area_of_study = ?", params['area of study'].join())
     end
 
@@ -854,7 +854,6 @@ class TeacherSet < ActiveRecord::Base
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
       response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
       headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
-
       if response.code == 200 || items_hash['data'].present?
         items_hash['data'] ||= []
         items_hash['data'] << response['data'] if response['data'].present?

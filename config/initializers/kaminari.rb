@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # Kaminari: initialize prior to the loading of the models.
 Kaminari.configure do |config|

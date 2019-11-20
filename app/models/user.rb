@@ -177,7 +177,6 @@ class User < ActiveRecord::Base
        'status' => 'start',
        'dataSent' => query
       })
-
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,

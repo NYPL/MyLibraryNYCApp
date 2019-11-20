@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 MyLibraryNYC::Application.configure do
   config.lograge.enabled = true
