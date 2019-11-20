@@ -1,6 +1,6 @@
+# encoding: UTF-8
 # frozen_string_literal: true
 
-#encoding: UTF-8
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
   include LogWrapper
@@ -14,10 +14,7 @@ class TeacherSet < ActiveRecord::Base
 
   has_many :teacher_set_notes #, :as => :notes
   has_many :teacher_set_books, :dependent => :destroy
-  has_many :books, :through => :teacher_set_books#, -> { order "teacher_set_books.rank desc" }
-
-
-
+  has_many :books, :through => :teacher_set_books #, -> { order "teacher_set_books.rank desc" }
   has_many :holds
   has_many :subject_teacher_sets, dependent: :delete_all
   has_many :subjects, through: :subject_teacher_sets
@@ -316,7 +313,7 @@ class TeacherSet < ActiveRecord::Base
 
     grade_begin = nil
     grade_end = nil
-    unless item['suitabilities'].nil?
+    if item['suitabilities'].present?
       item['suitabilities'].each do |suit|
         # Parse grade suitablility (e.g. 4-12, 4-+)
         # If grade_end is '+', store null
