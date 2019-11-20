@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LogWrapper
   # Wrapper module server's as a wrapper to
   # add output to the log file.

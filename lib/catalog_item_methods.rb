@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CatalogItemMethods
 
   CATALOG_DOMAIN = 'ilsstaff.nypl.org:2082'
