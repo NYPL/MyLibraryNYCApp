@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLastBookChangeToTeacherSets < ActiveRecord::Migration
   # This helps us get a snapshot of what the book's title was at that time by saving that data
   # on the teacher set.  We have to change something about the teacher set for Paper Trail to

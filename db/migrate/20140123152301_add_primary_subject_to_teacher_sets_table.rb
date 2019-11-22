@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPrimarySubjectToTeacherSetsTable < ActiveRecord::Migration
   def change
     add_column :teacher_sets, :primary_subject, :string

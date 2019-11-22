@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
   include Exceptions
   include LogWrapper
@@ -124,7 +126,7 @@ class User < ActiveRecord::Base
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
   def validate_pin_pattern
-    if pin && pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
+    if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
       true
     else
       errors.add(:pin, 'does not meet our requirements. Please try again.')
@@ -175,7 +177,6 @@ class User < ActiveRecord::Base
        'status' => 'start',
        'dataSent' => query
       })
-
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,

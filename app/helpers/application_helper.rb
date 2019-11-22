@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   #Sometimes want to re-write devise error messages.
   #Update devise error messages with custom error messages.

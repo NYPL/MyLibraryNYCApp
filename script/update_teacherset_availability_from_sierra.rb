@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def update_teacher_set_real_time_available_total_count
   start_time = Time.now
   failure_bib_ids = []

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameTeacherSetSubjectToAreaOfStudy < ActiveRecord::Migration
 
   def change

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAddressToSchools < ActiveRecord::Migration
   def change
     add_column :schools, :address_line_1, :string

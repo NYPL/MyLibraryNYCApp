@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register HoldChange do
   
   actions :all, except: [:edit, :destroy] #just show

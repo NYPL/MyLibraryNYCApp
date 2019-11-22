@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSchoolReferenceToUsers < ActiveRecord::Migration
   def change  
     change_table :users do |t|

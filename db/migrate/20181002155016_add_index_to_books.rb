@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIndexToBooks < ActiveRecord::Migration
   def change
     remove_index :books, :name => "index_books_bnumber"

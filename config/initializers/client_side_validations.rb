@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ClientSideValidations Initializer
 
 # Uncomment to disable uniqueness validator, possible security issue
@@ -12,7 +14,7 @@
 # <label for="#{instance.send(:tag_id)}" class="message"></label>
 #
  ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-   unless html_tag =~ /^<label/
+   unless html_tag.match?(/^<label/)
      %{<div class="field_with_errors">#{html_tag}<label style='color:#D13D44' for="#{instance.send(:tag_id)}" class="message"> #{instance.error_message.first}</label></div>}.html_safe
    else
      %{<div class="field_with_errors">#{html_tag}</div>}.html_safe

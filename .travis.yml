@@ -15,7 +15,7 @@ before_install:
   - gem install bundler -v '< 2'  # 2019-10-16: added to fix errors when upgrading rails env
   - "bundle config --global github.https true"  # 2019-10-16: added to fix errors when upgrading rails env
 before_script:
-  # - bundle exec rubocop  # 2019-10-16: TODO: bring back, the commenting out is temporary to fix errors when upgrading rails env
+  - bundle exec rubocop  # 2019-10-16: TODO: bring back, the commenting out is temporary to fix errors when upgrading rails env
 services:
 - postgresql
 script:
@@ -27,9 +27,8 @@ script:
 - ruby -Itest test/unit/book_test.rb
 - ruby -Itest test/unit/teacher_set_test.rb
 - ruby -Itest test/unit/ingest_rake_task_test.rb
-#- ruby -Itest test/integration/user_flow_test.rb
-#- ruby -Itest test/functional/exceptions_controller_test.rb
-# - ruby -Itest test/functional/api/v01/bibs_controller_test.rb
+- ruby -Itest test/integration/user_flow_test.rb
+- ruby -Itest test/functional/api/v01/bibs_controller_test.rb
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true

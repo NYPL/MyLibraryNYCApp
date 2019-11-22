@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAccessKeyToHoldsTable < ActiveRecord::Migration
   def change
     add_column :holds, :access_key, :string, :limit => 30
