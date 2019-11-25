@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAllowedUserEmailMasksTable < ActiveRecord::Migration
   # NOTE: This table is a stop-gap measure.
   # Until we move user registration/login to be fully managed outside of MLN,

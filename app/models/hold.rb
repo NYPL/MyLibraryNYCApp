@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Hold < ActiveRecord::Base
 
   # add a quick filter scope to ActiveAdmin oldest unfulfilled hold orders first.

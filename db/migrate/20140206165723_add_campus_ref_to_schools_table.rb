@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCampusRefToSchoolsTable < ActiveRecord::Migration
   def change
     add_column :schools, :campus_id, :int

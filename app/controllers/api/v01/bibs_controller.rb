@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V01::BibsController < Api::V01::GeneralController
   include LogWrapper
 
@@ -94,8 +96,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
         'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
-
-    render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
+    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
 
   def delete_teacher_sets
@@ -114,8 +115,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         teacher_set.destroy
       end
     end
-
-    render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
+    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
 
 

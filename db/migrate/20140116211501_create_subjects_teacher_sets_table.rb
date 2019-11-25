@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSubjectsTeacherSetsTable < ActiveRecord::Migration
   def self.up
     create_table :subjects_teacher_sets, :id => false do |t|

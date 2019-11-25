@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminUser < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -5,7 +7,7 @@ class AdminUser < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  #attr_accessible :email, :password, :password_confirmation, :email_notifications, :remember_me
+  # attr_accessible :email, :password, :password_confirmation, :email_notifications, :remember_me
 
   def name
     email

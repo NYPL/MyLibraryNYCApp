@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.setup do |config|
 
   # == Site Title
@@ -100,7 +102,7 @@ ActiveAdmin.setup do |config|
   # Admin comments are enabled by default.
   #
   # Default:
-  #config.allow_comments = false
+  # config.allow_comments = false
   #
   # You can turn them on and off for any given namespace by using a
   # namespace config block.

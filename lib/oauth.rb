@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Oauth
 	def self.get_oauth_token
     response = HTTParty.post(ENV['ISSO_OAUTH_TOKEN_URL'],

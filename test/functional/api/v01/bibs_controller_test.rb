@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Api::BibsControllerTest < ActionController::TestCase
@@ -47,13 +49,12 @@ class Api::BibsControllerTest < ActionController::TestCase
     assert first_teacher_set.primary_language.present?
     assert first_teacher_set.publisher.present?
     assert first_teacher_set.contents.present?
-    assert first_teacher_set.primary_subject.present?
     assert first_teacher_set.physical_description.present?
     assert first_teacher_set.details_url.present?
     assert_equal 0, first_teacher_set.grade_begin
     assert_equal 1, first_teacher_set.grade_end
-    assert_equal 70, first_teacher_set.lexile_begin
-    assert_equal 500, first_teacher_set.lexile_end
+    assert_equal 0, first_teacher_set.lexile_begin
+    assert_equal nil, first_teacher_set.lexile_end
     assert first_teacher_set.availability.present?
     assert first_teacher_set.teacher_set_notes.any?
     assert first_teacher_set.subject_teacher_sets.count == 2

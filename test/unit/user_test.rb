@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
@@ -106,8 +108,8 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     a 201 illustrating patron was created through
       patron creator microservice" do
-    crank!(:queens_user, barcode: 27777011111111)
-    assert_true @user.send_request_to_patron_creator_service
+    crank(:queens_user, barcode: 27777011111111)
+    assert_equal(true, @user.send_request_to_patron_creator_service)
   end
 
   # Need to call twice, in order to receive the second response

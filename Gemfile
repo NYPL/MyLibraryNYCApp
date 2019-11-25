@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ruby '2.5.7'
 
 source 'https://rubygems.org'
@@ -9,12 +11,9 @@ git_source(:github) do |repo_name|
 end
 
 gem 'rails', '5.0.7.1'
-#gem 'rails', '5.1.5'
 gem 'actionpack', '5.0.7.1'
-#gem 'actionpack', '5.1.5'
 gem 'activeadmin', '2.4.0'
 gem 'activemodel', '5.0.7.1'
-#gem 'activemodel', '5.1.5'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'addressable'
 gem 'auto-session-timeout'
@@ -47,9 +46,10 @@ gem 'yaml_db'
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
   gem 'coffee-rails'
-  #gem 'therubyracer', :platforms => :ruby # https://github.com/sstephenson/execjs#readme for more supported runtimes for ExecJS
-  #gem 'mini-racer'
-  #gem 'libv8', '3.16.14.15'
+  # gem 'therubyracer', :platforms => :ruby # https://github.com/sstephenson/execjs#readme for more supported runtimes for ExecJS
+  # gem 'mini-racer'
+  # gem 'libv8', '3.16.14.15'
+  
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -64,6 +64,5 @@ end
 
 group :test do
   gem 'minitest', '~> 5.6.1'
-  #gem 'minitest', '~> 5.12.2'
   gem 'database_cleaner'
 end

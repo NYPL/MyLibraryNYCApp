@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Book < ActiveRecord::Base
   # NOTE: The ISBN field in the database refers to a standard number; sometimes this is an ISBN.
   include CatalogItemMethods

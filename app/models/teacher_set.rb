@@ -1,4 +1,6 @@
-#encoding: UTF-8
+# encoding: UTF-8
+# frozen_string_literal: true
+
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
   include LogWrapper
@@ -12,7 +14,7 @@ class TeacherSet < ActiveRecord::Base
 
   has_many :teacher_set_notes #, :as => :notes
   has_many :teacher_set_books, :dependent => :destroy
-  has_many :books, :through => :teacher_set_books #, :order => 'teacher_set_books.rank ASC'
+  has_many :books, :through => :teacher_set_books #, -> { order "teacher_set_books.rank desc" }
   has_many :holds
   has_many :subject_teacher_sets, dependent: :delete_all
   has_many :subjects, through: :subject_teacher_sets
@@ -86,7 +88,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def subject_key
-    subject.parameterize unless subject.nil?
+    subject.parameterize if subject.present?
   end
 
   def suitabilities_string
@@ -141,7 +143,7 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Tags" is subject
-    unless params[:subjects].nil?
+    if params[:subjects].present?
       params[:subjects].each_with_index do |s, i|
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
@@ -151,7 +153,7 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Subject" is area_of_study
-    unless params['area of study'].nil?
+    if params['area of study'].present?
       sets = sets.where("area_of_study = ?", params['area of study'].join())
     end
 
@@ -311,7 +313,7 @@ class TeacherSet < ActiveRecord::Base
 
     grade_begin = nil
     grade_end = nil
-    unless item['suitabilities'].nil?
+    if item['suitabilities'].present?
       item['suitabilities'].each do |suit|
         # Parse grade suitablility (e.g. 4-12, 4-+)
         # If grade_end is '+', store null
@@ -471,7 +473,7 @@ class TeacherSet < ActiveRecord::Base
       title.strip!
       #puts "    Adding subject: #{title}#{title != _t ? " (orig \"#{_t}\")" : ''}"
 
-      subject = Subject.find_or_create_by_title title
+      subject = Subject.find_or_create_by(title: title)
       # subject.teacher_sets << self unless subject.teacher_sets.include? self
       self.subjects << subject unless subject.teacher_sets.include? self
     end
@@ -736,8 +738,8 @@ class TeacherSet < ActiveRecord::Base
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)
 
-      subject = Subject.find_or_create_by_title(subject_name)
-      subject_teacher_set = SubjectTeacherSet.find_or_create_by_teacher_set_id_and_subject_id(teacher_set_id: self.id, subject_id: subject.id)
+      subject = Subject.find_or_create_by(title: subject_name)
+      subject_teacher_set = SubjectTeacherSet.find_or_create_by(teacher_set_id: self.id, subject_id: subject.id)
     end
 
     prune_subjects(old_subjects)
@@ -768,7 +770,10 @@ class TeacherSet < ActiveRecord::Base
     # if the subject ends in a period (something metadata rules can require), strip the period
     new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
 
-    return new_subject_string if new_subject_string.present?
+    # If new_subject_string is empty, return nil, else return new_subject_string.
+    return unless new_subject_string.present?
+
+    return new_subject_string 
   end
 
   # Delete old subjects that do not have any records in the join table,
@@ -846,10 +851,11 @@ class TeacherSet < ActiveRecord::Base
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
       response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
       headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
-
+      
       if response.code == 200 || items_hash['data'].present?
+        resp = (ENV['RAILS_ENV'] == 'test')? JSON.parse(response) : response
         items_hash['data'] ||= []
-        items_hash['data'] << response['data'] if response['data'].present?
+        items_hash['data'] << resp['data'] if resp['data'].present?
         items_hash['data'].flatten!
         LogWrapper.log('DEBUG',
         {

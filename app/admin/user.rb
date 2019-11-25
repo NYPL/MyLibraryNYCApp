@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register User do
   menu :priority => 6
   actions :all
@@ -100,8 +102,8 @@ ActiveAdmin.register User do
       @page_title = resource.name(true)
     end
     
-    #Setting up Strong Parameters
-    #You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
+    # Setting up Strong Parameters
+    # You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
     def permitted_params
       params.permit user: [:email, :password, :password_confirmation, :remember_me, :barcode, :alt_barcodes, :first_name, :last_name, :alt_email, :school_id, :pin]
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSierraCodeZcodeMatches < ActiveRecord::Migration
   def change
     create_table "sierra_code_zcode_matches", :force => true do |t|
