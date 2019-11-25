@@ -201,6 +201,7 @@ class User < ActiveRecord::Base
           'status' => response.code,
           'responseData' => response.body
         })
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
 
