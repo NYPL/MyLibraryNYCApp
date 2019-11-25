@@ -4,11 +4,9 @@ require 'cgi'
 require 'uri'
 
 begin
-  puts "database.yml: about to parse url"
   LogWrapper.log('WARNING', {'message' => 'DATABASE_URL: before parsing the URL', 'method' => 'database.yml load'})
   uri = URI.parse(ENV["DATABASE_URL"])
   LogWrapper.log('WARNING', {'message' => "DATABASE_URL: after parsing the URL=[#{uri or 'empty_uri'}]", 'method' => 'database.yml load'})
-  puts "database.yml: parsed url=#{uri or 'empty_uri'}*"
 
 rescue URI::InvalidURIError
   raise "Invalid DATABASE_URL: hello#{ENV['DATABASE_URL']}world"
