@@ -473,7 +473,7 @@ class TeacherSet < ActiveRecord::Base
       title.strip!
       #puts "    Adding subject: #{title}#{title != _t ? " (orig \"#{_t}\")" : ''}"
 
-      subject = Subject.find_or_create_by_title title
+      subject = Subject.find_or_create_by(title: title)
       # subject.teacher_sets << self unless subject.teacher_sets.include? self
       self.subjects << subject unless subject.teacher_sets.include? self
     end
@@ -738,8 +738,8 @@ class TeacherSet < ActiveRecord::Base
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)
 
-      subject = Subject.find_or_create_by_title(subject_name)
-      subject_teacher_set = SubjectTeacherSet.find_or_create_by_teacher_set_id_and_subject_id(teacher_set_id: self.id, subject_id: subject.id)
+      subject = Subject.find_or_create_by(title: subject_name)
+      subject_teacher_set = SubjectTeacherSet.find_or_create_by(teacher_set_id: self.id, subject_id: subject.id)
     end
 
     prune_subjects(old_subjects)
@@ -851,9 +851,11 @@ class TeacherSet < ActiveRecord::Base
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
       response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
       headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
+      
       if response.code == 200 || items_hash['data'].present?
+        resp = (ENV['RAILS_ENV'] == 'test')? JSON.parse(response) : response
         items_hash['data'] ||= []
-        items_hash['data'] << response['data'] if response['data'].present?
+        items_hash['data'] << resp['data'] if resp['data'].present?
         items_hash['data'].flatten!
         LogWrapper.log('DEBUG',
         {
