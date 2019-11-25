@@ -41,7 +41,6 @@ class Api::BibsControllerTest < ActionController::TestCase
 
     # confirm all teacher_set_fields are updated
     first_teacher_set = TeacherSet.first
-    binding.pry
     assert first_teacher_set.title.present?
     assert first_teacher_set.call_number.present?
     assert first_teacher_set.description.present?
