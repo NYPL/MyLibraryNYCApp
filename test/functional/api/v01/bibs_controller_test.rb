@@ -14,7 +14,7 @@ class Api::BibsControllerTest < ActionController::TestCase
 
   test "should update teacher set even if an associate book has a field that is too long" do
     TeacherSet.destroy_all
-    post 'create_or_update_teacher_sets', { _json: ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS }
+    post 'create_or_update_teacher_sets', params: { _json: ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS }
     assert_response :success
     assert TeacherSet.count > 0
   end
@@ -22,7 +22,7 @@ class Api::BibsControllerTest < ActionController::TestCase
   test "should update teacher set attributes and create associated books" do
     Book.destroy_all
     TeacherSet.destroy_all
-    post 'create_or_update_teacher_sets', { _json: TWO_TEACHER_SETS_WITH_10_ISBNS_EACH }
+    post 'create_or_update_teacher_sets', params: { _json: TWO_TEACHER_SETS_WITH_10_ISBNS_EACH }
     assert_response :success
     assert Book.count == 20
     assert TeacherSet.count == 2
@@ -31,7 +31,7 @@ class Api::BibsControllerTest < ActionController::TestCase
     assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}", "b#{BNUMBER2}"]
 
     # simulate an update which removes seven books from each teacher_set
-    post 'create_or_update_teacher_sets', { _json: TWO_TEACHER_SETS_WITH_3_ISBNS_EACH }
+    post 'create_or_update_teacher_sets', params: { _json: TWO_TEACHER_SETS_WITH_3_ISBNS_EACH }
     assert_response :success
     assert Book.count == 20 # no change to books but TeacherSetBooks decrease
     assert TeacherSet.count == 2 # no change
@@ -65,7 +65,7 @@ class Api::BibsControllerTest < ActionController::TestCase
   test "should not create a teacher set if required field is missing (ie title)" do
     Book.destroy_all
     TeacherSet.destroy_all
-    post 'create_or_update_teacher_sets', { _json: TEACHER_SET_WITH_TITLE_MISSING }
+    post 'create_or_update_teacher_sets', params: { _json: TEACHER_SET_WITH_TITLE_MISSING }
     assert_response :success
     assert Book.count == 0
     assert TeacherSet.count == 0
@@ -73,7 +73,7 @@ class Api::BibsControllerTest < ActionController::TestCase
 
   test "should delete teacher sets when given a bib number" do
     TeacherSet.where(bnumber: "b#{BNUMBER1}").first_or_create
-    delete 'delete_teacher_sets', { _json: TWO_TEACHER_SETS_TO_DELETE }
+    delete 'delete_teacher_sets', params: { _json: TWO_TEACHER_SETS_TO_DELETE }
     assert_response :success
     assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}"]
   end
