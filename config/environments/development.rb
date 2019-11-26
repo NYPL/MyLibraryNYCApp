@@ -39,7 +39,7 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-dev-1002.us-east-1.elasticbeanstalk.com' }
   config.action_mailer.perform_deliveries = false
 
-  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
+  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application_1.log")
   config.logger.level = Logger::DEBUG
 
   config.eager_load = false
