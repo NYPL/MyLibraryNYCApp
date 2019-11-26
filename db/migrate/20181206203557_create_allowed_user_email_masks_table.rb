@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAllowedUserEmailMasksTable < ActiveRecord::Migration[3.2]
+class CreateAllowedUserEmailMasksTable < ActiveRecord::Migration[4.2]
   # NOTE: This table is a stop-gap measure.
   # Until we move user registration/login to be fully managed outside of MLN,
   # we'd like to restrict new user's email addresses to addresses from the Department of Education

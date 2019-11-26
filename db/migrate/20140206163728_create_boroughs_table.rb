@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateBoroughsTable < ActiveRecord::Migration[3.2]
+class CreateBoroughsTable < ActiveRecord::Migration[4.2]
   def up
     create_table "boroughs", :force => true do |t|
       t.string   "name"

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAdminNotes < ActiveRecord::Migration[3.2]
+class CreateAdminNotes < ActiveRecord::Migration[4.2]
   def self.up
     create_table :admin_notes do |t|
       t.string :resource_id, :null => false

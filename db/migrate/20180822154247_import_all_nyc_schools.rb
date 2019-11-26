@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ImportAllNycSchools < ActiveRecord::Migration[3.2]
+class ImportAllNycSchools < ActiveRecord::Migration[4.2]
   def up
     return if School.count == 0 # for Travis
 
