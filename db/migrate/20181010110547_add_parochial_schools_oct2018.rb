@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddParochialSchoolsOct2018 < ActiveRecord::Migration
+class AddParochialSchoolsOct2018 < ActiveRecord::Migration[3.2]
   def up
     # First create the new schools by adding them to a CSV like this.
     # This task is idempotent.

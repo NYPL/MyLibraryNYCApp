@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CleanupSchoolCodes < ActiveRecord::Migration
+class CleanupSchoolCodes < ActiveRecord::Migration[3.2]
   def up
     return if School.count == 0 # for Travis
 

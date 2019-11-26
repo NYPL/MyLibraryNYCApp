@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RenameBooksInSetsTable < ActiveRecord::Migration
+class RenameBooksInSetsTable < ActiveRecord::Migration[3.2]
   def change
     rename_table :books_in_sets, :teacher_set_books
 

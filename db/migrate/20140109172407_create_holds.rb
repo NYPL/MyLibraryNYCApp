@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateHolds < ActiveRecord::Migration
+class CreateHolds < ActiveRecord::Migration[3.2]
   def change
     create_table :holds do |t|
       t.integer :teacher_set_id, :limit => 8
