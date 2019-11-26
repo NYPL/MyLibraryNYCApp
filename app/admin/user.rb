@@ -5,14 +5,7 @@ ActiveAdmin.register User do
   actions :all
 
   before_create do |user|
-    begin
-      user.send_request_to_patron_creator_service if user.valid? # if not valid, errors will show on the form
-    rescue => e
-      LogWrapper.log('ERROR', {
-        'message' => "An error has occured when sending a request to the patron creator service",
-        'responseData' => e.message
-      })
-    end
+    user.send_request_to_patron_creator_service if user.valid? # if not valid, errors will show on the form
   end
 
   csv do
