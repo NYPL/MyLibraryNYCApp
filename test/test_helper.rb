@@ -3738,11 +3738,11 @@ TWO_TEACHER_SETS_TO_DELETE = [{
 ]
 
 class ActionController::TestCase
-  include Devise::TestHelpers
+  include Devise::Test::ControllerHelpers
 end
 
 class ActiveSupport::TestCase
-  setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice, 
+  setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
