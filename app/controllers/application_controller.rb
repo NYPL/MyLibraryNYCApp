@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
     # be careful -- after first access stored_location_for clears to a nil, so read it once
     # and store it in a local var before printing out or any other access
     redirect_url = stored_location_for(:user)
-    if !redirect_url.present?
+    unless redirect_url.present?
       redirect_url = app_url
     end
 

@@ -8,29 +8,9 @@ Documentation:
 Layout/AlignHash:
   Enabled: false
 
-Layout/EmptyLines:
-  Enabled: false
-
-Layout/EmptyLinesAroundMethodBody:
-  Enabled: false
-
-Layout/IndentationWidth:
-  Enabled: false
-
 Layout/IndentHash:
-  Enabled: false
-
-Layout/SpaceInsideHashLiteralBraces:
-  Enabled: false
-
-Style/AndOr:
   Enabled: false
 
 Style/BracesAroundHashParameters:
   Enabled: false
 
-Style/NegatedIf:
-  Enabled: false
-  
-Style/Not:
-  Enabled: false
