@@ -54,7 +54,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
           area_of_study: var_field('690', false),
           physical_description: physical_description,
           details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
-          grade_begin: grade_or_lexile_array('grade')[0] || '', # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
+          # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
+          grade_begin: grade_or_lexile_array('grade')[0] || '', 
           grade_end: grade_or_lexile_array('grade')[1] || '',
           lexile_begin: grade_or_lexile_array('lexile')[0] || '',
           lexile_end: grade_or_lexile_array('lexile')[1] || '',
@@ -64,36 +65,47 @@ class Api::V01::BibsController < Api::V01::GeneralController
         )
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "One attribute may be too long.  Error: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(@request_body, 
+                                                       "One attribute may be too long.  Error: #{exception.message[0..200]}...", 
+                                                       action_name, teacher_set).deliver
       end
       begin
         # clean up the area of study field to match the subject field string rules
         teacher_set.clean_primary_subject()
       rescue => exception
         log_error('clean_primary_subject', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating primary subject via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(@request_body, 
+                                                       "Error updating primary subject via API: #{exception.message[0..200]}...", 
+                                                       action_name, teacher_set).deliver
       end
       begin
         teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating subjects via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(@request_body, 
+                                                       "Error updating subjects via API: #{exception.message[0..200]}...", 
+                                                       action_name, teacher_set).deliver
       end
       begin
         teacher_set.update_notes(var_field('500', true))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating notes via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(@request_body,
+                                                       "Error updating notes via API: #{exception.message[0..200]}...", 
+                                                       action_name, teacher_set).deliver
       end
       begin
         teacher_set.update_included_book_list(teacher_set_record)
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating the associated book records via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(@request_body,
+                                                       "Error updating the associated book records via API: #{exception.message[0..200]}...", 
+                                                       action_name, teacher_set).deliver
       end
 
       saved_teacher_sets << teacher_set
-      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
+      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. 
+        Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
         'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)

@@ -5,7 +5,8 @@ class TeacherSetBook < ActiveRecord::Base
   belongs_to :teacher_set
   # attr_accessible :book, :teacher_set, :rank
   after_create :create_teacher_set_version_on_create
-  before_destroy :create_teacher_set_version_on_destroy, prepend: true # without prepending, associated teacher sets were already deleted, so they couldn't be versioned
+  # without prepending, associated teacher sets were already deleted, so they couldn't be versioned
+  before_destroy :create_teacher_set_version_on_destroy, prepend: true
 
   def create_teacher_set_version_on_create
     teacher_set.update_attributes(last_book_change: "added-#{self.book.id}-#{self.book.title}")

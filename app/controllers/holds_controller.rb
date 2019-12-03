@@ -81,7 +81,9 @@ class HoldsController < ApplicationController
 
       respond_to do |format|
         if @hold.save
-          format.html { redirect_to hold_url(@hold.access_key), notice: 'Your order has been received by our system and will soon be delivered to your school.<br/><br/>Check your email inbox for a message with further details.' }
+          format.html { redirect_to hold_url(@hold.access_key), notice: 
+            'Your order has been received by our system and will soon be delivered to your school.\
+            <br/><br/>Check your email inbox for a message with further details.' }
           format.json { render json: @hold, status: :created, location: @hold }
         else
           format.html { render action: 'new' }
@@ -91,7 +93,8 @@ class HoldsController < ApplicationController
     rescue => exception
       respond_to do |format|
         format.json {
-          render json: { error: "We've encountered an error and were unable to confirm your order. Please try again later or email help@mylibrarynyc.org for assistance.",
+          render json: { error: "We've encountered an error and were unable to confirm your order.\
+            Please try again later or email help@mylibrarynyc.org for assistance.",
           rails_error_message: exception.message }.to_json, status: 500 }
         LogWrapper.log('ERROR', 'message' => exception.message)
       end

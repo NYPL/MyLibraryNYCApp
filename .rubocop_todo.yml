@@ -1315,4 +1315,10 @@ Style/ZeroLengthPredicate:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 1675
+  Max: 150
+  Exclude:
+  - 'db/migrate/*.rb'
+  - 'test/test_helper.rb'
+  - 'lib/tasks/*.rake'
+  - 'config/routes.rb'
+  - 'config/initializers/*.rb'

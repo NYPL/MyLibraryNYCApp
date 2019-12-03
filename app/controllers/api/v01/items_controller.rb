@@ -9,14 +9,17 @@ class Api::V01::ItemsController < Api::V01::GeneralController
   # Updates the available_copies, total_copies, and availability fields on a teacher_set.
   # Receives a list of items from a POST request, each item represented by a JSON record.
   # All records are inside @request_body.
-  # Parses the item bodies to retrieve the bib id.  For each valid item, sends a request to the Bib Service for all of the items belonging to that bib.
-  # For each item in the returned list, parses the JSON body, to retrieve the due_date.  If the due_date is not null, counts the item as "unavailable".
+  # Parses the item bodies to retrieve the bib id.
+  # For each valid item, sends a request to the Bib Service for all of the items belonging to that bib.
+  # For each item in the returned list, parses the JSON body, to retrieve the due_date.  If the due_date is not null,
+  # counts the item as "unavailable".
   # Adds up the total number of items, and the number of items available, and updates the teacher_set fields accordingly.
   # On error finding local data, writes a message to the error log, but returns a success to the calling lambda.
   # On error communicating with the Bib Service, returns a failure to the calling lambda (triggering a re-try).
   def update_availability
     begin
-      LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}", "requestBody" => @request_body })
+      LogWrapper.log('DEBUG', {'message' => 'update_availability.start','method' => "#{controller_name}.#{action_name}", 
+                               "requestBody" => @request_body })
       error_code_and_message = validate_request
       if error_code_and_message.any?
         # don't send an alert email for now

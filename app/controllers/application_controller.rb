@@ -24,7 +24,8 @@ class ApplicationController < ActionController::Base
   ##
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
-    LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start','method' => 'app/controllers/application_controller.rb.after_sign_in_path_for'})
+    LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
+                             'method' => 'app/controllers/application_controller.rb.after_sign_in_path_for'})
     # be careful -- after first access stored_location_for clears to a nil, so read it once
     # and store it in a local var before printing out or any other access
     redirect_url = stored_location_for(:user)
