@@ -18,13 +18,14 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
       get '/users/signup'
       assert_select 'h1', 'Sign Up'
-      post '/users',
-      user: {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: new_email,
-        pin: user.pin,
-        school_id: user.school_id
+      post '/users', params: {
+        user: {
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: new_email,
+          pin: user.pin,
+          school_id: user.school_id
+        }
       }
       assert_response :redirect
       follow_redirect!

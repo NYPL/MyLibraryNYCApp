@@ -5,9 +5,9 @@ require 'ruby_dig'
 class HoldsController < ApplicationController
   include LogWrapper
 
-  before_filter :redirect_to_angular, only: [:show, :new, :cancel]
-  before_filter :check_ownership, only: [:show, :update]
-  before_filter :require_login, only: [:index, :new, :create, :check_ownership]
+  before_action :redirect_to_angular, only: [:show, :new, :cancel]
+  before_action :check_ownership, only: [:show, :update]
+  before_action :require_login, only: [:index, :new, :create, :check_ownership]
 
   def index
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/holds_controller.rb.index'})
