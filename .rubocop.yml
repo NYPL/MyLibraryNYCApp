@@ -11,13 +11,7 @@ Layout/AlignHash:
 Layout/EmptyLines:
   Enabled: false
 
-Layout/EmptyLinesAroundClassBody:
-  Enabled: false
-
 Layout/EmptyLinesAroundMethodBody:
-  Enabled: false
-
-Layout/EmptyLineBetweenDefs:
   Enabled: false
 
 Layout/IndentationWidth:
@@ -29,19 +23,7 @@ Layout/IndentHash:
 Layout/SpaceInsideHashLiteralBraces:
   Enabled: false
 
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/LineLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
 Style/AndOr:
-  Enabled: false
-
-Style/BlockDelimiters:
   Enabled: false
 
 Style/BracesAroundHashParameters:
