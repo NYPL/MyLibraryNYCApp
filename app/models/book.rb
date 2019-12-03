@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Book < ActiveRecord::Base
+  
   # NOTE: The ISBN field in the database refers to a standard number; sometimes this is an ISBN.
   include CatalogItemMethods
   include Oauth
@@ -12,9 +13,9 @@ class Book < ActiveRecord::Base
   attr_accessor :catalog_choice
   # attr_accessor :matching_api_items
 
-	# has_and_belongs_to_many :authors
-	has_many :teacher_set_books, :dependent => :destroy
-	has_many :teacher_sets, through: :teacher_set_books
+  # has_and_belongs_to_many :authors
+  has_many :teacher_set_books, :dependent => :destroy
+  has_many :teacher_sets, through: :teacher_set_books
 
   # turn this off this obsolete validation so that we can run tests on book creation; otherwise you get this error: `Need to set ENVs`
   # validate do |book|
@@ -61,28 +62,30 @@ class Book < ActiveRecord::Base
     self.class.catalog_items_by_query q
   end
 
-	def image_uri(size=:small)
+  def image_uri(size=:small)
     return nil if cover_uri.nil?
 
-		deriv = 'S'
-		deriv = 'M' if size == :medium
-		deriv = 'L' if size == :large
+    deriv = 'S'
+    deriv = 'M' if size == :medium
+    deriv = 'L' if size == :large
 
-		cover_uri.sub /Type=L/, "Type=#{deriv}"
-	end
+    cover_uri.sub /Type=L/, "Type=#{deriv}"
+  end
 
   def update_from_catalog_item(item)
-		self.update_attributes :details_url => item['details_url']
+    self.update_attributes :details_url => item['details_url']
 
-		self.update_attributes :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], :call_number => item['call_number'], :description => item['description'], :statement_of_responsibility => item['statement_of_responsibility']
+    self.update_attributes :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
+                           :call_number => item['call_number'], :description => item['description'], 
+                           :statement_of_responsibility => item['statement_of_responsibility']
 
-		self.update_attributes :format => item['format']['name'] unless item['format'].nil?
-		self.update_attributes :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
-		self.update_attributes :notes => item['notes'].join(';') unless item['notes'].nil?
-
-		self.update_attributes :cover_uri => 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=' + item['isbns'].first unless item['isbns'].nil?
-		self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && item['isbns'].size > 0
-		self
+    self.update_attributes :format => item['format']['name'] unless item['format'].nil?
+    self.update_attributes :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
+    self.update_attributes :notes => item['notes'].join(';') unless item['notes'].nil?
+    url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
+    self.update_attributes :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
+    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && item['isbns'].size > 0
+    self
   end
 
   def self.catalog_item(id)
@@ -135,7 +138,7 @@ class Book < ActiveRecord::Base
   end
 
   def self.upsert_from_catalog_item(item)
-		book = Book.find_or_initialize_by_details_url item['details_url']
+    book = Book.find_or_initialize_by_details_url item['details_url']
     book.update_from_catalog_item item
 
     book

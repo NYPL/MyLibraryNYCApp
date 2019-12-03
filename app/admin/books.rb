@@ -64,7 +64,8 @@ ActiveAdmin.register Book do
       book_version.title
     } do |book|
     attributes_table do
-      [:title, :sub_title, :format, :publication_date, :isbn, :primary_language, :call_number, :description, :physical_description, :notes, :statement_of_responsibility, :created_at, :updated_at].each do |prop|
+      [:title, :sub_title, :format, :publication_date, :isbn, :primary_language, :call_number, :description, :physical_description, :notes, 
+       :statement_of_responsibility, :created_at, :updated_at].each do |prop|
         row prop
       end
     end

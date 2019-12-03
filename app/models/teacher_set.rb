@@ -112,7 +112,8 @@ class TeacherSet < ActiveRecord::Base
         clauses << "#{table_name}.#{c} ILIKE ?"
       end
       # Match on topics too:
-      clauses << "#{table_name}.id IN (SELECT _S2T.teacher_set_id FROM subjects _S INNER JOIN subject_teacher_sets _S2T ON _S2T.subject_id=_S.id WHERE _S.title ILIKE ?)"
+      clauses << "#{table_name}.id IN (SELECT _S2T.teacher_set_id FROM subjects _S INNER JOIN subject_teacher_sets _S2T ON _S2T.subject_id=_S.id \
+                  WHERE _S.title ILIKE ?)"
 
       vals = [].fill("%#{params[:keyword]}%", 0, clauses.length)
       sets = sets.where(clauses.join(' OR '), *vals)
@@ -148,7 +149,8 @@ class TeacherSet < ActiveRecord::Base
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
-        sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND #{join_alias}.subject_id=#{s}")
+        sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND \
+                          #{join_alias}.subject_id=#{s}")
       end
     end
 
@@ -229,7 +231,7 @@ class TeacherSet < ActiveRecord::Base
 
       # Tags
       subjects_facets = {:label =>  'subjects', :items => []}
-      _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
+      _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id')
       # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
       # but let's make it 5 consistently now.
       #if !_qry.to_sql.include?('JOIN subject_teacher_sets')
@@ -436,7 +438,8 @@ class TeacherSet < ActiveRecord::Base
       :total_copies => total_copies
     })
 
-    puts "    Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} avail with #{self.new_or_pending_holds.count} open holds"
+    puts "Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} \
+          avail with #{self.new_or_pending_holds.count} open holds"
     # Update availability status string
     self.recalculate_availability
   end
