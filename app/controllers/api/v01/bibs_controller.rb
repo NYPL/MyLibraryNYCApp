@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Api::V01::BibsController < Api::V01::GeneralController
   include LogWrapper
 
-  before_filter :set_request_body
-  before_filter :validate_source_of_request
+  before_action :set_request_body
+  before_action :validate_source_of_request
 
   # Receive teacher sets from a POST request.
   # All records are inside @request_body.
@@ -36,7 +38,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       teacher_set = TeacherSet.where(bnumber: "b#{bnumber}").first_or_initialize
 
       # Calls Bib service for items.
-      # Calculates the total number of items and available items in the list.     
+      # Calculates the total number of items and available items in the list.
       ts_items_info = teacher_set.get_items_info_from_bibs_service(bnumber)
 
       begin
@@ -53,9 +55,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
           physical_description: physical_description,
           details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
           grade_begin: grade_or_lexile_array('grade')[0] || '', # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
-          grade_end: grade_or_lexile_array('grade')[1] || '', 
-          lexile_begin: grade_or_lexile_array('lexile')[0] || '',
-          lexile_end: grade_or_lexile_array('lexile')[1] || '',
+          grade_end: grade_or_lexile_array('grade')[1] || '',
+          lexile_begin: grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
+          lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
           available_copies: ts_items_info[:available_count],
           total_copies: ts_items_info[:total_count],
           availability: ts_items_info[:availability_string]
@@ -94,8 +96,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
         'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
-
-    render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
+    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
 
   def delete_teacher_sets
@@ -114,8 +115,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         teacher_set.destroy
       end
     end
-
-    render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
+    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
 
 
@@ -162,6 +162,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
     # Grades filter supports Pre-K and K
     # Grades = {Pre-K => -1, K => 0}
     # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
+    # Parsing lexile begin/end values has been deprecated, and will no longer work as expected.
     def grade_or_lexile_array(return_grade_or_lexile)
       grade_and_lexile_json = all_var_fields('521', 'content')
       return '' if grade_and_lexile_json.blank?
@@ -191,7 +192,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
     end
 
-  # Supporting only below grades 
+  # Supporting only below grades
   GRADES_1_12 = %w[1 2 3 4 5 6 7 8 9 10 11 12].freeze
   PREK_K_GRADES = ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek', 'K', 'k'].freeze
 

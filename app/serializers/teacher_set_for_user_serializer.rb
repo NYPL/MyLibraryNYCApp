@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TeacherSetForUserSerializer < ActiveModel::Serializer
 
   def serializable_hash

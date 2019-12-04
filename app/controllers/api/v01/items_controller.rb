@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Api::V01::ItemsController < Api::V01::GeneralController
   include LogWrapper
 
-  before_filter :set_request_body
-  before_filter :validate_source_of_request
+  before_action :set_request_body
+  before_action :validate_source_of_request
 
   # Updates the available_copies, total_copies, and availability fields on a teacher_set.
   # Receives a list of items from a POST request, each item represented by a JSON record.

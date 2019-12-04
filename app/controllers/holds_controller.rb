@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'ruby_dig'
 
 class HoldsController < ApplicationController
   include LogWrapper
 
-  before_filter :redirect_to_angular, only: [:show, :new, :cancel]
-  before_filter :check_ownership, only: [:show, :update]
-  before_filter :require_login, only: [:index, :new, :create, :check_ownership]
+  before_action :redirect_to_angular, only: [:show, :new, :cancel]
+  before_action :check_ownership, only: [:show, :update]
+  before_action :require_login, only: [:index, :new, :create, :check_ownership]
 
 
   def index
@@ -66,7 +68,7 @@ class HoldsController < ApplicationController
     begin
       # If currentuser school is inactive display error message and redirect to same page.
       is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
-      
+
       if !is_school_active
         render json: {:redirect_to => "#{app_url}#/teacher_sets/#{params[:teacher_set_id]}", :is_school_active => is_school_active}
         return
@@ -149,6 +151,16 @@ class HoldsController < ApplicationController
         }
       end
     end
+  end
+
+
+
+  private
+
+  # Strong parameters: protect object creation and allow mass assignment.
+  def hold_params
+    #not implementing in create yet: Hold.create(hold_params)
+    params.permit(:date_required)
   end
 
 end
