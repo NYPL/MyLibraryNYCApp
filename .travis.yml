@@ -41,14 +41,14 @@ deploy:
   bucket_path: my-library-nyc-app-dev-1002
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: upgrading_rails_version
+    branch: development
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_QA"
   region: us-east-1
   app: my-library-nyc-app
-  env: my-library-nyc-app-qa
+  env: my-library-nyc-app-qa25
   bucket_name: elasticbeanstalk-us-east-1-946183545209
   bucket_path: my-library-nyc-app-qa
   on:
