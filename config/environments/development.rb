@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 MyLibraryNYC::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
   # In the development environment your application's code is reloaded on
@@ -22,11 +24,11 @@ MyLibraryNYC::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   # Raise exception on mass assignment protection for Active Record models
-  config.active_record.mass_assignment_sanitizer = :strict
+  # config.active_record.mass_assignment_sanitizer = :strict
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
-  config.active_record.auto_explain_threshold_in_seconds = 0.5
+  # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   # Do not compress assets
   config.assets.compress = false
@@ -34,7 +36,11 @@ MyLibraryNYC::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-development.us-east-1.elasticbeanstalk.com' }
-  config.action_mailer.perform_deliveries = false  
+  config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-dev-1002.us-east-1.elasticbeanstalk.com' }
+  config.action_mailer.perform_deliveries = false
 
+  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
+  config.logger.level = Logger::DEBUG
+
+  config.eager_load = false
 end

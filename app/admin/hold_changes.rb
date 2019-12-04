@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register HoldChange do
   
   actions :all, except: [:edit, :destroy] #just show
@@ -36,5 +38,13 @@ ActiveAdmin.register HoldChange do
       f.input :hold_id, :as => :hidden # :input_html => { :disabled => true } 
     end
     f.actions
+  end
+
+  controller do
+    #Setting up Strong Parameters
+    #You must specify permitted_params within your users ActiveAdmin resource which reflects a hold_change's expected params.
+    def permitted_params
+      params.permit hold_change: [:status, :comment, :hold_id, :admin_user_id]
+    end
   end
 end

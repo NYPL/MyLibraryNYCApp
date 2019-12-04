@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ******* PLEASE READ ***********
 # This rake task is used for the purpose of migrating the 
 # production database on heroku to the production database on AWS RDS.

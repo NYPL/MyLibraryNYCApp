@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class HoldChange < ActiveRecord::Base
 
-  attr_accessible :status, :comment, :hold_id, :admin_user_id
+  # attr_accessible :status, :comment, :hold_id, :admin_user_id
 
   validates_presence_of :hold_id, :status
 

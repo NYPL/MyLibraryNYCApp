@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BookValidator
 
   attr_accessor :matching_api_items

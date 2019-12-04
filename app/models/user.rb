@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
   include Exceptions
   include LogWrapper
@@ -9,11 +11,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
   :recoverable, :rememberable, :trackable, :validatable, # this handles uniqueness of email automatically
   :timeoutable # adds session["warden.user.user.session"]["last_request_at"] which we use in sessions_controller
-
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me,
-  :barcode, :alt_barcodes, :first_name, :last_name, :alt_email,
-  :school_id, :pin
 
   # Makes getters and setters
   attr_accessor :pin
@@ -129,7 +126,7 @@ class User < ActiveRecord::Base
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
   def validate_pin_pattern
-    if pin && pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
+    if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
       true
     else
       errors.add(:pin, 'does not meet our requirements. Please try again.')
@@ -180,7 +177,6 @@ class User < ActiveRecord::Base
        'status' => 'start',
        'dataSent' => query
       })
-
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
@@ -203,7 +199,7 @@ class User < ActiveRecord::Base
         {
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
-          'responseData' => response.body 
+          'responseData' => response.body
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end

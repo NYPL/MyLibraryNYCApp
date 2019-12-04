@@ -1,4 +1,6 @@
-class CreateSubjectsTeacherSetsTable < ActiveRecord::Migration
+# frozen_string_literal: true
+
+class CreateSubjectsTeacherSetsTable < ActiveRecord::Migration[4.2]
   def self.up
     create_table :subjects_teacher_sets, :id => false do |t|
       t.references :subject

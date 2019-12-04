@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminMailer < ActionMailer::Base
   include LogWrapper
   LOG_TAG = "AdminMailer"
