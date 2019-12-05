@@ -111,6 +111,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
 
+  
   def delete_teacher_sets
     error_code_and_message = validate_request
     if error_code_and_message.any?
@@ -145,6 +146,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
     end
 
+    
     def all_var_fields(marcTag, tag)
       begin
         @teacher_set_record['varFields'].select{ |hash| hash['marcTag'] == marcTag }.map{|x| x['subfields'][0]['content']}
@@ -153,6 +155,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
     end
 
+    
     def fixed_field(marcTag)
       begin
         @teacher_set_record['fixedFields'][marcTag]['display']
@@ -161,6 +164,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
     end
 
+    
     # build saved_teacher_sets_json_array for the response body
     def saved_teacher_sets_json_array(saved_teacher_sets)
       return [] if saved_teacher_sets.empty?
@@ -171,6 +175,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       saved_teacher_sets_json_array
     end
 
+    
     # Grades filter supports Pre-K and K
     # Grades = {Pre-K => -1, K => 0}
     # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
@@ -236,6 +241,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
     prek_arr.uniq
   end
 
+  
   # Grades = {Pre-K => -1, K => 0}
   def grade_val(val)
     return unless val.present?

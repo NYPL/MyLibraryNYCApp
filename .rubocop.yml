@@ -11,6 +11,9 @@ Layout/AlignHash:
 Layout/IndentHash:
   Enabled: false
 
+# Layout/TrailingEmptyLines:
+#   Enabled: false
+
 Style/BracesAroundHashParameters:
   Enabled: false
 

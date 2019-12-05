@@ -59,6 +59,7 @@ class TeacherSetsController < ApplicationController
     }, serializer: SearchSerializer, include_books: false, include_contents: false
   end
 
+
   # GET /teacher_sets/1.json
   def show
     LogWrapper.log('DEBUG', {'message' => 'show.start', 'method' => 'app/controllers/teacher_sets_controller.rb.show'})
@@ -106,12 +107,14 @@ class TeacherSetsController < ApplicationController
     }, serializer: TeacherSetForUserSerializer, root: 'teacher_set'
   end
 
+
   # Gets current user teacherset holds from database.
   def teacher_set_holds
     LogWrapper.log('DEBUG', {'message' => 'teacher_set_holds.start', 'method' => 'app/controllers/teacher_sets_controller.rb.teacher_set_holds'})
     @set = TeacherSet.find(params[:id])
     @holds = @set.holds_for_user(current_user)
   end
+
 
   def create
     TeacherSet.create(teacherset_params)

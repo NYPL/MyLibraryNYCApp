@@ -13,6 +13,7 @@ ActiveAdmin.register HoldChange do
       #set any other values you might want to initialize
     end
 
+    
     def create
       params[:hold_change].merge!({ admin_user_id: current_admin_user.id })
       create!

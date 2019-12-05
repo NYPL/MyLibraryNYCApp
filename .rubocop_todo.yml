@@ -129,14 +129,18 @@ Layout/EmptyLineAfterMagicComment:
 # Cop supports --auto-correct.
 # Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
 Layout/EmptyLineBetweenDefs:
+  Description: 'Use empty lines between defs.'
+  StyleGuide: '#empty-lines-between-methods'
+  Enabled: true
+  NumberOfEmptyLines: 2
   Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/sessions_controller.rb'
-    - 'app/mailers/hold_mailer.rb'
-    - 'app/models/hold.rb'
-    - 'app/models/teacher_set.rb'
-    - 'app/models/user.rb'
-    - 'config/initializers/will_paginate.rb'
+    - 'db/migrate/*.rb'
+    - 'test/*/*.rb'
+    - 'test/*.rb'
+    - 'lib/*/*'
+    - 'lib/*.rb'
+    - 'config/routes.rb'
+    - 'config/initializers/*.rb'
 
 # Offense count: 47
 # Cop supports --auto-correct.
@@ -663,7 +667,7 @@ Metrics/BlockNesting:
 # Offense count: 7
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 597
+  Max: 600
 
 # Offense count: 19
 Metrics/CyclomaticComplexity:
@@ -672,6 +676,11 @@ Metrics/CyclomaticComplexity:
 # Offense count: 61
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/MethodLength:
+  Exclude:
+    - 'app/models/teacher_set.rb'
+    - 'app/models/user.rb'
+    - 'app/controllers/api/v01/bibs_controller.rb'
+    - 'db/migrate/*.rb'
   Max: 40
 
 # Offense count: 17

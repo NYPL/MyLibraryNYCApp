@@ -15,9 +15,11 @@ class UsersController < ApplicationController
     end
   end
 
+
   def check_email
     render :json => User.new.get_email_records(params[:email])
   end
+
 
   def create
     User.create(user_params)

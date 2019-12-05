@@ -14,6 +14,7 @@ class HoldsController < ApplicationController
     redirect_to root_url
   end
 
+  
   # GET /holds/1.json
   def show
     LogWrapper.log('DEBUG', {'message' => 'show.start', 'method' => 'app/controllers/holds_controller.rb.show'})
@@ -28,6 +29,7 @@ class HoldsController < ApplicationController
     }, serializer: HoldExtendedSerializer, root: false
   end
 
+  
   # GET /holds/new.json
   def new
     LogWrapper.log('DEBUG', {'message' => 'new.start', 'method' => 'app/controllers/holds_controller.rb.new'})
@@ -39,6 +41,7 @@ class HoldsController < ApplicationController
     }
   end
 
+  
   # GET /holds/1/cancel.json
   def cancel
     LogWrapper.log('DEBUG', {'message' => 'cancel.start', 'method' => 'app/controllers/holds_controller.rb.cancel'})
@@ -51,6 +54,7 @@ class HoldsController < ApplicationController
     }
   end
 
+  
   ##
   # Create holds and update quantity column in holds.
   # Calculate available copies from quantity saves in teacherset table.
@@ -100,6 +104,7 @@ class HoldsController < ApplicationController
       end
     end
   end
+
 
   def update
     LogWrapper.log('DEBUG', {'message' => 'update.start', 'method' => 'app/controllers/holds_controller.rb.update'})

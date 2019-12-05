@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Book < ActiveRecord::Base
-  
+
   # NOTE: The ISBN field in the database refers to a standard number; sometimes this is an ISBN.
   include CatalogItemMethods
   include Oauth
@@ -49,6 +49,7 @@ class Book < ActiveRecord::Base
     end
   end
 
+
   def matching_api_items
     q = {}
     if !self.isbn.nil? && !self.isbn.empty?
@@ -62,6 +63,7 @@ class Book < ActiveRecord::Base
     self.class.catalog_items_by_query q
   end
 
+
   def image_uri(size=:small)
     return nil if cover_uri.nil?
 
@@ -71,6 +73,7 @@ class Book < ActiveRecord::Base
 
     cover_uri.sub /Type=L/, "Type=#{deriv}"
   end
+
 
   def update_from_catalog_item(item)
     self.update_attributes :details_url => item['details_url']
@@ -88,16 +91,19 @@ class Book < ActiveRecord::Base
     self
   end
 
+
   def self.catalog_item(id)
     resp = self.api_call "titles/#{id}"
     # puts "cat item: #{resp.to_json}"
     return resp['title'] if resp.keys.include? 'title'
   end
 
+
   def self.catalog_item_by_query(q, scrape_fallback=false)
     res = self.catalog_items_by_query(q, scrape_fallback)
     res.first unless res.nil? || res.size == 0
   end
+
 
   def self.catalog_items_by_query(params, scrape_fallback=false)
     q = []
@@ -129,13 +135,14 @@ class Book < ActiveRecord::Base
     end
 
     return resp['titles'] if resp.keys.include? 'titles'
-
   end
+
 
   def self.update_by_catalog_id(id)
     item = self.catalog_item id
     Book.upsert_from_catalog_item item
   end
+
 
   def self.upsert_from_catalog_item(item)
     book = Book.find_or_initialize_by_details_url item['details_url']
@@ -144,11 +151,13 @@ class Book < ActiveRecord::Base
     book
   end
 
+
   def create_teacher_set_version_on_update
     teacher_sets.all.each do |teacher_set|
       teacher_set.update_attributes(last_book_change: "updated-#{self.id}-#{self.title}")
     end
   end
+
 
   def update_from_isbn
     response = send_request_to_bibs_microservice
@@ -224,6 +233,7 @@ class Book < ActiveRecord::Base
     return response
   end
 
+  
   def var_field(book_attributes, marcTag)
     begin
       book_attributes['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].map{ |x| x['content']}.join(', ')
