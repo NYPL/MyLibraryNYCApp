@@ -65,42 +65,42 @@ class Api::V01::BibsController < Api::V01::GeneralController
         )
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, 
-                                                       "One attribute may be too long.  Error: #{exception.message[0..200]}...", 
-                                                       action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "One attribute may be too long.  Error: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         # clean up the area of study field to match the subject field string rules
         teacher_set.clean_primary_subject()
       rescue => exception
         log_error('clean_primary_subject', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, 
-                                                       "Error updating primary subject via API: #{exception.message[0..200]}...", 
-                                                       action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating primary subject via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, 
-                                                       "Error updating subjects via API: #{exception.message[0..200]}...", 
-                                                       action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating subjects via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         teacher_set.update_notes(var_field('500', true))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body,
-                                                       "Error updating notes via API: #{exception.message[0..200]}...", 
-                                                       action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating notes via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         teacher_set.update_included_book_list(teacher_set_record)
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body,
-                                                       "Error updating the associated book records via API: #{exception.message[0..200]}...", 
-                                                       action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating the associated book records via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
 
       saved_teacher_sets << teacher_set
