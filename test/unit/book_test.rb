@@ -6,7 +6,6 @@ class BookTest < ActiveSupport::TestCase
   test 'creating a book does not create a version, because papertrail is turned off in the model' do
     # we turn it off this way in category_item_methods.rb for creating new sets via the admin dashboard
     crank!(:book)
-    binding.pry
     assert PaperTrail::Version.count == 0
   end
 
