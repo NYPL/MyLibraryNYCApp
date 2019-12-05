@@ -52,7 +52,7 @@ ActiveAdmin.register User do
         f.input :barcode
       end
       f.input :pin, label: raw("4-digit PIN<br> It cannot contain a digit that is repeated 3 or more times (0001, 5555) and \
-                                canccccnot be a pair of repeated digits (1212, 6363)")
+                                cannot be a pair of repeated digits (1212, 6363)")
     end
     f.actions
   end
