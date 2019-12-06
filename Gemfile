@@ -35,7 +35,6 @@ gem 'paper_trail', github: 'paper-trail-gem/paper_trail', branch: '5-stable'
 gem 'pg', '~> 0.18'
 gem 'rack-cors'
 gem 'rubocop','~> 0.59.1', require: false
-gem 'ruby_dig'
 gem 'test-unit'
 gem 'will_paginate', '~> 3.0'
 gem 'webmock'
