@@ -129,10 +129,6 @@ Layout/EmptyLineAfterMagicComment:
 # Cop supports --auto-correct.
 # Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
 Layout/EmptyLineBetweenDefs:
-  Description: 'Use empty lines between defs.'
-  StyleGuide: '#empty-lines-between-methods'
-  Enabled: true
-  NumberOfEmptyLines: 2
   Exclude:
     - 'db/migrate/*.rb'
     - 'test/*/*.rb'
@@ -664,11 +660,6 @@ Metrics/BlockLength:
 Metrics/BlockNesting:
   Max: 5
 
-# Offense count: 7
-# Configuration parameters: CountComments.
-Metrics/ClassLength:
-  Max: 600
-
 # Offense count: 19
 Metrics/CyclomaticComplexity:
   Max: 30
@@ -681,7 +672,6 @@ Metrics/MethodLength:
     - 'app/models/user.rb'
     - 'app/controllers/api/v01/bibs_controller.rb'
     - 'db/migrate/*.rb'
-  Max: 40
 
 # Offense count: 17
 Metrics/PerceivedComplexity:
@@ -1324,7 +1314,6 @@ Style/ZeroLengthPredicate:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 150
   Exclude:
   - 'db/migrate/*.rb'
   - 'test/test_helper.rb'
