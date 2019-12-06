@@ -38,9 +38,6 @@ Layout/AlignHash:
 # Configuration parameters: EnforcedStyle, IndentationWidth.
 # SupportedStyles: with_first_parameter, with_fixed_indentation
 Layout/AlignParameters:
-  SupportedStyles:
-    - with_first_parameter
-    - with_fixed_indentation
   Exclude:
     - 'app/controllers/api/v01/general_controller.rb'
     - 'app/models/book.rb'

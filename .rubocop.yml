@@ -17,3 +17,8 @@ Layout/TrailingEmptyLines:
 Style/BracesAroundHashParameters:
   Enabled: false
 
+Layout/AlignParameters:
+  SupportedStyles:
+    - with_first_parameter
+    - with_fixed_indentation
+
