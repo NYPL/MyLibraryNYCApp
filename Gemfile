@@ -55,7 +55,7 @@ end
 
 group :development, :local do
   gem 'pry', '>= 0.10.0'
-	gem 'pry-rails'
+  gem 'pry-rails'
   gem 'pry-remote'
   gem 'pry-nav', '>= 0.2.4'
   gem 'pry-rescue'
