@@ -29,7 +29,6 @@ gem 'jquery-rails', '> 4.0'
 gem 'jquery-ui-rails'
 gem 'json'
 gem "lograge"
-gem "logstash-event"
 gem 'nokogiri'
 gem 'open_uri_redirections'
 gem 'paper_trail', github: 'paper-trail-gem/paper_trail', branch: '5-stable'
@@ -37,7 +36,6 @@ gem 'pg', '~> 0.18'
 gem 'rack-cors'
 gem 'rubocop','~> 0.59.1', require: false
 gem 'ruby_dig'
-gem 'sendgrid-ruby', '~> 1.1.6'
 gem 'test-unit'
 gem 'will_paginate', '~> 3.0'
 gem 'webmock'
@@ -45,11 +43,7 @@ gem 'yaml_db'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
-  gem 'coffee-rails'
-  # gem 'therubyracer', :platforms => :ruby # https://github.com/sstephenson/execjs#readme for more supported runtimes for ExecJS
-  # gem 'mini-racer'
-  # gem 'libv8', '3.16.14.15'
-  
+  gem 'coffee-rails'  
   gem 'uglifier', '>= 1.0.3'
 end
 
