@@ -1105,7 +1105,7 @@ DEPENDENCIES
   activemodel (= 5.0.7.1)
   addressable
   auto-session-timeout
-  aws-sdk
+  aws-sdk (~> 3)
   client_side_validations (= 16.0.3)
   coffee-rails
   cranky
