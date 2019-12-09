@@ -51,7 +51,8 @@ ActiveAdmin.register User do
       else
         f.input :barcode
       end
-      f.input :pin, label: raw("4-digit PIN<br> It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)")
+      f.input :pin, label: raw("4-digit PIN<br> It cannot contain a digit that is repeated 3 or more times (0001, 5555) and \
+                                cannot be a pair of repeated digits (1212, 6363)")
     end
     f.actions
   end
@@ -102,10 +103,12 @@ ActiveAdmin.register User do
       @page_title = resource.name(true)
     end
     
+    
     # Setting up Strong Parameters
     # You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
     def permitted_params
-      params.permit user: [:email, :password, :password_confirmation, :remember_me, :barcode, :alt_barcodes, :first_name, :last_name, :alt_email, :school_id, :pin]
+      params.permit user: [:email, :password, :password_confirmation, :remember_me, :barcode, :alt_barcodes, :first_name, 
+                           :last_name, :alt_email, :school_id, :pin]
     end
   end
 end

@@ -16,11 +16,13 @@ class HoldChange < ActiveRecord::Base
     send_change_status_email
   end
 
+  
   def send_change_status_email
     # deliver email if status has been changed to error, pending, closed, or cancelled
     HoldMailer.status_change(hold, status, comment).deliver if ['error', 'pending', 'closed', 'cancelled'].include? status
   end
 
+  
   def update_hold
     # puts "updating hold status: ", hold.status, status
     hold.status = status

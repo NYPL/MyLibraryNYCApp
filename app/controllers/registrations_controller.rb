@@ -47,6 +47,7 @@ class RegistrationsController < Devise::RegistrationsController
     render :template => '/devise/registrations/new'
   end
 
+
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
@@ -72,6 +73,7 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+
   def after_update_path_for(resource)
     redirect_url = account_url
     if session[:redirect_after_update]
@@ -80,6 +82,7 @@ class RegistrationsController < Devise::RegistrationsController
     end
     redirect_url
   end
+
 
   # Below code for custom error messages. 
   # Because Devise gem display same attributes from database.
@@ -108,9 +111,11 @@ class RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.sanitize(:sign_up)
   end
 
+
   def user_params
     params.require(:user).permit(:alt_email, :school_id)
   end
+
 
   # Configure permitted parameters for devise
   def configure_permitted_parameters

@@ -43,13 +43,16 @@ class TeacherSet < ActiveRecord::Base
     holds.where(:status => ['new','pending'])
   end
 
+
   def held_by?(user)
     pending_holds_for_user(user).count > 0
   end
 
+
   def availability_string
     AVAILABILITY_LABELS[self.availability]
   end
+
 
   def pending_holds_for_user(user)
     if user
@@ -59,17 +62,20 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+
   #Current user Teacher set holds count
   def holds_count_for_user(user)
     holds = holds_for_user(user)
     holds.present? ? holds.sum(:quantity) : nil
   end
 
+  
   #Current user Teacher set holds
   def holds_for_user(user)
     return [] unless user
     holds.where(:user_id => user.id)
   end
+
 
   def make_slug
     # check for nil title otherwise parameterize will fail
@@ -77,28 +83,34 @@ class TeacherSet < ActiveRecord::Base
     self.slug ||= [parameterized_title, rand(36**6).to_s(36)].join("-")
   end
 
+
   # Poor man's subject... TODO: replace with column in DB
   def subject
     area_of_study
   end
+
 
   def has_subject(title)
     # puts "subjects for #{title}: #{self.subjects.select { |s| puts "'#{s.title}' == '#{title}'";  s.title == title }.inspect}"
     !self.subjects.select { |s| s.title == title }.empty?
   end
 
+
   def subject_key
     subject.parameterize if subject.present?
   end
+
 
   def suitabilities_string
     suitabilities.join('; ')
   end
 
+
   # Fetch first book cover uri, with size = (:small|:medium|:large)
   def image_uri(size = :small)
     books.first.image_uri(size) if books.size > 0
   end
+
 
   def self.for_query(params)
     sets = self.paginate(:page => params[:page])
@@ -112,7 +124,8 @@ class TeacherSet < ActiveRecord::Base
         clauses << "#{table_name}.#{c} ILIKE ?"
       end
       # Match on topics too:
-      clauses << "#{table_name}.id IN (SELECT _S2T.teacher_set_id FROM subjects _S INNER JOIN subject_teacher_sets _S2T ON _S2T.subject_id=_S.id WHERE _S.title ILIKE ?)"
+      clauses << "#{table_name}.id IN (SELECT _S2T.teacher_set_id FROM subjects _S INNER JOIN subject_teacher_sets _S2T ON _S2T.subject_id=_S.id \
+                  WHERE _S.title ILIKE ?)"
 
       vals = [].fill("%#{params[:keyword]}%", 0, clauses.length)
       sets = sets.where(clauses.join(' OR '), *vals)
@@ -148,7 +161,8 @@ class TeacherSet < ActiveRecord::Base
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
-        sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND #{join_alias}.subject_id=#{s}")
+        sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND \
+                          #{join_alias}.subject_id=#{s}")
       end
     end
 
@@ -174,6 +188,7 @@ class TeacherSet < ActiveRecord::Base
 
     sets
   end
+
 
   def self.facets_for_query(qry)
     cache_key = qry.to_sql.sub /\ LIMIT.*/, ''
@@ -229,7 +244,7 @@ class TeacherSet < ActiveRecord::Base
 
       # Tags
       subjects_facets = {:label =>  'subjects', :items => []}
-      _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id') # .having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
+      _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id')
       # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
       # but let's make it 5 consistently now.
       #if !_qry.to_sql.include?('JOIN subject_teacher_sets')
@@ -263,6 +278,7 @@ class TeacherSet < ActiveRecord::Base
     facets
   end
 
+
   def as_json(options = { })
     h = super(options)
     h[:subject]   = subject
@@ -271,10 +287,12 @@ class TeacherSet < ActiveRecord::Base
     h
   end
 
+
   def self.upsert_from_catalog_id(id)
     item = self.api_call "titles/#{id}"
     self.upsert_from_catalog_item item['title'] unless item.nil? || item['title'].nil?
   end
+
 
   def self.upsert_from_catalog_item(item)
     # book = self.find_or_initialize_by_details_url item['details_url']
@@ -283,6 +301,7 @@ class TeacherSet < ActiveRecord::Base
     book.update_from_catalog_item item
     book
   end
+
 
   def update_from_catalog_item(item)
     # puts "create book: #{item['id']}:  #{id}"
@@ -411,8 +430,8 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
-  def update_availability
 
+  def update_availability
     available_copies = 0
     total_copies = 0
 
@@ -436,10 +455,12 @@ class TeacherSet < ActiveRecord::Base
       :total_copies => total_copies
     })
 
-    puts "    Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} avail with #{self.new_or_pending_holds.count} open holds"
+    puts "Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} \
+          avail with #{self.new_or_pending_holds.count} open holds"
     # Update availability status string
     self.recalculate_availability
   end
+
 
   # Called any time availability totals change due to newly scraped data or newly added holds
   # to update the availability string to 'Available' or 'All copies in use'
@@ -514,10 +535,9 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
+
   def add_books_by_isbns(isbns)
-
     successes = 0
-
     puts "    Populating books by ISBNs: #{isbns}"
     isbns.each_with_index do |isbn, i|
       puts "    #{i+1}) #{isbn}:"
@@ -537,6 +557,7 @@ class TeacherSet < ActiveRecord::Base
 
     puts "  #{successes} of #{isbns.size} ISBNs resolved to catalog items"
   end
+
 
   def update_books
     puts "  Update books for #{id}"
@@ -596,9 +617,9 @@ class TeacherSet < ActiveRecord::Base
         self.update_attributes :set_type => list['list']['list_items'].size == 1 ? 'single' : 'multi'
       end
     end
-
     # self.save
   end
+
 
   def self.fetch_new(page=1, limit=25, just_id=nil)
     params = {:q => 'formatcode:(TEACHER_SETS )', :search_type => 'custom'}
@@ -776,6 +797,7 @@ class TeacherSet < ActiveRecord::Base
     return new_subject_string 
   end
 
+  
   # Delete old subjects that do not have any records in the join table,
   # because they are not associated with any teacher sets.
   def prune_subjects(subject_id_array)
@@ -787,6 +809,7 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+  
   # This is called from the bibs_controller.
   # Delete all records for a teacher set in the table TeacherSetNotes, then
   # create new records in that table.
@@ -798,6 +821,7 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+  
   # Calls Bib service for items.
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items and available items in the list
@@ -811,6 +835,7 @@ class TeacherSet < ActiveRecord::Base
     return {bibs_resp: response[:bibs_resp]}
   end
 
+  
   # Calls Bib service for items.
   def get_items_info_from_bibs_service(bibid)
     bibs_resp, items_found = send_request_to_items_microservice(bibid)
@@ -820,6 +845,7 @@ class TeacherSet < ActiveRecord::Base
     return {bibs_resp: bibs_resp, total_count: total_count, available_count: available_count, availability_string: availability_string}
   end
 
+  
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items in the list, the number of items that are
   # available to lend.

@@ -3,8 +3,10 @@
 module ApplicationHelper
   #Sometimes want to re-write devise error messages.
   #Update devise error messages with custom error messages.
-  #Example of resource.errors =  @messages={:alt_email=>["has already been taken"], :pin=>["does not meet our requirements. Please try again."]}>
-  #Example of error_msg_hash = {:alt_email=>["Alternate email has already been taken"], :pin=>["PIN does not meet our requirements. Please try again."]}
+  #Example of resource.errors =  @messages={:alt_email=>["has already been taken"], 
+  #:pin=>["does not meet our requirements. Please try again."]}>
+  #Example of error_msg_hash = {:alt_email=>["Alternate email has already been taken"], 
+  #:pin=>["PIN does not meet our requirements. Please try again."]}
   def custom_devise_error_messages(error_msg_hash={})
     return "" if resource.errors.empty?
     messages = resource.errors.messages.update(error_msg_hash)

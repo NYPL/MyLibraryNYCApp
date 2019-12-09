@@ -13,6 +13,7 @@ ActiveAdmin.register HoldChange do
       #set any other values you might want to initialize
     end
 
+    
     def create
       params[:hold_change].merge!({ admin_user_id: current_admin_user.id })
       create!
@@ -20,7 +21,8 @@ ActiveAdmin.register HoldChange do
   end
 
   sidebar :help do
-    div "All hold changes trigger an email to the requester. Use the Note field to add a note to the requester in the email. Click a Prepared Note to add prebaked language to the text field."
+    div "All hold changes trigger an email to the requester. Use the Note field to add a note to the requester in the email. \
+         Click a Prepared Note to add prebaked language to the text field."
   end
 
   form do |f|

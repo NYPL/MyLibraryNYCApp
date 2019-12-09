@@ -17,7 +17,8 @@ ActiveAdmin.register AdminUser do
     column :last_sign_in_at
     column :sign_in_count
     column "Email Notifications" do |admin_user|
-      link_to  admin_user.email_notifications ? 'On' : 'Off' , url_for(:action => :enable_or_disable, :id => admin_user.id), :method => :put, :confirm => ('Are you sure want to update the e-mail setting?')
+      link_to  admin_user.email_notifications ? 'On' : 'Off' , url_for(:action => :enable_or_disable, :id => admin_user.id), :method => :put, 
+                                                                       :confirm => ('Are you sure want to update the e-mail setting?')
     end
     actions
   end
