@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SchoolsController < ApplicationController
+  
   def index
     @schools = School.active
 
@@ -10,7 +11,7 @@ class SchoolsController < ApplicationController
     end
   end
 
-
+  
   def create
     School.create(school_params)
   end

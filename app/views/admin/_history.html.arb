@@ -85,7 +85,9 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
             'Created'
           else
             output = ''
-            # example of a version's changeset: {"title"=>["Native American History Reference Collection.", "Native American History Reference Collection 2"], "updated_at"=>["2018-09-25T18:33:52.245Z", "2018-09-25T19:51:55.739Z"]}
+            # example of a version's changeset: {"title"=>["Native American History Reference Collection.", 
+            # "Native American History Reference Collection 2"], "updated_at"=>["2018-09-25T18:33:52.245Z", "2018-09-25T19:51:55.739Z"]}
+            
             versions[version_number - 2].changeset.each do |k, v|
               # note that the contents of this block are duplicated below
               next if k == 'updated_at' # we don't need to show updated_at in this column

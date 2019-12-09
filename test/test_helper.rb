@@ -3832,7 +3832,6 @@ class ActiveSupport::TestCase
     )
   end
 
-
   # send_request_to_items_microservice sends an https request
   # to "https://https://qa-platform.nypl.org/api/v0.1/items
   # status of success if Sierra API finds the bib record.
