@@ -11,9 +11,26 @@ Layout/AlignHash:
 Layout/IndentHash:
   Enabled: false
 
-# Layout/TrailingEmptyLines:
-#   Enabled: false
+Layout/TrailingEmptyLines:
+  Enabled: false
 
 Style/BracesAroundHashParameters:
   Enabled: false
+
+Layout/AlignParameters:
+  SupportedStyles:
+    - with_first_parameter
+    - with_fixed_indentation  
+
+Metrics/MethodLength:
+  Max: 40
+
+Metrics/ClassLength:
+  Max: 600
+
+Layout/EmptyLineBetweenDefs:
+  NumberOfEmptyLines: 2
+
+Metrics/LineLength:
+  Max: 150
 
