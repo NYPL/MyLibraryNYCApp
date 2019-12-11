@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'ruby_dig'
-
 class HoldsController < ApplicationController
   include LogWrapper
 
@@ -78,7 +76,7 @@ class HoldsController < ApplicationController
         current_user.update_attributes(params[:settings])
       end
 
-      quantity = params.dig(:query_params, :quantity) ? params.dig(:query_params, :quantity) : @hold.quantity
+      quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
       @hold.quantity = quantity.to_i
       @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
       @hold.teacher_set.save!
