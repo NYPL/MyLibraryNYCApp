@@ -1,20 +1,22 @@
+# frozen_string_literal: false
+
 class ApplicationController < ActionController::Base
-
   protect_from_forgery
-
 
   def append_info_to_payload(payload)
     super
-    payload[:host] = request.host
-    case payload[:status]
-    when 200
-      payload[:level] = "INFO"
-    when payload[:status]  > 200 && payload[:status]  < 400
-      payload[:level] = "DEBUG"
-    when payload[:status]  > 400
-      payload[:level] = "WARNING"
-    when payload[:status]  >= 500
-      payload[:level] = "ERROR"
+    if ActiveRecord::Base.connected? && payload[:status].present?
+      payload[:host] = request.host
+      case payload[:status]
+      when 200
+        payload[:level] = "INFO"
+      when payload[:status]  > 200 && payload[:status]  < 400
+        payload[:level] = "DEBUG"
+      when payload[:status]  > 400
+        payload[:level] = "WARNING"
+      when payload[:status]  >= 500
+        payload[:level] = "ERROR"
+      end
     end
   end
 
@@ -22,11 +24,12 @@ class ApplicationController < ActionController::Base
   ##
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
-    LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start','method' => 'app/controllers/application_controller.rb.after_sign_in_path_for'})
+    LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
+                             'method' => 'app/controllers/application_controller.rb.after_sign_in_path_for'})
     # be careful -- after first access stored_location_for clears to a nil, so read it once
     # and store it in a local var before printing out or any other access
     redirect_url = stored_location_for(:user)
-    if !redirect_url.present?
+    unless redirect_url.present?
       redirect_url = app_url
     end
 

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class TeacherSetsController < ApplicationController
-  before_filter :redirect_to_angular, only: [:index, :show]
+  before_action :redirect_to_angular, only: [:index, :show]
 
   ##
   # GET /teacher_sets.json
@@ -73,8 +75,9 @@ class TeacherSetsController < ApplicationController
     @active_hold = nil
     user_has_ordered_max = false
 
-    #Displays unique titles in teachersets page.
-    ts_books = @set.books.uniq_by(&:cover_uri)
+    # limits book titles to unique ones to mask the problem we've been having
+    # with the teacher_sets detail page puling up duplicate child book records.
+    ts_books = @set.books.select(:cover_uri).distinct
 
     # Max copies value is configured in elastic beanstalk.
     # Max_copies_requestable is the maximum number of teachersets can request.
@@ -109,6 +112,21 @@ class TeacherSetsController < ApplicationController
     LogWrapper.log('DEBUG', {'message' => 'teacher_set_holds.start', 'method' => 'app/controllers/teacher_sets_controller.rb.teacher_set_holds'})
     @set = TeacherSet.find(params[:id])
     @holds = @set.holds_for_user(current_user)
+  end
+
+
+  def create
+    TeacherSet.create(teacherset_params)
+  end
+
+  private
+
+  # Strong parameters: protect object creation and allow mass assignment.
+  def teacherset_params
+    params.permit(:slug, :grade_begin, :grade_end, :availability, :call_number, :description, :details_url, :edition, :id,
+                  :isbn, :language, :lexile_begin, :lexile_end, :notes, :physical_description, :primary_language, :publication_date,
+                  :publisher, :series, :statement_of_responsibility, :sub_title, :title, :books_attributes,
+                  :available_copies, :total_copies, :primary_subject, :bnumber, :set_type, :contents, :last_book_change)
   end
 
 end

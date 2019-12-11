@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register TeacherSet do
   # The line below was causing an error on the teacher set index page.
   # Even after we remove it, we can still search by teacher sets, so it should be removed.

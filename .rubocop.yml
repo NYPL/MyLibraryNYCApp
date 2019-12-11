@@ -8,47 +8,29 @@ Documentation:
 Layout/AlignHash:
   Enabled: false
 
-Layout/EmptyLines:
-  Enabled: false
-
-Layout/EmptyLinesAroundClassBody:
-  Enabled: false
-
-Layout/EmptyLinesAroundMethodBody:
-  Enabled: false
-
-Layout/EmptyLineBetweenDefs:
-  Enabled: false
-
-Layout/IndentationWidth:
-  Enabled: false
-
 Layout/IndentHash:
   Enabled: false
 
-Layout/SpaceInsideHashLiteralBraces:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/LineLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Style/AndOr:
-  Enabled: false
-
-Style/BlockDelimiters:
+Layout/TrailingEmptyLines:
   Enabled: false
 
 Style/BracesAroundHashParameters:
   Enabled: false
 
-Style/NegatedIf:
-  Enabled: false
-  
-Style/Not:
-  Enabled: false
+Layout/AlignParameters:
+  SupportedStyles:
+    - with_first_parameter
+    - with_fixed_indentation  
+
+Metrics/MethodLength:
+  Max: 40
+
+Metrics/ClassLength:
+  Max: 600
+
+Layout/EmptyLineBetweenDefs:
+  NumberOfEmptyLines: 2
+
+Metrics/LineLength:
+  Max: 150
+

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Api::V01::BibsController < Api::V01::GeneralController
   include LogWrapper
 
-  before_filter :set_request_body
-  before_filter :validate_source_of_request
+  before_action :set_request_body
+  before_action :validate_source_of_request
 
   # Receive teacher sets from a POST request.
   # All records are inside @request_body.
@@ -54,50 +56,61 @@ class Api::V01::BibsController < Api::V01::GeneralController
           area_of_study: var_field('690', false),
           physical_description: physical_description,
           details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
-          grade_begin: grade_or_lexile_array('grade')[0] || '', # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
+          # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
+          grade_begin: grade_or_lexile_array('grade')[0] || '', 
           grade_end: grade_or_lexile_array('grade')[1] || '',
-          lexile_begin: grade_or_lexile_array('lexile')[0] || '',
-          lexile_end: grade_or_lexile_array('lexile')[1] || '',
+          lexile_begin: grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
+          lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
           available_copies: ts_items_info[:available_count],
           total_copies: ts_items_info[:total_count],
           availability: ts_items_info[:availability_string]
         )
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "One attribute may be too long.  Error: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "One attribute may be too long.  Error: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         # clean up the area of study field to match the subject field string rules
         teacher_set.clean_primary_subject()
       rescue => exception
         log_error('clean_primary_subject', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating primary subject via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating primary subject via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating subjects via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating subjects via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         teacher_set.update_notes(var_field('500', true))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating notes via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating notes via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         teacher_set.update_included_book_list(teacher_set_record)
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error updating the associated book records via API: #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating the associated book records via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
 
       saved_teacher_sets << teacher_set
-      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
+      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. 
+        Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
         'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
-
-    render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
+    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
 
 
@@ -117,8 +130,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         teacher_set.destroy
       end
     end
-
-    render status: 200, json: { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json
+    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
 
 
@@ -167,23 +179,32 @@ class Api::V01::BibsController < Api::V01::GeneralController
   end
 
 
+    
   # Grades filter supports Pre-K and K
   # Grades = {Pre-K => -1, K => 0}
   # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
+  # Parsing lexile begin/end values has been deprecated, and will no longer work as expected.
   def grade_or_lexile_array(return_grade_or_lexile)
-    grade_and_lexile_json = all_var_fields('521', 'content')
-    return '' if grade_and_lexile_json.blank?
-    grades_resp = get_grades(grade_and_lexile_json)
-    grades_resp.each do |grade_or_lexile_json|
-      begin
-        if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
-          return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
-        elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
-          if grade_or_lexile_json.upcase.include?('PRE')
-            # Prek values: ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek'] - supporting these values only
-            PREK_ARR.each do |val|
-              grades = grade_or_lexile_json.upcase.gsub('.', '').split("#{val}-")
-              return [TeacherSet::PRE_K_VAL, grade_val(grades[1])] if grades.length > 1
+      grade_and_lexile_json = all_var_fields('521', 'content')
+      return '' if grade_and_lexile_json.blank?
+      grades_resp = get_grades(grade_and_lexile_json)
+      grades_resp.each do |grade_or_lexile_json|
+        begin
+          if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
+            return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
+          elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
+            if grade_or_lexile_json.upcase.include?('PRE')
+              # Prek values: ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek'] - supporting these values only
+              PREK_ARR.each do |val|
+                grades = grade_or_lexile_json.upcase.gsub('.', '').split("#{val}-")
+                return [TeacherSet::PRE_K_VAL, grade_val(grades[1])] if grades.length > 1
+              end
+            elsif grade_or_lexile_json.upcase.include?('K')
+              # K values: [K, k] - supporting these values only
+              grade = grade_or_lexile_json.upcase.gsub('.', '').split('K-')[1]
+              return [TeacherSet::K_VAL, grade_val(grade)]
+            else
+              return grade_or_lexile_json.gsub('.', '').split('-')
             end
           elsif grade_or_lexile_json.upcase.include?('K')
             # K values: [K, k] - supporting these values only

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminMailer < ActionMailer::Base
   include LogWrapper
   LOG_TAG = "AdminMailer"
@@ -25,6 +27,7 @@ class AdminMailer < ActionMailer::Base
     end
   end
 
+  
   # Sends an email to let admins know that creating/updating a specific bib record failed
   def teacher_set_update_missing_required_fields(bnumber, title, physical_description)
     begin
@@ -46,8 +49,7 @@ class AdminMailer < ActionMailer::Base
     end
   end
 
-
-  ##
+  
   # Sends an email to let admins know that a request to update item availability has failed.
   def failed_items_controller_api_request(error_code_and_message)
     begin
