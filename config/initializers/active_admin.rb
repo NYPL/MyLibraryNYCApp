@@ -117,7 +117,7 @@ ActiveAdmin.setup do |config|
   #
   # Enable and disable Batch Actions
   #
-  config.batch_actions = true
+  config.batch_actions = false
 
 
   # == Controller Filters
@@ -170,9 +170,12 @@ ActiveAdmin.setup do |config|
   #
   #   config.namespace :admin do |admin|
   #     admin.build_menu :default do |menu|
-  #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
+  #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite1.com", html_options: { target: :blank }
   #     end
   #   end
+
+  # You can disable the menu item for the comments index page:
+  config.comments_menu = false
 
   # == Download Links
   #
