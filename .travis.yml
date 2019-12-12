@@ -50,9 +50,9 @@ deploy:
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_PRODUCTION"
   region: us-east-1
   app: my-library-nyc-app
-  env: my-library-nyc-app-production
+  env: my-library-nyc-app-production25
   bucket_name: elasticbeanstalk-us-east-1-946183545209
-  bucket_path: my-library-nyc-app-production
+  bucket_path: my-library-nyc-app-production25
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: master
