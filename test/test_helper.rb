@@ -19,7 +19,6 @@ require 'minitest'
 require 'minitest/assertions'
 require 'minitest/autorun'
 require 'stringio'
-
 require 'active_support'
 require 'active_support/core_ext'
 require 'logger'
