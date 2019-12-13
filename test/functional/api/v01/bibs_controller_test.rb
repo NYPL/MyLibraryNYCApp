@@ -54,8 +54,8 @@ class Api::BibsControllerTest < ActionController::TestCase
     assert_equal 0, first_teacher_set.grade_begin
     assert_equal 1, first_teacher_set.grade_end
     # lexile grade functionality has been deprecated, and will not work
-    #assert_equal 0, first_teacher_set.lexile_begin
-    #assert_equal nil, first_teacher_set.lexile_end
+    # assert_equal 0, first_teacher_set.lexile_begin
+    # assert_equal nil, first_teacher_set.lexile_end
     assert first_teacher_set.availability.present?
     assert first_teacher_set.teacher_set_notes.any?
     assert first_teacher_set.subject_teacher_sets.count == 2
