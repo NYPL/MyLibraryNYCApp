@@ -32,8 +32,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
       if bnumber.blank? || title.blank? || physical_description.blank?
         AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description).deliver
-        log_error('create_or_update_teacher_sets', "create_or_update_teacher_sets cannot update bib with missing bnumber (#{bnumber || 'nil'}), \
-          title (#{title || 'nil'}) or physical_description (#{physical_description || 'nil'}).")
+        log_error('create_or_update_teacher_sets', StandardError.new("create_or_update_teacher_sets cannot update bib \
+          with missing bnumber (#{bnumber || 'nil'}), \
+          title (#{title || 'nil'}) or physical_description (#{physical_description || 'nil'})."))
         next
       end
 
