@@ -36,7 +36,7 @@ MyLibraryNYC::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-dev-1002.us-east-1.elasticbeanstalk.com' }
+  config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-development.us-east-1.elasticbeanstalk.com' }
   config.action_mailer.perform_deliveries = false
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
