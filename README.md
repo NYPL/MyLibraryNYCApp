@@ -143,13 +143,13 @@ and
 Order Multiple Teacher Sets Configuration
 ========================
 ```
-MAXIMUM_COPIES_REQUESTABLE :5  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maximum teacherset orders, we can update in AWS ElasticBeanstalk Configuration.
+MAXIMUM_COPIES_REQUESTABLE: 5  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maximum teacherset orders, we can update in AWS ElasticBeanstalk Configuration.
 ```
 
 Show Maintenance Banner Configuration
 ========================
 ```
-SHOW_MAINTENANCE_BANNER : TRUE  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maintenanct banner, we can update in AWS ElasticBeanstalk Configuration.
+SHOW_MAINTENANCE_BANNER: TRUE  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maintenanct banner, we can update in AWS ElasticBeanstalk Configuration.
 ```
 
 Rubocop
