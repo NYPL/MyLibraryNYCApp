@@ -17,6 +17,12 @@
 
 <body>
   <%= render "layouts/navigation" %>
+  
+  <% if ENV['SHOW_BANNER'] && ENV['SHOW_BANNER'].to_s.downcase == "true" %>
+    <div id='banner_id'>
+      <%= render "layouts/banner" %>
+    </div>
+  <% end %>
   <div id='error_messages_id'>
     <%= render "layouts/messaging" %>
   </div>
