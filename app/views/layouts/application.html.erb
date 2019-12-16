@@ -17,8 +17,8 @@
 
 <body>
   <%= render "layouts/navigation" %>
-  
-  <% if ENV['SHOW_BANNER'] && ENV['SHOW_BANNER'].to_s.downcase == "true" %>
+
+  <% if ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.downcase == "true" %>
     <div id='banner_id'>
       <%= render "layouts/banner" %>
     </div>
