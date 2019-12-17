@@ -1,0 +1,5 @@
+<% if ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.downcase == "true" %>
+  <div class="alert main-alert fade-in-out-longer" >
+    <%= ENV['MAINTENANCE_BANNER_TEXT'] %>
+  </div>
+<% end %>
