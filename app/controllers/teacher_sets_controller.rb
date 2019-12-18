@@ -77,8 +77,7 @@ class TeacherSetsController < ApplicationController
 
     # limits book titles to unique ones to mask the problem we've been having
     # with the teacher_sets detail page puling up duplicate child book records.
-    # Note: if uniq doesn't do it, try distinct instead.
-    ts_books = @set.books.uniq(&:cover_uri)
+    ts_books = @set.books.select('DISTINCT ON (books.cover_uri) books.cover_uri, books.id, books.title')
 
     # Max copies value is configured in elastic beanstalk.
     # Max_copies_requestable is the maximum number of teachersets can request.
