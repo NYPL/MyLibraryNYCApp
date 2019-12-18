@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Api::ItemsControllerTest < MiniTest::Test
@@ -85,6 +87,7 @@ class Api::ItemsControllerTest < MiniTest::Test
       'debugInfo' => []
     }
   end
+
 
   def bibid_missing_req_body_for_item
     { 'data' => [ {
