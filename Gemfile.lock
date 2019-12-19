@@ -863,8 +863,6 @@ GEM
       jquery-rails (~> 4.3)
       js_regex (~> 3.1)
       rails (>= 5.0.0.1, < 6.1)
-    codeclimate-test-reporter (1.0.7)
-      simplecov
     coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -1107,7 +1105,6 @@ DEPENDENCIES
   auto-session-timeout
   aws-sdk (~> 3)
   client_side_validations (= 16.0.3)
-  codeclimate-test-reporter
   coffee-rails
   cranky
   database_cleaner
