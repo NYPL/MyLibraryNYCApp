@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-ENV['RAILS_ENV'] = 'test'
 require 'simplecov'
 SimpleCov.start 'rails'
-
+ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
+
+
 require 'rails/test_help'
 require 'webmock/test_unit'
 require 'factories/user_factory'
