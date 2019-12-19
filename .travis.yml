@@ -27,9 +27,10 @@ script:
 - ruby -Itest test/unit/book_test.rb
 - ruby -Itest test/unit/teacher_set_test.rb
 - ruby -Itest test/unit/ingest_rake_task_test.rb
+- coverage report --fail-under=100
 - ruby -Itest test/integration/user_flow_test.rb
 - ruby -Itest test/functional/api/v01/bibs_controller_test.rb
-- coverage report --fail-under=100
+
 
 deploy:
 - provider: elasticbeanstalk
