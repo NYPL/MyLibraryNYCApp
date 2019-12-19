@@ -61,4 +61,5 @@ group :test do
   gem 'minitest', '~> 5.6.1'
   gem 'database_cleaner'
   gem 'simplecov', require: false
+  gem 'codeclimate-test-reporter'
 end
