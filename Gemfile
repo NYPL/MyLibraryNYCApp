@@ -41,7 +41,7 @@ gem 'will_paginate', '~> 3.0'
 gem 'webmock'
 gem 'yaml_db'
 gem 'rails-perftest', '~> 0.0.7'
-gem 'simplecov'
+gem 'simplecov', '~> 0.12.0'
 
 
 group :assets do # Gems used only for assets and not required in production environments by default.
