@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+Rails.application.eager_load!
 require 'simplecov'
 SimpleCov.start 'rails' do
   add_filter '/bin/'
