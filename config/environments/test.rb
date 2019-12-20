@@ -39,5 +39,5 @@ MyLibraryNYC::Application.configure do
 
   config.action_mailer.perform_deliveries = false
 
-  config.eager_load = false
+  config.eager_load = true
 end
