@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Cranky::Factory
   require_relative 'school_factory'
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Exceptions
 
   # This class is created to throw exceptions if

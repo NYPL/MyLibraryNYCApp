@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CatalogItemMethods
 
   CATALOG_DOMAIN = 'ilsstaff.nypl.org:2082'
@@ -82,10 +84,10 @@ module CatalogItemMethods
     end
 
     def update_bnumber!
-      if self.details_url && self.details_url.include?('record=')
+      if self.details_url && self&.details_url&.include?('record=')
         self.bnumber = self.details_url.split('record=')[1].split('~')[0]
         self.save
-      elsif self.details_url && self.details_url.include?('bibliocommons.com/item/show/') && self.details_url[-2..-1] == '052'
+      elsif self.details_url && self&.details_url&.include?('bibliocommons.com/item/show/') && self.details_url[-2..-1] == '052'
         self.bnumber = self.details_url.split('bibliocommons.com/item/show/')[1].gsub('052', '')
         self.save
       end
