@@ -16,6 +16,7 @@
 </head>
 <body class="body-<%= controller.controller_name %>-<%= controller.action_name %>">
   <%= render "layouts/navigation" %>
+  <%= render "layouts/banner" %>
   <%= render "layouts/messaging" %>
   <div id="main" class="container <%= controller.controller_name %>-<%= controller.action_name %>" scroll-event ng-class="{floater:boolMakeFloat}" ng-app="MyLibraryNYCApp" ng-view>
     <%= yield %>

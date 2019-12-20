@@ -17,6 +17,7 @@
 
 <body>
   <%= render "layouts/navigation" %>
+  <%= render "layouts/banner" %>
   <%= render "layouts/messaging" %>
   <div id="main" class="container <%= controller.controller_name %>-<%= controller.action_name %>">
     <%= render "layouts/breadcrumb" unless controller.controller_name == "home" && controller.action_name == "index" %>
