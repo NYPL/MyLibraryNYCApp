@@ -40,7 +40,6 @@ gem 'test-unit'
 gem 'will_paginate', '~> 3.0'
 gem 'webmock'
 gem 'yaml_db'
-gem 'rails-perftest', '~> 0.0.7'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
@@ -59,6 +58,6 @@ end
 
 group :test do
   gem 'minitest', '~> 5.6.1'
-  gem 'simplecov', '~> 0.12.0', require: false
+  gem 'simplecov', '~> 0.17.1'
   gem 'database_cleaner'
 end
