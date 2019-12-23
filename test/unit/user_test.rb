@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'simplecov'
 require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   include AwsDecrypt
