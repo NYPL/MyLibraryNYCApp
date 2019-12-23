@@ -2,13 +2,13 @@
 
 output = (ENV['MINITEST_REPORT_FORMAT'] || 'HTML').upcase
 
-  require 'simplecov'
-  require 'simplecov-cobertura'
-  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter if output == 'XML'
-  SimpleCov.start do
-    add_filter 'test'
-    command_name 'Mintest'
-  end
+require 'simplecov'
+require 'simplecov-cobertura'
+SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter if output == 'XML'
+SimpleCov.start do
+  add_filter 'test'
+  command_name 'Mintest'
+end
 require File.expand_path('../../config/environment', __FILE__)
 
 
