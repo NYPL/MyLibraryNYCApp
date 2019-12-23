@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-SimpleCov.start 'rails' do
-  add_filter '/bin/'
-  add_filter '/db/'
-  add_filter '/test/' # for minitest
-end
-ENV['RAILS_ENV'] = 'test'
+output = (ENV['MINITEST_REPORT_FORMAT'] || 'HTML').upcase
+
+  require 'simplecov'
+  require 'simplecov-cobertura'
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter if output == 'XML'
+  SimpleCov.start do
+    add_filter 'test'
+    command_name 'Mintest'
+  end
 require File.expand_path('../../config/environment', __FILE__)
 
 
