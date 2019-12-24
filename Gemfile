@@ -58,6 +58,6 @@ end
 
 group :test do
   gem 'minitest', '~> 5.6.1'
-  gem 'simplecov', '~> 0.17.1'
+  gem 'coveralls', require: false
   gem 'database_cleaner'
 end

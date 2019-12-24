@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-output = (ENV['MINITEST_REPORT_FORMAT'] || 'HTML').upcase
-
 require 'simplecov'
-require 'simplecov-cobertura'
-SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter if output == 'XML'
+require 'coveralls'
+Coveralls.wear!('rails')
+
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.start do
-  add_filter 'test'
-  command_name 'Mintest'
+  add_filter 'app/secrets'
 end
-require File.expand_path('../../config/environment', __FILE__)
 
 
 require 'rails/test_help'
