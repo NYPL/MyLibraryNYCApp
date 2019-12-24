@@ -3,35 +3,21 @@ cache:
   directories:
     - /home/travis/.rvm/
 rvm:
-- 2.5.7  # 2019-10-16: updated for rails upgrade
-before_install:
-  - rvm use 2.5.7 --install --binary --fuzzy  # 2019-10-16: added to fix errors when upgrading rails env
-  #- gem update --system
-  #- gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
-  - gem --version
-  #- gem install bundler:2.5.0
-  #- gem install bundler:1.17.3
-  #- gem pristine bundler
-  - gem install bundler -v '< 2'  # 2019-10-16: added to fix errors when upgrading rails env
-  - "bundle config --global github.https true"  # 2019-10-16: added to fix errors when upgrading rails env
-before_script:
-  - bundle exec rubocop
+- 2.2.10
 services:
 - postgresql
 script:
 - bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
-- bundle exec rake db:migrate RAILS_ENV=test # 2019-10-16: added to fix errors when upgrading rails env
 - bundle exec rake db:migrate
-- ruby -Itest test/unit/user_test.rb
-- ruby -Itest test/unit/book_test.rb
-- ruby -Itest test/unit/teacher_set_test.rb
-- ruby -Itest test/unit/ingest_rake_task_test.rb
-- ruby -Itest test/integration/user_flow_test.rb
-- ruby -Itest test/functional/api/v01/bibs_controller_test.rb
-- coverage report --fail-under=10
-
-
+- bundle exec rake combined_tests:test
+#- ruby -Itest test/unit/user_test.rb
+#- ruby -Itest test/unit/book_test.rb
+#- ruby -Itest test/unit/teacher_set_test.rb
+#- ruby -Itest test/unit/ingest_rake_task_test.rb
+#- ruby -Itest test/integration/user_flow_test.rb
+#- ruby -Itest test/functional/exceptions_controller_test.rb
+#- ruby -Itest test/functional/api/v01/bibs_controller_test.rb
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
@@ -39,9 +25,9 @@ deploy:
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_DEVELOPMENT"
   region: us-east-1
   app: my-library-nyc-app
-  env: my-library-nyc-app-dev-1002
+  env: my-library-nyc-app-development
   bucket_name: elasticbeanstalk-us-east-1-224280085904
-  bucket_path: my-library-nyc-app-dev-1002
+  bucket_path: my-library-nyc-app-development
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: development
@@ -51,7 +37,7 @@ deploy:
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_QA"
   region: us-east-1
   app: my-library-nyc-app
-  env: my-library-nyc-app-qa25
+  env: my-library-nyc-app-qa
   bucket_name: elasticbeanstalk-us-east-1-946183545209
   bucket_path: my-library-nyc-app-qa
   on:
@@ -63,9 +49,9 @@ deploy:
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_PRODUCTION"
   region: us-east-1
   app: my-library-nyc-app
-  env: my-library-nyc-app-production25
+  env: my-library-nyc-app-production
   bucket_name: elasticbeanstalk-us-east-1-946183545209
-  bucket_path: my-library-nyc-app-production25
+  bucket_path: my-library-nyc-app-production
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: master

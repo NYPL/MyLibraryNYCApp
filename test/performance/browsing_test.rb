@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+=begin
 
 require 'test_helper'
 require 'rails/performance_test_help'
@@ -12,3 +13,4 @@ class BrowsingTest < ActionDispatch::PerformanceTest
     get '/'
   end
 end
+=end
