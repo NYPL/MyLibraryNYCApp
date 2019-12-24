@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require "rake/testtask"
+
 Rake::Task['test:run'].clear
 
 namespace :combined_tests do
