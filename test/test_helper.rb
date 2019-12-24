@@ -24,6 +24,15 @@ require 'active_support'
 require 'active_support/core_ext'
 require 'logger'
 
+
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_filter '/bin/'
+  add_filter '/db/'
+  add_filter '/test/' # for minitest
+end
+
+
 MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
   "data": [
     {

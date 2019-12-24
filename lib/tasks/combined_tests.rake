@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# our code runs without gem_tasks, but it is the standard line to include.
+# if have issues, bring the line back into code.
+# require "bundler/gem_tasks"
 require "rake/testtask"
 
 Rake::Task['test:run'].clear
