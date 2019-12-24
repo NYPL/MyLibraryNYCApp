@@ -30,6 +30,7 @@ script:
 # - ruby -Itest test/integration/user_flow_test.rb
 # - ruby -Itest test/functional/api/v01/bibs_controller_test.rb
 - bundle exec rake combined_tests:test
+- coverage report --fail-under=10
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
