@@ -31,6 +31,9 @@ SimpleCov.start 'rails' do
   add_filter '/db/'
   add_filter '/test/' # for minitest
 end
+SimpleCov.at_exit do
+  SimpleCov.minimum_coverage 90
+end
 
 
 MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
