@@ -21,17 +21,17 @@ namespace :combined_tests do
       'test/functional/exceptions_controller_test.rb',
       'test/functional/api/v01/bibs_controller_test.rb',
       'test/unit/user_test.rb', 'test/unit/book_test.rb'
-    ].shuffle()
-    #t.test_files = Rake::FileList['test/unit/user_test.rb', "test/unit/book_test.rb",
+    ].shuffle
+    # t.test_files = Rake::FileList['test/unit/user_test.rb', "test/unit/book_test.rb",
     #  'test/unit/teacher_set_test.rb', 'test/unit/ingest_rake_task_test.rb',
     #  'test/integration/user_flow_test.rb', 'test/functional/exceptions_controller_test.rb',
     #  'test/functional/api/v01/bibs_controller_test.rb'].shuffle()
 
     t.verbose = false
-  #end
+  # end
   end
 
 
   # set the test task as default for safety
-  #task default: :test2
+  # task default: :test2
 end
