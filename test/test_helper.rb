@@ -26,6 +26,7 @@ require 'logger'
 
 
 require 'simplecov'
+# Note: minimum coverage config can also maybe happen outside, and before the start block.
 SimpleCov.start 'rails' do
   # fail unit tests if total coverage dips below acceptable limit
   SimpleCov.minimum_coverage 7
