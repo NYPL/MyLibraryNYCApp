@@ -27,14 +27,14 @@ require 'logger'
 
 require 'simplecov'
 SimpleCov.start 'rails' do
+  SimpleCov.minimum_coverage 90
+  SimpleCov.minimum_coverage_by_file 10
   add_filter '/bin/'
   add_filter '/db/'
   add_filter '/test/' # for minitest
 end
-SimpleCov.at_exit do
-  SimpleCov.minimum_coverage 90
-  SimpleCov.minimum_coverage_by_file 10
-end
+# SimpleCov.at_exit do
+# end
 
 
 MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
