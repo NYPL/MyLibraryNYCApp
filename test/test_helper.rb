@@ -27,14 +27,14 @@ require 'logger'
 
 require 'simplecov'
 SimpleCov.start 'rails' do
-  SimpleCov.minimum_coverage 90
-  SimpleCov.minimum_coverage_by_file 10
+  # fail unit tests if total coverage dips below acceptable limit
+  SimpleCov.minimum_coverage 7
+  # fail unit tests if any file's individual coverage dips below acceptable limit
+  SimpleCov.minimum_coverage_by_file 0
   add_filter '/bin/'
   add_filter '/db/'
   add_filter '/test/' # for minitest
 end
-# SimpleCov.at_exit do
-# end
 
 
 MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
