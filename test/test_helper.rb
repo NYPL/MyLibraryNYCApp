@@ -33,6 +33,7 @@ SimpleCov.start 'rails' do
 end
 SimpleCov.at_exit do
   SimpleCov.minimum_coverage 90
+  SimpleCov.minimum_coverage_by_file 10
 end
 
 
