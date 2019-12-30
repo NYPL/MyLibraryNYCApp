@@ -1,14 +1,12 @@
 language: ruby
 cache:
   bundler
-  # directories:
-  #  - /home/travis/.rvm/
+  directories:
+    - /home/travis/.rvm/
 rvm:
 - 2.5.7  # 2019-10-16: updated for rails upgrade
 before_install:
   - rvm use 2.5.7 --install --binary --fuzzy  # 2019-10-16: added to fix errors when upgrading rails env
-  #- gem update --system
-  #- gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
   - gem --version
   - gem install bundler -v '< 2'  # 2019-10-16: added to fix errors when upgrading rails env
   - "bundle config --global github.https true"  # 2019-10-16: added to fix errors when upgrading rails env
@@ -24,7 +22,6 @@ script:
 # recreate test database from db/schema.rb
 - bundle exec rake db:schema:load
 # - bundle exec rake db:test:prepare # NOTE: might need this later.
-# - bundle exec rake spec # (need?)
 - bundle exec rake combined_tests:test
 deploy:
 - provider: elasticbeanstalk
