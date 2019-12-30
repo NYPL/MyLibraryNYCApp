@@ -23,8 +23,9 @@ script:
 - psql -c "CREATE DATABASE mln_test;" -U postgres
 # - bundle exec rake db:migrate RAILS_ENV=test # 2019-10-16: added to fix errors when upgrading rails env
 # - bundle exec rake db:migrate
-- bundle exec rake db:schema:load --trace
-# - bundle exec rake db:test:prepare # (need?)
+# recreate test database from db/schema.rb
+- bundle exec rake db:schema:load
+# - bundle exec rake db:test:prepare # NOTE: might need this later.
 # - bundle exec rake spec # (need?)
 - bundle exec rake combined_tests:test
 deploy:
