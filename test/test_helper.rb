@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+# Note: minimum coverage config can also maybe happen outside, and before the start block.
+SimpleCov.start 'rails' do
+  add_filter '/bin/'
+  add_filter '/db/'
+end
+# fail unit tests if total coverage dips below acceptable limit
+SimpleCov.minimum_coverage 25
+# fail unit tests if any file's individual coverage dips below acceptable limit
+SimpleCov.minimum_coverage_by_file 0
+
+
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
@@ -23,19 +35,6 @@ require 'stringio'
 require 'active_support'
 require 'active_support/core_ext'
 require 'logger'
-
-
-require 'simplecov'
-# Note: minimum coverage config can also maybe happen outside, and before the start block.
-SimpleCov.start 'rails' do
-  # fail unit tests if total coverage dips below acceptable limit
-  SimpleCov.minimum_coverage 7
-  # fail unit tests if any file's individual coverage dips below acceptable limit
-  SimpleCov.minimum_coverage_by_file 0
-  add_filter '/bin/'
-  add_filter '/db/'
-  add_filter '/test/' # for minitest
-end
 
 
 MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
@@ -3832,8 +3831,8 @@ class ActiveSupport::TestCase
       stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=#{ 9781896580601 + x }").
         with(
           headers: {
-      	  'Authorization'=>'Bearer testoken',
-      	  'Content-Type'=>'application/json'
+          'Authorization'=>'Bearer testoken',
+          'Content-Type'=>'application/json'
           }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {}
       )
     end
