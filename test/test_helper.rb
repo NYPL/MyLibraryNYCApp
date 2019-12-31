@@ -5,6 +5,7 @@ require 'simplecov'
 SimpleCov.start 'rails' do
   add_filter '/bin/'
   add_filter '/db/'
+  add_filter '/test/'
 end
 # fail unit tests if total coverage dips below acceptable limit
 SimpleCov.minimum_coverage 25
@@ -3831,16 +3832,16 @@ class ActiveSupport::TestCase
       stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=#{ 9781896580601 + x }").
         with(
           headers: {
-          'Authorization'=>'Bearer testoken',
-          'Content-Type'=>'application/json'
+            'Authorization'=>'Bearer testoken',
+            'Content-Type'=>'application/json'
           }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {}
       )
     end
     stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=123456789").
       with(
         headers: {
-        'Authorization'=>'Bearer testoken',
-        'Content-Type'=>'application/json'
+          'Authorization'=>'Bearer testoken',
+          'Content-Type'=>'application/json'
         }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {}
     )
   end
