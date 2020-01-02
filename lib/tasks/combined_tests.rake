@@ -26,6 +26,9 @@ namespace :combined_tests do
       'test/functional/exceptions_controller_test.rb',
       'test/functional/api/v01/bibs_controller_test.rb',
       'test/functional/teacher_sets_controller_test.rb',
+      'test/functional/home_controller_test.rb',
+      'test/functional/holds_controller_test.rb',
+      'test/functional/books_controller_test.rb',
       'test/unit/user_test.rb', 'test/unit/book_test.rb'
     ].shuffle
 
