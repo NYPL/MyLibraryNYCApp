@@ -124,7 +124,7 @@ class TeacherSetsController < ApplicationController
 
   # Strong parameters: protect object creation and allow mass assignment.
   def teacherset_params
-    params.permit(:description, :title, :edition, :id,
+    params.permit(:slug, :grade_begin, :grade_end, :availability, :call_number, :description, :details_url, :edition, :id,
                   :isbn, :language, :lexile_begin, :lexile_end, :notes, :physical_description, :primary_language, :publication_date,
                   :publisher, :series, :statement_of_responsibility, :sub_title, :title, :books_attributes,
                   :available_copies, :total_copies, :bnumber, :set_type, :contents, :last_book_change)

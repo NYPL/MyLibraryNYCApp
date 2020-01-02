@@ -21,5 +21,7 @@ class TeacherSetsControllerTest < ActionController::TestCase
 
   test "should create teacher_set" do
     post :create, params: {teacher_set: {description: @teacher_set.description, title: @teacher_set.title}}
+    binding.pry
+    assert_redirected_to teacher_set_path(TeacherSet.last)
   end
 end
