@@ -1,5 +1,18 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+# Note: minimum coverage config can also maybe happen outside, and before the start block.
+SimpleCov.start 'rails' do
+  add_filter '/bin/'
+  add_filter '/db/'
+  add_filter '/test/' # for minitest
+end
+# fail unit tests if total coverage dips below acceptable limit
+SimpleCov.minimum_coverage 25
+# fail unit tests if any file's individual coverage dips below acceptable limit
+SimpleCov.minimum_coverage_by_file 0
+
+
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
@@ -23,6 +36,7 @@ require 'stringio'
 require 'active_support'
 require 'active_support/core_ext'
 require 'logger'
+
 
 MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
   "data": [

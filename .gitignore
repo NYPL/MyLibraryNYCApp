@@ -30,3 +30,6 @@
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Coverage reports produced by SimpleCov
+/coverage
