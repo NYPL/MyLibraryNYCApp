@@ -19,7 +19,12 @@ class TeacherSetsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  #Assertion(assert_no_difference) that the result of evaluating an expression is not changed before and after invoking the passed in block.
+  #Creates teacher set.
   test "should create teacher_set" do
-    post :create, params: {teacher_set: {description: @teacher_set.description, title: @teacher_set.title}}
+    assert_no_difference 'TeacherSet.count' do
+      post :create, params: {teacher_set: {description: @teacher_set.description, title: @teacher_set.title}}
+    end
+    assert_response :success
   end
 end
