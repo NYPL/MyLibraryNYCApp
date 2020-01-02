@@ -2,7 +2,7 @@
 
 class TeacherSetsController < ApplicationController
 
-  before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] = 'test'
+  before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
 
   ##
   # GET /teacher_sets.json
