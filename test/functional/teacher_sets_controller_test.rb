@@ -5,7 +5,7 @@ require 'test_helper'
 class TeacherSetsControllerTest < ActionController::TestCase
 
   setup do
-    @teacher_set = teacher_sets(:one)
+    @teacher_set = teacher_sets(:teacher_set_one)
   end
 
   test "should get index" do
