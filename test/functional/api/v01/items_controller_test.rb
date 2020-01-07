@@ -153,21 +153,20 @@ class Api::ItemsControllerTest < MiniTest::Test
   private
 
   def req_body_for_item
-      [ {
-          'nyplSource' => 'sierra-nypl', 
-          'bibIds' => [
-            '998'
-          ],
-          'status' => {
-            'code' => '-', 
-            'display' => 'AVAILABLE', 
-            'duedate' => '2011-04-26T16:16:00-04:00'
-          },
-        } ]
-    
+    [ {
+      'nyplSource' => 'sierra-nypl', 
+      'bibIds' => [
+        '998'
+      ],
+      'status' => {
+        'code' => '-', 
+        'display' => 'AVAILABLE', 
+        'duedate' => '2011-04-26T16:16:00-04:00'
+      },
+    } ]
   end
 
-
+  
   def bibid_missing_req_body_for_item
     [ 
       {
@@ -181,6 +180,7 @@ class Api::ItemsControllerTest < MiniTest::Test
       } 
     ]
   end
+  
 
   def nypl_source_missing_req_body_for_item
     [ 
