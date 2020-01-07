@@ -148,26 +148,12 @@ MAXIMUM_COPIES_REQUESTABLE :5  - This is a configuration value in AWS ElasticBea
 
 Show Maintenance Banner Configuration
 ========================
-```
-SHOW_MAINTENANCE_BANNER: TRUE  - This is a configuration value in AWS ElasticBeanstalk. In future if anyone want to change the value of maintenanct banner, we can update in AWS ElasticBeanstalk Configuration.
+```SHOW_MAINTENANCE_BANNER: TRUE``` 
+This parameter can be set in the ElasticBeanstalk environment's Software config console area.  
+The parameter should be set to the string `TRUE` to turn on the banner, which is coded in app/views/layouts/angular.html.erb and app/views/layouts/application.html.erb.
 
-This parameter should be set to the string true to turn on the banner, which is set in app/views/layouts/angular.html.erb and app/views/layouts/application.html.erb.
-
-MAINTENANCE_BANNER_TEXT: 'Maintenance banner text'
-
-This parameter should be set to the string true to turn on the banner, which is set in the MAINTENANCE_BANNER_TEXT environment variable.
-```
-
-
-Show Maintenance Banner Configuration
-========================
-SHOW_MAINTENANCE_BANNER: TRUE
-This parameter can be set in the ElasticBeanstalk AWS console. 
-It should be set to the string 'TRUE' to turn on the banner. The banner text is set in the `MAINTENANCE_BANNER_TEXT` parameter, below.
-
-MAINTENANCE_BANNER_TEXT: 'Maintenance banner text' 
-This parameter can be set in the ElasticBeanstalk AWS console. 
-It should be set to the value which we wish to appear in the banner. It will only appear if the `SHOW_MAINTENANCE_BANNER` parameter above is set to `TRUE`.
+```MAINTENANCE_BANNER_TEXT: 'Maintenance banner text'```
+It should be set to the string message that is to appear on the maintenance banner.  It will only appear if the `SHOW_MAINTENANCE_BANNER` parameter above is set to `TRUE`.
 
 
 Rubocop
