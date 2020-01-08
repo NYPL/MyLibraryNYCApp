@@ -97,7 +97,8 @@ ActiveAdmin.register_page "Dashboard" do
 
     columns do
       column do
-        h2 "New"
+        # When we launch the new Rails5 upgraded MLN app we we would like to turn the R3 version to just show a maintenance page.
+        h2 "#{ENV['MAINTENANCE_BANNER_TEXT']}"
         if Hold.unseen.count == 0
           div 'No new holds'
         else
