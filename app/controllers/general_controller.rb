@@ -4,4 +4,3 @@ class GeneralController < ApplicationController
     render partial: 'layouts/maintenance_banner'
   end
 end
-
