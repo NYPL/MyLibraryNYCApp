@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20190701173109) do
+ActiveRecord::Schema.define(:version => 20191031152524) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -116,8 +116,8 @@ ActiveRecord::Schema.define(:version => 20190701173109) do
   create_table "schools", :force => true do |t|
     t.string   "name"
     t.integer  "campus_id"
-    t.string   "code",           :limit => 8
-    t.boolean  "active",                      :default => false
+    t.string   "code",           :limit => 32
+    t.boolean  "active",                       :default => false
     t.string   "address_line_1"
     t.string   "address_line_2"
     t.string   "state"
@@ -197,18 +197,18 @@ ActiveRecord::Schema.define(:version => 20190701173109) do
     t.datetime "updated_at",                                :null => false
     t.integer  "available_copies"
     t.integer  "total_copies"
-    t.string   "primary_subject"
+    t.string   "area_of_study"
     t.string   "bnumber",                     :limit => 20
     t.text     "set_type"
     t.text     "contents"
     t.text     "last_book_change"
   end
 
+  add_index "teacher_sets", ["area_of_study"], :name => "index_area_of_study"
   add_index "teacher_sets", ["availability"], :name => "index_teacher_sets_availaibilty"
   add_index "teacher_sets", ["bnumber"], :name => "index_teacher_sets_bnumber", :unique => true
   add_index "teacher_sets", ["grade_begin", "grade_end"], :name => "index_teacher_sets_grades"
   add_index "teacher_sets", ["lexile_begin", "lexile_end"], :name => "index_teacher_sets_lexile"
-  add_index "teacher_sets", ["primary_subject"], :name => "index_primary_subject"
   add_index "teacher_sets", ["set_type"], :name => "index_teacher_set_type"
   add_index "teacher_sets", ["title"], :name => "index_teacher_sets_title"
 

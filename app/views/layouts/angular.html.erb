@@ -16,8 +16,12 @@
 </head>
 <body class="body-<%= controller.controller_name %>-<%= controller.action_name %>">
   <%= render "layouts/navigation" %>
-  <%= render "layouts/messaging" %>
-  <div id="main" class="container <%= controller.controller_name %>-<%= controller.action_name %>" scroll-event ng-class="{floater:boolMakeFloat}" ng-app="MyLibraryNYCApp" ng-view>
+  <%= render "layouts/banner" %>
+  <div id='error_messages_id' ng-hide='hideVisible'>
+    <%= render "layouts/messaging" %>
+  </div>
+
+  <div id="main" ng-click="hideErrorDiv()" class="container <%= controller.controller_name %>-<%= controller.action_name %>" scroll-event ng-class="{floater:boolMakeFloat}" ng-app="MyLibraryNYCApp" ng-view>
     <%= yield %>
   </div>
   <%= render "layouts/footer" %>
