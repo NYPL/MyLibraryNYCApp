@@ -1,5 +1,11 @@
 MyLibraryNYC::Application.routes.draw do
 
+  # When we launch the new Rails5 upgraded MLN app we we would like to turn the R3 version to just show a maintenance page.
+  # root :to => 'home#index'
+
+  root :to => 'general#maintenance_banner'
+  get '*path', to: 'general#maintenance_banner'
+
   devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
 
   devise_scope :user do
