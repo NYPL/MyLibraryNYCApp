@@ -82,7 +82,11 @@ MyLibraryNYC::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'home#index'
+
+  # When we launch the new Rails5 upgraded MLN app we we would like to turn the R3 version to just show a maintenance page.
+  # root :to => 'home#index'
+  root :to => 'general#maintenance_banner'
+
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
