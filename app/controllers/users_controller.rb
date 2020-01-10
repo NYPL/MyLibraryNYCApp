@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 
   # Strong parameters: protect object creation and allow mass assignment.
   def user_params
-    params.require(:email, :encrypted_password).permit(:email, :password, :password_confirmation, :remember_me,
+    params.permit(:email, :password, :password_confirmation, :remember_me,
                                                        :barcode, :alt_barcodes, :first_name, :last_name, :alt_email, :school_id, :pin)
   end
 end

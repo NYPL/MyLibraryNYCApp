@@ -2,26 +2,27 @@
 
 require 'test_helper'
 
-class TeacherSetsControllerTest < ActionController::TestCase
+class UsersControllerTest < ActionController::TestCase
 
   setup do
-    @teacher_set = teacher_sets(:teacher_set_one)
+    @user = users(:user_one)
   end
 
-  test "should get index" do
-    get :index
-    assert_response :success
-    assert_not_nil assigns(:teacher_sets)
-  end
-
-  test "should show teacher_set" do
-    get :show, params: { id: @teacher_set.id }
+  test "should get check_email" do
+    mock_check_email_request(@user.email)
+    get :check_email, params: {email: @user.email}
     assert_response :success
   end
 
-  test "should create teacher_set" do
-    assert_no_difference 'TeacherSet.count' do
-      post :create, params: {teacher_set: {description: @teacher_set.description, title: @teacher_set.title}}
+  # test "should set settings" do
+  #   get :show, params: { id: @teacher_set.id }
+  #   assert_response :success
+  # end
+
+  test "should create user" do
+    assert_no_difference 'User.count' do
+      post :create, params: {user: {first_name: @user.first_name, last_name: @user.last_name, 
+                                    email: @user.email, encrypted_password: @user.encrypted_password}}
     end
     assert_response :success
   end

@@ -5,6 +5,8 @@
 # below each fixture, per the syntax in the comments below
 #
 
-one:
-  first_name: MyText
+user_one:
+  first_name: MyString
   last_name: MyString
+  email: MyString
+  encrypted_password: MyString

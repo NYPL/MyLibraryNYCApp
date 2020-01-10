@@ -1,4 +1,4 @@
-# school_one:
-#   address_line_1: MyText
-#   state: MyString
-#   active: true
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+school_one:
+  name: MyText
