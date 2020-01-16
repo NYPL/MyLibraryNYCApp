@@ -28,8 +28,8 @@ gem 'httparty'
 gem 'jquery-rails', '> 4.0'
 gem 'jquery-ui-rails'
 gem 'json'
-gem "lograge"
-gem "logstash-event"
+gem 'lograge', '~> 0.11.2'
+gem 'logstash-event', github: 'elastic/logstash', tag: 'v1.5.4'
 gem 'nokogiri'
 gem 'open_uri_redirections'
 gem 'paper_trail', github: 'paper-trail-gem/paper_trail', branch: '5-stable'
