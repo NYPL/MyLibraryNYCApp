@@ -30,6 +30,7 @@ ActiveAdmin.register User do
     column :current_sign_in_at
     column :last_sign_in_at
     column :sign_in_count
+    column :created_at
     actions
   end
 
@@ -102,12 +103,12 @@ ActiveAdmin.register User do
     def edit # the edit page title has to be handled this way, source: https://github.com/activeadmin/activeadmin/wiki/Set-page-title
       @page_title = resource.name(true)
     end
-    
-    
+
+
     # Setting up Strong Parameters
     # You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
     def permitted_params
-      params.permit user: [:email, :password, :password_confirmation, :remember_me, :barcode, :alt_barcodes, :first_name, 
+      params.permit user: [:email, :password, :password_confirmation, :remember_me, :barcode, :alt_barcodes, :first_name,
                            :last_name, :alt_email, :school_id, :pin]
     end
   end
