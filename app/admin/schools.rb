@@ -53,21 +53,19 @@ ActiveAdmin.register School do
     end
   end
 
-  show name: Proc.new {
-    school = School.includes(versions: :item).find(params[:id])
-    begin
+  show name: 
+    proc {
+      school = School.includes(versions: :item).find(params[:id])
       school_version = school.versions[(params[:version].to_i - 1).to_i].reify
-    rescue
-    end
-    # if there's a bug with turning the paper trail into an object (with reify) then display the school instead of a school version
-    school_version = (school_version || school)
-    school_version.name
-    } do |ad|
-        attributes_table do
-          [:name, :code, :borough].each do |prop|
-            row prop
-        end
+      # if there's a bug with turning the paper trail into an object (with reify) then display the school instead of a school version
+      school_version = (school_version || school)
+      school_version.name
+    } do |_school|
+    attributes_table do
+      [:name, :code, :borough].each do |prop|
+        row prop
       end
+    end
   end
 
   controller do

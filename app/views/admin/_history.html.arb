@@ -62,8 +62,11 @@ div class: "header", id: "header" do
   end
 end
 
-verion_object_name =  "#{assigns[:versioned_object].class.name}" == 'School' ? "#{assigns[:versioned_object].name}" : 
-"#{assigns[:versioned_object].title}"
+verion_object_name = if "#{assigns[:versioned_object].class.name}" == 'School'
+                       "#{assigns[:versioned_object].name}"
+                     else 
+                       "#{assigns[:versioned_object].title}"
+                     end
 panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{verion_object_name}".html_safe do
   table style: 'padding:0px 10px 0px 10px;' do
     # create the table's header row
