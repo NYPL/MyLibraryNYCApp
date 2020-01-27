@@ -5,15 +5,6 @@ ActiveAdmin.register School do
   menu :priority => 5
   sidebar :versions, :partial => "admin/version", :only => :show
 
-  controller do
-    def create
-      # Please refer to the comment about Paper Trail in admin/book.rb.
-      PaperTrail.enabled = false
-      super
-      PaperTrail.enabled = true
-    end
-  end
-
   actions :all, except: [:destroy, :new] #just show
 
   filter :name
