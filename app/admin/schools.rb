@@ -1,17 +1,6 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register School do
-  filter :name
-  filter :code
-  filter :active
-
-  filter :address_line_1
-  filter :address_line_2
-  filter :state
-
-  filter :postal_code
-  filter :phone_number
-  filter :borough
 
   menu :priority => 5
   sidebar :versions, :partial => "admin/version", :only => :show
