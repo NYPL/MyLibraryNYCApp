@@ -24,7 +24,7 @@ ActiveAdmin.register School do
     # render(partial: 'schools/activation_links_container', locals: { school: school, action: 'show' })
   end
 
-  # This method creates a link that we refer to in _version.html.erb this way: history_admin_teacher_set_path(resource)
+  # This method creates a link that we refer to in _version.html.erb this way: history_admin_school_path(resource)
   member_action :history do
     @versioned_object = School.find(params[:id])
     @versions = PaperTrail::Version.where(item_type: 'School', item_id: @versioned_object.id).order('created_at ASC')
