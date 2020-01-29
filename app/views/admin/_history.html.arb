@@ -129,7 +129,14 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
     tr do
       td do
         # always show the current version in the last row
-        link_to "Current Version", admin_teacher_set_path(assigns[:versioned_object])
+        resource_name = if resource.class.name == 'TeacherSet'
+                          admin_teacher_set_path(assigns[:versioned_object])
+                        elsif resource.class.name == 'Book'
+                          admin_book_path(assigns[:versioned_object])
+                        elsif resource.class.name == 'School'
+                          admin_school_path(assigns[:versioned_object])
+                        end
+        link_to "Current Version", resource_name
       end
       td do
         output = ''
