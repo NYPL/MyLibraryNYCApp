@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class School < ActiveRecord::Base
+  include CatalogItemMethods
+
+  has_paper_trail
+
+  before_save :disable_papertrail
+  before_update :enable_papertrail
+  after_save :enable_papertrail
+
   has_many :users
 
   default_scope { order('name ASC') }

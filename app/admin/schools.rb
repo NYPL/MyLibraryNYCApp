@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register School do
+
   menu :priority => 5
+  sidebar :versions, :partial => "admin/version", :only => :show
+
   actions :all, except: [:destroy, :new] #just show
 
   filter :name
@@ -18,7 +21,14 @@ ActiveAdmin.register School do
   action_item only: :show do
     # Note: commented out to stop schools list crashing after rails upgrade.
     # Not sure this line doesn't need to come back, will need to qa a bit.
-    #render(partial: 'schools/activation_links_container', locals: { school: school, action: 'show' })
+    # render(partial: 'schools/activation_links_container', locals: { school: school, action: 'show' })
+  end
+
+  # This method creates a link that we refer to in _version.html.erb this way: history_admin_school_path(resource)
+  member_action :history do
+    @versioned_object = School.find(params[:id])
+    @versions = PaperTrail::Version.where(item_type: 'School', item_id: @versioned_object.id).order('created_at ASC')
+    render partial: 'admin/history'
   end
 
   member_action :activate, method: :put do
@@ -43,16 +53,17 @@ ActiveAdmin.register School do
     end
   end
 
-  show do |ad|
+  show name: 
+    proc {
+      school = School.includes(versions: :item).find(params[:id])
+      school_version = school.versions[(params[:version].to_i - 1).to_i].reify
+      # if there's a bug with turning the paper trail into an object (with reify) then display the school instead of a school version
+      school_version = (school_version || school)
+      school_version.name
+    } do |_school|
     attributes_table do
-      [:name].each do |prop|
+      [:name, :code, :borough].each do |prop|
         row prop
-      end
-      row :borough do
-        ad.borough
-      end
-      row :code do
-        ad.code
       end
     end
   end
