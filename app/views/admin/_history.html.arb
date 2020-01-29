@@ -128,7 +128,7 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
     end
     tr do
       td do
-        # always show the current version in the last row
+        # always show the current version in the last-row
         resource_name = if resource.class.name == 'TeacherSet'
                           admin_teacher_set_path(assigns[:versioned_object])
                         elsif resource.class.name == 'Book'
