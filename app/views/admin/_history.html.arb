@@ -31,7 +31,7 @@ div class: "header", id: "header" do
         'Book'
       end
     end
-    li id: "schools" do
+    li id: "schools", class: "#{assigns[:versioned_object].class.name == 'School' ? 'current' : ''}" do
       a href: "/admin/schools" do
         'School'
       end
@@ -62,7 +62,12 @@ div class: "header", id: "header" do
   end
 end
 
-panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{assigns[:versioned_object].title}".html_safe do
+version_object_name = if "#{assigns[:versioned_object].class.name}" == 'School'
+                        "#{assigns[:versioned_object].name}"
+                      else 
+                        "#{assigns[:versioned_object].title}"
+                      end
+panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{version_object_name}".html_safe do
   table style: 'padding:0px 10px 0px 10px;' do
     # create the table's header row
     tr do
@@ -78,6 +83,8 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
             link_to "Version #{version_number}", admin_teacher_set_path(assigns[:versioned_object], version: version_number)
           elsif assigns[:versioned_object].class.name == 'Book'
             link_to "Version #{version_number}", admin_book_path(assigns[:versioned_object], version: version_number)
+          elsif assigns[:versioned_object].class.name == 'School'
+            link_to "Version #{version_number}", admin_school_path(assigns[:versioned_object], version: version_number)
           end
         end
         td do
