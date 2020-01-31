@@ -11,7 +11,7 @@ before_install:
   - gem install bundler -v '< 2'  # 2019-10-16: added to fix errors when upgrading rails env
   - "bundle config --global github.https true"  # 2019-10-16: added to fix errors when upgrading rails env
 before_script:
-  #- bundle exec rubocop
+  - bundle exec rubocop
 services:
 - postgresql
 script:
