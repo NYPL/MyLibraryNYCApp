@@ -4,7 +4,6 @@ link href: '/assets/active_admin.css', media: 'screen', rel: 'stylesheet', type:
 link href: '/assets/admin_history.css', media: 'screen', rel: 'stylesheet', type: 'text/css'
 
 versions = assigns[:versions]
-puts "VERSIONVERSIONVERSIONVERSIONVERSIONVERSIONVERSION.      #{versions}      VERSIONVERSIONVERSIONVERSIONVERSION"
 # hard-code the header is the easiest way to include it
 div class: "header", id: "header" do
   h1 class: "site_title", id: "site_title" do
@@ -117,7 +116,6 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
           end
         end
         td do
-        puts "TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST        #{version_number}      TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST"
           time = if version_number == 1
                    assigns[:versioned_object].created_at
                  else
