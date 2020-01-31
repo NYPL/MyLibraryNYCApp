@@ -28,7 +28,6 @@ ActiveAdmin.register School do
   member_action :history do
     @versioned_object = School.find(params[:id])
     @versions = PaperTrail::Version.where(item_type: 'School', item_id: @versioned_object.id).order('created_at ASC')
-    puts "TESTHISTORYTESTHISTORYTESTHISTORYTESTHISTORYTESTHISTORYTESTHISTORY.     #{@versions}   TESTHISTORYTESTHISTORYTESTHISTORYTESTHISTORYTESTHISTORY"
     render partial: 'admin/history'
   end
 
