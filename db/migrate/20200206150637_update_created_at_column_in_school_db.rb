@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateCreatedAtColumnInSchoolDb < ActiveRecord::Migration[5.0]
   def change
     # Updated create_at value if create_at value is null
