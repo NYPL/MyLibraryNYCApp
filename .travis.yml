@@ -21,7 +21,7 @@ script:
 # - bundle exec rake db:migrate
 # recreate test database from db/schema.rb
 - bundle exec rake db:schema:load
-- bundle exec rake db:test:prepare # NOTE: might need this later.
+# - bundle exec rake db:test:prepare # NOTE: might need this later.
 - bundle exec rake db:migrate RAILS_ENV=test
 - bundle exec rake combined_tests:test
 deploy:
