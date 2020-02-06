@@ -1,6 +1,6 @@
 class UpdateCreatedAtColumnInSchoolDb < ActiveRecord::Migration[5.0]
   def change
-    #Updated create_at value if create_at value is null
+    # Updated create_at value if create_at value is null
     School.find_each do |s|
       s.created_at = Time.zone.parse("2000-01-01 1:00:00") if s.created_at.nil?
       s.save!
