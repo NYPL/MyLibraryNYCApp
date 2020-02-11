@@ -159,7 +159,7 @@ It should be set to the string message that is to appear on the maintenance bann
 InfoSite code (https://www.mylibrarynyc.org/) into Sets.
 ========================================================
 ```
-Created all info-site(https://www.mylibrarynyc.org/) code into sets code base(https://sets.mylibrarynyc.org/)
+Created required info-site files(https://www.mylibrarynyc.org/) into sets code base(https://sets.mylibrarynyc.org/)
 
 All required javascripts, stylessheets, images files created into sets code -- (asserts/javascripts/info-site, asserts/stylesheets/info-site, asserts/images)
 
