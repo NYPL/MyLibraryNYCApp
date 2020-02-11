@@ -6,7 +6,7 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.perform_deliveries = true
 
   config.force_ssl = false
-
+  config.assets.check_precompiled_asset = false
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
 end

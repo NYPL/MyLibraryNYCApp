@@ -35,6 +35,7 @@ MyLibraryNYC::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  config.assets.check_precompiled_asset = false
 
   config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-development.us-east-1.elasticbeanstalk.com' }
   config.action_mailer.perform_deliveries = false
