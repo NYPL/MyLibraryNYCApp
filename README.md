@@ -156,6 +156,17 @@ The parameter should be set to the string `TRUE` to turn on the banner, which is
 It should be set to the string message that is to appear on the maintenance banner.  It will only appear if the `SHOW_MAINTENANCE_BANNER` parameter above is set to `TRUE`.
 
 
+Info-Site(https://www.mylibrarynyc.org/)
+================================
+```
+Created all info-site(https://www.mylibrarynyc.org/) code into sets code base(https://sets.mylibrarynyc.org/)
+
+All javascripts, stylessheets, images files created into sets code -- (asserts/javascripts/info-site, asserts/stylesheets/info-site, asserts/images)
+
+All info-site-controllers-views-layouts files created(controllers/info_site_controller.rb, views/info-site/**.html.erb, views/layouts/info-site/**.html.erb,)
+
+```
+
 Rubocop
 ========================
 ```
