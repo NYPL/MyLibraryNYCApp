@@ -6,9 +6,9 @@ case ENV['RAILS_ENV']
 
 when 'local'
 
-  ENV['DATABASE_URL'] = "postgresql://localhost/mylibnyc_local"
   ENV['MLN_SETS_URL'] = "dev-sets.mylibrarynyc.local"
   ENV['MLN_URL'] = "dev-www.mylibrarynyc.local"
+  ENV['DATABASE_URL'] = "postgresql://localhost/mylibnyc_local"
   ENV['API_GATEWAY_HEADER_KEY'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAydkErOQnDmhq+LmN8CARCAQ6BaEialZwZtZrF9XDXGVq0hJHo8lVgwDMyjtOXAaYQ5Z9Z7O/9XU3hLUND7c6uagr+RwAXD8arCtKAzJbfhpO7BL1I=")
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons"
@@ -25,6 +25,8 @@ when 'development'
 
   ENV['RACK_ENV'] = 'development'
   ENV['RAILS_ENV'] = 'development'
+  ENV['MLN_SETS_URL'] = "dev-sets.mylibrarynyc.org" # TODO: Need to encrypt the urls
+  ENV['MLN_URL'] = "dev.mylibrarynyc.org" # TODO: Need to encrypt the urls
   ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAASwwggEoBgkqhkiG9w0BBwagggEZMIIBFQIBADCCAQ4GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3apJFu88CTtQfpWdAgEQgIHg5FzviDrg2Qkl2HnO09j5KWORAq1CDtGaZtIATpvKoCHoxogGd4GyJ8M1/J/zHAtnapZiwe4AH22b3aUGQrQLDreu3t1kqp/4jVlkvz1Xa8+dCqeEeIsHgMXG1FTHrH3KZY27Fkg2mAHkJMlFI97oMoV8gj6O6UUfn/ZhNthrNkVSMZNZt2wFoZGXUC8s2rztJdnhQk1RusdDMp70+yoNwa470nOpXHNFoFHf1NVJ0Ih1HD8qSeViwWR7Q8sJSQCUYv9OPCGXkLNUWO1xNWY5d255dMrR/tSnEtugDNRXI1c=")
   ENV['API_GATEWAY_HEADER_KEY'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAydkErOQnDmhq+LmN8CARCAQ6BaEialZwZtZrF9XDXGVq0hJHo8lVgwDMyjtOXAaYQ5Z9Z7O/9XU3hLUND7c6uagr+RwAXD8arCtKAzJbfhpO7BL1I=")
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
@@ -42,7 +44,8 @@ when 'qa'
 
   ENV['RACK_ENV'] = 'qa'
   ENV['RAILS_ENV'] = 'qa'
-
+  ENV['MLN_SETS_URL'] = "qa-sets.mylibrarynyc.org" # TODO: Need to encrypt the urls
+  ENV['MLN_URL'] = "qa.mylibrarynyc.org" # TODO: Need to encrypt the urls
   ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAANMwgdAGCSqGSIb3DQEHBqCBwjCBvwIBADCBuQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx6tEcBuoN27fOPXIECARCAgYvNwgZyieISwY5tDHwk/HEW+V2wvFvL4wygxOZr860yRtMOaZeUAW9IYjOLbPA5T5kk6R4NoZMTYsvEsql1W11f9ITfbyKlJhCniyOGlB7TXuf3Qx+YjFvzFXoiTgrmSXXX37pmwJ8ZWFtjYVBzw5T3UdotLXPI3CIX+oBe/o+Bnp4hCx5N9m59UCEf")
   ENV['SECRET_KEY_BASE'] =  AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyfTw+28EAedabm+G0CARCAgZuC7bP44+26scvrRSMqz+kN/5VWTo8kWMmvK/3sLqkAHfWP+3YhkqRjsUJxV+ajxIpFS5xcvOrXVsCFLx8AKIAfgu5WJfzpCyilyk0YefEb9Rc/CR4Kby4RguC9VHdRdacEVggV14UfGNVUJ9WEnMcIoBEnzqk/jw4zq1Md99f3bkuYEOH3Hu2exuigDQcGOPW9ARv69MgL1ePqFg==")
 
@@ -61,6 +64,8 @@ when 'production'
 
   ENV['RACK_ENV'] = 'production'
   ENV['RAILS_ENV'] = 'production'
+  ENV['MLN_SETS_URL'] = "sets.mylibrarynyc.org" # TODO: Need to encrypt the urls
+  ENV['MLN_URL'] = "www.mylibrarynyc.org" # TODO: Need to encrypt the urls
   # production db
   ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAPMwgfAGCSqGSIb3DQEHBqCB4jCB3wIBADCB2QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyzTdVMhyqutO/fsX4CARCAgasVxmddpYC6YWNc39najXv2cf8cH0M5LsSaJKdeNR5CifdfFzre9dr5E0GiXj++koZgnYVQ2ObcmWGyv197K8/tqL8J9KGzjmNH0X/wzGRa/+QvU6JaESQFvjvRUV0QPdna3w6Q9X1RzwPt38zhFBy2Fs8WrZdfTh38QlNYb3993F86AT/Qz7at14AXUCPqdB+9QmoJxVNlQdbdkjqb7xStKSVhwK/mL3zc+Mk=")
   # production db token key

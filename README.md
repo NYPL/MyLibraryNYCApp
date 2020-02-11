@@ -156,8 +156,8 @@ The parameter should be set to the string `TRUE` to turn on the banner, which is
 It should be set to the string message that is to appear on the maintenance banner.  It will only appear if the `SHOW_MAINTENANCE_BANNER` parameter above is set to `TRUE`.
 
 
-Info-Site(https://www.mylibrarynyc.org/)
-================================
+Cretaed Info-Site-code(https://www.mylibrarynyc.org/) into Sets code
+========================================================
 ```
 Created all info-site(https://www.mylibrarynyc.org/) code into sets code base(https://sets.mylibrarynyc.org/)
 
