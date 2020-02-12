@@ -168,7 +168,7 @@ sudo nano /private/etc/hosts
 When you are prompted, enter your domain user password.
 Edit the hosts file.
 
-The file contains comments (lines that begin with the # symbol) and some default host name mappings (for example, 127.0.0.1 – local host). Add your new mappings after the default mappings.
+The file contains comments (lines that begin with the # symbol) and some default host name mappings (for example, 127.0.0.1 – local host). Add below new mappings after the default mappings.
 
 127.0.0.1 dev-www.mylibrarynyc.local
 127.0.0.1 dev-sets.mylibrarynyc.local
