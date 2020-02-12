@@ -155,11 +155,33 @@ The parameter should be set to the string `TRUE` to turn on the banner, which is
 ```MAINTENANCE_BANNER_TEXT: 'Maintenance banner text'```
 It should be set to the string message that is to appear on the maintenance banner.  It will only appear if the `SHOW_MAINTENANCE_BANNER` parameter above is set to `TRUE`.
 
+Configure localhost for sets and info site
+==========================================
+```
+MacOS X 10.6 through 10.12
+Use the following instructions if you’re running MacOS X 10.6 through 10.12:
+
+On your computer, select Applications > Utilities > Terminal to open a Terminal window.
+Enter the following command in the Terminal window to open the hosts file:
+
+sudo nano /private/etc/hosts
+When you are prompted, enter your domain user password.
+Edit the hosts file.
+
+The file contains comments (lines that begin with the # symbol) and some default host name mappings (for example, 127.0.0.1 – local host). Add your new mappings after the default mappings.
+
+127.0.0.1 dev-www.mylibrarynyc.local
+127.0.0.1 dev-sets.mylibrarynyc.local
+
+To save the hosts file, press Control+X.
+When you are asked if you want to save your changes, enter y.
+
+```
 
 InfoSite code (https://www.mylibrarynyc.org/) into Sets.
 ========================================================
 ```
-Created required info-site files(https://www.mylibrarynyc.org/) into sets code base(https://sets.mylibrarynyc.org/)
+Created info-site files in sets code base(https://sets.mylibrarynyc.org/)
 
 All required javascripts, stylessheets, images files created into sets code -- (asserts/javascripts/info-site, asserts/stylesheets/info-site, asserts/images)
 
