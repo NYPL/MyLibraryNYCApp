@@ -37,10 +37,6 @@ MyLibraryNYC::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  #When enabled, an exception is raised for missing assets. This option is enabled by default.
-  config.assets.check_precompiled_asset = true
-
-
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.perform_deliveries = false
 

@@ -36,9 +36,6 @@ MyLibraryNYC::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  #When enabled, an exception is raised for missing assets. This option is enabled by default.
-  config.assets.check_precompiled_asset = true
-
   config.action_mailer.default_url_options = { :host => 'my-library-nyc-app-development.us-east-1.elasticbeanstalk.com' }
   config.action_mailer.perform_deliveries = false
 
