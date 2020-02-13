@@ -87,8 +87,9 @@ MyLibraryNYC::Application.routes.draw do
   match 'about/participating-schools' => 'info_site#participating_schools', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
   match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
   match '/contacts-links' => 'info_site#contacts', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
-  root :to => "home#index"
+  
 
+  root :to => "home#index"
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
