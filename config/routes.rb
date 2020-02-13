@@ -83,12 +83,12 @@ MyLibraryNYC::Application.routes.draw do
   # just remember to delete public/index.html.
 
   # MLN application supports multiple domains.
-  match 'about/participating-schools' => 'info_site#participating_schools', via: [:get], :constraints => { :host => ENV['MLN_URL'] }
-  match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get], :constraints => { :host => ENV['MLN_URL'] }
-  match '/contacts-links' => 'info_site#contacts', via: [:get], :constraints => { :host => ENV['MLN_URL'] }
+  root :to => "home#index"
+  root :to => 'info_site#index', :constraints => {:host => ENV['MLN_INFO_SITE_URL']}
+  match 'about/participating-schools' => 'info_site#participating_schools', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
+  match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
+  match '/contacts-links' => 'info_site#contacts', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
 
-  root :to => "home#index", :constraints => {:host => ENV['MLN_SETS_URL']}
-  root :to => 'info_site#index', :constraints => {:host => ENV['MLN_URL']}
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

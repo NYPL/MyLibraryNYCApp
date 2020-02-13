@@ -6,7 +6,8 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.perform_deliveries = true
 
   config.force_ssl = false
-  config.assets.check_precompiled_asset = false
+  #When enabled, an exception is raised for missing assets. This option is enabled by default.
+  config.assets.check_precompiled_asset = true
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
 end
