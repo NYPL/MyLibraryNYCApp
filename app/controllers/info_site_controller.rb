@@ -20,4 +20,5 @@ class InfoSiteController < ApplicationController
   def participating_schools; end
 
   def digital_resources; end
+  
 end
