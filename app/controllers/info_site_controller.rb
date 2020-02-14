@@ -18,4 +18,6 @@ class InfoSiteController < ApplicationController
 
   # Display's mylibrarynyc school's information
   def participating_schools; end
+
+  def digital_resources; end
 end
