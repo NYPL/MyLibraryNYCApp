@@ -1,6 +1,12 @@
 <h1>MyLibraryNYC Participating Schools</h1>
 <ul class="result-list">
-  <% @schools.each do |school| %>
-    <li><%= school.name %> (<%= school.code[1..-1].upcase %>)</li>
+  <div align="center">
+    <a href="##">#</a> <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a> <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a> <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a> <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a> <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a> <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a> <a href="#Y">Y</a> <a href="#Z">Z</a> <br><br>
+  </div>
+  <% @schools_arr.each do |s| %>
+    <br><a name=<%= s["schoolname_first_letter"] %>><%= s["schoolname_first_letter"] %></a><br></br>
+        <% s["school_names"].each do |i|  %>
+          <li><%= i %></li> 
+        <% end %>
   <% end %>
 </ul>
