@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SchoolsController < ApplicationController
+  layout 'info_site/application'
   
   def index
     # Group by first letter of the school.
