@@ -9,8 +9,8 @@ class SchoolsController < ApplicationController
     @schools_arr = []
     @schools.each do |key, value|
       school_hash = {}
-      # If school name is start with alphabet letter, school names will display under aplhabet anchor eg: 'A' Academy for Careers (12), Academy(22).
-      # If school name is not start with alphabet letter, school names will display under '#' anchor. eg: '#' 486 newyork school (86),  56test(234).
+      # If school name starts with alphabet letter, school names will display under aplhabet anchor eg: 'A' Academy for Careers (12), Academy(22).
+      # If school name does not start with alphabet letter, school names will display under '#' anchor. eg: '#' 486 newyork school (86),  56test(234).
       school_hash['schoolname_first_letter'] = key.match?(/[A-Za-z]/) ? key : '#'
       school_hash['school_names'] = value.collect do |i|
         code = i.code.present? ? i.code[1..-1].upcase : ""
