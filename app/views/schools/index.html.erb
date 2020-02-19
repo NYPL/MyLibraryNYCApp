@@ -9,7 +9,7 @@
       <ul>
         <% @schools_arr.each do |s| %>
         <br>
-        <a name=<%= s["schoolname_first_letter"] %>></a><%= s["schoolname_first_letter"] %><br><br>
+        <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %><br><br>
         <% s["school_names"].each do |i|  %>
           <%= i %>
           <br>
