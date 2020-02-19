@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SchoolsController < ApplicationController
-  layout 'info_site/application'
   
   def index
     # Group by first letter of the school.
@@ -18,6 +17,7 @@ class SchoolsController < ApplicationController
       end
       @schools_arr << school_hash
     end
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @schools }
