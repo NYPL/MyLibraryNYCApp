@@ -13,7 +13,6 @@ class SchoolsController < ApplicationController
       # If school name does not start with alphabet letter, school names will display under '#' anchor. eg: '#' 486 newyork school (86),  56test(234).
       school_hash['alphabet_anchor'] = alphabet_anchor.match?(/[A-Za-z]/) ? alphabet_anchor : '#'
       school_hash['school_names'] = school_name.collect do |school|
-        code = school.code.present? ? school.code[1..-1].upcase : ""
         "#{i.name} (#{code})"
       end
       @schools_arr << school_hash
