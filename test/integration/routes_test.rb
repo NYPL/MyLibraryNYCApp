@@ -14,11 +14,11 @@ class RoutesTest < ActionDispatch::IntegrationTest
   end
 
   test "test for info-site index page" do
-    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}", get_params('index')
+    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}", get_info_site_action_params('index')
   end
 
   test "test for info-site participating-schools" do
-    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}/about/participating-schools", get_params('participating_schools')
+    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}/about/participating-schools", get_info_site_action_params('participating_schools')
   end
 
   test "test for info-site participating-schools page with sets hostname" do
@@ -29,7 +29,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
   end
 
   test "test for info-site about page" do
-    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}/about/about-mylibrarynyc", get_params('about')
+    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}/about/about-mylibrarynyc", get_info_site_action_params('about')
   end
 
   test "test for info-site about page with sets hostname" do
@@ -40,7 +40,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
   end
 
   test "test for info-site contacts-links page" do
-    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}/contacts-links", get_params('contacts')
+    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}/contacts-links", get_info_site_action_params('contacts')
   end
 
   test "test for info-site contacts-links page with sets hostname" do
@@ -51,7 +51,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
   end
 
   test "test for info-ste digital resources page" do
-    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}/help/access-digital-resources", get_params('digital_resources')
+    assert_routing "http://#{ENV['MLN_INFO_SITE_HOSTNAME']}/help/access-digital-resources", get_info_site_action_params('digital_resources')
   end
 
   test "test for info-site digital resources page page with sets hostname" do
@@ -63,7 +63,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
 
   private
 
-  def get_params(action_name)
+  def get_info_site_action_params(action_name)
     {:controller => "info_site", :action => action_name, :host => ENV['MLN_INFO_SITE_HOSTNAME']}
   end
 end
