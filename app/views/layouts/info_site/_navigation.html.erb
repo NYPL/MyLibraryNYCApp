@@ -1,0 +1,21 @@
+<ul class="nav nav--global__list">
+  <li>
+    <%= link_to "Account", "//#{ENV['MLN_SETS_SITE_URL']}/users/start" %>
+  </li>
+
+  <li>
+    <%= link_to "Help", "//#{ENV['MLN_SETS_SITE_URL']}/help" %>
+  </li>
+
+  <li>
+    <%= link_to "About", :controller => :info_site, :action => :about %>
+  </li>
+
+  <li>
+    <%= link_to "Contact", :controller => :info_site, :action => :contacts %>
+  </li>
+
+  <li>
+    <%= link_to "Participating Schools", :controller => :info_site, :action => :participating_schools %>
+  </li>
+</ul>

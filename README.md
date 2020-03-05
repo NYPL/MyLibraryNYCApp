@@ -155,6 +155,44 @@ The parameter should be set to the string `TRUE` to turn on the banner, which is
 ```MAINTENANCE_BANNER_TEXT: 'Maintenance banner text'```
 It should be set to the string message that is to appear on the maintenance banner.  It will only appear if the `SHOW_MAINTENANCE_BANNER` parameter above is set to `TRUE`.
 
+Configure localhost for sets and info site
+==========================================
+```
+As of February 2020, the MyLibraryNYC Information site (www.mylibrarynyc.org) has been merged into the Sets application. The Info site was a Rails app, but was created as a lightweight CMS, so the content was stored in the DB in document-oriented models. In merging into the Sets app, we moved away from that model, instead storing the content in regular HTML templates, and having that handled by a single InfoSiteController, as we didn't need the fuller functionality of a CMS.
+Additionally, we wanted the two different hostnames to continue working as before — so URLs starting www.mylibrarynyc.org should continue to work as before, as should those starting sets.mylibrarynyc.org. This is achieved by having the routes.rb file check the HOST request header and directing to the appropriate controller accordingly. That further means that to develop both parts of the app, you need to set up special hostnames locally (typically using the /etc/hosts file on Mac OS and other un*x like OSes). Instructions below.
+```
+
+```
+MacOS X 10.6 through 10.12
+Use the following instructions if you’re running MacOS X 10.6 through 10.12:
+
+On your computer, select Applications > Utilities > Terminal to open a Terminal window.
+Enter the following command in the Terminal window to open the hosts file:
+
+sudo nano /private/etc/hosts
+When you are prompted, enter your domain user password.
+Edit the hosts file.
+
+The file contains comments (lines that begin with the # symbol) and some default host name mappings (for example, 127.0.0.1 – local host). Add below new mappings after the default mappings.
+
+127.0.0.1 dev-www.mylibrarynyc.local
+127.0.0.1 dev-sets.mylibrarynyc.local
+
+To save the hosts file, press Control+X.
+When you are asked if you want to save your changes, enter y.
+
+```
+
+InfoSite code (https://www.mylibrarynyc.org/) into Sets.
+========================================================
+```
+Created info-site files in sets code base(https://sets.mylibrarynyc.org/)
+
+All required javascripts, stylessheets, images files created into sets code -- (assets/javascripts/info-site, assets/stylesheets/info-site, assets/images)
+
+All required info-site-controllers-views-layouts files created(controllers/info_site_controller.rb, views/info-site/**.html.erb, views/layouts/info-site/**.html.erb)
+
+```
 
 Rubocop
 ========================

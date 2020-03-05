@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "New York City Public Libraries" %></title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <%= stylesheet_link_tag "info-site/application", :media => "all" %>
+    <%= csrf_meta_tags %>
+    <%= yield(:head) %>
+  </head>
+  <body>
+    <div class='page--wrapper'>
+      <%= render 'layouts/info_site/header' %>
+
+      <!-- Main Content -->
+      <section class="grid--center wrapper--content" role="main">
+        <%= yield %>
+      </section>
+
+      <%= render 'layouts/info_site/footer' %>
+    </div>
+    <%= javascript_include_tag "info-site/application" %>
+  </body>
+</html>

@@ -81,7 +81,15 @@ MyLibraryNYC::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'home#index'
+
+  # MLN application supports multiple domains.
+  root :to => 'info_site#index', :constraints => {:host => ENV['MLN_INFO_SITE_URL']}
+  match 'about/participating-schools' => 'info_site#participating_schools', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
+  match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
+  match '/contacts-links' => 'info_site#contacts', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
+  match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_URL'] }
+
+  root :to => "home#index"
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
