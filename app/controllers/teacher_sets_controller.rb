@@ -8,7 +8,24 @@ class TeacherSetsController < ApplicationController
   # GET /teacher_sets.json
   # Called on loading the teacher set list page and when the user selects
   # a facet to filter by.
+
+  def create_teacherset_document_in_es
+    TeacherSet.find_each do |ts|
+      arr = []
+      begin
+        body = {title: ts.title, description: ts.physical_description, contents: ts.contents}
+        ElasticSearch.new.create_document(ts.id, body)
+        puts "updating elastic search"
+      rescue Elasticsearch::Transport::Transport::Errors::Conflict => e
+         puts "Error in elastic search"
+        arr << ts.id
+      end
+      arr
+    end
+  end
+
   def index
+    #create_teacherset_document_in_es
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
 
     @teacher_sets = TeacherSet.for_query params

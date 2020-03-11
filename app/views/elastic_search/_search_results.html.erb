@@ -1,0 +1,13 @@
+<% if @es_resp.present? && @es_resp[:totalMatches].present? %>
+<div>
+  <span class="bold">Total Matches Count: <%= @es_resp[:totalMatches]['value'] %></span>
+  <br><br>
+  <% @es_resp[:hits].each do |ts_data| %>
+    <span class="bold">Title: </span>  <%= ts_data['_source']['title'] %><br>
+    <span class="bold">Description: </span>  <%= ts_data['_source']['description'] %><br>
+    <span class="bold">Contents: </span> <%= ts_data['_source']['contents'] %><br><br>
+  <% end  if @es_resp[:hits].present? %>
+</div>
+<% else %>
+ <span class="bold">No results found</span>
+<% end %>

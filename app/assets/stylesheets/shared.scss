@@ -19,3 +19,27 @@
   padding-bottom:15px;
   padding-top:15px;
 }
+
+.bold {
+  font-weight: bold;
+}
+.es-search-text{
+  height:200px;
+  width:550px;
+}
+.es-search-button {
+  width: auto;
+  display: block;
+  margin: 0 auto;
+  padding: 12px;
+  font-size: 1em;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background: #AF2228;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+}
