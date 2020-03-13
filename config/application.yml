@@ -5,7 +5,6 @@
 case ENV['RAILS_ENV']
 
 when 'local'
-
   ENV['MLN_INFO_SITE_HOSTNAME'] = "dev-www.mylibrarynyc.local"
   ENV['MLN_SETS_SITE_HOSTNAME'] = "dev-sets.mylibrarynyc.local"
   ENV['DATABASE_URL'] = "postgresql://localhost/mylibnyc_local"
