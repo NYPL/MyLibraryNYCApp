@@ -24,4 +24,65 @@ class ElasticSearchController < ActionController::Base
       flash[:error] = "We've encountered Elastic Search error.#{exception.message}"
     end     
   end
+
+  def es_suggestions
+    search_fields = ['title', 'description', 'contents']
+    query = es_search_suggestions_query(params[:value])
+    es_data =  ElasticSearch.new.es_suggestions(query, search_fields)
+    es_arr = []
+    es_data.each_with_index{|data, index|
+      hash = {}
+      hash[:id] = index
+      hash[:value] = data
+      es_arr << hash
+    }
+    respond_to do |format|
+      format.html
+      format.json {render json: es_arr}
+    end
+  end
+
+
+  def es_search_suggestions_query(keyword)
+    query = {
+      "suggest": {
+        "text": keyword,
+        "title": {
+          "phrase": {
+            "field": "title",
+            "confidence": 0.0,
+            "direct_generator": [
+              {
+                "field": "title"
+              }
+            ]
+          }
+        },
+        "description": {
+          "phrase": {
+            "field": "description",
+            "confidence": 0.0,
+            "direct_generator": [
+              {
+                "field": "description"
+              }
+            ]
+          }
+        },
+        "contents": {
+          "phrase": {
+            "field": "contents",
+            "confidence": 0.0,
+            "direct_generator": [
+              {
+                "field": "contents"
+              }
+            ]
+          }
+        }
+      }
+    }
+  end
 end
+
+

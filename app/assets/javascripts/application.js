@@ -30,4 +30,43 @@ $(document).ready(function() {
   $("#main").click(function(){
     $("#error_messages_id").hide();
   });
-}); 
+});
+
+// this function show's elastic-search fuzziness selection dropdown
+function showFuzzySelection(type=null){
+  if (type == "fuzzy"){
+    $("#fuzzy_id").show();
+  }
+  else{
+    $("#fuzzy_id").hide();
+  }
+
+}
+
+function getElasticSearchSuggestions(value){
+	
+	count = 0
+  $('#search_keyword').autocomplete({
+    source: function (request, response) {
+      $.ajax({
+        dataType: "json",
+        type : 'Get',
+        url: "/elastic_search/es_suggestions",
+        data: {'value': value},
+        success: function(resp) {
+          response( $.map( resp.elastic_search, function(item) {
+             if (count >= 1){
+             	opt = ""
+             }else{
+             	opt = 'Did you mean: '
+             }
+             count += 1
+            return { label: opt + item.value, value: item.value }
+          }));
+        },
+        error: function(err) { }
+      });
+    },
+    minLength: 2
+  }); 
+}

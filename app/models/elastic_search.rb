@@ -13,7 +13,7 @@ class ElasticSearch
     }
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
-    @index = 'ts_index'
+    @index = 'ts_index98'
     @type = 'teacher_doc'
   end
 
@@ -53,6 +53,7 @@ class ElasticSearch
     results_hits = hits['hits']
     results[:totalMatches] = num_of_matches
     results[:hits] = results_hits
+    results[:suggestions] = resp['suggest']
     results
   end
 
@@ -78,6 +79,19 @@ class ElasticSearch
     start_time = Time.now
     response = @client.update(index: @index, type: type, id: id, body: query)
     response
+  end
+
+  def es_suggestions(query, fields)
+    suggestions_arr = []
+    begin
+      result = search_by_query(query)
+      fields.each do |field|
+        suggestions_arr << result[:suggestions]["#{field}"][0]["options"].collect{|data| data['text']}
+      end
+      suggestions_arr.flatten.uniq if suggestions_arr.present?
+    rescue Exception => e
+      raise e.message
+    end
   end
 
   def get_search_results(_type, params)

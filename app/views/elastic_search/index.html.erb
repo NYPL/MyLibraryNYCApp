@@ -1,13 +1,17 @@
+
 <div id="search_query">
   <%= form_tag("/search/es", remote: true) do %>
     <table>
       <tr>
         <td>
-          <span>Search Keyword <%= text_field_tag 'search_keyword'%></span>
+          <span>
+            <%= text_field_tag 'search_keyword', '', :spellcheck => "true" , :placeholder => 'Search Keyword', :onkeypress => "getElasticSearchSuggestions(this.value)", :class => 'search-box', :type => "search" %>
+            </span>
         </td>
       </tr>
       <tr>
         <td>
+          <br>
           <%= radio_button_tag 'search', 'partial', true, 
           onclick: "showFuzzySelection()" %>
           Partial search
@@ -32,6 +36,24 @@
   <% end %>
 </div>
 <br>
-<div id="search_results">
-  
-</div>
+<div id="search_results"></div>
+
+
+<style type="text/css">
+.search-box {
+  width:400px;
+  height: 33px;
+  margin:0 auto;
+  background-color: #FFF;
+  padding: 3px;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    background: #e6e6e6 !important;
+    color: #000000 !important;
+    border-radius: 4px !important;
+}
+</style>
