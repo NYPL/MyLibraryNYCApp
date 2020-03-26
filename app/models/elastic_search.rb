@@ -13,8 +13,8 @@ class ElasticSearch
     }
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
-    @index = 'ts_index98'
-    @type = 'teacher_doc'
+    @index = 'ts_index'
+    @type = 'teacher_set'
   end
 
   def index_doc_count
@@ -53,7 +53,6 @@ class ElasticSearch
     results_hits = hits['hits']
     results[:totalMatches] = num_of_matches
     results[:hits] = results_hits
-    results[:suggestions] = resp['suggest']
     results
   end
 

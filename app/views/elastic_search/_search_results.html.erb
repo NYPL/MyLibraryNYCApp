@@ -1,6 +1,6 @@
-<% if @es_resp.present? && @es_resp[:totalMatches].present? %>
+<% if @es_resp.present? && @es_resp[:hits].present? %>
 <div>
-  <span class="bold">Total Matches Count: <%= @es_resp[:totalMatches]['value'] %></span>
+  <span class="bold">Total Matches Count: <%= @es_resp[:totalMatches] %></span>
   <br><br>
   <% @es_resp[:hits].each do |ts_data| %>
     <span class="bold">Title: </span>  <%= ts_data['_source']['title'] %><br>
@@ -9,5 +9,15 @@
   <% end  if @es_resp[:hits].present? %>
 </div>
 <% else %>
- <span class="bold">No results found</span>
+ <span class="bold">No results found</span><br><br>
+ <% if @suggested_result.present? %>
+	 <div id="did_you_mean_id">
+	 	Did you mean <span class='italic'><%= link_to("#{@suggested_result}", "/search/es?search_keyword=#{@suggested_result}&search=#{params['search']}", method: :post, remote: true)%></span>?
+	 </div>
 <% end %>
+<% end %>
+<script type="text/javascript">
+	<% if @suggested_result == 'No Suggestion' %>
+		$("#did_you_mean_id").hide();
+	<% end %>
+</script>
