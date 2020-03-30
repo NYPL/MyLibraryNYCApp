@@ -23,6 +23,9 @@
 .bold {
   font-weight: bold;
 }
+.italic {
+  font-style: italic;
+}
 .es-search-text{
   height:200px;
   width:550px;
@@ -42,4 +45,20 @@
   border: none;
   border-radius: 10px;
   text-decoration: none;
+}
+
+.search-box {
+  width:400px;
+  height: 33px;
+  margin:0 auto;
+  background-color: #FFF;
+  padding: 3px;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    background: #e6e6e6 !important;
+    color: #000000 !important;
+    border-radius: 4px !important;
 }

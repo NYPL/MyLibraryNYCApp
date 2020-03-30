@@ -40,12 +40,9 @@ function showFuzzySelection(type=null){
   else{
     $("#fuzzy_id").hide();
   }
-
 }
 
-function getElasticSearchSuggestions(value){
-	
-	count = 0
+function getElasticSearchSuggestions(value) {
   $('#search_keyword').autocomplete({
     source: function (request, response) {
       $.ajax({
@@ -54,14 +51,17 @@ function getElasticSearchSuggestions(value){
         url: "/elastic_search/es_suggestions",
         data: {'value': value},
         success: function(resp) {
+
           response( $.map( resp.elastic_search, function(item) {
-             if (count >= 1){
-             	opt = ""
-             }else{
-             	opt = 'Did you mean: '
-             }
-             count += 1
-            return { label: opt + item.value, value: item.value }
+
+            if (item.value == "No Suggestion") {
+              opt = ""
+              return { label: item.value, value: item.value }
+            }else{
+              opt = 'Did you mean: '
+              return { label: opt + item.value + ' ?', value: item.value }
+            }
+            
           }));
         },
         error: function(err) { }

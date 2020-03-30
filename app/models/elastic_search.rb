@@ -13,7 +13,7 @@ class ElasticSearch
     }
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
-    @index = 'ts_index'
+    @index = 'ts_index210'
     @type = 'teacher_set'
   end
 
@@ -47,12 +47,12 @@ class ElasticSearch
   def search_by_query(body)
     results = {}
     start_time = Time.now
-    resp = @client.search body: body
+    resp = @client.search(index: @index, body: body)
     hits = resp['hits']
     num_of_matches = hits['total']
     results_hits = hits['hits']
     results[:totalMatches] = num_of_matches
-    results[:hits] = results_hits
+    results[:hits] = results_hits.uniq
     results
   end
 
