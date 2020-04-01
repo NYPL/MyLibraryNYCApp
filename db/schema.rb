@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200206150637) do
+ActiveRecord::Schema.define(version: 20200323044742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(version: 20200206150637) do
     t.string   "author_type"
     t.integer  "author_id"
     t.text     "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.string   "namespace"
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
@@ -42,17 +42,18 @@ ActiveRecord::Schema.define(version: 20200206150637) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "email_notifications",    default: true
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.boolean  "email_notifications",                default: true
+    t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
   end
 
   create_table "allowed_user_email_masks", force: :cascade do |t|
     t.string   "email_pattern",                 null: false
-    t.boolean  "active",        default: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.boolean  "active",                    default: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
   create_table "books", id: :bigserial, force: :cascade do |t|
@@ -69,8 +70,8 @@ ActiveRecord::Schema.define(version: 20200206150637) do
     t.text     "notes"
     t.text     "statement_of_responsibility"
     t.string   "cover_uri"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.string   "bnumber",                     limit: 20
     t.index ["bnumber"], name: "index_books_bnumber", using: :btree
     t.index ["title"], name: "index_books_title", using: :btree
@@ -78,15 +79,15 @@ ActiveRecord::Schema.define(version: 20200206150637) do
 
   create_table "boroughs", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "campuses", force: :cascade do |t|
     t.string   "name"
     t.integer  "borough_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.index ["borough_id"], name: "index_campuses_on_borough_id", using: :btree
   end
 
@@ -95,8 +96,8 @@ ActiveRecord::Schema.define(version: 20200206150637) do
     t.bigint   "admin_user_id"
     t.string   "status",        limit: 9
     t.text     "comment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "holds", force: :cascade do |t|
@@ -104,8 +105,8 @@ ActiveRecord::Schema.define(version: 20200206150637) do
     t.bigint   "user_id"
     t.date     "date_required"
     t.string   "status",         limit: 9,  default: "new"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.string   "access_key",     limit: 30
     t.integer  "quantity",                  default: 1
     t.index ["access_key"], name: "index_holds_access_key", unique: true, using: :btree
@@ -122,7 +123,7 @@ ActiveRecord::Schema.define(version: 20200206150637) do
     t.string   "postal_code"
     t.string   "phone_number"
     t.string   "borough"
-    t.datetime "created_at",                                null: false
+    t.datetime "created_at",                                 null: false
     t.datetime "updated_at"
     t.index ["active"], name: "index_schools_on_active", using: :btree
     t.index ["campus_id"], name: "index_schools_on_campus_id", using: :btree
@@ -132,8 +133,8 @@ ActiveRecord::Schema.define(version: 20200206150637) do
   create_table "sierra_code_zcode_matches", force: :cascade do |t|
     t.integer  "sierra_code"
     t.string   "zcode"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "subject_teacher_sets", id: false, force: :cascade do |t|
@@ -145,8 +146,8 @@ ActiveRecord::Schema.define(version: 20200206150637) do
 
   create_table "subjects", force: :cascade do |t|
     t.string   "title",      limit: 30
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.index ["title"], name: "index_subjects_title", unique: true, using: :btree
   end
 
@@ -219,8 +220,8 @@ ActiveRecord::Schema.define(version: 20200206150637) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.bigint   "barcode"
     t.string   "first_name",             limit: 40
     t.string   "last_name",              limit: 40
@@ -228,7 +229,9 @@ ActiveRecord::Schema.define(version: 20200206150637) do
     t.string   "home_library",           limit: 6
     t.integer  "school_id"
     t.text     "alt_barcodes"
+    t.index ["barcode"], name: "index_users_barcode", unique: true, using: :btree
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["school_id"], name: "index_users_on_school_id", using: :btree
   end
