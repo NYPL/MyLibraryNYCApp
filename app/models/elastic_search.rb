@@ -13,8 +13,10 @@ class ElasticSearch
     }
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
-    @index = 'ts_index210'
+    @index = index || ts_index
     @type = 'teacher_set'
+
+    #ts_index211
   end
 
   def index_doc_count
@@ -42,6 +44,36 @@ class ElasticSearch
   def fuzzy_search_by_query(keyword, from, size, fuzzy_val)
     query = {"from": from, "size": size, "query": {"multi_match": {"query": keyword, "fields": ["title", "description", "contents"], "fuzziness": fuzzy_val}}}
     search_by_query(query)
+  end
+
+  def get_teacher_set_grades(grade_begin, grade_end)
+      query = {
+        "query": {
+          "bool": {
+            "should": [
+              {
+                "range": {
+                  "grade_end": {
+                    "gte": grade_begin,
+                    "lte": grade_end,
+                    "relation": "CONTAINS"
+                  }
+                }
+              }, 
+              {
+                "range": {
+                  "grade_begin": {
+                    "gte": grade_begin,
+                    "lte": grade_end,
+                    "relation": "CONTAINS"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+      search_by_query(query) 
   end
 
   def search_by_query(body)

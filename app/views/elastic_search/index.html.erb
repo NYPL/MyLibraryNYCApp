@@ -1,38 +1,171 @@
+<script type="text/javascript">
+
+  $(document).ready(function (){
+    var grades_val = $('#grades');
+    var sliderElement = $("#slider_id")
+
+    sliderElement.slider({
+      range: true,
+      min: -1,
+      max: 12,
+      values: [-1, 12],
+      slide : function(event, ui){
+          $("#hide_div").hide();
+          $("#grades").show();
+          if (ui.values[0] == -1){
+            grade1 = 'Pre-K'
+          }else if (ui.values[0] == 0){
+            grade1 = 'K'
+          }else{
+            grade1 = ui.values[0]
+          }
+
+          if (ui.values[1] == -1){
+            grade2 = 'Pre-K'
+          }else if (ui.values[1] == 0){
+            grade2 = 'K'
+          }else{
+            grade2 = ui.values[1]
+          }
+        grades_val.html(grade1 + ' - ' + grade2);
+      },
+      stop : function( event, ui ) {
+        onGradeSliderStop(ui.values[0], ui.values[1])
+      },
+    });
+
+
+    $('#grades').html(sliderElement.slider('values', 0) + ' to ' +  sliderElement.slider('values', 1))
+  })
+
+function onGradeSliderStop(grade_begin, grade_end){
+  $.ajax({
+        dataType: "json",
+        type : 'Get',
+        url: "/elastic_search/teacher_set_grades_from_es",
+        data: {'grade_begin': grade_begin, 'grade_end': grade_end},
+        success: function(json) {
+          
+        }
+      });
+}
+
+
+</script>
+
 <div id="search_query">
-  <%= form_tag("/search/es", remote: true) do %>
-    <table>
-      <tr>
-        <td>
-          <span>
-            <%= text_field_tag 'search_keyword', '', :spellcheck => "true" , :placeholder => 'Search Keyword', :class => 'search-box', :type => "search" %>
+  
+  <!-- <div class="facet-toolbar">
+    <%= form_tag("/search/es", remote: true) do %>
+      <span>
+          <%#= text_field_tag 'search_keyword', '', :spellcheck => "true" , :placeholder => 'Search Keyword', :class => 'search-box', :type => "search" %>
+            <input id="search_keyword" name="search_keyword" type="text" 
+            spellcheck="true" style="width:170px"/>
+            <span class="input-button">
+              <button type="submit" class="search_button"><i class="fa fa-search"></i></button>
             </span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <br>
-          <%= radio_button_tag 'search', 'partial', true, 
+        </span>
+    <% end %>
+  </div>
+
+  <div class="row animate-in-container">
+
+
+    <div class= "bold" id="form_id" style="max-width: 250px">
+    GRADES <span id="hide_div">Pre-K to 12</span> <span id="grades" style="display: none;"></span><br/><br/>
+      <div class="ui-slider" id="slider_id"></div>
+      <div id="filters">FILTERS</div>
+    </div>
+
+  </div> -->
+
+        
+
+          <%#= radio_button_tag 'search', 'partial', true, 
           onclick: "showFuzzySelection()" %>
-          Partial search
-          &nbsp;&nbsp;<%= radio_button_tag 'search', 'fuzzy', false, 
+          <!-- Partial search
+          &nbsp;&nbsp;<%#= radio_button_tag 'search', 'fuzzy', false, 
           onclick: "showFuzzySelection('fuzzy')" %>
           Fuzzy search &nbsp;&nbsp;
           <span id="fuzzy_id" style="display: none">
-            <%= select_tag 'fuzzyness', options_for_select(@fuzzy_count_arr), 
+            <%#= select_tag 'fuzzyness', options_for_select(@fuzzy_count_arr), 
             :class => "quantity-select-button" %>
           </span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <br>
-          <%= submit_tag 'Submit Query', data: { disable_with: "Please wait.." }, 
+        -->
+          <%#= submit_tag 'Submit Query', data: { disable_with: "Please wait.." }, 
           class: 'es-search-button' %>
-        </td>
-      </tr>
-      
-    </table>
+       
+    
+  
+</div>
+
+<div class="facet-toolbar">
+  <%= form_tag("/search/es", remote: true, class: "form-search" ) do %>
+    <input id="keyword" name="keyword" type="text" />
+    <span class="input-button">
+      <button type="submit" class="button"><i class="fa fa-search"></i></button>
+    </span>
   <% end %>
 </div>
+
+<div class="row animate-in-container">
+  <div id="facets" class="column" ng-class="{'active': facetsVisible}">
+    <div id="facets-inner">
+      <div id="facets-inner-scrollable">
+        <div class= "bold" id="form_id" style="max-width: 200px">
+          GRADES <span id="hide_div">Pre-K to 12</span> <span id="grades" style="display: none;"></span><br/><br/>
+            <div class="ui-slider" id="slider_id"></div>
+            <div id="filters">FILTERS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="teacher_sets" class="column">
+    <!-- <ul id="teacher_sets-list" class="result-list"
+        infinite-scroll="teacher_sets.nextPage()" infinite-scroll-immediate-check="false"
+        infinite-scroll-distance="1" infinite-scroll-disabled="teacher_sets.busy">
+      <li ng-repeat="ts in teacher_sets.items">
+        <ng-include src="'/templates/teacher_sets/_result.html'"></ng-include>
+      </li>
+    </ul>
+    <div ng-hide="teacher_sets.items.length || teacher_sets.busy" class="no-results">Sorry, no results found!</div>
+    <div ng-show="teacher_sets.showBusy" class="loading-results">
+      <div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div>
+    </div> -->
+  </div>
+</div>
+
+
+
+
+
+
 <br>
 <div id="search_results"></div>
+
+<style type="text/css">
+  .ui-widget-content { 
+    font-family: Verdana,Arial,sans-serif !important; 
+    font-size: 1.1em !important; 
+    font-weight: 900 !important;
+}
+
+.search_button{
+    margin: 0 auto;
+    padding: 5px 15px 10px 12px;
+    font-size: 1em;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background: #AF2228;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+    position: absolute;
+}
+</style>

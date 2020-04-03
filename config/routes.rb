@@ -92,12 +92,16 @@ MyLibraryNYC::Application.routes.draw do
   root :to => "home#index"
   match '/search/es' => "elastic_search#index", via: [:get, :post]
 
+  #binding.pry
   resources :elastic_search do
     collection do
       get 'es_suggestions'
+      get 'teacher_set_grades_from_es'
     end
   end
-
+  get 'elastic_search/es_suggestions'
+  get 'elastic_search/teacher_set_grades_from_es'
+  
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
