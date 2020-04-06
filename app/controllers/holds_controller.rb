@@ -14,7 +14,7 @@ class HoldsController < ApplicationController
     redirect_to root_url
   end
 
-  
+
   # GET /holds/1.json
   def show
     LogWrapper.log('DEBUG', {'message' => 'show.start', 'method' => 'app/controllers/holds_controller.rb.show'})
@@ -27,9 +27,10 @@ class HoldsController < ApplicationController
       teacher_set: @hold.teacher_set,
       teacher_set_notes: @hold.teacher_set.teacher_set_notes
     }, serializer: HoldExtendedSerializer, root: false
+    return
   end
 
-  
+
   # GET /holds/new.json
   def new
     LogWrapper.log('DEBUG', {'message' => 'new.start', 'method' => 'app/controllers/holds_controller.rb.new'})
@@ -39,9 +40,10 @@ class HoldsController < ApplicationController
       hold: @hold,
       teacher_set: @hold.teacher_set
     }
+    return
   end
 
-  
+
   # GET /holds/1/cancel.json
   def cancel
     LogWrapper.log('DEBUG', {'message' => 'cancel.start', 'method' => 'app/controllers/holds_controller.rb.cancel'})
@@ -52,9 +54,10 @@ class HoldsController < ApplicationController
       teacher_set: @hold.teacher_set,
       teacher_set_notes: @hold.teacher_set.teacher_set_notes
     }
+    return
   end
 
-  
+
   ##
   # Create holds and update quantity column in holds.
   # Calculate available copies from quantity saves in teacherset table.
@@ -85,7 +88,7 @@ class HoldsController < ApplicationController
 
       respond_to do |format|
         if @hold.save
-          format.html { redirect_to hold_url(@hold.access_key), notice: 
+          format.html { redirect_to hold_url(@hold.access_key), notice:
             'Your order has been received by our system and will soon be delivered to your school.\
             <br/><br/>Check your email inbox for a message with further details.' }
           format.json { render json: @hold, status: :created, location: @hold }
