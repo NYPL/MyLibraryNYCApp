@@ -1,11 +1,13 @@
 <nav class="navigation" role="navigation">
   <div class="container">
     <%= link_to "<i class='fa fa-book'></i> Learn More".html_safe, 'http://mylibrarynyc.org', :class=>"link-learn-more" %>
-    <% if user_signed_in? %>
-      <%= link_to "<span>Dashboard</span>".html_safe, app_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
-    <% else %>
+    <% if MLNConfigurationController.new.feature_flag_config('dashboard.enabled') %>
+      <%= link_to "<i class='fa fa-user'></i> Dashboard".html_safe, app_url %>
+    <% end %>
+    <% if !user_signed_in? %>
       <%= link_to "<span>Home</span>".html_safe, root_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
     <% end %>
+
     <%= link_to "<i class='fa fa-question'></i> Help".html_safe, help_url %>
     <% if user_signed_in? %>
       <%= link_to "<i class='fa fa-user'></i> Account".html_safe, account_url %>

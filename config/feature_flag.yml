@@ -1,0 +1,15 @@
+local:
+  ts.data.from.es.enabled: false
+  dashboard.enabled: true
+
+development:
+  ts.data.from.es.enabled: false
+  dashboard.enabled: true
+
+qa:
+  ts.data.from.es.enabled: false
+  dashboard.enabled: true
+
+prod:
+  ts.data.from.es.enabled: false
+  dashboard.enabled: true
