@@ -41,6 +41,8 @@ gem 'will_paginate', '~> 3.0'
 gem 'webmock'
 gem 'yaml_db'
 gem 'rails-controller-testing'
+gem 'rollout'
+gem 'launchdarkly-server-sdk'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'

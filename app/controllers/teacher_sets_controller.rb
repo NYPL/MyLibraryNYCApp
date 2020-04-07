@@ -9,7 +9,6 @@ class TeacherSetsController < ApplicationController
   # Called on loading the teacher set list page and when the user selects
   # a facet to filter by.
   def index
-    #binding.pry
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
 
     @teacher_sets = TeacherSet.for_query params
@@ -84,14 +83,9 @@ class TeacherSetsController < ApplicationController
     # Max copies value is configured in elastic beanstalk.
     # Max_copies_requestable is the maximum number of teachersets can request.
 
-    show_feature = LaunchDarklyController.new.get_feature_flag('allow-extra-quantity', current_user)
+    allow_extra_holds = LaunchDarklyController.new.get_feature_flag('allow-extra-quantity', current_user)
     
-   # binding.pry
-    if show_feature
-      max_copies_requestable = 10
-    else
-      max_copies_requestable = ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
-    end
+    max_copies_requestable =  allow_extra_holds ? 10 : ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
 
     if @set.held_by? current_user
       @active_hold = @set.pending_holds_for_user(current_user).first
@@ -106,7 +100,6 @@ class TeacherSetsController < ApplicationController
 
     # Button should be disabled after teacher has ordered maximum.
     allowed_quantities = user_has_ordered_max ? [] : (1..max_copies_requestable.to_i).to_a
-    #binding.pry
     render json: {
       teacher_set: @set,
       active_hold: @active_hold,
