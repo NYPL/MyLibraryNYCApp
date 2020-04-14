@@ -54,16 +54,19 @@ class ElasticSearch
     keyword = params["keyword"] if params["keyword"].present?
     query = {}    
     if keyword.present? && params["grade_begin"].present? && params["grade_end"].present?
+     
      query = {:query=>
           {:bool=>
             {:must=>
-              [{:range=>{:grade_begin=>{:gte=> params["grade_begin"].to_i}}},
+               [{:range=>{:grade_begin=>{:lte=> params["grade_end"].to_i}}},
                {:range=>{:grade_end=>{:gte=> params["grade_begin"].to_i}}},
-               {:range=>{:grade_begin=>{:lte=> params["grade_end"].to_i}}},
-               {:range=>{:grade_end=>{:lte=> params["grade_end"].to_i}}},
+
                {:multi_match=>{:query=> keyword, :fields=>["title", "description", "contents"]}}]}}}
+
+
+
     elsif keyword.present?
-      query = {:query=> {:bool=> {:must=> {:multi_match=>{:query=> keyword, :fields=>["title", "description"]}} }}}
+      query = {:query=> {:bool=> {:must=> {:multi_match=>{:query=> keyword, :fields=>["title^8", "description", "contents"]}} }}}
     elsif params["grade_begin"].present? && params["grade_end"].present?
       query = {:query=> {:bool=> {:must=>
                 [{:range=>{:grade_begin=>{:gte=> params["grade_begin"].to_i}}},
@@ -74,7 +77,8 @@ class ElasticSearch
     end
     query[:from] = from;
     query[:size] = size;
-    query[:sort] = [{ "availability.raw": {"order": "asc"}}, { "available_copies": "desc" }, { "id": "desc" }]
+    query[:sort] = [{"_score": "desc", "available_copies": "desc", "_id": "asc"}]
+    #[{ "availability.raw": {"order": "asc"}}, { "available_copies": "desc" }, { "id": "desc" }]
     results = search_by_query(query)
     #binding.pry
     unless results[:hits].present?
