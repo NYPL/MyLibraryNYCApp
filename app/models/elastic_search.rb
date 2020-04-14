@@ -11,9 +11,10 @@ class ElasticSearch
         headers: { content_type: 'application/json' }
       }
     }
+    
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
-    @index = index || ts_index
+    @index = index || 'ts_index'
     @type = 'teacher_set'
 
     #ts_index211
@@ -42,38 +43,54 @@ class ElasticSearch
   end
 
   def fuzzy_search_by_query(keyword, from, size, fuzzy_val)
-    query = {"from": from, "size": size, "query": {"multi_match": {"query": keyword, "fields": ["title", "description", "contents"], "fuzziness": fuzzy_val}}}
+    query = {"query": {"multi_match": {"query": keyword, "fields": ["title", "description", "contents"], "fuzziness": fuzzy_val}}}
     search_by_query(query)
   end
 
+  def get_teacher_sets_from_es(params)
+    page = params["page"].present? ? params["page"].to_i - 1 : 0
+    size = 20
+    from = page.to_i * size.to_i
+    keyword = params["keyword"] if params["keyword"].present?
+    query = {}    
+    if keyword.present? && params["grade_begin"].present? && params["grade_end"].present?
+     query = {:query=>
+          {:bool=>
+            {:must=>
+              [{:range=>{:grade_begin=>{:gte=> params["grade_begin"].to_i}}},
+               {:range=>{:grade_end=>{:gte=> params["grade_begin"].to_i}}},
+               {:range=>{:grade_begin=>{:lte=> params["grade_end"].to_i}}},
+               {:range=>{:grade_end=>{:lte=> params["grade_end"].to_i}}},
+               {:multi_match=>{:query=> keyword, :fields=>["title", "description", "contents"]}}]}}}
+    elsif keyword.present?
+      query = {:query=> {:bool=> {:must=> {:multi_match=>{:query=> keyword, :fields=>["title", "description"]}} }}}
+    elsif params["grade_begin"].present? && params["grade_end"].present?
+      query = {:query=> {:bool=> {:must=>
+                [{:range=>{:grade_begin=>{:gte=> params["grade_begin"].to_i}}},
+                 {:range=>{:grade_end=>{:gte=> params["grade_begin"].to_i}}},
+                 {:range=>{:grade_begin=>{:lte=> params["grade_end"].to_i}}},
+                 {:range=>{:grade_end=>{:lte=> params["grade_end"].to_i}}}]
+               }}}
+    end
+    query[:from] = from;
+    query[:size] = size;
+    query[:sort] = [{ "availability.raw": {"order": "asc"}}, { "available_copies": "desc" }, { "id": "desc" }]
+    results = search_by_query(query)
+    #binding.pry
+    unless results[:hits].present?
+      query = {"query": {"multi_match": {"query": keyword, "fields": ["title", "description", "contents"], "fuzziness": 1}}}
+      results = search_by_query(query)
+    end
+    results
+  end
+
   def get_teacher_set_grades(grade_begin, grade_end)
-      query = {
-        "query": {
-          "bool": {
-            "should": [
-              {
-                "range": {
-                  "grade_end": {
-                    "gte": grade_begin,
-                    "lte": grade_end,
-                    "relation": "CONTAINS"
-                  }
-                }
-              }, 
-              {
-                "range": {
-                  "grade_begin": {
-                    "gte": grade_begin,
-                    "lte": grade_end,
-                    "relation": "CONTAINS"
-                  }
-                }
-              }
-            ]
-          }
-        }
-      }
-      search_by_query(query) 
+
+    [{:range=>{:grade_begin=>{:gte=> params["grade_begin"].to_i}}},
+    {:range=>{:grade_end=>{:gte=> params["grade_begin"].to_i}}},
+    {:range=>{:grade_begin=>{:lte=> params["grade_end"].to_i}}},
+    {:range=>{:grade_end=>{:lte=> params["grade_end"].to_i}}}]
+          
   end
 
   def search_by_query(body)

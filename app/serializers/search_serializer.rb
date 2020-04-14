@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SearchSerializer < ActiveModel::Serializer
-  cached
+  #cached
 
   self.root = false
 

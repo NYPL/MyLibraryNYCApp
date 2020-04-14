@@ -55,87 +55,36 @@ function onGradeSliderStop(grade_begin, grade_end){
 
 <div id="search_query">
   
-  <!-- <div class="facet-toolbar">
+  <div class="facet-toolbar">
     <%= form_tag("/search/es", remote: true) do %>
       <span>
-          <%#= text_field_tag 'search_keyword', '', :spellcheck => "true" , :placeholder => 'Search Keyword', :class => 'search-box', :type => "search" %>
-            <input id="search_keyword" name="search_keyword" type="text" 
-            spellcheck="true" style="width:170px"/>
-            <span class="input-button">
-              <button type="submit" class="search_button"><i class="fa fa-search"></i></button>
-            </span>
-        </span>
-    <% end %>
-  </div>
-
-  <div class="row animate-in-container">
-
-
-    <div class= "bold" id="form_id" style="max-width: 250px">
-    GRADES <span id="hide_div">Pre-K to 12</span> <span id="grades" style="display: none;"></span><br/><br/>
-      <div class="ui-slider" id="slider_id"></div>
-      <div id="filters">FILTERS</div>
-    </div>
-
-  </div> -->
-
-        
-
-          <%#= radio_button_tag 'search', 'partial', true, 
+          <%= text_field_tag 'search_keyword', '', :spellcheck => "true" , :placeholder => 'Search Keyword', :class => 'search-box', :type => "search" %>
+          <%= radio_button_tag 'search', 'partial', true, 
           onclick: "showFuzzySelection()" %>
-          <!-- Partial search
-          &nbsp;&nbsp;<%#= radio_button_tag 'search', 'fuzzy', false, 
+          Partial search
+          &nbsp;&nbsp;<%= radio_button_tag 'search', 'fuzzy', false, 
           onclick: "showFuzzySelection('fuzzy')" %>
           Fuzzy search &nbsp;&nbsp;
           <span id="fuzzy_id" style="display: none">
-            <%#= select_tag 'fuzzyness', options_for_select(@fuzzy_count_arr), 
+            <%= select_tag 'fuzzyness', options_for_select(@fuzzy_count_arr), 
             :class => "quantity-select-button" %>
           </span>
-        -->
-          <%#= submit_tag 'Submit Query', data: { disable_with: "Please wait.." }, 
+       
+          <%= submit_tag 'Submit Query', data: { disable_with: "Please wait.." }, 
           class: 'es-search-button' %>
        
+    <% end %>
+  </div>
+
+
+        
+
+      
     
   
 </div>
 
-<div class="facet-toolbar">
-  <%= form_tag("/search/es", remote: true, class: "form-search" ) do %>
-    <input id="keyword" name="keyword" type="text" />
-    <span class="input-button">
-      <button type="submit" class="button"><i class="fa fa-search"></i></button>
-    </span>
-  <% end %>
-</div>
 
-<div class="row animate-in-container">
-  <div id="facets" class="column" ng-class="{'active': facetsVisible}">
-    <div id="facets-inner">
-      <div id="facets-inner-scrollable">
-        <div class= "bold" id="form_id" style="max-width: 200px">
-          GRADES <span id="hide_div">Pre-K to 12</span> <span id="grades" style="display: none;"></span><br/><br/>
-            <div class="ui-slider" id="slider_id"></div>
-            <div id="filters">FILTERS</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div id="teacher_sets" class="column">
-    <!-- <ul id="teacher_sets-list" class="result-list"
-        infinite-scroll="teacher_sets.nextPage()" infinite-scroll-immediate-check="false"
-        infinite-scroll-distance="1" infinite-scroll-disabled="teacher_sets.busy">
-      <li ng-repeat="ts in teacher_sets.items">
-        <ng-include src="'/templates/teacher_sets/_result.html'"></ng-include>
-      </li>
-    </ul>
-    <div ng-hide="teacher_sets.items.length || teacher_sets.busy" class="no-results">Sorry, no results found!</div>
-    <div ng-show="teacher_sets.showBusy" class="loading-results">
-      <div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div>
-    </div> -->
-  </div>
-</div>
 
 
 

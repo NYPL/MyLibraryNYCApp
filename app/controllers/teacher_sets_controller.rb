@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class TeacherSetsController < ApplicationController
 
   before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
@@ -13,8 +12,13 @@ class TeacherSetsController < ApplicationController
     TeacherSet.find_each do |ts|
       arr = []
       begin
-        body = {title: ts.title, description: ts.physical_description, contents: ts.contents}
-        ElasticSearch.new.create_document(ts.id, body)
+        body = {title: ts.title, description: ts.description, contents: ts.contents, 
+          id: ts.id.to_i, details_url: ts.details_url, grade_end: ts.grade_end, 
+          grade_begin: ts.grade_begin, availability: ts.availability, total_copies: ts.total_copies,
+          call_number: ts.call_number, language: ts.language, physical_description: ts.physical_description,
+          primary_language: ts.primary_language, created_at: ts.created_at, updated_at: ts.updated_at,
+          available_copies: ts.available_copies, bnumber: ts.bnumber, set_type: ts.set_type }
+        ElasticSearch.new('ts_index').create_document(ts.id, body)
         puts "updating elastic search"
       rescue Elasticsearch::Transport::Transport::Errors::Conflict => e
          puts "Error in elastic search"
@@ -24,12 +28,49 @@ class TeacherSetsController < ApplicationController
     end
   end
 
+  def create_ts_object_from_json(json)
+    arr = []
+    if json[:hits].present? && json[:hits].present?
+      json[:hits].each do |ts|
+        teacher_set = TeacherSet.new
+        next if ts["_source"]['mappings'].present?
+        teacher_set.title = ts["_source"]['title']
+        teacher_set.description = ts["_source"]['description']
+        teacher_set.contents = ts["_source"]['contents']
+        teacher_set.grade_begin = ts["_source"]['grade_begin']
+        teacher_set.grade_end = ts["_source"]['grade_end']
+        teacher_set.language = ts["_source"]['language']
+        teacher_set.id = ts["_source"]['id']
+        teacher_set.details_url = ts["_source"]['details_url']
+        teacher_set.availability = ts["_source"]['availability']
+
+        teacher_set.total_copies = ts["_source"]['total_copies']
+        teacher_set.call_number = ts["_source"]['call_number']
+        teacher_set.language = ts["_source"]['language']
+        teacher_set.physical_description = ts["_source"]['physical_description']
+        teacher_set.primary_language = ts["_source"]['primary_language']
+        teacher_set.created_at = ts["_source"]['created_at']
+        teacher_set.updated_at = ts["_source"]['updated_at']
+        teacher_set.available_copies = ts["_source"]['available_copies']
+        teacher_set.bnumber = ts["_source"]['bnumber']
+        teacher_set.set_type = ts["_source"]['set_type']
+        arr << teacher_set 
+      end
+    end
+    arr
+  end
+
   def index
     #create_teacherset_document_in_es
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-
-    @teacher_sets = TeacherSet.for_query params
-    @facets = TeacherSet.facets_for_query @teacher_sets
+    #binding.pry
+    if true#MLNConfigurationController.new.feature_flag_config('dashboard.enabled')
+      teacher_sets = ElasticSearch.new('ts_index').get_teacher_sets_from_es(params)
+      @teacher_sets = create_ts_object_from_json(teacher_sets)
+    else
+      @teacher_sets = TeacherSet.for_query params
+    end
+    @facets = TeacherSet.facets_for_query TeacherSet.for_query params
 
     # Determine what facets are selected based on query string
     @facets.each do |f|
@@ -70,7 +111,6 @@ class TeacherSetsController < ApplicationController
         v[:path] = teacher_sets_path(v[:q])
       end
     end
-
     render json: {
       teacher_sets: @teacher_sets,
       facets: @facets
