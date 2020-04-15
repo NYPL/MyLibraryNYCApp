@@ -25,7 +25,15 @@
   @media all and (max-width: 590px) {
     padding: 3rem 0em 0em 0em;
   }
-  @media not all and (min-width: 450px) {
+  @media not all and (min-width: 440px) {
+    padding: 5rem 0em 0em 0em;
+  }
+
+  @media not all and (min-width: 400px) {
+    padding: 3rem 0em 0em 0em;
+  }
+
+  @media not all and (min-width: 250px) {
     padding: 5rem 0em 0em 0em;
   }
 }
