@@ -15,10 +15,23 @@
   float: left;
   clear: left;
   width: 100%;
+  padding: 1rem;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: 0rem;
+  background: #fff7a5;
+  @media all and (max-width: 590px) {
+    padding: 3rem 0em 0em 0em;
+  }
+  @media not all and (min-width: 450px) {
+    padding: 5rem 0em 0em 0em;
+  }
 }
 
 .container {
-  max-width: 800px;
+  max-width: 810px;
   margin: 0 auto;
 }
 
