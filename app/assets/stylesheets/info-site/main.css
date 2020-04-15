@@ -29,12 +29,20 @@
     padding: 5rem 0em 0em 0em;
   }
 
+  @media not all and (min-width: 435px) {
+    padding: 5rem 0em 0em 0em;
+  }
+
   @media not all and (min-width: 400px) {
     padding: 3rem 0em 0em 0em;
   }
 
-  @media not all and (min-width: 250px) {
+  @media not all and (min-width: 235px) {
     padding: 5rem 0em 0em 0em;
+  }
+
+  @media not all and (min-width: 160px) {
+    padding: 10rem 0em 0em 0em;
   }
 }
 
