@@ -92,7 +92,6 @@ MyLibraryNYC::Application.routes.draw do
   root :to => "home#index"
   match '/search/es' => "elastic_search#index", via: [:get, :post]
 
-  #binding.pry
   resources :elastic_search do
     collection do
       get 'es_suggestions'

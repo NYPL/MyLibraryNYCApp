@@ -18,7 +18,7 @@ class TeacherSetsController < ApplicationController
           call_number: ts.call_number, language: ts.language, physical_description: ts.physical_description,
           primary_language: ts.primary_language, created_at: ts.created_at, updated_at: ts.updated_at,
           available_copies: ts.available_copies, bnumber: ts.bnumber, set_type: ts.set_type }
-        ElasticSearch.new('ts_index').create_document(ts.id, body)
+        ElasticSearch.new.create_document(ts.id, body)
         puts "updating elastic search"
       rescue Elasticsearch::Transport::Transport::Errors::Conflict => e
          puts "Error in elastic search"
@@ -43,7 +43,6 @@ class TeacherSetsController < ApplicationController
         teacher_set.id = ts["_source"]['id']
         teacher_set.details_url = ts["_source"]['details_url']
         teacher_set.availability = ts["_source"]['availability']
-
         teacher_set.total_copies = ts["_source"]['total_copies']
         teacher_set.call_number = ts["_source"]['call_number']
         teacher_set.language = ts["_source"]['language']
@@ -63,9 +62,9 @@ class TeacherSetsController < ApplicationController
   def index
     #create_teacherset_document_in_es
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-    #binding.pry
+  begin
     if true#MLNConfigurationController.new.feature_flag_config('dashboard.enabled')
-      teacher_sets = ElasticSearch.new('ts_index').get_teacher_sets_from_es(params)
+      teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = create_ts_object_from_json(teacher_sets)
     else
       @teacher_sets = TeacherSet.for_query params
@@ -115,6 +114,15 @@ class TeacherSetsController < ApplicationController
       teacher_sets: @teacher_sets,
       facets: @facets
     }, serializer: SearchSerializer, include_books: false, include_contents: false
+  end
+  rescue Exception => e
+    respond_to do |format|
+        format.json {
+          render json: { error: "We've encountered an error.\
+            Please try again later or email help@mylibrarynyc.org for assistance.",
+          rails_error_message: e.message }.to_json, status: 500 }
+        LogWrapper.log('ERROR', 'message' => e.message)
+      end
   end
 
 
