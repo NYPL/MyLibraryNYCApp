@@ -5,9 +5,8 @@
 case ENV['RAILS_ENV']
 
 when 'local'
-
-  ENV['MLN_INFO_SITE_URL'] = "dev-www.mylibrarynyc.local"
-  ENV['MLN_SETS_SITE_URL'] = "dev-sets.mylibrarynyc.local"
+  ENV['MLN_INFO_SITE_HOSTNAME'] = "dev-www.mylibrarynyc.local"
+  ENV['MLN_SETS_SITE_HOSTNAME'] = "dev-sets.mylibrarynyc.local"
   ENV['DATABASE_URL'] = "postgresql://localhost/mylibnyc_local"
   ENV['ELASTIC_SEARCH_HOST'] = "http://localhost:9200/"
   ENV['ES_CONNECT_TIMEOUT'] = "5"
