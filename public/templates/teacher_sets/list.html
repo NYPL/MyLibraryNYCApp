@@ -47,10 +47,8 @@
         <ng-include src="'/templates/teacher_sets/_result.html'"></ng-include>
       </li>
     </ul>
-
     <div ng-show="teacher_sets.errors && teacher_sets.errors.error_message" class="no-results">{{teacher_sets.errors.error_message}}</div>
-
-    <div ng-hide="(teacher_sets.items || teacher_sets.busy) && teacher_sets.errors" class="no-results">Sorry, no results found!</div>
+    <div ng-hide="(teacher_sets.items.length || teacher_sets.busy || teacher_sets.errors)" class="no-results">Sorry, no results found!</div>
     
     <div ng-show="teacher_sets.showBusy" class="loading-results">
       <div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div><div>&nbsp;</div>
