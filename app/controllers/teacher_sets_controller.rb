@@ -63,7 +63,7 @@ class TeacherSetsController < ApplicationController
     #create_teacherset_document_in_es
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
   begin
-    if true#MLNConfigurationController.new.feature_flag_config('dashboard.enabled')
+    if MLNConfigurationController.new.feature_flag_config('dashboard.enabled')
       teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = create_ts_object_from_json(teacher_sets)
     else
@@ -116,13 +116,12 @@ class TeacherSetsController < ApplicationController
     }, serializer: SearchSerializer, include_books: false, include_contents: false
   end
   rescue Exception => e
-    respond_to do |format|
-        format.json {
-          render json: { error: "We've encountered an error.\
-            Please try again later or email help@mylibrarynyc.org for assistance.",
-          rails_error_message: e.message }.to_json, status: 500 }
-        LogWrapper.log('ERROR', 'message' => e.message)
-      end
+    LogWrapper.log('ERROR', {'message' => e.message, 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
+    render json: {
+      errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},
+      teacher_sets: {},
+      facets: {}
+    }, serializer: SearchSerializer, include_books: false, include_contents: false
   end
 
 
