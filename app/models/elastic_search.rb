@@ -14,7 +14,7 @@ class ElasticSearch
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
     @index = index || 'techerset_index'
-    @type = 'teacherset'
+    @type = 'teacher_set'
   end
 
   def index_doc_count
@@ -48,42 +48,53 @@ class ElasticSearch
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     size = 20
     from = page.to_i * size.to_i
-    keyword = params["keyword"] if params["keyword"].present?
-    grade_begin = params["grade_begin"]
-    grade_end = params["grade_end"].to_i
-    query = {}
+    keyword = params["keyword"]
+    g_begin = params["grade_begin"]
+    g_end = params["grade_end"]
+    language = params["language"]
+    set_type = params['set type']
+    availability = params['availability']
+    area_of_study = params['area of study']
 
-    if keyword.present? && params["grade_begin"].present? && params["grade_end"].present?
-      query = teacher_set_search_keyword_and_grades_query(keyword, params["grade_begin"].to_i, params["grade_end"].to_i)
-    elsif keyword.present?
-      query = ts_search_keyword_query(keyword)
-    elsif params["grade_begin"].present? && params["grade_end"].present?
-      query = {:query=> {:bool=> {:must=>
-                [ {:range=>{:grade_begin=>{:lte=> params["grade_end"].to_i}}},
-                  {:range=>{:grade_end=>{:gte=> params["grade_begin"].to_i}}} ]}}}
+    query = {:query=> {:bool=> {:must=> []}}}
+
+    if keyword.present? || (g_begin.present? && g_end.present?) || language.present? || set_type.present? || availability.present? || area_of_study.present?
+      if keyword.present?
+        query[:query][:bool][:must] << {:multi_match=>{:query=> keyword, :fields=>["title^8", "description", "contents"]}}
+      end
+      if g_begin.present? && g_end.present?
+        query[:query][:bool][:must] << {:range=>{:grade_begin=>{:lte=> g_end.to_i}}}
+        query[:query][:bool][:must] << {:range=>{:grade_end=>{:gte=> g_begin.to_i}}}
+      end
+      if language.present?
+        query[:query][:bool][:must] << {:multi_match=>{:query=> language.join, :fields=>["language", "primary_language"]}}
+      end
+
+      if set_type.present?
+        query[:query][:bool][:must] << {:match=>{:set_type=> set_type.join}}
+      end
+
+      if availability.present?
+        query[:query][:bool][:must] << {:match=>{:availability=> availability.join}}
+      end
+
+      if area_of_study.present?
+        query[:query][:bool][:must] << {:match=>{:area_of_study=> area_of_study.join}}
+      end
     end
 
     query[:from] = from;
     query[:size] = size;
     query[:sort] = [{"_score": "desc", "available_copies": "desc", "_id": "asc"}]
     results = search_by_query(query)
-
-    unless results[:hits].present?
-      query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
-      results = search_by_query(query)
+    
+    if !results[:hits].present? && keyword.present? && query[:query][:bool][:must].present?
+      if query[:query][:bool][:must][0][:multi_match].present?
+        query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
+        results = search_by_query(query)
+      end
     end
     results
-  end
-
-  def ts_search_keyword_query(keyword)
-    {:query=> {:bool=> {:must=> [{:multi_match=>{:query=> keyword, :fields=>["title^8", "description", "contents"]}}]}}}
-  end
-
-  def teacher_set_search_keyword_and_grades_query(keyword, grade_begin, grade_end)
-    {:query=> {:bool=> {:must=> 
-              [ {:multi_match=>{:query=> keyword, :fields=>["title^8", "description", "contents"]}},
-                {:range=>{:grade_begin=>{:lte=> grade_end.to_i}}},
-                {:range=>{:grade_end=>{:gte=> grade_begin.to_i}}} ]}}}
   end
 
   def search_by_query(body)
@@ -118,8 +129,7 @@ class ElasticSearch
 
   def update(id, query, type='user')
     start_time = Time.now
-    response = @client.update(index: @index, type: type, id: id, body: query)
-    response
+    @client.update(index: @index, type: type, id: id, body: query)
   end
 
   def es_suggestions(query, fields)
@@ -161,3 +171,4 @@ class ElasticSearch
     results
   end
 end
+
