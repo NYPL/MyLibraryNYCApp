@@ -62,10 +62,12 @@ class ElasticSearch
       if keyword.present?
         query[:query][:bool][:must] << {:multi_match=>{:query=> keyword, :fields=>["title^8", "description", "contents"]}}
       end
+
       if g_begin.present? && g_end.present?
         query[:query][:bool][:must] << {:range=>{:grade_begin=>{:lte=> g_end.to_i}}}
         query[:query][:bool][:must] << {:range=>{:grade_end=>{:gte=> g_begin.to_i}}}
       end
+
       if language.present?
         query[:query][:bool][:must] << {:multi_match=>{:query=> language.join, :fields=>["language", "primary_language"]}}
       end
@@ -85,7 +87,7 @@ class ElasticSearch
 
     query[:from] = from;
     query[:size] = size;
-    query[:sort] = [{"_score": "desc", "available_copies": "desc", "_id": "asc"}]
+    query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "available_copies": "desc", "_id": "asc"}]
     results = search_by_query(query)
     
     if !results[:hits].present? && keyword.present? && query[:query][:bool][:must].present?
