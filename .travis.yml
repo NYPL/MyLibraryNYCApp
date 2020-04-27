@@ -47,7 +47,7 @@ deploy:
   bucket_path: my-library-nyc-app-qa
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: local-elasticsearch-setup
+    branch: qa
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_PRODUCTION"
