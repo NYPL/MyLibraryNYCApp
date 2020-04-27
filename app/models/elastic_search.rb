@@ -87,8 +87,9 @@ class ElasticSearch
 
     query[:from] = from;
     query[:size] = size;
-    query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "available_copies": "desc", "_id": "asc"}]
+    query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
     results = search_by_query(query)
+
     
     if !results[:hits].present? && keyword.present? && query[:query][:bool][:must].present?
       if query[:query][:bool][:must][0][:multi_match].present?
