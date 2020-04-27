@@ -90,16 +90,6 @@ MyLibraryNYC::Application.routes.draw do
   match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
 
   root :to => "home#index"
-  match '/search/es' => "elastic_search#index", via: [:get, :post]
-
-  resources :elastic_search do
-    collection do
-      get 'es_suggestions'
-      get 'teacher_set_grades_from_es'
-    end
-  end
-  get 'elastic_search/es_suggestions'
-  get 'elastic_search/teacher_set_grades_from_es'
   
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

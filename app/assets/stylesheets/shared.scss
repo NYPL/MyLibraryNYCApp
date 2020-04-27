@@ -27,39 +27,3 @@
 .italic {
   font-style: italic;
 }
-.es-search-text{
-  height:200px;
-  width:550px;
-}
-.es-search-button {
-  width: auto;
-  display: block;
-  margin: 0 auto;
-  padding: 12px;
-  font-size: 1em;
-  font-weight: normal;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  background: #AF2228;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  text-decoration: none;
-}
-
-.search-box {
-  width:400px;
-  height: 33px;
-  margin:0 auto;
-  background-color: #FFF;
-  padding: 3px;
-  border: 1px solid #000;
-  border-radius: 4px;
-}
-
-.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
-    background: #e6e6e6 !important;
-    color: #000000 !important;
-    border-radius: 4px !important;
-}
