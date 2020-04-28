@@ -27,5 +27,9 @@ module TeachersetHelper
 
   def delete_teacheset_record_from_es(id)
     resp = ElasticSearch.new.delete_document_by_id(id)
+    if resp["found"] && resp["result"] == "deleted"
+      LogWrapper.log('DEBUG', {'message' => "Successfullly deleted elastic search doc. Teacher set id #{id}", 
+                               'method' => 'app/helpers/delete_teacheset_record_from_es'})
+    end
   end
 end

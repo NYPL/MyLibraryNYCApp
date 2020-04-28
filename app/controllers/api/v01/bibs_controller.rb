@@ -134,9 +134,12 @@ class Api::V01::BibsController < Api::V01::GeneralController
     saved_teacher_sets = []
     @request_body.each do |teacher_set_record|
       teacher_set = TeacherSet.where(bnumber: "b#{teacher_set_record['id']}").first
+
       if teacher_set
         saved_teacher_sets << teacher_set
-        teacher_set.destroy
+        resp = teacher_set.destroy
+        #After deletion of teacherset data from db than delete data from elastic search
+        delete_teacheset_record_from_es(teacher_set.id) if resp.destroyed?
       end
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
