@@ -130,9 +130,9 @@ class ElasticSearch
     response
   end
 
-  def update(id, query, type='user')
+  def update(id, query)
     start_time = Time.now
-    @client.update(index: @index, type: type, id: id, body: query)
+    @client.update(index: @index, type: @type, id: id, body: {doc: query}, refresh: true)
   end
 
   def es_suggestions(query, fields)

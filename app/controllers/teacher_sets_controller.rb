@@ -8,26 +8,6 @@ class TeacherSetsController < ApplicationController
   # Called on loading the teacher set list page and when the user selects
   # a facet to filter by.
 
-  def create_teacherset_document_in_es
-    TeacherSet.find_each do |ts|
-      arr = []
-      begin
-        body = {title: ts.title, description: ts.description, contents: ts.contents, 
-          id: ts.id.to_i, details_url: ts.details_url, grade_end: ts.grade_end, 
-          grade_begin: ts.grade_begin, availability: ts.availability, total_copies: ts.total_copies,
-          call_number: ts.call_number, language: ts.language, physical_description: ts.physical_description,
-          primary_language: ts.primary_language, created_at: ts.created_at, updated_at: ts.updated_at,
-          available_copies: ts.available_copies, bnumber: ts.bnumber, set_type: ts.set_type }
-        ElasticSearch.new.create_document(ts.id, body)
-        puts "updating elastic search"
-      rescue Elasticsearch::Transport::Transport::Errors::Conflict => e
-         puts "Error in elastic search"
-        arr << ts.id
-      end
-      arr
-    end
-  end
-
   def create_ts_object_from_json(json)
     arr = []
     if json[:hits].present? && json[:hits].present?
@@ -70,7 +50,6 @@ class TeacherSetsController < ApplicationController
       @teacher_sets = TeacherSet.for_query params
     end
     @facets = TeacherSet.facets_for_query TeacherSet.for_query params
-
     # Determine what facets are selected based on query string
     @facets.each do |f|
       f[:items].each do |v|
@@ -116,6 +95,7 @@ class TeacherSetsController < ApplicationController
     }, serializer: SearchSerializer, include_books: false, include_contents: false
   end
   rescue Exception => e
+    binding.pry
     LogWrapper.log('ERROR', {'message' => e.message, 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     render json: {
       errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},

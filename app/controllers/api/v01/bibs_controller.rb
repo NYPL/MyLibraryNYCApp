@@ -2,6 +2,7 @@
 
 class Api::V01::BibsController < Api::V01::GeneralController
   include LogWrapper
+  include TeachersetHelper
 
   before_action :set_request_body
   before_action :validate_source_of_request
@@ -105,7 +106,14 @@ class Api::V01::BibsController < Api::V01::GeneralController
           @request_body, "Error updating the associated book records via API: #{exception.message[0..200]}...", action_name, teacher_set
         ).deliver
       end
-
+      begin
+        create_or_update_teacherset_document_in_es(teacher_set)
+      rescue => exception
+        log_error('create_or_update_teacher_sets', exception)
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error occured while updating the elastic search document via API, BIB Id: #{teacher_set.bnumber}, 
+          #{exception.message[0..200]}...", action_name, teacher_set).deliver
+      end
       saved_teacher_sets << teacher_set
       LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set.
         Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",

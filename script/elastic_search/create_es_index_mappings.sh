@@ -25,7 +25,7 @@ curl -XPUT "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-e
       "analyzer": {
         "ts_analyzer": {
           "tokenizer" : "standard",
-          "filter: ["standard", "lowercase", "stop", "asciifolding"]
+          "filter": ["standard", "lowercase", "stop", "asciifolding"]
         }
       }
     }
@@ -94,12 +94,6 @@ curl -XPUT "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-e
           },
           "primary_language": {
             "type": "keyword"
-          },
-          "created_at":{
-            "type": "date"
-          },
-          "updated_at":{
-            "type": "date"
           },
           "available_copies": {
             "type": "integer"
