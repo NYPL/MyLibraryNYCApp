@@ -8,7 +8,7 @@ module TeachersetHelper
       id: ts.id.to_i, details_url: ts.details_url, grade_end: ts.grade_end, 
       grade_begin: ts.grade_begin, availability: availability, total_copies: ts.total_copies,
       call_number: ts.call_number, language: ts.language, physical_description: ts.physical_description,
-      primary_language: ts.primary_language, created_at: ts.created_at, updated_at: ts.updated_at,
+      primary_language: ts.primary_language, created_at: created_at, updated_at: updated_at,
       available_copies: ts.available_copies, bnumber: ts.bnumber, set_type: ts.set_type }
   end
 
@@ -23,5 +23,9 @@ module TeachersetHelper
       LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}", 
                                'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
     end
+  end
+
+  def delete_teacheset_record_from_es(id)
+    resp = ElasticSearch.new.delete_document_by_id(id)
   end
 end

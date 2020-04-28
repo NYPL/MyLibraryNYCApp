@@ -112,18 +112,6 @@ class ElasticSearch
     results
   end
 
-  def bulk_update(updates)
-    start_time = Time.now
-    response = @client.bulk({body: updates})
-    response
-  end
-
-  def delete_by_query(query)
-    start_time = Time.now
-    response = @client.delete_by_query(index: @index, body: query)
-    response
-  end
-
   def get_document_by_id(index, type, id)
     start_time = Time.now
     response = @client.get index: index, type: type, id: id
@@ -135,43 +123,22 @@ class ElasticSearch
     @client.update(index: @index, type: @type, id: id, body: {doc: query}, refresh: true)
   end
 
-  def es_suggestions(query, fields)
-    suggestions_arr = []
-    begin
-      result = search_by_query(query)
-      fields.each do |field|
-        suggestions_arr << result[:suggestions]["#{field}"][0]["options"].collect{|data| data['text']}
-      end
-      suggestions_arr.flatten.uniq if suggestions_arr.present?
-    rescue Exception => e
-      raise e.message
-    end
+  def bulk_update(updates)
+    start_time = Time.now
+    response = @client.bulk({body: updates})
+    response
   end
 
-  def get_search_results(_type, params)
+  def delete_document_by_id(id)
     start_time = Time.now
-    request_payload = {
-      id:' @es_template_id',
-      params: params
-    }
-    results = {}
-    resp = nil
-    error_es = "error"
-    begin
-      resp = @client.search_template index: @index, type: _type, body: request_payload
-    rescue Elasticsearch::Transport::Transport::Errors::BadRequest => e
-      raise 'error'
-    end
-    raise error_es if resp.nil? || resp['hits'].nil? || resp['hits']['total'].nil?\
-                        || resp['hits']['hits'].nil? || resp['hits']['hits'].length.nil?
+    response = @client.delete index: @index, type: @type, id: id
+    response
+  end
 
-    hits = resp['hits']
-    num_of_matches = hits['total']
-    results_hits = hits['hits']
-
-    results[:totalMatches] = num_of_matches
-    results[:hits] = results_hits
-    results
+  def delete_by_query(query)
+    start_time = Time.now
+    response = @client.delete_by_query(index: @index, body: query)
+    response
   end
 end
 
