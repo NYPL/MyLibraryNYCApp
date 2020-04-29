@@ -43,7 +43,8 @@ class TeacherSetsController < ApplicationController
     #create_teacherset_document_in_es
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
   begin
-    if true#MLNConfigurationController.new.feature_flag_config('dashboard.enabled')
+
+    if MlnConfigurationController.new.feature_flag_config('ts.data.from.es.enabled')
       teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = create_ts_object_from_json(teacher_sets)
     else

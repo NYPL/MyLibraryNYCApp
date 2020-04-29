@@ -5,7 +5,6 @@ class MlnConfigurationController < ApplicationController
   def initialize
     @feature_flag_config = nil
     @app_env = ENV['RACK_ENV'].nil? ? 'local' : ENV['RACK_ENV']
-    @s3_controller = S3Controller.new
     load_all_configs
   end
 
@@ -16,11 +15,11 @@ class MlnConfigurationController < ApplicationController
   private
 
   def load_config_local
-    YAML.load(File.read(File.expand_path("../config/feature_flag.yml", __FILE__)))
+    @feature_flag_config = YAML.load(File.read(File.expand_path("../config/feature_flag.yml", __FILE__)))
   end
 
   def load_config
-    @feature_flag_config = YAML.load(@s3_controller.get_s3_file("my-library-nyc-config", "#{ENV['RAILS_ENV']}/feature_flag.yml"))
+    @feature_flag_config = YAML.load(S3Controller.new.get_s3_file("my-library-nyc-config", "#{ENV['RAILS_ENV']}/feature_flag.yml"))
   end
 
   def load_all_configs
