@@ -4,6 +4,7 @@ class MlnConfigurationController < ApplicationController
 
   def initialize
     @feature_flag_config = nil
+    @elasticsearch_config = nil
     @app_env = ENV['RACK_ENV'].nil? ? 'local' : ENV['RACK_ENV']
     load_all_configs
   end
@@ -12,10 +13,15 @@ class MlnConfigurationController < ApplicationController
     @feature_flag_config["#{@app_env}"][key]
   end
 
+  def elasticsearch_config(key)
+    @elasticsearch_config["#{@app_env}"][key]
+  end
+
   private
 
   def load_config_local
     @feature_flag_config = YAML.load_file('config/feature_flag.yml')
+    @elasticsearch_config = YAML.load_file('config/elasticsearch_config.yml')
   end
 
   def load_config

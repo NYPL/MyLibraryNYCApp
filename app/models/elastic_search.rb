@@ -3,18 +3,18 @@
 class ElasticSearch
 
   def initialize(index=nil)
+    @es_config = MlnConfigurationController.new.elasticsearch_config('teachersets')
     arguments = {
-      host: ENV['ELASTIC_SEARCH_HOST'],
+      host: @es_config['host'],
       transport_options: {
-        request: { open_timeout: 10 },
+        request: { open_timeout: @es_config['connect_timeout'] },
         headers: { content_type: 'application/json' }
       }
     }
-    
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
-    @index = index || 'techerset_index'
-    @type = 'teacher_set'
+    @index = @es_config['index'] || 'teacherset'
+    @type = @es_config['type'] || 'teacherset'
   end
 
   def index_doc_count
@@ -31,6 +31,9 @@ class ElasticSearch
   def delete_document_by_id(id)
     start_time = Time.now
     response = @client.delete index: @index, type: @type, id: id
+    LogWrapper.log('DEBUG', {'message' => "ES document successfully deleted. Id: #{id}", 
+                             'method' => 'delete_document_by_id'})
+
     response
   end
 

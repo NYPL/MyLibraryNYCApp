@@ -40,7 +40,6 @@ class TeacherSetsController < ApplicationController
   end
 
   def index
-    #create_teacherset_document_in_es
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
   begin
 

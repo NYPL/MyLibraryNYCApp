@@ -1,0 +1,28 @@
+
+local:
+  teachersets:
+    host: 'http://localhost:9200/'
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
+
+development:
+  teachersets:
+    host: 'https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/'
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacher_set'
+    
+qa:
+  teachersets:
+    host: 'TODO'
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
+
+prod:
+  teachersets:
+    host: 'TODO'
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
