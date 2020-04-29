@@ -1,4 +1,3 @@
-
 local:
   teachersets:
     host: 'http://localhost:9200/'
@@ -11,8 +10,8 @@ development:
     host: 'https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/'
     connect_timeout: 3
     index: 'teacherset'
-    type: 'teacher_set'
-    
+    type: 'teacherset'
+
 qa:
   teachersets:
     host: 'TODO'
