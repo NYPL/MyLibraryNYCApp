@@ -26,6 +26,7 @@ class MlnConfigurationController < ApplicationController
 
   def load_config
     @feature_flag_config = YAML.load(S3Controller.new.get_s3_file("my-library-nyc-config", "#{ENV['RAILS_ENV']}/feature_flag.yml"))
+    @elasticsearch_config = YAML.load_file('config/elasticsearch_config.yml')
   end
 
   def load_all_configs
