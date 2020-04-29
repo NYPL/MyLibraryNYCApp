@@ -15,7 +15,7 @@ class MlnConfigurationController < ApplicationController
   private
 
   def load_config_local
-    @feature_flag_config = YAML.load(File.read(File.expand_path("../config/feature_flag.yml", __FILE__)))
+    @feature_flag_config = YAML.load_file('config/feature_flag.yml')
   end
 
   def load_config

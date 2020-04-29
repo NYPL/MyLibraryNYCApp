@@ -1,5 +1,5 @@
 local:
-  ts.data.from.es.enabled: false
+  ts.data.from.es.enabled: true
   dashboard.enabled: true
 
 development:
