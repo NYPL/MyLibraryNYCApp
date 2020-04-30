@@ -2,7 +2,7 @@
 
 class Api::V01::BibsController < Api::V01::GeneralController
   include LogWrapper
-  include TeachersetHelper
+  include TeacherSetsHelper
 
   before_action :set_request_body
   before_action :validate_source_of_request

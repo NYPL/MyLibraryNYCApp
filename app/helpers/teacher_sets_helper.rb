@@ -1,5 +1,6 @@
-module TeachersetHelper
+# frozen_string_literal: true
 
+module TeacherSetsHelper
   def teacher_set_info(ts)
     created_at = ts.created_at.present? ? ts.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
     updated_at = ts.updated_at.present? ? ts.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
