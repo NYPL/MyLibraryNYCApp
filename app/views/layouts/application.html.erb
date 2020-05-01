@@ -17,7 +17,10 @@
 
 <body>
   <%= render "layouts/navigation" %>
-  <%= render "layouts/messaging" %>
+  <%= render "layouts/banner" %>
+  <div id='error_messages_id'>
+    <%= render "layouts/messaging" %>
+  </div>
   <div id="main" class="container <%= controller.controller_name %>-<%= controller.action_name %>">
     <%= render "layouts/breadcrumb" unless controller.controller_name == "home" && controller.action_name == "index" %>
     <%= yield %>
@@ -25,4 +28,4 @@
   <%= render "layouts/footer" %>
   <%= render "layouts/timeout" if current_user %>
 </body>
-</html>
+</html> 

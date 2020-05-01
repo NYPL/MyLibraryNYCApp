@@ -38,7 +38,8 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
         } else {
           $location.path('/holds/'+resp.hold.access_key).search({new_order: 1});
         }
-          $scope.busy = false;
+        $scope.busy = false;
+        $scope.is_school_active = resp.is_school_active
       }).error(function(resp) {
         $scope.errorMessage = resp.error
       })
@@ -54,5 +55,11 @@ app.controller('TeacherSetDetailCtrl', ['$scope', '$routeParams', '$http', '$loc
         $location.path("/holds/new").search({teacher_set_id: $scope.teacher_set_id});
       }
     };
+
+    /** Makes the success/error alert at the top of the page disappear, 
+    when the user clicks anywhere on the body of the page. */
+    $scope.hideErrorDiv = function(){
+      $('#error_messages_id').hide();
+    }
   }
 ]);

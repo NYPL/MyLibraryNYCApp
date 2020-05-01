@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 MyLibraryNYC::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -65,7 +67,9 @@ MyLibraryNYC::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  config.action_mailer.perform_deliveries = true  
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.default_url_options = { :host => 'sets.mylibrarynyc.org' }
 
+  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
+  config.logger.level = Logger::INFO
 end

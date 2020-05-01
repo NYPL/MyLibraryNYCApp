@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Book do
 
   # To make page loading faster and smoother, we'll remove unnecessary filters.
@@ -62,13 +64,14 @@ ActiveAdmin.register Book do
       book_version.title
     } do |book|
     attributes_table do
-      [:title, :sub_title, :format, :publication_date, :isbn, :primary_language, :call_number, :description, :physical_description, :notes, :statement_of_responsibility, :created_at, :updated_at].each do |prop|
+      [:title, :sub_title, :format, :publication_date, :isbn, :primary_language, :call_number, :description, :physical_description, :notes, 
+       :statement_of_responsibility, :created_at, :updated_at].each do |prop|
         row prop
       end
     end
 
     h2 'Teacher Sets'
-    if book.teacher_sets.count > 0
+    if book.teacher_sets.count.positive?
       table_for book.teacher_sets do
         column 'Title' do |s| link_to s.title, admin_teacher_set_path(s) end
         column 'Availability' do |s| link_to s.availability, admin_teacher_set_path(s) end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HoldExtendedSerializer < ActiveModel::Serializer
 
   def serializable_hash
@@ -14,6 +16,7 @@ class HoldExtendedSerializer < ActiveModel::Serializer
     TeacherSetSerializer.new(object[:teacher_set], options).serializable_hash
   end
 
+  
   def hold_serializer_hash
     HoldSerializer.new(object[:hold], options).serializable_hash unless object[:hold].nil?
   end

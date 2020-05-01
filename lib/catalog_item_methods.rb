@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CatalogItemMethods
 
   CATALOG_DOMAIN = 'ilsstaff.nypl.org:2082'
@@ -31,10 +33,15 @@ module CatalogItemMethods
     def suitabilities
       ret = []
       unless grade_begin.nil?
-        if grade_end.nil? || grade_end == 0
+        g_begin = grade_begin
+        if grade_end.nil?
+          grade_begin = grade_val(g_begin)
           ret << "Grade #{grade_begin}+"
         else
-          ret << "Grades #{grade_begin} - #{grade_end}"
+          g_end = grade_end
+          grade_begin = grade_val(g_begin)
+          grade_end = grade_val(g_end)
+          ret << "Grades #{grade_begin} to #{grade_end}"
         end
       end
       unless lexile_begin.nil? or true # removing lexiles
@@ -45,6 +52,15 @@ module CatalogItemMethods
         end
       end
       ret
+    end
+
+    # Grades = {Pre-K => -1, K => 0}
+    def grade_val(grade)
+      return 'Pre-K' if grade == TeacherSet::PRE_K_VAL
+
+      return 'K' if grade == TeacherSet::K_VAL
+
+      return grade
     end
 
     def marc
@@ -68,10 +84,10 @@ module CatalogItemMethods
     end
 
     def update_bnumber!
-      if self.details_url && self.details_url.include?('record=')
+      if self.details_url && self&.details_url&.include?('record=')
         self.bnumber = self.details_url.split('record=')[1].split('~')[0]
         self.save
-      elsif self.details_url && self.details_url.include?('bibliocommons.com/item/show/') && self.details_url[-2..-1] == '052'
+      elsif self.details_url && self&.details_url&.include?('bibliocommons.com/item/show/') && self.details_url[-2..-1] == '052'
         self.bnumber = self.details_url.split('bibliocommons.com/item/show/')[1].gsub('052', '')
         self.save
       end

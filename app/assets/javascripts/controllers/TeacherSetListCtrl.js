@@ -5,12 +5,16 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
 
     $scope.$location = $location;
     $scope.teacher_sets = new TeachSetListFactory();
-    $scope.grades = [0,1,2,3,4,5,6,7,8,9,10,11,12];
+    // Grade filter supports Pre-k and K 
+    // Pre-k value is -1
+    // K value is 0
+    $scope.grades = [-1,0,1,2,3,4,5,6,7,8,9,10,11,12];
     $scope.min_grade = $scope.grades[0];
     $scope.max_grade = $scope.grades[$scope.grades.length-1];
     $scope.grade_values = [];
     $scope.grade_values[0] = $scope.teacher_sets.queryParams.grade_begin || $scope.min_grade;
     $scope.grade_values[1] = $scope.teacher_sets.queryParams.grade_end || $scope.max_grade;
+
     $scope.onGradeSliderStop = function(grade_begin, grade_end){
       $scope.teacher_sets.doGrades(grade_begin, grade_end);
     };
@@ -36,6 +40,12 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
       }, 1000);
     } else {
       $scope.hideFacets();
+    }
+
+    /** Makes the success/error alert at the top of the page disappear, 
+    when the user clicks anywhere on the body of the page. */
+    $scope.hideErrorDiv = function(){
+      $('#error_messages_id').hide();
     }
   }
 ]);

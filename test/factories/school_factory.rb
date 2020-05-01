@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Cranky::Factory
   def school
     define name: "Queens Academy: College Prep",

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SessionsController < Devise::SessionsController
   layout 'empty', :only => [ :timeout_check ]
 
@@ -33,13 +35,16 @@ class SessionsController < Devise::SessionsController
     8.hours
   end
 
+
   def timeout_warning_duration
     10.minutes
   end
 
+
   def timeout_timestamp
     session["warden.user.user.session"]["last_request_at"] + max_session_duration
   end
+
 
   def timeout_warning_timestamp
     timeout_timestamp - timeout_warning_duration

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 require 'pry'
 
@@ -31,8 +33,8 @@ namespace :sync_users do
       next if $. == 1
 
       # if we're only reading a few lines of the csv, then see if we can stop, before reading any further
-      next if (csv_start > 0 && $. < csv_start)
-      break if (csv_limit > 0 && $. >= (csv_start + csv_limit))
+      next if (csv_start.positive? && $. < csv_start)
+      break if (csv_limit.positive? && $. >= (csv_start + csv_limit))
 
       # "P BARCODE"|"EMAIL ADDR"|"PIN"|"EXP DATE"|"PCODE3"|"P TYPE"|"TOT CHKOUT"|"HOME LIBR"|"MBLOCK"|"PCODE4"|"PATRN NAME"|"ADDRESS"|"CREATED(PATRON)"|"UPDATED(PATRON)"
       # Example:  "23333106701234"|"name@gmail.com"|"Tn/jC7sHXQpfw"|"10-01-2018"|"1"|"153"|"4"|"ea   "|"-"|"895"|"LASTNAME, FIRSTNAME"|"123 MAIN ST, NY 10001"|"05-20-2009 15:23"|"07-02-2018"
@@ -113,8 +115,8 @@ namespace :sync_users do
       next if $. == 1
 
       # if we're only reading a few lines of the csv, then see if we can stop, before reading any further
-      next if (csv_start > 0 && $. < csv_start)
-      break if (csv_limit > 0 && $. >= (csv_start + csv_limit))
+      next if (csv_start.positive? && $. < csv_start)
+      break if (csv_limit.positive? && $. >= (csv_start + csv_limit))
 
       # "P BARCODE"|"EMAIL ADDR"|"PIN"|"EXP DATE"|"PCODE3"|"P TYPE"|"TOT CHKOUT"|"HOME LIBR"|"MBLOCK"|"PCODE4"|"PATRN NAME"|"ADDRESS"|"CREATED(PATRON)"|"UPDATED(PATRON)"
       # Example:  "23333106701234"|"name@gmail.com"|"Tn/jC7sHXQpfw"|"10-01-2018"|"1"|"153"|"4"|"ea   "|"-"|"895"|"LASTNAME, FIRSTNAME"|"123 MAIN ST, NY 10001"|"05-20-2009 15:23"|"07-02-2018"

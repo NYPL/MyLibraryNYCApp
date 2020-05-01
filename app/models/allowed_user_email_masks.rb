@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 ## A "mask" is a regular expression that can be used to isolate/approve a string.
 # We're using just the simplest form of a mask, like: "@nypl.org is allowed now".
@@ -9,7 +10,7 @@
 # users (teachers) can sign up for MLN accounts with.
 class AllowedUserEmailMasks < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email_pattern, :active, :created_at, :updated_at
+  # attr_accessible :email_pattern, :active, :created_at, :updated_at
 
   before_create :normalize_email_strings
   before_update :normalize_email_strings

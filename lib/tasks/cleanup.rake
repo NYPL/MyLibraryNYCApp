@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :cleanup do
 
   # Use it like this with one or more arguments: `rake cleanup:bib_records['book teacher_set']` or `rake cleanup:bib_records['book']`

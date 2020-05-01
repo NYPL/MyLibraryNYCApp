@@ -13,18 +13,13 @@
   <div class="field-group">
     <%= f.label 'Preferred email address for reservation notifications:' %>
     <%= f.email_field :alt_email, :value => @contact_email, :autofocus => true %>
-    <div class="checkbox">
-  <label><input type="checkbox" value="">Unsubscribe from email alerts</label>
-</div>
   </div>
 
   <div class="field-group">
     <%= f.label 'Your school:' %>
-    <%= f.select :school_id, School.active.map { |s| [s.name + " (#{s.code[1..-1].upcase})", s.id] }  %>
+    <%= f.select :school_id, @schools %>
   </div>
-
   <%= f.hidden_field :current_password, :value => User.default_password.to_s %>
-
   <div class="actions">
     <%= f.submit "Update Settings", :class=> "button" %>
   </div>

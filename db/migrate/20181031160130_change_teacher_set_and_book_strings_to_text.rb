@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TEACHER SET FIELDS WE ARE LEAVING AS STRING:
 # :primary_subject
 # :call_number
@@ -12,7 +14,7 @@
 # :isbn
 # :primary_language
 
-class ChangeTeacherSetAndBookStringsToText < ActiveRecord::Migration
+class ChangeTeacherSetAndBookStringsToText < ActiveRecord::Migration[4.2]
   def change
     change_column :teacher_sets, :title, :text
     change_column :teacher_sets, :details_url, :text

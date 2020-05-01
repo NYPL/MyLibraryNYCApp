@@ -87,6 +87,8 @@
         <%= link_to all_versions_string, history_admin_teacher_set_path(resource) %>
       <% elsif resource.class.name == 'Book' %>
         <%= link_to all_versions_string, history_admin_book_path(resource) %>
+      <% elsif resource.class.name == 'School' %>
+        <%= link_to all_versions_string, history_admin_school_path(resource) %>
       <% end %>
     <% else %>
     <% end %>

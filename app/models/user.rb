@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
   include Exceptions
   include LogWrapper
@@ -9,11 +11,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
   :recoverable, :rememberable, :trackable, :validatable, # this handles uniqueness of email automatically
   :timeoutable # adds session["warden.user.user.session"]["last_request_at"] which we use in sessions_controller
-
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me,
-  :barcode, :alt_barcodes, :first_name, :last_name, :alt_email,
-  :school_id, :pin
 
   # Makes getters and setters
   attr_accessor :pin
@@ -69,6 +66,7 @@ class User < ActiveRecord::Base
     "mylibrarynyc"
   end
 
+  
   def name(full=false)
     handle = self.email.sub /@.*/, ''
     name = self.first_name
@@ -76,10 +74,12 @@ class User < ActiveRecord::Base
     name.nil? ? handle : name
   end
 
+  
   def contact_email
     !self.alt_email.nil? && !self.alt_email.empty? ? self.alt_email : self.email
   end
 
+  
   # Enable login by either email or alt_email (DOE email and contact email, respectively)
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
@@ -90,15 +90,17 @@ class User < ActiveRecord::Base
     end
   end
 
+  
   def multiple_barcodes?
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
 
+  
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
 
-
+  
   def assign_barcode
     LogWrapper.log('DEBUG',
       {
@@ -122,6 +124,7 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
+  
   # Checks pin patterns against
   # the following examples:
   # 1111, 2929, 0003, 5999.
@@ -129,7 +132,7 @@ class User < ActiveRecord::Base
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
   def validate_pin_pattern
-    if pin && pin.scan(/(.)\1{2,}/).empty? && pin.scan(/(..)\1{1,}/).empty? == true
+    if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
       true
     else
       errors.add(:pin, 'does not meet our requirements. Please try again.')
@@ -137,6 +140,7 @@ class User < ActiveRecord::Base
     end
   end
 
+  
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -180,7 +184,6 @@ class User < ActiveRecord::Base
        'status' => 'start',
        'dataSent' => query
       })
-
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
@@ -203,12 +206,13 @@ class User < ActiveRecord::Base
         {
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
-          'responseData' => response.body 
+          'responseData' => response.body
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
 
+  
   # 404 - no records with the same e-mail were found
   # 409 - more then 1 record with the same e-mail was found
   # 200 - 1 record with the same e-mail was found
@@ -261,10 +265,12 @@ class User < ActiveRecord::Base
       return response
   end
 
+  
   def patron_type
     school.borough == 'QUEENS' ? 149 : 151
   end
 
+  
   def pcode3
     return 1 if school.borough == 'BRONX'
     return 2 if school.borough == 'MANHATTAN'
@@ -273,6 +279,7 @@ class User < ActiveRecord::Base
     return 5 if school.borough == 'QUEENS'
   end
 
+  
   # This returns the sierra code, not the school's zcode
   def pcode4
     school.sierra_code

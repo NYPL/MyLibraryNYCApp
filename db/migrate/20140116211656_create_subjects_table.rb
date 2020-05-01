@@ -1,4 +1,6 @@
-class CreateSubjectsTable < ActiveRecord::Migration
+# frozen_string_literal: true
+
+class CreateSubjectsTable < ActiveRecord::Migration[4.2]
   def up
     create_table :subjects do |t|
       t.string   "title", :limit => 30

@@ -1,4 +1,6 @@
-class DeviseCreateAdminUsers < ActiveRecord::Migration
+# frozen_string_literal: true
+
+class DeviseCreateAdminUsers < ActiveRecord::Migration[4.2]
   def migrate(direction)
     super
     # Create a default user

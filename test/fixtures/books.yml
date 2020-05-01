@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+books_one:
+  title: title
+  details_url: details_url
+
+books_two:
+  title: title1
+  details_url: details_url1

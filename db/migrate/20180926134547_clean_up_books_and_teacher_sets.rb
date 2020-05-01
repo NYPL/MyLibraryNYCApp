@@ -1,4 +1,6 @@
-class CleanUpBooksAndTeacherSets < ActiveRecord::Migration
+# frozen_string_literal: true
+
+class CleanUpBooksAndTeacherSets < ActiveRecord::Migration[4.2]
   def up
     ActiveRecord::Base.transaction do
       # Teacher sets already have bnumbers after testing each of the teacher_sets,
