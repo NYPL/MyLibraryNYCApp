@@ -127,6 +127,54 @@ class User < ActiveRecord::Base
   end
 
 
+  def check_barcode_uniqueness_with_sierra
+    @my_barcode='27777023005672'
+
+    response = HTTParty.get(
+      ENV['PATRON_MICROSERVICE_URL_V01'] + "?barcode=#{@my_barcode}",
+      headers:
+        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
+          'Content-Type' => 'application/json' },
+      timeout: 10
+    )
+    case response.code
+    when 200
+      @barcode_found = true
+      LogWrapper.log('DEBUG',
+        {
+          'message' => "The bibs service responded with the barcode JSON.",
+          'status' => response.code
+        })
+    when 404
+      @barcode_found = false
+      LogWrapper.log('ERROR',
+        {
+          'message' => "The bibs service could not find the book with ISBN=#{isbn}",
+          'status' => response.code
+        })
+    when 409
+      # duplicate patrons found for query
+      @barcode_found = false
+      LogWrapper.log('ERROR',
+        {
+          'message' => "The bibs service could not find the book with ISBN=#{isbn}",
+          'status' => response.code
+        })
+    else
+      # includes response of 500
+      LogWrapper.log('ERROR',
+        {
+          'message' => "An error has occured when sending a request to the bibs service",
+          'status' => response.code,
+          'responseData' => response.body
+        })
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+    end
+
+    return response
+  end
+
+
   # Checks pin patterns against
   # the following examples:
   # 1111, 2929, 0003, 5999.
