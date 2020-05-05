@@ -4,10 +4,10 @@
 
 <p>
   Change this order's status here:<br />
-  <%= link_to "#{new_admin_hold_change_url(:hold => @hold)}", new_admin_hold_change_url(:hold => @hold) %> 
+  <%= link_to "#{new_admin_hold_change_url(:hold => @hold)}", new_admin_hold_change_url(:hold => @hold) %>
 </p>
 
-<% if @user.multiple_barcodes? %>
+<% if @user.multiple_barcodes_in_mln? %>
   <p style="font-weight: bold; color: red;">Note: This user has multiple barcodes.</p>
 <% end %>
 

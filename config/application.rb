@@ -76,5 +76,12 @@ module MyLibraryNYC
       end
     end
 
+    # set Active Job to use the built-in adapter for the delayed_job gem
+    config.active_job.queue_adapter = :delayed_job
+
+    # set the queue name prefix to the stage we're running on
+    # later, we can set the delayed jobs to run in more than one queue
+    # s.a. the production_low_priority queue
+    config.active_job.queue_name_prefix = Rails.env
   end
 end

@@ -45,4 +45,6 @@ MyLibraryNYC::Application.configure do
 
   # Turn off asset pipline information showing in logs
   config.assets.logger = true
+
+  config.eager_load = false
 end
