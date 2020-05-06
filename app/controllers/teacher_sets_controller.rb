@@ -95,7 +95,6 @@ class TeacherSetsController < ApplicationController
     }, serializer: SearchSerializer, include_books: false, include_contents: false
   end
   rescue Exception => e
-    binding.pry
     LogWrapper.log('ERROR', {'message' => e.message, 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     render json: {
       errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},
