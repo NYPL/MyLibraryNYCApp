@@ -58,10 +58,13 @@ class ElasticSearch
     set_type = params['set type']
     availability = params['availability']
     area_of_study = params['area of study']
+    subjects = params['subjects']
 
     query = {:query=> {:bool=> {:must=> []}}}
 
-    if keyword.present? || (g_begin.present? && g_end.present?) || language.present? || set_type.present? || availability.present? || area_of_study.present?
+    if keyword.present? || (g_begin.present? && g_end.present?) || language.present? \
+      || set_type.present? || availability.present? || area_of_study.present? || subjects.present?
+
       if keyword.present?
         query[:query][:bool][:must] << {:multi_match=>{:query=> keyword, :fields=>["title^8", "description", "contents"]}}
       end
@@ -86,14 +89,16 @@ class ElasticSearch
       if area_of_study.present?
         query[:query][:bool][:must] << {:match=>{:area_of_study=> area_of_study.join}}
       end
+      if subjects.present?
+        query[:query][:bool][:must] << {:nested=>{:path=>"subjects", :query=>{:bool=>{:must=>{:terms=>{"subjects.id"=> subjects}}}}}}
+      end
     end
-
     query[:from] = from;
     query[:size] = size;
     query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
+
     results = search_by_query(query)
 
-    
     if !results[:hits].present? && keyword.present? && query[:query][:bool][:must].present?
       if query[:query][:bool][:must][0][:multi_match].present?
         query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
