@@ -130,50 +130,7 @@ curl -XPUT "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-e
 
 
 
-"subjects": {
-            "type": "nested",
-            "properties": {
-              "id": {
-                "type": "integer"
-              },
-              "title": {
-                "type": "text",
-                "fields": {
-                  "keyword": {
-                  "type": "keyword"
-                  }
-                }
-              }
 
-
-
-
-
-
-              "classes" : {
-                "type" : "nested",
-                "properties" : {
-                   "name" : { "type" : "text"},
-                   "grades" : { "type" : "integer" }
-              }
-            }
-        # if ts.subjects.present?
-        #   subjects_arr = []
-        # binding.pry
-        #   # ts.subjects.each {|s|
-        #   #   binding.pry
-        #   #   s_created_at = s.created_at.present? ? s.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-        #   #   s_updated_at = s.updated_at.present? ? s.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-        #   #   sub_hash = {}
-
-        #   #   sub_hash[:id] = s.id
-        #   #   sub_hash[:title] = s.title
-        #   #   sub_hash[:created_at] = s_created_at
-        #   #   sub_hash[:updated_at] = s_updated_at
-        #   #   subjects_arr << sub_hash
-        #   # }
-          
-        # end
 
 
 def create_teacherset_document_in_es

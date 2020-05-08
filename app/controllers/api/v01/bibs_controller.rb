@@ -106,18 +106,18 @@ class Api::V01::BibsController < Api::V01::GeneralController
           @request_body, "Error updating the associated book records via API: #{exception.message[0..200]}...", action_name, teacher_set
         ).deliver
       end
+
       begin
         create_or_update_teacherset_document_in_es(teacher_set)
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(
-          @request_body, "Error occured while updating the elastic search document via API, BIB Id: #{teacher_set.bnumber}, 
-          #{exception.message[0..200]}...", action_name, teacher_set).deliver
+        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error occured while updating the elastic search document via API,\
+          BIB Id: #{teacher_set.bnumber},#{exception.message[0..200]}...", action_name, teacher_set).deliver
       end
       saved_teacher_sets << teacher_set
       LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set.
-        Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
-        'method' => "bibs_controller.create_or_update_teacher_sets"})
+                     Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
+                     'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
@@ -134,13 +134,11 @@ class Api::V01::BibsController < Api::V01::GeneralController
     saved_teacher_sets = []
     @request_body.each do |teacher_set_record|
       teacher_set = TeacherSet.where(bnumber: "b#{teacher_set_record['id']}").first
-
-      if teacher_set
-        saved_teacher_sets << teacher_set
-        resp = teacher_set.destroy
-        #After deletion of teacherset data from db than delete data from elastic search
-        delete_teacheset_record_from_es(teacher_set.id) if resp.destroyed?
-      end
+      next unless teacher_set.present?
+      saved_teacher_sets << teacher_set
+      resp = teacher_set.destroy
+      # After deletion of teacherset data from db than delete data teacherset doc from elastic search
+      delete_teacheset_record_from_es(teacher_set.id) if resp.destroyed?
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end

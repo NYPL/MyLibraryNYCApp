@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class S3Controller < ApplicationController
 
   def initialize
@@ -5,8 +7,8 @@ class S3Controller < ApplicationController
     @s3_client = create_client
   end
 
+
   def get_s3_file(bucket, file)
-    start_time = Time.now
     begin
       response = @s3_client.get_object({
         bucket: bucket,
@@ -27,4 +29,4 @@ class S3Controller < ApplicationController
     }
     Aws::S3::Client.new(client_options)
   end
-end 
+end

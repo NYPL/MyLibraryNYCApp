@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class ElasticSearch
-
-  def initialize(index=nil)
+  def initialize(_index = nil)
     @es_config = MlnConfigurationController.new.elasticsearch_config('teachersets')
     arguments = {
       host: @es_config['host'],
@@ -17,19 +16,20 @@ class ElasticSearch
     @type = @es_config['type'] || 'teacherset'
   end
 
+
   def index_doc_count
-    start_time = Time.now
-    response = @client.perform_request 'GET', @index+'/_count'
+    response = @client.perform_request 'GET', @index + '/_count'
     total_docs = response.body['count']
     total_docs
   end
+
 
   def create_document(id, body)
     @client.create index: @index, type: @type, id: id, body: body
   end
 
+
   def delete_document_by_id(id)
-    start_time = Time.now
     response = @client.delete index: @index, type: @type, id: id
     LogWrapper.log('DEBUG', {'message' => "ES document successfully deleted. Id: #{id}", 
                              'method' => 'delete_document_by_id'})
@@ -37,20 +37,21 @@ class ElasticSearch
     response
   end
 
-  def partial_search_by_query(keyword, from , size)
-    query = {"from": from, "size": size, "query": {"multi_match": {"query": keyword, "fields": ["title", "description", "contents"]}}}
+
+  def partial_search_by_query(keyword, from, size)
+    query = {"from": from, "size": size, "query": {"multi_match": {"query": keyword, "fields": %w[title description contents]}}}
     search_by_query(query)
   end
+
 
   def fuzzy_search_by_query(keyword, from, size, fuzzy_val)
-    query = {"query": {"multi_match": {"query": keyword, "fields": ["title", "description", "contents"], "fuzziness": fuzzy_val}}}
+    query = {"from": from, "size": size, "query": {"multi_match": 
+      {"query": keyword, "fields": %w[title description contents], "fuzziness": fuzzy_val}}}
     search_by_query(query)
   end
 
-  def get_teacher_sets_from_es(params)
-    page = params["page"].present? ? params["page"].to_i - 1 : 0
-    size = 20
-    from = page.to_i * size.to_i
+
+  def teacher_sets_params(params)
     keyword = params["keyword"]
     g_begin = params["grade_begin"]
     g_end = params["grade_end"]
@@ -59,42 +60,51 @@ class ElasticSearch
     availability = params['availability']
     area_of_study = params['area of study']
     subjects = params['subjects']
+    [keyword, g_begin, g_end, language, set_type, availability, area_of_study, subjects]
+  end
 
-    query = {:query=> {:bool=> {:must=> []}}}
+
+  def get_teacher_sets_from_es(params)
+    page = params["page"].present? ? params["page"].to_i - 1 : 0
+    size = 20
+    from = page.to_i * size.to_i
+    keyword, g_begin, g_end, language, set_type, availability, area_of_study, subjects = teacher_sets_params(params)
+    query = {:query => {:bool => {:must => []}}}
 
     if keyword.present? || (g_begin.present? && g_end.present?) || language.present? \
       || set_type.present? || availability.present? || area_of_study.present? || subjects.present?
 
       if keyword.present?
-        query[:query][:bool][:must] << {:multi_match=>{:query=> keyword, :fields=>["title^8", "description", "contents"]}}
+        query[:query][:bool][:must] << {:multi_match => {:query => keyword, :fields => %w[title^8 description contents]}}
       end
 
       if g_begin.present? && g_end.present?
-        query[:query][:bool][:must] << {:range=>{:grade_begin=>{:lte=> g_end.to_i}}}
-        query[:query][:bool][:must] << {:range=>{:grade_end=>{:gte=> g_begin.to_i}}}
+        query[:query][:bool][:must] << {:range => {:grade_begin => {:lte => g_end.to_i}}}
+        query[:query][:bool][:must] << {:range => {:grade_end => {:gte => g_begin.to_i}}}
       end
 
       if language.present?
-        query[:query][:bool][:must] << {:multi_match=>{:query=> language.join, :fields=>["language", "primary_language"]}}
+        query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[language primary_language]}}
       end
 
       if set_type.present?
-        query[:query][:bool][:must] << {:match=>{:set_type=> set_type.join}}
+        query[:query][:bool][:must] << {:match => {:set_type => set_type.join}}
       end
 
       if availability.present?
-        query[:query][:bool][:must] << {:match=>{:availability=> availability.join}}
+        query[:query][:bool][:must] << {:match => {:availability => availability.join}}
       end
 
       if area_of_study.present?
-        query[:query][:bool][:must] << {:match=>{:area_of_study=> area_of_study.join}}
+        query[:query][:bool][:must] << {:match => {:area_of_study => area_of_study.join}}
       end
+
       if subjects.present?
-        query[:query][:bool][:must] << {:nested=>{:path=>"subjects", :query=>{:bool=>{:must=>{:terms=>{"subjects.id"=> subjects}}}}}}
+        query[:query][:bool][:must] << {:nested => {:path => "subjects", :query => {:bool => {:must => {:terms => {"subjects.id" => subjects}}}}}}
       end
     end
-    query[:from] = from;
-    query[:size] = size;
+    query[:from] = from
+    query[:size] = size
     query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
 
     results = search_by_query(query)
@@ -108,9 +118,9 @@ class ElasticSearch
     results
   end
 
+
   def search_by_query(body)
     results = {}
-    start_time = Time.now
     resp = @client.search(index: @index, body: body)
     hits = resp['hits']
     num_of_matches = hits['total']
@@ -120,33 +130,26 @@ class ElasticSearch
     results
   end
 
+
   def get_document_by_id(index, type, id)
-    start_time = Time.now
     response = @client.get index: index, type: type, id: id
     response
   end
 
+
   def update(id, query)
-    start_time = Time.now
     @client.update(index: @index, type: @type, id: id, body: {doc: query}, refresh: true)
   end
 
+
   def bulk_update(updates)
-    start_time = Time.now
     response = @client.bulk({body: updates})
     response
   end
 
-  def delete_document_by_id(id)
-    start_time = Time.now
-    response = @client.delete index: @index, type: @type, id: id
-    response
-  end
 
   def delete_by_query(query)
-    start_time = Time.now
     response = @client.delete_by_query(index: @index, body: query)
     response
   end
 end
-

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'yaml'
 
 class MlnConfigurationController < ApplicationController
-
   def initialize
     @feature_flag_config = nil
     @elasticsearch_config = nil
@@ -9,12 +10,14 @@ class MlnConfigurationController < ApplicationController
     load_all_configs
   end
 
+
   def feature_flag_config(key)
-    @feature_flag_config["#{@app_env}"][key]
+    @feature_flag_config[@app_env][key]
   end
 
+
   def elasticsearch_config(key)
-    @elasticsearch_config["#{@app_env}"][key]
+    @elasticsearch_config[@app_env][key]
   end
 
   private
@@ -24,13 +27,15 @@ class MlnConfigurationController < ApplicationController
     @elasticsearch_config = YAML.load_file('config/elasticsearch_config.yml')
   end
 
+
   def load_config
-    @feature_flag_config = YAML.load(S3Controller.new.get_s3_file("my-library-nyc-config", "#{ENV['RAILS_ENV']}/feature_flag.yml"))
+    @feature_flag_config = YAML.safe_load(S3Controller.new.get_s3_file("my-library-nyc-config", "#{ENV['RAILS_ENV']}/feature_flag.yml"))
     @elasticsearch_config = YAML.load_file('config/elasticsearch_config.yml')
   end
 
+
   def load_all_configs
-    if @app_env == 'local' || @app_env == nil
+    if @app_env == 'local' || @app_env.nil?
       load_config_local
     else
       load_config
