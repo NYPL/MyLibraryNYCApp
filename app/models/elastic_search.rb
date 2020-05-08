@@ -68,54 +68,56 @@ class ElasticSearch
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     size = 20
     from = page.to_i * size.to_i
-    keyword, g_begin, g_end, language, set_type, availability, area_of_study, subjects = teacher_sets_params(params)
-    query = {:query => {:bool => {:must => []}}}
-
-    if keyword.present? || (g_begin.present? && g_end.present?) || language.present? \
-      || set_type.present? || availability.present? || area_of_study.present? || subjects.present?
-
-      if keyword.present?
-        query[:query][:bool][:must] << {:multi_match => {:query => keyword, :fields => %w[title^8 description contents]}}
-      end
-
-      if g_begin.present? && g_end.present?
-        query[:query][:bool][:must] << {:range => {:grade_begin => {:lte => g_end.to_i}}}
-        query[:query][:bool][:must] << {:range => {:grade_end => {:gte => g_begin.to_i}}}
-      end
-
-      if language.present?
-        query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[language primary_language]}}
-      end
-
-      if set_type.present?
-        query[:query][:bool][:must] << {:match => {:set_type => set_type.join}}
-      end
-
-      if availability.present?
-        query[:query][:bool][:must] << {:match => {:availability => availability.join}}
-      end
-
-      if area_of_study.present?
-        query[:query][:bool][:must] << {:match => {:area_of_study => area_of_study.join}}
-      end
-
-      if subjects.present?
-        query[:query][:bool][:must] << {:nested => {:path => "subjects", :query => {:bool => {:must => {:terms => {"subjects.id" => subjects}}}}}}
-      end
-    end
+    query = teacher_sets_query_based_on_filters(params)
     query[:from] = from
     query[:size] = size
     query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
 
     results = search_by_query(query)
 
-    if !results[:hits].present? && keyword.present? && query[:query][:bool][:must].present?
+    if !results[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
       if query[:query][:bool][:must][0][:multi_match].present?
         query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
         results = search_by_query(query)
       end
     end
     results
+  end
+
+
+  def teacher_sets_query_based_on_filters(params)
+    keyword, g_begin, g_end, language, set_type, availability, area_of_study, subjects = teacher_sets_params(params)
+    query = {:query => {:bool => {:must => []}}}
+
+    if keyword.present?
+      query[:query][:bool][:must] << {:multi_match => {:query => keyword, :fields => %w[title^8 description contents]}}
+    end
+
+    if g_begin.present? && g_end.present?
+      query[:query][:bool][:must] << {:range => {:grade_begin => {:lte => g_end.to_i}}}
+      query[:query][:bool][:must] << {:range => {:grade_end => {:gte => g_begin.to_i}}}
+    end
+
+    if language.present?
+      query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[language primary_language]}}
+    end
+
+    if set_type.present?
+      query[:query][:bool][:must] << {:match => {:set_type => set_type.join}}
+    end
+
+    if availability.present?
+      query[:query][:bool][:must] << {:match => {:availability => availability.join}}
+    end
+
+    if area_of_study.present?
+      query[:query][:bool][:must] << {:match => {:area_of_study => area_of_study.join}}
+    end
+
+    if subjects.present?
+      query[:query][:bool][:must] << {:nested => {:path => "subjects", :query => {:bool => {:must => {:terms => {"subjects.id" => subjects}}}}}}
+    end
+    query
   end
 
 
