@@ -36,9 +36,13 @@ module TeacherSetsHelper
       LogWrapper.log('DEBUG', {'message' => "Successfullly updated elastic search doc. Teacher set id #{body[:id]}", 
                                'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
-      ElasticSearch.new.create_document(body[:id], body)
-      LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}. Error: #{e.message}", 
-                               'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+      resp = ElasticSearch.new.create_document(body[:id], body)
+      if resp['result'] == "created"
+        LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}", 
+                                 'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+      end
+    rescue StandardError => e
+      LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}",
     end
   end
 

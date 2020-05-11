@@ -137,7 +137,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       next unless teacher_set.present?
       saved_teacher_sets << teacher_set
       resp = teacher_set.destroy
-      # After deletion of teacherset data from db than delete data teacherset doc from elastic search
+      # After deletion of teacherset data from db than delete teacherset doc from elastic search
       delete_teacheset_record_from_es(teacher_set.id) if resp.destroyed?
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
