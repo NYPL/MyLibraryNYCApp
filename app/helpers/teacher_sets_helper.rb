@@ -40,9 +40,13 @@ module TeacherSetsHelper
       if resp['result'] == "created"
         LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}", 
                                  'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+      else
+        LogWrapper.log('ERROR', {'message' => "Elastic search document not created/updated. Error: #{e.message}. Teacher set id #{body[:id]}", 
+                                 'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
       end
     rescue StandardError => e
-      LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}",
+      LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}. Error: #{e.message}",
+                               'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
     end
   end
 
