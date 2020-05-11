@@ -5,6 +5,21 @@ module TeacherSetsHelper
     created_at = ts_obj.created_at.present? ? ts_obj.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
     updated_at = ts_obj.updated_at.present? ? ts_obj.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
     availability = ts_obj.availability.present? ? ts_obj.availability.downcase : nil
+
+    subjects_arr = []
+    if ts_obj.subjects.present?
+      ts_obj.subjects.uniq.each do |subject|
+        subjects_hash = {}
+        s_created_at = subject.created_at.present? ? subject.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+        s_updated_at = subject.updated_at.present? ? subject.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+        subjects_hash[:id] = subject.id
+        subjects_hash[:title] = subject.title
+        subjects_hash[:created_at] = s_created_at
+        subjects_hash[:updated_at] = s_updated_at
+        subjects_arr << subjects_hash
+      end
+    end
+
     {title: ts_obj.title, description: ts_obj.description, contents: ts_obj.contents, 
       id: ts_obj.id.to_i, details_url: ts_obj.details_url, grade_end: ts_obj.grade_end, 
       grade_begin: ts_obj.grade_begin, availability: availability, total_copies: ts_obj.total_copies,

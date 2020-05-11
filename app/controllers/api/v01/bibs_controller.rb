@@ -108,7 +108,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
 
       begin
-        create_or_update_teacherset_document_in_es(teacher_set)
+        create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
         AdminMailer.failed_bibs_controller_api_request(@request_body, "Error occured while updating the elastic search document via API,\
