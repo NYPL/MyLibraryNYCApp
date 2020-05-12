@@ -4,6 +4,7 @@ local:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
+    size: 20
 
 development:
   teachersets:
@@ -11,6 +12,7 @@ development:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
+    size: 20
 
 qa:
   teachersets:
@@ -18,6 +20,7 @@ qa:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
+    size: 20
 
 prod:
   teachersets:
@@ -25,3 +28,4 @@ prod:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
+    size: 20

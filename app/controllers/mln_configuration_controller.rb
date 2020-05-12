@@ -2,6 +2,8 @@
 
 require 'yaml'
 
+# MlnConfigurationController class loads all configurations from "app/config/*.yml" and S3 bucket.
+# In future any one will create new configs, we can access all configs from this controller.
 class MlnConfigurationController < ApplicationController
   def initialize
     @feature_flag_config = nil
@@ -11,11 +13,12 @@ class MlnConfigurationController < ApplicationController
   end
 
 
+  # Load feature flag config file based on environment
   def feature_flag_config(key)
     @feature_flag_config[@app_env][key]
   end
 
-
+  # Load elastic search config file based on environment
   def elasticsearch_config(key)
     @elasticsearch_config[@app_env][key]
   end
