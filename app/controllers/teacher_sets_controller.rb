@@ -17,14 +17,16 @@ class TeacherSetsController < ApplicationController
   def index
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     begin
+        # Feature flag: 'ts.data.from.es.enabled = true' gets teacher-set documents from elastic search.
+        # ts.data.from.es.enabled = false gets gets teacher-set data from database.
       if MlnConfigurationController.new.feature_flag_config('ts.data.from.es.enabled')
-        # Gets teacher-set documents from elastic search.
         teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
         @teacher_sets = create_ts_object_from_es_json(teacher_sets)
+        @facets = TeacherSet.facets_for_query TeacherSet.for_query params
       else
         @teacher_sets = TeacherSet.for_query params
+        @facets = TeacherSet.facets_for_query @teacher_sets
       end
-      @facets = TeacherSet.facets_for_query TeacherSet.for_query params
       # Determine what facets are selected based on query string
       @facets.each do |f|
         f[:items].each do |v|

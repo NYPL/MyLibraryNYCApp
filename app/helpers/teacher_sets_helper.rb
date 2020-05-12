@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 module TeacherSetsHelper
-  # Request input body to create teacherset document in elastic search.
+  # Make request input body to create teacherset document in elastic search.
+  # Input param ts_obj eg: <TeacherSet:0x00007fd79383a640 id: 350, title: "Step",call_number: "Teacher",
+    # description: "Book", details_url: "http://catalog.nypl.org/record=b21378444~S1","updated-7571-Step up to the plate, Maria Singh">
+  # Expected response from this method {:title=>"Step Up", :description=> "Book", :contents=>"Step Up", :id=>350}
+
   def teacher_set_info(ts_obj)
     created_at = ts_obj.created_at.present? ? ts_obj.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
     updated_at = ts_obj.updated_at.present? ? ts_obj.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
@@ -11,7 +15,7 @@ module TeacherSetsHelper
     # Teacherset have has_many relationship with subjects
     # Get teacherset subjects from db than update in elastic search.
     if ts_obj.subjects.present?
-      ts_obj.subjects.uniq.each do |subject|
+      ts_obj.subjects.distinct.each do |subject|
         subjects_hash = {}
         s_created_at = subject.created_at.present? ? subject.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
         s_updated_at = subject.updated_at.present? ? subject.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
@@ -32,7 +36,7 @@ module TeacherSetsHelper
   end
 
   
-  # Create or update teacherset document in elastic search.  
+  # Create or update teacherset document in elastic search.
   def create_or_update_teacherset_document_in_es(ts_object)
     body = teacher_set_info(ts_object)
     begin
