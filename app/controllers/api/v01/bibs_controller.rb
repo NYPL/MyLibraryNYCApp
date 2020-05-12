@@ -108,7 +108,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
 
       begin
-        # When ever there is a create/update to bib than need to create/update the data in elastic search documnet.
+        # When ever there is a create/update on bib than need to create/update the data in elastic search documnet.
         create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
