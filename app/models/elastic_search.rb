@@ -2,6 +2,7 @@
 
 class ElasticSearch
   def initialize(_index = nil)
+    # Load elastic search configs from 'config/elasticsearch_config.yml'.
     @es_config = MlnConfigurationController.new.elasticsearch_config('teachersets')
     arguments = {
       host: @es_config['host'],
@@ -17,18 +18,16 @@ class ElasticSearch
   end
 
 
-  def index_doc_count
-    response = @client.perform_request 'GET', @index + '/_count'
-    total_docs = response.body['count']
-    total_docs
-  end
-
-
+  # Create elastic search document by id and body.
   def create_document(id, body)
-    @client.create index: @index, type: @type, id: id, body: body
+    response = @client.create index: @index, type: @type, id: id, body: body
+    LogWrapper.log('DEBUG', {'message' => "ES document successfully created. Id: #{id}", 
+                             'method' => 'create_document'})
+    response
   end
 
 
+  # Delete elastic search document by id.
   def delete_document_by_id(id)
     response = @client.delete index: @index, type: @type, id: id
     LogWrapper.log('DEBUG', {'message' => "ES document successfully deleted. Id: #{id}", 
@@ -64,6 +63,7 @@ class ElasticSearch
   end
 
 
+  # Get teacher sets documents from elastic search.
   def get_teacher_sets_from_es(params)
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     size = 20
@@ -85,6 +85,7 @@ class ElasticSearch
   end
 
 
+  # Get elastic serach queries based on input filter params.
   def teacher_sets_query_based_on_filters(params)
     keyword, g_begin, g_end, language, set_type, availability, area_of_study, subjects = teacher_sets_params(params)
     query = {:query => {:bool => {:must => []}}}
@@ -121,6 +122,7 @@ class ElasticSearch
   end
 
 
+  # Elastic search documents based on the query.
   def search_by_query(body)
     results = {}
     resp = @client.search(index: @index, body: body)
@@ -133,23 +135,32 @@ class ElasticSearch
   end
 
 
-  def get_document_by_id(index, type, id)
-    response = @client.get index: index, type: type, id: id
+  # Get elastic search document by id.
+  def get_document_by_id(id)
+    response = @client.get index: @index, type: @type, id: id
+    LogWrapper.log('DEBUG', {'message' => "Got ES document successfully. Id: #{id}", 
+                             'method' => 'get_document_by_id'})
     response
   end
 
 
-  def update(id, query)
-    @client.update(index: @index, type: @type, id: id, body: {doc: query}, refresh: true)
+  # Update elastic search document by id and body.
+  def update_document_by_id(id, query)
+    response = @client.update(index: @index, type: @type, id: id, body: {doc: query}, refresh: true)
+    LogWrapper.log('DEBUG', {'message' => "ES document successfully updated. Id: #{id}", 
+                             'method' => 'update_document_by_id'})
+    response
   end
 
 
+  # Bulk update on elastic search document.
   def bulk_update(updates)
     response = @client.bulk({body: updates})
     response
   end
 
 
+  # Delete elastic search document by body.
   def delete_by_query(query)
     response = @client.delete_by_query(index: @index, body: query)
     response

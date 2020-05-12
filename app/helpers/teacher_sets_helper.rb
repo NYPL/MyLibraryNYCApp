@@ -37,7 +37,7 @@ module TeacherSetsHelper
     body = teacher_set_info(ts_object)
     begin
       # If teacherset document is found in elastic search than update document in ES.
-      ElasticSearch.new.update(body[:id], body)
+      ElasticSearch.new.update_document_by_id(body[:id], body)
       LogWrapper.log('DEBUG', {'message' => "Successfullly updated elastic search doc. Teacher set id #{body[:id]}", 
                                'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
