@@ -13,13 +13,13 @@ class MlnConfigurationController < ApplicationController
   end
 
 
-  # Load feature flag config file based on environment
+  # Load feature flag configurations based on environment
   def feature_flag_config(key)
     @feature_flag_config[@app_env][key]
   end
 
   
-  # Load elastic search config file based on environment
+  # Load elastic search configurations based on environment
   def elasticsearch_config(key)
     @elasticsearch_config[@app_env][key]
   end
@@ -34,16 +34,20 @@ class MlnConfigurationController < ApplicationController
 
 
   def load_config
-    # Loading feature_flag config files from s3 bucket.
+    # Load feature_flag configurations from s3 bucket.
     @feature_flag_config = YAML.safe_load(S3Controller.new.get_s3_file("my-library-nyc-config", "#{ENV['RAILS_ENV']}/feature_flag.yml"))
+    
+    # Load elastic search configurations for all environments
     @elasticsearch_config = YAML.load_file('config/elasticsearch_config.yml')
   end
 
 
   def load_all_configs
+    # Load local configurations
     if @app_env == 'local' || @app_env.nil?
       load_config_for_local
     else
+    # Load dev, qa, prod, test configurations
       load_config
     end
   end

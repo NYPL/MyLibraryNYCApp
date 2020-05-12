@@ -10,10 +10,6 @@ class TeacherSetsController < ApplicationController
   # GET /teacher_sets.json
   # Called on loading the teacher set list page and when the user selects
   # a facet to filter by.
-
-
-
-
   def index
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     begin

@@ -8,6 +8,7 @@ class S3Controller < ApplicationController
   end
 
 
+  # Read AWS s3 bucket config files
   def get_s3_file(bucket, file)
     begin
       response = @s3_client.get_object({
@@ -23,6 +24,7 @@ class S3Controller < ApplicationController
 
   private
 
+  # Create client to connect AWS.
   def create_client
     client_options = {
         region: 'us-east-1'
