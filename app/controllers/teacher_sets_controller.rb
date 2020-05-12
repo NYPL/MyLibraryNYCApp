@@ -2,6 +2,8 @@
 
 class TeacherSetsController < ApplicationController
 
+  include TeacherSetsHelper
+
   before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
 
   ##
@@ -9,43 +11,14 @@ class TeacherSetsController < ApplicationController
   # Called on loading the teacher set list page and when the user selects
   # a facet to filter by.
 
-  def create_ts_object_from_es_json(json)
-    arr = []
-    if json[:hits].present? && json[:hits].present?
-      json[:hits].each do |ts|
-        teacher_set = TeacherSet.new
-        next if ts["_source"]['mappings'].present?
 
-        teacher_set.title = ts["_source"]['title']
-        teacher_set.description = ts["_source"]['description']
-        teacher_set.contents = ts["_source"]['contents']
-        teacher_set.grade_begin = ts["_source"]['grade_begin']
-        teacher_set.grade_end = ts["_source"]['grade_end']
-        teacher_set.language = ts["_source"]['language']
-        teacher_set.id = ts["_source"]['id']
-        teacher_set.details_url = ts["_source"]['details_url']
-        teacher_set.availability = ts["_source"]['availability']
-        teacher_set.total_copies = ts["_source"]['total_copies']
-        teacher_set.call_number = ts["_source"]['call_number']
-        teacher_set.language = ts["_source"]['language']
-        teacher_set.physical_description = ts["_source"]['physical_description']
-        teacher_set.primary_language = ts["_source"]['primary_language']
-        teacher_set.created_at = ts["_source"]['created_at']
-        teacher_set.updated_at = ts["_source"]['updated_at']
-        teacher_set.available_copies = ts["_source"]['available_copies']
-        teacher_set.bnumber = ts["_source"]['bnumber']
-        teacher_set.set_type = ts["_source"]['set_type']
-        arr << teacher_set 
-      end
-    end
-    arr
-  end
 
 
   def index
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     begin
       if MlnConfigurationController.new.feature_flag_config('ts.data.from.es.enabled')
+        # Gets teacher-set documents from elastic search.
         teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
         @teacher_sets = create_ts_object_from_es_json(teacher_sets)
       else
