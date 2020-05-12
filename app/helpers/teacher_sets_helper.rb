@@ -31,16 +31,17 @@ module TeacherSetsHelper
       available_copies: ts_obj.available_copies, bnumber: ts_obj.bnumber, set_type: ts_obj.set_type }
   end
 
+  
   # Create or update teacherset document in elastic search.  
   def create_or_update_teacherset_document_in_es(ts_object)
     body = teacher_set_info(ts_object)
     begin
-      #If teacherset document is found in elastic search than update document in ES.
+      # If teacherset document is found in elastic search than update document in ES.
       ElasticSearch.new.update(body[:id], body)
       LogWrapper.log('DEBUG', {'message' => "Successfullly updated elastic search doc. Teacher set id #{body[:id]}", 
                                'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
-      #If teacherset document not found in elastic search than create document in ES.
+      # If teacherset document not found in elastic search than create document in ES.
       resp = ElasticSearch.new.create_document(body[:id], body)
       if resp['result'] == "created"
         LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}", 
@@ -55,6 +56,7 @@ module TeacherSetsHelper
     end
   end
 
+  
   # When Delete request comes from sierra, than delete teacher set documnet in elastic search.
   def delete_teacheset_record_from_es(id)
     resp = ElasticSearch.new.delete_document_by_id(id)
@@ -64,6 +66,7 @@ module TeacherSetsHelper
                                'method' => 'app/helpers/delete_teacheset_record_from_es'})
   end
 
+  
   # Make teacherset object from elastic search json
   def create_ts_object_from_es_json(json)
     arr = []
