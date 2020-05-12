@@ -3,7 +3,7 @@
 module TeacherSetsHelper
   # Make request input body to create teacherset document in elastic search.
   # Input param ts_obj eg: <TeacherSet:0x00007fd79383a640 id: 350, title: "Step",call_number: "Teacher",
-    # description: "Book", details_url: "http://catalog.nypl.org/record=b21378444~S1","updated-7571-Step up to the plate, Maria Singh">
+  # description: "Book", details_url: "http://catalog.nypl.org/record=b21378444~S1","updated-7571-Step up to the plate, Maria Singh">
   # Expected response from this method {:title=>"Step Up", :description=> "Book", :contents=>"Step Up", :id=>350}
 
   def teacher_set_info(ts_obj)

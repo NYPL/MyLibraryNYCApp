@@ -17,8 +17,8 @@ class TeacherSetsController < ApplicationController
   def index
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     begin
-        # Feature flag: 'ts.data.from.es.enabled = true' gets teacher-set documents from elastic search.
-        # ts.data.from.es.enabled = false gets gets teacher-set data from database.
+      # Feature flag: 'ts.data.from.es.enabled = true' gets teacher-set documents from elastic search.
+      # ts.data.from.es.enabled = false gets gets teacher-set data from database.
       if MlnConfigurationController.new.feature_flag_config('ts.data.from.es.enabled')
         teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
         @teacher_sets = create_ts_object_from_es_json(teacher_sets)

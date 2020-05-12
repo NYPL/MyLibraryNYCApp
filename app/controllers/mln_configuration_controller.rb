@@ -18,6 +18,7 @@ class MlnConfigurationController < ApplicationController
     @feature_flag_config[@app_env][key]
   end
 
+  
   # Load elastic search config file based on environment
   def elasticsearch_config(key)
     @elasticsearch_config[@app_env][key]
