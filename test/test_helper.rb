@@ -3758,7 +3758,7 @@ end
 class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
-        :mock_delete_request_from_elastic_search_service
+        :mock_delete_request_from_elastic_search_service, :mock_security_credentials
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -3922,6 +3922,22 @@ class ActiveSupport::TestCase
         'Content-Type'=>'application/json'
         }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {}
     )
+  end
+
+  def mock_security_credentials
+    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials")
+      .to_return(
+        {
+          status: 200,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
   end
 
 end
