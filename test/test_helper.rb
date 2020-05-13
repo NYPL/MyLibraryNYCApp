@@ -3925,19 +3925,12 @@ class ActiveSupport::TestCase
   end
 
   def mock_security_credentials
-    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials")
-      .to_return(
-        {
-          status: 200,
-          headers: {}
-        },
-        {
-          status: 500,
-          body: {
-            'status' => 'failure'
-          }.to_json, headers: {}
-        }
-      )
+    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/").with(
+      headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'User-Agent'=>'aws-sdk-ruby3/3.68.1'
+        }).to_return(status: 200, body: "", headers: {})
   end
 
 end
