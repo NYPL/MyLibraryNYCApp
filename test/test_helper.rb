@@ -3757,7 +3757,8 @@ end
 
 class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
-        :mock_send_request_to_items_microservice
+        :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
+        :mock_delete_request_from_elastic_search_service
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -3813,6 +3814,60 @@ class ActiveSupport::TestCase
           body: {
             'status' => 'success'
           }.to_json,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
+  end
+
+  # mock_get_data_from_aws_s3_adapter
+  # to 'https://my-library-nyc-config.s3.amazonaws.com/test/feature_flag.yml' and returns a
+  def mock_send_request_to_s3_adapter
+    stub_request(:get, "https://my-library-nyc-config.s3.amazonaws.com/test/feature_flag.yml")
+      .to_return(
+        {
+          status: 200,
+          body: {
+            'status' => 'success'
+          }.to_json,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
+  end
+
+  def mock_send_request_to_elastic_search_service
+    stub_request(:put, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468850?op_type=create")
+      .to_return(
+        {
+          status: 200,
+          body: { "id" => 614468853, "title" => "title", "bnumber" => "b998" }.to_json,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
+  end
+
+  def mock_delete_request_from_elastic_search_service
+    stub_request(:delete, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468850?op_type=delete")
+      .to_return(
+        {
+          status: 200,
           headers: {}
         },
         {
