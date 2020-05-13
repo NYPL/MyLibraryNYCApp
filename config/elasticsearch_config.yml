@@ -29,3 +29,11 @@ prod:
     index: 'teacherset'
     type: 'teacherset'
     size: 20
+
+test:
+  teachersets:
+    host: 'https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/'
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
+    size: 20

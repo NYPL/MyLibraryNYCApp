@@ -9,3 +9,6 @@ qa:
 
 prod:
   ts.data.from.es.enabled: false
+
+test:
+  ts.data.from.es.enabled: true

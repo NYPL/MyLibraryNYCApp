@@ -109,7 +109,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
       begin
         # When ever there is a create/update on bib than need to create/update the data in elastic search documnet.
-        create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
+        if MlnConfigurationController.new.feature_flag_config('ts.data.from.es.enabled')
+          create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
+        end
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
         AdminMailer.failed_bibs_controller_api_request(@request_body, "Error occured while updating the elastic search document via API,\
@@ -138,8 +140,10 @@ class Api::V01::BibsController < Api::V01::GeneralController
       next unless teacher_set.present?
       saved_teacher_sets << teacher_set
       resp = teacher_set.destroy
-      # After deletion of teacherset data from db than delete teacherset doc from elastic search
-      delete_teacheset_record_from_es(teacher_set.id) if resp.destroyed?
+      if MlnConfigurationController.new.feature_flag_config('ts.data.from.es.enabled')
+        # After deletion of teacherset data from db than delete teacherset doc from elastic search
+        delete_teacheset_record_from_es(teacher_set.id) if resp.destroyed?
+      end
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end

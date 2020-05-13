@@ -44,7 +44,7 @@ class MlnConfigurationController < ApplicationController
 
   def load_all_configs
     # Load local configurations
-    if @app_env == 'local' || @app_env.nil?
+    if ['local', nil].include?(@app_env)
       load_config_for_local
     else
     # Load dev, qa, prod, test configurations
