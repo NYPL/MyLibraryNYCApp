@@ -47,7 +47,7 @@ class MlnConfigurationController < ApplicationController
     if ['local', nil].include?(@app_env)
       load_config_for_local
     else
-    # Load dev, qa, prod, test configurations
+      # Load dev, qa, prod, test configurations
       load_config
     end
   end
