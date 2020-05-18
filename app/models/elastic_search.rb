@@ -217,7 +217,7 @@ class ElasticSearch
 
       resp[:aggregations]["subjects"]["subject_ids"]["buckets"].each do |agg_val|
 
-        next if agg_val['doc_count'] <= Subject::MIN_COUNT_FOR_FACET
+        next if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
 
         subjects_facets[:items] << {
           :value => agg_val["key"],
