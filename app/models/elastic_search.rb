@@ -166,10 +166,10 @@ class ElasticSearch
       { :label => 'area of study', :column => 'area_of_study' }
     ].each do |config|
       facets_group = {:label => config[:label], :items => []}
-      agg_name = config[:column]
+      agg_name = config[:label]
       config_column = config[:column] == "availability" ? 'availability.raw' : config[:column]
 
-      # get facets data by language, availability, set_type and area_of_study
+      # get facets data from elastic search by language, availability, set_type and area_of_study
       query = {:aggs => {:"#{agg_name}" => {:terms => {:field => config_column, :size => 10000, :order => {:_key => "asc"}}}}}
       resp = search_by_query(query)
 
