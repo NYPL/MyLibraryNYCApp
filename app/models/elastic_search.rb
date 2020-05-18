@@ -2,8 +2,8 @@
 
 class ElasticSearch
 
-  AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
-  SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
+  AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}.freeze
+  SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}.freeze
 
   def initialize(_index = nil)
     # Load elastic search configs from 'config/elasticsearch_config.yml'.
@@ -132,91 +132,88 @@ class ElasticSearch
     query
   end
 
-  def facets_for_query(teacher_sets)
+  
+  def facets_for_query(_teacher_sets)
     facets = []
+    # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
+    # TODO: take this cache expiration timeout constant out into a properties file.
+    # facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
+    facets = get_language_availability_set_type_area_of_study_facts(facets)
+
+    subjects_facets = get_subject_facets(facets)
+    facets << subjects_facets
+
+    # Specify desired order of facets:
+    facets.sort_by! do |f|
+      ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
+      ind.nil? ? 1000 : ind
+    end
+
+    # Set order of facet vals:
+    facets.each do |f|
+      f[:items].sort_by! { |i| i[:label] }
+    end
+    facets
+    # end
+  end
+
+  
+  def get_language_availability_set_type_area_of_study_facts(facets)
     [
-        { :label => 'language',
-          :column => :primary_language
-        },
-        { :label => 'availability',
-          :column => 'availability',
-          :value_map => AVAILABILITY_LABELS
-        },
-        { :label => 'set type',
-          :column => 'set_type',
-          :value_map => SET_TYPE_LABELS
-        },
-        { :label => 'area of study',
-          :column => 'area_of_study'
-        }
-      ].each do |config|
-          facets_group = {:label => config[:label], :items => []}
-          agg_name = "#{config[:column]}_aggs"
-          config_column = config[:column] == "availability" ? 'availability.raw' : config[:column]
-          query = {
-                "aggs": {
-                  "#{agg_name}": {
-                    "terms": {
-                      "field": config_column,
-                      "size": 100,
-                      "order": {"_key": "asc"}
-                    }
-                  }
-                }
-              }
-        resp = search_by_query(query)
+      { :label => 'language', :column => :primary_language },
+      { :label => 'availability', :column => 'availability', :value_map => AVAILABILITY_LABELS},
+      { :label => 'set type', :column => 'set_type', :value_map => SET_TYPE_LABELS },
+      { :label => 'area of study', :column => 'area_of_study' }
+    ].each do |config|
+      facets_group = {:label => config[:label], :items => []}
+      agg_name = config[:column]
+      config_column = config[:column] == "availability" ? 'availability.raw' : config[:column]
+
+      # get facets data by language, availability, set_type and area_of_study
+      query = {:aggs => {:"#{agg_name}" => {:terms => {:field => config_column, :size => 10000, :order => {:_key => "asc"}}}}}
+      resp = search_by_query(query)
+
+      aggregations = resp[:aggregations][agg_name]
+      if aggregations.present? && aggregations["buckets"].present?
         resp[:aggregations][agg_name]["buckets"].each do |agg_val|
 
-          label = config[:label]
+          label = agg_val['key']
           unless config[:value_map].nil?
             label = config[:value_map][agg_val['key']]
             next if label.nil?
           end
-
           facets_group[:items] << {
             :value => agg_val['key'],
-            :label => agg_val['key'],
+            :label => label,
             :count => agg_val['doc_count']
           }
         end
-        facets << facets_group
       end
+      facets << facets_group
+    end
+    facets
+  end
 
-      # Collect primary subjects for restricting subjects
-      primary_subjects = []
 
-      unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
-        primary_subjects = subjects_facet.first[:items].map { |s| s[:label] }
-      end
+  # Get subject facets
+  def get_subject_facets(facets)
+    primary_subjects = []
+    # Collect primary subjects for restricting subjects
 
-      subjects_facets = {:label =>  'subjects', :items => []}
+    unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
+      primary_subjects = subjects_facet.first[:items].map { |s| s[:label] }
+    end
 
-      primary_subjects_arr = []
-      primary_subjects.each do |subject|
-        primary_subjects_arr << { "match": { "subjects.title": subject }}
-      end
+    subjects_facets = {:label => 'subjects', :items => []}
 
-      subjects_query = { 
-        "size": 10000,
-        "sort": {"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"},
-        "query": { "nested": { "path": "subjects", "query": { "bool": { "must_not": primary_subjects_arr } } } },
-        "aggs": {
-          "subjects": {
-            "nested": {
-            "path": "subjects"
-          },
-          "aggregations": {
-            "subject_ids": { "terms": { "field": "subjects.id", "size": 100000 },
-              "aggregations": { "subject_titles": { "terms": { "field": "subjects.title.keyword", "size": 10000000 }}}}
-            } 
-          }
-        }
-      }
+    resp = get_subject_facets_from_es(primary_subjects)
 
-      resp = search_by_query(subjects_query)
+    sub_aggs = resp[:aggregations]["subjects"]
 
-      resp[:aggregations]["subjects"]["subject_ids"]["buckets"].each do |agg_val|
-
+    if sub_aggs.present? || sub_aggs["subject_ids"].present? && sub_aggs["subject_ids"]["buckets"].present?
+      sub_aggs["subject_ids"]["buckets"].each do |agg_val|
+        # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
+        # but let's make it 5 consistently now.
         next if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
 
         subjects_facets[:items] << {
@@ -225,23 +222,39 @@ class ElasticSearch
           :count => agg_val['doc_count']
         }
       end
-      facets << subjects_facets
+    end
+    subjects_facets
+  end
 
+  
+  # Get subject factes from elastic search
+  def get_subject_facets_from_es(primary_subjects)
+    primary_subjects_arr = []
+    primary_subjects.each do |subject|
+      primary_subjects_arr << { "match": { "subjects.title": subject }}
+    end
 
-      # Specify desired order of facets:
-      facets.sort_by! do |f|
-        ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
-        ind.nil? ? 1000 : ind
-      end
+    subjects_query = {
+     :size => 10000,
+     :sort => {:_score => "desc", :"availability.raw" => "asc", :created_at => "desc", :_id => "asc"},
+     :query =>
+      {:nested =>
+        {:path => "subjects",
+         :query =>
+          {:bool =>
+            {:must_not => primary_subjects_arr}}}},
+     :aggs =>
+      {:subjects =>
+        {:nested => {:path => "subjects"},
+         :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 100000}, 
+         :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword",
+          :size => 100000}}}}}}}
+    }
+    search_by_query(subjects_query)
+  end
 
-      # Set order of facet vals:
-      facets.each do |f|
-        f[:items].sort_by! { |i| i[:label] }
-      end
-      facets
- end
-
-  # Elastic search documents based on the query.Eg: body: {id: "1234567", title: "test"}
+  
+  # Search elastic documents based on the query.Eg: body: {id: "1234567", title: "test"}
   def search_by_query(body)
     results = {}
     resp = @client.search(index: @index, body: body)
@@ -251,7 +264,10 @@ class ElasticSearch
     results_aggregations = resp['aggregations']
     results[:totalMatches] = num_of_matches
     results[:hits] = results_hits.uniq
-    results[:aggregations] = if results_aggregations.nil? then {} else results_aggregations end
+    results[:aggregations] = {}
+    if results_aggregations.present?
+      results[:aggregations] = results_aggregations
+    end
     results
   end
 
