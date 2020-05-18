@@ -19,8 +19,8 @@ class TeacherSetsController < ApplicationController
         teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
         @teacher_sets = create_ts_object_from_es_json(teacher_sets)
         # Still working on the facets
-        # @facets = ElasticSearch.new.facets_for_query @teacher_sets
-        @facets = TeacherSet.facets_for_query TeacherSet.for_query params
+        @facets = ElasticSearch.new.facets_for_query @teacher_sets
+        #@facets = TeacherSet.facets_for_query TeacherSet.for_query params
       else
         @teacher_sets = TeacherSet.for_query params
         @facets = TeacherSet.facets_for_query @teacher_sets
