@@ -13,11 +13,13 @@ class TeacherSetsController < ApplicationController
   def index
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     begin
-      # Feature flag: 'ts.data.from.es.enabled = true' gets teacher-set documents from elastic search.
-      # ts.data.from.es.enabled = false gets gets teacher-set data from database.
-      if MlnConfigurationController.new.feature_flag_config('ts.data.from.es.enabled')
+      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' gets teacher-set documents from elastic search.
+      # teacherset.data.from.elasticsearch.enabled = false gets gets teacher-set data from database.
+      if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
         teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
         @teacher_sets = create_ts_object_from_es_json(teacher_sets)
+        # Still working on the facets
+        # @facets = ElasticSearch.new.facets_for_query @teacher_sets
         @facets = TeacherSet.facets_for_query TeacherSet.for_query params
       else
         @teacher_sets = TeacherSet.for_query params
@@ -38,7 +40,8 @@ class TeacherSetsController < ApplicationController
         facets: @facets
       }, serializer: SearchSerializer, include_books: false, include_contents: false
     rescue StandardError => e
-      LogWrapper.log('ERROR', {'message' => e.message, 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
+      LogWrapper.log('DEBUG', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}"}, 
+                               'method' => 'app/controllers/teacher_sets_controller.rb.index'})
       render json: {
         errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},
         teacher_sets: {},

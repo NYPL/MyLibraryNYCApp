@@ -1,14 +1,14 @@
 local:
-  ts.data.from.es.enabled: true
+  teacherset.data.from.elasticsearch.enabled: true
 
 development:
-  ts.data.from.es.enabled: true
+  teacherset.data.from.elasticsearch.enabled: true
 
 qa:
-  ts.data.from.es.enabled: false
+  teacherset.data.from.elasticsearch.enabled: false
 
 prod:
-  ts.data.from.es.enabled: false
+  teacherset.data.from.elasticsearch.enabled: false
 
 test:
-  ts.data.from.es.enabled: true
+  teacherset.data.from.elasticsearch.enabled: true

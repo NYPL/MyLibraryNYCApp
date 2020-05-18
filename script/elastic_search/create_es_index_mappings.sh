@@ -1,4 +1,4 @@
-curl -XDELETE "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset"
+# Create elastic search mappings and index.
 
 curl -XPUT "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset?" -H 'Content-Type: application/json' -d '
 {
@@ -104,7 +104,7 @@ curl -XPUT "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-e
                     "type": "integer"
                   },
                   "title": {
-                    "type": "text",
+                    "type": "keyword",
                     "fields": {
                       "keyword": {
                       "type": "keyword"
@@ -126,49 +126,5 @@ curl -XPUT "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-e
   }
 }'
 
-
-
-
-
-
-
-
-def create_teacherset_document_in_es
-  TeacherSet.find_each do |ts|
-    arr = []
-    created_at = ts.created_at.present? ? ts.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-    updated_at = ts.updated_at.present? ? ts.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-    availability = ts.availability.present? ? ts.availability.downcase : nil
-    
-    begin
-      subjects_arr = []
-      if ts.subjects.present?
-        ts.subjects.uniq.each do |subject|
-          subjects_hash = {}
-          s_created_at = subject.created_at.present? ? subject.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-          s_updated_at = subject.updated_at.present? ? subject.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-          subjects_hash[:id] = subject.id
-          subjects_hash[:title] = subject.title
-          subjects_hash[:created_at] = s_created_at
-          subjects_hash[:updated_at] = s_updated_at
-          subjects_arr << subjects_hash
-        end
-      end
-
-      body = {title: ts.title, description: ts.description, contents: ts.contents, 
-        id: ts.id.to_i, details_url: ts.details_url, grade_end: ts.grade_end, 
-        grade_begin: ts.grade_begin, availability: availability, total_copies: ts.total_copies,
-        call_number: ts.call_number, language: ts.language, physical_description: ts.physical_description,
-        primary_language: ts.primary_language, created_at: created_at, updated_at: updated_at,
-        available_copies: ts.available_copies, bnumber: ts.bnumber, set_type: ts.set_type, 
-        area_of_study: ts.area_of_study, subjects: subjects_arr}
-
-      ElasticSearch.new.create_document(ts.id, body)
-      puts "updating elastic search"
-    rescue Elasticsearch::Transport::Transport::Errors::Conflict => e
-       puts "Error in elastic search"
-      arr << ts.id
-    end
-    arr
-  end
-end
+# Delete elastic search Index
+curl -XDELETE "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset"
