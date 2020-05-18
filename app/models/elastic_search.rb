@@ -207,7 +207,7 @@ class ElasticSearch
           },
           "aggregations": {
             "subject_ids": { "terms": { "field": "subjects.id", "size": 100000 },
-              "aggregations": { "subject_titles": { "terms": { "field": "subjects.title", "size": 10000000 }}}}
+              "aggregations": { "subject_titles": { "terms": { "field": "subjects.title.keyword", "size": 10000000 }}}}
             } 
           }
         }
