@@ -40,7 +40,7 @@ class TeacherSetsController < ApplicationController
         facets: @facets
       }, serializer: SearchSerializer, include_books: false, include_contents: false
     rescue StandardError => e
-      LogWrapper.log('DEBUG', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}"}, 
+      LogWrapper.log('DEBUG', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
                                'method' => 'app/controllers/teacher_sets_controller.rb.index'})
       render json: {
         errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},
