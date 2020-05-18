@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class ElasticSearch
+
+  AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
+  SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
+
   def initialize(_index = nil)
     # Load elastic search configs from 'config/elasticsearch_config.yml'.
     @es_config = MlnConfigurationController.new.elasticsearch_config('teachersets')
@@ -128,6 +132,114 @@ class ElasticSearch
     query
   end
 
+  def facets_for_query(teacher_sets)
+    facets = []
+    [
+        { :label => 'language',
+          :column => :primary_language
+        },
+        { :label => 'availability',
+          :column => 'availability',
+          :value_map => AVAILABILITY_LABELS
+        },
+        { :label => 'set type',
+          :column => 'set_type',
+          :value_map => SET_TYPE_LABELS
+        },
+        { :label => 'area of study',
+          :column => 'area_of_study'
+        }
+      ].each do |config|
+          facets_group = {:label => config[:label], :items => []}
+          agg_name = "#{config[:column]}_aggs"
+          config_column = config[:column] == "availability" ? 'availability.raw' : config[:column]
+          query = {
+                "aggs": {
+                  "#{agg_name}": {
+                    "terms": {
+                      "field": config_column,
+                      "size": 100,
+                      "order": {"_key": "asc"}
+                    }
+                  }
+                }
+              }
+        resp = search_by_query(query)
+        resp[:aggregations][agg_name]["buckets"].each do |agg_val|
+
+          label = config[:label]
+          unless config[:value_map].nil?
+            label = config[:value_map][agg_val['key']]
+            next if label.nil?
+          end
+
+          facets_group[:items] << {
+            :value => agg_val['key'],
+            :label => agg_val['key'],
+            :count => agg_val['doc_count']
+          }
+        end
+        facets << facets_group
+      end
+
+      # Collect primary subjects for restricting subjects
+      primary_subjects = []
+
+      unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
+        primary_subjects = subjects_facet.first[:items].map { |s| s[:label] }
+      end
+
+      subjects_facets = {:label =>  'subjects', :items => []}
+
+      primary_subjects_arr = []
+      primary_subjects.each do |subject|
+        primary_subjects_arr << { "match": { "subjects.title": subject }}
+      end
+
+      subjects_query = { 
+        "size": 10000,
+        "sort": {"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"},
+        "query": { "nested": { "path": "subjects", "query": { "bool": { "must_not": primary_subjects_arr } } } },
+        "aggs": {
+          "subjects": {
+            "nested": {
+            "path": "subjects"
+          },
+          "aggregations": {
+            "subject_ids": { "terms": { "field": "subjects.id", "size": 100000 },
+              "aggregations": { "subject_titles": { "terms": { "field": "subjects.title", "size": 10000000 }}}}
+            } 
+          }
+        }
+      }
+
+      resp = search_by_query(subjects_query)
+
+      resp[:aggregations]["subjects"]["subject_ids"]["buckets"].each do |agg_val|
+
+        next if agg_val['doc_count'] <= Subject::MIN_COUNT_FOR_FACET
+
+        subjects_facets[:items] << {
+          :value => agg_val["key"],
+          :label => agg_val["subject_titles"]["buckets"].first["key"],
+          :count => agg_val['doc_count']
+        }
+      end
+      facets << subjects_facets
+
+
+      # Specify desired order of facets:
+      facets.sort_by! do |f|
+        ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
+        ind.nil? ? 1000 : ind
+      end
+
+      # Set order of facet vals:
+      facets.each do |f|
+        f[:items].sort_by! { |i| i[:label] }
+      end
+      facets
+ end
 
   # Elastic search documents based on the query.Eg: body: {id: "1234567", title: "test"}
   def search_by_query(body)
@@ -136,8 +248,10 @@ class ElasticSearch
     hits = resp['hits']
     num_of_matches = hits['total']
     results_hits = hits['hits']
+    results_aggregations = resp['aggregations']
     results[:totalMatches] = num_of_matches
     results[:hits] = results_hits.uniq
+    results[:aggregations] = if results_aggregations.nil? then {} else results_aggregations end
     results
   end
 
