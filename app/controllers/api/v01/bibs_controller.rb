@@ -107,15 +107,13 @@ class Api::V01::BibsController < Api::V01::GeneralController
         ).deliver
       end
 
-      begin
-        # When ever there is a create/update on bib than need to create/update the data in elastic search documnet.
-        if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+        begin
+          # When ever there is a create/update on bib than need to create/update the data in elastic search documnet.
           create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
+        rescue => exception
+          log_error('create_or_update_teacher_sets', exception)
         end
-      rescue => exception
-        log_error('create_or_update_teacher_sets', exception)
-        AdminMailer.failed_bibs_controller_api_request(@request_body, "Error occured while updating the elastic search document via API,\
-          BIB Id: #{teacher_set.bnumber},#{exception.message[0..200]}...", action_name, teacher_set).deliver
       end
       saved_teacher_sets << teacher_set
       LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set.
