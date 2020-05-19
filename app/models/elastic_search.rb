@@ -19,7 +19,7 @@ class ElasticSearch
     @current_file = File.basename(__FILE__)
     @index = @es_config['index'] || 'teacherset'
     @type = @es_config['type'] || 'teacherset'
-    @teachersets_per_page_size = @es_config['teachersets_per_page_size'] || 20
+    @teachersets_per_page = @es_config['teachersets_per_page'] || 20
     @size = @es_config['size'] || 10000
   end
 
@@ -60,10 +60,10 @@ class ElasticSearch
   def get_teacher_sets_from_es(params)
     # Per page showing 20 teachersets.
     page = params["page"].present? ? params["page"].to_i - 1 : 0
-    from = page.to_i * @teachersets_per_page_size.to_i
+    from = page.to_i * @teachersets_per_page.to_i
     query = teacher_sets_query_based_on_filters(params)
     query[:from] = from
-    query[:size] = @teachersets_per_page_size
+    query[:size] = @teachersets_per_page
 
     # Sorting  the teachersets based on availability and created_at values. 
     # Showing latest created teachersets.
