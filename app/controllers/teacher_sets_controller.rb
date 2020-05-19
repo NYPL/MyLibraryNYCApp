@@ -13,8 +13,8 @@ class TeacherSetsController < ApplicationController
   def index
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     begin
-      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' gets teacher-set documents from elastic search.
-      # teacherset.data.from.elasticsearch.enabled = false gets gets teacher-set data from database.
+      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' means gets teacher-set documents from elastic search.
+      # teacherset.data.from.elasticsearch.enabled = false means gets gets teacher-set data from database.
       if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
         teacher_sets = ElasticSearch.new.get_teacher_sets_from_es(params)
         @teacher_sets = create_ts_object_from_es_json(teacher_sets)
@@ -48,7 +48,7 @@ class TeacherSetsController < ApplicationController
     end
   end
 
-
+  # teacher set facets
   def teacher_set_facets(params)
     @facets.each do |f|
       f[:items].each do |v|
