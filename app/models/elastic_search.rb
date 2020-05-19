@@ -71,7 +71,7 @@ class ElasticSearch
     query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
     results = search_by_query(query)
 
-    # If any search keyword have wrong spelling, getting the elasticsearch documents with fuzziness.
+    # If any search keyword have wrong spelling, still getting the elasticsearch documents with fuzziness.
     # Fuzziness means find similar terms and search term within a specified edit distance.
     # Eg: worng spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
     if !results[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
@@ -94,7 +94,7 @@ class ElasticSearch
       query[:query][:bool][:must] << {:multi_match => {:query => keyword, :fields => %w[title^8 description contents]}}
     end
 
-    # If grade_begin, grade_end is present in filters get ES query based on ranges.
+    # If grade_begin, grade_end ranges present in filters get ES query based on ranges.
     # grade_begin value should be less than grade_end value
     # grade_end value should be greater than grade_begin value
     if grade_begin.present? && grade_end.present?
@@ -102,31 +102,31 @@ class ElasticSearch
       query[:query][:bool][:must] << {:range => {:grade_end => {:gte => grade_begin.to_i}}}
     end
 
-    # If language is present in filters finding the language in these fields [language, primary_language]
+    # If language present in filters finding the language in these fields [language, primary_language]
     if language.present?
       query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[language primary_language]}}
     end
 
-    # If set_type is present in filters get ES query based on set_type.
+    # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi
 
     if set_type.present?
       query[:query][:bool][:must] << {:match => {:set_type => set_type.join}}
     end
 
-    # If availability is present in filters get ES query based on availability.
+    # If availability present in filters get ES query based on availability.
     # Eg: availability: "available/unavailable"
     if availability.present?
       query[:query][:bool][:must] << {:match => {:availability => availability.join}}
     end
 
-    # If area_of_study is present in filters get ES query based on area_of_study.
+    # If area_of_study present in filters get ES query based on area_of_study.
     # Eg: area_of_study: "Social Studies"
     if area_of_study.present?
       query[:query][:bool][:must] << {:match => {:area_of_study => area_of_study.join}}
     end
 
-    # If subjects is present in filters get ES query based on subjects.
+    # If subjects present in filters get ES query based on subjects.
     # teacherset have has_many  relationship with subject.
     # subjects mapping are stored in nested format in elastic search. 
     if subjects.present?
@@ -140,6 +140,7 @@ class ElasticSearch
   def facets_for_query(_teacher_sets)
     # TODO: Need to work on tha rails cache
     facets = []
+    # Get all facets from elastic search.
     facets = get_language_availability_set_type_area_of_study_facts(facets)
 
     subjects_facets = get_subject_facets(facets)
