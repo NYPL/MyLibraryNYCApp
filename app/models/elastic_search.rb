@@ -132,12 +132,10 @@ class ElasticSearch
     query
   end
 
-  
+  # Get teacher set facets
   def facets_for_query(_teacher_sets)
+    # TODO: Need to work on tha rails cache
     facets = []
-    # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
-    # TODO: take this cache expiration timeout constant out into a properties file.
-    # facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
     facets = get_language_availability_set_type_area_of_study_facts(facets)
 
     subjects_facets = get_subject_facets(facets)
