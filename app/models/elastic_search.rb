@@ -210,16 +210,16 @@ class ElasticSearch
   # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
   # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
   def get_subject_facets(facets)
-    primary_subjects = []
-    # Collect primary subjects for restricting subjects
+    area_of_study_data = []
+    # Collect area_of_study data for restricting subjects
 
     unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
-      primary_subjects = subjects_facet.first[:items].map { |s| s[:label] }
+      area_of_study_data = subjects_facet.first[:items].map { |s| s[:label] }
     end
 
     subjects_facets = {:label => 'subjects', :items => []}
 
-    resp = get_subject_facets_from_es(primary_subjects)
+    resp = get_subject_facets_from_es(area_of_study_data)
 
     sub_aggs = resp[:aggregations]["subjects"]
 
@@ -241,13 +241,15 @@ class ElasticSearch
 
   
   # Get group by subject factes from elastic search
-  # primary_subjects eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
-  def get_subject_facets_from_es(primary_subjects)
-    primary_subjects_arr = []
-    primary_subjects.each do |subject|
-      primary_subjects_arr << { "match": { "subjects.title": subject }}
+  # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
+  def get_subject_facets_from_es(area_of_study_data)
+    area_of_study_data_arr = []
+    area_of_study_data.each do |subject|
+      area_of_study_data_arr << { "match": { "subjects.title": subject }}
     end
 
+    # area_of_study data should not show in subjects.
+    # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
     subjects_query = {
      :size => 10000,
      :sort => {:_score => "desc", :"availability.raw" => "asc", :created_at => "desc", :_id => "asc"},
@@ -256,7 +258,7 @@ class ElasticSearch
         {:path => "subjects",
          :query =>
           {:bool =>
-            {:must_not => primary_subjects_arr}}}},
+            {:must_not => area_of_study_data_arr}}}},
      :aggs =>
       {:subjects =>
         {:nested => {:path => "subjects"},
