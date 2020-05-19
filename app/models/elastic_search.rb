@@ -66,13 +66,14 @@ class ElasticSearch
     query[:from] = from
     query[:size] = @teachersets_per_page
 
-    # Sorting  the teachersets based on availability and created_at values. 
+    # Sorting teachersets based on availability and created_at values. 
     # Showing latest created teachersets.
     query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
     results = search_by_query(query)
 
-    # Eg: If any search keyword have wrong spelling, querying the elasticsearch query with fuzziness.
+    # If any search keyword have wrong spelling, getting the elasticsearch documents with fuzziness.
     # Fuzziness means find similar terms and search term within a specified edit distance.
+    # Eg: worng spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
     if !results[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
       if query[:query][:bool][:must][0][:multi_match].present?
         query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
