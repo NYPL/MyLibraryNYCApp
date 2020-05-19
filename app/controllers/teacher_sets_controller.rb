@@ -48,6 +48,7 @@ class TeacherSetsController < ApplicationController
     end
   end
 
+
   # teacher set facets
   def teacher_set_facets(params)
     @facets.each do |f|

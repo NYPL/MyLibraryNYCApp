@@ -42,6 +42,7 @@ class ElasticSearch
     response
   end
 
+  
   # Teacher set filter params
   def teacher_sets_input_params(params)
     keyword = params["keyword"]
@@ -133,6 +134,7 @@ class ElasticSearch
     query
   end
 
+  
   # Get teacher set facets
   def facets_for_query(_teacher_sets)
     # TODO: Need to work on tha rails cache
@@ -155,6 +157,7 @@ class ElasticSearch
     facets
   end
 
+ 
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study) 
   def get_language_availability_set_type_area_of_study_facts(facets)
     [
@@ -198,12 +201,12 @@ class ElasticSearch
   end
 
 
-
   # Get subject facets
   # facets eg: [ {:label=>"language", :items=> [{:value=>"Chinese", :label=>"Chinese", :count=>34}]},
-            # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable", :label=>"Checked Out", :count=>32}]},
-            # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
-            # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
+  # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable", 
+  # :label=>"Checked Out", :count=>32}]},
+  # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
+  # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
   def get_subject_facets(facets)
     primary_subjects = []
     # Collect primary subjects for restricting subjects
@@ -234,6 +237,7 @@ class ElasticSearch
     subjects_facets
   end
 
+  
   # Get group by subject factes from elastic search
   # primary_subjects eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
   def get_subject_facets_from_es(primary_subjects)
