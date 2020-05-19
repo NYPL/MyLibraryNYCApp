@@ -4,7 +4,8 @@ local:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
-    size: 20
+    teachersets_per_page_size: 20
+    size: 10000
 
 development:
   teachersets:
@@ -12,7 +13,8 @@ development:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
-    size: 20
+    teachersets_per_page_size: 20
+    size: 10000
 
 qa:
   teachersets:
@@ -20,7 +22,8 @@ qa:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
-    size: 20
+    teachersets_per_page_size: 20
+    size: 10000
 
 prod:
   teachersets:
@@ -28,7 +31,8 @@ prod:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
-    size: 20
+    teachersets_per_page_size: 20
+    size: 10000
 
 test:
   teachersets:
@@ -36,4 +40,5 @@ test:
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
-    size: 20
+    teachersets_per_page_size: 20
+    size: 10000
