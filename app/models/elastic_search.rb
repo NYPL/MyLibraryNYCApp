@@ -154,10 +154,9 @@ class ElasticSearch
       f[:items].sort_by! { |i| i[:label] }
     end
     facets
-    # end
   end
 
-  
+  # Group by facets from elasticsearch (language, availability, set_type, area_of_study) 
   def get_language_availability_set_type_area_of_study_facts(facets)
     [
       { :label => 'language', :column => :primary_language },
@@ -165,17 +164,22 @@ class ElasticSearch
       { :label => 'set type', :column => 'set_type', :value_map => SET_TYPE_LABELS },
       { :label => 'area of study', :column => 'area_of_study' }
     ].each do |config|
+
       facets_group = {:label => config[:label], :items => []}
-      agg_name = config[:label]
+      # eg: aggregation_name = 'language' or 'availability' etc
+      aggregation_name = config[:label]
       config_column = config[:column] == "availability" ? 'availability.raw' : config[:column]
 
-      # get facets data from elastic search by language, availability, set_type and area_of_study
-      query = {:aggs => {:"#{agg_name}" => {:terms => {:field => config_column, :size => 10000, :order => {:_key => "asc"}}}}}
+      # prepare elastic search group by query based on language, availability, set_type and area_of_study
+      query = {:aggs => {:"#{aggregation_name}" => {:terms => {:field => config_column, :size => 10000, :order => {:_key => "asc"}}}}}
+      
+      # Calling elastic search to get aggegations data
       resp = search_by_query(query)
 
-      aggregations = resp[:aggregations][agg_name]
+      aggregations = resp[:aggregations][aggregation_name]
+
       if aggregations.present? && aggregations["buckets"].present?
-        resp[:aggregations][agg_name]["buckets"].each do |agg_val|
+        resp[:aggregations][aggregation_name]["buckets"].each do |agg_val|
 
           label = agg_val['key']
           unless config[:value_map].nil?
@@ -195,7 +199,12 @@ class ElasticSearch
   end
 
 
+
   # Get subject facets
+  # facets eg: [ {:label=>"language", :items=> [{:value=>"Chinese", :label=>"Chinese", :count=>34}]},
+            # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable", :label=>"Checked Out", :count=>32}]},
+            # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
+            # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
   def get_subject_facets(facets)
     primary_subjects = []
     # Collect primary subjects for restricting subjects
@@ -212,7 +221,7 @@ class ElasticSearch
 
     if sub_aggs.present? || sub_aggs["subject_ids"].present? && sub_aggs["subject_ids"]["buckets"].present?
       sub_aggs["subject_ids"]["buckets"].each do |agg_val|
-        # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
+        # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
         next if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
 
@@ -226,8 +235,8 @@ class ElasticSearch
     subjects_facets
   end
 
-  
-  # Get subject factes from elastic search
+  # Get group by subject factes from elastic search
+  # primary_subjects eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
   def get_subject_facets_from_es(primary_subjects)
     primary_subjects_arr = []
     primary_subjects.each do |subject|
