@@ -62,25 +62,28 @@ class ElasticSearch
     # Per page showing 20 teachersets.
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
-    query = teacher_sets_query_based_on_filters(params)
+    query, agg_hash = teacher_sets_query_based_on_filters(params)
     query[:from] = from
     query[:size] = @teachersets_per_page
-
     # Sorting teachersets based on availability and created_at values. 
     # Showing latest created teachersets.
     query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
-    results = search_by_query(query)
+    query[:aggs] = agg_hash
+
+    teacherset_docs = search_by_query(query)
+    facets = facets_for_teacher_sets(teacherset_docs)
 
     # If any search keyword have wrong spelling, still getting the elasticsearch documents with fuzziness.
     # Fuzziness means find similar terms and search term within a specified edit distance.
     # Eg: worng spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
-    if !results[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
+    if !teacherset_docs[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
       if query[:query][:bool][:must][0][:multi_match].present?
         query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
-        results = search_by_query(query)
+        teacherset_docs = search_by_query(query)
+        facets = facets_for_teacher_sets(teacherset_docs)
       end
     end
-    results
+    [teacherset_docs, facets]
   end
 
 
@@ -88,6 +91,7 @@ class ElasticSearch
   def teacher_sets_query_based_on_filters(params)
     keyword, grade_begin, grade_end, language, set_type, availability, area_of_study, subjects = teacher_sets_input_params(params)
     query = {:query => {:bool => {:must => []}}}
+    aggregation_hash = {}
 
     # If search keyword is present in filters, finding the search keyword in these fields [title, description, contents]
     if keyword.present?
@@ -106,6 +110,7 @@ class ElasticSearch
     if language.present?
       query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[language primary_language]}}
     end
+    aggregation_hash["language"] = { "terms": { "field": "language", :size => 10000, :order => {:_key => "asc"} } }
 
     # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi
@@ -113,37 +118,47 @@ class ElasticSearch
     if set_type.present?
       query[:query][:bool][:must] << {:match => {:set_type => set_type.join}}
     end
+    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10000, :order => {:_key => "asc"} } }
 
     # If availability present in filters get ES query based on availability.
     # Eg: availability: "available/unavailable"
     if availability.present?
       query[:query][:bool][:must] << {:match => {:availability => availability.join}}
     end
+    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10000, :order => {:_key => "asc"} } }
 
     # If area_of_study present in filters get ES query based on area_of_study.
     # Eg: area_of_study: "Social Studies"
     if area_of_study.present?
       query[:query][:bool][:must] << {:match => {:area_of_study => area_of_study.join}}
     end
+    
+    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 10000, :order => {:_key => "asc"} } }
 
     # If subjects present in filters get ES query based on subjects.
     # teacherset have has_many  relationship with subject.
     # subjects mapping are stored in nested format in elastic search. 
     if subjects.present?
-      query[:query][:bool][:must] << {:nested => {:path => "subjects", :query => {:bool => {:must => {:terms => {"subjects.id" => subjects}}}}}}
+      query[:query][:bool][:must] << {:nested => {:path => "subjects", 
+                                      :query => {:bool => {:must => [{:terms => {"subjects.id" => params["subjects"]}}]}}}}
     end
-    query
+
+    aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
+        :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 100000, :order => {:_key => "asc"}}, 
+        :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :size => 100000, :order => {:_key => "asc"}}}}}}}
+    
+    [query, aggregation_hash]
   end
 
   
   # Get teacher set facets
-  def facets_for_query(_teacher_sets)
+  def facets_for_teacher_sets(teacher_sets_docs)
     # TODO: Need to work on tha rails cache
     facets = []
     # Get all facets from elastic search.
-    facets = get_language_availability_set_type_area_of_study_facts(facets)
+    facets = get_language_availability_set_type_area_of_study_facts(teacher_sets_docs, facets)
 
-    subjects_facets = get_subject_facets(facets)
+    subjects_facets = get_subject_facets(teacher_sets_docs, facets)
     facets << subjects_facets
 
     # Specify desired order of facets:
@@ -161,7 +176,7 @@ class ElasticSearch
 
  
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study) 
-  def get_language_availability_set_type_area_of_study_facts(facets)
+  def get_language_availability_set_type_area_of_study_facts(teacherset_docs, facets)
     [
       { :label => 'language', :column => :primary_language },
       { :label => 'availability', :column => 'availability', :value_map => AVAILABILITY_LABELS},
@@ -172,19 +187,10 @@ class ElasticSearch
       facets_group = {:label => config[:label], :items => []}
       # eg: aggregation_name = 'language' or 'availability' etc
       aggregation_name = config[:label]
-      config_column = config[:column] == "availability" ? 'availability.raw' : config[:column]
-
-      # prepare elastic search group by query based on language, availability, set_type and area_of_study
-      query = {:aggs => {:"#{aggregation_name}" => {:terms => {:field => config_column, :size => 10000, :order => {:_key => "asc"}}}}}
-      
-      # Calling elastic search to get aggegations data
-      resp = search_by_query(query)
-
-      aggregations = resp[:aggregations][aggregation_name]
+      aggregations = teacherset_docs[:aggregations][aggregation_name.to_s]
 
       if aggregations.present? && aggregations["buckets"].present?
-        resp[:aggregations][aggregation_name]["buckets"].each do |agg_val|
-
+        teacherset_docs[:aggregations][aggregation_name.to_s]["buckets"].each do |agg_val|
           label = agg_val['key']
           unless config[:value_map].nil?
             label = config[:value_map][agg_val['key']]
@@ -209,7 +215,7 @@ class ElasticSearch
   # :label=>"Checked Out", :count=>32}]},
   # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
   # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
-  def get_subject_facets(facets)
+  def get_subject_facets(teacherset_docs, facets)
     area_of_study_data = []
     # Collect area_of_study data for restricting subjects
 
@@ -219,9 +225,7 @@ class ElasticSearch
 
     subjects_facets = {:label => 'subjects', :items => []}
 
-    resp = get_subject_facets_from_es(area_of_study_data)
-
-    sub_aggs = resp[:aggregations]["subjects"]
+    sub_aggs = teacherset_docs[:aggregations]["subjects"]
 
     if sub_aggs.present? || sub_aggs["subject_ids"].present? && sub_aggs["subject_ids"]["buckets"].present?
       sub_aggs["subject_ids"]["buckets"].each do |agg_val|
@@ -236,6 +240,12 @@ class ElasticSearch
         }
       end
     end
+    subjects_facets[:items].delete_if do |subject|
+      area_of_study_data.include?(subject[:label])
+    end
+
+    subject_items = subjects_facets[:items].collect { |subject| subject[:label] }
+    subjects_facets = subject_items - area_of_study_data
     subjects_facets
   end
 
