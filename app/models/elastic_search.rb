@@ -218,7 +218,6 @@ class ElasticSearch
   def get_subject_facets(teacherset_docs, facets)
     area_of_study_data = []
     # Collect area_of_study data for restricting subjects
-
     unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
       area_of_study_data = subjects_facet.first[:items].map { |s| s[:label] }
     end
@@ -240,12 +239,12 @@ class ElasticSearch
         }
       end
     end
+
+    # area_of_study data should not show in subjects.
+    # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
     subjects_facets[:items].delete_if do |subject|
       area_of_study_data.include?(subject[:label])
     end
-
-    subject_items = subjects_facets[:items].collect { |subject| subject[:label] }
-    subjects_facets = subject_items - area_of_study_data
     subjects_facets
   end
 
