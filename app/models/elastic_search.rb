@@ -150,8 +150,8 @@ class ElasticSearch
     aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 200, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
-        :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 200, :order => {:_key => "asc"}}, 
-        :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :size => 200, :order => {:_key => "asc"}}}}}}}
+        :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 500, :order => {:_key => "asc"}}, 
+        :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :size => 500, :order => {:_key => "asc"}}}}}}}
     
     aggregation_hash
   end
