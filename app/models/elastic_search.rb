@@ -144,14 +144,14 @@ class ElasticSearch
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 10000, :order => {:_key => "asc"} } }
-    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10000, :order => {:_key => "asc"} } }
-    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10000, :order => {:_key => "asc"} } }
-    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 10000, :order => {:_key => "asc"} } }
+    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 1000, :order => {:_key => "asc"} } }
+    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 1000, :order => {:_key => "asc"} } }
+    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 1000, :order => {:_key => "asc"} } }
+    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 1000, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
-        :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 100000, :order => {:_key => "asc"}}, 
-        :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :size => 100000, :order => {:_key => "asc"}}}}}}}
+        :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 1000, :order => {:_key => "asc"}}, 
+        :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :size => 1000, :order => {:_key => "asc"}}}}}}}
     
     aggregation_hash
   end
@@ -229,6 +229,7 @@ class ElasticSearch
   def get_subject_facets(teacherset_docs, facets)
     area_of_study_data = []
     # Collect area_of_study data for restricting subjects
+    # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
     unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
       area_of_study_data = subjects_facet.first[:items].map { |s| s[:label] }
     end
@@ -257,36 +258,6 @@ class ElasticSearch
       area_of_study_data.include?(subject[:label])
     end
     subjects_facets
-  end
-
-  
-  # Get group by subject factes from elastic search
-  # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
-  def get_subject_facets_from_es(area_of_study_data)
-    area_of_study_data_arr = []
-    area_of_study_data.each do |subject|
-      area_of_study_data_arr << { "match": { "subjects.title": subject }}
-    end
-
-    # area_of_study data should not show in subjects.
-    # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
-    subjects_query = {
-     :size => 10000,
-     :sort => {:_score => "desc", :"availability.raw" => "asc", :created_at => "desc", :_id => "asc"},
-     :query =>
-      {:nested =>
-        {:path => "subjects",
-         :query =>
-          {:bool =>
-            {:must_not => area_of_study_data_arr}}}},
-     :aggs =>
-      {:subjects =>
-        {:nested => {:path => "subjects"},
-         :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 100000}, 
-         :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword",
-          :size => 100000}}}}}}}
-    }
-    search_by_query(subjects_query)
   end
 
   
