@@ -110,7 +110,7 @@ class ElasticSearch
     if language.present?
       query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[language primary_language]}}
     end
-    aggregation_hash["language"] = { "terms": { "field": "language", :size => 10000, :order => {:_key => "asc"} } }
+    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 10000, :order => {:_key => "asc"} } }
 
     # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi
