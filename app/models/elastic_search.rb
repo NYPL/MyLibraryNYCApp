@@ -110,30 +110,25 @@ class ElasticSearch
     if language.present?
       query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[language primary_language]}}
     end
-    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 10000, :order => {:_key => "asc"} } }
+    
 
     # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi
-
     if set_type.present?
       query[:query][:bool][:must] << {:match => {:set_type => set_type.join}}
     end
-    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10000, :order => {:_key => "asc"} } }
 
     # If availability present in filters get ES query based on availability.
     # Eg: availability: "available/unavailable"
     if availability.present?
       query[:query][:bool][:must] << {:match => {:availability => availability.join}}
     end
-    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10000, :order => {:_key => "asc"} } }
 
     # If area_of_study present in filters get ES query based on area_of_study.
     # Eg: area_of_study: "Social Studies"
     if area_of_study.present?
       query[:query][:bool][:must] << {:match => {:area_of_study => area_of_study.join}}
     end
-    
-    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 10000, :order => {:_key => "asc"} } }
 
     # If subjects present in filters get ES query based on subjects.
     # teacherset have has_many  relationship with subject.
@@ -142,14 +137,25 @@ class ElasticSearch
       query[:query][:bool][:must] << {:nested => {:path => "subjects", 
                                       :query => {:bool => {:must => [{:terms => {"subjects.id" => params["subjects"]}}]}}}}
     end
+    aggregation_hash = group_by_facets_query(aggregation_hash)
+    [query, aggregation_hash]
+  end
+
+
+  # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
+  def group_by_facets_query(aggregation_hash)
+    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 10000, :order => {:_key => "asc"} } }
+    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10000, :order => {:_key => "asc"} } }
+    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10000, :order => {:_key => "asc"} } }
+    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 10000, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
         :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 100000, :order => {:_key => "asc"}}, 
         :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :size => 100000, :order => {:_key => "asc"}}}}}}}
     
-    [query, aggregation_hash]
+    aggregation_hash
   end
-
+  
   
   # Get teacher set facets
   def facets_for_teacher_sets(teacher_sets_docs)
