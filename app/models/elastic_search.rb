@@ -149,10 +149,9 @@ class ElasticSearch
     aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
     aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
-    aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
-        :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 2000, :order => {:_key => "asc"}}, 
-        :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :order => {:_key => "asc"}}}}}}}
-    
+    aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
+    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+                                                                               {:title => {:terms => {:field => "subjects.title"}}}]}}}}
     aggregation_hash
   end
   
@@ -238,20 +237,19 @@ class ElasticSearch
 
     sub_aggs = teacherset_docs[:aggregations]["subjects"]
 
-    if sub_aggs.present? || sub_aggs["subject_ids"].present? && sub_aggs["subject_ids"]["buckets"].present?
-      sub_aggs["subject_ids"]["buckets"].each do |agg_val|
+    if sub_aggs.present? || sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?
+      sub_aggs["subjects"]["buckets"].each do |agg_val|
         # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
         next if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
-
+        
         subjects_facets[:items] << {
-          :value => agg_val["key"],
-          :label => agg_val["subject_titles"]["buckets"].first["key"],
-          :count => agg_val['doc_count']
+          :value => agg_val["key"]["id"],
+          :label => agg_val["key"]["title"],
+          :count => agg_val["doc_count"]
         }
       end
     end
-
     # area_of_study data should not show in subjects.
     # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
     subjects_facets[:items].delete_if do |subject|
