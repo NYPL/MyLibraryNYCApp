@@ -159,23 +159,28 @@ class ElasticSearch
   
   # Get teacher set facets
   def facets_for_teacher_sets(teacher_sets_docs)
-    # TODO: Need to work on tha rails cache
-    facets = []
-    # Get all facets from elastic search.
-    facets = get_language_availability_set_type_area_of_study_facts(teacher_sets_docs, facets)
+    cache_key = teacher_sets_docs.to_json
 
-    subjects_facets = get_subject_facets(teacher_sets_docs, facets)
-    facets << subjects_facets
+    cache_key = Digest::MD5.hexdigest cache_key.parameterize
+    # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
+    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
+      facets = []
+      # Get all facets from elastic search.
+      facets = get_language_availability_set_type_area_of_study_facts(teacher_sets_docs, facets)
 
-    # Specify desired order of facets:
-    facets.sort_by! do |f|
-      ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
-      ind.nil? ? 1000 : ind
-    end
+      subjects_facets = get_subject_facets(teacher_sets_docs, facets)
+      facets << subjects_facets
 
-    # Set order of facet vals:
-    facets.each do |f|
-      f[:items].sort_by! { |i| i[:label] }
+      # Specify desired order of facets:
+      facets.sort_by! do |f|
+        ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
+        ind.nil? ? 1000 : ind
+      end
+
+      # Set order of facet vals:
+      facets.each do |f|
+        f[:items].sort_by! { |i| i[:label] }
+      end
     end
     facets
   end
