@@ -144,14 +144,14 @@ class ElasticSearch
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 1000, :order => {:_key => "asc"} } }
-    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 1000, :order => {:_key => "asc"} } }
-    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 1000, :order => {:_key => "asc"} } }
-    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 1000, :order => {:_key => "asc"} } }
+    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 50, :order => {:_key => "asc"} } }
+    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10, :order => {:_key => "asc"} } }
+    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
+    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 200, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
-        :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 1000, :order => {:_key => "asc"}}, 
-        :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :size => 1000, :order => {:_key => "asc"}}}}}}}
+        :aggregations => {:subject_ids => {:terms => {:field => "subjects.id", :size => 200, :order => {:_key => "asc"}}, 
+        :aggregations => {:subject_titles => {:terms => {:field => "subjects.title.keyword", :size => 200, :order => {:_key => "asc"}}}}}}}
     
     aggregation_hash
   end
