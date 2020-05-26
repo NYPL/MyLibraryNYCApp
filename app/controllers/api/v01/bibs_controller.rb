@@ -140,7 +140,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       resp = teacher_set.destroy
       if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
         # After deletion of teacherset data from db than delete teacherset doc from elastic search
-        delete_teacheset_record_from_es(teacher_set.id) if resp.destroyed?
+        delete_teacherset_record_from_es(teacher_set.id) if resp.destroyed?
       end
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)

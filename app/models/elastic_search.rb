@@ -24,12 +24,15 @@ class ElasticSearch
     @size = @es_config['size'] || 10000
   end
 
+  
   # Decode aws elastic-search url
   def es_host(config)
-    return unless @es_config['host'].present?
-    AwsDecrypt.decrypt_kms(@es_config['host']).gsub!(/\xE2\x80\x9C/n, '').gsub!(/\xE2\x80\x9D/n, '')
+    return unless config['host'].present?
+    
+    AwsDecrypt.decrypt_kms(config['host']).gsub!(/\xE2\x80\x9C/n, '').gsub!(/\xE2\x80\x9D/n, '')
   end
 
+  
   # Create elastic search document by id and body. Eg: id: "1234567", body: {id: "1234567", title: "test"}
   def create_document(id, body)
     response = @client.create index: @index, type: @type, id: id, body: body
