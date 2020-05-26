@@ -29,7 +29,7 @@ class MlnConfigurationController < ApplicationController
   # Loading config files for local
   def load_config_for_local
     @feature_flag_config = YAML.load_file('config/feature_flag.yml')
-    @elasticsearch_config = YAML.load_file('config/elasticsearch_config.yml')
+    @elasticsearch_config = YAML.load_file('config/elastic_search.yml')
   end
 
 
@@ -38,7 +38,7 @@ class MlnConfigurationController < ApplicationController
     @feature_flag_config = YAML.safe_load(S3Controller.new.get_s3_file("my-library-nyc-config", "#{ENV['RAILS_ENV']}/feature_flag.yml"))
     
     # Load elastic search configurations for all environments
-    @elasticsearch_config = YAML.load_file('config/elasticsearch_config.yml')
+    @elasticsearch_config = YAML.load_file('config/elastic_search.yml')
   end
 
 

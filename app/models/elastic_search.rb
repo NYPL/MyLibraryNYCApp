@@ -7,7 +7,7 @@ class ElasticSearch
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}.freeze
 
   def initialize(_index = nil)
-    # Load elastic search configs from 'config/elasticsearch_config.yml'.
+    # Load elastic search configs from 'config/elastic_search.yml'.
     @es_config = MlnConfigurationController.new.elasticsearch_config('teachersets')
     arguments = {
       host: es_host(@es_config),
