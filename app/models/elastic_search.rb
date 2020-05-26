@@ -1,3 +1,4 @@
+require "aws_decrypt.rb"
 # frozen_string_literal: true
 
 class ElasticSearch
@@ -9,7 +10,7 @@ class ElasticSearch
     # Load elastic search configs from 'config/elasticsearch_config.yml'.
     @es_config = MlnConfigurationController.new.elasticsearch_config('teachersets')
     arguments = {
-      host: @es_config['host'],
+      host: es_host(@es_config),
       transport_options: {
         request: { open_timeout: @es_config['connect_timeout'] },
         headers: { content_type: 'application/json' }
@@ -23,6 +24,11 @@ class ElasticSearch
     @size = @es_config['size'] || 10000
   end
 
+  # Decode aws elastic-search url
+  def es_host(config)
+    return unless @es_config['host'].present?
+    AwsDecrypt.decrypt_kms(@es_config['host']).gsub!(/\xE2\x80\x9C/n, '').gsub!(/\xE2\x80\x9D/n, '')
+  end
 
   # Create elastic search document by id and body. Eg: id: "1234567", body: {id: "1234567", title: "test"}
   def create_document(id, body)
@@ -158,28 +164,22 @@ class ElasticSearch
   
   # Get teacher set facets
   def facets_for_teacher_sets(teacher_sets_docs)
-    cache_key = teacher_sets_docs.to_json
+    facets = []
+    # Get all facets from elastic search.
+    facets = get_language_availability_set_type_area_of_study_facts(teacher_sets_docs, facets)
 
-    cache_key = Digest::MD5.hexdigest cache_key.parameterize
-    # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
-    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
-      facets = []
-      # Get all facets from elastic search.
-      facets = get_language_availability_set_type_area_of_study_facts(teacher_sets_docs, facets)
+    subjects_facets = get_subject_facets(teacher_sets_docs, facets)
+    facets << subjects_facets
 
-      subjects_facets = get_subject_facets(teacher_sets_docs, facets)
-      facets << subjects_facets
+    # Specify desired order of facets:
+    facets.sort_by! do |f|
+      ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
+      ind.nil? ? 1000 : ind
+    end
 
-      # Specify desired order of facets:
-      facets.sort_by! do |f|
-        ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
-        ind.nil? ? 1000 : ind
-      end
-
-      # Set order of facet vals:
-      facets.each do |f|
-        f[:items].sort_by! { |i| i[:label] }
-      end
+    # Set order of facet vals:
+    facets.each do |f|
+      f[:items].sort_by! { |i| i[:label] }
     end
     facets
   end
