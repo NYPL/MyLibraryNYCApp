@@ -245,8 +245,7 @@ class ElasticSearch
       sub_aggs["subjects"]["buckets"].each do |agg_val|
         # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
-        # Subject::MIN_COUNT_FOR_FACET
-        next if agg_val['doc_count'] < 1
+        next if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
         
         subjects_facets[:items] << {
           :value => agg_val["key"]["id"],
