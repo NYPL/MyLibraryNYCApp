@@ -32,7 +32,8 @@ module TeacherSetsHelper
       grade_begin: ts_obj.grade_begin, availability: availability, total_copies: ts_obj.total_copies,
       call_number: ts_obj.call_number, language: ts_obj.language, physical_description: ts_obj.physical_description,
       primary_language: ts_obj.primary_language, created_at: created_at, updated_at: updated_at,
-      available_copies: ts_obj.available_copies, bnumber: ts_obj.bnumber, set_type: ts_obj.set_type }
+      available_copies: ts_obj.available_copies, bnumber: ts_obj.bnumber, set_type: ts_obj.set_type,
+      area_of_study: ts_obj.area_of_study, subjects: subjects_arr }
   end
 
   
