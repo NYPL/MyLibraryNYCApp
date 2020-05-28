@@ -5,9 +5,9 @@ development:
   teacherset.data.from.elasticsearch.enabled: true
 
 qa:
-  teacherset.data.from.elasticsearch.enabled: false
+  teacherset.data.from.elasticsearch.enabled: true
 
-prod:
+production:
   teacherset.data.from.elasticsearch.enabled: false
 
 test:
