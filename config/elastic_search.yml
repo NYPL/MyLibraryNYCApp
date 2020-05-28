@@ -18,7 +18,7 @@ development:
 
 qa:
   teachersets:
-    host: 'TODO'
+    host: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAALkwgbYGCSqGSIb3DQEHBqCBqDCBpQIBADCBnwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx6Tn8PX2cXADESxvwCARCAcheqRLcNh6BZ50W6K5txuEECYmlicsAu4WKKDllP0O8wzUyQ0V/v+TnK/UmSLyW4Q9Iv4bQh4vsxfayymzQunmWW2DPmcXGPDPy1eOuaqZ6XmanM24TalxRsCGCKfOY4FRsICyUzl3yPpS+uGVu8DjbdRg=="
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
