@@ -51,7 +51,8 @@ class TeacherSetsHelperTest < MiniTest::Test
 
   describe "delete teacherset record from_es" do
     it 'test delete_teacherset_record_from_es' do
-      expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => "354", "_version" => 2, "result" => "deleted", "_shards" => {"total" => 2, "successful" => 1, "failed" => 0}, "_seq_no" => 294, "_primary_term" => 2}
+      expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => "354", "_version" => 2, "result" => "deleted", 
+        "_shards" => {"total" => 2, "successful" => 1, "failed" => 0}, "_seq_no" => 294, "_primary_term" => 2}
       @mintest_mock1.expect(:delete_document_by_id, expected_resp, [354])
       resp = nil
       ElasticSearch.stub :new, @mintest_mock1 do
