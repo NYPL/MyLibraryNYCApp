@@ -3935,8 +3935,7 @@ class ActiveSupport::TestCase
 
 
   def mock_aws_request
-    WebMock.stub_request(:post, "https://kms.us-east-1.amazonaws.com/")
-      .to_return(:status => 200, :body => "", :headers => {})
+    WebMock.stub_request(:post, "https://kms.us-east-1.amazonaws.com/").to_return(:status => 200, :body => "", :headers => {})
   end
 
 
