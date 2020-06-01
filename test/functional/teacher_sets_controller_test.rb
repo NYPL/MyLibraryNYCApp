@@ -14,16 +14,13 @@ class TeacherSetsControllerTest < ActionController::TestCase
   end
 
   test "should get index" do
-    # TODO: need to fix below test case
-    # get :index
-    # assert_response :success
-    # assert_not_nil assigns(:teacher_sets)
+    get :index
+    assert_response :success
   end
 
   test "should show teacher_set" do
-    # TODO: need to fix below test case
-    # get :show, params: { id: @teacher_set.id }
-    # assert_response :success
+    get :show, params: { id: @teacher_set.id }
+    assert_response :success
   end
 
   # TODO: Fix: This test fails with the '"TeacherSet.count" didn't change by 1.'

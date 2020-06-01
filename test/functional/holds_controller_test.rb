@@ -9,9 +9,8 @@ class HoldsControllerTest < ActionController::TestCase
   end
 
   test "should show holds" do
-    # TODO: need to fix test cases
-    # get :show, params: { id: @hold.access_key }
-    # assert_response :success
+    get :show, params: { id: @hold.access_key }
+    assert_response :success
   end
 
   test "should get new" do
