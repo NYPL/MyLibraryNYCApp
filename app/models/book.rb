@@ -5,6 +5,8 @@ class Book < ActiveRecord::Base
   # NOTE: The ISBN field in the database refers to a standard number; sometimes this is an ISBN.
   include CatalogItemMethods
   include Oauth
+  include Exceptions
+
   has_paper_trail
   before_save :disable_papertrail
   before_update :enable_papertrail
@@ -227,7 +229,7 @@ class Book < ActiveRecord::Base
           'status' => response.code,
           'responseData' => response.body
         })
-      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+      raise Exceptions::InvalidResponse.new("Invalid status code of: #{response.code}")
     end
 
     return response
