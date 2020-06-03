@@ -85,7 +85,7 @@ class ElasticSearch
 
     # If any search keyword have wrong spelling, still getting the elasticsearch documents with fuzziness.
     # Fuzziness means find similar terms and search term within a specified edit distance.
-    # Eg: worng spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
+    # Eg: wrong spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
     if !teacherset_docs[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
       if query[:query][:bool][:must][0][:multi_match].present?
         query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
@@ -170,7 +170,7 @@ class ElasticSearch
   def facets_for_teacher_sets(teacher_sets_docs)
     facets = []
     # Get all facets from elastic search.
-    facets = get_language_availability_set_type_area_of_study_facts(teacher_sets_docs, facets)
+    facets = get_language_availability_set_type_area_of_study_facets(teacher_sets_docs, facets)
 
     subjects_facets = get_subject_facets(teacher_sets_docs, facets)
     facets << subjects_facets
@@ -190,7 +190,7 @@ class ElasticSearch
 
  
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study) 
-  def get_language_availability_set_type_area_of_study_facts(teacherset_docs, facets)
+  def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets)
     [
       { :label => 'language', :column => :primary_language },
       { :label => 'availability', :column => 'availability', :value_map => AVAILABILITY_LABELS},
