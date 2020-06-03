@@ -62,7 +62,7 @@ module TeacherSetsHelper
   end
 
   
-  # When Delete request comes from sierra, than delete teacher set documnet in elastic search.
+  # When Delete request comes from sierra, than delete teacher set document in elastic search.
   def delete_teacherset_record_from_es(id)
     resp = ElasticSearch.new.delete_document_by_id(id)
     return unless resp["result"] == "deleted"

@@ -28,6 +28,7 @@ class TeacherSetsHelperTest < MiniTest::Test
        :bnumber => "B456",:set_type => "set_type",:area_of_study => "area_of_study",:subjects => []}
   end
 
+  # test teacher set object method.
   describe "test teacher set object" do
     it 'test teacher set object' do
       resp = teacher_set_info(@teacher_set_obj)
@@ -35,6 +36,7 @@ class TeacherSetsHelperTest < MiniTest::Test
     end
   end
 
+  # Update teacher-set document in ES
   describe '#test create or update teacherset' do
     it 'update teacherset document in es' do
       es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
@@ -49,6 +51,7 @@ class TeacherSetsHelperTest < MiniTest::Test
     end
   end
 
+  # Delete teacher-set document in ES
   describe "delete teacherset record from_es" do
     it 'test delete_teacherset_record_from_es' do
       expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => "354", "_version" => 2, "result" => "deleted", 
@@ -62,6 +65,7 @@ class TeacherSetsHelperTest < MiniTest::Test
     end
   end
 
+  # Create teacher set object from elastic search json
   describe "test create ts_object from es_json" do
     it "create ts_object from es json" do
       es_json = {:totalMatches => 1330,

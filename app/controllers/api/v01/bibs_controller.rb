@@ -107,9 +107,11 @@ class Api::V01::BibsController < Api::V01::GeneralController
         ).deliver
       end
 
+      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+      # If feature flag is enabled create/update data in elasticsearch.
       if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
         begin
-          # When ever there is a create/update on bib than need to create/update the data in elastic search documnet.
+          # When ever there is a create/update on bib than need to create/update the data in elastic search document.
           create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
         rescue => exception
           log_error('create_or_update_teacher_sets', exception)
@@ -138,6 +140,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
       next unless teacher_set.present?
       saved_teacher_sets << teacher_set
       resp = teacher_set.destroy
+      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+      # If feature flag is enabled delete data from elasticsearch.
       if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
         # After deletion of teacherset data from db than delete teacherset doc from elastic search
         delete_teacherset_record_from_es(teacher_set.id) if resp.destroyed?
