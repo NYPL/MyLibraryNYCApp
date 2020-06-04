@@ -149,8 +149,8 @@ class User < ActiveRecord::Base
   def send_request_to_patron_creator_service
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
-      'emails' => [email],
-      'pin' => pin,
+      'emails' => ['email'],
+      'pin' => nil,
       'patronType' => patron_type,
       'patronCodes' => {
         'pcode1' => '-',
@@ -208,7 +208,7 @@ class User < ActiveRecord::Base
           'status' => response.code,
           'responseData' => response.body
         })
-      raise Exceptions::InvalidResponse.new("Invalid status code of: #{response.code}")
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
 
