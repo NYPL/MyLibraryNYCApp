@@ -79,7 +79,6 @@ class HoldsController < ApplicationController
       @hold.user = current_user
 
       unless params[:settings].nil?
-        # Parse settings object from ActionController::Parameters 
         current_user.update_attributes(params.require(:settings).to_hash)
       end
 
