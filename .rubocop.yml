@@ -34,3 +34,5 @@ Layout/EmptyLineBetweenDefs:
 Metrics/LineLength:
   Max: 150
 
+Style/IfUnlessModifier:
+  Enabled: false

@@ -8,7 +8,8 @@ class SearchSerializer < ActiveModel::Serializer
   def serializable_hash
     {
       :teacher_sets => ActiveModel::ArraySerializer.new(object[:teacher_sets], @options),
-      :facets => object[:facets]
+      :facets => object[:facets],
+      :errors => object[:errors]
     }
   end
 end
