@@ -30,4 +30,4 @@ $(document).ready(function() {
   $("#main").click(function(){
     $("#error_messages_id").hide();
   });
-}); 
+});

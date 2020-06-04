@@ -16,7 +16,6 @@ class TeacherSetsControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
     assert_response :success
-    assert_not_nil assigns(:teacher_sets)
   end
 
   test "should show teacher_set" do

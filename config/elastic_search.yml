@@ -1,0 +1,44 @@
+local:
+  teachersets:
+    host: 'http://localhost:9200/'
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
+    teachersets_per_page: 20
+    size: 10000
+
+development:
+  teachersets:
+    host: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAMIwgb8GCSqGSIb3DQEHBqCBsTCBrgIBADCBqAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwbdTkDn3sgAAeS0csCARCAewIOhmLggshs4ujFPXtWujBP7+r7v9jd//t9KjpvOD4GUQUhW/C8oo/fmPBBYp6Iltl9wlzDgpwJpCaX7k6NVVbFc2HzsIKhyPrYjLE2XkQMjHcHKZpLi1QHNuLg7RL8+gmHmQdFupXBZ/XXAmVx1gCbjFLhshmwBoDkKA=="
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
+    teachersets_per_page: 20
+    size: 10000
+
+qa:
+  teachersets:
+    host: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAALkwgbYGCSqGSIb3DQEHBqCBqDCBpQIBADCBnwYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx6Tn8PX2cXADESxvwCARCAcheqRLcNh6BZ50W6K5txuEECYmlicsAu4WKKDllP0O8wzUyQ0V/v+TnK/UmSLyW4Q9Iv4bQh4vsxfayymzQunmWW2DPmcXGPDPy1eOuaqZ6XmanM24TalxRsCGCKfOY4FRsICyUzl3yPpS+uGVu8DjbdRg=="
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
+    teachersets_per_page: 20
+    size: 10000
+
+production:
+  teachersets:
+    host: 'TODO'
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
+    teachersets_per_page: 20
+    size: 10000
+
+test:
+  teachersets:
+    host: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAL4wgbsGCSqGSIb3DQEHBqCBrTCBqgIBADCBpAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwloKXMb+At3SuOO10CARCAd+ibwLn4bjAp4IrdBIDbhe4urFI1rv8h2HrlqJIiGBZ6/o/gaHe0roZo870J/MxpWd9oRf6i3xOrzOZ/aNMwJU3T/eajqKhaK7viD10sIjTmIMlDxDJDAlyz/kMK7rhX6XrG2bQih5SMZwuVJ81+1aHqiW771Paf"
+    connect_timeout: 3
+    index: 'teacherset'
+    type: 'teacherset'
+    teachersets_per_page: 20
+    size: 10000

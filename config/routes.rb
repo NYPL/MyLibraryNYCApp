@@ -90,7 +90,7 @@ MyLibraryNYC::Application.routes.draw do
   match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
 
   root :to => "home#index"
-
+  
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
