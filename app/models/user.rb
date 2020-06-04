@@ -149,8 +149,8 @@ class User < ActiveRecord::Base
   def send_request_to_patron_creator_service
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
-      'emails' => ['email'],
-      'pin' => nil,
+      'emails' => [email],
+      'pin' => pin,
       'patronType' => patron_type,
       'patronCodes' => {
         'pcode1' => '-',
