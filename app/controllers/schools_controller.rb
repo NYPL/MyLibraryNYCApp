@@ -4,10 +4,11 @@ class SchoolsController < ApplicationController
   layout 'info_site/application'
   
   def index
+    schools = School.active
     # Group by first letter of the school.
-    schools = School.active.group_by { |school| school.name[0] }
+    group_by_schools = schools.group_by { |school| school.name[0] }
     @schools_arr = []
-    schools.each do |alphabet_anchor, school_objects|
+    group_by_schools.each do |alphabet_anchor, school_objects|
       school_hash = {}
       # If school name starts with alphabet letter, school names will display under aplhabet anchor eg: 'A' Academy for Careers (12), Academy(22).
       # If school name does not start with alphabet letter, school names will display under '#' anchor. eg: '#' 486 newyork school (86),  56test(234).
