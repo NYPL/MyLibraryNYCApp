@@ -79,7 +79,7 @@ class HoldsController < ApplicationController
       @hold.user = current_user
 
       unless params[:settings].nil?
-        current_user.update_attributes(params[:settings])
+        current_user.update_attributes(params.require(:settings).to_hash)
       end
 
       quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
