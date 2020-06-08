@@ -29,8 +29,9 @@ class ElasticSearch
   def es_host(config)
     return unless config['host'].present?
     return config['host'] if ENV['RACK_ENV'] == "local"
-    
-    AwsDecrypt.decrypt_kms(config['host']).gsub!(/\xE2\x80\x9C/n, '').gsub!(/\xE2\x80\x9D/n, '')
+    es_host = AwsDecrypt.decrypt_kms(config['host'])
+    return unless es_host.present?
+    es_host.gsub!(/\xE2\x80\x9C/n, '').gsub!(/\xE2\x80\x9D/n, '')
   end
 
   
