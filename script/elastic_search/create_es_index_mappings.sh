@@ -1,6 +1,8 @@
 # Create elastic search mappings and index.
+echo "Enter elastic search URL"
+read es_url
 
-curl -XPUT "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset?" -H 'Content-Type: application/json' -d '
+curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
 {
   "settings": {
     "analysis": {
@@ -125,6 +127,3 @@ curl -XPUT "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-e
     }
   }
 }'
-
-# Delete elastic search Index
-curl -XDELETE "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset"
