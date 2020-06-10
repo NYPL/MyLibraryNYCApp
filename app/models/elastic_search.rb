@@ -34,7 +34,7 @@ class ElasticSearch
     es_host = AwsDecrypt.decrypt_kms(config['host'])
     return unless es_host.present?
     
-    es_host.gsub!(/\xE2\x80\x9C/n, '').gsub!(/\xE2\x80\x9D/n, '')
+    "https://#{es_host}"
   end
 
   
