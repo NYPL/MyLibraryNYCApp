@@ -2,6 +2,8 @@
 
 class TeacherSetsController < ApplicationController
 
+  include TeacherSetsHelper
+
   before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
 
   ##
@@ -10,19 +12,45 @@ class TeacherSetsController < ApplicationController
   # a facet to filter by.
   def index
     LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-
-    @teacher_sets = TeacherSet.for_query params
-    @facets = TeacherSet.facets_for_query @teacher_sets
-
-    # Determine what facets are selected based on query string
-    @facets.each do |f|
-      f[:items].each do |v|
-        k = f[:label].underscore
-        v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)
+    begin
+      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' means gets teacher-set documents from elastic search.
+      # teacherset.data.from.elasticsearch.enabled = false means gets teacher-set data from database.
+      if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+        # Get teachersets and facets from elastic search
+        teacher_sets, @facets = ElasticSearch.new.get_teacher_sets_from_es(params)
+        @teacher_sets = create_ts_object_from_es_json(teacher_sets)
+      else
+        @teacher_sets = TeacherSet.for_query params
+        @facets = TeacherSet.facets_for_query @teacher_sets
       end
-    end
+      # Determine what facets are selected based on query string
+      @facets.each do |f|
+        f[:items].each do |v|
+          k = f[:label].underscore
+          v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)
+        end
+      end
 
-    # Attach custom :q param to each facet with query params to be applied to that link
+      # Attach custom :q param to each facet with query params to be applied to that link
+      @facets = teacher_set_facets(params)
+      render json: {
+        teacher_sets: @teacher_sets,
+        facets: @facets
+      }, serializer: SearchSerializer, include_books: false, include_contents: false
+    rescue StandardError => e
+      LogWrapper.log('DEBUG', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
+                               'method' => 'app/controllers/teacher_sets_controller.rb.index'})
+      render json: {
+        errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},
+        teacher_sets: {},
+        facets: {}
+      }, serializer: SearchSerializer, include_books: false, include_contents: false
+    end
+  end
+
+
+  # teacher set facets
+  def teacher_set_facets(params)
     @facets.each do |f|
       f[:items].each do |v|
         l = f[:label].underscore
@@ -53,11 +81,6 @@ class TeacherSetsController < ApplicationController
         v[:path] = teacher_sets_path(v[:q])
       end
     end
-
-    render json: {
-      teacher_sets: @teacher_sets,
-      facets: @facets
-    }, serializer: SearchSerializer, include_books: false, include_contents: false
   end
 
 

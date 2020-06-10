@@ -2,6 +2,7 @@
 
 class Api::V01::BibsController < Api::V01::GeneralController
   include LogWrapper
+  include TeacherSetsHelper
 
   before_action :set_request_body
   before_action :validate_source_of_request
@@ -106,10 +107,20 @@ class Api::V01::BibsController < Api::V01::GeneralController
         ).deliver
       end
 
+      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+      # If feature flag is enabled create/update data in elasticsearch.
+      if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+        begin
+          # When ever there is a create/update on bib than need to create/update the data in elastic search document.
+          create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
+        rescue => exception
+          log_error('create_or_update_teacher_sets', exception)
+        end
+      end
       saved_teacher_sets << teacher_set
       LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set.
-        Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
-        'method' => "bibs_controller.create_or_update_teacher_sets"})
+                     Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
+                     'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
   end
@@ -126,9 +137,14 @@ class Api::V01::BibsController < Api::V01::GeneralController
     saved_teacher_sets = []
     @request_body.each do |teacher_set_record|
       teacher_set = TeacherSet.where(bnumber: "b#{teacher_set_record['id']}").first
-      if teacher_set
-        saved_teacher_sets << teacher_set
-        teacher_set.destroy
+      next unless teacher_set.present?
+      saved_teacher_sets << teacher_set
+      resp = teacher_set.destroy
+      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+      # If feature flag is enabled delete data from elasticsearch.
+      if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+        # After deletion of teacherset data from db than delete teacherset doc from elastic search
+        delete_teacherset_record_from_es(teacher_set.id) if resp.destroyed?
       end
     end
     api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
