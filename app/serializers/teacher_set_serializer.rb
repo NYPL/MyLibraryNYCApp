@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class TeacherSetSerializer < ActiveModel::Serializer
-  unless MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+
+  # Need to revert after testing in production
+  if !MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled') && false
     cached
   end
 
