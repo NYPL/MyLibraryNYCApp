@@ -2,9 +2,9 @@
 
 class TeacherSetSerializer < ActiveModel::Serializer
 
-  unless MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-    cached
-  end
+  # unless MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+  #   cached
+  # end
 
   attributes :id, :availability, :availability_string, :description, :details_url, :primary_language, :subject_key, :title, :suitabilities_string, 
              :call_number, :physical_description, :set_type, :contents, :total_copies,
