@@ -269,6 +269,8 @@ class ElasticSearch
   
   # Search elastic documents based on the query.Eg: body: {id: "1234567", title: "test"}
   def search_by_query(body)
+    LogWrapper.log('INFO', {'message' => "Elastic search query: #{body}", 
+                            'method' => 'search_by_query'})
     results = {}
     resp = @client.search(index: @index, body: body)
     hits = resp['hits']
