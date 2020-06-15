@@ -39,15 +39,9 @@ class TeacherSetsController < ApplicationController
       @facets = teacher_set_facets(params)
       # Attach custom :q param to each facet with query params to be applied to that link
       if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-        render json: {
-          teacher_sets: @teacher_sets,
-          facets: @facets
-        }
+        render json: { teacher_sets: @teacher_sets, facets: @facets }
       else
-        render json: {
-          teacher_sets: @teacher_sets,
-          facets: @facets
-        }, serializer: SearchSerializer, include_books: false, include_contents: false
+        render json: { teacher_sets: @teacher_sets, facets: @facets }, serializer: SearchSerializer, include_books: false, include_contents: false
       end
     rescue StandardError => e
       LogWrapper.log('DEBUG', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
