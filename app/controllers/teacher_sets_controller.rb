@@ -36,6 +36,7 @@ class TeacherSetsController < ApplicationController
         end
       end
 
+      @facets = teacher_set_facets(params)
       # Attach custom :q param to each facet with query params to be applied to that link
       if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
         render json: {
