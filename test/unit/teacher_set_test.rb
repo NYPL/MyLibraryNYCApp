@@ -95,17 +95,24 @@ class TeacherSetTest < ActiveSupport::TestCase
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   describe "update set_type value in teacher set table" do
     it "test set_type value with Topic set" do
-      set_type_val = "Topic set"
-      resp = nil
-      resp = TeacherSet.new.update_set_type(set_type_val)
-      assert_equal(false, resp)
+      set_type_val = " Topic set "
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
     end
 
-    it "test set_type value is nil" do
+    it "test set_type value with Topic set" do
+      set_type_val = " Book Club Set "
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
+    end
+
+    it "test set_type value with nil" do
       set_type_val = nil
-      resp = nil
-      resp = TeacherSet.new.update_set_type(set_type_val)
-      assert_equal(false, resp)
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
     end
   end
 
