@@ -8,7 +8,7 @@ qa:
   teacherset.data.from.elasticsearch.enabled: true
 
 production:
-  teacherset.data.from.elasticsearch.enabled: false
+  teacherset.data.from.elasticsearch.enabled: true
 
 test:
   teacherset.data.from.elasticsearch.enabled: true
