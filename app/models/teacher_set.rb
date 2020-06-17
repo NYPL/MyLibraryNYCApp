@@ -35,8 +35,8 @@ class TeacherSet < ActiveRecord::Base
 
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
-  TOPIC_SET = 'single'
-  BOOK_CLUB_SET = 'multi'
+  TOPIC_SET = 'multi'
+  BOOK_CLUB_SET = 'single'
 
   FULLTEXT_COLUMNS = ['title', 'description', 'contents']
 
