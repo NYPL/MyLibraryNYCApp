@@ -708,11 +708,15 @@ class TeacherSet < ActiveRecord::Base
   # If subfields.content type is "Book Club Set" set_type value  stored as 'single' in teacher_sets table.
   # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
-  def update_set_type(set_type_val)
+  def update_set_type(set_type_val)      
     if set_type_val.present?
       set_type = set_type_val.titleize.include?('Topic Set')? TOPIC_SET : BOOK_CLUB_SET
+    elsif self.books.count < 1
+      set_type = nil
+    elsif self.books.count == 1
+      set_type = TOPIC_SET
     else
-      set_type = self.books.count <= 1 ? BOOK_CLUB_SET : TOPIC_SET
+      set_type = BOOK_CLUB_SET
     end
     self.update_attributes(set_type: set_type)
   end
