@@ -710,15 +710,17 @@ class TeacherSet < ActiveRecord::Base
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   def update_set_type(set_type_val)
     set_type = nil
-    LogWrapper.log('INFO', {'message' => "Set type value from sierra: #{set_type_val}",'method' => 'teacher_set.update_set_type'})
     books = TeacherSet.find(self.id).books
-    if set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Topic Set') || books.count.to_i > 1
+    if set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Topic Set')
       set_type = TOPIC_SET
-    elsif set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Book Club Set') || books.count.to_i == 1
+    elsif set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Book Club Set')
+      set_type = BOOK_CLUB_SET
+    elsif books.count.to_i > 1
+      set_type = TOPIC_SET
+    elsif books.count.to_i == 1
       set_type = BOOK_CLUB_SET
     end
     self.update_attributes(set_type: set_type)
-    LogWrapper.log('INFO', {'message' => "Updated set_type value in teacherset-table: #{set_type}",'method' => 'teacher_set.update_set_type'})
   end
 
   
