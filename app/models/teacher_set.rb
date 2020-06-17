@@ -710,9 +710,9 @@ class TeacherSet < ActiveRecord::Base
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   def update_set_type(set_type_val)
     if set_type_val.present?
-      set_type = set_type_val.titleize.include?('Topic Set')? BOOK_CLUB_SET : TOPIC_SET
+      set_type = set_type_val.titleize.include?('Topic Set')? TOPIC_SET : BOOK_CLUB_SET
     else
-      set_type = self.books.count == 1 ? BOOK_CLUB_SET : TOPIC_SET
+      set_type = self.books.count <= 1 ? BOOK_CLUB_SET : TOPIC_SET
     end
     self.update_attributes(set_type: set_type)
   end
