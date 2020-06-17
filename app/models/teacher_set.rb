@@ -35,6 +35,8 @@ class TeacherSet < ActiveRecord::Base
 
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
+  TOPIC_SET = 'multi'
+  BOOK_CLUB_SET = 'single'
 
   FULLTEXT_COLUMNS = ['title', 'description', 'contents']
 
@@ -699,11 +701,29 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
+  
+  # Set type value varFields entry with the marcTag=526
+  # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
+  # If subfields.content type is "Topic Set", set_type value  stored as 'multi' in teacher_sets table.
+  # If subfields.content type is "Book Club Set" set_type value  stored as 'single' in teacher_sets table.
+  # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
+  # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
+  def update_set_type(set_type_val)
+    set_type = nil
+    books = TeacherSet.find(self.id).books
+    if set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Topic Set') || books.count.to_i > 1
+      set_type = TOPIC_SET
+    elsif set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Book Club Set') || books.count.to_i == 1
+      set_type = BOOK_CLUB_SET
+    end
+    self.update_attributes(set_type: set_type)
+  end
 
+  
   # Receive JSON related to a teacher_set.
   # For each ISBN, ensure there is an associated book.
   # Disassociate books that are no longer in the teacher set.
-  def update_included_book_list(teacher_set_record)
+  def update_included_book_list(teacher_set_record, set_type)
     # Gather all ISBNs.
     return unless teacher_set_record['varFields']
     isbns = []
@@ -729,6 +749,8 @@ class TeacherSet < ActiveRecord::Base
       TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
       book.update_from_isbn
     end
+    # Update set_type value in teacher_set table.
+    update_set_type(set_type)
   end
 
 
