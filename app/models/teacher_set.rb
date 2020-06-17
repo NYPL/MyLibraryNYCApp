@@ -714,9 +714,9 @@ class TeacherSet < ActiveRecord::Base
     elsif self.books.count < 1
       set_type = nil
     elsif self.books.count == 1
-      set_type = TOPIC_SET
-    else
       set_type = BOOK_CLUB_SET
+    else
+      set_type = TOPIC_SET
     end
     self.update_attributes(set_type: set_type)
   end
