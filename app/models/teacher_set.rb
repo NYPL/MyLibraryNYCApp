@@ -701,12 +701,12 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
-  
+  # Set type value varFields entry with the marcTag=526
   # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
   # If subfields.content type is "Topic Set", set_type value  stored as 'multi' in teacher_sets table.
   # If subfields.content type is "Book Club Set" set_type value  stored as 'single' in teacher_sets table.
   # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
-  # teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
+  # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   def update_set_type(set_type_val)
     if set_type_val.present?
       set_type = set_type_val.titleize.include?('Topic Set')? BOOK_CLUB_SET : TOPIC_SET
