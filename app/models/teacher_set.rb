@@ -701,6 +701,7 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
+  
   # Set type value varFields entry with the marcTag=526
   # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
   # If subfields.content type is "Topic Set", set_type value  stored as 'multi' in teacher_sets table.
