@@ -221,8 +221,8 @@ So if you want to test mailing locally, turn the perform_deliveries back on.
 Configure ElasticSearch in local
 =================================
 
-MylibraryNyc project using elastic-search-6.8 version.
 ```
+MylibraryNyc project using elastic-search-6.8 version.
 Download elastic-search-6.8 version based on OS.
 
 Download elastic-search:
