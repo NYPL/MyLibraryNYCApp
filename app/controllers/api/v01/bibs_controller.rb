@@ -137,7 +137,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
     saved_teacher_sets = []
     @request_body.each do |teacher_set_record|
-      teacher_set = TeacherSet.where(bnumber: "b#{teacher_set_record['id']}").first
+      teacher_set_model = TeacherSet.new
+      # Delete teacher-set record by bib_id
+      teacher_set = teacher_set_model.get_teacher_set_by_bnumber(teacher_set_record['id'])
       next unless teacher_set.present?
       saved_teacher_sets << teacher_set
       resp = teacher_set.destroy
