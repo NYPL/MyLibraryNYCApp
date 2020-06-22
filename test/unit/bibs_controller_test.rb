@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class BibsControllerTest < MiniTest::Test
-	extend Minitest::Spec::DSL
+  extend Minitest::Spec::DSL
   include LogWrapper
 
   def setup
@@ -17,16 +17,16 @@ class BibsControllerTest < MiniTest::Test
   # If feature flag is enabled delete data from elasticsearch.
   describe "delete teacher sets" do
     it 'test delete teacher sets' do
-    	@mintest_mock1.expect(:call, [])
-    	@controller.instance_variable_set(:@request_body, req_body_for_item)
-    	resp = nil
-    	expected_resp = "{\"teacher_sets\":[]}"
-    	TeacherSet.stub :new, TeacherSet.new(bnumber: 'b998') do
-      	@controller.stub :validate_request, @mintest_mock1 do
-      		@controller.stub :api_response_builder, expected_resp, [] do
-      			resp = @controller.delete_teacher_sets
-      		end
-      	end
+      @mintest_mock1.expect(:call, [])
+      @controller.instance_variable_set(:@request_body, req_body_for_item)
+      resp = nil
+      expected_resp = "{\"teacher_sets\":[]}"
+      TeacherSet.stub :new, TeacherSet.new(bnumber: 'b998') do
+        @controller.stub :validate_request, @mintest_mock1 do
+          @controller.stub :api_response_builder, expected_resp, [] do
+            resp = @controller.delete_teacher_sets
+          end
+        end
       end
       assert_equal(expected_resp, resp)
       @mintest_mock1.verify
@@ -37,7 +37,7 @@ class BibsControllerTest < MiniTest::Test
   private
 
   def req_body_for_item
-    [ {
+    [{
       'nyplSource' => 'sierra-nypl',
       'id' => '998',
       'bibIds' => [
@@ -47,8 +47,7 @@ class BibsControllerTest < MiniTest::Test
         'code' => '-', 
         'display' => 'AVAILABLE', 
         'duedate' => '2011-04-26T16:16:00-04:00'
-      },
-    } ]
+      }
+    }]
   end
-
 end
