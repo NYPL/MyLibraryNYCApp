@@ -47,7 +47,7 @@ class BibsControllerTest < MiniTest::Test
     # Case: 2
     # If feature flag is enabled than delete teacher-set document from elasticsearch.
     # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
-    it 'test delete teacher sets deom es' do
+    it 'test delete teacher sets from es' do
       resp = nil
       teacherset_resp = TeacherSet.new(id: 733, bnumber: 998, title: "QA Teacher Set for MLN-662  AC#4")
       @mintest_mock1.expect(:call, [])
