@@ -217,3 +217,48 @@ in config/environments/development.rb and local.rb
 
 So if you want to test mailing locally, turn the perform_deliveries back on.
 ```
+
+Configure ElasticSearch in local
+=================================
+
+```
+MylibraryNyc project using elastic-search-6.8 version.
+Download elastic-search-6.8 version based on OS.
+
+Download elastic-search:
+https://www.elastic.co/downloads/past-releases/elasticsearch-6-8-0 
+
+Go to terminal/commandline
+cd elasticsearch-6.8.0
+Command to start elastic search:  ./bin/elasticsearch
+
+```
+
+```
+Commands to copy database from one environmnet to another
+=========================================================
+
+Dump the database which ever your interested in.
+'pg_dump' dumps a database as a text file or to other formats.
+
+
+Run database dump commands:
+Command: pg_dump --host={host_name} --username mylibrarynyc --file file_name.out {database_name}
+
+Before restoring database
+1) It is recommended to have a back up by talking snapshots of database.
+2) Stop all severe's wherever database being used.
+
+Run below commands in terminal/commandline.
+
+psql postgres;
+DROP database {database_name};
+or
+DROP SCHEMA public CASCADE;
+
+CREATE SCHEMA public;
+
+Run restore database commands:
+'pg_restore' is a utility for restoring a PostgreSQL database from an archive created by pg_dump in one of the non-plain-text formats.
+Command: pg_restore --verbose --host {host_name} --username {user_name} --dbname {database_name} file_name.out
+``` 

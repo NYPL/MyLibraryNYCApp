@@ -55,6 +55,12 @@ class TeacherSet < ActiveRecord::Base
     AVAILABILITY_LABELS[self.availability]
   end
 
+  
+  # Delete teacher-set record by bib_id
+  def get_teacher_set_by_bnumber(bib_id)
+    TeacherSet.where(bnumber: "b#{bib_id}").first
+  end
+
 
   def pending_holds_for_user(user)
     if user
@@ -478,64 +484,64 @@ class TeacherSet < ActiveRecord::Base
   # Probably old and unused.
   # Are you looking for the code that updates subjects when a teacher set is updated in Sierra,
   # and the bib record is sent to the MLN API?  Look at the update_subjects_via_api method.
-  def update_subjects
-    subjects.clear
+  # def update_subjects
+  #   subjects.clear
 
-    # TODO: take the 1.day constant out into a properties file.
-    # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
-    links = self.class.scrape_css self.details_url, '.further_list a', 8.hour
-    links.each do |n|
-      next if n.text.include? 'Teacher Set'
-      next if n.text.include? 'Adultery'
+  #   # TODO: take the 1.day constant out into a properties file.
+  #   # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
+  #   links = self.class.scrape_css self.details_url, '.further_list a', 8.hour
+  #   links.each do |n|
+  #     next if n.text.include? 'Teacher Set'
+  #     next if n.text.include? 'Adultery'
 
-      title =n.text
-      _t = '' + title
-      # Truncate phrases like "Something something - some qualifying statement" to just "Something something":
-      title = title.split(/( \W |\()/)[0]
-      title = title.truncate 30
-      title.strip!
-      #puts "    Adding subject: #{title}#{title != _t ? " (orig \"#{_t}\")" : ''}"
+  #     title =n.text
+  #     _t = '' + title
+  #     # Truncate phrases like "Something something - some qualifying statement" to just "Something something":
+  #     title = title.split(/( \W |\()/)[0]
+  #     title = title.truncate 30
+  #     title.strip!
+  #     #puts "    Adding subject: #{title}#{title != _t ? " (orig \"#{_t}\")" : ''}"
 
-      subject = Subject.find_or_create_by(title: title)
-      # subject.teacher_sets << self unless subject.teacher_sets.include? self
-      self.subjects << subject unless subject.teacher_sets.include? self
-    end
+  #     subject = Subject.find_or_create_by(title: title)
+  #     # subject.teacher_sets << self unless subject.teacher_sets.include? self
+  #     self.subjects << subject unless subject.teacher_sets.include? self
+  #   end
 
-    # Get primary subject from marc field 690
-    subject = self.marc[690]
-    unless subject.nil?
-      subject = subject.sub /\.$/, ''
-      # Strip off stupid (Teacher Set) qualifier cause I mean come on what the hell
-      subject.sub! /\ \(Teacher Set\)/, ''
+  #   # Get primary subject from marc field 690
+  #   subject = self.marc[690]
+  #   unless subject.nil?
+  #     subject = subject.sub /\.$/, ''
+  #     # Strip off stupid (Teacher Set) qualifier cause I mean come on what the hell
+  #     subject.sub! /\ \(Teacher Set\)/, ''
 
-      # Determine popularity of subject
-      subject_popularity = self.class.where(:area_of_study => subject).count
-    end
+  #     # Determine popularity of subject
+  #     subject_popularity = self.class.where(:area_of_study => subject).count
+  #   end
 
-    new_title = "" + self.title
+  #   new_title = "" + self.title
 
-    # puts "  Primary subj: #{subject}"
-    # If primary subject is unpopular (e.g. Mythology, Libros en Espanol, Reading)
-    if subject.nil? || subject_popularity < 10
-      # puts "  ..Unpopular subject: #{subject} with #{subject_popularity} instances for title #{title}"
+  #   # puts "  Primary subj: #{subject}"
+  #   # If primary subject is unpopular (e.g. Mythology, Libros en Espanol, Reading)
+  #   if subject.nil? || subject_popularity < 10
+  #     # puts "  ..Unpopular subject: #{subject} with #{subject_popularity} instances for title #{title}"
 
-      # Look at popular primary_subjects and choose one that intersects with self.subjects
-      self.class.group(:area_of_study).having('count(*) >= 10').count.each do |(label,count)|
-        if self.has_subject label
-          subject = label
-        end
-      end
-      # Note that some unpopular primary_subjects (e.g. Math, Music) aren't overridden
+  #     # Look at popular primary_subjects and choose one that intersects with self.subjects
+  #     self.class.group(:area_of_study).having('count(*) >= 10').count.each do |(label,count)|
+  #       if self.has_subject label
+  #         subject = label
+  #       end
+  #     end
+  #     # Note that some unpopular primary_subjects (e.g. Math, Music) aren't overridden
 
-      new_title.sub! /^#{Regexp.escape(subject)}: /, '' unless subject.nil?
-    end
+  #     new_title.sub! /^#{Regexp.escape(subject)}: /, '' unless subject.nil?
+  #   end
 
-    self.update_attributes({
-      :area_of_study => subject,
-      :title => new_title
-    })
+  #   self.update_attributes({
+  #     :area_of_study => subject,
+  #     :title => new_title
+  #   })
 
-  end
+  # end
 
 
   def add_books_by_isbns(isbns)
