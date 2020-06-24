@@ -736,6 +736,7 @@ class TeacherSet < ActiveRecord::Base
     elsif books.count.to_i == 1
       set_type = BOOK_CLUB_SET
     end
+    LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
     self.update_attributes(set_type: set_type)
   end
 
