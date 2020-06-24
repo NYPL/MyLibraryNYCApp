@@ -34,7 +34,7 @@ class TeacherSet < ActiveRecord::Base
   K_VAL = 0
 
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
-  SET_TYPE_LABELS = {'Book Club Set' => 'Book Club Set', 'Topic Set' => 'Topic Sets'}
+  SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
   TOPIC_SET = 'Topic Set'
   BOOK_CLUB_SET = 'Book Club Set'
 
