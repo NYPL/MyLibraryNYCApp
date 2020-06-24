@@ -727,12 +727,8 @@ class TeacherSet < ActiveRecord::Base
   def update_set_type(set_type_val)
     set_type = set_type_val
     books = TeacherSet.find(self.id).books
-    if set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Topic Set')
-      set_type = TOPIC_SET
-    elsif set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Book Club Set')
-      set_type = BOOK_CLUB_SET
-    elsif set_type_val.present?
-      set_type = set_type_val
+    if set_type_val.present?
+      set_type = set_type_val.strip().gsub(/\.$/, '').titleize
     elsif books.count.to_i > 1
       set_type = TOPIC_SET
     elsif books.count.to_i == 1
