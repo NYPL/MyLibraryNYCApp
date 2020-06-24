@@ -34,9 +34,10 @@ class TeacherSet < ActiveRecord::Base
   K_VAL = 0
 
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
-  SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
-  TOPIC_SET = 'multi'
-  BOOK_CLUB_SET = 'single'
+  SET_TYPE_LABELS = {'Book Club Set' => 'Book Club Set', 'Topic Set' => 'Topic Sets'}
+  TOPIC_SET = 'Topic Set'
+  BOOK_CLUB_SET = 'Book Club Set'
+
 
   FULLTEXT_COLUMNS = ['title', 'description', 'contents']
 
@@ -216,8 +217,7 @@ class TeacherSet < ActiveRecord::Base
           :value_map => self::AVAILABILITY_LABELS
         },
         { :label => 'set type',
-          :column => 'set_type',
-          :value_map => self::SET_TYPE_LABELS
+          :column => 'set_type'
         },
         { :label => 'area of study',
           :column => 'area_of_study'
@@ -707,7 +707,16 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
+  # If set_type value is 'single' return set_type value is 'Book Club Set'
+  # If set_type value is 'multi' return set_type value is 'Topic Set'
+  def get_set_type(set_type)
+    return unless set_type.present?
+    return BOOK_CLUB_SET if set_type == 'single'
+    return TOPIC_SET if set_type == 'multi'
+    set_type
+  end
   
+
   # Set type value varFields entry with the marcTag=526
   # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
   # If subfields.content type is "Topic Set", set_type value  stored as 'multi' in teacher_sets table.
@@ -715,7 +724,7 @@ class TeacherSet < ActiveRecord::Base
   # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   def update_set_type(set_type_val)
-    set_type = nil
+    set_type = set_type_val
     books = TeacherSet.find(self.id).books
     if set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Topic Set')
       set_type = TOPIC_SET
