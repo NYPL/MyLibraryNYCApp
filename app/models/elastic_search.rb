@@ -198,7 +198,7 @@ class ElasticSearch
     [
       { :label => 'language', :column => :primary_language },
       { :label => 'availability', :column => 'availability', :value_map => AVAILABILITY_LABELS},
-      { :label => 'set type', :column => 'set_type', :value_map => SET_TYPE_LABELS },
+      { :label => 'set type', :column => 'set_type' },
       { :label => 'area of study', :column => 'area_of_study' }
     ].each do |config|
 
