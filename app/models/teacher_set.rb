@@ -707,8 +707,9 @@ class TeacherSet < ActiveRecord::Base
 
   end
 
-  # If set_type value is 'single' return set_type value is 'Book Club Set'
-  # If set_type value is 'multi' return set_type value is 'Topic Set'
+
+  # If set_type value is 'single' return set_type value as 'Book Club Set'
+  # If set_type value is 'multi' return set_type value as 'Topic Set'
   def get_set_type(set_type)
     return unless set_type.present?
     return BOOK_CLUB_SET if set_type == 'single'
