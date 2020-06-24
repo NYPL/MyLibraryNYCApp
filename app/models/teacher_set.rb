@@ -731,6 +731,8 @@ class TeacherSet < ActiveRecord::Base
       set_type = TOPIC_SET
     elsif set_type_val.present? && set_type_val.strip().gsub(/\.$/, '').titleize.include?('Book Club Set')
       set_type = BOOK_CLUB_SET
+    elsif set_type_val.present?
+      set_type = set_type_val
     elsif books.count.to_i > 1
       set_type = TOPIC_SET
     elsif books.count.to_i == 1
