@@ -247,7 +247,7 @@ Command: pg_dump --host={host_name} --username mylibrarynyc --file file_name.out
 
 Before restoring database
 1) It is recommended to have a back up by talking snapshots of database.
-2) Stop all severe's wherever database being used.
+2) Stop all services wherever database being used.
 
 Run below commands in terminal/commandline.
 
