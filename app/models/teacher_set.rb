@@ -37,6 +37,7 @@ class TeacherSet < ActiveRecord::Base
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
   TOPIC_SET = 'Topic Set'
   BOOK_CLUB_SET = 'Book Club Set'
+  SIERRA_NYPL = 'sierra-nypl'
 
 
   FULLTEXT_COLUMNS = ['title', 'description', 'contents']
@@ -628,84 +629,84 @@ class TeacherSet < ActiveRecord::Base
     # self.save
   end
 
+  # Old and unused.
+  #   def self.fetch_new(page=1, limit=25, just_id=nil)
+  #     params = {:q => 'formatcode:(TEACHER_SETS )', :search_type => 'custom'}
+  #     params[:limit] = limit
+  #     puts "params: #{params.inspect}"
+  #     params[:page] = page
 
-  def self.fetch_new(page=1, limit=25, just_id=nil)
-    params = {:q => 'formatcode:(TEACHER_SETS )', :search_type => 'custom'}
-    params[:limit] = limit
-    puts "params: #{params.inspect}"
-    params[:page] = page
+  #     new = []
+  #     unique_ids = []
+  #     while (items = self.api_call("titles", params)) && !items['titles'].nil? && !items['titles'].empty?
+  #       puts "______________________________________________________________"
+  #       puts "API Fetch All: P #{params[:page]} of #{items['pages']}: #{items['titles'].count} items"
 
-    new = []
-    unique_ids = []
-    while (items = self.api_call("titles", params)) && !items['titles'].nil? && !items['titles'].empty?
-      puts "______________________________________________________________"
-      puts "API Fetch All: P #{params[:page]} of #{items['pages']}: #{items['titles'].count} items"
+  #       items['titles'].each_with_index do |title, i|
+  #         puts "#{(i+1) + (params[:page]-1)*params[:limit]} of #{items['count']}: Add/update #{title['id']}: #{title['title']}"
+  #         id = title['id'].to_i
+  #         # puts "upsert_from_catalog_id #{id}"
+  #         new << id unless self.exists?(id)
+  #         unique_ids << id
 
-      items['titles'].each_with_index do |title, i|
-        puts "#{(i+1) + (params[:page]-1)*params[:limit]} of #{items['count']}: Add/update #{title['id']}: #{title['title']}"
-        id = title['id'].to_i
-        # puts "upsert_from_catalog_id #{id}"
-        new << id unless self.exists?(id)
-        unique_ids << id
+  #         # If debugging a specific id, skip all except for that id
+  #         next if !just_id.nil? && id != just_id
 
-        # If debugging a specific id, skip all except for that id
-        next if !just_id.nil? && id != just_id
+  # =begin
+  #         if self.exists? id
+  #           s = self.find id
+  #           next if !s.description.empty?
+  #         end
+  # =end
+  #         set = upsert_from_catalog_id id
+  #         # Comment out to get the list of teacher sets not in the app faster
+  #         if !set.nil?
+  #           set.update_availability
+  #           set.update_books
+  #           set.update_subjects
+  #         end
 
-=begin
-        if self.exists? id
-          s = self.find id
-          next if !s.description.empty?
-        end
-=end
-        set = upsert_from_catalog_id id
-        # Comment out to get the list of teacher sets not in the app faster
-        if !set.nil?
-          set.update_availability
-          set.update_books
-          set.update_subjects
-        end
+  #       end
 
-      end
+  #       params[:page] += 1
+  #       # Reached the end?
+  #       break if params[:page] > items['pages'].to_i
+  #       # break if params[:page].to_i > 3
+  #     end
 
-      params[:page] += 1
-      # Reached the end?
-      break if params[:page] > items['pages'].to_i
-      # break if params[:page].to_i > 3
-    end
+  #     removed = self.where('id NOT IN (?)', unique_ids)
 
-    removed = self.where('id NOT IN (?)', unique_ids)
+  #     puts "Double checking missing sets: #{removed.count}: #{removed.map {|s| s.id}.join ', '}"
+  #     removed.each_with_index do |set, i|
+  #       # puts "#{(i+1)} of #{removed.size}: Add/update #{set.id}: #{set.title}"
 
-    puts "Double checking missing sets: #{removed.count}: #{removed.map {|s| s.id}.join ', '}"
-    removed.each_with_index do |set, i|
-      # puts "#{(i+1)} of #{removed.size}: Add/update #{set.id}: #{set.title}"
+  #       if !(resp = self.api_call("titles/#{set.id}")).nil? && !resp.keys.include?('error')
+  #         # puts "#{resp['title']['availability']['id']}"
 
-      if !(resp = self.api_call("titles/#{set.id}")).nil? && !resp.keys.include?('error')
-        # puts "#{resp['title']['availability']['id']}"
+  #         # Bibliocommons now returns a valid json response even if the set/book
+  #         # is deleted. Check if the availability is 'deleted'.
+  #         if resp['title']['availability']['id'] == 'DELETED'
+  #           puts "#{resp['title']['id']}, #{resp['title']['title']}, #{resp['title']['details_url']}, #{resp['title']['call_number']}"
+  #         end
 
-        # Bibliocommons now returns a valid json response even if the set/book
-        # is deleted. Check if the availability is 'deleted'.
-        if resp['title']['availability']['id'] == 'DELETED'
-          puts "#{resp['title']['id']}, #{resp['title']['title']}, #{resp['title']['details_url']}, #{resp['title']['call_number']}"
-        end
+  #         set = upsert_from_catalog_id set.id
+  #         if !set.nil?
+  #           set.update_availability
+  #           set.update_books
+  #           set.update_subjects
+  #         end
 
-        set = upsert_from_catalog_id set.id
-        if !set.nil?
-          set.update_availability
-          set.update_books
-          set.update_subjects
-        end
+  #       else
+  #         puts "DELETE THIS SET (maybe): #{set.id} doesn't resolve at the api anymore..."
+  #       end
 
-      else
-        puts "DELETE THIS SET (maybe): #{set.id} doesn't resolve at the api anymore..."
-      end
+  #     end
+  #     # puts "Removed: #{removed.count}: #{removed.map {|s| s.id}.join ', '}"
 
-    end
-    # puts "Removed: #{removed.count}: #{removed.map {|s| s.id}.join ', '}"
+  #     puts "New: #{new.size}: #{new.join ', '}"
+  #     puts "Done"
 
-    puts "New: #{new.size}: #{new.join ', '}"
-    puts "Done"
-
-  end
+  # end
 
 
   # If set_type value is 'single' return set_type value as 'Book Club Set'
@@ -736,6 +737,18 @@ class TeacherSet < ActiveRecord::Base
     end
     LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
     self.update_attributes(set_type: set_type)
+  end
+
+
+  # Update teacher sets set-type nil to value from sierra
+  def update_set_type_from_nil_to_value
+    teacher_sets = TeacherSet.where(set_type: nil)
+    teacher_sets.each do |teacher_set|
+      bib_id =  teacher_set.bnumber.split('b')[1]
+      LogWrapper.log('DEBUG', {'message' => "Teacher set bib-id value: #{bib_id}", 'method' => 'teacher_set.update_set_type_from_nil_to_value'})
+      set_type = teacher_set.get_set_type_value_from_bib_response(bib_id)
+      teacher_set.update_set_type(set_type)
+    end
   end
 
   
@@ -901,6 +914,23 @@ class TeacherSet < ActiveRecord::Base
     return total_count, available_count
   end
 
+
+  # Call sierra bib api to get set_type value
+  def get_set_type_value_from_bib_response(bibid)
+    resp = send_request_to_bibs_microservice(bibid)
+    set_type = nil
+    if resp.present? && resp.code == 200
+      resp["data"].each do |bib_record|
+        set_type_marctag = bib_record['varFields'].detect { |hash| hash['marcTag'] == '526' }
+        if set_type_marctag.present?
+          set_type = set_type_marctag['subfields'].map { |x| x['content']}.join(', ')
+        end
+      end
+    end
+    set_type
+  end
+
+
   private
 
   #Sends a request to the items microservice.
@@ -950,5 +980,39 @@ class TeacherSet < ActiveRecord::Base
     end
     #Recursive call
     send(__method__, bibid, offset, response, items_hash)
+  end
+
+
+  # Sends a request to the bibs microservice.(Get bib response by bibid)
+  # Sierra-bib-id-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
+  def send_request_to_bibs_microservice(bibid)
+    bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
+    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params,
+    headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
+    if response.code == 200
+      LogWrapper.log('DEBUG',
+      {
+        'message' => "Response from bib services api",
+        'method' => 'send_request_to_bibs_microservice',
+        'status' => response.code,
+        'responseData' => response.message
+      })
+    elsif response.code == 404
+      items_hash = response
+      LogWrapper.log('DEBUG',
+      {
+        'message' => "The bib service could not find with bibid=#{bibid}",
+        'method' => 'send_request_to_bibs_microservice',
+        'status' => response.code
+      })
+    else
+      LogWrapper.log('ERROR',
+      {
+        'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
+        'method' => 'send_request_to_bibs_microservice',
+        'status' => response.code
+      })
+    end
+    response
   end
 end
