@@ -984,7 +984,7 @@ class TeacherSet < ActiveRecord::Base
 
 
   # Sends a request to the bibs microservice.(Get bib response by bibid)
-  # Sierra-bib-id-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
+  # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
   def send_request_to_bibs_microservice(bibid)
     bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
     response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params,
