@@ -90,6 +90,8 @@ class ElasticSearch
     # If any search keyword have wrong spelling, still getting the elasticsearch documents with fuzziness.
     # Fuzziness means find similar terms and search term within a specified edit distance.
     # Eg: wrong spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
+    # query[:query][:bool][:must][0][:multi_match] = ["title^8", "description", "contents"]
+    # query[:query][:bool][:must][1] = ["subjects.title"]
     if !teacherset_docs[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
       if query[:query][:bool][:must][0][:multi_match].present? || query[:query][:bool][:must][1].present?
         query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
