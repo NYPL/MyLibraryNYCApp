@@ -110,6 +110,7 @@ class ElasticSearch
     query = {:query => {:bool => {:must => []}}}
     aggregation_hash = {}
     # If search keyword is present in filters, finding the search keyword in these fields [title, description, contents, subjects]
+    # Subjects is a nested object.
     if keyword.present?
       query[:query][:bool][:must] << {:multi_match => {:query => keyword, :fields => ["title^8", "description", "contents"]}}
       nested_subject_query = {:nested => {:path => "subjects", :query => {:multi_match => {:query => keyword, :fields => ["subjects.title"]}}}} 
