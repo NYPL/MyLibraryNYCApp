@@ -100,29 +100,29 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
               "format": "date_time_no_millis"
             },
             "subjects": {
-                "type": "nested",
-                "properties": {
-                  "id": {
-                    "type": "integer"
-                  },
-                  "title": {
-                    "type": "keyword",
-                    "fields": {
-                      "keyword": {
-                      "type": "keyword"
-                      }
-                    }
+              "type": "nested",
+              "properties": {
+                "id": {
+                  "type": "integer"
                 },
-            "created_at": {
-              "type": "date",
-              "format": "date_time_no_millis"
-            },
-            "updated_at": {
-              "type": "date",
-              "format": "date_time_no_millis"
-            }
+                "title": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                    "type": "keyword"
+                    }
+                  }
+                },
+                "created_at": {
+                  "type": "date",
+                  "format": "date_time_no_millis"
+                },
+                "updated_at": {
+                  "type": "date",
+                  "format": "date_time_no_millis"
+                }
+              }
           }
-        }
       }
     }
   }
