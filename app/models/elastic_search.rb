@@ -90,9 +90,12 @@ class ElasticSearch
     # If any search keyword have wrong spelling, still getting the elasticsearch documents with fuzziness.
     # Fuzziness means find similar terms and search term within a specified edit distance.
     # Eg: wrong spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
+    # query[:query][:bool][:must][0][:multi_match] = ["title^8", "description", "contents"]
+    # query[:query][:bool][:must][1] = ["subjects.title"]
     if !teacherset_docs[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
-      if query[:query][:bool][:must][0][:multi_match].present?
+      if query[:query][:bool][:must][0][:multi_match].present? || query[:query][:bool][:must][1].present?
         query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
+        query[:query][:bool][:must][1][:nested][:query][:multi_match][:fuzziness] = 1
         teacherset_docs = search_by_query(query)
         facets = facets_for_teacher_sets(teacherset_docs)
       end
@@ -106,10 +109,12 @@ class ElasticSearch
     keyword, grade_begin, grade_end, language, set_type, availability, area_of_study, subjects = teacher_sets_input_params(params)
     query = {:query => {:bool => {:must => []}}}
     aggregation_hash = {}
-
-    # If search keyword is present in filters, finding the search keyword in these fields [title, description, contents]
+    # If search keyword is present in filters, finding the search keyword in these fields [title, description, contents, subjects]
+    # Subjects is a nested object.
     if keyword.present?
-      query[:query][:bool][:must] << {:multi_match => {:query => keyword, :fields => %w[title^8 description contents]}}
+      query[:query][:bool][:must] << {:multi_match => {:query => keyword, :fields => ["title^8", "description", "contents"]}}
+      nested_subjects_query = {:nested => {:path => "subjects", :query => {:multi_match => {:query => keyword, :fields => ["subjects.title"]}}}} 
+      query[:query][:bool][:must] << nested_subjects_query
     end
 
     # If grade_begin, grade_end ranges present in filters get ES query based on ranges.
@@ -165,7 +170,7 @@ class ElasticSearch
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
     :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
-                                                                               {:title => {:terms => {:field => "subjects.title"}}}]}}}}
+                                                                               {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
     aggregation_hash
   end
   
