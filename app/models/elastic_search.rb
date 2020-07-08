@@ -112,8 +112,8 @@ class ElasticSearch
     # Subjects is a nested object.
     if keyword.present?
       subjects_query = {:nested => {:path => "subjects", :query => {:bool => {:must => [{:match => {:"subjects.title" => keyword}}]}}}}
-      query[:query][:bool][:must] << {:bool => {:should => [{:multi_match => {:query => keyword, :fields => ["title^8", "description", "contents"]}}, 
-                                     subjects_query]}}
+      query[:query][:bool][:must] << {:bool => {:should => [{:multi_match => {:query => keyword, :fields => ["title^8", "description", "contents"]}},
+                                                            subjects_query]} }
     end
 
     # If grade_begin, grade_end ranges present in filters get ES query based on ranges.
