@@ -93,9 +93,8 @@ class ElasticSearch
     # query[:query][:bool][:must][0][:multi_match] = ["title^8", "description", "contents"]
     # query[:query][:bool][:must][1] = ["subjects.title"]
     if !teacherset_docs[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
-      if query[:query][:bool][:must][0][:multi_match].present? || query[:query][:bool][:must][1].present?
-        query[:query][:bool][:must][0][:multi_match][:fuzziness] = 1
-        query[:query][:bool][:must][1][:nested][:query][:multi_match][:fuzziness] = 1
+      if query[:query][:bool][:must][0][:bool][:should][0][:multi_match].present?
+        query[:query][:bool][:must][0][:bool][:should][0][:multi_match][:fuzziness] = 1
         teacherset_docs = search_by_query(query)
         facets = facets_for_teacher_sets(teacherset_docs)
       end
@@ -112,9 +111,9 @@ class ElasticSearch
     # If search keyword is present in filters, finding the search keyword in these fields [title, description, contents, subjects]
     # Subjects is a nested object.
     if keyword.present?
-      query[:query][:bool][:must] << {:multi_match => {:query => keyword, :fields => ["title^8", "description", "contents"]}}
-      nested_subjects_query = {:nested => {:path => "subjects", :query => {:multi_match => {:query => keyword, :fields => ["subjects.title"]}}}} 
-      query[:query][:bool][:must] << nested_subjects_query
+      subjects_query = {:nested => {:path => "subjects", :query => {:bool => {:must => [{:match => {:"subjects.title" => keyword}}]}}}}
+      query[:query][:bool][:must] << {:bool => {:should => [{:multi_match => {:query => keyword, :fields => ["title^8", "description", "contents"]}},
+                                                            subjects_query]} }
     end
 
     # If grade_begin, grade_end ranges present in filters get ES query based on ranges.
