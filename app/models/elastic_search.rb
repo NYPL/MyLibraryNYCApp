@@ -111,7 +111,7 @@ class ElasticSearch
     # If search keyword is present in filters, finding the search keyword in these fields [title, description, contents, subjects]
     # Subjects is a nested object.
     if keyword.present?
-      subjects_query = {:nested => {:path => "subjects", :query => {:bool => {:must => [{:match => {:"subjects.title" => keyword}}]}}}}
+      subjects_query = {:nested => {:path => "subjects", :query => [{:match => {:"subjects.title" => keyword}}] }}
       query[:query][:bool][:must] << {:bool => {:should => [{:multi_match => {:query => keyword, :fields => ["title^8", "description", "contents"]}},
                                                             subjects_query]} }
     end
