@@ -30,7 +30,8 @@ module MyLibraryNYC
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
+    config.time_zone = 'Eastern Time (US & Canada)'
+    config.active_record.default_timezone = :local
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
@@ -75,6 +76,20 @@ module MyLibraryNYC
         resource '*', headers: :any, methods: [:get, :post, :options]
       end
     end
+
+    # tell rails that delayed_job gem will be handling asynchronous processing
+    config.active_job.queue_adapter = :delayed_job
+
+    # Schedule the task that will cycle through user barcodes,
+    # make the last check on barcode uniqueness in Sierra,
+    # finalize the barcode and send email to user.
+    # NOTE: Unsure of behavior on web server scaled to multiple machines.
+    # NOTE: Not sure I want to load all tasks.
+    config.after_initialize do
+      Rails.application.load_tasks
+      Rake::Task['user_barcode_tools:init'].invoke
+    end
+
 
   end
 end

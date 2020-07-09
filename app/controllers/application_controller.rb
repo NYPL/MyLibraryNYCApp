@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+
   def append_info_to_payload(payload)
     super
     if ActiveRecord::Base.connected? && payload[:status].present?
