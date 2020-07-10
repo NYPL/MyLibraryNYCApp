@@ -99,7 +99,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
         ).deliver
       end
       begin
-        teacher_set.update_included_book_list(teacher_set_record)
+        # Set type value varFields entry with the marcTag=526
+        teacher_set.update_included_book_list(teacher_set_record, var_field('526'))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
         AdminMailer.failed_bibs_controller_api_request(
@@ -136,7 +137,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
     saved_teacher_sets = []
     @request_body.each do |teacher_set_record|
-      teacher_set = TeacherSet.where(bnumber: "b#{teacher_set_record['id']}").first
+      # Delete teacher-set record by bib_id
+      teacher_set = TeacherSet.new.get_teacher_set_by_bnumber(teacher_set_record['id'])
       next unless teacher_set.present?
       saved_teacher_sets << teacher_set
       resp = teacher_set.destroy
