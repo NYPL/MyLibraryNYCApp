@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
   # the record.
-  # Update school_id nil in users table. Once migration is done, need to bring back validation for school_id.
+  # Once migration is done, need to bring back validation for school_id.
   validates :first_name, :last_name, :presence => true
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
