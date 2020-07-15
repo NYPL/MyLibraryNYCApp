@@ -247,5 +247,5 @@ ActiveRecord::Schema.define(version: 20200714200527) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
 
-  add_foreign_key :users, :schools, column: :school_id, primary_key: "id"
+  add_foreign_key "users", "schools", column: "school_id", primary_key: "id"
 end
