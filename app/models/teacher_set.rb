@@ -58,7 +58,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
   
-  # Delete teacher-set record by bib_id
+  # Get teacher-set record by bib_id
   def get_teacher_set_by_bnumber(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first
   end
