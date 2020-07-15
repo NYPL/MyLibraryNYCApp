@@ -137,10 +137,11 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
     saved_teacher_sets = []
     @request_body.each do |teacher_set_record|
-      # Delete teacher-set record by bib_id
+      # Get teacher-set record by bib_id
       teacher_set = TeacherSet.new.get_teacher_set_by_bnumber(teacher_set_record['id'])
       next unless teacher_set.present?
       saved_teacher_sets << teacher_set
+      # Delete teacher-set record
       resp = teacher_set.destroy
       # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
       # If feature flag is enabled delete data from elasticsearch.
