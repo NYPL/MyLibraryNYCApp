@@ -105,7 +105,7 @@ class ElasticSearch
       subjects_query = {:nested => {:path => "subjects", :query => 
       [
         {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["subjects.title^3"]}},
-        {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}}
+        {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["subjects.title^3"]}}
       ]}}
       query[:query][:bool][:must] << {:bool => {:should => 
       [
