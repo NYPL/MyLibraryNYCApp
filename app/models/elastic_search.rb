@@ -86,18 +86,6 @@ class ElasticSearch
 
     teacherset_docs = search_by_query(query)
     facets = facets_for_teacher_sets(teacherset_docs)
-
-    # If any search keyword have wrong spelling, still getting the elasticsearch documents with fuzziness.
-    # Fuzziness means find similar terms and search term within a specified edit distance.
-    # Eg: wrong spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
-    # query[:query][:bool][:must][0][:bool][:should][0][:multi_match] = ["title^8", "description", "contents"]
-    if !teacherset_docs[:hits].present? && params["keyword"].present? && query[:query][:bool][:must].present?
-      if query[:query][:bool][:must][0][:bool][:should][0][:multi_match].present?
-        query[:query][:bool][:must][0][:bool][:should][0][:multi_match][:fuzziness] = 1
-        teacherset_docs = search_by_query(query)
-        facets = facets_for_teacher_sets(teacherset_docs)
-      end
-    end
     [teacherset_docs, facets]
   end
 
@@ -109,10 +97,22 @@ class ElasticSearch
     aggregation_hash = {}
     # If search keyword is present in filters, finding the search keyword in these fields [title, description, contents, subjects]
     # Subjects is a nested object.
+    # If any search keyword have wrong spelling, still getting the elasticsearch documents with fuzziness.
+    # Fuzziness means find similar terms and search term within a specified edit distance.
+    # Eg: wrong spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
+
     if keyword.present?
-      subjects_query = {:nested => {:path => "subjects", :query => {:match => {:"subjects.title" => keyword}} }}
-      query[:query][:bool][:must] << {:bool => {:should => [{:multi_match => {:query => keyword, :fields => ["title^8", "description", "contents"]}},
-                                                            subjects_query]} }
+      subjects_query = {:nested => {:path => "subjects", :query => 
+      [
+        {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["subjects.title^3"]}},
+        {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}}
+      ]}}
+      query[:query][:bool][:must] << {:bool => {:should => 
+      [
+        {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["title^10", "description^2", "contents"]}},
+        {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}},
+        subjects_query, {:term => {:"title.keyword" => {:value => keyword}}}
+      ]}}
     end
 
     # If grade_begin, grade_end ranges present in filters get ES query based on ranges.
