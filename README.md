@@ -232,6 +232,46 @@ Go to terminal/commandline
 cd elasticsearch-6.8.0
 Command to start elastic search:  ./bin/elasticsearch
 
+
+# Run below method in rails console to update teacherset docs into elastic search cluster.
+
+def create_teacherset_document_in_es
+  TeacherSet.find_each do |ts|
+    arr = []
+    created_at = ts.created_at.present? ? ts.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+    updated_at = ts.updated_at.present? ? ts.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+    availability = ts.availability.present? ? ts.availability.downcase : nil
+    begin
+      subjects_arr = []
+      if ts.subjects.present?
+        ts.subjects.uniq.each do |subject|
+          subjects_hash = {}
+          s_created_at = subject.created_at.present? ? subject.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+          s_updated_at = subject.updated_at.present? ? subject.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+          subjects_hash[:id] = subject.id
+          subjects_hash[:title] = subject.title
+          subjects_hash[:created_at] = s_created_at
+          subjects_hash[:updated_at] = s_updated_at
+          subjects_arr << subjects_hash
+        end
+      end
+      body = {title: ts.title, description: ts.description, contents: ts.contents, 
+        id: ts.id.to_i, details_url: ts.details_url, grade_end: ts.grade_end, 
+        grade_begin: ts.grade_begin, availability: availability, total_copies: ts.total_copies,
+        call_number: ts.call_number, language: ts.language, physical_description: ts.physical_description,
+        primary_language: ts.primary_language, created_at: created_at, updated_at: updated_at,
+        available_copies: ts.available_copies, bnumber: ts.bnumber, set_type: ts.set_type, 
+        area_of_study: ts.area_of_study, subjects: subjects_arr}
+      ElasticSearch.new.create_document(ts.id, body)
+      puts "updating elastic search"
+    rescue Elasticsearch::Transport::Transport::Errors::Conflict => e
+       puts "Error in elastic search"
+      arr << ts.id
+    end
+    arr
+  end
+end
+
 ```
 
 ```
@@ -260,5 +300,12 @@ CREATE SCHEMA public;
 
 Run restore database commands:
 'pg_restore' is a utility for restoring a PostgreSQL database from an archive created by pg_dump in one of the non-plain-text formats.
+
 Command: pg_restore --verbose --host {host_name} --username {user_name} --dbname {database_name} file_name.out
+
+Example1: pg_restore --verbose --host localhost --dbname qa_new_name1 qa-new_name1.text
+
+Example2: psql --host localhost --dbname latest_qa1 -f qa-new_name.out
+
+
 ``` 
