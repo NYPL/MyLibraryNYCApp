@@ -30,7 +30,8 @@ namespace :combined_tests do
       'test/functional/home_controller_test.rb',
       'test/functional/holds_controller_test.rb',
       'test/functional/books_controller_test.rb',
-      'test/unit/user_test.rb', 'test/unit/book_test.rb'
+      'test/unit/user_test.rb', 'test/unit/book_test.rb',
+      'test/unit/elastic_search_test.rb'
     ].shuffle
 
     t.verbose = false
