@@ -20,6 +20,7 @@ Layout/AlignArray:
   Exclude:
     - 'test/test_helper.rb'
     - 'test/unit/teacher_set_test.rb'
+    - 'test/unit/*.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
