@@ -980,7 +980,6 @@ Style/InverseMethods:
 # Configuration parameters: IgnoredMethods.
 Style/MethodCallWithoutArgsParentheses:
   Exclude:
-    - 'app/controllers/api/v01/bibs_controller.rb'
     - 'app/models/teacher_set.rb'
 
 # Offense count: 1

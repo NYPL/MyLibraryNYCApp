@@ -75,7 +75,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
       begin
         # clean up the area of study field to match the subject field string rules
-        teacher_set.clean_primary_subject()
+        teacher_set.clean_primary_subject
       rescue => exception
         log_error('clean_primary_subject', exception)
         AdminMailer.failed_bibs_controller_api_request(
@@ -252,7 +252,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       grades_arr = []
       prek_arr = []
       grade_and_lexile_json.each do |gd|
-        grade = gd.strip()
+        grade = gd.strip
         return [grade] if grade.upcase.include?('PRE')
         grade_arr = grade.gsub('.', '').split('-')
         if grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
