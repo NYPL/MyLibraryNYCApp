@@ -9,7 +9,7 @@ namespace :ingest do
 
   # Fetch latest data from biblio
   desc "Import new data"
-  task :ingest, [:page, :limit, :just_id]  => :environment do |t, args|
+  task :ingest, [:page, :limit, :just_id] => :environment do |t, args|
     args.with_defaults(:page=> 1, :limit => 25, :just_id => nil)
 
     page = args.page.to_i
@@ -26,7 +26,7 @@ namespace :ingest do
 
   # Update availability status and counts of all sets by scraping internal catalog
   desc "Update availability numbers for all sets"
-  task :update_availability, [:start, :limit, :id]  => :environment do |t, args|
+  task :update_availability, [:start, :limit, :id] => :environment do |t, args|
     args.with_defaults(:start => 0, :limit => nil, :id => nil)
     start = args.start.to_i
     limit = args.limit.to_i unless args.limit.nil?

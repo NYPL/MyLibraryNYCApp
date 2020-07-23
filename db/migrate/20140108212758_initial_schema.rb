@@ -23,7 +23,7 @@ class InitialSchema < ActiveRecord::Migration[4.2]
     add_index :books, ["title"], :name => "index_books_title", :unique => false
 
     create_table "books_in_sets", :id => false, :force => true do |t|
-      t.integer "book_id",        :limit => 8,                :null => false
+      t.integer "book_id",        :limit => 8, :null => false
       t.integer "teacher_set_id", :limit => 8
       t.integer "rank",           :limit => 2, :default => 0, :null => false
     end
@@ -69,12 +69,12 @@ class InitialSchema < ActiveRecord::Migration[4.2]
     add_index :teacher_sets, ["title"], :name => "index_teacher_sets_title", :unique => false
 
     create_table "users", :force => true do |t|
-      t.string   "email",                  :default => "", :null => false
-      t.string   "encrypted_password",     :default => "", :null => false
+      t.string   "email", :default => "", :null => false
+      t.string   "encrypted_password", :default => "", :null => false
       t.string   "reset_password_token"
       t.datetime "reset_password_sent_at"
       t.datetime "remember_created_at"
-      t.integer  "sign_in_count",          :default => 0,  :null => false
+      t.integer  "sign_in_count", :default => 0, :null => false
       t.datetime "current_sign_in_at"
       t.datetime "last_sign_in_at"
       t.string   "current_sign_in_ip"

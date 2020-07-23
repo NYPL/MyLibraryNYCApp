@@ -157,18 +157,7 @@ Layout/EndAlignment:
 # Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
 Layout/ExtraSpacing:
   Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/holds_controller.rb'
-    - 'app/models/teacher_set.rb'
-    - 'config.ru'
-    - 'config/environments/qa.rb'
-    - 'config/environments/test.rb'
-    - 'db/migrate/20140108212758_initial_schema.rb'
     - 'db/schema.rb'
-    - 'db/seeds.rb'
-    - 'lib/tasks/ingest.rake'
-    - 'lib/tasks/sync_users.rake'
-    - 'script/rails'
 
 # Offense count: 75
 # Cop supports --auto-correct.

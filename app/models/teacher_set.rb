@@ -255,7 +255,7 @@ class TeacherSet < ActiveRecord::Base
       end
 
       # Tags
-      subjects_facets = {:label =>  'subjects', :items => []}
+      subjects_facets = {:label => 'subjects', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id')
       # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
       # but let's make it 5 consistently now.
@@ -293,7 +293,7 @@ class TeacherSet < ActiveRecord::Base
 
   def as_json(options = { })
     h = super(options)
-    h[:subject]   = subject
+    h[:subject] = subject
     h[:subject_key] = subject_key
     h[:suitabilities_string] = suitabilities_string
     h
@@ -747,7 +747,7 @@ class TeacherSet < ActiveRecord::Base
   def update_set_type_from_nil_to_value
     teacher_sets = TeacherSet.where(set_type: nil)
     teacher_sets.each do |teacher_set|
-      bib_id =  teacher_set.bnumber.split('b')[1]
+      bib_id = teacher_set.bnumber.split('b')[1]
       LogWrapper.log('DEBUG', {'message' => "Teacher set bib-id value: #{bib_id}", 'method' => 'teacher_set.update_set_type_from_nil_to_value'})
       set_type = teacher_set.get_set_type_value_from_bib_response(bib_id)
       teacher_set.update_set_type(set_type)
@@ -903,7 +903,7 @@ class TeacherSet < ActiveRecord::Base
     return {bibs_resp: bibs_resp} if !items_found
 
     total_count, available_count = parse_items_available_and_total_count(bibs_resp)
-    availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
+    availability_string = (available_count.to_i > 0) ? AVAILABLE : UNAVAILABLE
     return {bibs_resp: bibs_resp, total_count: total_count, available_count: available_count, availability_string: availability_string}
   end
 
@@ -913,9 +913,9 @@ class TeacherSet < ActiveRecord::Base
   # available to lend.
   def parse_items_available_and_total_count(response)
     available_count = 0
-    total_count  = 0
+    total_count = 0
     response['data'].each do |item|
-      total_count += 1 unless (item['status']['code'].present? &&  ['w', 'm', 'k'].include?(item['status']['code']))
+      total_count += 1 unless (item['status']['code'].present? && ['w', 'm', 'k'].include?(item['status']['code']))
       available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
     end
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
