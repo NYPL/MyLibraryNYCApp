@@ -1246,13 +1246,6 @@ Style/WordArray:
     - 'lib/tasks/cleanup.rake'
     - 'lib/tasks/ingest.rake'
 
-# Offense count: 10
-# Cop supports --auto-correct.
-Style/ZeroLengthPredicate:
-  Exclude:
-    - 'app/models/book.rb'
-    - 'app/models/teacher_set.rb'
-
 # Offense count: 785
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https

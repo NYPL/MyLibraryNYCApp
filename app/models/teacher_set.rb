@@ -119,7 +119,7 @@ class TeacherSet < ActiveRecord::Base
 
   # Fetch first book cover uri, with size = (:small|:medium|:large)
   def image_uri(size = :small)
-    books.first.image_uri(size) if books.size > 0
+    books.first.image_uri(size) if !books.empty?
   end
 
 
@@ -192,7 +192,7 @@ class TeacherSet < ActiveRecord::Base
     if params[:language].present?
       sets = sets.where("language IN (?) OR primary_language IN (?)", params[:language], params[:language])
     end
-    if !params[:availability].nil? && params[:availability].size > 0
+    if !params[:availability].nil? && !params[:availability].empty?
       sets = sets.where("availability IN (?)", params[:availability])
     end
 
@@ -336,11 +336,11 @@ class TeacherSet < ActiveRecord::Base
       :contents => item['contents'].join("\n")
     })
 
-    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && item['isbns'].size > 0
-    self.update_attributes :language => item['languages'].first['name'] if item['languages'].size > 0
-    self.update_attributes :physical_description => item['physical_description'].first if item['physical_description'].size > 0
-    self.update_attributes :publisher => item['publishers'].first['name'] if item['publishers'].size > 0
-    self.update_attributes :series => item['series'].first['name'] if !item['series'].nil? && item['series'].size > 0
+    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
+    self.update_attributes :language => item['languages'].first['name'] if !item['languages'].empty?
+    self.update_attributes :physical_description => item['physical_description'].first if !item['physical_description'].empty?
+    self.update_attributes :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
+    self.update_attributes :series => item['series'].first['name'] if !item['series'].nil? && !item['series'].empty?
 
     grade_begin = nil
     grade_end = nil
@@ -361,19 +361,12 @@ class TeacherSet < ActiveRecord::Base
             grade_end = grade_end.nil? ? v : [grade_end, v].max
           end
         end
-=begin
-        m = suit['name'].match /([0-9]+)L-([0-9]+)L/
-        unless m.nil?
-          self.update_attributes :lexile_begin => m[1].to_i
-          self.update_attributes :lexile_end => m[2].nil? || !m[2].match(/[0-9]+/) ? nil : m[2].to_i
-        end
-=end
       end
     end
     self.update_attributes :grade_begin => grade_begin, :grade_end => grade_end
 
     lang = nil
-    unless item['primary_language'].nil? || item['primary_language'].size == 0
+    unless item['primary_language'].nil? || item['primary_language'].empty?
       lang = item['primary_language']['name']
       lang = nil if ['Undetermined'].include? lang
     end

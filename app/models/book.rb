@@ -89,7 +89,7 @@ class Book < ActiveRecord::Base
     self.update_attributes :notes => item['notes'].join(';') unless item['notes'].nil?
     url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
     self.update_attributes :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
-    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && item['isbns'].size > 0
+    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
     self
   end
 
@@ -103,7 +103,7 @@ class Book < ActiveRecord::Base
 
   def self.catalog_item_by_query(q, scrape_fallback=false)
     res = self.catalog_items_by_query(q, scrape_fallback)
-    res.first unless res.nil? || res.size == 0
+    res.first unless res.nil? || res.empty?
   end
 
 
