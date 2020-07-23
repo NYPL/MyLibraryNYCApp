@@ -83,6 +83,7 @@ class TeacherSet < ActiveRecord::Base
   #Current user Teacher set holds
   def holds_for_user(user)
     return [] unless user
+
     holds.where(:user_id => user.id)
   end
 
@@ -143,6 +144,7 @@ class TeacherSet < ActiveRecord::Base
 
     [:grade_begin, :grade_end, :lexile_begin, :lexile_end].each do |k|
       next if params[k].nil?
+
       params[k] = params[k].to_i if params[k].present?
     end
 
@@ -171,6 +173,7 @@ class TeacherSet < ActiveRecord::Base
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
+
         sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND \
                           #{join_alias}.subject_id=#{s}")
       end
@@ -715,6 +718,7 @@ class TeacherSet < ActiveRecord::Base
     return unless set_type.present?
     return BOOK_CLUB_SET if set_type == 'single'
     return TOPIC_SET if set_type == 'multi'
+
     set_type
   end
   
@@ -758,15 +762,18 @@ class TeacherSet < ActiveRecord::Base
   def update_included_book_list(teacher_set_record, set_type)
     # Gather all ISBNs.
     return unless teacher_set_record['varFields']
+
     isbns = []
     teacher_set_record['varFields'].each do |var_field|
       next unless var_field['marcTag'] == '944'
       next unless var_field['subfields'] && var_field['subfields'][0] && var_field['subfields'][0]['content']
+
       isbns = var_field['subfields'][0]['content'].split(' ')
     end
 
     # Delete teacher_set_books records for books with an ISBN that is not in the teacher_set's list of ISBNs.
     return if isbns.empty?
+
     self.teacher_set_books.each do |teacher_set_book|
       if !teacher_set_book.book || (teacher_set_book.book.isbn.present? && !isbns.include?(teacher_set_book.book.isbn))
         teacher_set_book.destroy
@@ -870,6 +877,7 @@ class TeacherSet < ActiveRecord::Base
   def update_notes(teacher_set_notes_string)
     TeacherSetNote.where(teacher_set_id: self.id).destroy_all
     return if teacher_set_notes_string.blank?
+
     teacher_set_notes_string.split(',').each do |note_content|
       TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
@@ -894,6 +902,7 @@ class TeacherSet < ActiveRecord::Base
   def get_items_info_from_bibs_service(bibid)
     bibs_resp, items_found = send_request_to_items_microservice(bibid)
     return {bibs_resp: bibs_resp} if !items_found
+
     total_count, available_count = parse_items_available_and_total_count(bibs_resp)
     availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
     return {bibs_resp: bibs_resp, total_count: total_count, available_count: available_count, availability_string: availability_string}
@@ -978,6 +987,7 @@ class TeacherSet < ActiveRecord::Base
         })
       end
     end
+
     #Recursive call
     send(__method__, bibid, offset, response, items_hash)
   end

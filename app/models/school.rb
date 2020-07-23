@@ -29,6 +29,7 @@ class School < ActiveRecord::Base
   def sierra_code
     match = SierraCodeZcodeMatch.find_by_zcode(code)
     return nil if !match
+
     return match.sierra_code
   end
 end

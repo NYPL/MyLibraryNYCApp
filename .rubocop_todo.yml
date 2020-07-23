@@ -106,12 +106,6 @@ Layout/DotPosition:
 Layout/EmptyLineAfterGuardClause:
   Exclude:
     - 'app/controllers/api/v01/general_controller.rb'
-    - 'app/controllers/api/v01/items_controller.rb'
-    - 'app/helpers/application_helper.rb'
-    - 'app/models/book.rb'
-    - 'app/models/hold.rb'
-    - 'app/models/school.rb'
-    - 'app/models/teacher_set.rb'
     - 'app/models/untitled.rb'
     - 'app/views/admin/_history.html.arb'
     - 'lib/tasks/cleanup.rake'

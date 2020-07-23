@@ -164,6 +164,7 @@ class Book < ActiveRecord::Base
   def update_from_isbn
     response = send_request_to_bibs_microservice
     return if !@book_found
+
     begin
       book_attributes = JSON.parse(response.body)['data'][0]
       self.update_attributes(
