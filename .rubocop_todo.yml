@@ -101,13 +101,6 @@ Layout/DotPosition:
   Exclude:
     - 'test/test_helper.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterMagicComment:
-  Exclude:
-    - 'app/models/teacher_set.rb'
-    - 'db/schema.rb'
-
 # Offense count: 13
 # Cop supports --auto-correct.
 # Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
@@ -142,15 +135,6 @@ Layout/EmptyLinesAroundClassBody:
 
 # Offense count: 8
 # Cop supports --auto-correct.
-Layout/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'app/controllers/angular_controller.rb'
-    - 'app/controllers/teacher_sets_controller.rb'
-    - 'app/models/book.rb'
-    - 'app/models/teacher_set.rb'
-
-# Offense count: 8
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
 Layout/EmptyLinesAroundModuleBody:
@@ -173,7 +157,6 @@ Layout/EndAlignment:
 # Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
 Layout/ExtraSpacing:
   Exclude:
-    - 'app/admin/admin_user.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/holds_controller.rb'
     - 'app/models/teacher_set.rb'
