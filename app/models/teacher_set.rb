@@ -439,7 +439,6 @@ class TeacherSet < ActiveRecord::Base
       end
 
     end
-
   end
 
 
