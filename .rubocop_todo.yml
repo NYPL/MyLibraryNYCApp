@@ -19,20 +19,7 @@ Bundler/OrderedGems:
 Layout/AlignArray:
   Exclude:
     - 'test/test_helper.rb'
-    - 'test/unit/teacher_set_test.rb'
     - 'test/unit/*.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
-# SupportedHashRocketStyles: key, separator, table
-# SupportedColonStyles: key, separator, table
-# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
-Layout/AlignHash:
-  Exclude:
-    - 'app/controllers/api/v01/bibs_controller.rb'
-    - 'app/models/teacher_set.rb'
-    - 'app/models/user.rb'
 
 # Offense count: 24
 # Cop supports --auto-correct.
@@ -41,29 +28,6 @@ Layout/AlignHash:
 Layout/CaseIndentation:
   Exclude:
     - 'app/admin/dashboard.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Layout/ClosingParenthesisIndentation:
-  Exclude:
-    - 'lib/oauth.rb'
-    - 'test/test_helper.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Layout/CommentIndentation:
-  Exclude:
-    - 'app/models/book.rb'
-    - 'config/application.rb'
-    - 'config/initializers/client_side_validations.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleAlignWith, AutoCorrect, Severity.
-# SupportedStylesAlignWith: start_of_line, def
-Layout/DefEndAlignment:
-  Exclude:
-    - 'lib/oauth.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

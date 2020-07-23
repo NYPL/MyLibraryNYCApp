@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Oauth
-	def self.get_oauth_token
+  def self.get_oauth_token
     response = HTTParty.post(ENV['ISSO_OAUTH_TOKEN_URL'], body: {
         grant_type: 'client_credentials',
         client_id: ENV['ISSO_CLIENT_ID'],
@@ -20,8 +20,7 @@ module Oauth
        'message' => 'Error in receiving response from ISSO NYPL TOKEN SERVICE',
        'responseData' => "#{response.body}",
        'status' => response.code
-       }
-      )
+       })
       raise InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
