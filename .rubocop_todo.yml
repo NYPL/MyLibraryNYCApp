@@ -34,34 +34,6 @@ Layout/AlignHash:
     - 'app/models/teacher_set.rb'
     - 'app/models/user.rb'
 
-# Offense count: 26
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_parameter, with_fixed_indentation
-Layout/AlignParameters:
-  Exclude:
-    - 'app/controllers/api/v01/general_controller.rb'
-    - 'app/models/book.rb'
-    - 'app/models/teacher_set.rb'
-    - 'app/models/user.rb'
-    - 'lib/oauth.rb'
-    - 'test/integration/user_flow_test.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleAlignWith.
-# SupportedStylesAlignWith: either, start_of_block, start_of_line
-Layout/BlockAlignment:
-  Exclude:
-    - 'app/admin/books.rb'
-    - 'app/admin/teacher_sets.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Layout/BlockEndNewline:
-  Exclude:
-    - 'app/controllers/holds_controller.rb'
-
 # Offense count: 24
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentOneStep, IndentationWidth.

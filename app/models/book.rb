@@ -192,8 +192,7 @@ class Book < ActiveRecord::Base
 
   # Sends a request to the bibs microservice.
   def send_request_to_bibs_microservice
-    LogWrapper.log('DEBUG',
-      {
+    LogWrapper.log('DEBUG', {
        'message' => 'Request sent to bibs service',
        'method' => 'send_request_to_bibs_microservice',
        'status' => 'start',
@@ -211,21 +210,18 @@ class Book < ActiveRecord::Base
     case response.code
     when 200
       @book_found = true
-      LogWrapper.log('DEBUG',
-        {
+      LogWrapper.log('DEBUG', {
           'message' => "The bibs service responded with the book JSON.",
           'status' => response.code
         })
     when 404
       @book_found = false
-      LogWrapper.log('ERROR',
-        {
+      LogWrapper.log('ERROR', {
           'message' => "The bibs service could not find the book with ISBN=#{isbn}",
           'status' => response.code
         })
     else
-      LogWrapper.log('ERROR',
-        {
+      LogWrapper.log('ERROR', {
           'message' => "An error has occured when sending a request to the bibs service",
           'status' => response.code,
           'responseData' => response.body

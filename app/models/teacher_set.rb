@@ -947,16 +947,15 @@ class TeacherSet < ActiveRecord::Base
       return items_hash, items_found
     else
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
-      response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
-      headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
+      response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params, headers: { 
+        'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
       
       if response.code == 200 || items_hash['data'].present?
         resp = (ENV['RAILS_ENV'] == 'test')? JSON.parse(response) : response
         items_hash['data'] ||= []
         items_hash['data'] << resp['data'] if resp['data'].present?
         items_hash['data'].flatten!
-        LogWrapper.log('DEBUG',
-        {
+        LogWrapper.log('DEBUG', {
           'message' => "Response from item services api",
           'method' => 'send_request_to_items_microservice',
           'status' => response.code,
@@ -964,15 +963,13 @@ class TeacherSet < ActiveRecord::Base
         })
       elsif response.code == 404
         items_hash = response
-        LogWrapper.log('DEBUG',
-        {
+        LogWrapper.log('DEBUG', {
           'message' => "The items service could not find the Items with bibid=#{bibid}",
           'method' => 'send_request_to_items_microservice',
           'status' => response.code
         })
       else
-        LogWrapper.log('ERROR',
-        {
+        LogWrapper.log('ERROR', {
           'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
           'method' => 'send_request_to_items_microservice',
           'status' => response.code
@@ -989,11 +986,10 @@ class TeacherSet < ActiveRecord::Base
   # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
   def send_request_to_bibs_microservice(bibid)
     bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
-    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params,
-    headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
+    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", '
+      Content-Type' => 'application/json' }, timeout: 10)
     if response.code == 200
-      LogWrapper.log('DEBUG',
-      {
+      LogWrapper.log('DEBUG', {
         'message' => "Response from bib services api",
         'method' => 'send_request_to_bibs_microservice',
         'status' => response.code,
@@ -1001,15 +997,13 @@ class TeacherSet < ActiveRecord::Base
       })
     elsif response.code == 404
       items_hash = response
-      LogWrapper.log('DEBUG',
-      {
+      LogWrapper.log('DEBUG', {
         'message' => "The bib service could not find with bibid=#{bibid}",
         'method' => 'send_request_to_bibs_microservice',
         'status' => response.code
       })
     else
-      LogWrapper.log('ERROR',
-      {
+      LogWrapper.log('ERROR', {
         'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
         'method' => 'send_request_to_bibs_microservice',
         'status' => response.code
