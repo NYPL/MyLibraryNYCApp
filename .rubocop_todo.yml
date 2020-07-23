@@ -101,17 +101,6 @@ Layout/DotPosition:
   Exclude:
     - 'test/test_helper.rb'
 
-# Offense count: 22
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterGuardClause:
-  Exclude:
-    - 'app/controllers/api/v01/general_controller.rb'
-    - 'app/models/untitled.rb'
-    - 'app/views/admin/_history.html.arb'
-    - 'lib/tasks/cleanup.rake'
-    - 'lib/tasks/ingest.rake'
-    - 'script/update_teacherset_availability_from_sierra.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterMagicComment:

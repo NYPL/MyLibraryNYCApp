@@ -90,6 +90,7 @@ namespace :ingest do
       (last_name, first_name, barcode, email, school_code, school_name) = line
 
       next if email.nil? || email.strip.empty?
+
       puts "#{email}"
 
       if !(school = School.find_by_code(school_code.strip.downcase)).nil?
@@ -543,6 +544,7 @@ namespace :ingest do
     Dir.new(dumps_base).each do |f|
       m = f.match /(\w+)_school_codes/
       next if m.nil?
+
       borough_name = m[1].underscore.split('_').map(&:capitalize).join(' ')
 
       next if ['Brooklyn','Queens'].include? borough_name
