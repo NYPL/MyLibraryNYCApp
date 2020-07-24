@@ -38,7 +38,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           title (#{title || 'nil'}) or physical_description (#{physical_description || 'nil'})."))
         next
       end
-
+      # Get teacherset record by bnumber or create teacherset record by bnumber
       teacher_set = TeacherSet.where(bnumber: "b#{bnumber}").first_or_initialize
 
       # Calls Bib service for items.
