@@ -28,6 +28,7 @@ namespace :cleanup do
           duplicate_records.each do |duplicate_record|
             # skip the first duplicate so that we do not delete it or shift its holds and other associated models
             next if duplicate_record == first_duplicate_record
+
             if model_name == 'teacher_set'
               ['hold', 'subjects_teacher_set', 'teacher_set_book', 'teacher_set_note'].each do |associated_model_name|
                 associated_records_for_associated_model = associated_model_name.camelize.constantize.where(teacher_set_id: duplicate_record.id)
