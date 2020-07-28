@@ -27,6 +27,7 @@ class Api::V01::GeneralController < ApplicationController
     elsif !@request_body || @request_body.empty?
       return [400, 'Request body is empty.']
     end
+
     return []
   end
 

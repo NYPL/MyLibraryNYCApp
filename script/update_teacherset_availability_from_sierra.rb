@@ -8,6 +8,7 @@ def update_teacher_set_real_time_available_total_count
   error_messages  = []
   TeacherSet.find_each do |ts|
     next if !ts.bnumber
+
     begin
       bib_id = ts.bnumber.gsub('b', '')
       puts "Bib id: #{bib_id}"

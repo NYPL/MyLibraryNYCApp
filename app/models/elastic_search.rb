@@ -27,7 +27,7 @@ class ElasticSearch
   
   # Decode aws elastic-search url
   def es_host(config)
-    return unless config['host'].present?
+    return if !config['host'].present? || ENV['RACK_ENV'] == "test"
 
     return config['host'] if ENV['RACK_ENV'] == "local"
 

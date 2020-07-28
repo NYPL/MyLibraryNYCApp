@@ -1,8 +1,8 @@
 language: ruby
-cache:
-  bundler: true
-  directories:
-  - "/home/travis/.rvm/"
+#cache:
+#  bundler: true
+#  directories:
+#  - "/home/travis/.rvm/"
 rvm:
 - 2.5.7
 before_install:

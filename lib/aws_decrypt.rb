@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module AwsDecrypt
-
   def self.decrypt_kms(key)
     client = Aws::KMS::Client.new(region: 'us-east-1')
     resp = client.decrypt({
@@ -9,5 +8,4 @@ module AwsDecrypt
       })
     return resp.plaintext
   end
-
 end
