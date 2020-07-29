@@ -115,17 +115,17 @@ ActiveAdmin.register TeacherSet do
   end
 
   # The proc below sets the page title to title of the version if there is a version specified in the parameters
-  show title: Proc.new{
-      teacher_set_with_versions = TeacherSet.includes(versions: :item).find(params[:id])
-      if params[:version]
-        # title of a version of the teacher set
-        version = teacher_set_with_versions.versions[(params[:version].to_i - 1).to_i].reify
-        version.title
-      else
-        # the current teacher set title
-        teacher_set_with_versions.title
-      end
-    } do |teacher_set|
+  show title: Proc.new {
+    teacher_set_with_versions = TeacherSet.includes(versions: :item).find(params[:id])
+    if params[:version]
+      # title of a version of the teacher set
+      version = teacher_set_with_versions.versions[(params[:version].to_i - 1).to_i].reify
+      version.title
+    else
+      # the current teacher set title
+      teacher_set_with_versions.title
+    end
+  } do |teacher_set|
 
     return if params[:version] == '0'
 

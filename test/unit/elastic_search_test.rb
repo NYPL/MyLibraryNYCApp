@@ -17,7 +17,7 @@ class ElasticSearchTest < MiniTest::Test
         "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
         "subjects" =>  {:nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000, 
           :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
-                       {:title => {:terms => {:field => "subjects.title"}}}]}}}}}
+                       {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}}
   end
 
 
@@ -40,8 +40,28 @@ class ElasticSearchTest < MiniTest::Test
     it 'teacher sets query by keyword' do
       resp = nil
       params = { "keyword" => "test" }
-      expected_resp = [{:query => {:bool => 
-        {:must => [{:multi_match => {:query => "test", :fields => ["title^8", "description", "contents"]}}]}}}] << @agg_hash
+      expected_resp = [{:query => 
+        {:bool => 
+           {:must => 
+             [{:bool => 
+                {:should => 
+                  [{:multi_match => {:query => "test", :type => "phrase_prefix", :boost => 3, :fields => ["title^10", "description^2", "contents"]}},
+                   {:multi_match => {:query => "test", :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}},
+                   {:nested => 
+                     {:path => "subjects",
+                      :query => 
+                       [{:multi_match => {:query => "test", :type => "phrase_prefix", :boost => 3, :fields => ["subjects.title^3"]}}, 
+                        {:multi_match => {:query => "test", :fuzziness => 1, :fields => ["subjects.title^3"]}}]}},
+                   {:term => {:"title.keyword" => {:value => "test"}}}]}}]}}},
+                    {"language" => {:terms => {:field => "primary_language", :size => 100, :order => {:_key => "asc"}}},
+                     "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},
+                     "availability" => {:terms => {:field => "availability.raw", :size => 10, :order => {:_key => "asc"}}},
+                     "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
+                     "subjects" => 
+                      { :nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000,
+                        :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+                                     {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}}]
+
 
       @mintest_mock1.expect(:call, ["test"], [params])
       @mintest_mock2.expect(:call, @agg_hash, [{}])
@@ -228,7 +248,7 @@ class ElasticSearchTest < MiniTest::Test
     it 'get language_availability_set_type_area_of_study_facts' do
       expected_resp = [{:label => "language", :items => [{:value => "English", :label => "English", :count => 1}]},
                        {:label => "availability", :items => [{:value => "available", :label => "Available", :count => 1}]},
-                       {:label => "set type", :items => [{:value => "multi", :label => "Topic Sets", :count => 1}]},
+                       {:label => "set type", :items => [{:value => "multi", :label => "multi", :count => 1}]},
                        {:label => "area of study", :items => [{:value => "Arabic Language Arts.", :label => "Arabic Language Arts.", :count => 1}]}]
       resp = @es_model.get_language_availability_set_type_area_of_study_facets(es_document_resp, [])
       assert_equal(expected_resp, resp)

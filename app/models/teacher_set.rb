@@ -58,7 +58,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
   
-  # Delete teacher-set record by bib_id
+  # Get teacher-set record by bib_id
   def get_teacher_set_by_bnumber(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first
   end
@@ -83,6 +83,7 @@ class TeacherSet < ActiveRecord::Base
   #Current user Teacher set holds
   def holds_for_user(user)
     return [] unless user
+
     holds.where(:user_id => user.id)
   end
 
@@ -118,7 +119,7 @@ class TeacherSet < ActiveRecord::Base
 
   # Fetch first book cover uri, with size = (:small|:medium|:large)
   def image_uri(size = :small)
-    books.first.image_uri(size) if books.size > 0
+    books.first.image_uri(size) if !books.empty?
   end
 
 
@@ -143,6 +144,7 @@ class TeacherSet < ActiveRecord::Base
 
     [:grade_begin, :grade_end, :lexile_begin, :lexile_end].each do |k|
       next if params[k].nil?
+
       params[k] = params[k].to_i if params[k].present?
     end
 
@@ -171,6 +173,7 @@ class TeacherSet < ActiveRecord::Base
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
         next unless s.match /^[0-9]+$/
+
         sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND \
                           #{join_alias}.subject_id=#{s}")
       end
@@ -189,7 +192,7 @@ class TeacherSet < ActiveRecord::Base
     if params[:language].present?
       sets = sets.where("language IN (?) OR primary_language IN (?)", params[:language], params[:language])
     end
-    if !params[:availability].nil? && params[:availability].size > 0
+    if !params[:availability].nil? && !params[:availability].empty?
       sets = sets.where("availability IN (?)", params[:availability])
     end
 
@@ -252,7 +255,7 @@ class TeacherSet < ActiveRecord::Base
       end
 
       # Tags
-      subjects_facets = {:label =>  'subjects', :items => []}
+      subjects_facets = {:label => 'subjects', :items => []}
       _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id')
       # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
       # but let's make it 5 consistently now.
@@ -290,7 +293,7 @@ class TeacherSet < ActiveRecord::Base
 
   def as_json(options = { })
     h = super(options)
-    h[:subject]   = subject
+    h[:subject] = subject
     h[:subject_key] = subject_key
     h[:suitabilities_string] = suitabilities_string
     h
@@ -333,11 +336,11 @@ class TeacherSet < ActiveRecord::Base
       :contents => item['contents'].join("\n")
     })
 
-    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && item['isbns'].size > 0
-    self.update_attributes :language => item['languages'].first['name'] if item['languages'].size > 0
-    self.update_attributes :physical_description => item['physical_description'].first if item['physical_description'].size > 0
-    self.update_attributes :publisher => item['publishers'].first['name'] if item['publishers'].size > 0
-    self.update_attributes :series => item['series'].first['name'] if !item['series'].nil? && item['series'].size > 0
+    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
+    self.update_attributes :language => item['languages'].first['name'] if !item['languages'].empty?
+    self.update_attributes :physical_description => item['physical_description'].first if !item['physical_description'].empty?
+    self.update_attributes :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
+    self.update_attributes :series => item['series'].first['name'] if !item['series'].nil? && !item['series'].empty?
 
     grade_begin = nil
     grade_end = nil
@@ -358,19 +361,12 @@ class TeacherSet < ActiveRecord::Base
             grade_end = grade_end.nil? ? v : [grade_end, v].max
           end
         end
-=begin
-        m = suit['name'].match /([0-9]+)L-([0-9]+)L/
-        unless m.nil?
-          self.update_attributes :lexile_begin => m[1].to_i
-          self.update_attributes :lexile_end => m[2].nil? || !m[2].match(/[0-9]+/) ? nil : m[2].to_i
-        end
-=end
       end
     end
     self.update_attributes :grade_begin => grade_begin, :grade_end => grade_end
 
     lang = nil
-    unless item['primary_language'].nil? || item['primary_language'].size == 0
+    unless item['primary_language'].nil? || item['primary_language'].empty?
       lang = item['primary_language']['name']
       lang = nil if ['Undetermined'].include? lang
     end
@@ -436,7 +432,6 @@ class TeacherSet < ActiveRecord::Base
       end
 
     end
-
   end
 
 
@@ -715,6 +710,7 @@ class TeacherSet < ActiveRecord::Base
     return unless set_type.present?
     return BOOK_CLUB_SET if set_type == 'single'
     return TOPIC_SET if set_type == 'multi'
+
     set_type
   end
   
@@ -744,7 +740,7 @@ class TeacherSet < ActiveRecord::Base
   def update_set_type_from_nil_to_value
     teacher_sets = TeacherSet.where(set_type: nil)
     teacher_sets.each do |teacher_set|
-      bib_id =  teacher_set.bnumber.split('b')[1]
+      bib_id = teacher_set.bnumber.split('b')[1]
       LogWrapper.log('DEBUG', {'message' => "Teacher set bib-id value: #{bib_id}", 'method' => 'teacher_set.update_set_type_from_nil_to_value'})
       set_type = teacher_set.get_set_type_value_from_bib_response(bib_id)
       teacher_set.update_set_type(set_type)
@@ -758,15 +754,18 @@ class TeacherSet < ActiveRecord::Base
   def update_included_book_list(teacher_set_record, set_type)
     # Gather all ISBNs.
     return unless teacher_set_record['varFields']
+
     isbns = []
     teacher_set_record['varFields'].each do |var_field|
       next unless var_field['marcTag'] == '944'
       next unless var_field['subfields'] && var_field['subfields'][0] && var_field['subfields'][0]['content']
+
       isbns = var_field['subfields'][0]['content'].split(' ')
     end
 
     # Delete teacher_set_books records for books with an ISBN that is not in the teacher_set's list of ISBNs.
     return if isbns.empty?
+
     self.teacher_set_books.each do |teacher_set_book|
       if !teacher_set_book.book || (teacher_set_book.book.isbn.present? && !isbns.include?(teacher_set_book.book.isbn))
         teacher_set_book.destroy
@@ -870,6 +869,7 @@ class TeacherSet < ActiveRecord::Base
   def update_notes(teacher_set_notes_string)
     TeacherSetNote.where(teacher_set_id: self.id).destroy_all
     return if teacher_set_notes_string.blank?
+
     teacher_set_notes_string.split(',').each do |note_content|
       TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
@@ -894,8 +894,9 @@ class TeacherSet < ActiveRecord::Base
   def get_items_info_from_bibs_service(bibid)
     bibs_resp, items_found = send_request_to_items_microservice(bibid)
     return {bibs_resp: bibs_resp} if !items_found
+
     total_count, available_count = parse_items_available_and_total_count(bibs_resp)
-    availability_string = (available_count.to_i > 0) ?  AVAILABLE  : UNAVAILABLE
+    availability_string = (available_count.to_i > 0) ? AVAILABLE : UNAVAILABLE
     return {bibs_resp: bibs_resp, total_count: total_count, available_count: available_count, availability_string: availability_string}
   end
 
@@ -905,9 +906,9 @@ class TeacherSet < ActiveRecord::Base
   # available to lend.
   def parse_items_available_and_total_count(response)
     available_count = 0
-    total_count  = 0
+    total_count = 0
     response['data'].each do |item|
-      total_count += 1 unless (item['status']['code'].present? &&  ['w', 'm', 'k'].include?(item['status']['code']))
+      total_count += 1 unless (item['status']['code'].present? && ['w', 'm', 'k'].include?(item['status']['code']))
       available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
     end
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
@@ -946,16 +947,15 @@ class TeacherSet < ActiveRecord::Base
       return items_hash, items_found
     else
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
-      response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params,
-      headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
+      response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params, headers: { 
+        'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
       
       if response.code == 200 || items_hash['data'].present?
         resp = (ENV['RAILS_ENV'] == 'test')? JSON.parse(response) : response
         items_hash['data'] ||= []
         items_hash['data'] << resp['data'] if resp['data'].present?
         items_hash['data'].flatten!
-        LogWrapper.log('DEBUG',
-        {
+        LogWrapper.log('DEBUG', {
           'message' => "Response from item services api",
           'method' => 'send_request_to_items_microservice',
           'status' => response.code,
@@ -963,21 +963,20 @@ class TeacherSet < ActiveRecord::Base
         })
       elsif response.code == 404
         items_hash = response
-        LogWrapper.log('DEBUG',
-        {
+        LogWrapper.log('DEBUG', {
           'message' => "The items service could not find the Items with bibid=#{bibid}",
           'method' => 'send_request_to_items_microservice',
           'status' => response.code
         })
       else
-        LogWrapper.log('ERROR',
-        {
+        LogWrapper.log('ERROR', {
           'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
           'method' => 'send_request_to_items_microservice',
           'status' => response.code
         })
       end
     end
+
     #Recursive call
     send(__method__, bibid, offset, response, items_hash)
   end
@@ -987,11 +986,10 @@ class TeacherSet < ActiveRecord::Base
   # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
   def send_request_to_bibs_microservice(bibid)
     bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
-    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params,
-    headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
+    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", '
+      Content-Type' => 'application/json' }, timeout: 10)
     if response.code == 200
-      LogWrapper.log('DEBUG',
-      {
+      LogWrapper.log('DEBUG', {
         'message' => "Response from bib services api",
         'method' => 'send_request_to_bibs_microservice',
         'status' => response.code,
@@ -999,15 +997,13 @@ class TeacherSet < ActiveRecord::Base
       })
     elsif response.code == 404
       items_hash = response
-      LogWrapper.log('DEBUG',
-      {
+      LogWrapper.log('DEBUG', {
         'message' => "The bib service could not find with bibid=#{bibid}",
         'method' => 'send_request_to_bibs_microservice',
         'status' => response.code
       })
     else
-      LogWrapper.log('ERROR',
-      {
+      LogWrapper.log('ERROR', {
         'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
         'method' => 'send_request_to_bibs_microservice',
         'status' => response.code

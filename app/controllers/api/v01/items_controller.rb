@@ -27,6 +27,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         render_error(error_code_and_message)
       end
       return if error_code_and_message.any?
+
       t_set_bnumber, nypl_source = parse_item_bib_id_and_nypl_source(@request_body)
 
       unless t_set_bnumber.present?

@@ -3889,16 +3889,14 @@ class ActiveSupport::TestCase
           headers: {
             'Authorization'=>'Bearer testoken',
             'Content-Type'=>'application/json'
-          }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {}
-      )
+          }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {})
     end
     stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=123456789").
       with(
         headers: {
           'Authorization'=>'Bearer testoken',
           'Content-Type'=>'application/json'
-        }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {}
-    )
+        }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {})
   end
 
   # send_request_to_items_microservice sends an https request
@@ -3911,8 +3909,7 @@ class ActiveSupport::TestCase
         headers: {
         'Authorization'=>'Bearer testoken',
         'Content-Type'=>'application/json'
-        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {}
-    )
+        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
 
     items_query_params = "?bibId=999&limit=25&offset=0"
     stub_request(:get, "#{ENV['ITEMS_MICROSERVICE_URL_V01']}" + items_query_params).
@@ -3920,8 +3917,7 @@ class ActiveSupport::TestCase
         headers: {
         'Authorization'=>'Bearer testoken',
         'Content-Type'=>'application/json'
-        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {}
-    )
+        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
   end
 
   def mock_security_credentials

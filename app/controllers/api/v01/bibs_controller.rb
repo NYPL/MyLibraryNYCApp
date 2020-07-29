@@ -75,7 +75,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       end
       begin
         # clean up the area of study field to match the subject field string rules
-        teacher_set.clean_primary_subject()
+        teacher_set.clean_primary_subject
       rescue => exception
         log_error('clean_primary_subject', exception)
         AdminMailer.failed_bibs_controller_api_request(
@@ -137,10 +137,12 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
     saved_teacher_sets = []
     @request_body.each do |teacher_set_record|
-      # Delete teacher-set record by bib_id
+      # Get teacher-set record by bib_id
       teacher_set = TeacherSet.new.get_teacher_set_by_bnumber(teacher_set_record['id'])
       next unless teacher_set.present?
+
       saved_teacher_sets << teacher_set
+      # Delete teacher-set record
       resp = teacher_set.destroy
       # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
       # If feature flag is enabled delete data from elasticsearch.
@@ -190,6 +192,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
     # build saved_teacher_sets_json_array for the response body
     def saved_teacher_sets_json_array(saved_teacher_sets)
       return [] if saved_teacher_sets.empty?
+
       saved_teacher_sets_json_array = []
       saved_teacher_sets.each do |saved_ts|
         saved_teacher_sets_json_array << { id: saved_ts.id, bnumber: saved_ts.bnumber, title: saved_ts.title }
@@ -205,6 +208,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
     def grade_or_lexile_array(return_grade_or_lexile)
         grade_and_lexile_json = all_var_fields('521', 'content')
         return '' if grade_and_lexile_json.blank?
+
         grades_resp = get_grades(grade_and_lexile_json)
         grades_resp.each do |grade_or_lexile_json|
           begin
@@ -251,8 +255,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
       grades_arr = []
       prek_arr = []
       grade_and_lexile_json.each do |gd|
-        grade = gd.strip()
+        grade = gd.strip
         return [grade] if grade.upcase.include?('PRE')
+
         grade_arr = grade.gsub('.', '').split('-')
         if grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
           grades_arr << grade
@@ -274,6 +279,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
     # Grades = {Pre-K => -1, K => 0}
     def grade_val(val)
       return unless val.present?
+
       if val == 'K'
         TeacherSet::K_VAL
       elsif PREK_ARR.include?(val)

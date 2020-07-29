@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module CatalogItemMethods
-
   CATALOG_DOMAIN = 'ilsstaff.nypl.org:2082'
 
   BIBLIO_API_RETRIES = 3      # Retry failed biblio api queries
@@ -95,7 +94,6 @@ module CatalogItemMethods
   end
 
   module ClassMethods
-
     def api_call(endpoint, params={}, kill_cache=false, retries=0)
       p = {}
 
@@ -178,5 +176,4 @@ module CatalogItemMethods
       doc.css(css)
     end
   end
-
 end
