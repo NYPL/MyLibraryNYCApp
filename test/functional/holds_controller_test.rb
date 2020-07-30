@@ -22,4 +22,11 @@ class HoldsControllerTest < ActionController::TestCase
     post :cancel, params: { id: @hold.access_key }
     assert_response :success
   end
+
+  test "update" do
+    @hold.instance_variable_set(:@hold, @hold)
+    post :update, ActionController::Parameters.new("id" => @hold.access_key, "hold" => ActionController::Parameters.new({status: "MyText"}), 
+                                                   "hold_change" => {"comment" => "qqq", "status" => "cancelled"}), format: :js
+    assert_template :edit
+  end
 end

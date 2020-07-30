@@ -127,6 +127,7 @@ class HoldsController < ApplicationController
     end
 
     respond_to do |format|
+      params.permit!
       if @hold.update_attributes(params[:hold])
         format.html { redirect_to @hold, notice: 'Your order was successfully updated.' }
         format.json { render json: @hold }
@@ -164,7 +165,7 @@ class HoldsController < ApplicationController
   # Strong parameters: protect object creation and allow mass assignment.
   def hold_params
     #not implementing in create yet: Hold.create(hold_params)
-    params.permit(:date_required, :id, :quantity, :status, :teacher_set_id, :access_key, :user_id, :created_at, :updated_at)
+    params.permit(:date_required, :id, :quantity, :status, :teacher_set_id, :access_key, :user_id, :created_at, :updated_at, :hold)
   end
 
 end
