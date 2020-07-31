@@ -64,7 +64,6 @@ class HoldsController < ApplicationController
   def create
     LogWrapper.log('DEBUG', {'message' => 'create.start', 'method' => 'app/controllers/holds_controller.rb.create'})
     begin
-      current_user = nil
       # If user's school is inactive, then display an error message and redirect to teacher set detail page.
       is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
       if !is_school_active
