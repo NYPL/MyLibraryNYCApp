@@ -5,9 +5,12 @@ hold1:
   status: MyText
   quantity: 1
   teacher_set: teacher_set_one
+  user: user1
+
 
 hold2:
   access_key: access_key2
-  status: MyText
+  status: MyText2
   quantity: 1
   teacher_set: teacher_set_one
+  user: user1

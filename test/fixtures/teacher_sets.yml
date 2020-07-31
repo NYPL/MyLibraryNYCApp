@@ -3,6 +3,10 @@
 teacher_set_one:
   description: MyText
   title: MyString
+  available_copies: 2
+  bnumber: '123'
 teacher_set_two:
-  description: MyText
-  title: MyString
+  description: MyText1
+  title: MyString1
+  available_copies: 2
+  bnumber: '1234'

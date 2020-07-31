@@ -64,9 +64,9 @@ class HoldsController < ApplicationController
   def create
     LogWrapper.log('DEBUG', {'message' => 'create.start', 'method' => 'app/controllers/holds_controller.rb.create'})
     begin
+      current_user = nil
       # If user's school is inactive, then display an error message and redirect to teacher set detail page.
       is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
-
       if !is_school_active
         render json: {:redirect_to => "#{app_url}#/teacher_sets/#{params[:teacher_set_id]}", :is_school_active => is_school_active}
         # stop processing further code, so new hold is not created,
@@ -75,6 +75,7 @@ class HoldsController < ApplicationController
       end
 
       set = TeacherSet.find(params[:teacher_set_id])
+      params.permit!
       @hold = set.holds.build(params[:hold])
       @hold.user = current_user
 
@@ -102,14 +103,20 @@ class HoldsController < ApplicationController
         end
       end
     rescue => exception
-      LogWrapper.log('ERROR', 'message' => exception.message)
-      # Note: don't need an explicit return here
-      respond_to do |format|
-        format.json {
-          render json: { error: "We've encountered an error and were unable to confirm your order.\
-            Please try again later or email help@mylibrarynyc.org for assistance.", rails_error_message: exception.message }.to_json, status: 500 
-        }
-      end
+      error_message(exception)
+    end
+  end
+
+
+  def error_message(exception)
+    LogWrapper.log('ERROR', 'message' => exception.message)
+    # Note: don't need an explicit return here
+    respond_to do |format|
+      format.html {}
+      format.json {
+        render json: { error: "We've encountered an error and were unable to confirm your order.\
+          Please try again later or email help@mylibrarynyc.org for assistance.", rails_error_message: exception.message }.to_json, status: 500 
+      }
     end
   end
 

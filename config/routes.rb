@@ -15,7 +15,7 @@ MyLibraryNYC::Application.routes.draw do
     resources :holds
   end
   resources :books
-  resources :schools, :only => [:index]
+  resources :schools, :only => [:index, :create]
   match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel, via: [:get, :post]
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
 
