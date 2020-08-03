@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PokeModel1Job < ApplicationJob
   queue_as :default
 

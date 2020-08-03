@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'poke_model_1_job'
 
 # keep failed jobs in the database, so can troubleshoot later
@@ -24,10 +25,10 @@ Delayed::Worker.delay_jobs = !Rails.env.test?
 Delayed::Worker.raise_signal_exceptions = :term
 
 
-#Delayed::Worker.queue_attributes = {
+# Delayed::Worker.queue_attributes = {
 #  default_high_priority: { priority: -10 },
 #  default_low_priority: { priority: 10 },
 #  barcode_queue: { priority: 10 }
-#}
+# }
 
 Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))
