@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+require 'poke_model_1_job'
 
 # keep failed jobs in the database, so can troubleshoot later
 Delayed::Worker.destroy_failed_jobs = false
 
 Delayed::Worker.sleep_delay = 60
-Delayed::Worker.max_attempts = 5
+Delayed::Worker.max_attempts = 3
 
 # If worker takes longer than X time, kill the delayed worker,
 # and allow the job to fail so another worker can pick it up.
