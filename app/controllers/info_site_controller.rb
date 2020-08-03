@@ -22,5 +22,6 @@ class InfoSiteController < ApplicationController
 
   def digital_resources; end
 
+
   def help; end
 end
