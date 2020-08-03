@@ -74,6 +74,7 @@ class HoldsController < ApplicationController
       end
 
       set = TeacherSet.find(params[:teacher_set_id])
+      params.permit!
       @hold = set.holds.build(params[:hold])
       @hold.user = current_user
 
