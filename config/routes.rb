@@ -32,6 +32,9 @@ MyLibraryNYC::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
   get '/check_email', to: 'users#check_email'
+  post '/require_login', to: 'application#require_login'
+  post '/redirect_to_angular', to: 'application#redirect_to_angular'
+
   match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
 
   match 'settings' => 'settings#index', via: [:get, :patch, :post]
