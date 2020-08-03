@@ -30,26 +30,27 @@ class Book < ActiveRecord::Base
 
   validates_uniqueness_of :bnumber, allow_blank: true
 
-  def populate_missing_data
-    if self.details_url.nil?
-      puts "populate missing data for #{self.inspect}"
-      if !self.catalog_choice.nil? && !self.catalog_choice.empty?
-        # puts "populate missing data for #{self.inspect} from #{self.catalog_choice}"
+  # Unused method
+  # def populate_missing_data
+  #   if self.details_url.nil?
+  #     puts "populate missing data for #{self.inspect}"
+  #     if !self.catalog_choice.nil? && !self.catalog_choice.empty?
+  #       # puts "populate missing data for #{self.inspect} from #{self.catalog_choice}"
 
-        item = self.class.catalog_item self.catalog_choice
-        # puts "item: ", item
-        self.update_from_catalog_item item
-        # puts "Success? ", item
+  #       item = self.class.catalog_item self.catalog_choice
+  #       # puts "item: ", item
+  #       self.update_from_catalog_item item
+  #       # puts "Success? ", item
 
-      elsif !self.matching_api_items.nil? && self.matching_api_items.size == 1
-        item = self.matching_api_items.first
-        # puts "updating from item: #{item}"
-        item = self.class.catalog_item item['id']
-        # puts "updating from item item: #{item}"
-        self.update_from_catalog_item item
-      end
-    end
-  end
+  #     elsif !self.matching_api_items.nil? && self.matching_api_items.size == 1
+  #       item = self.matching_api_items.first
+  #       # puts "updating from item: #{item}"
+  #       item = self.class.catalog_item item['id']
+  #       # puts "updating from item item: #{item}"
+  #       self.update_from_catalog_item item
+  #     end
+  #   end
+  # end
 
 
   def matching_api_items
