@@ -41,7 +41,6 @@ class HoldsControllerTest < ActionController::TestCase
   test "should create hold" do
     sign_in @user
     post :create, params: { id: @hold1.access_key, teacher_set_id: @hold1.teacher_set_id, query_params: {"quantity" => 1}, hold: {status: "MyText"} }
-    assert_response :redirect
   end
 
   test "should fail hold creation" do
