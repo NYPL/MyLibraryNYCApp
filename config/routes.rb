@@ -91,6 +91,7 @@ MyLibraryNYC::Application.routes.draw do
   match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
   match '/contacts-links' => 'info_site#contacts', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
   match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
+  match '/mln-help' => 'info_site#help', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
 
   root :to => "home#index"
   
