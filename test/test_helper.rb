@@ -3758,7 +3758,8 @@ end
 class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
-        :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc
+        :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
+        :mock_send_request_to_bib_service
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -3825,24 +3826,20 @@ class ActiveSupport::TestCase
       )
   end
 
+  def mock_send_request_to_bib_service
+    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=&nyplSource=sierra-nypl").
+      with(headers: {
+        'content-Type'=>'application/json',
+        'Authorization'=>'Bearer testoken'
+      }).to_return(status: 200, body: "", headers: {})
+  end
   # mock_get_data_from_aws_s3_adapter
   # to 'https://my-library-nyc-config.s3.amazonaws.com/test/feature_flag.yml' and returns a
   def mock_send_request_to_s3_adapter
     stub_request(:get, "https://my-library-nyc-config.s3.amazonaws.com/test/feature_flag.yml")
       .to_return(
-        {
-          status: 200,
-          body: {
-            'status' => 'success'
-          }.to_json,
-          headers: {}
-        },
-        {
-          status: 500,
-          body: {
-            'status' => 'failure'
-          }.to_json, headers: {}
-        }
+        { status: 200, body: { 'status' => 'success' }.to_json, headers: {} },
+        { status: 500, body: { 'status' => 'failure' }.to_json, headers: {} }
       )
   end
 
