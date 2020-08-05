@@ -38,7 +38,7 @@ MyLibraryNYC::Application.routes.draw do
 
   match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post]
 
-  get 'help' => 'home#help', :as => :help
+  get 'help' => 'home#help', :as => :help, :constraints => { :host => ENV['MLN_SETS_SITE_HOSTNAME'] }
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
@@ -88,7 +88,7 @@ MyLibraryNYC::Application.routes.draw do
   match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
   match '/contacts-links' => 'info_site#contacts', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
   match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
-  match '/mln-help' => 'info_site#help', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
+  match '/help' => 'info_site#help', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
 
   root :to => "home#index"
   
