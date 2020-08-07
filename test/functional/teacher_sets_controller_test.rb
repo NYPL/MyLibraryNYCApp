@@ -32,4 +32,9 @@ class TeacherSetsControllerTest < ActionController::TestCase
     # assert_redirected_to teacher_set_path(assigns(:teacher_set))
     assert_response :success
   end
+
+  test "test teacher-set strong params" do
+    post :create, { id: 1}
+    assert_response :success
+  end
 end

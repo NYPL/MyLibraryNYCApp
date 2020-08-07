@@ -15,7 +15,7 @@ MyLibraryNYC::Application.routes.draw do
     resources :holds
   end
   resources :books
-  resources :schools, :only => [:index]
+  resources :schools, :only => [:index, :create]
   match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel, via: [:get, :post]
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
 
@@ -32,6 +32,9 @@ MyLibraryNYC::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
   get '/check_email', to: 'users#check_email'
+  post '/require_login', to: 'application#require_login'
+  post '/redirect_to_angular', to: 'application#redirect_to_angular'
+
   match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
 
   match 'settings' => 'settings#index', via: [:get, :patch, :post]

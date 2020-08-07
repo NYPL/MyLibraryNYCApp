@@ -4,3 +4,19 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
+
+user1:
+  id: 206669143
+  email: myText@test.com
+  school_id: 382274395
+  school: school_one
+  first_name: 'firstname'
+  last_name: 'lastname'
+
+user2:
+  id: "1234"
+  email: myText1@test.com
+  school_id: 382274395
+  school: school_one
+  first_name: 'firstname'
+  last_name: 'lastname'
