@@ -25,5 +25,7 @@ class InfoSiteController < ApplicationController
 
   def help; end
 
-  #def faq; end
+  def faq
+    @faqs = FaqsController.new.get_all_frequently_asked_questions
+  end
 end
