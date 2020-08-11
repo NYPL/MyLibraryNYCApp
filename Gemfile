@@ -41,6 +41,8 @@ gem 'will_paginate', '~> 3.0'
 gem 'webmock'
 gem 'yaml_db'
 gem 'rails-controller-testing'
+gem 'activeadmin_reorderable'
+gem 'acts_as_list'
 
 gem 'elasticsearch', '6.8'
 

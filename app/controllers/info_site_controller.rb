@@ -24,4 +24,6 @@ class InfoSiteController < ApplicationController
 
 
   def help; end
+
+  #def faq; end
 end
