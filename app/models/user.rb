@@ -163,15 +163,13 @@ class User < ActiveRecord::Base
     case response.code
     when 200
       @barcode_found_in_sierra = true
-      LogWrapper.log('DEBUG',
-        {
+      LogWrapper.log('DEBUG', {
           'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
           'message' => "patron service found user(#{barcode_to_check}) in Sierra",
           'status' => response.code
         })
     when 404
-      LogWrapper.log('DEBUG',
-        {
+      LogWrapper.log('DEBUG', {
           'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
           'message' => "patron service did not find user(#{barcode_to_check}) in Sierra",
           'status' => response.code
@@ -180,16 +178,14 @@ class User < ActiveRecord::Base
       # Duplicate patrons found for query.  This is a data cleanliness/sync problem
       # but for the purpose of this method, we just care that the barcode is taken.
       @barcode_found_in_sierra = true
-      LogWrapper.log('INFO',
-        {
+      LogWrapper.log('INFO', {
           'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
           'message' => "patron service found multiple user(#{barcode_to_check}) records in Sierra",
           'status' => response.code
         })
     else
       # Includes response of 500.  Be liberal and assume the barcode is free.
-      LogWrapper.log('ERROR',
-        {
+      LogWrapper.log('ERROR', {
           'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
           'message' => "patron service threw error while looking for user(#{barcode_to_check}) in Sierra",
           'status' => response.code,
