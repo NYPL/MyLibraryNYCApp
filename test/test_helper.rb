@@ -8,7 +8,7 @@ SimpleCov.start 'rails' do
   add_filter '/test/' # for minitest
 end
 # fail unit tests if total coverage dips below acceptable limit
-SimpleCov.minimum_coverage 25
+SimpleCov.minimum_coverage 44
 # fail unit tests if any file's individual coverage dips below acceptable limit
 SimpleCov.minimum_coverage_by_file 0
 
@@ -3757,7 +3757,9 @@ end
 
 class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
-        :mock_send_request_to_items_microservice
+        :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
+        :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
+        :mock_send_request_to_bib_service
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -3824,6 +3826,56 @@ class ActiveSupport::TestCase
       )
   end
 
+  def mock_send_request_to_bib_service
+    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=&nyplSource=sierra-nypl").
+      with(headers: {
+        'content-Type'=>'application/json',
+        'Authorization'=>'Bearer testoken'
+      }).to_return(status: 200, body: "", headers: {})
+  end
+  # mock_get_data_from_aws_s3_adapter
+  # to 'https://my-library-nyc-config.s3.amazonaws.com/test/feature_flag.yml' and returns a
+  def mock_send_request_to_s3_adapter
+    stub_request(:get, "https://my-library-nyc-config.s3.amazonaws.com/test/feature_flag.yml")
+      .to_return(
+        { status: 200, body: { 'status' => 'success' }.to_json, headers: {} },
+        { status: 500, body: { 'status' => 'failure' }.to_json, headers: {} }
+      )
+  end
+
+  def mock_send_request_to_elastic_search_service
+    stub_request(:put, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468850?op_type=create")
+      .to_return(
+        {
+          status: 200,
+          body: { "id" => 614468853, "title" => "title", "bnumber" => "b998" }.to_json,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
+  end
+
+  def mock_delete_request_from_elastic_search_service
+    stub_request(:delete, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468850?op_type=delete")
+      .to_return(
+        {
+          status: 200,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
+  end
+
   # send_request_to_bibs_microservice sends an https request
   # to "https://qa-platform.nypl.org/api/v0.1/bibs?standardNumber=9781896580601" and returns a
   # status of success if Sierra API finds the bib record.
@@ -3834,16 +3886,14 @@ class ActiveSupport::TestCase
           headers: {
             'Authorization'=>'Bearer testoken',
             'Content-Type'=>'application/json'
-          }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {}
-      )
+          }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {})
     end
     stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=123456789").
       with(
         headers: {
           'Authorization'=>'Bearer testoken',
           'Content-Type'=>'application/json'
-        }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {}
-    )
+        }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {})
   end
 
   # send_request_to_items_microservice sends an https request
@@ -3856,8 +3906,7 @@ class ActiveSupport::TestCase
         headers: {
         'Authorization'=>'Bearer testoken',
         'Content-Type'=>'application/json'
-        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {}
-    )
+        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
 
     items_query_params = "?bibId=999&limit=25&offset=0"
     stub_request(:get, "#{ENV['ITEMS_MICROSERVICE_URL_V01']}" + items_query_params).
@@ -3865,10 +3914,48 @@ class ActiveSupport::TestCase
         headers: {
         'Authorization'=>'Bearer testoken',
         'Content-Type'=>'application/json'
-        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {}
-    )
+        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
   end
 
+  def mock_security_credentials
+    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/").with(
+      headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'User-Agent'=>'aws-sdk-ruby3/3.68.1'
+        }).to_return(status: 200, body: "", headers: {})
+  end
+
+
+  def mock_aws_request
+    WebMock.stub_request(:post, "https://kms.us-east-1.amazonaws.com/").to_return(:status => 200, :body => "", :headers => {})
+  end
+
+
+  def mock_es_doc
+    stub_request(:get, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/_search").
+      with(
+        body: "{\"query\":{\"bool\":{\"must\":[]}},\"from\":0,\"size\":20,\"sort\":[{\"_score\":\"desc\",\"availability.raw\":\"asc\",\"created_at\":\"desc\",\"_id\":\"asc\"}],\"aggs\":{\"language\":{\"terms\":{\"field\":\"primary_language\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},\"set type\":{\"terms\":{\"field\":\"set_type\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},\"availability\":{\"terms\":{\"field\":\"availability.raw\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},\"area of study\":{\"terms\":{\"field\":\"area_of_study\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},\"subjects\":{\"nested\":{\"path\":\"subjects\"},\"aggregations\":{\"subjects\":{\"composite\":{\"size\":3000,\"sources\":[{\"id\":{\"terms\":{\"field\":\"subjects.id\"}}},{\"title\":{\"terms\":{\"field\":\"subjects.title\"}}}]}}}}}}",
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Faraday v1.0.1'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
+
+  def mock_delete_es_doc
+    stub_request(:delete, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468851").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Faraday v1.0.1'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
 end
 
 begin

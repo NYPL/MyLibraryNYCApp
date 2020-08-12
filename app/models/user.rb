@@ -9,8 +9,8 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :registerable,
-  :recoverable, :rememberable, :trackable, :validatable, # this handles uniqueness of email automatically
-  :timeoutable # adds session["warden.user.user.session"]["last_request_at"] which we use in sessions_controller
+         :recoverable, :rememberable, :trackable, :validatable, # this handles uniqueness of email automatically
+         :timeoutable # adds session["warden.user.user.session"]["last_request_at"] which we use in sessions_controller
 
   # Makes getters and setters
   attr_accessor :pin
@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
   # the record.
-  validates :school_id, :first_name, :last_name, :presence => true
+  validates :first_name, :last_name, :presence => true
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
@@ -102,8 +102,7 @@ class User < ActiveRecord::Base
 
 
   def assign_barcode
-    LogWrapper.log('DEBUG',
-      {
+    LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
        'method' => "assign_barcode",
        'status' => "start",
@@ -113,8 +112,7 @@ class User < ActiveRecord::Base
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
-    LogWrapper.log('DEBUG',
-      {
+    LogWrapper.log('DEBUG', {
        'message' => "Barcode has been assigned to #{self.email}",
        'method' => "assign_barcode",
        'status' => "end",
@@ -225,8 +223,7 @@ class User < ActiveRecord::Base
         "content": school.name
       }]
     }
-    LogWrapper.log('DEBUG',
-      {
+    LogWrapper.log('DEBUG', {
        'message' => 'Request sent to patron creator service',
        'method' => 'send_request_to_patron_creator_service',
        'status' => 'start',
@@ -243,15 +240,13 @@ class User < ActiveRecord::Base
 
     case response.code
     when 201
-      LogWrapper.log('DEBUG',
-        {
+      LogWrapper.log('DEBUG', {
           'message' => "The account with e-mail #{email} was
            successfully created from the micro-service!",
           'status' => response.code
         })
     else
-      LogWrapper.log('ERROR',
-        {
+      LogWrapper.log('ERROR', {
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
           'responseData' => response.body
@@ -281,30 +276,26 @@ class User < ActiveRecord::Base
     response = JSON.parse(response.body)
     case response['statusCode']
     when 404
-      LogWrapper.log('DEBUG',
-        {
+      LogWrapper.log('DEBUG', {
          'message' => "No records found with the e-mail #{email} in Sierra database",
          'status' => response['statusCode'],
          'user' =>  { email: email }
         })
     when 409
-      LogWrapper.log('DEBUG',
-        {
+      LogWrapper.log('DEBUG', {
          'message' => "The following e-mail #{email} has more then 1 record in the Sierra database with the same e-mail",
          'status' => response['statusCode'],
          'user' => { email: email }
         })
     when 200
-      LogWrapper.log('DEBUG',
-        {
+      LogWrapper.log('DEBUG', {
          'message' => "The following e-mail #{email} has 1 other record in the Sierra database with the same e-mail",
          'status' => response['statusCode'],
          'user' => { email: email }
         })
       response = {statusCode: 200, message: 'This e-mail address already exists!'}
     else
-      LogWrapper.log('ERROR',
-        {
+      LogWrapper.log('ERROR', {
          'message' => "#{response}",
          'status' => response['statusCode'],
          'user' => { email: email }

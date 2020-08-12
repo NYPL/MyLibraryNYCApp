@@ -87,6 +87,42 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
+  
+  # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
+  # If subfields.content type is "Topic Set", set_type value  stored as 'multi' in teacher_sets table.
+  # If subfields.content type is "Book Club Set" set_type value  stored as 'single' in teacher_sets table.
+  # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
+  # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
+  describe "update set_type value in teacher set table" do
+    it "test set_type value with Topic set" do
+      set_type_val = " Topic set "
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
+    end
+
+    it "test set_type value with Topic set" do
+      set_type_val = " Book Club Set "
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
+    end
+
+    it "test set_type value with nil" do
+      set_type_val = nil
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
+    end
+  end
+
+  def test_teacher_set_query
+    params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
+    resp = TeacherSet.for_query(params)
+    assert_equal(2, resp.count)
+  end
+
+
   private
 
   def bib_id_not_found_response

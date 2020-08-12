@@ -2,3 +2,12 @@
 
 school_one:
   name: MyText
+  active: true
+  id: 382274395
+  code: z38227442
+
+school_two:
+  name: MyText2
+  active: true
+  id: 38227439
+  code: z38227441

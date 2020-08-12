@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class TeacherSetSerializer < ActiveModel::Serializer
+
   cached
 
   attributes :id, :availability, :availability_string, :description, :details_url, :primary_language, :subject_key, :title, :suitabilities_string, 

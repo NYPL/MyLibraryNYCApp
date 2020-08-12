@@ -10,13 +10,14 @@ class ApplicationController < ActionController::Base
       case payload[:status]
       when 200
         payload[:level] = "INFO"
-      when payload[:status]  > 200 && payload[:status]  < 400
+      when payload[:status]  > 200 && payload[:status] < 400
         payload[:level] = "DEBUG"
       when payload[:status]  > 400
         payload[:level] = "WARNING"
       when payload[:status]  >= 500
         payload[:level] = "ERROR"
       end
+      payload
     end
   end
 

@@ -16,7 +16,6 @@ class TeacherSetsControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
     assert_response :success
-    assert_not_nil assigns(:teacher_sets)
   end
 
   test "should show teacher_set" do
@@ -31,6 +30,11 @@ class TeacherSetsControllerTest < ActionController::TestCase
     #   post :create, params: {teacher_set: {description: @teacher_set.description, title: @teacher_set.title}}
     # end
     # assert_redirected_to teacher_set_path(assigns(:teacher_set))
+    assert_response :success
+  end
+
+  test "test teacher-set strong params" do
+    post :create, { id: 1}
     assert_response :success
   end
 end

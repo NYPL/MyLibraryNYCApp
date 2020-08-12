@@ -66,7 +66,6 @@ class HoldsController < ApplicationController
     begin
       # If user's school is inactive, then display an error message and redirect to teacher set detail page.
       is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
-
       if !is_school_active
         render json: {:redirect_to => "#{app_url}#/teacher_sets/#{params[:teacher_set_id]}", :is_school_active => is_school_active}
         # stop processing further code, so new hold is not created,
@@ -75,11 +74,12 @@ class HoldsController < ApplicationController
       end
 
       set = TeacherSet.find(params[:teacher_set_id])
+      params.permit!
       @hold = set.holds.build(params[:hold])
       @hold.user = current_user
 
       unless params[:settings].nil?
-        current_user.update_attributes(params[:settings])
+        current_user.update_attributes(params.require(:settings).to_hash)
       end
 
       quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
@@ -92,7 +92,8 @@ class HoldsController < ApplicationController
           LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
           format.html { redirect_to hold_url(@hold.access_key), notice:
             'Your order has been received by our system and will soon be delivered to your school.\
-            <br/><br/>Check your email inbox for a message with further details.' }
+            <br/><br/>Check your email inbox for a message with further details.' 
+          }
           format.json { render json: @hold, status: :created, location: @hold }
         else
           LogWrapper.log('DEBUG', {'message' => 'create: a new hold was generated', 'method' => 'app/controllers/holds_controller.rb.create'})
@@ -101,14 +102,20 @@ class HoldsController < ApplicationController
         end
       end
     rescue => exception
-      LogWrapper.log('ERROR', 'message' => exception.message)
-      # Note: don't need an explicit return here
-      respond_to do |format|
-        format.json {
-          render json: { error: "We've encountered an error and were unable to confirm your order.\
-            Please try again later or email help@mylibrarynyc.org for assistance.",
-          rails_error_message: exception.message }.to_json, status: 500 }
-      end
+      error_message(exception)
+    end
+  end
+
+
+  def error_message(exception)
+    LogWrapper.log('ERROR', 'message' => exception.message)
+    # Note: don't need an explicit return here
+    respond_to do |format|
+      format.html {}
+      format.json {
+        render json: { error: "We've encountered an error and were unable to confirm your order.\
+          Please try again later or email help@mylibrarynyc.org for assistance.", rails_error_message: exception.message }.to_json, status: 500 
+      }
     end
   end
 
@@ -126,6 +133,7 @@ class HoldsController < ApplicationController
     end
 
     respond_to do |format|
+      params.permit!
       if @hold.update_attributes(params[:hold])
         format.html { redirect_to @hold, notice: 'Your order was successfully updated.' }
         format.json { render json: @hold }
@@ -163,7 +171,7 @@ class HoldsController < ApplicationController
   # Strong parameters: protect object creation and allow mass assignment.
   def hold_params
     #not implementing in create yet: Hold.create(hold_params)
-    params.permit(:date_required, :id, :quantity, :status, :teacher_set_id, :access_key, :user_id, :created_at, :updated_at)
+    params.permit(:date_required, :id, :quantity, :status, :teacher_set_id, :access_key, :user_id, :created_at, :updated_at, :hold)
   end
 
 end

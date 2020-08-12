@@ -97,6 +97,7 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
             versions[version_number - 2].changeset.each do |k, v|
               # note that the contents of this block are duplicated below
               next if k == 'updated_at' # we don't need to show updated_at in this column
+
               if k == 'last_book_change'
                 changed_book_action = v[1].split('-')[0]
                 changed_book_id = v[1].split('-')[1]
@@ -143,6 +144,7 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
         versions[-1].changeset.each do |k, v|
           # note that the contents of this block are duplicated above
           next if k == 'updated_at' # we don't need to show updated_at in this column
+
           if k == 'last_book_change'
             changed_book_action = v[1].split('-')[0]
             changed_book_id = v[1].split('-')[1]

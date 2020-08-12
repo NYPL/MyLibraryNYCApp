@@ -42,6 +42,8 @@ gem 'webmock'
 gem 'yaml_db'
 gem 'rails-controller-testing'
 
+gem 'elasticsearch', '6.8'
+
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
   gem 'coffee-rails'

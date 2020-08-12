@@ -5,6 +5,8 @@ class Book < ActiveRecord::Base
   # NOTE: The ISBN field in the database refers to a standard number; sometimes this is an ISBN.
   include CatalogItemMethods
   include Oauth
+  include Exceptions
+
   has_paper_trail
   before_save :disable_papertrail
   before_update :enable_papertrail
@@ -28,26 +30,27 @@ class Book < ActiveRecord::Base
 
   validates_uniqueness_of :bnumber, allow_blank: true
 
-  def populate_missing_data
-    if self.details_url.nil?
-      puts "populate missing data for #{self.inspect}"
-      if !self.catalog_choice.nil? && !self.catalog_choice.empty?
-        # puts "populate missing data for #{self.inspect} from #{self.catalog_choice}"
+  # Unused method
+  # def populate_missing_data
+  #   if self.details_url.nil?
+  #     puts "populate missing data for #{self.inspect}"
+  #     if !self.catalog_choice.nil? && !self.catalog_choice.empty?
+  #       # puts "populate missing data for #{self.inspect} from #{self.catalog_choice}"
 
-        item = self.class.catalog_item self.catalog_choice
-        # puts "item: ", item
-        self.update_from_catalog_item item
-        # puts "Success? ", item
+  #       item = self.class.catalog_item self.catalog_choice
+  #       # puts "item: ", item
+  #       self.update_from_catalog_item item
+  #       # puts "Success? ", item
 
-      elsif !self.matching_api_items.nil? && self.matching_api_items.size == 1
-        item = self.matching_api_items.first
-        # puts "updating from item: #{item}"
-        item = self.class.catalog_item item['id']
-        # puts "updating from item item: #{item}"
-        self.update_from_catalog_item item
-      end
-    end
-  end
+  #     elsif !self.matching_api_items.nil? && self.matching_api_items.size == 1
+  #       item = self.matching_api_items.first
+  #       # puts "updating from item: #{item}"
+  #       item = self.class.catalog_item item['id']
+  #       # puts "updating from item item: #{item}"
+  #       self.update_from_catalog_item item
+  #     end
+  #   end
+  # end
 
 
   def matching_api_items
@@ -87,7 +90,7 @@ class Book < ActiveRecord::Base
     self.update_attributes :notes => item['notes'].join(';') unless item['notes'].nil?
     url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
     self.update_attributes :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
-    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && item['isbns'].size > 0
+    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
     self
   end
 
@@ -101,7 +104,7 @@ class Book < ActiveRecord::Base
 
   def self.catalog_item_by_query(q, scrape_fallback=false)
     res = self.catalog_items_by_query(q, scrape_fallback)
-    res.first unless res.nil? || res.size == 0
+    res.first unless res.nil? || res.empty?
   end
 
 
@@ -162,6 +165,7 @@ class Book < ActiveRecord::Base
   def update_from_isbn
     response = send_request_to_bibs_microservice
     return if !@book_found
+
     begin
       book_attributes = JSON.parse(response.body)['data'][0]
       self.update_attributes(
@@ -189,8 +193,7 @@ class Book < ActiveRecord::Base
 
   # Sends a request to the bibs microservice.
   def send_request_to_bibs_microservice
-    LogWrapper.log('DEBUG',
-      {
+    LogWrapper.log('DEBUG', {
        'message' => 'Request sent to bibs service',
        'method' => 'send_request_to_bibs_microservice',
        'status' => 'start',
@@ -208,21 +211,18 @@ class Book < ActiveRecord::Base
     case response.code
     when 200
       @book_found = true
-      LogWrapper.log('DEBUG',
-        {
+      LogWrapper.log('DEBUG', {
           'message' => "The bibs service responded with the book JSON.",
           'status' => response.code
         })
     when 404
       @book_found = false
-      LogWrapper.log('ERROR',
-        {
+      LogWrapper.log('ERROR', {
           'message' => "The bibs service could not find the book with ISBN=#{isbn}",
           'status' => response.code
         })
     else
-      LogWrapper.log('ERROR',
-        {
+      LogWrapper.log('ERROR', {
           'message' => "An error has occured when sending a request to the bibs service",
           'status' => response.code,
           'responseData' => response.body
