@@ -39,6 +39,16 @@ class User < ActiveRecord::Base
   end
 
 
+  def initialize
+    # Start by assuming this user has an equivalent user record in Sierra
+    # Most users will, if set up correctly.  New users and users whose records
+    # have been purged from Sierra might not.
+    # NOTE: The barcode_found_in_sierra is not guaranteed to accurately reflect
+    # user sync status, until after you've called check_barcode_uniqueness_with_sierra.
+    @barcode_found_in_sierra = false
+  end
+
+
   ## NOTE: Validation methods, including this one, are called twice when
   # making new user from the admin interface. While not a behavior we want,
   # it doesn't currently pose a problem.
@@ -58,6 +68,14 @@ class User < ActiveRecord::Base
       errors.add(:email, 'should end in @schools.nyc.gov or another participating school address')
       return false
     end
+  end
+
+
+  def barcode_found_in_sierra
+    # Getter for flag that reflects whether there's a user or users in Sierra
+    # that correspond(s) to this user object in MLN db.
+    # See the docs in initialize method for limitations.
+    return @barcode_found_in_sierra
   end
 
 
@@ -123,11 +141,20 @@ class User < ActiveRecord::Base
   end
 
 
-  def check_barcode_uniqueness_with_sierra
-    @my_barcode='27777023005672'
+  def check_barcode_uniqueness_with_sierra(barcode_to_check)
+    # Ask the platform microservice api to ask Sierra if there is already a user
+    # with the passed-in barcode.
+    # Return "true" if a user is found, false otherwise.  Default to "false".
+    # Throw an exception if called with malformed data.
+
+    if barcode_to_check.blank?
+      return false
+    end
+
+    @barcode_found_in_sierra = false
 
     response = HTTParty.get(
-      ENV['PATRON_MICROSERVICE_URL_V01'] + "?barcode=#{@my_barcode}",
+      ENV['PATRON_MICROSERVICE_URL_V01'] + "?barcode=#{barcode_to_check}",
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
           'Content-Type' => 'application/json' },
@@ -135,39 +162,43 @@ class User < ActiveRecord::Base
     )
     case response.code
     when 200
-      @barcode_found = true
+      @barcode_found_in_sierra = true
       LogWrapper.log('DEBUG',
         {
-          'message' => "The bibs service responded with the barcode JSON.",
+          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+          'message' => "patron service found user(#{barcode_to_check}) in Sierra",
           'status' => response.code
         })
     when 404
-      @barcode_found = false
-      LogWrapper.log('ERROR',
+      LogWrapper.log('DEBUG',
         {
-          'message' => "The bibs service could not find the book with ISBN=#{isbn}",
+          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+          'message' => "patron service did not find user(#{barcode_to_check}) in Sierra",
           'status' => response.code
         })
     when 409
-      # duplicate patrons found for query
-      @barcode_found = false
-      LogWrapper.log('ERROR',
+      # Duplicate patrons found for query.  This is a data cleanliness/sync problem
+      # but for the purpose of this method, we just care that the barcode is taken.
+      @barcode_found_in_sierra = true
+      LogWrapper.log('INFO',
         {
-          'message' => "The bibs service could not find the book with ISBN=#{isbn}",
+          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+          'message' => "patron service found multiple user(#{barcode_to_check}) records in Sierra",
           'status' => response.code
         })
     else
-      # includes response of 500
+      # Includes response of 500.  Be liberal and assume the barcode is free.
       LogWrapper.log('ERROR',
         {
-          'message' => "An error has occured when sending a request to the bibs service",
+          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+          'message' => "patron service threw error while looking for user(#{barcode_to_check}) in Sierra",
           'status' => response.code,
           'responseData' => response.body
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
 
-    return response
+    return @barcode_found_in_sierra
   end
 
 
