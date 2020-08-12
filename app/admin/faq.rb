@@ -1,8 +1,8 @@
 ActiveAdmin.register Faq do
   menu :priority => 12
-  #sidebar :versions, :partial => "admin/version", :only => :show
-  permit_params :questions, :answers
   config.sort_order = 'position_asc'
+  #sidebar :versions, :partial => "admin/version", :only => :show
+  permit_params :questions, :answers, :id
 
   controller do
     def create
@@ -33,14 +33,21 @@ ActiveAdmin.register Faq do
     end
   end
 
+  form do |f|
+    f.inputs "Creare Frequently Asked Questions" do
+      f.input :questions
+      f.input :answers
+    end
+    f.actions
+  end
   
-  show name: 
+  show questions: 
     proc {
       faq = Faq.includes(versions: :item).find(params[:id])
       faq_version = faq.versions[(params[:version].to_i - 1).to_i].reify
       # if there's a bug with turning the paper trail into an object (with reify) then display the school instead of a school version
       faq_version = (faq_version || faq)
-      faq_version.name
+      faq_version.questions
     } do |faq|
 
     return if params[:version] == '0'
@@ -67,7 +74,7 @@ ActiveAdmin.register Faq do
     #Setting up Strong Parameters
     #You must specify permitted_params within your faq ActiveAdmin resource which reflects a faq's expected params.
     def permitted_params
-      params.permit faq: [:questions, :answers]
+      params.permit faq: [:id, :questions, :answers, :position, :order]
     end
   end
 end

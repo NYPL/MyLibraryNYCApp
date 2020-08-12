@@ -1,8 +1,11 @@
 <div class="grid__item" role="main">
   <div class="help-page line">
-      <h1 class="pg--title">FAQ</h1>
+      <h1 class="pg--title">Help</h1>
       <div class="pg--content">
-        
+        <% @faqs.each do |faq| %>
+        <%= faq.questions.html_safe %>
+        <%= faq.answers.html_safe %><br>
+        <% end %>
       </div>
   </div>	
 </div>
