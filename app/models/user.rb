@@ -39,16 +39,6 @@ class User < ActiveRecord::Base
   end
 
 
-  def initialize
-    # Start by assuming this user has an equivalent user record in Sierra
-    # Most users will, if set up correctly.  New users and users whose records
-    # have been purged from Sierra might not.
-    # NOTE: The barcode_found_in_sierra is not guaranteed to accurately reflect
-    # user sync status, until after you've called check_barcode_uniqueness_with_sierra.
-    @barcode_found_in_sierra = false
-  end
-
-
   ## NOTE: Validation methods, including this one, are called twice when
   # making new user from the admin interface. While not a behavior we want,
   # it doesn't currently pose a problem.
@@ -74,7 +64,12 @@ class User < ActiveRecord::Base
   def barcode_found_in_sierra
     # Getter for flag that reflects whether there's a user or users in Sierra
     # that correspond(s) to this user object in MLN db.
-    # See the docs in initialize method for limitations.
+    # NOTE: The barcode_found_in_sierra is not guaranteed to accurately reflect
+    # user sync status, until after you've called check_barcode_uniqueness_with_sierra.
+    if @barcode_found_in_sierra.blank?
+      return false
+    end
+
     return @barcode_found_in_sierra
   end
 
@@ -144,6 +139,8 @@ class User < ActiveRecord::Base
   def check_barcode_uniqueness_with_sierra(barcode_to_check)
     # Ask the platform microservice api to ask Sierra if there is already a user
     # with the passed-in barcode.
+    # Most users will have an equivalent user record in Sierra, if set up correctly.
+    # New users and users whose records have been purged from Sierra might not.
     # Return "true" if a user is found, false otherwise.  Default to "false".
     # Throw an exception if called with malformed data.
 
