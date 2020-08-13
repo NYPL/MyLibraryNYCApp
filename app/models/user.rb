@@ -136,7 +136,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def check_barcode_uniqueness_with_sierra(barcode_to_check)
+  def check_barcode_found_in_sierra(barcode_to_check)
     # Ask the platform microservice api to ask Sierra if there is already a user
     # with the passed-in barcode.
     # Most users will have an equivalent user record in Sierra, if set up correctly.
@@ -157,6 +157,7 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
+
     case response.code
     when 200
       @barcode_found_in_sierra = true
