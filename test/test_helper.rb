@@ -3840,7 +3840,7 @@ class ActiveSupport::TestCase
 
   # Return a string with 14 random digits, suitable for a barcode.
   def self.generate_barcode
-    barcode = Array.new(14) {rand(10)}
+    barcode = Array.new(14) { rand(10) }
     barcode = barcode.join
     return barcode
   end
