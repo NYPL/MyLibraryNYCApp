@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Faq <  ActiveRecord::Base
+class Faq < ActiveRecord::Base
   acts_as_list :add_new_at => :bottom
   validates :position, uniqueness: true, allow_blank: false, allow_nil: false
   validates :question, :answer, :presence => true
