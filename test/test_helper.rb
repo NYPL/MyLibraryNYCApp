@@ -3840,7 +3840,9 @@ class ActiveSupport::TestCase
 
   # Return a string with 14 random digits, suitable for a barcode.
   def self.generate_barcode
-    return 14.times.map{rand(10)}.join
+    barcode = Array.new(14) {rand(10)}
+    barcode = barcode.join
+    return barcode
   end
 
 
@@ -3870,7 +3872,7 @@ class ActiveSupport::TestCase
   # Accepts a barcode, and the Sierra response status to simulate.
   # Returns the passed in response status code, and an appropriate response body to match it.
   def mock_check_barcode_request(barcode, status_code)
-    if (status_code == '404')
+    if status_code == '404'
       stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
         .to_return(status: 404, body: {
           "message"=>"Failed to retrieve patron record by barcode",
@@ -3880,7 +3882,7 @@ class ActiveSupport::TestCase
       return
     end
 
-    if (status_code == '409')
+    if status_code == '409'
       stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
         .to_return(status: 409, body: {
           "message"=>"Multiple patron records found",
@@ -3890,7 +3892,7 @@ class ActiveSupport::TestCase
       return
     end
 
-    if (status_code == '500')
+    if status_code == '500'
       stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
         .to_return(status: 500, body: {
           "message"=>"Server error",
