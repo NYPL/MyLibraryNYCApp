@@ -5,9 +5,9 @@
       <div class="pg--content">
         <table>
           <% @faqs.each_with_index do |faq, index| %>
-            <tr><td><div class="questions"><%= faq.questions.html_safe %><span class="plusminus">+</span></div>
+            <tr><td><div class="questions"><%= faq.question.html_safe %><span class="plusminus">+</span></div>
             <div class="answers" style="display: none;">
-              <%= faq.answers.html_safe %>
+              <%= faq.answer.html_safe %>
             </div></td></tr>
           <% end %>
         </table>
