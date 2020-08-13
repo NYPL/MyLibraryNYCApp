@@ -10,10 +10,10 @@ class FaqsControllerTest < MiniTest::Test
     @faq_controller = FaqsController.new
   end
 
-  describe "test_teacher_sets_input_params" do
-    it 'teacher sets input params' do
+  describe "test faqs" do
+    it 'test faqs' do
       resp = @faq_controller.frequently_asked_questions
-      assert_empty(resp)
+      assert_equal(2, resp.count)
     end
   end
 end
