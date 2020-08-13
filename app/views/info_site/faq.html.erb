@@ -17,21 +17,16 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 
 <script type="text/javascript">
-$( document ).ready(function() {
-  //toggle the component with class answers
-  $(".questions").click(function() {
-    if ($('.answers').is(':visible')) {
-      $(".answers").slideUp(300);
-      $(".plusminus").text('+');
-    }
-    if ($(this).next(".answers").is(':visible')) {
-      $(this).next(".answers").slideUp(300);
-      $(this).children(".plusminus").text('+');
-    } else {
-      $(this).next(".answers").slideDown(300);
-      $(this).children(".plusminus").text('-');
-    }
+  $( document ).ready(function() {
+    //toggle the component with class answers
+    $(".questions").click(function() {
+      if ($(this).next(".answers").is(':visible')) {
+        $(this).next(".answers").slideUp(300);
+        $(this).children(".plusminus").text('+');
+      } else {
+        $(this).next(".answers").slideDown(300);
+        $(this).children(".plusminus").text('-');
+      }
+    });
   });
-});
-
 </script>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Faq do
   menu :priority => 12
   config.sort_order = 'position_asc'
@@ -24,8 +26,9 @@ ActiveAdmin.register Faq do
       if controller.action_methods.include?('edit') 
         links += link_to I18n.t('active_admin.edit'), edit_resource_path(resource), :class => "member_link edit_link"
       end
-      if controller.action_methods.include?('destroy')
-        links += link_to I18n.t('active_admin.delete'), resource_path(resource), :method => :delete, :confirm => I18n.t('active_admin.delete_confirmation'), :class => "member_link delete_link"
+      if controller.action_methods.include?('destroy') 
+        links += link_to I18n.t('active_admin.delete'), resource_path(resource), :method => :delete, 
+        data: { confirm: 'Are you sure you want to delete this Content?' }, :class => "member_link delete_link"
       end
       links
     end
@@ -69,8 +72,8 @@ ActiveAdmin.register Faq do
   end
 
   controller do
-    #Setting up Strong Parameters
-    #You must specify permitted_params within your faq ActiveAdmin resource which reflects a faq's expected params.
+    # Setting up Strong Parameters
+    # You must specify permitted_params within your faq ActiveAdmin resource which reflects a faq's expected params.
     def permitted_params
       params.permit faq: [:id, :question, :answer, :position, :order]
     end
