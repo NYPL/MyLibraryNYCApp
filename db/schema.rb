@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200714200527) do
+ActiveRecord::Schema.define(version: 20200813141524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20200714200527) do
   end
 
   create_table "allowed_user_email_masks", force: :cascade do |t|
-    t.string   "email_pattern",                 null: false
+    t.string   "email_pattern", limit: 255,                 null: false
     t.boolean  "active",                    default: false
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
@@ -61,15 +61,15 @@ ActiveRecord::Schema.define(version: 20200714200527) do
     t.text     "sub_title"
     t.text     "format"
     t.text     "details_url"
-    t.string   "publication_date"
-    t.string   "isbn"
-    t.string   "primary_language"
+    t.string   "publication_date",            limit: 255
+    t.string   "isbn",                        limit: 255
+    t.string   "primary_language",            limit: 255
     t.text     "call_number"
     t.text     "description"
     t.text     "physical_description"
     t.text     "notes"
     t.text     "statement_of_responsibility"
-    t.string   "cover_uri"
+    t.string   "cover_uri",                   limit: 255
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
     t.string   "bnumber",                     limit: 20
@@ -78,17 +78,23 @@ ActiveRecord::Schema.define(version: 20200714200527) do
   end
 
   create_table "boroughs", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
 
   create_table "campuses", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",       limit: 255
     t.integer  "borough_id"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.index ["borough_id"], name: "index_campuses_on_borough_id", using: :btree
+  end
+
+  create_table "faqs", force: :cascade do |t|
+    t.text    "question"
+    t.text    "answer"
+    t.integer "position"
   end
 
   create_table "hold_changes", force: :cascade do |t|
@@ -132,7 +138,7 @@ ActiveRecord::Schema.define(version: 20200714200527) do
 
   create_table "sierra_code_zcode_matches", force: :cascade do |t|
     t.integer  "sierra_code"
-    t.string   "zcode"
+    t.string   "zcode",       limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
@@ -169,29 +175,29 @@ ActiveRecord::Schema.define(version: 20200714200527) do
 
   create_table "teacher_sets", id: :bigserial, force: :cascade do |t|
     t.text     "title"
-    t.string   "call_number"
+    t.string   "call_number",                 limit: 255
     t.text     "description"
     t.text     "details_url"
     t.text     "edition"
     t.datetime "publication_date"
     t.text     "statement_of_responsibility"
     t.text     "sub_title"
-    t.string   "availability"
-    t.string   "isbn"
-    t.string   "language"
+    t.string   "availability",                limit: 255
+    t.string   "isbn",                        limit: 255
+    t.string   "language",                    limit: 255
     t.text     "physical_description"
-    t.string   "primary_language"
+    t.string   "primary_language",            limit: 255
     t.text     "publisher"
     t.text     "series"
     t.integer  "grade_begin",                 limit: 2
     t.integer  "grade_end",                   limit: 2
     t.integer  "lexile_begin"
     t.integer  "lexile_end"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "available_copies"
     t.integer  "total_copies"
-    t.string   "area_of_study"
+    t.string   "area_of_study",               limit: 255
     t.string   "bnumber",                     limit: 20
     t.text     "set_type"
     t.text     "contents"
@@ -206,26 +212,26 @@ ActiveRecord::Schema.define(version: 20200714200527) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                             default: "", null: false
-    t.string   "encrypted_password",                default: "", null: false
-    t.string   "reset_password_token"
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                     default: 0,  null: false
+    t.integer  "sign_in_count",                      default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.string   "confirmation_token"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.string   "confirmation_token",     limit: 255
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
+    t.string   "unconfirmed_email",      limit: 255
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
     t.bigint   "barcode"
     t.string   "first_name",             limit: 40
     t.string   "last_name",              limit: 40
-    t.string   "alt_email"
+    t.string   "alt_email",              limit: 255
     t.string   "home_library",           limit: 6
     t.integer  "school_id"
     t.text     "alt_barcodes"

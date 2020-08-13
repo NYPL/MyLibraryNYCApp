@@ -1,11 +1,37 @@
+
 <div class="grid__item" role="main">
-  <div class="help-page line">
-      <h1 class="pg--title">Help</h1>
+  <div class="help-page">
+      <h1 class="pg--title">FAQ</h1>
       <div class="pg--content">
-        <% @faqs.each do |faq| %>
-        <%= faq.questions.html_safe %>
-        <%= faq.answers.html_safe %><br>
-        <% end %>
+        <table>
+          <% @faqs.each_with_index do |faq, index| %>
+            <tr><td><div class="questions"><%= faq.questions.html_safe %><span class="plusminus">+</span></div>
+            <div class="answers" style="display: none;">
+              <%= faq.answers.html_safe %>
+            </div></td></tr>
+          <% end %>
+        </table>
       </div>
   </div>	
 </div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+  //toggle the component with class answers
+  $(".questions").click(function() {
+    if ($('.answers').is(':visible')) {
+      $(".answers").slideUp(300);
+      $(".plusminus").text('+');
+    }
+    if ($(this).next(".answers").is(':visible')) {
+      $(this).next(".answers").slideUp(300);
+      $(this).children(".plusminus").text('+');
+    } else {
+      $(this).next(".answers").slideDown(300);
+      $(this).children(".plusminus").text('-');
+    }
+  });
+});
+
+</script>

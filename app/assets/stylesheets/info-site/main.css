@@ -61,3 +61,43 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
   }
 }
+
+table, td, th {  
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 15px;
+}
+
+.questions {
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 0 1px 0;
+  padding: 7px 0px; 
+  font-weight: bold;
+  font-size: large;
+}
+
+.answers {
+ /* background: lightgray;*/
+}
+
+.answers p {
+  padding: 18px 0px;
+  margin: 0px;
+  font-size: medium;
+  color: #404040;
+}
+
+.plusminus {
+  float: right;
+  font-size: xx-large;
+  font-weight: 200;
+}
