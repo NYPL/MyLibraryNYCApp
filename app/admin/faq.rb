@@ -35,7 +35,7 @@ ActiveAdmin.register Faq do
   end
 
   form do |f|
-    f.inputs "Creare Frequently Asked Questions" do
+    f.inputs "Create Frequently Asked Questions" do
       f.input :question
       f.input :answer
     end
@@ -62,10 +62,10 @@ ActiveAdmin.register Faq do
     end
 
     attributes_table do
-      row 'Questions' do 
+      row 'Question' do 
         faq_with_version.question
       end
-      row 'Answers' do 
+      row 'Answer' do 
         faq_with_version.answer
       end
     end
