@@ -1,12 +1,17 @@
 language: ruby
-#cache:
-#  bundler: true
-#  directories:
-#  - "/home/travis/.rvm/"
+# 2020-08-04: caching significantly reduces build time in travis,
+# but we're currently having issues with obtaining correct cached rvm
+# cache:
+#   bundler: true
+#   directories:
+#   - "/home/travis/.rvm/"
 rvm:
 - 2.5.7
 before_install:
-- rvm use 2.5.7 --install --binary --fuzzy  # 2019-10-16: added to fix errors when upgrading rails env
+  # 2019-10-16: added to fix errors when upgrading rails env
+  # 2020-08-04: removed to fix errors with travis
+  # deployment -- looks like travis internal rvm handling has changed
+  # - rvm use 2.5.7 --install --binary --fuzzy
 - gem --version
 - gem install bundler -v '< 2'  # 2019-10-16: added to fix errors when upgrading rails env
 - bundle config --global github.https true  # 2019-10-16: added to fix errors when upgrading rails env

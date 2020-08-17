@@ -12,6 +12,48 @@ class UserTest < ActiveSupport::TestCase
     AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
   end
 
+
+  [generate_barcode].each do |barcode|
+    test 'sierra user can be found by barcode' do
+      mock_check_barcode_request(barcode, '200')
+      response = @user.check_barcode_found_in_sierra(barcode)
+      user_would_be_unique_in_sierra = false
+      assert response == !user_would_be_unique_in_sierra
+    end
+  end
+
+
+  [generate_barcode].each do |barcode|
+    test 'sierra user cannot be found by barcode' do
+      mock_check_barcode_request(barcode, '404')
+      response = @user.check_barcode_found_in_sierra(barcode)
+      user_would_be_unique_in_sierra = true
+      assert response == !user_would_be_unique_in_sierra
+    end
+  end
+
+
+  [generate_barcode].each do |barcode|
+    test 'multiple sierra users found' do
+      mock_check_barcode_request(barcode, '409')
+      response = @user.check_barcode_found_in_sierra(barcode)
+      user_would_be_unique_in_sierra = false
+      assert response == !user_would_be_unique_in_sierra
+    end
+  end
+
+
+  [generate_barcode].each do |barcode|
+    test 'sierra barcode lookup crashes' do
+      mock_check_barcode_request(barcode, '500')
+      exception = assert_raise(Exceptions::InvalidResponse) do
+        @user.check_barcode_found_in_sierra(barcode)
+      end
+      assert_equal('Invalid status code of: 500', exception.message)
+    end
+  end
+
+
   [generate_email].each do |new_email|
     test 'user model cannot be created without first name' do
       @user.first_name = ""
