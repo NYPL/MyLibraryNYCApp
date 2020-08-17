@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20200813141524) do
   end
 
   create_table "campuses", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name"
     t.integer  "borough_id"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
@@ -193,8 +193,8 @@ ActiveRecord::Schema.define(version: 20200813141524) do
     t.integer  "grade_end",                   limit: 2
     t.integer  "lexile_begin"
     t.integer  "lexile_end"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.integer  "available_copies"
     t.integer  "total_copies"
     t.string   "area_of_study"
@@ -217,7 +217,7 @@ ActiveRecord::Schema.define(version: 20200813141524) do
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,  null: false
+    t.integer  "sign_in_count",                     default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
