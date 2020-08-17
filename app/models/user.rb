@@ -61,12 +61,25 @@ class User < ActiveRecord::Base
   end
 
 
+  def barcode_found_in_sierra
+    # Getter for flag that reflects whether there's a user or users in Sierra
+    # that correspond(s) to this user object in MLN db.
+    # NOTE: The barcode_found_in_sierra is not guaranteed to accurately reflect
+    # user sync status, until after you've called check_barcode_uniqueness_with_sierra.
+    if @barcode_found_in_sierra.blank?
+      return false
+    end
+
+    return @barcode_found_in_sierra
+  end
+
+
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
     "mylibrarynyc"
   end
 
-  
+
   def name(full=false)
     handle = self.email.sub /@.*/, ''
     name = self.first_name
@@ -74,12 +87,12 @@ class User < ActiveRecord::Base
     name.nil? ? handle : name
   end
 
-  
+
   def contact_email
     !self.alt_email.nil? && !self.alt_email.empty? ? self.alt_email : self.email
   end
 
-  
+
   # Enable login by either email or alt_email (DOE email and contact email, respectively)
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
@@ -90,17 +103,17 @@ class User < ActiveRecord::Base
     end
   end
 
-  
+
   def multiple_barcodes?
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
 
-  
+
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
 
-  
+
   def assign_barcode
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
@@ -122,7 +135,67 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
-  
+
+  def check_barcode_found_in_sierra(barcode_to_check)
+    # Ask the platform microservice api to ask Sierra if there is already a user
+    # with the passed-in barcode.
+    # Most users will have an equivalent user record in Sierra, if set up correctly.
+    # New users and users whose records have been purged from Sierra might not.
+    # Return "true" if a user is found, false otherwise.  Default to "false".
+    # Throw an exception if called with malformed data.
+
+    if barcode_to_check.blank?
+      return false
+    end
+
+    @barcode_found_in_sierra = false
+
+    response = HTTParty.get(
+      ENV['PATRON_MICROSERVICE_URL_V01'] + "?barcode=#{barcode_to_check}",
+      headers:
+        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
+          'Content-Type' => 'application/json' },
+      timeout: 10
+    )
+
+    case response.code
+    when 200
+      @barcode_found_in_sierra = true
+      LogWrapper.log('DEBUG', {
+          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+          'message' => "patron service found user(#{barcode_to_check}) in Sierra",
+          'status' => response.code
+        })
+    when 404
+      LogWrapper.log('DEBUG', {
+          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+          'message' => "patron service did not find user(#{barcode_to_check}) in Sierra",
+          'status' => response.code
+        })
+    when 409
+      # Duplicate patrons found for query.  This is a data cleanliness/sync problem
+      # but for the purpose of this method, we just care that the barcode is taken.
+      @barcode_found_in_sierra = true
+      LogWrapper.log('INFO', {
+          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+          'message' => "patron service found multiple user(#{barcode_to_check}) records in Sierra",
+          'status' => response.code
+        })
+    else
+      # Includes response of 500.  Be liberal and assume the barcode is free.
+      LogWrapper.log('ERROR', {
+          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+          'message' => "patron service threw error while looking for user(#{barcode_to_check}) in Sierra",
+          'status' => response.code,
+          'responseData' => response.body
+        })
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+    end
+
+    return @barcode_found_in_sierra
+  end
+
+
   # Checks pin patterns against
   # the following examples:
   # 1111, 2929, 0003, 5999.
@@ -138,7 +211,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  
+
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -207,7 +280,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  
+
   # 404 - no records with the same e-mail were found
   # 409 - more then 1 record with the same e-mail was found
   # 200 - 1 record with the same e-mail was found
@@ -256,12 +329,12 @@ class User < ActiveRecord::Base
       return response
   end
 
-  
+
   def patron_type
     school.borough == 'QUEENS' ? 149 : 151
   end
 
-  
+
   def pcode3
     return 1 if school.borough == 'BRONX'
     return 2 if school.borough == 'MANHATTAN'
@@ -270,7 +343,7 @@ class User < ActiveRecord::Base
     return 5 if school.borough == 'QUEENS'
   end
 
-  
+
   # This returns the sierra code, not the school's zcode
   def pcode4
     school.sierra_code

@@ -3751,9 +3751,78 @@ TWO_TEACHER_SETS_TO_DELETE = [{
     }
 ]
 
+SIERRA_USER = {"data"=>
+  [{"barCodes"=>["27777023005746"],
+    "id"=>7899158,
+    "updatedDate"=>"2020-07-28T23:24:45+00:00",
+    "createdDate"=>"2020-07-28T23:24:45+00:00",
+    "deleted"=>false,
+    "suppressed"=>false,
+    "names"=>["TESTER, QA"],
+    "barcodes"=>["27777023005746"],
+    "emails"=>["qa-tester-8132@rssnyc.org"],
+    "patronType"=>151,
+    "patronCodes"=>{"pcode1"=>"-", "pcode2"=>"-", "pcode3"=>2, "pcode4"=>585},
+    "homeLibraryCode"=>"mm",
+    "message"=>{"code"=>"-", "accountMessages"=>["qa-tester-8132@rssnyc.org"]},
+    "blockInfo"=>{"code"=>"-"},
+    "addresses"=>[{"lines"=>["443 WEST 135 STREET", "MANHATTAN, NY 10031"], "type"=>"a"}],
+    "phones"=>[{"number"=>"212-690-6800", "type"=>"t"}, {"number"=>"A. Philip Randolph Campus High School", "type"=>"o"}],
+    "moneyOwed"=>0.0,
+    "fixedFields"=>
+     {"44"=>{"label"=>"E-Communications", "value"=>"-"},
+      "45"=>{"label"=>"Education Level", "value"=>"-"},
+      "46"=>{"label"=>"Home Region", "value"=>"2"},
+      "47"=>{"label"=>"Patron Type", "value"=>"151"},
+      "48"=>{"label"=>"Total Checkouts", "value"=>"0"},
+      "49"=>{"label"=>"Total Renewals", "value"=>"0"},
+      "50"=>{"label"=>"Current Checkouts", "value"=>"0"},
+      "53"=>{"label"=>"Home Library", "value"=>"mm   "},
+      "54"=>{"label"=>"Patron Message", "value"=>"-"},
+      "55"=>{"label"=>"Highest Overdues", "value"=>"0"},
+      "56"=>{"label"=>"Manual Block", "value"=>"-"},
+      "80"=>{"label"=>"Record Type", "value"=>"p"},
+      "81"=>{"label"=>"Record Number", "value"=>"7899158"},
+      "83"=>{"label"=>"Created Date", "value"=>"2020-07-28T23:24:45Z"},
+      "84"=>{"label"=>"Updated Date", "value"=>"2020-07-28T23:24:45Z"},
+      "85"=>{"label"=>"No. of Revisions", "value"=>"1"},
+      "86"=>{"label"=>"Agency", "value"=>"1"},
+      "95"=>{"label"=>"Claims Returned", "value"=>"0"},
+      "96"=>{"label"=>"Money Owed", "value"=>0},
+      "98"=>{"label"=>"PDATE", "value"=>"2020-07-28T23:24:45Z"},
+      "99"=>{"label"=>"FIRM", "value"=>"     "},
+      "102"=>{"label"=>"Current Item A", "value"=>"0"},
+      "103"=>{"label"=>"Current Item B", "value"=>"0"},
+      "104"=>{"label"=>"PIUSE", "value"=>"0"},
+      "105"=>{"label"=>"Overdue Penalty", "value"=>"0"},
+      "122"=>{"label"=>"ILL Request", "value"=>"0"},
+      "123"=>{"label"=>"Debit Balance", "value"=>0},
+      "124"=>{"label"=>"Current Item C", "value"=>"0"},
+      "125"=>{"label"=>"Current Item D", "value"=>"0"},
+      "126"=>{"label"=>"School Code", "value"=>"585"},
+      "158"=>{"label"=>"Patron Agency", "value"=>"0"},
+      "263"=>{"label"=>"Preferred Language", "value"=>"eng"},
+      "268"=>{"label"=>"Notice Preference", "value"=>"-"},
+      "269"=>{"label"=>"Registrations on Record", "value"=>"0"},
+      "270"=>{"label"=>"Total Registrations", "value"=>"0"},
+      "271"=>{"label"=>"Total Programs Attended", "value"=>"0"},
+      "297"=>{"label"=>"Waitlists on Record", "value"=>"0"}},
+    "varFields"=>
+     [{"fieldTag"=>"=", "content"=>"$6$WuFQmJQ68AA65p/b$EgG1Jiq1yUGYqpryzsQu6EtAJczrNzWfn/IUv5w.o0xxmccep0t1/Rm5aGESFSpOSWqNoPXItH6jnYZlqfTF3."},
+      {"fieldTag"=>"b", "content"=>"27777023005746"},
+      {"fieldTag"=>"o", "content"=>"A. Philip Randolph Campus High School"},
+      {"fieldTag"=>"z", "content"=>"qa-tester-8132@rssnyc.org"},
+      {"fieldTag"=>"a", "content"=>"443 WEST 135 STREET$MANHATTAN, NY 10031"},
+      {"fieldTag"=>"n", "content"=>"TESTER, QA"},
+      {"fieldTag"=>"t", "content"=>"212-690-6800"}]}],
+ "count"=>1,
+ "statusCode"=>200}
+
+
 class ActionController::TestCase
   include Devise::Test::ControllerHelpers
 end
+
 
 class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
@@ -3769,17 +3838,27 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
-  # generate_email returns a string with 8 random charachters concatenated with the current timestamp
+  # Return a string with 14 random digits, suitable for a barcode.
+  def self.generate_barcode
+    barcode = Array.new(14) { rand(10) }
+    barcode = barcode.join
+    return barcode
+  end
+
+
+  # generate_email returns a string with 8 random characters concatenated with the current timestamp
   # and domain schools.nyc.gov
   def self.generate_email
     return ('a'..'z').to_a.shuffle[0, 8].join + Time.now.to_i.to_s + '@schools.nyc.gov'
   end
 
-  # generate_email returns a string with 8 random charachters concatenated with the current timestamp
+
+  # generate_email returns a string with 8 random characters concatenated with the current timestamp
   # and domain gmail.com
   def self.generate_email_without_valid_domain
     return ('a'..'z').to_a.shuffle[0, 8].join + Time.now.to_i.to_s + '@gmail.com'
   end
+
 
   # mock_get_oauth_token_request mocks an https request to 'https://isso.nypl.org/oauth/token'
   # and returns a JSON object with the key access_token
@@ -3787,6 +3866,49 @@ class ActiveSupport::TestCase
     stub_request(:post, 'https://isso.nypl.org/oauth/token')
       .to_return(status: 200, body: { 'access_token' => 'testoken' }.to_json)
   end
+
+
+  # Mocks an https request to 'https://qa-platform.nypl.org/api/v0.1/patrons?barcode=' .
+  # Accepts a barcode, and the Sierra response status to simulate.
+  # Returns the passed in response status code, and an appropriate response body to match it.
+  def mock_check_barcode_request(barcode, status_code)
+    if status_code == '404'
+      stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
+        .to_return(status: 404, body: {
+          "message"=>"Failed to retrieve patron record by barcode",
+          "statusCode"=>404
+        }
+        .to_json, headers: { 'Content-Type' => 'application/json' })
+      return
+    end
+
+    if status_code == '409'
+      stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
+        .to_return(status: 409, body: {
+          "message"=>"Multiple patron records found",
+          "statusCode"=>409
+        }
+        .to_json, headers: { 'Content-Type' => 'application/json' })
+      return
+    end
+
+    if status_code == '500'
+      stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
+        .to_return(status: 500, body: {
+          "message"=>"Server error",
+          "statusCode"=>500
+        }
+        .to_json, headers: { 'Content-Type' => 'application/json' })
+      return
+    end
+
+    # return a successful 200 "single unique user found" response
+    stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
+      .to_return(status: 200,
+                 body: SIERRA_USER.to_json,
+                 headers: { 'Content-Type' => 'application/json' })
+  end
+
 
   # mock_check_email_request takes in a parameter of e-mail and mocks an https
   # request to 'https://qa-platform.nypl.org/api/v0.1/patrons?email=' and returns a
@@ -3803,6 +3925,7 @@ class ActiveSupport::TestCase
       }
       .to_json, headers: { 'Content-Type' => 'application/json' })
   end
+
 
   # mock_send_request_to_patron_creator_service sends an https request
   # to 'https://qa-platform.nypl.org/api/v0.2/patrons' and returns a

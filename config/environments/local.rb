@@ -45,4 +45,8 @@ MyLibraryNYC::Application.configure do
 
   # Turn off asset pipline information showing in logs
   config.assets.logger = true
+
+  config.eager_load = false
+
+  config.active_job.queue_adapter = :delayed_job
 end

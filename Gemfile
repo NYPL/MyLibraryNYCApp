@@ -10,6 +10,11 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'delayed_job'
+gem 'delayed_job_active_record'
+gem 'daemons'
+
+
 gem 'rails', '5.0.7.1'
 gem 'actionpack', '5.0.7.1'
 gem 'activeadmin', '2.4.0'
