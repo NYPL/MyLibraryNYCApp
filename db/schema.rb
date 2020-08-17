@@ -92,8 +92,8 @@ ActiveRecord::Schema.define(version: 20200813141524) do
   end
 
   create_table "faqs", force: :cascade do |t|
-    t.text    "question",          null: false
-    t.text    "answer",            null: false
+    t.text    "question"
+    t.text    "answer"
     t.integer "position"
   end
 
