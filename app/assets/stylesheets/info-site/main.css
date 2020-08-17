@@ -90,7 +90,7 @@ th, td {
 }
 
 .answers p {
-  padding: 18px 0px;
+  padding: 18px 0px 1px 0px;
   margin: 0px;
   font-size: medium;
   color: #404040;
