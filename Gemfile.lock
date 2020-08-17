@@ -56,6 +56,7 @@ GEM
       sassc-rails (~> 2.1)
       sprockets (>= 3.0, < 4.1)
       sprockets-es6 (~> 0.9, >= 0.9.2)
+    activeadmin_reorderable (0.1.2)
     activejob (5.0.7.1)
       activesupport (= 5.0.7.1)
       globalid (>= 0.3.6)
@@ -70,6 +71,8 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    acts_as_list (1.0.1)
+      activerecord (>= 4.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     arbre (1.2.1)
@@ -1131,7 +1134,9 @@ DEPENDENCIES
   actionpack (= 5.0.7.1)
   active_model_serializers (~> 0.8.1)
   activeadmin (= 2.4.0)
+  activeadmin_reorderable
   activemodel (= 5.0.7.1)
+  acts_as_list
   addressable
   auto-session-timeout
   aws-sdk (~> 3)

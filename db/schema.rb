@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200727225857) do
+ActiveRecord::Schema.define(version: 20200813141524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20200727225857) do
   end
 
   create_table "allowed_user_email_masks", force: :cascade do |t|
-    t.string   "email_pattern",                 null: false
+    t.string   "email_pattern",             null: false
     t.boolean  "active",                    default: false
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
@@ -89,6 +89,12 @@ ActiveRecord::Schema.define(version: 20200727225857) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.index ["borough_id"], name: "index_campuses_on_borough_id", using: :btree
+  end
+
+  create_table "faqs", force: :cascade do |t|
+    t.text    "question"
+    t.text    "answer"
+    t.integer "position"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
