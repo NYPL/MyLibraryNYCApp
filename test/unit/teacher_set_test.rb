@@ -116,6 +116,12 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
+  def test_teacher_set_query
+    params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
+    resp = TeacherSet.for_query(params)
+    assert_equal(2, resp.count)
+  end
+
 
   private
 

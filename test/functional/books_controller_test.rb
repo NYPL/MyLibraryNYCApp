@@ -20,4 +20,9 @@ class BooksControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "test book strong params" do
+    post :create, { id: 1}
+    assert_response :success
+  end
+
 end

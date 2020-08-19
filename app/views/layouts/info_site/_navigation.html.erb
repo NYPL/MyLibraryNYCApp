@@ -4,7 +4,7 @@
   </li>
 
   <li>
-    <%= link_to "Help", "//#{ENV['MLN_SETS_SITE_HOSTNAME']}/help" %>
+    <%= link_to "Help", :controller => :info_site, :action => :help  %>
   </li>
 
   <li>
@@ -17,5 +17,9 @@
 
   <li>
     <%= link_to "Participating Schools", :controller => :info_site, :action => :participating_schools %>
+  </li>
+
+  <li>
+    <%= link_to "FAQ", :controller => :info_site, :action => :faq %>
   </li>
 </ul>

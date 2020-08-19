@@ -539,90 +539,90 @@ class TeacherSet < ActiveRecord::Base
 
   # end
 
+  # Old and unused
+  # def add_books_by_isbns(isbns)
+  #   successes = 0
+  #   puts "    Populating books by ISBNs: #{isbns}"
+  #   isbns.each_with_index do |isbn, i|
+  #     puts "    #{i+1}) #{isbn}:"
+  #     cat_item = Book.catalog_item_by_query({:isbn => isbn}, true)
+  #     if cat_item.nil?
+  #       puts "    Couldn't find catalog item by isbn"
 
-  def add_books_by_isbns(isbns)
-    successes = 0
-    puts "    Populating books by ISBNs: #{isbns}"
-    isbns.each_with_index do |isbn, i|
-      puts "    #{i+1}) #{isbn}:"
-      cat_item = Book.catalog_item_by_query({:isbn => isbn}, true)
-      if cat_item.nil?
-        puts "    Couldn't find catalog item by isbn"
+  #     else
+  #       cat_item = Book.catalog_item(cat_item['id'])
+  #       book = Book.upsert_from_catalog_item cat_item
+  #       puts "     Adding book #{book.title}"
+  #       self.teacher_set_books.push TeacherSetBook.create(:book => book, :teacher_set => self, :rank => i)
 
-      else
-        cat_item = Book.catalog_item(cat_item['id'])
-        book = Book.upsert_from_catalog_item cat_item
-        puts "     Adding book #{book.title}"
-        self.teacher_set_books.push TeacherSetBook.create(:book => book, :teacher_set => self, :rank => i)
+  #       successes += 1
+  #     end
+  #   end
 
-        successes += 1
-      end
-    end
+  #   puts "  #{successes} of #{isbns.size} ISBNs resolved to catalog items"
+  # end
 
-    puts "  #{successes} of #{isbns.size} ISBNs resolved to catalog items"
-  end
+  # Old and unused.
+  # def update_books
+  #   puts "  Update books for #{id}"
+  #   scrape_url = "http://any.bibliocommons.com/item/catalogue_info/#{id}"
 
+  #   # First try pulling books from marc record:
+  #   # TODO: take the 1.day constant out into a properties file.
+  #   rows = self.class.scrape_css scrape_url, '#marc_details tr', 1.day
+  #   rows.each do |n|
+  #     if (tag_col = n.at_css('td.marcTag')) && tag_col.text.strip == '944'
+  #       isbns = n.at_css('td.marcTagData').text.sub(/^\$a/,'').strip.split ' '
 
-  def update_books
-    puts "  Update books for #{id}"
-    scrape_url = "http://any.bibliocommons.com/item/catalogue_info/#{id}"
+  #       puts "  Adding books by marc 944 field"
+  #       TeacherSetBook.destroy_for_set self.id
+  #       self.add_books_by_isbns isbns
 
-    # First try pulling books from marc record:
-    # TODO: take the 1.day constant out into a properties file.
-    rows = self.class.scrape_css scrape_url, '#marc_details tr', 1.day
-    rows.each do |n|
-      if (tag_col = n.at_css('td.marcTag')) && tag_col.text.strip == '944'
-        isbns = n.at_css('td.marcTagData').text.sub(/^\$a/,'').strip.split ' '
+  #       self.update_attributes :set_type => isbns.size == 1 ? 'single' : 'multi'
 
-        puts "  Adding books by marc 944 field"
-        TeacherSetBook.destroy_for_set self.id
-        self.add_books_by_isbns isbns
-
-        self.update_attributes :set_type => isbns.size == 1 ? 'single' : 'multi'
-
-        return
-      end
-    end
+  #       return
+  #     end
+  #   end
 
 
-    # If that fails, try pulling it from biblio list via link in circ widget:
-    scrape_url = "http://nypl.bibliocommons.com/item/show_circulation_widget/#{id}"
-    data = self.class.scrape_content scrape_url, 14.day
+  #   # If that fails, try pulling it from biblio list via link in circ widget:
+  #   scrape_url = "http://nypl.bibliocommons.com/item/show_circulation_widget/#{id}"
+  #   data = self.class.scrape_content scrape_url, 14.day
 
-    m = data.nil? ? nil : data.match(/<a [^>]*href=\\"([^\\]+)\\"[^>]*>List of Individual Titles/)
+  #   m = data.nil? ? nil : data.match(/<a [^>]*href=\\"([^\\]+)\\"[^>]*>List of Individual Titles/)
 
-    if m.nil? || (list_url = m[1]).nil? || list_url.nil? || (list_id = list_url.match(/nypl_selection\/([0-9]+)/)).nil?
-      puts "    Couldn't scrape list for #{id}"
+  #   if m.nil? || (list_url = m[1]).nil? || list_url.nil? || (list_id = list_url.match(/nypl_selection\/([0-9]+)/)).nil?
+  #     puts "    Couldn't scrape list for #{id}"
 
-    else
-      list_id = list_id[1] unless list_id.nil?
+  #   else
+  #     list_id = list_id[1] unless list_id.nil?
 
-      # list = api_call 'lists', list_id
-      list = self.class.api_call "lists/#{list_id}"
-      # puts "got list data: #{list.inspect}"
+  #     # list = api_call 'lists', list_id
+  #     list = self.class.api_call "lists/#{list_id}"
+  #     # puts "got list data: #{list.inspect}"
 
-      TeacherSetBook.destroy_for_set self.id
-      if list.nil? || list['list'].nil? || list['list']['list_items'].nil?
-        puts "    No list items found for #{list_id}: #{list.inspect}"
+  #     TeacherSetBook.destroy_for_set self.id
+  #     if list.nil? || list['list'].nil? || list['list']['list_items'].nil?
+  #       puts "    No list items found for #{list_id}: #{list.inspect}"
 
-      else
-        puts "    Adding books by biblio list"
-        list['list']['list_items'].each_with_index do |item, i|
-          book = Book.update_by_catalog_id item['title']['id'].to_i
-          puts "    Adding book #{i}: #{book.title}"
-          self.teacher_set_books.push TeacherSetBook.create(:book => book, :teacher_set => self, :rank => i)
-          # Book.upsert_from_catalog_item item
-          # item = api_call 'titles', item['title']['id']
-          # puts "got bigger item: #{item.inspect}"
-          # b = save_book item['title']
+  #     else
+  #       puts "    Adding books by biblio list"
+  #       list['list']['list_items'].each_with_index do |item, i|
+  #         book = Book.update_by_catalog_id item['title']['id'].to_i
+  #         puts "    Adding book #{i}: #{book.title}"
+  #         self.teacher_set_books.push TeacherSetBook.create(:book => book, :teacher_set => self, :rank => i)
+  #         # Book.upsert_from_catalog_item item
+  #         # item = api_call 'titles', item['title']['id']
+  #         # puts "got bigger item: #{item.inspect}"
+  #         # b = save_book item['title']
 
-        end
+  #       end
 
-        self.update_attributes :set_type => list['list']['list_items'].size == 1 ? 'single' : 'multi'
-      end
-    end
-    # self.save
-  end
+  #       self.update_attributes :set_type => list['list']['list_items'].size == 1 ? 'single' : 'multi'
+  #     end
+  #   end
+  #   # self.save
+  # end
 
   # Old and unused.
   #   def self.fetch_new(page=1, limit=25, just_id=nil)
@@ -741,6 +741,8 @@ class TeacherSet < ActiveRecord::Base
     teacher_sets = TeacherSet.where(set_type: nil)
     teacher_sets.each do |teacher_set|
       bib_id = teacher_set.bnumber.split('b')[1]
+
+      next if bib_id.nil?
       LogWrapper.log('DEBUG', {'message' => "Teacher set bib-id value: #{bib_id}", 'method' => 'teacher_set.update_set_type_from_nil_to_value'})
       set_type = teacher_set.get_set_type_value_from_bib_response(bib_id)
       teacher_set.update_set_type(set_type)

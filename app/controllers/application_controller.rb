@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
       when payload[:status]  >= 500
         payload[:level] = "ERROR"
       end
+      payload
     end
   end
 
