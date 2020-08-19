@@ -1,15 +1,19 @@
 <div class='error-message' ng-show="errorMessage">{{ errorMessage }}</div>
 <div class="animate-in-container" ng-show="loaded">
-  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include> 
+  <ng-include src="'/templates/shared/_breadcrumb.html'"></ng-include>
   <div class="row">
     <div id="teacher_set" class="column">
+      <div class="school_inactive_message" data-ng-show="is_school_active == false">
+      According to our records, your school no longer participates in the MyLibraryNYC program.
+      please contact <a href="https://slsa-nys.org/about-us/directory/name/leanne-ellis/" target="_blank">Leanne Ellis</a> for further assistance.
+      </div>
+
       <div class="ts-banner subject subject-{{ts.subject_key}}">
         <i class="fa"></i>
         <h3>{{ts.title}}</h3>
       </div>
-      
       <div class="ts-actions">
-        <span class="order_button_padding"> <b>ORDER NOW! </b>&nbsp;&nbsp;{{ts.available_copies}} of 
+        <span class="order_button_padding"> <b>ORDER NOW! </b>&nbsp;&nbsp;{{ts.available_copies}} of
             {{ts.total_copies}} available
         </span>
         <p style="white-space: pre"></p>
@@ -33,7 +37,7 @@
         <p ng-show="user_has_ordered_max">
           You have <a href="/teacher_sets/{{ts.id}}/teacher_set_holds">requested</a> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
         </p>
-      </div>    
+      </div>
       <p class="ts-description">{{ts.description}}</p>
       <h3 ng-show="ts.books"><ng-pluralize count="ts.books.length" when="{'1': '1 Title', 'other': '{} Titles'}"></ng-pluralize></h3>
       <ul class="ts-book-list" ng-class="{'ts-copy-list': ts.set_type=='single' && ts.books.length==1}">
@@ -54,29 +58,36 @@
         <h3>Contents</h3>
         <pre>{{ts.contents}}</pre>
       </div>
-            
+
       <hr />
-      
-      <div class="ts-details">      
-        <dl>        
-          <dt ng-show="ts.suitabilities_string">Suggested Grade Range</dt>
+
+      <div class="ts-details">
+        <dl>
+          <dt ng-show="ts.suitabilities_string">Suggested Grade Range [New]</dt>
           <dd>{{ts.suitabilities_string}}</dd>
           <dt ng-show="ts.publication_date">Publication Date</dt>
-          <dd>{{ts.publication_date}}</dd>       
+          <dd>{{ts.publication_date}}</dd>
           <dt ng-show="ts.primary_language">Primary Language</dt>
           <dd>{{ts.primary_language}}</dd>
+
+          <dt ng-show="ts.language && ts.language != ts.primary_language">Other Languages</dt>
+          <dd ng-show="ts.language && ts.language != ts.primary_language">{{ts.language}}</dd>
+
+          <dt ng-show="ts.set_type">Type</dt>
+          <dd>{{ts.set_type}}</dd>
+
           <dt ng-show="ts.physical_description">Physical Description</dt>
-          <dd>{{ts.physical_description}}</dd>    
+          <dd>{{ts.physical_description}}</dd>
           <dt ng-show="ts.teacher_set_notes.length > 0 || ts.statement_of_responsibility">Notes</dt>
           <dd class="notes" ng-repeat="note in ts.teacher_set_notes">{{note.content}}</dd>
         </dl>
-      </div>      
-      
+      </div>
+
       <a ng-click="moreList = !moreList" ng-show="!moreList"><i class="fa fa-plus-circle"></i> See More</a>
-      <div class="ts-details ts-more-details" ng-class="{'show': moreList}">      
+      <div class="ts-details ts-more-details" ng-class="{'show': moreList}">
         <dl>
           <dt ng-show="ts.call_number">Call Number</dt>
-          <dd>{{ts.call_number}}</dd>          
+          <dd>{{ts.call_number}}</dd>
           <dt ng-show="ts.edition">Edition</dt>
           <dd>{{ts.edition}}</dd>
           <dt ng-show="ts.isbn">ISBN</dt>

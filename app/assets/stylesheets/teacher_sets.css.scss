@@ -442,6 +442,7 @@
   background: $highlight;
   padding: $componentPadding;
 }
+
 .loading-results {
   text-align: center;
   padding: $componentPadding;
@@ -685,3 +686,22 @@
 .order_button_padding{
   padding-left: 30px
 }
+
+.school_inactive_message {
+  background: #fff7a5;
+  text-align:center;
+  padding: 10px 20px;
+  position: relative;
+  margin-bottom: 0;
+}
+
+.alert {
+  background: #fff7a5;
+  margin: 10px 0 20px;
+  text-align: center;
+  padding: 10px;
+  line-height: 20px;
+  margin-bottom: 0px;
+  margin-top: -20px;
+}
+

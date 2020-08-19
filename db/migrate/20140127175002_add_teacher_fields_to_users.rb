@@ -1,4 +1,6 @@
-class AddTeacherFieldsToUsers < ActiveRecord::Migration
+# frozen_string_literal: true
+
+class AddTeacherFieldsToUsers < ActiveRecord::Migration[4.2]
   def change
     add_column :users, :barcode, :integer, :limit => 8
     add_column :users, :first_name, :string, :limit => 40

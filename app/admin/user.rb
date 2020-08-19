@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register User do
   menu :priority => 6
   actions :all
@@ -28,7 +30,7 @@ ActiveAdmin.register User do
     column :current_sign_in_at
     column :last_sign_in_at
     column :sign_in_count
-    default_actions
+    actions
   end
 
   filter :email
@@ -49,7 +51,6 @@ ActiveAdmin.register User do
       else
         f.input :barcode
       end
-      f.input :pin, label: raw("4-digit PIN<br> It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)")
     end
     f.actions
   end
@@ -98,6 +99,14 @@ ActiveAdmin.register User do
   controller do
     def edit # the edit page title has to be handled this way, source: https://github.com/activeadmin/activeadmin/wiki/Set-page-title
       @page_title = resource.name(true)
+    end
+    
+    
+    # Setting up Strong Parameters
+    # You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
+    def permitted_params
+      params.permit user: [:email, :password, :password_confirmation, :remember_me, :barcode, :alt_barcodes, :first_name, 
+                           :last_name, :alt_email, :school_id]
     end
   end
 end

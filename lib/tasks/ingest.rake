@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'uri'
 
@@ -7,7 +9,7 @@ namespace :ingest do
 
   # Fetch latest data from biblio
   desc "Import new data"
-  task :ingest, [:page, :limit, :just_id]  => :environment do |t, args|
+  task :ingest, [:page, :limit, :just_id] => :environment do |t, args|
     args.with_defaults(:page=> 1, :limit => 25, :just_id => nil)
 
     page = args.page.to_i
@@ -24,7 +26,7 @@ namespace :ingest do
 
   # Update availability status and counts of all sets by scraping internal catalog
   desc "Update availability numbers for all sets"
-  task :update_availability, [:start, :limit, :id]  => :environment do |t, args|
+  task :update_availability, [:start, :limit, :id] => :environment do |t, args|
     args.with_defaults(:start => 0, :limit => nil, :id => nil)
     start = args.start.to_i
     limit = args.limit.to_i unless args.limit.nil?
@@ -88,6 +90,7 @@ namespace :ingest do
       (last_name, first_name, barcode, email, school_code, school_name) = line
 
       next if email.nil? || email.strip.empty?
+
       puts "#{email}"
 
       if !(school = School.find_by_code(school_code.strip.downcase)).nil?
@@ -541,6 +544,7 @@ namespace :ingest do
     Dir.new(dumps_base).each do |f|
       m = f.match /(\w+)_school_codes/
       next if m.nil?
+
       borough_name = m[1].underscore.split('_').map(&:capitalize).join(' ')
 
       next if ['Brooklyn','Queens'].include? borough_name

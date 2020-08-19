@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 MyLibraryNYC::Application.routes.draw do
 
   devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
 
   devise_scope :user do
-    match 'timeout_check' => 'sessions#timeout_check', via: :get
-    match 'timeout' => 'sessions#timeout', via: :get
+    get 'timeout_check' => 'sessions#timeout_check'
+    get 'timeout' => 'sessions#timeout'
   end
 
   get 'extend_session_iframe' => 'home#extend_session_iframe'
@@ -14,8 +16,8 @@ MyLibraryNYC::Application.routes.draw do
   end
   resources :books
   resources :schools, :only => [:index]
-  match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel
-  match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', :as => :teacher_set_holds
+  match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel, via: [:get, :post]
+  match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
 
   resources :holds
 
@@ -30,10 +32,13 @@ MyLibraryNYC::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
   get '/check_email', to: 'users#check_email'
-  match 'app' => 'angular#index', :as => :app
-  match 'settings' => 'settings#index'
-  match 'account' => 'settings#index', :as => :account
-  match 'help' => 'home#help', :as => :help
+  match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
+
+  match 'settings' => 'settings#index', via: [:get, :patch, :post]
+
+  match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post]
+
+  get 'help' => 'home#help', :as => :help
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
@@ -76,8 +81,16 @@ MyLibraryNYC::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'home#index'
 
+  # MLN application supports multiple domains.
+  root :to => 'info_site#index', :constraints => {:host => ENV['MLN_INFO_SITE_HOSTNAME']}
+  match 'about/participating-schools' => 'info_site#participating_schools', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
+  match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
+  match '/contacts-links' => 'info_site#contacts', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
+  match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
+
+  root :to => "home#index"
+  
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 

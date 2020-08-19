@@ -1,11 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  title: MyString
+teacher_set_one:
   description: MyText
-  slug: MyString
-
-two:
   title: MyString
+teacher_set_two:
   description: MyText
-  slug: MyString
+  title: MyString

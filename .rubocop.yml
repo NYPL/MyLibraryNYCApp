@@ -1,0 +1,41 @@
+# This is the configuration used to check the rubocop source code.
+inherit_from: .rubocop_todo.yml
+
+Documentation:
+  Description: "Document classes and non-namespace modules."
+  Enabled: false
+
+Layout/AlignHash:
+  Enabled: false
+
+Layout/IndentHash:
+  Enabled: false
+
+Layout/TrailingEmptyLines:
+  Enabled: false
+
+Style/BracesAroundHashParameters:
+  Enabled: false
+
+Layout/AlignParameters:
+  SupportedStyles:
+    - with_first_parameter
+    - with_fixed_indentation  
+
+Metrics/MethodLength:
+  Max: 40
+
+Metrics/ClassLength:
+  Max: 600
+
+Layout/EmptyLineBetweenDefs:
+  NumberOfEmptyLines: 2
+
+Metrics/LineLength:
+  Max: 150
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false

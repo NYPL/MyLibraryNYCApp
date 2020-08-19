@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class TeacherSetTest < ActiveSupport::TestCase
@@ -40,17 +42,17 @@ class TeacherSetTest < ActiveSupport::TestCase
       total_count = 2 
       available_count = 2
 
-      @mintest_mock1.expect(:call, [bib_items_response, true], [bib_id, nypl_source])
+      @mintest_mock1.expect(:call, [bib_items_response, true], [bib_id])
       @mintest_mock2.expect(:call, [total_count, available_count], [bib_items_response])
 
-      @model.stub :send_request_to_bibs_microservice, @mintest_mock1 do
+      @model.stub :send_request_to_items_microservice, @mintest_mock1 do
         @model.stub :parse_items_available_and_total_count, @mintest_mock2 do
           @model.stub :update_attributes, true, [total_copies: total_count, available_copies: available_count, availability: 'available'] do
-            resp = @model.update_available_and_total_count(bib_id, nypl_source)
+            resp = @model.update_available_and_total_count(bib_id)
           end
         end
       end
-      assert_equal(bib_items_response, resp)
+      assert_equal(bib_items_response, resp[:bibs_resp]) 
     end
 
     #Test:2 Bibid is not found in bibs service
@@ -62,12 +64,12 @@ class TeacherSetTest < ActiveSupport::TestCase
       total_count = 2 
       available_count = 2
 
-      @mintest_mock1.expect(:call, [bib_id_not_found_response, false], [bib_id, nypl_source])
+      @mintest_mock1.expect(:call, [bib_id_not_found_response, false], [bib_id])
 
-      @model.stub :send_request_to_bibs_microservice, @mintest_mock1 do
-        resp = @model.update_available_and_total_count(bib_id, nypl_source)
+      @model.stub :send_request_to_items_microservice, @mintest_mock1 do
+        resp = @model.update_available_and_total_count(bib_id)
       end
-      assert_equal(bib_id_not_found_response, resp)
+      assert_equal(bib_id_not_found_response, resp[:bibs_resp])
     end
   end
   
@@ -84,6 +86,36 @@ class TeacherSetTest < ActiveSupport::TestCase
       assert_equal(available_count, resp[1])
     end
   end
+
+  
+  # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
+  # If subfields.content type is "Topic Set", set_type value  stored as 'multi' in teacher_sets table.
+  # If subfields.content type is "Book Club Set" set_type value  stored as 'single' in teacher_sets table.
+  # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
+  # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
+  describe "update set_type value in teacher set table" do
+    it "test set_type value with Topic set" do
+      set_type_val = " Topic set "
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
+    end
+
+    it "test set_type value with Topic set" do
+      set_type_val = " Book Club Set "
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
+    end
+
+    it "test set_type value with nil" do
+      set_type_val = nil
+      teacher_set = crank!(:teacher_set)
+      resp = teacher_set.update_set_type(set_type_val)
+      assert_equal(true, resp)
+    end
+  end
+
 
   private
 

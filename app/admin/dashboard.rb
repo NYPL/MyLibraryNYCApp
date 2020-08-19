@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register_page "Dashboard" do
 
   menu :priority => 1, :label => proc{ I18n.t("active_admin.dashboard") }
@@ -34,6 +36,10 @@ ActiveAdmin.register_page "Dashboard" do
         'created_at ASC'
       when 'p_created_at_desc'
         'created_at DESC'
+      when 'p_quantity_asc'
+        'quantity ASC'
+      when 'p_quantity_desc'
+        'quantity DESC'
       else
         nil
       end
@@ -63,6 +69,10 @@ ActiveAdmin.register_page "Dashboard" do
         'created_at ASC'
       when 'created_at_desc'
         'created_at DESC'
+      when 'quantity_asc'
+        'quantity ASC'
+      when 'quantity_desc'
+        'quantity DESC'
       else
         nil
       end
@@ -106,19 +116,27 @@ ActiveAdmin.register_page "Dashboard" do
             column "#" do
               i += 1
             end
-            column 'Set', sortable: :set do |h|
 
+            column 'Set', sortable: :set do |h|
               if !h.teacher_set.nil?
                 link_to h.teacher_set.title, admin_hold_path(h)
               else
-                "This teacher set no longer exist."
+                "This teacher set no longer exists."
               end
             end
+
             column 'Call Number', sortable: :call_number do |h|
               if !h.teacher_set.nil?
                 link_to h.teacher_set.call_number, admin_hold_path(h)
               end
             end
+
+            column 'Quantity', sortable: :quantity do |h|
+              if !h.quantity.nil?
+                h.quantity
+              end
+            end
+
             column 'User', sortable: :user do |h|
               if !h.user.nil?
                 link_to h.user.email, admin_hold_path(h)
@@ -126,6 +144,7 @@ ActiveAdmin.register_page "Dashboard" do
                 "Missing user data"
               end
             end
+
             column 'Requester Barcode', sortable: :barcode do |h|
               if !h.user.nil?
                 link_to h.user.barcode, admin_hold_path(h)
@@ -133,6 +152,7 @@ ActiveAdmin.register_page "Dashboard" do
                 "Missing user data"
               end
             end
+
             column 'Date', sortable: :created_at do |h|
               if !h.nil?
                 link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
@@ -140,6 +160,7 @@ ActiveAdmin.register_page "Dashboard" do
                 "Missing hold data"
               end
             end
+
           end
         end
       end
@@ -156,6 +177,11 @@ ActiveAdmin.register_page "Dashboard" do
             column "#" do i += 1 end
             column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
             column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+            column 'Quantity', sortable: :quantity do |h|
+              if !h.quantity.nil?
+                h.quantity
+              end
+            end
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|
@@ -181,6 +207,11 @@ ActiveAdmin.register_page "Dashboard" do
             column "#" do i += 1 end
             column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
             column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+            column 'Quantity', sortable: :quantity do |h|
+              if !h.quantity.nil?
+                h.quantity
+              end
+            end
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|
@@ -206,6 +237,11 @@ ActiveAdmin.register_page "Dashboard" do
             column "#" do i += 1 end
             column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
             column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+            column 'Quantity', sortable: :quantity do |h|
+              if !h.quantity.nil?
+                h.quantity
+              end
+            end
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|
@@ -231,6 +267,11 @@ ActiveAdmin.register_page "Dashboard" do
             column "#" do i += 1 end
             column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
             column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+            column 'Quantity', sortable: :quantity do |h|
+              if !h.quantity.nil?
+                h.quantity
+              end
+            end
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|

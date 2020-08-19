@@ -1,0 +1,5 @@
+<% if ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.downcase == "true" && ENV['MAINTENANCE_BANNER_TEXT'].present? %>
+  <div id="banner" class= "banner">
+    <%= render 'layouts/banner' %>
+  </div>
+<% end %>

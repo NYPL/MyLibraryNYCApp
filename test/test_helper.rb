@@ -1,3 +1,18 @@
+# frozen_string_literal: true
+
+require 'simplecov'
+# Note: minimum coverage config can also maybe happen outside, and before the start block.
+SimpleCov.start 'rails' do
+  add_filter '/bin/'
+  add_filter '/db/'
+  add_filter '/test/' # for minitest
+end
+# fail unit tests if total coverage dips below acceptable limit
+SimpleCov.minimum_coverage 25
+# fail unit tests if any file's individual coverage dips below acceptable limit
+SimpleCov.minimum_coverage_by_file 0
+
+
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
@@ -7,6 +22,7 @@ require 'factories/school_factory'
 require 'factories/book_factory'
 require 'factories/teacher_set_factory'
 require 'pry'
+require 'pry-stack_explorer'
 
 include WebMock::API
 
@@ -20,6 +36,7 @@ require 'stringio'
 require 'active_support'
 require 'active_support/core_ext'
 require 'logger'
+
 
 MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
   "data": [
@@ -3467,6 +3484,238 @@ TEACHER_SET_WITH_TITLE_MISSING = [
   }
 ]
 
+ITEM_JSON_REQUEST_BODY = '{
+  "data": [
+   {
+           "id": "18894057",
+           "nyplSource": "sierra-nypl",
+           "nyplType": "item",
+           "updatedDate": "2019-06-26T15:37:46-04:00",
+           "createdDate": "2015-08-28T19:07:06-04:00",
+           "deletedDate": null,
+           "deleted": false,
+           "bibIds": [
+               "19968034"
+           ],
+           "location": {
+               "code": "eduls",
+               "name": "LSC Educator Collection"
+           },
+           "status": {
+               "code": "w",
+               "display": "WITHDRAWN",
+               "duedate": null
+           },
+           "barcode": "33333402216093",
+           "callNumber": "Teacher Set ELA A Board Books 6-7",
+           "itemType": null,
+           "fixedFields": {
+               "57": {
+                   "label": "BIB HOLD",
+                   "value": "false",
+                   "display": null
+               },
+               "58": {
+                   "label": "Copy No.",
+                   "value": "1",
+                   "display": null
+               },
+               "59": {
+                   "label": "Item Code 1",
+                   "value": "30007",
+                   "display": null
+               },
+               "60": {
+                   "label": "Item Code 2",
+                   "value": "-",
+                   "display": null
+               },
+               "61": {
+                   "label": "Item Type",
+                   "value": "252",
+                   "display": "Teacher Set (DOE EDUCATOR ONLY)"
+               },
+               "62": {
+                   "label": "Price",
+                   "value": "0.000000",
+                   "display": null
+               },
+               "64": {
+                   "label": "Checkout Location",
+                   "value": "0",
+                   "display": null
+               },
+               "70": {
+                   "label": "Checkin Location",
+                   "value": "0",
+                   "display": null
+               },
+               "74": {
+                   "label": "Item Use 3",
+                   "value": "0",
+                   "display": null
+               },
+               "76": {
+                   "label": "Total Checkouts",
+                   "value": "0",
+                   "display": null
+               },
+               "77": {
+                   "label": "Total Renewals",
+                   "value": "0",
+                   "display": null
+               },
+               "79": {
+                   "label": "Location",
+                   "value": "eduls",
+                   "display": "LSC Educator Collection"
+               },
+               "80": {
+                   "label": "Record Type",
+                   "value": "i",
+                   "display": null
+               },
+               "81": {
+                   "label": "Record Number",
+                   "value": "33243159",
+                   "display": null
+               },
+               "83": {
+                   "label": "Created Date",
+                   "value": "2015-08-28T19:07:06Z",
+                   "display": null
+               },
+               "84": {
+                   "label": "Updated Date",
+                   "value": "2019-06-26T15:37:46Z",
+                   "display": null
+               },
+               "85": {
+                   "label": "No. of Revisions",
+                   "value": "6",
+                   "display": null
+               },
+               "86": {
+                   "label": "Agency",
+                   "value": "1",
+                   "display": null
+               },
+               "88": {
+                   "label": "Status",
+                   "value": "w",
+                   "display": "WITHDRAWN"
+               },
+               "93": {
+                   "label": "Inhouse Use",
+                   "value": "0",
+                   "display": null
+               },
+               "94": {
+                   "label": "Copy Use",
+                   "value": "0",
+                   "display": null
+               },
+               "97": {
+                   "label": "Item Message",
+                   "value": "c",
+                   "display": null
+               },
+               "98": {
+                   "label": "PDATE",
+                   "value": "2019-02-26T20:28:00Z",
+                   "display": null
+               },
+               "108": {
+                   "label": "OPAC Message",
+                   "value": "m",
+                   "display": null
+               },
+               "109": {
+                   "label": "Year-to-Date Circ",
+                   "value": "0",
+                   "display": null
+               },
+               "110": {
+                   "label": "Last Year Circ",
+                   "value": "0",
+                   "display": null
+               },
+               "127": {
+                   "label": "Item Agency",
+                   "value": "44",
+                   "display": "NYPL/Other"
+               },
+               "161": {
+                   "label": "VI Central",
+                   "value": "0",
+                   "display": null
+               },
+               "162": {
+                   "label": "IR Dist Learn Same Site",
+                   "value": "0",
+                   "display": null
+               },
+               "264": {
+                   "label": "Holdings Item Tag",
+                   "value": "6",
+                   "display": null
+               },
+               "265": {
+                   "label": "Inherit Location",
+                   "value": "false",
+                   "display": null
+               }
+           },
+           "varFields": [
+               {
+                   "fieldTag": "b",
+                   "marcTag": null,
+                   "ind1": null,
+                   "ind2": null,
+                   "content": "33333402216093",
+                   "subfields": null
+               },
+               {
+                   "fieldTag": "c",
+                   "marcTag": null,
+                   "ind1": null,
+                   "ind2": null,
+                   "content": "Teacher Set ELA A Board Books 6-7",
+                   "subfields": null
+               },
+               {
+                   "fieldTag": "f",
+                   "marcTag": null,
+                   "ind1": null,
+                   "ind2": null,
+                   "content": "Purchased with DOE Funds (BPL fstms)",
+                   "subfields": null
+               },
+               {
+                   "fieldTag": "t",
+                   "marcTag": null,
+                   "ind1": null,
+                   "ind2": null,
+                   "content": "LOGDOE/XC",
+                   "subfields": null
+               },
+               {
+                   "fieldTag": "x",
+                   "marcTag": null,
+                   "ind1": null,
+                   "ind2": null,
+                   "content": "FORCE CHANGE FOR SCC 022619",
+                   "subfields": null
+               }
+           ]
+       }
+   ],
+  "count": 25,
+  "totalCount": 0,
+  "statusCode": 200,
+  "debugInfo": []
+}'
+
 TWO_TEACHER_SETS_TO_DELETE = [{
     "id": "0",
     "title": "Example for non-existant bnumber"
@@ -3503,11 +3752,13 @@ TWO_TEACHER_SETS_TO_DELETE = [{
 ]
 
 class ActionController::TestCase
-  include Devise::TestHelpers
+  include Devise::Test::ControllerHelpers
 end
 
 class ActiveSupport::TestCase
-  setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice
+  setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
+        :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
+        :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -3537,12 +3788,11 @@ class ActiveSupport::TestCase
   end
 
   # mock_check_email_request takes in a parameter of e-mail and mocks an https
-  # request to 'https://dev-platform.nypl.org/api/v0.1/patrons?email=' and returns a
+  # request to 'https://qa-platform.nypl.org/api/v0.1/patrons?email=' and returns a
   # 404 statusCode if the e-mail hasn't been created in Sierra.
   # TODO: Need to add 200 if the e-mail has been created
   def mock_check_email_request(email)
-    stub_request(:get, 'https://dev-platform.nypl.org/api/v0.1/patrons?email=' +
-    email)
+    stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?email=" + email)
       .to_return(status: 200, body: {
         'status' => 404,
         'type' => 'exception',
@@ -3554,10 +3804,10 @@ class ActiveSupport::TestCase
   end
 
   # mock_send_request_to_patron_creator_service sends an https request
-  # to 'https://dev-platform.nypl.org/api/v0.2/patrons' and returns a
+  # to 'https://qa-platform.nypl.org/api/v0.2/patrons' and returns a
   # status of success if Sierra API created a patron record.
   def mock_send_request_to_patron_creator_service
-    stub_request(:post, 'https://dev-platform.nypl.org/api/v0.2/patrons')
+    stub_request(:post, ENV['PATRON_MICROSERVICE_URL_V02'])
       .to_return(
         {
           status: 201,
@@ -3575,28 +3825,140 @@ class ActiveSupport::TestCase
       )
   end
 
+  # mock_get_data_from_aws_s3_adapter
+  # to 'https://my-library-nyc-config.s3.amazonaws.com/test/feature_flag.yml' and returns a
+  def mock_send_request_to_s3_adapter
+    stub_request(:get, "https://my-library-nyc-config.s3.amazonaws.com/test/feature_flag.yml")
+      .to_return(
+        {
+          status: 200,
+          body: {
+            'status' => 'success'
+          }.to_json,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
+  end
+
+  def mock_send_request_to_elastic_search_service
+    stub_request(:put, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468850?op_type=create")
+      .to_return(
+        {
+          status: 200,
+          body: { "id" => 614468853, "title" => "title", "bnumber" => "b998" }.to_json,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
+  end
+
+  def mock_delete_request_from_elastic_search_service
+    stub_request(:delete, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468850?op_type=delete")
+      .to_return(
+        {
+          status: 200,
+          headers: {}
+        },
+        {
+          status: 500,
+          body: {
+            'status' => 'failure'
+          }.to_json, headers: {}
+        }
+      )
+  end
+
   # send_request_to_bibs_microservice sends an https request
-  # to "https://platform.nypl.org/api/v0.1/bibs?standardNumber=9781896580601" and returns a
+  # to "https://qa-platform.nypl.org/api/v0.1/bibs?standardNumber=9781896580601" and returns a
   # status of success if Sierra API finds the bib record.
   def send_request_to_bibs_microservice
     20.times do |x|
-      stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?standardNumber=#{ 9781896580601 + x }").
+      stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=#{ 9781896580601 + x }").
         with(
           headers: {
-      	  'Authorization'=>'Bearer testoken',
-      	  'Content-Type'=>'application/json'
-          }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {}
-      )
+            'Authorization'=>'Bearer testoken',
+            'Content-Type'=>'application/json'
+          }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {})
     end
-    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?standardNumber=123456789").
+    stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=123456789").
+      with(
+        headers: {
+          'Authorization'=>'Bearer testoken',
+          'Content-Type'=>'application/json'
+        }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {})
+  end
+
+  # send_request_to_items_microservice sends an https request
+  # to "https://https://qa-platform.nypl.org/api/v0.1/items
+  # status of success if Sierra API finds the bib record.
+  def mock_send_request_to_items_microservice
+    items_query_params = "?bibId=998&limit=25&offset=0"
+    stub_request(:get, "#{ENV['ITEMS_MICROSERVICE_URL_V01']}" + items_query_params).
       with(
         headers: {
         'Authorization'=>'Bearer testoken',
         'Content-Type'=>'application/json'
-        }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {}
-    )
+        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
+
+    items_query_params = "?bibId=999&limit=25&offset=0"
+    stub_request(:get, "#{ENV['ITEMS_MICROSERVICE_URL_V01']}" + items_query_params).
+      with(
+        headers: {
+        'Authorization'=>'Bearer testoken',
+        'Content-Type'=>'application/json'
+        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
   end
 
+  def mock_security_credentials
+    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/").with(
+      headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'User-Agent'=>'aws-sdk-ruby3/3.68.1'
+        }).to_return(status: 200, body: "", headers: {})
+  end
+
+
+  def mock_aws_request
+    WebMock.stub_request(:post, "https://kms.us-east-1.amazonaws.com/").to_return(:status => 200, :body => "", :headers => {})
+  end
+
+
+  def mock_es_doc
+    stub_request(:get, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/_search").
+      with(
+        body: "{\"query\":{\"bool\":{\"must\":[]}},\"from\":0,\"size\":20,\"sort\":[{\"_score\":\"desc\",\"availability.raw\":\"asc\",\"created_at\":\"desc\",\"_id\":\"asc\"}],\"aggs\":{\"language\":{\"terms\":{\"field\":\"primary_language\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},\"set type\":{\"terms\":{\"field\":\"set_type\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},\"availability\":{\"terms\":{\"field\":\"availability.raw\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},\"area of study\":{\"terms\":{\"field\":\"area_of_study\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},\"subjects\":{\"nested\":{\"path\":\"subjects\"},\"aggregations\":{\"subjects\":{\"composite\":{\"size\":3000,\"sources\":[{\"id\":{\"terms\":{\"field\":\"subjects.id\"}}},{\"title\":{\"terms\":{\"field\":\"subjects.title\"}}}]}}}}}}",
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Faraday v1.0.1'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
+
+  def mock_delete_es_doc
+    stub_request(:delete, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468851").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Faraday v1.0.1'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
 end
 
 begin

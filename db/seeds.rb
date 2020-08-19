@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 #
@@ -13,7 +15,7 @@ File.open 'db/seed-data.sql', 'r' do |f|
   end
 
   statements = f.read.split(/;$/)
-  statements.pop  # the last empty statement
+  statements.pop # the last empty statement
   puts "Seeding from #{statements.size} statement dump"
  
   ActiveRecord::Base.transaction do

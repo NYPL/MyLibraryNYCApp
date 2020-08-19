@@ -5,6 +5,7 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
     var TeachSetListFactory = function() {
       localStorage.clear();
       this.items = [];
+      this.errors = {};
       this.facets = [];
       this.busy = false; // whether service is *actually* busy
       this.showBusy = false; // whether or not to show that we are busy
@@ -66,6 +67,9 @@ app.factory('TeachSetListFactory', [ '$http', '$routeParams', '$location',
         // only refresh facets on first page
         } else if (that.page <= 1) {
           that.repaintFacets(data.facets);
+        }
+        if (that.errors) {
+          that.errors = data.errors;
         }
         that.busy = false;
         that.cancelBusyMessage();

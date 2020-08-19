@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register TeacherSet do
   # The line below was causing an error on the teacher set index page.
   # Even after we remove it, we can still search by teacher sets, so it should be removed.
@@ -29,7 +31,7 @@ ActiveAdmin.register TeacherSet do
 
   filter :books_title, as: :string
   filter :subjects_title, as: :string
-  filter :primary_subject
+  filter :area_of_study
 
   filter :grade_begin
   filter :grade_end
@@ -113,17 +115,17 @@ ActiveAdmin.register TeacherSet do
   end
 
   # The proc below sets the page title to title of the version if there is a version specified in the parameters
-  show title: Proc.new{
-      teacher_set_with_versions = TeacherSet.includes(versions: :item).find(params[:id])
-      if params[:version]
-        # title of a version of the teacher set
-        version = teacher_set_with_versions.versions[(params[:version].to_i - 1).to_i].reify
-        version.title
-      else
-        # the current teacher set title
-        teacher_set_with_versions.title
-      end
-    } do |teacher_set|
+  show title: Proc.new {
+    teacher_set_with_versions = TeacherSet.includes(versions: :item).find(params[:id])
+    if params[:version]
+      # title of a version of the teacher set
+      version = teacher_set_with_versions.versions[(params[:version].to_i - 1).to_i].reify
+      version.title
+    else
+      # the current teacher set title
+      teacher_set_with_versions.title
+    end
+  } do |teacher_set|
 
     return if params[:version] == '0'
 
