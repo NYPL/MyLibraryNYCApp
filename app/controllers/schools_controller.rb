@@ -9,6 +9,7 @@ class SchoolsController < ApplicationController
     group_by_schools = schools.group_by { |school| school.name[0] }
     @schools_arr = []
     group_by_schools.each do |alphabet_anchor, school_objects|
+      next if !alphabet_anchor.present?
       school_hash = {}
       # If school name starts with alphabet letter, school names will display under aplhabet anchor eg: 'A' Academy for Careers (12), Academy(22).
       # If school name does not start with alphabet letter, school names will display under '#' anchor. eg: '#' 486 newyork school (86),  56test(234).
