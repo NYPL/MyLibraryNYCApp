@@ -742,7 +742,7 @@ class TeacherSet < ActiveRecord::Base
     teacher_sets.each do |teacher_set|
       bib_id = teacher_set.bnumber.split('b')[1]
       next if bib_id.nil?
-      
+
       LogWrapper.log('DEBUG', {'message' => "Teacher set bib-id value: #{bib_id}", 'method' => 'teacher_set.update_set_type_from_nil_to_value'})
       set_type = teacher_set.get_set_type_value_from_bib_response(bib_id)
       teacher_set.update_set_type(set_type)
