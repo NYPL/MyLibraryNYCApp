@@ -6,16 +6,35 @@
       <div align="center">
         <a href="##">#</a> <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a> <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a> <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a> <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a> <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a> <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a> <a href="#Y">Y</a> <a href="#Z">Z</a> <br><br>
       </div>
-      <ul>
+      <input id="search_participating_school" type="text" placeholder="Search..">
+      <div id="participating_schools_id">
         <% @schools_arr.each do |s| %>
         <br>
-        <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %><br><br>
-        <% s["school_names"].each do |i|  %>
-          <%= i %>
-          <br>
-        <% end %>
+        <div id="participating_schools_id">
+          <% if s["school_names"].present?%>
+            <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %><br><br>
+          <% end %>
+          <% s["school_names"].each do |i|  %>
+             <p><%= i %></p>
+            <br>
+          <% end %>
+        </div>
       <% end %>
-      </ul>
+      
     </div>
   </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  $("#search_participating_school").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+   // if (value.length >= 3) {
+      $("#participating_schools_id *").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+   // }
+  });
+});
+</script>
