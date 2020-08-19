@@ -39,3 +39,6 @@ Style/IfUnlessModifier:
 
 Metrics/AbcSize:
   Enabled: false
+  
+Style/SymbolProc:
+  Enabled: false

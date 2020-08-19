@@ -30,7 +30,13 @@ namespace :combined_tests do
       'test/functional/home_controller_test.rb',
       'test/functional/holds_controller_test.rb',
       'test/functional/books_controller_test.rb',
-      'test/unit/user_test.rb', 'test/unit/book_test.rb',
+      'test/unit/book_test.rb',
+      'test/functional/schools_controller_test.rb',
+      'test/functional/info_site_controller_test.rb',
+      'test/functional/s3_controller_test.rb',
+      'test/functional/teacher_sets_test.rb',
+      'test/functional/*.rb',
+      'test/unit/user_test.rb', 'test/unit/*.rb',
       'test/unit/elastic_search_test.rb'
     ].shuffle
 

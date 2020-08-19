@@ -12,16 +12,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200714200527) do
-
+ActiveRecord::Schema.define(version: 20200813141524) do
+    
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "resource_id",   null: false
     t.string   "resource_type", null: false
-    t.string   "author_type"
     t.integer  "author_id"
+    t.string   "author_type"
     t.text     "body"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20200714200527) do
   end
 
   create_table "allowed_user_email_masks", force: :cascade do |t|
-    t.string   "email_pattern",                 null: false
+    t.string   "email_pattern",             null: false
     t.boolean  "active",                    default: false
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
@@ -91,6 +91,27 @@ ActiveRecord::Schema.define(version: 20200714200527) do
     t.index ["borough_id"], name: "index_campuses_on_borough_id", using: :btree
   end
 
+  create_table "faqs", force: :cascade do |t|
+    t.text    "question"
+    t.text    "answer"
+    t.integer "position"
+  end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
   create_table "hold_changes", force: :cascade do |t|
     t.bigint   "hold_id"
     t.bigint   "admin_user_id"
@@ -116,7 +137,7 @@ ActiveRecord::Schema.define(version: 20200714200527) do
     t.string   "name"
     t.integer  "campus_id"
     t.string   "code",           limit: 32
-    t.boolean  "active",                    default: false
+    t.boolean  "active",                     default: false
     t.string   "address_line_1"
     t.string   "address_line_2"
     t.string   "state"
@@ -187,8 +208,8 @@ ActiveRecord::Schema.define(version: 20200714200527) do
     t.integer  "grade_end",                   limit: 2
     t.integer  "lexile_begin"
     t.integer  "lexile_end"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "available_copies"
     t.integer  "total_copies"
     t.string   "area_of_study"
@@ -206,12 +227,12 @@ ActiveRecord::Schema.define(version: 20200714200527) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                             default: "", null: false
-    t.string   "encrypted_password",                default: "", null: false
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                     default: 0,  null: false
+    t.integer  "sign_in_count",                      default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -229,16 +250,16 @@ ActiveRecord::Schema.define(version: 20200714200527) do
     t.string   "home_library",           limit: 6
     t.integer  "school_id"
     t.text     "alt_barcodes"
+    t.index "lower((email)::text), lower((alt_email)::text)", name: "index_users_on_email_or_alt_email_lower", using: :btree
     t.index ["barcode"], name: "index_users_barcode", unique: true, using: :btree
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-    t.index ["school_id"], name: "index_users_on_school_id", using: :btree
   end
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
-    t.bigint   "item_id",        null: false
+    t.bigint   "item_id",                    null: false
     t.string   "event",          null: false
     t.string   "whodunnit"
     t.text     "object"

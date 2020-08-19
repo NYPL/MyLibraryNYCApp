@@ -76,7 +76,7 @@ class BibsControllerTest < MiniTest::Test
 
     # Case: 3
     # Test if Teacherset record not found in database return nil
-    it 'test delete teacher sets deom es' do
+    it 'test delete teacher sets from es' do
       resp = nil
       teacherset_resp = nil
       @mintest_mock1.expect(:call, [])

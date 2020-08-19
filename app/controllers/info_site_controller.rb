@@ -21,4 +21,12 @@ class InfoSiteController < ApplicationController
   
 
   def digital_resources; end
+
+
+  def help; end
+
+  
+  def faq
+    @faqs = FaqsController.new.frequently_asked_questions
+  end
 end
