@@ -12,7 +12,7 @@
         <br>
         <div id="participating_schools_id">
           <% if s["school_names"].present?%>
-            <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %><br><br>
+            <a style="margin-left: 3rem;" name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %><br><br>
           <% end %>
           <% s["school_names"].each do |i|  %>
              <p><%= i %></p>
@@ -20,7 +20,6 @@
           <% end %>
         </div>
       <% end %>
-      
     </div>
   </div>
 </div>
@@ -30,11 +29,24 @@
   $(document).ready(function(){
   $("#search_participating_school").on("keyup", function() {
     var value = $(this).val().toLowerCase();
-   // if (value.length >= 3) {
+   //if (value.length >= 3) {
       $("#participating_schools_id *").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
-   // }
+  //}
   });
 });
 </script>
+
+
+<style type="text/css">
+  #participating_schools_id p {
+  margin-left: 3rem;
+  margin-bottom: inherit;
+}
+
+#participating_schools_id a {
+  margin-left: 3rem;
+ /* margin-bottom: inherit;*/
+}
+</style>
