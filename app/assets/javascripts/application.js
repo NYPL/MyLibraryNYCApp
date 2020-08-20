@@ -31,3 +31,23 @@ $(document).ready(function() {
     $("#error_messages_id").hide();
   });
 });
+
+$(document).ready(function() {
+  $("#search_participating_school").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    var count = 0;
+    $("#participating_schools_id *").filter(function() {
+      if ($(this).text().toLowerCase().indexOf(value) > -1) count++;
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+
+    if(count == 0){
+      $("#schools_not_found").html(value + " did not match any schools");
+      $("#participating_schools_id *").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) == -1)
+      });
+    } else {
+      $("#schools_not_found").html("");
+    }
+  });
+});
