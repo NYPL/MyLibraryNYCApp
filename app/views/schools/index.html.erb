@@ -14,10 +14,10 @@
         <% @schools_arr.each do |s| %>
         <div id="participating_schools_id_1">
           <% if s["school_names"].present?%>
-            <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %><br>
+            <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %>
           <% end %>
           <% s["school_names"].each do |i|  %>
-             <span style="display: block"><%= i %></span>
+             <span style="display: block;"><%= i %></span>
           <% end %>
         </div>
       <% end %>
@@ -36,10 +36,13 @@
     });
 
     if(count == 0){
-      $("#schools_not_found").html("Schools are not found")
-    }
-    else {
-      $("#schools_not_found").html("")
+      $("#schools_not_found").html(value + " did not match any schools");
+      $("#participating_schools_id *").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) == -1)
+      });
+
+    }else {
+      $("#schools_not_found").html("");
     }
   });
 });
@@ -47,12 +50,16 @@
 
 <style type="text/css">
   #participating_schools_id p { margin-bottom: -20px; }
-  #participating_schools_id_1 { margin: 1em 0; }
-  #schools_not_found { margin: 1em 0; }
+  #participating_schools_id_1 { margin: 1em 0; margin-bottom: 2em;}
+  #schools_not_found { margin: 1em 0; color: red; }
 </style>
 
 
 <style type="text/css">
+
+  .alphabet_anchor {
+    /*margin-bottom: 2em;*/
+  }
   .participating_schools { font-size: xx-large; font-weight: bold; }
 
   .school_header {font-size: large; font-weight: bold;}
