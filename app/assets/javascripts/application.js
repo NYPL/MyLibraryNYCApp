@@ -32,7 +32,6 @@ $(document).ready(function() {
   });
 });
 
-
 $(document).ready(function() {
   $("#search_participating_school").on("keyup", function() {
     var value = $(this).val().toLowerCase();
@@ -43,10 +42,12 @@ $(document).ready(function() {
     });
 
     if(count == 0){
-      $("#schools_not_found").html("Schools are not found")
-    }
-    else {
-      $("#schools_not_found").html("")
+      $("#schools_not_found").html(value + " did not match any schools");
+      $("#participating_schools_id *").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) == -1)
+      });
+    } else {
+      $("#schools_not_found").html("");
     }
   });
 });
