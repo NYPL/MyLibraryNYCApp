@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SchoolsController < ApplicationController
-  layout 'info_site/application'
   
   def index
     schools = School.active

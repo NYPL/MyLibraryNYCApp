@@ -34,6 +34,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   $("#search_participating_school").on("keyup", function() {
+    var search_keyword = $(this).val();
     var value = $(this).val().toLowerCase();
     var count = 0;
     $("#participating_schools_id *").filter(function() {
@@ -42,7 +43,7 @@ $(document).ready(function() {
     });
 
     if(count == 0){
-      $("#schools_not_found").html(value + " did not match any schools");
+      $("#schools_not_found").html(search_keyword + " did not match any schools");
       $("#participating_schools_id *").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) == -1)
       });
