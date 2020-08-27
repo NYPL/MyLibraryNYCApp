@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -12,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200813141524) do
-    
+ActiveRecord::Schema.define(version: 20200826062613) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -250,6 +248,7 @@ ActiveRecord::Schema.define(version: 20200813141524) do
     t.string   "home_library",           limit: 6
     t.integer  "school_id"
     t.text     "alt_barcodes"
+    t.string   "status"
     t.index "lower((email)::text), lower((alt_email)::text)", name: "index_users_on_email_or_alt_email_lower", using: :btree
     t.index ["barcode"], name: "index_users_barcode", unique: true, using: :btree
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

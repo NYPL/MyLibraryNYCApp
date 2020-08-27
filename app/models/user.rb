@@ -39,6 +39,9 @@ class User < ActiveRecord::Base
   end
 
 
+  STATUS_LABELS = {'barcode_pending' => 'barcode_pending', 'complete' => 'complete'}
+
+
   ## NOTE: Validation methods, including this one, are called twice when
   # making new user from the admin interface. While not a behavior we want,
   # it doesn't currently pose a problem.
