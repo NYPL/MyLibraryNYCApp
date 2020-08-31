@@ -2,8 +2,6 @@
 
 class InfoSiteController < ApplicationController
 
-  layout 'info_site/application'
-
   # Display's info-site home page
   def index; end
 

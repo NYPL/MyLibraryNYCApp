@@ -1,6 +1,8 @@
 <% unless @hide_breadcrumbs %>
   <div id="breadcrumb">
-    <%= link_to "Home", "/app#/teacher_sets" %> <i class="fa fa-angle-right"></i>
+    <% unless params["host"] == ENV['MLN_INFO_SITE_HOSTNAME'] && params["controller"] == "info_site" && params["action"] == "index" %>
+      <%= link_to "Home", "/app#/teacher_sets" %> <i class="fa fa-angle-right"></i>
+    <% end %>
     <% case request.fullpath %>
     <% when "/account", "/users/edit" %>
       Account
@@ -8,12 +10,16 @@
       Help
     <% when "/schools" %>
       Participating schools
+    <% when "/faq" %>
+      FAQs
     <% when "/users/start" %>
       Get Started
     <% when "/users/signup", "/users" %>
       Sign Up
     <% when "/teacher_sets/#{params[:id]}/teacher_set_holds" %>
       Teacher Set Holds
+    <% when "/" %>
+      
     <% else %>
       <%= request.fullpath %>
     <% end %>
