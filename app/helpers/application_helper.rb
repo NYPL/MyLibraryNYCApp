@@ -25,4 +25,9 @@ module ApplicationHelper
 
     html.html_safe
   end
+
+
+  def info_site_home_page?
+    params["host"] == ENV['MLN_INFO_SITE_HOSTNAME'] && params["controller"] == "info_site" && params["action"] == "index"
+  end
 end
