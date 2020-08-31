@@ -37,17 +37,3 @@
     }
   </style>
 <% end %>
-
-<div id="timeout-warning">
-  Your session is about to expire.
-  <span id="extend-session-link" onClick="extendSession();">Extend my session</span>.
-  <iframe id="extend-session-iframe" src="/extend_session_iframe" width="100" height="100" style="display:none;">
-    <!-- We reload this iframe when a user needs to extend a session. That resets -->
-  </iframe>
-  <script>
-    function extendSession() {
-      document.getElementById('extend-session-iframe').contentDocument.location.reload(true);
-      $('#timeout-warning').hide();
-    }
-  </script>
-</div>
