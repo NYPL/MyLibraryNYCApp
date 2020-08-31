@@ -28,3 +28,25 @@
   <%= render "layouts/timeout" if current_user %>
 </body>
 </html>
+
+<% if params["host"] == ENV['MLN_INFO_SITE_HOSTNAME'] && params["controller"] == "info_site" && params["action"] == "index" %>
+  <style type="text/css">
+    .container {
+      max-width: 1024px;
+    }
+  </style>
+<% end %>
+
+<div id="timeout-warning">
+  Your session is about to expire.
+  <span id="extend-session-link" onClick="extendSession();">Extend my session</span>.
+  <iframe id="extend-session-iframe" src="/extend_session_iframe" width="100" height="100" style="display:none;">
+    <!-- We reload this iframe when a user needs to extend a session. That resets -->
+  </iframe>
+  <script>
+    function extendSession() {
+      document.getElementById('extend-session-iframe').contentDocument.location.reload(true);
+      $('#timeout-warning').hide();
+    }
+  </script>
+</div>
