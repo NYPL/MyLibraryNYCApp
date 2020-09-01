@@ -14,12 +14,14 @@
     <div id="participating_schools_id">
       <% @schools_arr.each do |s| %>
       <div id="participating_schools_id_1">
-        <% if s["school_names"].present?%>
-          <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %>
-        <% end %>
-        <% s["school_names"].each do |i|  %>
-           <span style="display: block;"><%= i %></span>
-        <% end %>
+        <ul>
+          <% if s["school_names"].present?%>
+            <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %>
+          <% end %>
+          <% s["school_names"].each do |i|  %>
+             <li style="display: block;"><%= i %></li>
+          <% end %>
+        </ul>
       </div>
     <% end %>
   </div>
