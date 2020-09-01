@@ -157,3 +157,55 @@ th, td {
   background: #333;
   max-width: 212px;
 }
+
+.redfamily {
+  color: red; 
+}
+.school_inbox, .close-icon, .search-wrapper {
+  position: relative;
+  padding: 10px;
+}
+.search-wrapper {
+ /* width: 16rem;*/
+}
+.school_inbox {
+  width: 80%;
+  border: 1px solid #ccc;
+  outline: 0;
+  border-radius: 3px;
+  margin: 6px -9px !important;
+}
+.school_inbox:focus {
+  border: 2px solid #bebede;
+}
+.close-icon {
+  border:1px solid transparent;
+  background-color: transparent;
+  display: inline-block;
+  vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+  margin-left: -28px;
+}
+.close-icon:after {
+  content: "X";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: #CCC;
+  z-index:1;
+  left: 17rem;
+  bottom: 35px;
+  margin: auto;
+  padding: 2px;
+  border-radius: 50%;
+  text-align: center;
+  color: white;
+  font-weight: normal;
+  font-size: 12px;
+  box-shadow: 0 0 2px #000000;
+  cursor: pointer;
+}
+.school_inbox:not(:valid) ~ .close-icon {
+  display: none;
+}
