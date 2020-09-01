@@ -8,7 +8,7 @@
       <li class="nav-hover-color"><%= link_to "Search Teacher Sets", "//#{ENV['MLN_SETS_SITE_HOSTNAME']}/app#/teacher_sets"  %></li>
       <% if user_signed_in? %>
         <li class="nav-hover-color"><%= link_to "Account", account_url %></li>
-      <% elsif user_signed_in? == false && info_site_home_page? %>
+      <% elsif user_signed_in? == false && params["host"] == ENV['MLN_INFO_SITE_HOSTNAME'] && params["controller"] == "info_site" %>
         <li class="nav-hover-color"><%= link_to "Account", "//#{ENV['MLN_SETS_SITE_HOSTNAME']}/users/start" %></li>
       <% else %>
         <li class="nav-hover-color"><%= link_to "Sign In".html_safe, new_user_session_path %></li>
