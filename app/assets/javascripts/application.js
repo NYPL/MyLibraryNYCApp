@@ -42,16 +42,21 @@ $(document).ready(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
     if(count == 0){
+      $("#schools_not_found").show();
       $("#schools_not_found").html(search_keyword + " did not match any schools");
       $("#participating_schools_id *").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) == -1)
       });
     } else {
+      $("#schools_not_found").hide();
       $("#schools_not_found").html("");
     }
   });
 });
 
+function hideSchoolNotFoundMessage() {
+  $("#schools_not_found").hide();
+}
 
 $( document ).ready(function() {
   //toggle the component with class answers

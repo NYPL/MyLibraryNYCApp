@@ -6,12 +6,10 @@
       <a href="##">#</a> <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a> <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a> <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a> <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a> <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a> <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a> <a href="#Y">Y</a> <a href="#Z">Z</a> <br><br>
     </div>
     <div>or type the name of your school in the box below</div>
-   <div class="search-wrapper">
-    <form>
+    <form class="search-wrapper">
       <input id="search_participating_school" type="text" placeholder="Search school" name="focus" required class="school_inbox" />
-      <button class="close-icon" type="reset"></button>
+      <button class="close-icon" type="reset" onclick="hideSchoolNotFoundMessage()"></button>
     </form>
-  </div>
     <div id="schools_not_found" class = "schools_not_found"></div></br>
     <div id="participating_schools_id">
       <% @schools_arr.each do |s| %>
@@ -27,37 +25,23 @@
   </div>
 </div>
 
-<script type="text/javascript">
-  if ($("#search_participating_school").val() == ""){
-    $("#schools_not_found").hide();
-  }
-</script>
-
 <style type="text/css">
-body {
-  background-color: #f1f1f1;
-  font-family: Helvetica,Arial,Verdana;
-
-}
-h1 {
-  color: green;
-  text-align: center;
-}
 .redfamily {
   color: red; 
 }
-.school_inbox,.close-icon,.search-wrapper {
+.school_inbox, .close-icon, .search-wrapper {
   position: relative;
   padding: 10px;
 }
 .search-wrapper {
-  width: 16rem;
+ /* width: 16rem;*/
 }
 .school_inbox {
   width: 80%;
   border: 1px solid #ccc;
   outline: 0;
   border-radius: 3px;
+  margin: 6px -9px !important;
 }
 .school_inbox:focus {
   border: 2px solid #bebede;
@@ -69,13 +53,13 @@ h1 {
   vertical-align: middle;
   outline: 0;
   cursor: pointer;
+  margin-left: -28px;
 }
 .close-icon:after {
   content: "X";
   display: block;
   width: 16px;
   height: 16px;
-  position: absolute;
   background-color: #CCC;
   z-index:1;
   left: 17rem;
@@ -91,10 +75,6 @@ h1 {
   cursor: pointer;
 }
 .school_inbox:not(:valid) ~ .close-icon {
-  display: none;
-}
-
-.school_inbox:not(:valid) ~ .schools_not_found {
   display: none;
 }
 </style>
