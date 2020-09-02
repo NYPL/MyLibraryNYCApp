@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   end
 
 
-  STATUS_LABELS = {'barcode_pending' => 'barcode_pending', 'complete' => 'complete'}
+  STATUS_LABELS = {'barcode_pending' => 'barcode_pending', 'complete' => 'complete'}.freeze
 
 
   ## NOTE: Validation methods, including this one, are called twice when
