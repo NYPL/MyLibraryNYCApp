@@ -17,6 +17,14 @@ class RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params)
     if resource.valid?
       begin
+        # save the user object as pending
+        resource.save_as_pending
+
+        # find fresh new barcode that's available in both MLN db and Sierra
+        resource.find_unique_new_barcode
+
+        # TODO: on timeouts/exceptions/negative results,
+        # don't send request to Patron Service
         resource.send_request_to_patron_creator_service
         resource.save
         yield resource if block_given?
@@ -53,7 +61,7 @@ class RegistrationsController < Devise::RegistrationsController
   # the current user in place.
   def update
     # Here Updates current user alt_email and schooid.
-    current_user.alt_email = user_params["alt_email"] if user_params["alt_email"].present? 
+    current_user.alt_email = user_params["alt_email"] if user_params["alt_email"].present?
     current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
     current_user.save!
 
@@ -84,7 +92,7 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
 
-  # Below code for custom error messages. 
+  # Below code for custom error messages.
   # Because Devise gem display same attributes from database.
   # eg: 'Pin does not meet our requirements. Please try again' instead of this error message
   # display  'PIN(here PIN is capital letters) does not meet our requirements. Please try again.'
@@ -122,4 +130,3 @@ class RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :alt_email, :school_id, :pin])
   end
 end
-
