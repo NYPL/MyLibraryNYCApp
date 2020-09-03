@@ -365,14 +365,13 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  width: 100%;
 }
 
 li a {
   display: inline-block;
   color: white;
   text-align: center;
-  padding: 14px 16px;
+  padding: 7px 5px 5px 7px;
   text-decoration: none;
   background-color: transparent;
 
@@ -512,4 +511,6 @@ footer {
   text-transform: lowercase;
 }
 
-
+.float-right {
+  float: right;
+}
