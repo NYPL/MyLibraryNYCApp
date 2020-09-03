@@ -6,17 +6,22 @@
       <a href="##">#</a> <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a> <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a> <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a> <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a> <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a> <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a> <a href="#Y">Y</a> <a href="#Z">Z</a> <br><br>
     </div>
     <div>or type the name of your school in the box below</div>
-    <input class = "school_inbox" id="search_participating_school" type="text" placeholder="Search school..">
+    <form class="search-wrapper">
+      <input id="search_participating_school" type="text" placeholder="Search school" name="focus" required class="school_inbox" />
+      <button class="close-icon" type="reset" onclick="hideSchoolNotFoundMessage()"></button>
+    </form>
     <div id="schools_not_found" class = "schools_not_found"></div></br>
     <div id="participating_schools_id">
       <% @schools_arr.each do |s| %>
       <div id="participating_schools_id_1">
-        <% if s["school_names"].present?%>
-          <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %>
-        <% end %>
-        <% s["school_names"].each do |i|  %>
-           <span style="display: block;"><%= i %></span>
-        <% end %>
+        <ul>
+          <% if s["school_names"].present?%>
+            <a name=<%= s["alphabet_anchor"] %>></a><%= s["alphabet_anchor"] %>
+          <% end %>
+          <% s["school_names"].each do |i|  %>
+             <li style="display: block;"><%= i %></li>
+          <% end %>
+        </ul>
       </div>
     <% end %>
   </div>
