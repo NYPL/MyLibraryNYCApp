@@ -311,9 +311,9 @@ class User < ActiveRecord::Base
     # if we're being asked to increment our barcode because it's
     # non-unique in Sierra, then do so here
     if self.barcode
-      # 10 is a cheap way of helping prevent collisions, and we
-      # have the numeric range to spare.
-      self.assign_attributes({ barcode: self.barcode + 10})
+      # random number between 5 and 10 is a cheap way of helping prevent collisions,
+      # and we have the barcode range to spare.
+      self.assign_attributes({ barcode: self.barcode + rand(5..10)})
       return self.barcode
     end
 
@@ -352,6 +352,9 @@ class User < ActiveRecord::Base
     # New users and users whose records have been purged from Sierra might not.
     # Return "true" if a user is found, false otherwise.  Default to "false".
     # Throw an exception if called with malformed data.
+
+    # TODO: delete below line, it's for testing
+    return true
 
     if barcode_to_check.blank?
       return false
