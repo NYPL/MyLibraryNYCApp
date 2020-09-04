@@ -1,6 +1,8 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
+require 'pry'
+
 class User < ActiveRecord::Base
   include Exceptions
   include LogWrapper
@@ -116,7 +118,29 @@ class User < ActiveRecord::Base
   end
 
 
+  # Another piece of code has determined this user is all set to be called
+  # complete and done.  Note: Usually, expect the next step to be the calling of
+  # Patron Service to create the user in Sierra.
+  def save_as_complete
+    #binding.pry
+    puts "save_as_complete: start"
+    self.status = STATUS_LABELS['complete']
+    puts "save_as_complete: barcode=#{self.barcode}, saved status=#{self.status}"
+
+    #puts "raising error here"
+    #sleep(300)
+    #raise Exceptions::InvalidResponse, "Invalid status code of something or other"
+
+    self.save
+    puts "save_as_complete: end"
+  end
+
+
+  # If the user's barcode is not yet finalized, then set its status to
+  # 'pending' and save.  In the future, there may be other conditions that
+  # could set the user to "pending", and we'll be checking for those here, as well.
   def save_as_pending
+    # do we need to fill in a provisional barcode?
     if !self.barcode.present?
       self.barcode = self.assign_barcode
     end
@@ -387,8 +411,10 @@ class User < ActiveRecord::Base
     # b) make sure it'd be new and unique in Sierra
     # c) repeat until b) is true
 
+    puts "find_unique_new_barcode: start"
     # Enqueue a job to be performed as soon as the queuing system is free.
     FindAvailableUserBarcodeJob.new.perform(user: self)
+    puts "find_unique_new_barcode: end"
   end
 
 
@@ -397,7 +423,5 @@ class User < ActiveRecord::Base
 
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
-
-
 
 end
