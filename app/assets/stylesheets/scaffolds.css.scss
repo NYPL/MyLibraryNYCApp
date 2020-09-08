@@ -391,12 +391,32 @@ li a {
     margin: 0px -4px;
   }
 
+  @media not all and (min-width: 345px) {
+    margin: 0px -6px;
+  }
+
+  @media not all and (min-width: 335px) {
+    margin: 0px -8px;
+  }
+
   @media not all and (min-width: 325px) {
     margin: 0px -8px;
   }
 
+  @media not all and (min-width: 311px) {
+    margin: 0px -10px;
+  }
+
+  @media not all and (min-width: 290px) {
+    margin: 0px -12px;
+  }
+
   @media not all and (min-width: 285px) {
      margin: 0px -8px;
+  }
+
+  @media not all and (min-width: 277px) {
+     margin: 0px -12px;
   }
 
 }
@@ -446,15 +466,6 @@ a {
       width: 75px;
       font-size: 0.6em;
     }
-
-
-    @media only screen and (min-width : 321px) {
-
-    }
-
-    @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
-/* Styles */
-}
 
     @media all and (max-width: 593px) {
       width: 75px;
