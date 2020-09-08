@@ -16,8 +16,8 @@
 
 .maintenance-banner-color {
   background: #fff7a5;
-  padding-bottom:15px;
-  padding-top:15px;
+  padding-bottom: 1em;
+  padding-top: 2em;
   text-align: center;
   
   @media all and (max-width: 590px) {
@@ -36,11 +36,11 @@
   }
 
   @media not all and (min-width: 410px) {
-    padding: 1rem 0em 0em 0em;
+    padding: 1rem 0em 1em 0em;
   }
 
   @media not all and (min-width: 355px) {
-    padding: 1rem 0em 1em 0em;
+    padding: 1rem 1em 1em 0em;
   }
 
   @media not all and (min-width: 280px) {
