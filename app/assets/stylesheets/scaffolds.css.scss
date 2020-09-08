@@ -379,9 +379,26 @@ li a {
     margin: 0px -11px;
   }
 
-  @media all and (max-width: 625px) {
-    margin: 0px -11px;
+  @media all and (max-width: 590px) {
+    margin: 0px -9px;
   }
+
+  @media not all and (min-width: 440px) {
+    margin: 0px -3px;
+  }
+
+  @media not all and (min-width: 365px) {
+    margin: 0px -4px;
+  }
+
+  @media not all and (min-width: 365px) {
+    margin: 0px -8px;
+  }
+
+  @media not all and (min-width: 285px) {
+     margin: 0px -8px;
+  }
+
 }
 
 .nav-hover-color {

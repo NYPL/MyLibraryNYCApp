@@ -34,10 +34,6 @@
   padding-bottom:15px;
   padding-top:15px;
   text-align: center;
-
-  @media not all and (min-width: 799px) {
-    padding: 55px 0px 0px 0px !important;
-  }
 }
 
 .banner {
@@ -54,7 +50,7 @@
     padding: 3rem 0em 0em 0em;
   }
   @media not all and (min-width: 440px) {
-    padding: 5rem 0em 0em 0em;
+    padding: 1rem 0em 0em 0em;
   }
 
   @media not all and (min-width: 435px) {
@@ -62,11 +58,15 @@
   }
 
   @media not all and (min-width: 400px) {
-    padding: 3rem 0em 0em 0em;
+    padding: 1rem 0em 0em 0em;
   }
 
   @media not all and (min-width: 235px) {
     padding: 5rem 0em 0em 0em;
+  }
+
+  @media not all and (min-width: 410px) {
+    padding: 1rem 0em 0em 0em;
   }
 
   @media not all and (min-width: 160px) {
