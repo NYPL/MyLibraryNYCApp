@@ -9,9 +9,4 @@ require 'test_helper'
 
 class InfoSiteControllerTest < ActionController::TestCase
 
-  test "should get index" do
-    get :index
-    assert_response :success
-  end
-
 end
