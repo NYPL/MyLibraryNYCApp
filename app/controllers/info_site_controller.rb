@@ -2,10 +2,6 @@
 
 class InfoSiteController < ApplicationController
 
-  # Display's info-site home page
-  def index; end
-
-
   # Display's mylibrarynyc information
   def about; end
 
