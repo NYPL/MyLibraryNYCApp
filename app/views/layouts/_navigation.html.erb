@@ -1,20 +1,20 @@
 <nav class="navigation" role="navigation">
   <div class="container">
     <div class="site-logo" role="banner" class="nav-hover-color">
-        <%= link_to image_tag("mylibrarynyc-logo-white-mini.png", border: 0), "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/"  %>
+        <%= link_to image_tag("mylibrarynyc-logo-white-mini.png", border: 0), "//#{ENV['MLN_INFO_SITE_HOSTNAME']}"  %>
       </div>
     <ul class="nav nav--global__list float-right">
       <% if user_signed_in? %>
         <li class="nav-hover-color"><%= link_to "Account", account_url %></li>
       <% elsif user_signed_in? == false && params["host"] == ENV['MLN_INFO_SITE_HOSTNAME'] && params["controller"] == "info_site" %>
-        <li class="nav-hover-color"><%= link_to "Account", "//#{ENV['MLN_SETS_SITE_HOSTNAME']}/users/start" %></li>
+        <li class="nav-hover-color"><%= link_to "Account", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/users/start" %></li>
       <% else %>
         <li class="nav-hover-color"><%= link_to "Sign In".html_safe, new_user_session_path %></li>
       <% end %>
-      <li class="nav-hover-color"><%= link_to "Search Teacher Sets", "//#{ENV['MLN_SETS_SITE_HOSTNAME']}/app#/teacher_sets"  %></li>
+      <li class="nav-hover-color"><%= link_to "Search Teacher Sets", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/app#/teacher_sets"  %></li>
       <li class="nav-hover-color"><%= link_to "Help", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/help" %></li>
       <li class="nav-hover-color"><%= link_to "FAQs", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/faq" %></li>
-      <li class="nav-hover-color"><%= link_to "Participating Schools", "//#{ENV['MLN_SETS_SITE_HOSTNAME']}/schools" %></li>
+      <li class="nav-hover-color"><%= link_to "Participating Schools", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/schools" %></li>
     </ul>
   </div>
 </nav>
@@ -45,12 +45,7 @@
 </script>
 
 <style type="text/css">
-  .nav-panel {
-    padding-top: 15px;
-    padding-right: 90px;
-  }
   li {
-  display: inline-block;
-}
-
+    display: inline-block;
+  }
 </style>
