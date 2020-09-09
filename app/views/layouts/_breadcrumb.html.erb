@@ -19,9 +19,10 @@
     <% when "/teacher_sets/#{params[:id]}/teacher_set_holds" %>
       Teacher Set Holds
     <% when "/" %>
-      
-    <% else %>
-      <%= request.fullpath %>
+    
+    <% end %>
+    <% if params["controller"] == "schools" && params["action"] == "index" %>
+      Participating schools
     <% end %>
   </div>
 <% end %>

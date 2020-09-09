@@ -1,7 +1,7 @@
 <nav class="navigation" role="navigation">
   <div class="container">
     <div class="site-logo" role="banner" class="nav-hover-color">
-        <%= link_to image_tag("mylibrarynyc-logo-white-mini.png", border: 0), {action: 'index', controller: 'info_site'} %>
+        <%= link_to image_tag("mylibrarynyc-logo-white-mini.png", border: 0), "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/"  %>
       </div>
     <ul class="nav nav--global__list float-right">
       <% if user_signed_in? %>
