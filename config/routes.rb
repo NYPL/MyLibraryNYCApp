@@ -84,7 +84,6 @@ MyLibraryNYC::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
 
-  # MLN application supports multiple domains.
   root :to => 'home#index'
   match 'about/participating-schools' => 'home#participating_schools', via: [:get]
   match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get]

@@ -1,7 +1,8 @@
 <% if ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.downcase == "true" && ENV['MAINTENANCE_BANNER_TEXT'].present? %>
   <div class='maintenance-banner-color'>
     <div class="container" >
-      <%= ENV['MAINTENANCE_BANNER_TEXT'] %>
+      <%= ENV['MAINTENANCE_BANNER_TEXT'].html_safe %>
     </div>
   </div>
 <% end %>
+
