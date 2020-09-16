@@ -97,16 +97,17 @@ class ApplicationController < ActionController::Base
   # eg: https://www.mylibrarynyc.org/contacts-links -> https://www.mylibrarynyc.org/help
   # eg: https://www.mylibrarynyc.org/about/about-mylibrarynyc -> https://www.mylibrarynyc.org/faq
   def redirect_if_old_domain
-    if request.host == ENV['MLN_SETS_SITE_HOSTNAME']
-      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}#{request.fullpath}", :status => :moved_permanently 
+    if request.host == ENV['MLN_SETS_SITE_HOSTNAME'] && request.fullpath == "/help"
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}:3000/faq", :status => :moved_permanently
+    elsif request.host == ENV['MLN_SETS_SITE_HOSTNAME']
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}:3000#{request.fullpath}", :status => :moved_permanently 
     end
-
     if request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/contacts-links")
-      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/help", :status => :moved_permanently 
-    end
-
-    if request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/about/about-mylibrarynyc")
-      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/faq", :status => :moved_permanently 
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}:3000/help", :status => :moved_permanently 
+    elsif request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/about/about-mylibrarynyc")
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}:3000/faq", :status => :moved_permanently
+    elsif request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/about/participating-schools")
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}:3000/schools", :status => :moved_permanently
     end
   end
 
