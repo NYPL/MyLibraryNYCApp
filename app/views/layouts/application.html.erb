@@ -28,4 +28,11 @@
   <%= render "layouts/footer" %>
   <%= render "layouts/timeout" if current_user %>
 </body>
-</html> 
+</html>
+<% if params["controller"] == "home" && params["action"] == "index" %>
+  <style type="text/css">
+    #main {
+      max-width: 1024px;
+    }
+  </style>
+<% end %>

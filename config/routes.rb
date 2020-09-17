@@ -41,7 +41,6 @@ MyLibraryNYC::Application.routes.draw do
 
   match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post]
 
-  get 'help' => 'home#help', :as => :help, :constraints => { :host => ENV['MLN_SETS_SITE_HOSTNAME'] }
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
@@ -85,16 +84,13 @@ MyLibraryNYC::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
 
-  # MLN application supports multiple domains.
-  root :to => 'info_site#index', :constraints => {:host => ENV['MLN_INFO_SITE_HOSTNAME']}
-  match 'about/participating-schools' => 'info_site#participating_schools', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
-  match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
-  match '/contacts-links' => 'info_site#contacts', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
-  match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
-  match '/help' => 'info_site#help', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
-  match '/faq' => 'info_site#faq', via: [:get], :constraints => { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
-
-  root :to => "home#index"
+  root :to => 'home#index'
+  match '/about/participating-schools' => 'schools#index', via: [:get]
+  match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get]
+  match '/contacts-links' => 'info_site#contacts', via: [:get]
+  match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get]
+  match '/help' => 'home#help', via: [:get]
+  match '/faq' => 'home#faq', via: [:get]
   
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

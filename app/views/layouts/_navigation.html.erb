@@ -1,17 +1,21 @@
 <nav class="navigation" role="navigation">
   <div class="container">
-    <%= link_to "<i class='fa fa-book'></i> Learn More".html_safe, 'http://mylibrarynyc.org', :class=>"link-learn-more" %>
-    <% if user_signed_in? %>
-      <%= link_to "<span>Dashboard</span>".html_safe, app_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
-    <% else %>
-      <%= link_to "<span>Home</span>".html_safe, root_url, :class=>"link-home", "aria-label" => "Home-Logo" %>
-    <% end %>
-    <%= link_to "<i class='fa fa-question'></i> Help".html_safe, help_url %>
-    <% if user_signed_in? %>
-      <%= link_to "<i class='fa fa-user'></i> Account".html_safe, account_url %>
-    <% else %>
-      <%= link_to "<i class='fa fa-user'></i> Sign In".html_safe, new_user_session_path %>
-    <% end %>
+    <div class="site-logo" role="banner" class="nav-hover-color">
+        <%= link_to image_tag("mylibrarynyc-logo-white-mini.png", border: 0), "//#{ENV['MLN_INFO_SITE_HOSTNAME']}"  %>
+      </div>
+    <ul class="nav nav--global__list float-right">
+      <% if user_signed_in? %>
+        <li class="nav-hover-color"><%= link_to "Account", account_url %></li>
+      <% elsif user_signed_in? == false && params["host"] == ENV['MLN_INFO_SITE_HOSTNAME'] && params["controller"] == "info_site" %>
+        <li class="nav-hover-color"><%= link_to "Account", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/users/start" %></li>
+      <% else %>
+        <li class="nav-hover-color"><%= link_to "Sign In".html_safe, new_user_session_path %></li>
+      <% end %>
+      <li class="nav-hover-color"><%= link_to "Search Teacher Sets", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/app#/teacher_sets"  %></li>
+      <li class="nav-hover-color"><%= link_to "Help", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/help" %></li>
+      <li class="nav-hover-color"><%= link_to "FAQs", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/faq" %></li>
+      <li class="nav-hover-color"><%= link_to "Participating Schools", "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/schools" %></li>
+    </ul>
   </div>
 </nav>
 
@@ -39,3 +43,9 @@
   ga('create', 'UA-1420324-121', {'allowAnchor': true});
   ga('send', 'pageview', { 'page': location.pathname + location.search + location.hash});
 </script>
+
+<style type="text/css">
+  li {
+    display: inline-block;
+  }
+</style>

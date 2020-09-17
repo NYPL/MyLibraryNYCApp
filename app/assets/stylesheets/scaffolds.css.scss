@@ -358,50 +358,133 @@ input.fakespan {
       margin: 0;
     }
   }
-  a {
-    color: $white;
-    display: block;
-    float: right;
-    width: 60px;    
-    height: $navHeight - 10;
-    line-height: 10px;
-    text-align: center;
-    text-decoration: none;
-    white-space: nowrap;
-    background: $red;
-    margin: 5px 5px 5px 0;
-    font-size: 12px;
-    @include border-radius(5px);
-    &:hover {
-      background: $red;
-    }
-    i {
-      display: block;
-      line-height: 20px;
-    }
-    &.link-home {
-      float: left;
-      margin-left: 5px;
-      width: 130px;
-      background: url(/assets/mylibrarynyc-logo-white-mini.png) center no-repeat;
-      background-size: contain;
-      background-color: transparent;
 
-      span {
-        display: none;
-      }
-    }
-    &.link-learn-more {
-      width: 75px;
-    }
-    &.active {
-      color: $red;
-      background: $white; //darken($red,5%);
-    }
-    @media (max-width: $reallySmallBreakpoint) {
-      font-size: 0.8em;
-    }
+ul {
+  list-style-type: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 7px 5px 5px 7px;
+  text-decoration: none;
+  background-color: transparent;
+
+  @media all and (max-width: 625px) {
+    margin: 0px -11px;
   }
+
+  @media all and (max-width: 590px) {
+    margin: 0px -9px;
+  }
+
+  @media not all and (min-width: 440px) {
+    margin: 0px -3px;
+  }
+
+  @media not all and (min-width: 365px) {
+    margin: 0px -4px;
+  }
+
+  @media not all and (min-width: 345px) {
+    margin: 0px -6px;
+  }
+
+  @media not all and (min-width: 335px) {
+    margin: 0px -8px;
+  }
+
+  @media not all and (min-width: 325px) {
+    margin: 0px -8px;
+  }
+
+  @media not all and (min-width: 311px) {
+    margin: 0px -10px;
+  }
+
+  @media not all and (min-width: 290px) {
+    margin: 0px -12px;
+  }
+
+  @media not all and (min-width: 285px) {
+     margin: 0px -8px;
+  }
+
+  @media not all and (min-width: 277px) {
+     margin: 0px -12px;
+  }
+
+}
+
+.nav-hover-color {
+  :hover {
+    background: #c4262d;
+  }
+
+}
+
+li a:hover{text-decoration:underline;cursor:pointer}
+
+a {
+  color: $white;
+  display: block;
+  float: right;
+  height: $navHeight - 10;
+  line-height: 10px;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  margin: 5px 5px 5px 0;
+  font-size: 12px;
+  @include border-radius(5px);
+  &:hover {
+    background: $red;
+  }
+  i {
+    display: block;
+    line-height: 20px;
+  }
+  &.link-home {
+    float: left;
+    margin-left: 5px;
+    width: 130px;
+    background: url(/assets/mylibrarynyc-logo-white-mini.png) center no-repeat;
+    background-size: contain;
+    background-color: transparent;
+
+    @media all and (max-width: 500px) {
+      width: 95px;
+      font-size: 0.6em;
+    }
+
+    @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+      width: 75px;
+      font-size: 0.6em;
+    }
+
+    @media all and (max-width: 593px) {
+      width: 75px;
+      font-size: 0.6em;
+    }
+
+    span {
+      display: none;
+    }
+
+  }
+  &.link-learn-more {
+    width: 75px;
+  }
+  &.active {
+    color: $red;
+    background: $white; //darken($red,5%);
+  }
+}
 }
 
 #breadcrumb {
@@ -454,4 +537,8 @@ footer {
 
 .lowercase {
   text-transform: lowercase;
+}
+
+.float-right {
+  float: right;
 }
