@@ -99,6 +99,8 @@ class ApplicationController < ActionController::Base
   def redirect_if_old_domain
     if request.host == ENV['MLN_SETS_SITE_HOSTNAME'] && request.fullpath == "/help"
       redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/faq", :status => :moved_permanently
+    elsif request.host == ENV['MLN_SETS_SITE_HOSTNAME'] && request.fullpath == "/"
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/app#/teacher_sets", :status => :moved_permanently 
     elsif request.host == ENV['MLN_SETS_SITE_HOSTNAME']
       redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}#{request.fullpath}", :status => :moved_permanently 
     end
