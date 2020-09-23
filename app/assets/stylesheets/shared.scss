@@ -76,3 +76,10 @@
 .school_inbox { box-sizing:border-box; height:2em; padding:.5em; width: 19em; }
 
 .page-content { margin: 2rem; padding: 1rem; }
+
+.sets_requested { display: none; }
+
+@media all and (max-width: 801px) {
+  .sets_requested { display: inline-block; }
+  .holds_quantity { display: none; }
+}
