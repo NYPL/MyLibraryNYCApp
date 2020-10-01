@@ -13,7 +13,7 @@ class GoogleSpreadSheet
     @worksheet = @spreadsheet.worksheets.first
   end
 
-  # Update news letter email to google sheets
+  # Create news-letter email into google sheets
   def create_news_letter_email_in_google_sheets(params)
     google_sheet_client
     new_row = params["email"]
