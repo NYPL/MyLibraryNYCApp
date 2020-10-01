@@ -31,8 +31,14 @@ class AwsParameterStoreController
 
 
   def google_sheet_credentials
-    client_secret_body = news_letter_google_sheet_credentials
-    JSON.parse client_secret_body.value if client_secret_body.present?
+    begin
+      client_secret_body = news_letter_google_sheet_credentials
+      JSON.parse client_secret_body.value if client_secret_body.present?
+    rescue Aws::Errors::ServiceError => e
+      LogWrapper.log('ERROR', {'message' => "Error occured while reading the google credential from aws parameter store. #{e.message}" , 
+                     'method' => 'google_sheet_credentials'})
+      raise e
+    end
   end
 
 
