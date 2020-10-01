@@ -5,6 +5,7 @@ Bundler.require
 
 class GoogleSpreadSheet
 
+  # Get google sheet credentials from AwsParameterStore.
   def google_sheet_client
     client_secret_body = AwsParameterStoreController.new.google_sheet_credentials
     session = GoogleDrive::Session.from_service_account_key(StringIO.new(JSON.dump(client_secret_body)))
@@ -12,7 +13,7 @@ class GoogleSpreadSheet
     @worksheet = @spreadsheet.worksheets.first
   end
 
-
+  # Update news letter email to google sheets
   def create_news_letter_email_in_google_sheets(params)
     google_sheet_client
     new_row = params["email"]
