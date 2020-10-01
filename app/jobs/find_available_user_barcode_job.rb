@@ -17,7 +17,8 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
     # TODO: handle user == nil
 
-    # TODO: this will cause an infinite loop.  move the retrying to its own job hook
+    # TODO: this will cause an infinite loop on barcode found.
+    # move the retrying to its own job hook
     already_there = true
     while already_there == true do
       # ask the user to ask Platform Service to ask Sierra if it
@@ -33,6 +34,8 @@ class FindAvailableUserBarcodeJob < ApplicationJob
         puts "FindAvailableUserBarcodeJob.perform: barcode was in sierra, calling user.assign_barcode, user.barcode=#{user.barcode}"
         user.assign_barcode
         puts "FindAvailableUserBarcodeJob.perform: called user.assign_barcode, user.barcode=#{user.barcode}"
+        # wait a bit before hitting Sierra up again
+        sleep(5)
       end
     end
 
@@ -60,7 +63,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
   end
 
 
-  rescue_from(ActiveRecord::RecordNotFound) do |exception|
+  rescue_from(Exceptions::InvalidResponse) do |exception|
     # Do something with the exception
     # TODO
   end
