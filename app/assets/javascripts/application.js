@@ -78,3 +78,33 @@ $( document ).ready(function() {
     }
   });
 });
+
+
+function hidevalidation(email) {
+  if(email  != ""){
+    $('#nl_message').html("");
+    $('#nl_message').hide();
+  }
+}
+
+
+function validateNewsLetterEmail(email) {
+  if(email == ""){
+    $('#nl_message').html("Please enter a valid email address");
+    $('#nl_message').css("color", "red");
+    $('#nl_message').show();
+     return false;
+   }else{
+    $('#nl_message').html("");
+    $('#nl_message').hide();
+   }
+ 
+  if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){ 
+    return (true)
+  }else{
+    $('#nl_message').html("Please enter a valid email address");
+    $('#nl_message').css("color", "red");
+    $('#nl_message').show();
+    return (false)
+  }
+}

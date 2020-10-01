@@ -40,6 +40,8 @@ MyLibraryNYC::Application.routes.draw do
   match 'settings' => 'settings#index', via: [:get, :patch, :post]
 
   match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post]
+  match '/news_letter/index' => 'news_letter#index', via: [:get, :post]
+  match '/news_letter/news_letter_email_is_valid' => 'news_letter#news_letter_email_is_valid', via: [:get, :post]
 
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
