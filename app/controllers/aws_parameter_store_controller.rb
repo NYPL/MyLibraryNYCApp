@@ -7,7 +7,7 @@ class AwsParameterStoreController
     @systems_manager = create_client
   end
 
-
+  # Call AWS parameter store to get google-sheet credential values.
   def get_parameter_store_values(parameter_name)
     begin
       response = @systems_manager.get_parameter({

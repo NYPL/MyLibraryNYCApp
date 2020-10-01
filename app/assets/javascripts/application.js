@@ -88,6 +88,7 @@ function hideNewsLetterValidation(email) {
 }
 
 
+// validate news letter email address.
 function validateNewsLetterEmail(email) {
   if(email == ""){
     $('#nl_message').html("Please enter a valid email address");
