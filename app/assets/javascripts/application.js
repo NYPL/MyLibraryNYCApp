@@ -80,7 +80,7 @@ $( document ).ready(function() {
 });
 
 
-function hidevalidation(email) {
+function hideNewsLetterValidation(email) {
   if(email  != ""){
     $('#nl_message').html("");
     $('#nl_message').hide();
