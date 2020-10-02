@@ -26,7 +26,7 @@ class AwsParameterStoreController
 
 
   def news_letter_google_sheet_credentials
-    get_parameter_store_values("/#{ENV[RAILS_ENV]}/google-credentials/mylibrarynyc")
+    get_parameter_store_values("/#{ENV['RAILS_ENV']}/google-credentials/mylibrarynyc")
   end
 
 
