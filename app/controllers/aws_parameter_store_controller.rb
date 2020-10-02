@@ -13,7 +13,7 @@ class AwsParameterStoreController
     begin
       response = @systems_manager.get_parameter({
         name: parameter_name,
-        with_decryption: false
+        with_decryption: true
       })
       LogWrapper.log('INFO', {'message' => "AWS parameter call  #{response}",
                               'method' => 'get_parameter_store_values'})
