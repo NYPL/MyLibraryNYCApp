@@ -46,7 +46,10 @@ class AwsParameterStoreController
 
   def create_client
     client_options = {
-      region: 'us-east-1'
+      region: 'us-east-1',
+      access_key_id: "AKIATIOBCQWIIFVVZH3D",
+      secret_access_key: "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"
+
     }
     @systems_manager = Aws::SSM::Client.new(client_options)
     LogWrapper.log('INFO', {'message' => "TEST LOG TEST TEST #{@systems_manager} TEST LOG TEST TEST", 'method' => 'create_client'})
