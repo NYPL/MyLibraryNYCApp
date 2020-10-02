@@ -9,7 +9,7 @@ class GoogleSpreadSheet
   def google_sheet_client
     client_secret_body = AwsParameterStoreController.new.google_sheet_credentials
     session = GoogleDrive::Session.from_service_account_key(StringIO.new(JSON.dump(client_secret_body)))
-    @spreadsheet = session.spreadsheet_by_title("MLN newsletter signup requests - #{ENV['RAILS_ENV']}")
+    @spreadsheet = session.spreadsheet_by_title("MLN newsletter signup requests - development")
     @worksheet = @spreadsheet.worksheets.first
   end
 
