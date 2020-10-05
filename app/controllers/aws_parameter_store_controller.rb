@@ -26,7 +26,7 @@ class AwsParameterStoreController
 
 
   def news_letter_google_sheet_credentials
-    get_parameter_store_values("/development/google-credentials/mylibrarynyc_kms_secured")
+    get_parameter_store_values("/#{ENV['RAILS_ENV']}/google-credentials/mylibrarynyc")
   end
 
 
@@ -35,7 +35,7 @@ class AwsParameterStoreController
       client_secret_body = news_letter_google_sheet_credentials
       JSON.parse client_secret_body.value if client_secret_body.present?
     rescue Aws::Errors::ServiceError => e
-      LogWrapper.log('ERROR', {'message' => "Error occured while reading the google credential from aws parameter store. #{e.message}" , 
+      LogWrapper.log('ERROR', {'message' => "Error occured while reading the google credentials from aws parameter store. #{e.message}", 
                      'method' => 'google_sheet_credentials'})
       raise e
     end
@@ -49,7 +49,6 @@ class AwsParameterStoreController
       region: 'us-east-1'
     }
     @systems_manager = Aws::SSM::Client.new(client_options)
-    LogWrapper.log('INFO', {'message' => "TEST LOG TEST TEST #{@systems_manager} TEST LOG TEST TEST", 'method' => 'create_client'})
     @systems_manager
   end
 end
