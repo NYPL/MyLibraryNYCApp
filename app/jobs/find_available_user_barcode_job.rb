@@ -2,20 +2,29 @@
 
 class FindAvailableUserBarcodeJob < ApplicationJob
   queue_as :default
+  discard_on(ActiveJob::DeserializationError) do |job, error|
+    puts "FindAvailableUserBarcodeJob: discarding #{job} on error:#{error}"
+  end
+  discard_on(Exceptions::ArgumentError) do |job, error|
+    puts "FindAvailableUserBarcodeJob: discarding #{job} on error:#{error}"
+  end
 
   around_perform :around_cleanup
 
   # retry_on CustomAppException # defaults to 3s wait, 5 attempts
-  # discard_on ActiveJob::DeserializationError
 
 
   def perform(user: nil, **args)
     puts "FindAvailableUserBarcodeJob.perform"
     # perform code on its own thread
     Rails.logger.debug "#{self.class.name}: I'm performing my job with arguments: #{args.inspect}"
-    puts "FindAvailableUserBarcodeJob.perform: user=#{user}"
+    puts "FindAvailableUserBarcodeJob.perform: user=#{user || 'nil'}"
 
-    # TODO: handle user == nil
+    # if we got passed bad user data, ___
+    if user.blank?
+      puts "FindAvailableUserBarcodeJob.perform: raising an error"
+      raise Exceptions::ArgumentError, "FindAvailableUserBarcodeJob called with nil user."
+    end
 
     # TODO: this will cause an infinite loop on barcode found.
     # move the retrying to its own job hook

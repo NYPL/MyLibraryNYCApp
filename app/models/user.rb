@@ -353,9 +353,6 @@ class User < ActiveRecord::Base
     # Return "true" if a user is found, false otherwise.  Default to "false".
     # Throw an exception if called with malformed data.
 
-    # TODO: delete below line, it's for testing
-    return true
-
     if barcode_to_check.blank?
       return false
     end
