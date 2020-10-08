@@ -1,9 +1,10 @@
 <div class="mktoForm">
-  <%= form_tag '/news_letter/index', method: 'get', remote: true  do %>
+  <%= form_tag '/news_letter/index', :id => 'news_letetr_form', :onsubmit => "validateNewsLetterEmail(event)", :method => :get, 
+  :remote => true do %>
     <div class="news_letter_form">
       <div class="news_letter_desc bold"> Submit your email to sign up for the MyLibraryNYC newsletter: </div>
       <div class="mktoFormRow"><input onkeyup="hideNewsLetterValidation(this.value)" id="news_letter_email" class="news_letter_email" type="text" name="email" placeholder="Enter your email address" /></div>
-      <div class="mktoButtonRow"><input class="news_letter_subs_button" type="submit" value="Subscribe" onclick="return validateNewsLetterEmail($('#news_letter_email').val());"/>
+      <div class="mktoButtonRow"><input class="news_letter_subs_button" type="submit" value="Subscribe"/>
       </diiv>
     </div>
       <div class="nl_message" id="nl_message" style="display: none;"></div>  

@@ -1,3 +1,8 @@
 $('#nl_message').show();
-$("#nl_message").html("Thanks for subscribing! You will receive an e-mail confirmation shortly.");
-$('#nl_message').css("color", "green");
+<% if flash[:error].present? %>
+  $("#nl_message").html("<%= flash[:error] %>")
+  $('#nl_message').css("color", "red");
+<% else %>
+  $("#nl_message").html("Thanks for subscribing! You will receive an e-mail confirmation shortly.");
+  $('#nl_message').css("color", "green");
+<% end %>

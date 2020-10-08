@@ -89,23 +89,16 @@ function hideNewsLetterValidation(email) {
 
 
 // validate news letter email address.
-function validateNewsLetterEmail(email) {
+function validateNewsLetterEmail(event) {
+  event.preventDefault();
+  email = $("#news_letter_email").val();
   if(email == ""){
     $('#nl_message').html("Please enter a valid email address");
     $('#nl_message').css("color", "red");
     $('#nl_message').show();
-     return false;
-   }else{
+    return false;
+   } else {
     $('#nl_message').html("");
     $('#nl_message').hide();
    }
- 
-  if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){ 
-    return (true)
-  }else{
-    $('#nl_message').html("Please enter a valid email address");
-    $('#nl_message').css("color", "red");
-    $('#nl_message').show();
-    return (false)
-  }
 }
