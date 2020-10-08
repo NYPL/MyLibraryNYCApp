@@ -18,7 +18,7 @@ class GoogleSpreadSheet
   def create_news_letter_email_in_google_sheets(params)
     google_sheet_client
     email = params["email"]
-    if is_email_already_in_google_sheets(email)
+    if email_already_in_google_sheets?(email)
       LogWrapper.log('DEBUG', {'message' => "Email already saved in google sheets. Email: #{email}",
                                'method' => 'create_news_letter_email_in_google_sheets'})
       raise 'Email is already subscribed.'
@@ -31,8 +31,8 @@ class GoogleSpreadSheet
 
   
   # Checking here input email already in google sheets or not.
-  def is_email_already_in_google_sheets(input_email)
-     emails_arr = @worksheet.rows.flatten
-     emails_arr.include?(input_email)
+  def email_already_in_google_sheets?(input_email)
+    emails_arr = @worksheet.rows.flatten
+    emails_arr.include?(input_email)
   end
 end

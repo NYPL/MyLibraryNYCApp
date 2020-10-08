@@ -125,6 +125,7 @@ class ApplicationController < ActionController::Base
     store_location_for(:user, originating_location)
   end
 
+  
   def clear_flash_messages
     flash[:notice] = nil
     flash[:danger] = nil
