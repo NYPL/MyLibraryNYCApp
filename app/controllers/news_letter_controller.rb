@@ -17,7 +17,8 @@ class NewsLetterController < ApplicationController
 
 
   # Validate news-letter email is valid or not.
-  # This below method allows these formats only. eg: test@dd.com, test@com. 
+  # This below method allows these formats only. eg: test@dd.com, test@com.
+  # For email validation using ruby gem, this is not custom regular expression validation.
   def validate_news_letter_email_is_valid
     is_valid = EmailValidator.valid? params['email']
     raise "Please enter a valid email address" unless is_valid
