@@ -92,7 +92,7 @@ function hideNewsLetterValidation(email) {
 function validateNewsLetterEmail(event) {
   event.preventDefault();
   email = $("#news_letter_email").val();
-  if(email == ""){
+  if(!email.length){
     $('#nl_message').html("Please enter a valid email address");
     $('#nl_message').css("color", "red");
     $('#nl_message').show();
