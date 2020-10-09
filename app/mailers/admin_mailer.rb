@@ -67,4 +67,17 @@ class AdminMailer < ActionMailer::Base
       raise exception
     end
   end
+
+
+  # 
+  def send_news_letter_confirmation_email(email)
+    begin
+      mail(to: [email], :subject => "News letter confirmation email")
+    rescue => exception
+      LogWrapper.log('ERROR', {
+        'message' => "Cannot send send news letter confirmation email.  Backtrace=#{exception.backtrace}.",
+        'method' => 'AdminMailer.send_news_letter_confirmation_email'
+      })
+    end
+  end
 end

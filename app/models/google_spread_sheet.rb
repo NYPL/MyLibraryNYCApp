@@ -5,11 +5,11 @@ Bundler.require
 
 class GoogleSpreadSheet
 
-  # Get google sheet credentials from AwsParameterStore.
+  # Get google sheet credentials from ENV config and read news-letetr emails from good sheets.
   def google_sheet_client
     google_credentials = ENV['NEWS_LETTER_GOOGLE_CREDENTIALS']
     session = GoogleDrive::Session.from_service_account_key(StringIO.new(google_credentials))
-    @spreadsheet = session.spreadsheet_by_title("MLN newsletter signup requests - #{ENV['RAILS_ENV']}")
+    @spreadsheet = session.spreadsheet_by_title("MLN newsletter signup requests - development")
     @worksheet = @spreadsheet.worksheets.first
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
@@ -22,21 +22,9 @@ class GoogleSpreadSheet
   def create_news_letter_email_in_google_sheets(params)
     google_sheet_client
     email = params["email"]
-    if email_already_in_google_sheets?(email)
-      LogWrapper.log('DEBUG', {'message' => "Email already saved in google sheets. Email: #{email}",
-                               'method' => 'create_news_letter_email_in_google_sheets'})
-      raise 'Email is already subscribed.'
-    end 
     @worksheet.insert_rows(@worksheet.num_rows + 1, [[email]])
-    is_saved_in_google_sheets = @worksheet.save
+    #is_saved_in_google_sheets = @worksheet.save
     LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params}",
                             'method' => 'create_news_letter_email_in_google_sheets'})
-  end
-
-  
-  # Checking here input email already in google sheets or not.
-  def email_already_in_google_sheets?(input_email)
-    emails_arr = @worksheet.rows.flatten
-    emails_arr.include?(input_email)
   end
 end
