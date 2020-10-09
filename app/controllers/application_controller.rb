@@ -126,7 +126,7 @@ class ApplicationController < ActionController::Base
   end
 
   
-  # Clear flash messages before hitting any action.
+  # Clear persisted flash messages before hitting any controller method.
   def clear_flash_messages
     flash[:notice] = nil
     flash[:success] = nil
