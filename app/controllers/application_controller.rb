@@ -126,11 +126,10 @@ class ApplicationController < ActionController::Base
   end
 
   
+  # Clear flash messages before hitting any action.
   def clear_flash_messages
     flash[:notice] = nil
-    flash[:danger] = nil
     flash[:success] = nil
-    flash[:warning] = nil
     flash[:error] = nil
   end
 end

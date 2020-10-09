@@ -10,10 +10,14 @@ class NewsLetterController < ApplicationController
     end
     flash[:notice] = "Thanks for subscribing! You will receive an e-mail confirmation shortly."
   rescue StandardError => e
+    LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
+                             'method' => 'index'})
     flash[:error] = e.message
   end
 
 
+  # Validate news-letter email is valid or not.
+  # This below method allows these formats only. eg: test@dd.com, test@com. 
   def validate_news_letter_email_is_valid
     is_valid = EmailValidator.valid? params['email']
     raise "Please enter a valid email address" unless is_valid
