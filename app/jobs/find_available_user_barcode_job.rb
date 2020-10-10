@@ -2,12 +2,10 @@
 
 class FindAvailableUserBarcodeJob < ApplicationJob
   queue_as :default
-  discard_on(ActiveJob::DeserializationError) do |job, error|
-    puts "FindAvailableUserBarcodeJob: discarding #{job} on error:#{error}"
-  end
-  discard_on(Exceptions::ArgumentError) do |job, error|
-    puts "FindAvailableUserBarcodeJob: discarding #{job} on error:#{error}"
-  end
+  #discard_on ActiveJob::DeserializationError
+  #discard_on Exceptions::ArgumentError do |job, error|
+  #  puts "FindAvailableUserBarcodeJob: discarding #{job} on error:#{error}"
+  #end
 
   around_perform :around_cleanup
 
@@ -61,10 +59,6 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
 
 
-    # TODO handle exceptions
-    # if might raise exceptions, like CustomAppException or
-    # ActiveJob::DeserializationError, then can rescue or discard
-
     # TODO
     # handle race conditions in case more than one server is processing users
     # or users are incrementing barcodes independently of each other without
@@ -74,7 +68,8 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
   rescue_from(Exceptions::InvalidResponse) do |exception|
     # Do something with the exception
-    # TODO
+    puts "I rescued from InvalidResponse, now what"
+    retry_job queue: :low_priority
   end
 
 

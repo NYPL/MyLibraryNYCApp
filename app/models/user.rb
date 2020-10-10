@@ -352,6 +352,7 @@ class User < ActiveRecord::Base
     # New users and users whose records have been purged from Sierra might not.
     # Return "true" if a user is found, false otherwise.  Default to "false".
     # Throw an exception if called with malformed data.
+    raise Exceptions::InvalidResponse, "TEST EXCEPTION"
 
     if barcode_to_check.blank?
       return false
