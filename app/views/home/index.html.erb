@@ -105,4 +105,7 @@
       </div>
     </div>
   </div>
+  <%# if MlnConfigurationController.new.feature_flag_config('news_letter.enabled') %>
+    <div> <%= render :partial => 'news_letter/news_letter_form' %> </div>
+  <%# end %>
 </div>
