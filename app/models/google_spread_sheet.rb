@@ -5,7 +5,7 @@ Bundler.require
 
 class GoogleSpreadSheet
 
-  # Get google sheet credentials from ENV config and read news-letetr emails from good sheets.
+  # Get google sheet credentials from application.yml and connect to google sheets.
   def google_sheet_client
     google_credentials = ENV['NEWS_LETTER_GOOGLE_CREDENTIALS']
     session = GoogleDrive::Session.from_service_account_key(StringIO.new(google_credentials))

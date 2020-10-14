@@ -69,7 +69,7 @@ class AdminMailer < ActionMailer::Base
   end
 
 
-  # 
+  # Sends confirmation email link to news-letter subscriber.
   def send_news_letter_confirmation_email(encrypt_email, email)
     begin
       @encrypt_email = encrypt_email
