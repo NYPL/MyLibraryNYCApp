@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_action :redirect_if_old_domain, :clear_flash_messages
+  before_action :redirect_if_old_domain
 
   def append_info_to_payload(payload)
     super
@@ -123,14 +123,5 @@ class ApplicationController < ActionController::Base
 
     # :user is the scope we are authenticating
     store_location_for(:user, originating_location)
-  end
-
-  
-  def clear_flash_messages
-    flash[:notice] = nil
-    flash[:danger] = nil
-    flash[:success] = nil
-    flash[:warning] = nil
-    flash[:error] = nil
   end
 end

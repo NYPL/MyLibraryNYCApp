@@ -4,6 +4,7 @@ class NewsLetterController < ApplicationController
   include EncryptDecryptString
 
   def index
+    flash[:error] = nil
     email = params['email']
     validate_news_letter_email_is_valid
     google_sheet = GoogleSpreadSheet.new.google_sheet_client
@@ -16,7 +17,6 @@ class NewsLetterController < ApplicationController
     end
     flash[:notice] = "Thanks for subscribing! You will receive an e-mail confirmation shortly."
   rescue StandardError => e
-
     flash[:error] = e.message[0..75]
   end
 
