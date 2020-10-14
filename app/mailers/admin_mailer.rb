@@ -70,14 +70,16 @@ class AdminMailer < ActionMailer::Base
 
 
   # 
-  def send_news_letter_confirmation_email(email)
+  def send_news_letter_confirmation_email(encrypt_email, email)
     begin
+      @encrypt_email = encrypt_email
       mail(to: [email], :subject => "News letter confirmation email")
     rescue => exception
       LogWrapper.log('ERROR', {
-        'message' => "Cannot send send news letter confirmation email.  Backtrace=#{exception.backtrace}.",
-        'method' => 'AdminMailer.send_news_letter_confirmation_email'
+        'message' => "Cannot send send news letter confirmation email. Error message:#{exception.message},
+          backtrace=#{exception.backtrace}.", 'method' => 'AdminMailer.send_news_letter_confirmation_email'
       })
+      raise exception.message
     end
   end
 end

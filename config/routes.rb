@@ -93,6 +93,8 @@ MyLibraryNYC::Application.routes.draw do
   match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get]
   match '/help' => 'home#help', via: [:get]
   match '/faq' => 'home#faq', via: [:get]
+  match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]
+
   
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

@@ -38,4 +38,9 @@ class HomeController < ApplicationController
   def faq
     @faqs = FaqsController.new.frequently_asked_questions
   end
+
+  def newsletter_confirmation
+    @is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)  
+  end
+
 end

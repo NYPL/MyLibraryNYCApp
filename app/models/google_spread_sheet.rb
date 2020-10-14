@@ -16,15 +16,4 @@ class GoogleSpreadSheet
                              'method' => 'google_sheet_client'})
     raise "We've encountered an error and were unable to confirm your email"
   end
-
-  
-  # Create news-letter email into google sheets
-  def create_news_letter_email_in_google_sheets(params)
-    google_sheet_client
-    email = params["email"]
-    @worksheet.insert_rows(@worksheet.num_rows + 1, [[email]])
-    #is_saved_in_google_sheets = @worksheet.save
-    LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params}",
-                            'method' => 'create_news_letter_email_in_google_sheets'})
-  end
 end
