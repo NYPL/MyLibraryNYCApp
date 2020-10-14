@@ -3,6 +3,7 @@
 require 'openssl'
 
 module EncryptDecryptString
+  # Encrypt and decrypt methods
   def self.encrypt_string(str)
     cipher_salt1 = 'my-library-nyc'
     cipher_salt2 = 'nypl'

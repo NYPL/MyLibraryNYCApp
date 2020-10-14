@@ -11,9 +11,9 @@ class NewsLetterController < ApplicationController
     # Connect's to google sheets
     google_sheet = GoogleSpreadSheet.new.google_sheet_client
     emails_arr = google_sheet.rows.flatten
-    # Checking here input email already in google sheets or not.
+    # Checking here input email is already in google sheets or not.
     email_already_in_google_sheets?(emails_arr, email)
-    # After input validations, send news-letter confirmation email to subscriber.
+    # After input validations, send news-letter confirmation email to news-letter subscriber.
     send_news_letter_confirmation_email(email)
     respond_to do |format|
       format.html 
@@ -21,6 +21,8 @@ class NewsLetterController < ApplicationController
     end
     flash[:notice] = "Thanks for subscribing! You will receive an e-mail confirmation shortly."
   rescue StandardError => e
+    LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
+                             'method' => 'index'})
     flash[:error] = e.message[0..75]
   end
 
@@ -34,8 +36,8 @@ class NewsLetterController < ApplicationController
   end
 
 
-  # send news-letter confirmation email link to subscriber.
-  # confirmation email should be an encryted key. Eg: "key=YHY7878999"
+  # sends news-letter confirmation email link to news-letter subscriber.
+  # confirmation email should be an encryted format. Eg: "key=YHY7878999"
   def send_news_letter_confirmation_email(email)
     encrypt_email = EncryptDecryptString.encrypt_string(email)
     AdminMailer.send_news_letter_confirmation_email(encrypt_email, email).deliver
