@@ -9,7 +9,7 @@ class GoogleSpreadSheet
   def google_sheet_client
     google_credentials = ENV['NEWS_LETTER_GOOGLE_CREDENTIALS']
     session = GoogleDrive::Session.from_service_account_key(StringIO.new(google_credentials))
-    @spreadsheet = session.spreadsheet_by_title("MLN newsletter signup requests - development")
+    @spreadsheet = session.spreadsheet_by_title("MLN newsletter signup requests - #{ENV['RAILS_ENV']}")
     @worksheet = @spreadsheet.worksheets.first
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
