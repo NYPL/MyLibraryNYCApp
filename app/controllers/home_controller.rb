@@ -43,7 +43,6 @@ class HomeController < ApplicationController
   # Create news-letter confirmation email in google sheets
   def newsletter_confirmation
     @is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
-    @is_success 
   end
 
 end
