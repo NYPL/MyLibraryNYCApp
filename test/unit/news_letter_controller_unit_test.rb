@@ -12,8 +12,8 @@ class NewsLetterControllerUnitTest < MiniTest::Test
     @mintest_mock2 = MiniTest::Mock.new
   end
 
-  describe 'Test news-letter email found in google sheets ' do
-    it 'Test news-letter email found in google sheets' do
+  describe 'news-letter email already in google sheets?' do
+    it 'news-letter email already in google sheets?' do
       emails_arr = ['test@test1.com', "test2@test2.com"]
       email = emails_arr[0]
       resp = assert_raises(RuntimeError) { @nl_controller.email_already_in_google_sheets?(emails_arr, email) }
