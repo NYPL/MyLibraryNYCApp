@@ -31,7 +31,6 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
     };
 
     $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-      console.log((newUrl.substr(newUrl.lastIndexOf('/')+1)))
       if (newUrl.substr(newUrl.lastIndexOf('/')+1) === 'teacher_sets'){
         window.history.go(0);
       }
