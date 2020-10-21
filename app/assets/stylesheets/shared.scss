@@ -85,16 +85,16 @@
 }
 
 .nl_message {
-  padding-left: 69px;
   padding-bottom: 20px;
   font-size: 13px;
-  text-align: left
+  text-align: left;
+  margin-left: 14%;
 }
 
 .news_letter_desc {
-  margin-left: 18px;
+  margin-left: 45px;
   margin-bottom: -10px;
-  color: #ff9900;
+  color: #7d7872;
 }
 
 .news_letter_email {
@@ -108,26 +108,47 @@
   background: #e8e4e2 !important;
 }
 
-.news_letter_subs_button {
-  padding: 12px 45px !important;
-  background-color: #3385ff;
-  color: #FFF;
-  border: 1px;
-  border-radius: 3px;
-}
-
-.news_letter_form{
-  margin-top: 60px;
+.news_letter_form {
+  margin-top: 15px;
 }
 
 .mktoForm {width: auto !important; width: 100%; text-align: -webkit-center}
 .mktoFormRow {margin: 15px 0px 0px 20px; display: inline-block; width: 55%;}
 .mktoOffset {display:none}
-.mktoButtonRow {display: inline-block; position: relative; width:25%; margin: 0px 0px 0px -4px;}
+.mktoButtonRow {
+  display: inline-block; 
+  position: relative; 
+  margin: 0px 0px 0px -2px;
+}
+
+.mktoForm {
+  #email{
+    border-radius: 4px !important;
+    padding: 10px !important;
+    background-color: #EEEEED !important;
+  }
+}
 
 .news_letter_confirmation_email {
   background-color: #CCC;
   margin: 20px; 
   text-align: left;
   padding: 25px;
+}
+
+.nl-subscribe-button {
+  display: block;
+  margin: 0 auto;
+  padding: 12px;
+  font-size: 1em;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  background: #AF2228;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
 }

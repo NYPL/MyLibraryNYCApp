@@ -82,6 +82,8 @@ $( document ).ready(function() {
 
 function hideNewsLetterValidation(email) {
   if(email  != ""){
+    $('#submit').prop('disabled', false);
+    $('#submit').css("background-color", '#AF2228');
     $('#nl_message').html("");
     $('#nl_message').hide();
   }
@@ -91,7 +93,7 @@ function hideNewsLetterValidation(email) {
 // validate news letter email address.
 function validateNewsLetterEmail(event) {
   event.preventDefault();
-  email = $("#news_letter_email").val();
+  email = $("#email").val();
   if(!email.length){
     $('#nl_message').html("Please enter a valid email address");
     $('#nl_message').css("color", "red");

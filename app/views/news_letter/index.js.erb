@@ -3,6 +3,8 @@ $('#nl_message').show();
   $("#nl_message").html("<%= flash[:error].html_safe %>")
   $('#nl_message').css("color", "red");
 <% else %>
-  $("#nl_message").html("Thanks for subscribing! You will receive an e-mail confirmation shortly.");
+  $('#submit').prop('disabled', true);
+  $('#submit').css("background-color", '#CCC');
+  $("#nl_message").html("<%= flash[:notice].html_safe %>");
   $('#nl_message').css("color", "green");
 <% end %>
