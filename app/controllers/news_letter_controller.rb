@@ -61,8 +61,11 @@ class NewsLetterController < ApplicationController
   # this method returns boolean value. Based on this value we are showing the success or failure message.
   def create_news_letter_email_in_google_sheets(params)
     google_sheet = GoogleSpreadSheet.new.google_sheet_client
+    emails_arr = google_sheet.rows.flatten
     # Decryt the confirmation email string, than save to google sheets.
     decrypt_email = EncryptDecryptString.decrypt_string(params["key"])
+    # Email is already in google sheets return true. Do not write again to google sheets.
+    return true if emails_arr.include?(decrypt_email)
     google_sheet.insert_rows(google_sheet.num_rows + 1, [[decrypt_email]])
     is_saved_in_google_sheets = google_sheet.save
     LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params}",

@@ -1,10 +1,13 @@
 <div class="news_letter_confirmation_email">
-  <p>Hi,</p>
+  <p>Hi there!</p>
   <p>We have sent an email with a confirmation link. In order to complete the news-letter sign-up process, please click the below confirmation link.</p>
   <p><a href="//<%= "#{ENV['MLN_INFO_SITE_HOSTNAME']}/newsletter_confirmation?key=#{@encrypt_email}" %>">
     <%= "#{ENV['MLN_INFO_SITE_HOSTNAME']}/newsletter_confirmation?key=#{@encrypt_email}" %></a></p>
-  <p>If you need assistance, please contact us. <a href='mailto:help@mylibrarynyc.org'>help@mylibrarynyc.org</a></p>
+  <p>If you need assistance, please contact us <a href='mailto:help@mylibrarynyc.org'>help@mylibrarynyc.org</a></p>
   <p></p>
-  <p>Thanks,</p>
-  <p><a href="https://www.mylibrarynyc.org">www.mylibrarynyc.org</a></p>
+  <p>
+    Thank You,<br />
+    MyLibraryNYC<br />
+    <%= link_to "#{root_url}", root_url %> 
+  </p>
 </div>
