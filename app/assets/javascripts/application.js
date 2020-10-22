@@ -94,7 +94,7 @@ function validateNewsLetterEmail(event) {
   email = $("#email").val();
   if(!email.length){
     $('#nl_message').html("Please enter a valid email address");
-    $('#nl_message').css("color", "red");
+    $('#nl_message').css("color", '#c4262d');
     $('#nl_message').show();
     return false;
    } else {
