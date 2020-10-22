@@ -1,7 +1,5 @@
-<div class="animate-in-container" ng-show="loaded"><br>
-  <% if @is_success %>
-    <p class="alert hold-alert">Thank you for subscribing to the MyLibraryNYC newsletter. Your email has been confirmed.</p>
-  <% else %>
-    <p class="alert hold-alert">Unfortunately there was a problem. Please try subscribing again <a href="https://www.mylibrarynyc.org/">www.mylibrarynyc.org</a> or contact <a href='mailto:help@mylibrarynyc.org'>help@mylibrarynyc.org</a>.</p>
-  <% end %>
-</div>
+<% if @is_success %>
+  <p class="alert hold-alert nl-conf-msg">Thank you for subscribing to the MyLibraryNYC newsletter. Your email has been confirmed.</p>
+<% else %>
+  <p class="alert hold-alert nl-conf-msg">Unfortunately there was a problem. Please try subscribing again <a href="https://www.mylibrarynyc.org/">www.mylibrarynyc.org</a> or contact <a href='mailto:help@mylibrarynyc.org'>help@mylibrarynyc.org</a>.</p>
+<% end %>
