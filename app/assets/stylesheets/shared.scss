@@ -88,11 +88,11 @@
   padding-bottom: 20px;
   font-size: 14px;
   text-align: left;
-  margin-left: 14%;
+  margin-left: 14.2%;
 }
 
 .news_letter_desc {
-  margin-left: 45px;
+  margin-left: 51px;
   margin-bottom: -10px;
   color: #7d7872;
 }
@@ -112,7 +112,7 @@
   margin-top: 15px;
 }
 
-.mktoForm {width: auto !important; width: 100%; text-align: -webkit-center}
+.mktoForm {width: auto !important; width: 100%; text-align: -webkit-center; text-align: -moz-center}
 .mktoFormRow {margin: 15px 0px 0px 20px; display: inline-block; width: 55%;}
 .mktoOffset {display:none}
 .mktoButtonRow {
@@ -124,8 +124,9 @@
 .mktoForm {
   #email{
     border-radius: 4px !important;
-    padding: 10px !important;
+    padding: 10px 3px !important;
     background-color: #EEEEED !important;
+    text-indent: 0px;
   }
 }
 
