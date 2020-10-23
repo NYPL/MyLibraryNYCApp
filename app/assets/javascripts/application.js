@@ -81,12 +81,14 @@ $( document ).ready(function() {
 
 
 function hideNewsLetterValidation(email) {
-  if(email  != ""){
+  if(email != "") {
     $('#nl_message').html("");
     $('#nl_message').hide();
+  } else {
+    $('#submit').prop('disabled', false);
+    $('#submit').css("background-color", '#AF2228');
   }
 }
-
 
 // validate news letter email address.
 function validateNewsLetterEmail(event) {
