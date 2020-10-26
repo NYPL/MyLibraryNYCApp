@@ -152,8 +152,13 @@
   text-decoration: none;
   text-transform: uppercase;
   white-space: nowrap;
+  width: 115px !important;
 }
 
 .nl-conf-msg {
   margin-top: 25px;
+}
+
+.nl-conf-size {
+  font-size: 20px;
 }

@@ -21,6 +21,8 @@
     <% end %>
     <% if params["controller"] == "schools" && params["action"] == "index" %>
       Participating schools
+    <% else params["controller"] == "home" && params["action"] == "newsletter_confirmation" %>
+      Newsletter subscription
     <% end %>
   </div>
 <% end %>
