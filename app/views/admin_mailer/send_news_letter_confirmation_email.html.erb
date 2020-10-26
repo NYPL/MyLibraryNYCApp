@@ -1,10 +1,10 @@
 <div class="news_letter_confirmation_email">
-  <p>Hi there!</p>
-  <p>We have sent an email with a confirmation link. In order to complete the news-letter sign-up process, please click the below confirmation link.</p>
+  <p>Hello,</p>
+  <p>We have received a request to subscribe this email address to the MyLibraryNYC newsletter. To confirm this subscription request please click the confirmation link below:</p>
   <p><a href="//<%= "#{ENV['MLN_INFO_SITE_HOSTNAME']}/newsletter_confirmation?key=#{@encrypt_email}" %>">
     <%= "#{ENV['MLN_INFO_SITE_HOSTNAME']}/newsletter_confirmation?key=#{@encrypt_email}" %></a></p>
-  <p>If you need assistance, please contact us <a href='mailto:help@mylibrarynyc.org'>help@mylibrarynyc.org</a></p>
-  <p></p>
+  <p>If you need assistance, please contact <a href='mailto:help@mylibrarynyc.org'>help@mylibrarynyc.org</a></p>
+  <br/>
   <p>
     Thank You,<br />
     MyLibraryNYC<br />

@@ -19,7 +19,7 @@ class NewsLetterController < ApplicationController
       format.html 
       format.js 
     end
-    flash.now[:notice] = "Thanks for subscribing! You will receive an e-mail confirmation shortly."
+    flash.now[:notice] = "Thanks for subscribing! You should receive an e-mail confirmation shortly."
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
                              'method' => 'index'})
@@ -51,7 +51,7 @@ class NewsLetterController < ApplicationController
 
     LogWrapper.log('DEBUG', {'message' => "Email already saved in google sheets. Email: #{email}",
                              'method' => 'email_already_in_google_sheets'})
-    raise 'Email is already subscribed.'
+    raise 'That email is already subscribed to the MyLibraryNYC newsletter.' 
   end
 
 

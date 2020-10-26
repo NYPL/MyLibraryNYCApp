@@ -84,6 +84,7 @@ function hideNewsLetterValidation(email) {
   if(email != "") {
     $('#nl_message').html("");
     $('#nl_message').hide();
+    $('#submit').val('Subscribe');
   } else {
     $('#submit').prop('disabled', false);
     $('#submit').css("background-color", '#AF2228');
