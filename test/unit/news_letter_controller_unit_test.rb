@@ -17,7 +17,7 @@ class NewsLetterControllerUnitTest < MiniTest::Test
       emails_arr = ['test@test1.com', "test2@test2.com"]
       email = emails_arr[0]
       resp = assert_raises(RuntimeError) { @nl_controller.email_already_in_google_sheets?(emails_arr, email) }
-      assert_equal("Email is already subscribed.", resp.message)
+      assert_equal("That email is already subscribed to the MyLibraryNYC newsletter.", resp.message)
     end
   end
 end
