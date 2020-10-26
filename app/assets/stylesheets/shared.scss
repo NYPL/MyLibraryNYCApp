@@ -86,7 +86,8 @@
 
 .nl_message {
   padding-bottom: 20px;
-  font-size: 14px;
+  padding-top: 3px;
+  font-size: 15px;
   text-align: left;
   margin-left: 14.2%;
 }
@@ -127,6 +128,10 @@
     padding: 10px 8px !important;
     background-color: #EEEEED !important;
     text-indent: 0px;
+    width: 100% !important;
+    background: #EEEEED;
+    border: 1px solid #575047;
+    color: #303030;
   }
 }
 
