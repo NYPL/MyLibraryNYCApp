@@ -136,6 +136,45 @@
   margin-left: 51px;
   margin-bottom: -10px;
   color: #7d7872;
+  @media not all and (min-width: 542px) {
+    margin-left: 13.2%;
+    font-size: 12px;
+  }
+
+  @media not all and (min-width: 440px) {
+    margin-left: 14.2%;
+    font-size: 12px;
+  }
+
+  @media not all and (min-width: 435px) {
+    margin-left: 4.2%;
+    font-size: 13px;
+  }
+
+  @media not all and (min-width: 400px) {
+    margin-left: 14.2%;
+    font-size: 12px;
+  }
+
+  @media not all and (min-width: 410px) {
+    margin-left: 4.2%;
+    font-size: 12px;
+  }
+
+  @media not all and (min-width: 355px) {
+    margin-left: 24.2%;
+    font-size: 12px;
+  }
+
+  @media not all and (min-width: 280px) {
+   margin-left: 24.2%;
+   font-size: 12px;
+  }
+
+  @media not all and (min-width: 160px) {
+    margin-left: 24.2%;
+    font-size: 12px;
+  }
 }
 
 .news_letter_email {
