@@ -3,8 +3,7 @@
     <div class="news_letter_form">
       <div class="news_letter_desc bold"> Submit your email to sign up for the MyLibraryNYC newsletter: </div>
       <div class="mktoFormRow">
-        <%= email_field_tag('email', "", placeholder: "Enter your email address", autocomplete: "off", 
-            onkeyup: "hideNewsLetterValidation(this.value)") %>
+        <input name="email" id="email" onkeyup="hideNewsLetterValidation(this.value)" autocomplete="off" placeholder="Enter your email address"/>
       </div>
       <div class="mktoButtonRow">
         <input id="submit" name="submit" type="submit" value="Subscribe" class="nl-subscribe-button" onClick="this.value='Sending...';"/>
