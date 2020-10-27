@@ -299,11 +299,11 @@ class TeacherSet < ActiveRecord::Base
     h
   end
 
-
-  def self.upsert_from_catalog_id(id)
-    item = self.api_call "titles/#{id}"
-    self.upsert_from_catalog_item item['title'] unless item.nil? || item['title'].nil?
-  end
+  # old and unused method
+  # def self.upsert_from_catalog_id(id)
+  #   item = self.api_call "titles/#{id}"
+  #   self.upsert_from_catalog_item item['title'] unless item.nil? || item['title'].nil?
+  # end
 
 
   def self.upsert_from_catalog_item(item)
