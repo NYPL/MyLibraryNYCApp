@@ -78,3 +78,30 @@ $( document ).ready(function() {
     }
   });
 });
+
+
+function hideNewsLetterValidation(email) {
+  if(email != "") {
+    $('#nl_message').html("");
+    $('#nl_message').hide();
+    $('#submit').val('Subscribe');
+  } else {
+    $('#submit').prop('disabled', false);
+    $('#submit').css("background-color", '#AF2228');
+  }
+}
+
+// validate news letter email address.
+function validateNewsLetterEmail(event) {
+  event.preventDefault();
+  email = $("#email").val();
+  if(!email.length){
+    $('#nl_message').html("Please enter a valid email address");
+    $('#nl_message').css("color", '#c4262d');
+    $('#nl_message').show();
+    return false;
+   } else {
+    $('#nl_message').html("");
+    $('#nl_message').hide();
+   }
+}

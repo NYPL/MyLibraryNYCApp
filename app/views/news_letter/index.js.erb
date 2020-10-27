@@ -1,0 +1,11 @@
+$('#nl_message').show();
+$('#submit').val('Subscribe');
+<% if flash[:error].present? %>
+  $("#nl_message").html("<%= flash[:error].html_safe %>")
+  $('#nl_message').css("color", '#c4262d');
+<% else %>
+  $('#submit').prop('disabled', true);
+  $('#submit').css("background-color", '#CCC');
+  $("#nl_message").html("<%= flash[:notice].html_safe %>");
+  $('#nl_message').css("color", "green");
+<% end %>

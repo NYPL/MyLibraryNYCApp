@@ -1,0 +1,13 @@
+<div class="news_letter_confirmation_email">
+  <p>Hello,</p>
+  <p>We have received a request to subscribe this email address to the MyLibraryNYC newsletter. To confirm this subscription request please click the confirmation link below:</p>
+  <p><a href="//<%= "#{ENV['MLN_INFO_SITE_HOSTNAME']}/newsletter_confirmation?key=#{@encrypt_email}" %>">
+    <%= "#{ENV['MLN_INFO_SITE_HOSTNAME']}/newsletter_confirmation?key=#{@encrypt_email}" %></a></p>
+  <p>If you need assistance, please contact <a href='mailto:help@mylibrarynyc.org'>help@mylibrarynyc.org</a></p>
+  <br/>
+  <p>
+    Thank You,<br />
+    MyLibraryNYC<br />
+    <%= link_to "#{root_url}", root_url %> 
+  </p>
+</div>
