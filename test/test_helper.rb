@@ -9,7 +9,7 @@ SimpleCov.start 'rails' do
   add_filter '/app/admin/'
 end
 # fail unit tests if total coverage dips below acceptable limit
-SimpleCov.minimum_coverage 54
+SimpleCov.minimum_coverage 50
 # fail unit tests if any file's individual coverage dips below acceptable limit
 SimpleCov.minimum_coverage_by_file 0
 
