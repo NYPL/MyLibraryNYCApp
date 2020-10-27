@@ -52,19 +52,19 @@ class Book < ActiveRecord::Base
   #   end
   # end
 
+  # Unused method
+  # def matching_api_items
+  #   q = {}
+  #   if !self.isbn.nil? && !self.isbn.empty?
+  #     q[:isbn] = self.isbn
 
-  def matching_api_items
-    q = {}
-    if !self.isbn.nil? && !self.isbn.empty?
-      q[:isbn] = self.isbn
+  #   else
+  #     q[:title] = self.title
+  #     q[:author] = self.statement_of_responsibility unless self.statement_of_responsibility.nil? || self.statement_of_responsibility.empty?
+  #   end
 
-    else
-      q[:title] = self.title
-      q[:author] = self.statement_of_responsibility unless self.statement_of_responsibility.nil? || self.statement_of_responsibility.empty?
-    end
-
-    self.class.catalog_items_by_query q
-  end
+  #   self.class.catalog_items_by_query q
+  # end
 
 
   def image_uri(size=:small)
