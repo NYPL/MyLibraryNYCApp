@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
+# Asynchronously calls User methods to find a new barcode that
+# would be available in both MLN db and Sierra.
 class FindAvailableUserBarcodeJob < ApplicationJob
   queue_as :default
-  #discard_on ActiveJob::DeserializationError
-  #discard_on Exceptions::ArgumentError do |job, error|
-  #  puts "FindAvailableUserBarcodeJob: discarding #{job} on error:#{error}"
-  #end
+
+  # NOTE: retry_on and discard_on need rails >= 5.1.
+  # TODO: Update rails, and replace current retry handling with built-in hooks.
 
   around_perform :around_cleanup
-
-  # retry_on CustomAppException # defaults to 3s wait, 5 attempts
 
 
   def perform(user: nil, **args)
@@ -31,7 +30,20 @@ class FindAvailableUserBarcodeJob < ApplicationJob
       # ask the user to ask Platform Service to ask Sierra if it
       # already knows this barcode candidate
       puts "FindAvailableUserBarcodeJob.perform: about to call user.check_barcode_found_in_sierra"
-      already_there = user.check_barcode_found_in_sierra(user.barcode)
+      begin
+        already_there = user.check_barcode_found_in_sierra(user.barcode)
+      rescue Exceptions::InvalidResponse => exception
+        puts exception.message
+        #puts "re-raising"
+        #raise Exceptions::InvalidResponse, "RAISE EXCEPTION AGAIN TO RETRY"
+        #puts "re-rais-ed"
+      end
+      puts "re-raising"
+      raise StandardError.new("This is the error message")
+      puts "re-raised"
+
+      try next: run in server, see if rescue_from works when job is run in daemon
+
       puts "FindAvailableUserBarcodeJob.perform: called user.check_barcode_found_in_sierra, already_there=#{already_there}"
 
       # barcode found to already be in Sierra for another user?
@@ -66,11 +78,10 @@ class FindAvailableUserBarcodeJob < ApplicationJob
   end
 
 
-  rescue_from(Exceptions::InvalidResponse) do |exception|
-    # Do something with the exception
-    puts "I rescued from InvalidResponse, now what"
-    retry_job queue: :low_priority
+  rescue_from Exception do |exception|
+    puts "I rescued from Exception, now what"
   end
+
 
 
   private

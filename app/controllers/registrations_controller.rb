@@ -24,7 +24,7 @@ class RegistrationsController < Devise::RegistrationsController
         resource.find_unique_new_barcode
 
         # TODO: on timeouts/exceptions/negative results,
-        # don't send request to Patron Service
+        # don't send request to Patron Service, keep user as pending
         resource.send_request_to_patron_creator_service
         resource.save
         yield resource if block_given?
