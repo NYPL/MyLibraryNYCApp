@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_action :redirect_if_old_domain
 
   def append_info_to_payload(payload)
     super
@@ -87,6 +88,29 @@ class ApplicationController < ActionController::Base
   # So we must exclude the standard "is_navigational_format?" requirement.
   def storable_location?
     request.get? && !devise_controller? && !request.xhr?
+  end
+
+
+  # If it is old domain redirect to new domain
+  # eg: https://www.mylibrarynyc.org/about/participating-schools -> https://www.mylibrarynyc.org/schools
+  # eg: https://sets.mylibrarynyc.org/help -> https://www.mylibrarynyc.org/faq
+  # eg: https://www.mylibrarynyc.org/contacts-links -> https://www.mylibrarynyc.org/help
+  # eg: https://www.mylibrarynyc.org/about/about-mylibrarynyc -> https://www.mylibrarynyc.org/faq
+  def redirect_if_old_domain
+    if request.host == ENV['MLN_SETS_SITE_HOSTNAME'] && request.fullpath == "/help"
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/faq", :status => :moved_permanently
+    elsif request.host == ENV['MLN_SETS_SITE_HOSTNAME'] && request.fullpath == "/"
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/app#/teacher_sets", :status => :moved_permanently 
+    elsif request.host == ENV['MLN_SETS_SITE_HOSTNAME']
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}#{request.fullpath}", :status => :moved_permanently 
+    end
+    if request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/contacts-links")
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/help", :status => :moved_permanently 
+    elsif request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/about/about-mylibrarynyc")
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/faq", :status => :moved_permanently
+    elsif request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/about/participating-schools")
+      redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/schools", :status => :moved_permanently
+    end
   end
 
 

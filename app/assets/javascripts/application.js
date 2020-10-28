@@ -39,12 +39,14 @@ $(document).ready(function() {
     var count = 0;
     if (value != '#') {
       $("#participating_schools_id *").filter(function() {
-        if ($(this).text().toLowerCase().indexOf(value) > -1) count++;
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        if(!$(this).hasClass('alphabet_anchor')) {
+          if ($(this).text().toLowerCase().indexOf(value) > -1) count++;
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          }
       });
     }
 
-    if(count == 0){
+    if(count == 0) {
       $("#schools_not_found").show();
       $("#schools_not_found").html(search_keyword + " did not match any schools");
       $("#participating_schools_id *").filter(function() {
@@ -57,8 +59,11 @@ $(document).ready(function() {
   });
 });
 
-function hideSchoolNotFoundMessage() {
+function hideSchoolNotFoundMessage(val=null) {
   $("#schools_not_found").hide();
+  $("#participating_schools_id *").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf() == -1)
+  });
 }
 
 $( document ).ready(function() {
@@ -73,3 +78,30 @@ $( document ).ready(function() {
     }
   });
 });
+
+
+function hideNewsLetterValidation(email) {
+  if(email != "") {
+    $('#nl_message').html("");
+    $('#nl_message').hide();
+    $('#submit').val('Subscribe');
+  } else {
+    $('#submit').prop('disabled', false);
+    $('#submit').css("background-color", '#AF2228');
+  }
+}
+
+// validate news letter email address.
+function validateNewsLetterEmail(event) {
+  event.preventDefault();
+  email = $("#email").val();
+  if(!email.length){
+    $('#nl_message').html("Please enter a valid email address");
+    $('#nl_message').css("color", '#c4262d');
+    $('#nl_message').show();
+    return false;
+   } else {
+    $('#nl_message').html("");
+    $('#nl_message').hide();
+   }
+}

@@ -1,15 +1,13 @@
 <% unless @hide_breadcrumbs %>
   <div id="breadcrumb">
     <% unless params["host"] == ENV['MLN_INFO_SITE_HOSTNAME'] && params["controller"] == "info_site" && params["action"] == "index" %>
-      <%= link_to "Home", "/app#/teacher_sets" %> <i class="fa fa-angle-right"></i>
+      <%= link_to "Home", root_url %> <i class="fa fa-angle-right"></i>
     <% end %>
     <% case request.fullpath %>
     <% when "/account", "/users/edit" %>
       Account
     <% when "/help" %>
       Help
-    <% when "/schools" %>
-      Participating schools
     <% when "/faq" %>
       FAQs
     <% when "/users/start" %>
@@ -20,8 +18,12 @@
       Teacher Set Holds
     <% when "/" %>
       
-    <% else %>
-      <%= request.fullpath %>
+    <% end %>
+
+    <% if params["controller"] == "schools" && params["action"] == "index" %>
+      Participating schools
+    <% elsif params["controller"] == "home" && params["action"] == "newsletter_confirmation" %>
+      Newsletter subscription
     <% end %>
   </div>
 <% end %>

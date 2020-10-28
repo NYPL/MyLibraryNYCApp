@@ -17,7 +17,9 @@
         <% unless local_assigns[:hide_title] %>
           <td class="title"><%= link_to hold.teacher_set.title, hold.teacher_set, :title => "view teacher set details" %></td>
         <% end %>
-        <td class="status"><%= hold.quantity %></td>
+        <td class="status holds_quantity"><%= hold.quantity %></td>
+        <% sets_requested = (hold.quantity.to_i <= 1)? "Set Requested" : "Sets Requested" %>
+        <td class="sets_requested"><%= hold.quantity %> <%= sets_requested %></td>
         <td class="status"><%= hold.status_label %></td>
       </tr>
     <% end %>

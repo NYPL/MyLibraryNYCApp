@@ -2,10 +2,6 @@
 
 class InfoSiteController < ApplicationController
 
-  # Display's info-site home page
-  def index; end
-
-
   # Display's mylibrarynyc information
   def about; end
 
@@ -22,9 +18,4 @@ class InfoSiteController < ApplicationController
 
 
   def help; end
-
-  
-  def faq
-    @faqs = FaqsController.new.frequently_asked_questions
-  end
 end

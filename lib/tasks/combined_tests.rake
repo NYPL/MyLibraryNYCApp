@@ -30,6 +30,7 @@ namespace :combined_tests do
       'test/functional/home_controller_test.rb',
       'test/functional/holds_controller_test.rb',
       'test/functional/books_controller_test.rb',
+      'test/functional/news_letter_controller_test.rb',
       'test/unit/book_test.rb',
       'test/functional/schools_controller_test.rb',
       'test/functional/info_site_controller_test.rb',
@@ -37,7 +38,9 @@ namespace :combined_tests do
       'test/functional/teacher_sets_test.rb',
       'test/functional/*.rb',
       'test/unit/user_test.rb', 'test/unit/*.rb',
-      'test/unit/elastic_search_test.rb'
+      'test/unit/elastic_search_test.rb',
+      'test/unit/encrypt_decrypt_string_test.rb',
+      'test/unit/news_letter_controller_unit_test.rb'
     ].shuffle
 
     t.verbose = false
