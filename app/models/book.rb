@@ -52,19 +52,19 @@ class Book < ActiveRecord::Base
   #   end
   # end
 
+  # Unused method
+  # def matching_api_items
+  #   q = {}
+  #   if !self.isbn.nil? && !self.isbn.empty?
+  #     q[:isbn] = self.isbn
 
-  def matching_api_items
-    q = {}
-    if !self.isbn.nil? && !self.isbn.empty?
-      q[:isbn] = self.isbn
+  #   else
+  #     q[:title] = self.title
+  #     q[:author] = self.statement_of_responsibility unless self.statement_of_responsibility.nil? || self.statement_of_responsibility.empty?
+  #   end
 
-    else
-      q[:title] = self.title
-      q[:author] = self.statement_of_responsibility unless self.statement_of_responsibility.nil? || self.statement_of_responsibility.empty?
-    end
-
-    self.class.catalog_items_by_query q
-  end
+  #   self.class.catalog_items_by_query q
+  # end
 
 
   def image_uri(size=:small)
@@ -101,44 +101,44 @@ class Book < ActiveRecord::Base
     return resp['title'] if resp.keys.include? 'title'
   end
 
+  # Unused method
+  # def self.catalog_item_by_query(q, scrape_fallback=false)
+  #   res = self.catalog_items_by_query(q, scrape_fallback)
+  #   res.first unless res.nil? || res.empty?
+  # end
 
-  def self.catalog_item_by_query(q, scrape_fallback=false)
-    res = self.catalog_items_by_query(q, scrape_fallback)
-    res.first unless res.nil? || res.empty?
-  end
+  # Unused method
+  # def self.catalog_items_by_query(params, scrape_fallback=false)
+  #   q = []
+  #   # if !self.isbn.nil? && !self.isbn.empty?
+  #   if !params[:isbn].nil?
+  #     q << 'isbn:' + params[:isbn]
+  #   else
+  #     q << "title:(#{params[:title]})" unless params[:title].nil?
+  #     q << "author:(#{params[:author]})" unless params[:author].nil? || params[:author].empty?
+  #   end
 
+  #   # puts "query: #{q.inspect}"
 
-  def self.catalog_items_by_query(params, scrape_fallback=false)
-    q = []
-    # if !self.isbn.nil? && !self.isbn.empty?
-    if !params[:isbn].nil?
-      q << 'isbn:' + params[:isbn]
-    else
-      q << "title:(#{params[:title]})" unless params[:title].nil?
-      q << "author:(#{params[:author]})" unless params[:author].nil? || params[:author].empty?
-    end
+  #   resp = self.api_call 'titles', {:q => q.join(' '), :library => 'nypl', :search_type => 'custom'}
 
-    # puts "query: #{q.inspect}"
+  #   if (!resp.keys.include?('titles') || resp['titles'].empty?) && scrape_fallback
+  #     scrape_url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=i&searcharg=#{params[:isbn]}"
 
-    resp = self.api_call 'titles', {:q => q.join(' '), :library => 'nypl', :search_type => 'custom'}
+  #     rows = self.scrape_css scrape_url, '.bibDetail tr', 1.day
+  #     rows.each do |n|
+  #       # puts " Considering row: #{n}"
+  #       if (label = n.at_css('td.bibInfoLabel')) && label.text.strip.downcase == 'isbn'
+  #         isbn = n.at_css('td.bibInfoData').text.strip.split(/ /).first
+  #         puts "    Using alt isbn: #{isbn}"
 
-    if (!resp.keys.include?('titles') || resp['titles'].empty?) && scrape_fallback
-      scrape_url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=i&searcharg=#{params[:isbn]}"
+  #         return self.catalog_items_by_query :isbn => isbn
+  #       end
+  #     end
+  #   end
 
-      rows = self.scrape_css scrape_url, '.bibDetail tr', 1.day
-      rows.each do |n|
-        # puts " Considering row: #{n}"
-        if (label = n.at_css('td.bibInfoLabel')) && label.text.strip.downcase == 'isbn'
-          isbn = n.at_css('td.bibInfoData').text.strip.split(/ /).first
-          puts "    Using alt isbn: #{isbn}"
-
-          return self.catalog_items_by_query :isbn => isbn
-        end
-      end
-    end
-
-    return resp['titles'] if resp.keys.include? 'titles'
-  end
+  #   return resp['titles'] if resp.keys.include? 'titles'
+  # end
 
 
   def self.update_by_catalog_id(id)

@@ -62,118 +62,120 @@ module CatalogItemMethods
       return grade
     end
 
-    def marc
-      ret = {}
+    # Unused code
+    # def marc
+    #   ret = {}
 
-      scrape_url = "http://nypl.bibliocommons.com/item/catalogue_info/#{id}"
-      rows = self.class.scrape_css scrape_url, '#marc_details tr', 1.day
-      rows.each do |n|
-        if (tag_col = n.at_css('td.marcTag')) && (key = tag_col.text.strip).match(/^[0-9]+$/)
-          val = n.at_css('td.marcTagData').text.strip
-          # Remove leading and trailing ctrl codes (e.g. "$aEnglish Language Arts.$2local")
-          val.sub! /^\$a/,''
-          val.sub! /\$[0-9a-z]+$/,''
-          val.strip!
-          ret[key.to_i] = val
-        end
-      end
-      # puts "marc: #{ret.inspect}"
+    #   scrape_url = "http://nypl.bibliocommons.com/item/catalogue_info/#{id}"
+    #   rows = self.class.scrape_css scrape_url, '#marc_details tr', 1.day
+    #   rows.each do |n|
+    #     if (tag_col = n.at_css('td.marcTag')) && (key = tag_col.text.strip).match(/^[0-9]+$/)
+    #       val = n.at_css('td.marcTagData').text.strip
+    #       # Remove leading and trailing ctrl codes (e.g. "$aEnglish Language Arts.$2local")
+    #       val.sub! /^\$a/,''
+    #       val.sub! /\$[0-9a-z]+$/,''
+    #       val.strip!
+    #       ret[key.to_i] = val
+    #     end
+    #   end
+    #   # puts "marc: #{ret.inspect}"
 
-      ret
-    end
+    #   ret
+    # end
 
-    def update_bnumber!
-      if self.details_url && self&.details_url&.include?('record=')
-        self.bnumber = self.details_url.split('record=')[1].split('~')[0]
-        self.save
-      elsif self.details_url && self&.details_url&.include?('bibliocommons.com/item/show/') && self.details_url[-2..-1] == '052'
-        self.bnumber = self.details_url.split('bibliocommons.com/item/show/')[1].gsub('052', '')
-        self.save
-      end
-    end
+    # def update_bnumber!
+    #   if self.details_url && self&.details_url&.include?('record=')
+    #     self.bnumber = self.details_url.split('record=')[1].split('~')[0]
+    #     self.save
+    #   elsif self.details_url && self&.details_url&.include?('bibliocommons.com/item/show/') && self.details_url[-2..-1] == '052'
+    #     self.bnumber = self.details_url.split('bibliocommons.com/item/show/')[1].gsub('052', '')
+    #     self.save
+    #   end
+    # end
   end
 
   module ClassMethods
-    def api_call(endpoint, params={}, kill_cache=false, retries=0)
-      p = {}
+    # old and unused
+    # def api_call(endpoint, params={}, kill_cache=false, retries=0)
+    #   p = {}
 
 
-      url = 'https://api.bibliocommons.com/v1'
-      url += "/#{endpoint}"
+    #   url = 'https://api.bibliocommons.com/v1'
+    #   url += "/#{endpoint}"
 
-      p[:date_format] = 'iso8601'
-      p[:locale] = 'en-US'
-      p[:library] = 'nypl'
-      p[:api_key] = ENV['BIBLIO_KEY']
-      if ENV['BIBLIO_KEY'].nil?
-        puts "Need to set ENVs"
-        exit
-      end
-      p = p.merge(params)
+    #   p[:date_format] = 'iso8601'
+    #   p[:locale] = 'en-US'
+    #   p[:library] = 'nypl'
+    #   p[:api_key] = ENV['BIBLIO_KEY']
+    #   if ENV['BIBLIO_KEY'].nil?
+    #     puts "Need to set ENVs"
+    #     exit
+    #   end
+    #   p = p.merge(params)
 
-      # puts "    [API params: #{p.inspect}]"
+    #   # puts "    [API params: #{p.inspect}]"
 
-      key = endpoint + '?' + params.to_s
+    #   key = endpoint + '?' + params.to_s
 
-      Rails.cache.delete(key) if kill_cache
-      resp = Rails.cache.fetch(key, :expires_in => 1.day) do
-        query_string = p.map{ |x,v| "#{x}=#{v}" }.join('&')
-        puts "    API: #{url} ? #{params.to_s} ( #{query_string})"
-        begin
-          resp = HTTParty.get(url, :query=>p)
-          sleep 0.51
-          objs = JSON.parse resp.to_json
-        rescue
-          puts "WARN: Error parsing JSON from biblio api"
-          objs = {"error" => "true"}
-        end
-      end
+    #   Rails.cache.delete(key) if kill_cache
+    #   resp = Rails.cache.fetch(key, :expires_in => 1.day) do
+    #     query_string = p.map{ |x,v| "#{x}=#{v}" }.join('&')
+    #     puts "    API: #{url} ? #{params.to_s} ( #{query_string})"
+    #     begin
+    #       resp = HTTParty.get(url, :query=>p)
+    #       sleep 0.51
+    #       objs = JSON.parse resp.to_json
+    #     rescue
+    #       puts "WARN: Error parsing JSON from biblio api"
+    #       objs = {"error" => "true"}
+    #     end
+    #   end
 
-      # resp = {"error" => "true"} if rand < 0.30
+    #   # resp = {"error" => "true"} if rand < 0.30
 
-      # Error response?
-      if resp.nil? || resp.to_s.size < 35 || resp.keys.include?('error')
-        Rails.cache.delete(key)
+    #   # Error response?
+    #   if resp.nil? || resp.to_s.size < 35 || resp.keys.include?('error')
+    #     Rails.cache.delete(key)
 
-        # Don't retry indefinitely
-        if retries < BIBLIO_API_RETRIES
+    #     # Don't retry indefinitely
+    #     if retries < BIBLIO_API_RETRIES
 
-          puts "WARNING: BIBLIO API FAILED (/#{endpoint}) #{retries + 1} time(s). Waiting #{BIBLIO_API_RETRY_WAIT}s to retry"
-          sleep BIBLIO_API_RETRY_WAIT
+    #       puts "WARNING: BIBLIO API FAILED (/#{endpoint}) #{retries + 1} time(s). Waiting #{BIBLIO_API_RETRY_WAIT}s to retry"
+    #       sleep BIBLIO_API_RETRY_WAIT
 
-          # Retry call:
-          resp = api_call endpoint, params, kill_cache, retries + 1
+    #       # Retry call:
+    #       resp = api_call endpoint, params, kill_cache, retries + 1
 
-        else
-          puts "FAIL: API failed to fetch /#{endpoint}?#{p.to_s} after #{BIBLIO_API_RETRIES} retries"
-        end
-      end
-      # puts " resp: #{resp.to_s.size}"
+    #     else
+    #       puts "FAIL: API failed to fetch /#{endpoint}?#{p.to_s} after #{BIBLIO_API_RETRIES} retries"
+    #     end
+    #   end
+    #   # puts " resp: #{resp.to_s.size}"
 
-      resp
-    end
+    #   resp
+    # end
 
-    def scrape_content(url, expires=1.hour, sleep=0.51)
-      key = Digest::MD5.hexdigest url
+    # def scrape_content(url, expires=1.hour, sleep=0.51)
+    #   key = Digest::MD5.hexdigest url
 
-      Rails.cache.fetch(key, :expires_in => expires) do
-        require 'open-uri'
-        # puts "    [scrape cache miss: #{url}]" #  (#{key} exp #{expires})]"
-        content = nil
-        begin
-          open(url, :allow_redirections => :safe) { |io| content = io.read }
-        rescue Exception => e
-          puts "  ERROR fetching #{url}: #{e}"
-        end
-        sleep sleep
-        content
-      end
-    end
+    #   Rails.cache.fetch(key, :expires_in => expires) do
+    #     require 'open-uri'
+    #     # puts "    [scrape cache miss: #{url}]" #  (#{key} exp #{expires})]"
+    #     content = nil
+    #     begin
+    #       open(url, :allow_redirections => :safe) { |io| content = io.read }
+    #     rescue Exception => e
+    #       puts "  ERROR fetching #{url}: #{e}"
+    #     end
+    #     sleep sleep
+    #     content
+    #   end
+    # end
 
-    def scrape_css(url, css, expires=1.hour)
-      content = self.scrape_content url, expires
-      doc = Nokogiri::HTML(content)
-      doc.css(css)
-    end
+    # def scrape_css(url, css, expires=1.hour)
+    #   content = self.scrape_content url, expires
+    #   doc = Nokogiri::HTML(content)
+    #   doc.css(css)
+    # end
   end
 end
