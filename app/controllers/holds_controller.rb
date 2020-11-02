@@ -123,36 +123,25 @@ class HoldsController < ApplicationController
 
   def update
     LogWrapper.log('DEBUG', {'message' => 'update.start', 'method' => 'app/controllers/holds_controller.rb.update'})
-    begin
-      @hold = Hold.find_by_access_key(params[:id])
-      # Update teacher-set available copies while cancelling the hold.
-      @hold.teacher_set.available_copies = @hold.teacher_set.available_copies + @hold.teacher_set.holds_count_for_user(current_user, @hold.id)
-      @hold.teacher_set.save!
-      unless (c = params[:hold_change]).nil?
-        if c[:status] == 'cancelled'
-          LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
-          @hold.cancel! c[:comment]
-        end
+    @hold = Hold.find_by_access_key(params[:id])
+    # Update teacher-set available copies while cancelling the hold.
+    @hold.teacher_set.available_copies = @hold.teacher_set.available_copies + @hold.teacher_set.holds_count_for_user(current_user, @hold.id)
+    @hold.teacher_set.save!
+    unless (c = params[:hold_change]).nil?
+      if c[:status] == 'cancelled'
+        LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
+        @hold.cancel! c[:comment]
       end
+    end
 
-      respond_to do |format|
-        params.permit!
-        if @hold.update_attributes(params[:hold])
-          format.html { redirect_to @hold, notice: 'Your order was successfully updated.' }
-          format.json { render json: @hold }
-        else
-          format.html { render action: 'edit' }
-          format.json { render json: @hold.errors, status: :unprocessable_entity }
-        end
-      end
-    rescue => exception
-      LogWrapper.log('ERROR', 'message' => exception.message)
-      respond_to do |format|
-        format.html {}
-        format.json {
-          render json: { error: "We've encountered an error and were unable to cancel your order.\
-            Please try again later or email help@mylibrarynyc.org for assistance.", rails_error_message: exception.message }.to_json, status: 500 
-        }
+    respond_to do |format|
+      params.permit!
+      if @hold.update_attributes(params[:hold])
+        format.html { redirect_to @hold, notice: 'Your order was successfully updated.' }
+        format.json { render json: @hold }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @hold.errors, status: :unprocessable_entity }
       end
     end
   end
