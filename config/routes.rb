@@ -88,9 +88,6 @@ MyLibraryNYC::Application.routes.draw do
 
   root :to => 'home#index'
   match '/about/participating-schools' => 'schools#index', via: [:get]
-  match 'about/about-mylibrarynyc' => 'info_site#about', via: [:get]
-  match '/contacts-links' => 'info_site#contacts', via: [:get]
-  match '/help/access-digital-resources' => 'info_site#digital_resources', via: [:get]
   match '/help' => 'home#help', via: [:get]
   match '/faq' => 'home#faq', via: [:get]
   match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]
