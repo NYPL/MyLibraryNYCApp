@@ -33,6 +33,7 @@ class HoldsControllerTest < ActionController::TestCase
   end
 
   test "should update hold successfully" do
+    sign_in @user
     post :update, params: { id: @hold1.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
     assert_response :redirect
     assert_equal("Your order was successfully updated.", flash[:notice])
