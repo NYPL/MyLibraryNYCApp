@@ -2,7 +2,7 @@
 
 hold1:
   access_key: access_key1
-  status: MyText
+  status: new
   quantity: 1
   teacher_set: teacher_set_one
   user: user1
@@ -10,7 +10,7 @@ hold1:
 
 hold2:
   access_key: access_key2
-  status: MyText2
+  status: new
   quantity: 1
   teacher_set: teacher_set_one
   user: user1

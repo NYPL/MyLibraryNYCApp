@@ -73,14 +73,14 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
-  #Current user Teacher set holds count
+  # Current user Teacher set holds count
   def holds_count_for_user(user, hold_id=nil)
     holds = holds_for_user(user, hold_id)
     holds.present? ? holds.sum(:quantity) : nil
   end
 
 
-  #Current user Teacher set holds
+  # Current user Teacher set holds
   def holds_for_user(user, hold_id)
     return [] unless user
     

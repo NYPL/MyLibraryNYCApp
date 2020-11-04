@@ -120,7 +120,8 @@ class HoldsController < ApplicationController
     end
   end
 
-
+  
+  # Here calculate the teacher-set available_copies based on the current-user holds than saves in teacher-set table and cancel the current-user holds.
   def update
     LogWrapper.log('DEBUG', {'message' => 'update.start', 'method' => 'app/controllers/holds_controller.rb.update'})
     @hold = Hold.find_by_access_key(params[:id])
