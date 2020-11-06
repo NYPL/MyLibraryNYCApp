@@ -267,7 +267,7 @@ class User < ActiveRecord::Base
   # could set the user to "pending", and we'll be checking for those here, as well.
   def save_as_pending
     # do we need to fill in a provisional barcode?
-    if !self.barcode.present?
+    unless self.barcode.present?
       self.barcode = self.assign_barcode
     end
 
