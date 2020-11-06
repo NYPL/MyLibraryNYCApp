@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # frozen_string_literal: true
 
 class User < ActiveRecord::Base
@@ -251,6 +250,29 @@ class User < ActiveRecord::Base
   # This returns the sierra code, not the school's zcode
   def pcode4
     school.sierra_code
+  end
+
+
+  # Another piece of code has determined this user is all set to be called
+  # complete and done.  Note: Usually, expect the next step to be the calling of
+  # Patron Service to create the user in Sierra.
+  def save_as_complete
+    self.status = STATUS_LABELS['complete']
+    self.save
+  end
+
+
+  # If the user's barcode is not yet finalized, then set its status to
+  # 'pending' and save.  In the future, there may be other conditions that
+  # could set the user to "pending", and we'll be checking for those here, as well.
+  def save_as_pending
+    # do we need to fill in a provisional barcode?
+    if !self.barcode.present?
+      self.barcode = self.assign_barcode
+    end
+
+    self.status = STATUS_LABELS['barcode_pending']
+    self.save
   end
 
 
