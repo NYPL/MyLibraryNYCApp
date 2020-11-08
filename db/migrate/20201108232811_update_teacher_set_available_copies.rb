@@ -6,7 +6,6 @@ class UpdateTeacherSetAvailableCopies < ActiveRecord::Migration[5.0]
       if ts.total_copies > 0 && ts.total_copies.present?
         ts.available_copies = ts.total_copies - ts.ts_holds_count.to_i
         if ts.available_copies < 0
-          binding.pry
           ts_arr << ts.id
           next
         end
