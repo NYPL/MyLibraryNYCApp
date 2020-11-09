@@ -72,6 +72,7 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+  
   # Get all teacher-set status holds except for cancelled and closed.
   def ts_holds_count
     ts_holds = holds.where.not(status: ['cancelled', 'closed'])
