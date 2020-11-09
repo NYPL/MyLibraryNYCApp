@@ -125,16 +125,16 @@ class HoldsController < ApplicationController
   def update
     LogWrapper.log('DEBUG', {'message' => 'update.start', 'method' => 'app/controllers/holds_controller.rb.update'})
     @hold = Hold.find_by_access_key(params[:id])
-    # Update teacher-set available copies while cancelling the hold.
-    @hold.teacher_set.available_copies = @hold.teacher_set.available_copies + @hold.teacher_set.holds_count_for_user(current_user, @hold.id)
-    @hold.teacher_set.save!
+
     unless (c = params[:hold_change]).nil?
       if c[:status] == 'cancelled'
+        # Update teacher-set available copies while cancelling the hold.
+        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies + @hold.teacher_set.holds_count_for_user(current_user, @hold.id)
+        @hold.teacher_set.save!
         LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
         @hold.cancel! c[:comment]
       end
     end
-
     respond_to do |format|
       params.permit!
       if @hold.update_attributes(params[:hold])
