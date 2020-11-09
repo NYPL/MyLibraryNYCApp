@@ -34,7 +34,7 @@ class HoldsControllerTest < ActionController::TestCase
 
   test "update teacher-set available_copies and cancel hold successfully" do
     sign_in @user
-    expected_ts_available_copies  = 4
+    expected_ts_available_copies = 4
 
     resp = post :update, params: { id: @hold1.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
     resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold1.id)
@@ -49,7 +49,7 @@ class HoldsControllerTest < ActionController::TestCase
 
   test "Should fail hold cancelaltion" do
     sign_in @user
-    expected_ts_available_copies  = 2
+    expected_ts_available_copies = 2
 
     resp = post :update, params: { id: @hold1.access_key, hold_change: {"comment" => "qqq", "status" => "new"}, hold: {status: "new"} }
     resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold1.id)
