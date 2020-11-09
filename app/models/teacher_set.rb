@@ -88,6 +88,13 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
+  # Get all teacher-set status holds except for cancelled and closed.
+  def ts_holds_count
+    ts_holds = holds.where.not(status: ['cancelled', 'closed'])
+    ts_holds.present? ? ts_holds.sum(:quantity) : nil
+  end
+
+
   def make_slug
     # check for nil title otherwise parameterize will fail
     parameterized_title = (self.title || '').parameterize
