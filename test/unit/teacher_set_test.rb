@@ -128,7 +128,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       @model.stub :holds_for_user, @mintest_mock1 do
         resp = @teacher_set.holds_count_for_user(@user, @hold1.id)
       end
-      assert_equal(1, resp)
+      assert_equal(2, resp)
     end
 
     # Test-2
@@ -138,7 +138,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       @model.stub :holds_for_user, @mintest_mock1 do
         resp = @teacher_set.holds_count_for_user(@user, @hold1.id)
       end
-      assert_equal(1, resp)
+      assert_equal(2, resp)
     end
   end
 
