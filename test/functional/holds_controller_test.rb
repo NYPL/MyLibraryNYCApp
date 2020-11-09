@@ -60,9 +60,14 @@ class HoldsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-  test "should create hold" do
+  test "create hold and update teacher-set available_copies" do
+    expected_ts_available_copies = 0
+    # Before hold creation teacher-set available copies is 2.
     sign_in @user
-    post :create, params: { id: @hold1.access_key, teacher_set_id: @hold1.teacher_set_id, query_params: {"quantity" => 1}, hold: {status: "MyText"} }
+    resp = post :create, params: { id: @hold1.access_key, teacher_set_id: @hold1.teacher_set_id, query_params: {"quantity" => 2}, hold: {} }
+    resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold1.id)
+    # User requested 2 teacher-sets. After creation of hold teacher-set available_copies will zero.
+    assert_equal(expected_ts_available_copies, TeacherSet.find(resp_hold_obj.teacher_set_id).available_copies)
   end
 
   test "should fail hold creation" do
