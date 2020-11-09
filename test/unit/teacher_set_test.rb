@@ -120,7 +120,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-  # Test current-user teacher-set holds quantity count
   describe "test teacher-set holds count" do
     # Test-1
     it "test current-user holds count with hold_id not nil" do
@@ -143,7 +142,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-  # Test current-user teacher-set holds
   describe 'holds for user' do
     # Test-1
     it 'test current-user is not present' do
