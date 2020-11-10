@@ -12,6 +12,14 @@ class UserTest < ActiveSupport::TestCase
     AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
   end
 
+  # todo:
+  # - newly created user has status of barcode_pending
+  # - integration: mock sierra response of barcode not found, make sure the user keeps its
+  # barcode and changes status and saves.
+  # - integration: sierra response of barcode found or exception, make sure user increments barcode and tries again.
+  # - if pass blank barcode to check_barcode_found_in_sierra, it returns false, so make sure
+  # the calling code is responsible for checking barcode string to exist and be reasonable
+  # - if there was a problem, and the problem is resolved, user does save with new status and barcode
 
   [generate_barcode].each do |barcode|
     test 'sierra user can be found by barcode' do

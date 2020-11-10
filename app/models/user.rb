@@ -116,6 +116,29 @@ class User < ActiveRecord::Base
   end
 
 
+  # Another piece of code has determined this user is all set to be called
+  # complete and done.  Note: Usually, expect the next step to be the calling of
+  # Patron Service to create the user in Sierra.
+  def save_as_complete!
+    self.status = STATUS_LABELS['complete']
+    self.save
+  end
+
+
+  # If the user's barcode is not yet finalized, then set its status to
+  # 'pending' and save.  In the future, there may be other conditions that
+  # could set the user to "pending", and we'll be checking for those here, as well.
+  def save_as_pending!
+    # do we need to fill in a provisional barcode?
+    if !self.barcode.present?
+      self.barcode = self.assign_barcode
+    end
+
+    self.status = STATUS_LABELS['barcode_pending']
+    self.save
+  end
+
+
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -348,6 +371,18 @@ class User < ActiveRecord::Base
     end
 
     return @barcode_found_in_sierra
+  end
+
+
+  def find_unique_new_barcode
+    # Start the whole loop of
+    # a) pick barcode in MLN db
+    # b) make sure it'd be new and unique in Sierra
+    # c) repeat until b) is true
+
+    # TODO: move user.assign_barcode over to its own multithreaded job
+    self.assign_barcode!
+    user.save_as_complete!
   end
 
 
