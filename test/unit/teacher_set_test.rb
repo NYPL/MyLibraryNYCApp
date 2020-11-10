@@ -8,6 +8,10 @@ class TeacherSetTest < ActiveSupport::TestCase
   include LogWrapper
 
   before do
+    @user = holds(:hold1).user
+    @hold1 = holds(:hold1)
+    @hold2 = holds(:hold2)
+    @teacher_set = teacher_sets(:teacher_set_one)
     @model = TeacherSet.new
     @mintest_mock1 = MiniTest::Mock.new
     @mintest_mock2 = MiniTest::Mock.new
@@ -114,6 +118,47 @@ class TeacherSetTest < ActiveSupport::TestCase
       resp = teacher_set.update_set_type(set_type_val)
       assert_equal(true, resp)
     end
+  end
+
+  describe "test teacher-set holds count" do
+    # Test-1
+    it "test current-user holds count with hold_id not nil" do
+      @mintest_mock1.expect(:call, [@hold1], [@user, @hold1.id])
+      resp = nil
+      @model.stub :holds_for_user, @mintest_mock1 do
+        resp = @teacher_set.holds_count_for_user(@user, @hold1.id)
+      end
+      assert_equal(2, resp)
+    end
+
+    # Test-2
+    it "test current-user holds count with hold_id nil" do
+      @mintest_mock1.expect(:call, [@hold1], [@user, nil])
+      resp = nil
+      @model.stub :holds_for_user, @mintest_mock1 do
+        resp = @teacher_set.holds_count_for_user(@user, @hold1.id)
+      end
+      assert_equal(2, resp)
+    end
+  end
+
+  describe 'holds for user' do
+    # Test-1
+    it 'test current-user is not present' do
+      resp = @teacher_set.holds_for_user(nil, @hold1.id)
+      assert_empty(resp)
+    end
+
+    # Test-2
+    it 'test current-user holds with hold_id' do
+      @mintest_mock1.expect(:call, [@hold1], [@user, @hold1.id])
+      resp = nil
+      @model.stub :ts_holds_by_user_and_hold_id, @mintest_mock1 do 
+        resp = @teacher_set.holds_for_user(@user, @hold1.id)
+      end
+      assert_equal([@hold1], resp)
+    end
+
   end
 
   def test_teacher_set_query
