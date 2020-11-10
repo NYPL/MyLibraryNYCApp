@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # frozen_string_literal: true
 
 class User < ActiveRecord::Base
@@ -156,7 +155,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode.to_s],
+      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode!.to_s],
       'addresses': [
         {
           'lines': [
@@ -277,9 +276,32 @@ class User < ActiveRecord::Base
   end
 
 
+  # Another piece of code has determined this user is all set to be called
+  # complete and done.  Note: Usually, expect the next step to be the calling of
+  # Patron Service to create the user in Sierra.
+  def save_as_complete
+    self.status = STATUS_LABELS['complete']
+    self.save
+  end
+
+
+  # If the user's barcode is not yet finalized, then set its status to
+  # 'pending' and save.  In the future, there may be other conditions that
+  # could set the user to "pending", and we'll be checking for those here, as well.
+  def save_as_pending
+    # do we need to fill in a provisional barcode?
+    unless self.barcode.present?
+      self.barcode = self.assign_barcode!
+    end
+
+    self.status = STATUS_LABELS['barcode_pending']
+    self.save
+  end
+
+
   # ################ THE BARCODES SECTION! ################
 
-  def assign_barcode
+  def assign_barcode!
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
        'method' => "assign_barcode",
@@ -287,7 +309,7 @@ class User < ActiveRecord::Base
        'user' => {email: self.email}
       })
 
-    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
+    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).pluck(:barcode).last
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
     LogWrapper.log('DEBUG', {
