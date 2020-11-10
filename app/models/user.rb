@@ -286,7 +286,7 @@ class User < ActiveRecord::Base
        'user' => {email: self.email}
       })
 
-    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.pluck(:barcode)
+    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).pluck(:barcode).last
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
     LogWrapper.log('DEBUG', {
