@@ -278,7 +278,7 @@ class User < ActiveRecord::Base
 
   # ################ THE BARCODES SECTION! ################
 
-  def assign_barcode
+  def assign_barcode!
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
        'method' => "assign_barcode",
@@ -286,7 +286,7 @@ class User < ActiveRecord::Base
        'user' => {email: self.email}
       })
 
-    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
+    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.pluck(:barcode)
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
     LogWrapper.log('DEBUG', {
