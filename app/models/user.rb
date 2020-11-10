@@ -132,7 +132,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode.to_s],
+      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode!.to_s],
       'addresses': [
         {
           'lines': [
