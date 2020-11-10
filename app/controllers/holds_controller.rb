@@ -84,11 +84,12 @@ class HoldsController < ApplicationController
 
       quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
       @hold.quantity = quantity.to_i
-      @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
-      @hold.teacher_set.save!
 
       respond_to do |format|
         if @hold.save
+          # Update teacher-set available_copies while creating the teacher-set order copies.
+          @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
+          @hold.teacher_set.save!
           LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
           format.html { redirect_to hold_url(@hold.access_key), notice:
             'Your order has been received by our system and will soon be delivered to your school.\
@@ -119,19 +120,21 @@ class HoldsController < ApplicationController
     end
   end
 
-
+  
+  # Here calculate the teacher-set available_copies based on the current-user holds than saves in teacher-set table and cancel the current-user holds.
   def update
     LogWrapper.log('DEBUG', {'message' => 'update.start', 'method' => 'app/controllers/holds_controller.rb.update'})
-
     @hold = Hold.find_by_access_key(params[:id])
 
     unless (c = params[:hold_change]).nil?
       if c[:status] == 'cancelled'
+        # Update teacher-set available copies while cancelling the hold.
+        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies + @hold.teacher_set.holds_count_for_user(current_user, @hold.id)
+        @hold.teacher_set.save!
         LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
         @hold.cancel! c[:comment]
       end
     end
-
     respond_to do |format|
       params.permit!
       if @hold.update_attributes(params[:hold])
