@@ -268,7 +268,7 @@ class User < ActiveRecord::Base
   def save_as_pending
     # do we need to fill in a provisional barcode?
     unless self.barcode.present?
-      self.barcode = self.assign_barcode
+      self.barcode = self.assign_barcode!
     end
 
     self.status = STATUS_LABELS['barcode_pending']
