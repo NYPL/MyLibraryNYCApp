@@ -312,7 +312,7 @@ class User < ActiveRecord::Base
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).pluck(:barcode).last
     # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
     if last_user_barcode.blank?
-      last_user_barcode = 27777000000001;
+      last_user_barcode = 27777000000001
     end
 
     self.assign_attributes({ barcode: last_user_barcode + 1})
