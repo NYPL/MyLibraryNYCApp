@@ -310,6 +310,11 @@ class User < ActiveRecord::Base
       })
 
     last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).pluck(:barcode).last
+    # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
+    if last_user_barcode.blank?
+      last_user_barcode = 27777000000001;
+    end
+
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
     LogWrapper.log('DEBUG', {
@@ -402,9 +407,10 @@ class User < ActiveRecord::Base
     # b) make sure it'd be new and unique in Sierra
     # c) repeat until b) is true
 
-    # TODO: move user.assign_barcode over to its own multithreaded job
+    # TODO: future branches: move user.assign_barcode over to its own multithreaded job,
+    # and move save_as_complete over to after have successfully sent to Sierra
     self.assign_barcode!
-    user.save_as_complete!
+    self.save_as_complete!
   end
 
 
