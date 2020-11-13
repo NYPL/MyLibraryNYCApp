@@ -1,4 +1,5 @@
 <div class="news_letter_confirmation_email">
+  <%= link_to image_tag("news-letter-email-logo.png", border: 0), "//#{ENV['MLN_INFO_SITE_HOSTNAME']}/" %>
   <p>Hello,</p>
   <p>We have received a request to subscribe this email address to the MyLibraryNYC newsletter. To confirm this subscription request please click the confirmation link below:</p>
   <p><a href="//<%= "#{ENV['MLN_INFO_SITE_HOSTNAME']}/newsletter_confirmation?key=#{@encrypt_email}" %>">
