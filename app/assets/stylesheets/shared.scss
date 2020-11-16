@@ -228,6 +228,16 @@
   margin: 20px; 
   text-align: left;
   padding: 25px;
+
+  hr {
+    display: block;
+    height: 1px !important;
+    border: 0 !important;
+    border-top: 12px solid #ccc !important;
+    margin: 1em 0 !important;
+    padding: 0 !important;
+    width: 130% !important;
+  }
 }
 
 .nl-subscribe-button {
@@ -259,6 +269,7 @@
   font-size: 20px;
 }
 
-.news-letter-form{
+.news-letter-form {
   max-width: 610px;
 }
+
