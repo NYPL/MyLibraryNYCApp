@@ -73,6 +73,7 @@ class AdminMailer < ActionMailer::Base
   def send_news_letter_confirmation_email(encrypt_email, email)
     begin
       @encrypt_email = encrypt_email
+      attachments.inline['news-letter-email-logo.png'] = File.read('path/to/news-letter-email-logo.png')
       mail(to: [email], :subject => "MylibraryNYC Newsletter - confirmation requested")
     rescue => exception
       LogWrapper.log('ERROR', {
