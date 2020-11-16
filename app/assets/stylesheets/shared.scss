@@ -231,12 +231,12 @@
 
   hr {
     display: block;
-    height: 1px;
-    border: 0;
-    border-top: 12px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
-    width: 130%;
+    height: 1px !important;
+    border: 0 !important;
+    border-top: 12px solid #ccc !important;
+    margin: 1em 0 !important;
+    padding: 0 !important;
+    width: 130% !important;
   }
 }
 
