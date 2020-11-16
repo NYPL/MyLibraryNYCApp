@@ -7,7 +7,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
     user_one = crank!(:user, barcode: 27777000000099)
     user_two = crank(:user)
-    user_two.assign_barcode
+    user_two.assign_barcode!
     assert(user_two.barcode == 27777000000100)
   end
 
