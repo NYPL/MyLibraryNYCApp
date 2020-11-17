@@ -1011,8 +1011,9 @@ class TeacherSet < ActiveRecord::Base
   # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
   def send_request_to_bibs_microservice(bibid)
     bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
-    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'authorization' => "Bearer #{Oauth.get_oauth_token}", '
-      Content-Type' => 'application/json' }, timeout: 10)
+    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 
+      'Content-Type' => 'application/json' }, timeout: 10)
+
     if response.code == 200
       LogWrapper.log('DEBUG', {
         'message' => "Response from bib services api",
