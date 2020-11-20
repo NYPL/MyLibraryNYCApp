@@ -296,7 +296,7 @@ class User < ActiveRecord::Base
 
     last_user_barcode = User.where("barcode < #{max_barcode}").order(:barcode).pluck(:barcode).last
     # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
-    if (last_user_barcode.blank? or (last_user_barcode < min_barcode))
+    if (last_user_barcode.blank? || (last_user_barcode < min_barcode))
       last_user_barcode = min_barcode
     end
 
