@@ -756,6 +756,7 @@ class TeacherSet < ActiveRecord::Base
     end
     LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
     self.update_attributes(set_type: set_type)
+    set_type
   end
 
 
@@ -776,7 +777,7 @@ class TeacherSet < ActiveRecord::Base
   # Receive JSON related to a teacher_set.
   # For each ISBN, ensure there is an associated book.
   # Disassociate books that are no longer in the teacher set.
-  def update_included_book_list(teacher_set_record, set_type)
+  def update_included_book_list(teacher_set_record)
     # Gather all ISBNs.
     return unless teacher_set_record['varFields']
 
@@ -805,8 +806,6 @@ class TeacherSet < ActiveRecord::Base
       TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
       book.update_from_isbn
     end
-    # Update set_type value in teacher_set table.
-    update_set_type(set_type)
   end
 
 

@@ -12,6 +12,8 @@ class TeacherSetTest < ActiveSupport::TestCase
     @hold1 = holds(:hold1)
     @hold2 = holds(:hold2)
     @teacher_set = teacher_sets(:teacher_set_one)
+    @teacher_set3 = teacher_sets(:teacher_set_three)
+    @teacher_set4 = teacher_sets(:teacher_set_four)
     @model = TeacherSet.new
     @mintest_mock1 = MiniTest::Mock.new
     @mintest_mock2 = MiniTest::Mock.new
@@ -99,24 +101,24 @@ class TeacherSetTest < ActiveSupport::TestCase
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   describe "update set_type value in teacher set table" do
     it "test set_type value with Topic set" do
-      set_type_val = " Topic set "
-      teacher_set = crank!(:teacher_set)
+      set_type_val = "Topic Set"
+      teacher_set = @teacher_set4
       resp = teacher_set.update_set_type(set_type_val)
-      assert_equal(true, resp)
+      assert_equal(set_type_val, resp)
     end
 
-    it "test set_type value with Topic set" do
-      set_type_val = " Book Club Set "
-      teacher_set = crank!(:teacher_set)
+    it "test set_type value with Book Club Set" do
+      set_type_val = "Book Club Set"
+      teacher_set = @teacher_set3
       resp = teacher_set.update_set_type(set_type_val)
-      assert_equal(true, resp)
+      assert_equal(set_type_val, resp)
     end
 
     it "test set_type value with nil" do
       set_type_val = nil
       teacher_set = crank!(:teacher_set)
       resp = teacher_set.update_set_type(set_type_val)
-      assert_equal(true, resp)
+      assert_equal(set_type_val, resp)
     end
   end
 
@@ -164,7 +166,7 @@ class TeacherSetTest < ActiveSupport::TestCase
   def test_teacher_set_query
     params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
     resp = TeacherSet.for_query(params)
-    assert_equal(2, resp.count)
+    assert_equal(4, resp.count)
   end
 
 
