@@ -115,29 +115,6 @@ class User < ActiveRecord::Base
   end
 
 
-  # Another piece of code has determined this user is all set to be called
-  # complete and done.  Note: Usually, expect the next step to be the calling of
-  # Patron Service to create the user in Sierra.
-  def save_as_complete!
-    self.status = STATUS_LABELS['complete']
-    self.save
-  end
-
-
-  # If the user's barcode is not yet finalized, then set its status to
-  # 'pending' and save.  In the future, there may be other conditions that
-  # could set the user to "pending", and we'll be checking for those here, as well.
-  def save_as_pending!
-    # do we need to fill in a provisional barcode?
-    unless self.barcode.present?
-      self.barcode = self.assign_barcode!
-    end
-
-    self.status = STATUS_LABELS['barcode_pending']
-    self.save
-  end
-
-
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -279,24 +256,26 @@ class User < ActiveRecord::Base
   # Another piece of code has determined this user is all set to be called
   # complete and done.  Note: Usually, expect the next step to be the calling of
   # Patron Service to create the user in Sierra.
-  def save_as_complete
+  def save_as_complete!
     self.status = STATUS_LABELS['complete']
-    self.save
+    self.save!
   end
 
 
   # If the user's barcode is not yet finalized, then set its status to
   # 'pending' and save.  In the future, there may be other conditions that
   # could set the user to "pending", and we'll be checking for those here, as well.
-  def save_as_pending
+  def save_as_pending!
     # do we need to fill in a provisional barcode?
     unless self.barcode.present?
       self.barcode = self.assign_barcode!
     end
 
     self.status = STATUS_LABELS['barcode_pending']
-    self.save
+    self.save!
   end
+
+
 
 
   # ################ THE BARCODES SECTION! ################
@@ -309,10 +288,16 @@ class User < ActiveRecord::Base
        'user' => {email: self.email}
       })
 
-    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).pluck(:barcode).last
+    # Integer(string) can raise ArgumentError.  we choose not to rescue it, because
+    # not having min and max barcode range boundaries set in the application.yml file
+    # should prevent the app from working in a visible manner.
+    min_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MINIMUM'])
+    max_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MAXIMUM'])
+
+    last_user_barcode = User.where("barcode < #{max_barcode}").order(:barcode).pluck(:barcode).last
     # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
-    if last_user_barcode.blank?
-      last_user_barcode = 27777000000001
+    if (last_user_barcode.blank? or (last_user_barcode < min_barcode))
+      last_user_barcode = min_barcode
     end
 
     self.assign_attributes({ barcode: last_user_barcode + 1})
