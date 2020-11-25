@@ -211,14 +211,14 @@ class UserTest < ActiveSupport::TestCase
 
   test 'mln app notices if runs out of available barcodes' do
     # this is the max barcode we can actually create
-    user_takes_last_barcode = crank(:queens_user, barcode: Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MAXIMUM']) - 2)
-    user_takes_last_barcode.save
-
+    user_takes_last_barcode = crank(:queens_user, barcode: Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MAXIMUM']))
+    user_takes_last_barcode.save!
     # next user cannot get a valid barcode
     user_two = crank(:queens_user)
-    user_two.save
-    user_two.assign_barcode!
-    assert_equal(["MLN app has run out of available user barcodes"], user_two.errors.messages[:barcode])
+    user_two.save!
+    exception = assert_raise(RangeError) do
+      user_two.assign_barcode!
+    end
   end
 
 
