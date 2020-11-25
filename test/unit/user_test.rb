@@ -219,6 +219,7 @@ class UserTest < ActiveSupport::TestCase
     exception = assert_raise(RangeError) do
       user_two.assign_barcode!
     end
+    assert_equal('MLN app has run out of available user barcodes', exception.message)
   end
 
 
