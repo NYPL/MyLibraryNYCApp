@@ -294,9 +294,26 @@ class User < ActiveRecord::Base
     min_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MINIMUM'])
     max_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MAXIMUM'])
 
-    last_user_barcode = User.where("barcode < #{max_barcode}").order(:barcode).pluck(:barcode).last
+    # some databases sort nulls to top of order, other databases sort nulls to bottom of order
+    last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
     # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
-    if (last_user_barcode.blank? || (last_user_barcode < min_barcode))
+    if last_user_barcode.blank?
+      # Check to see if we're in an empty database, or if it's the opposite case:
+      # we've run out of allowed barcodes.  Yes, we might have historical user records
+      # with barcodes outside of the range, but we can't be making new records there.
+      current_top_barcode = User.where.not(barcode: nil).order(barcode: :desc).pluck(:barcode).first
+      if current_top_barcode.blank?
+        # hurrah, we're in a fresh db, let's start our users table off
+        last_user_barcode = min_barcode
+      else
+        # No more barcodes left in the range available to MLN.
+        # Throw an Exception-level exception -- we can't operate with
+        # no available barcodes, and this exception shouldn't be caught
+        raise Exception.new "MLN app has run out of available user barcodes";
+      end
+    end
+
+    if (last_user_barcode < min_barcode)
       last_user_barcode = min_barcode
     end
 
