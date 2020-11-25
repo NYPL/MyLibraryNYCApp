@@ -309,7 +309,7 @@ class User < ActiveRecord::Base
         # No more barcodes left in the range available to MLN.
         # Throw an Exception-level exception -- we can't operate with
         # no available barcodes, and this exception shouldn't be caught
-        raise Exceptions::RuntimeError, "MLN app has run out of available user barcodes";
+        raise Exceptions::RuntimeError, "MLN app has run out of available user barcodes"
       end
     end
 
