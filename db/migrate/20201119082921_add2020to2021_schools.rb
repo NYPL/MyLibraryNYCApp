@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Add2020to2021Schools < ActiveRecord::Migration[5.0]
   def up
     # First create the new schools by adding them to a CSV like this.
