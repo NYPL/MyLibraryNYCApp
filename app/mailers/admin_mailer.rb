@@ -74,7 +74,7 @@ class AdminMailer < ActionMailer::Base
     begin
       @encrypt_email = encrypt_email
       attachments.inline['news-letter-email-logo.png'] = File.read(Rails.root.join("app/assets/images/news-letter-email-logo.png"))
-      mail(to: [email], :subject => "MylibraryNYC Newsletter - confirmation requested")
+      mail(to: [email], :subject => "MyLibraryNYC Newsletter - confirmation requested")
     rescue => exception
       LogWrapper.log('ERROR', {
         'message' => "Cannot send send news letter confirmation email. Error message:#{exception.message},
