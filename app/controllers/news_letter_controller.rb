@@ -9,8 +9,9 @@ class NewsLetterController < ApplicationController
     # Checking input email is valid format or not.
     validate_news_letter_email_is_valid
     # Connect's to google sheets
-    google_sheet = GoogleSpreadSheet.new.google_sheet_client
-    emails_arr = google_sheet.rows.flatten
+    google_sheet = GoogleSpreadSheet.new.get_news_letter_google_spread_sheets_emails
+    emails_arr = google_sheet.values.flatten
+
     # Checking here input email is already in google sheets or not.
     email_already_in_google_sheets?(emails_arr, email)
     # After input validations, send news-letter confirmation email to news-letter subscriber.
