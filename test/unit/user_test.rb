@@ -7,11 +7,19 @@ class UserTest < ActiveSupport::TestCase
 
   setup do
     # create the first user with a barcode in range so that send_request_to_patron_creator_service will work
+    # specific barcode number doesn't matter here
     @user = crank(:queens_user, barcode: 27777011111111)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: @user.school.code)
     AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
   end
 
+
+  # TODO: integration: mock sierra response of barcode not found, make sure the user keeps its
+  # barcode and changes status and saves.
+  # TODO: integration: sierra response of barcode found or exception, make sure user increments barcode and tries again.
+  # TODO: if pass blank barcode to check_barcode_found_in_sierra, it returns false, so make sure
+  # the calling code is responsible for checking barcode string to exist and be reasonable
+  # TODO: if there was a problem, and the problem is resolved, user does save with new status and barcode
 
   [generate_barcode].each do |barcode|
     test 'sierra user can be found by barcode' do
@@ -167,6 +175,17 @@ class UserTest < ActiveSupport::TestCase
     assert_equal('Invalid status code of: 500', exception.message)
   end
 
+
+  test "sending user to sierra changes status from pending to complete" do
+    crank(:queens_user, barcode: 27777011111111)
+    assert_equal("barcode_pending", @user.status)
+    @user.find_unique_new_barcode
+    # TODO: future change:
+    # @user.send_request_to_patron_creator_service
+    assert_equal("complete", @user.status)
+  end
+
+
   test "Queens patron's patron_type is set based on their school's borough" do
     assert(@user.patron_type == 149)
   end
@@ -188,4 +207,20 @@ class UserTest < ActiveSupport::TestCase
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
     assert(user.pcode4 == user.school.sierra_code)
   end
+
+
+  test 'mln app notices if runs out of available barcodes' do
+    # this is the max barcode we can actually create
+    user_takes_last_barcode = crank(:queens_user, barcode: Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MAXIMUM']))
+    user_takes_last_barcode.save!
+    # next user cannot get a valid barcode
+    user_two = crank(:queens_user)
+    user_two.save!
+    exception = assert_raise(RangeError) do
+      user_two.assign_barcode!
+    end
+    assert_equal('MLN app has run out of available user barcodes', exception.message)
+  end
+
+
 end

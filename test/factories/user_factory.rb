@@ -11,7 +11,8 @@ class Cranky::Factory
            password: 'password123',
            password_confirmation: 'password123',
            pin: '1234',
-           school_id: crank!(:school).id
+           school_id: crank!(:school).id,
+           status: 'barcode_pending'
   end
 
   def queens_user

@@ -256,24 +256,26 @@ class User < ActiveRecord::Base
   # Another piece of code has determined this user is all set to be called
   # complete and done.  Note: Usually, expect the next step to be the calling of
   # Patron Service to create the user in Sierra.
-  def save_as_complete
+  def save_as_complete!
     self.status = STATUS_LABELS['complete']
-    self.save
+    self.save!
   end
 
 
   # If the user's barcode is not yet finalized, then set its status to
   # 'pending' and save.  In the future, there may be other conditions that
   # could set the user to "pending", and we'll be checking for those here, as well.
-  def save_as_pending
+  def save_as_pending!
     # do we need to fill in a provisional barcode?
     unless self.barcode.present?
       self.barcode = self.assign_barcode!
     end
 
     self.status = STATUS_LABELS['barcode_pending']
-    self.save
+    self.save!
   end
+
+
 
 
   # ################ THE BARCODES SECTION! ################
@@ -286,7 +288,35 @@ class User < ActiveRecord::Base
        'user' => {email: self.email}
       })
 
-    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).pluck(:barcode).last
+    # Integer(string) can raise ArgumentError.  we choose not to rescue it, because
+    # not having min and max barcode range boundaries set in the application.yml file
+    # should prevent the app from working in a visible manner.
+    min_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MINIMUM'])
+    max_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MAXIMUM'])
+
+    # some databases sort nulls to top of order, other databases sort nulls to bottom of order
+    last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
+    # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
+    if last_user_barcode.blank?
+      # Check to see if we're in an empty database, or if it's the opposite case:
+      # we've run out of allowed barcodes.  Yes, we might have historical user records
+      # with barcodes outside of the range, but we can't be making new records there.
+      current_top_barcode = User.where.not(barcode: nil).order(barcode: :desc).pluck(:barcode).first
+      if current_top_barcode.blank?
+        # hurrah, we're in a fresh db, let's start our users table off
+        last_user_barcode = min_barcode
+      else
+        # No more barcodes left in the range available to MLN.
+        # Throw an Exception-level exception -- we can't operate with
+        # no available barcodes, and this exception shouldn't be caught
+        raise RangeError, "MLN app has run out of available user barcodes"
+      end
+    end
+
+    if (last_user_barcode < min_barcode)
+      last_user_barcode = min_barcode
+    end
+
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
     LogWrapper.log('DEBUG', {
@@ -370,6 +400,19 @@ class User < ActiveRecord::Base
     end
 
     return @barcode_found_in_sierra
+  end
+
+
+  def find_unique_new_barcode
+    # Start the whole loop of
+    # a) pick barcode in MLN db
+    # b) make sure it'd be new and unique in Sierra
+    # c) repeat until b) is true
+
+    # TODO: future branches: move user.assign_barcode over to its own multithreaded job,
+    # and move save_as_complete over to after have successfully sent to Sierra
+    self.assign_barcode!
+    self.save_as_complete!
   end
 
 
