@@ -14,7 +14,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
 
-
   [generate_barcode].each do |barcode|
     test 'sierra user can be found by barcode' do
       mock_check_barcode_request(barcode, '200')
