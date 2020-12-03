@@ -30,7 +30,6 @@ class NewsLetterControllerUnitTest < MiniTest::Test
 
 
   describe 'Test create news letter email in google_sheets method' do
-
     # # Case: 1
     it 'Test Decrypt news-letetr email method' do
       email = 'test@ss.com'
@@ -70,8 +69,7 @@ class NewsLetterControllerUnitTest < MiniTest::Test
       google_sheet.updates.spreadsheet_id = "wed11"
       @mintest_mock1.expect(:call, ['test@ss.com'])
       @mintest_mock2.expect(:call, google_sheet, [email])
-
-
+      
       resp = nil
       @nl_controller.stub :news_letter_google_spread_sheet_emails, @mintest_mock1 do
         EncryptDecryptString.stub :decrypt_string, email, [params['key']] do
