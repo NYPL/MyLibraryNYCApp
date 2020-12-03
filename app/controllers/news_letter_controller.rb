@@ -58,7 +58,7 @@ class NewsLetterController < ApplicationController
   end
 
   
-  # Connect's to google client and read all news-letter emails
+  # Connect's to google client and get all news-letter emails
   def news_letter_google_spread_sheet_emails
     service = GoogleApiClient.new.sheets_client
     response = service.get_spreadsheet_values(SPREAD_SHEET_ID, RANGE)
@@ -66,7 +66,7 @@ class NewsLetterController < ApplicationController
   end
 
 
-  # Connect's to google client and append news-letter email to google sheet.
+  # Connect's to google client and append news-letter emails to google sheet.
   def write_news_letter_emails_to_google_sheets(email)
     service = GoogleApiClient.new.sheets_client
     value_range_object = Google::Apis::SheetsV4::ValueRange.new(values: [[email]])
@@ -86,7 +86,7 @@ class NewsLetterController < ApplicationController
     # Email is already in google sheets return true. Do not overwrite to google sheets.
     return true if emails_arr.include?(decrypt_email)
     
-    # Append news letter email to google sheeets
+    # Append news letter emails to google sheeets
     response = write_news_letter_emails_to_google_sheets(decrypt_email)
     is_saved_in_google_sheets = true
     LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params}, 
