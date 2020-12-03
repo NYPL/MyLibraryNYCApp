@@ -34,7 +34,7 @@ class NewsLetterController < ApplicationController
   # For email validation using ruby gem, this is not custom regular expression validation.
   def validate_news_letter_email_is_valid
     is_valid = EmailValidator.valid? params['email']
-    LogWrapper.log('INFO', {'message' => "News letter input email: #{email}",
+    LogWrapper.log('INFO', {'message' => "News letter input email: #{params['email']}",
                             'method' => 'validate_news_letter_email_is_valid'})
     raise "Please enter a valid email address" unless is_valid
   end

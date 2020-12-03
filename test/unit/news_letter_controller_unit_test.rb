@@ -31,7 +31,7 @@ class NewsLetterControllerUnitTest < MiniTest::Test
 
   describe 'Test create news letter email in google_sheets method' do
 
-    # Case: 1
+    # # Case: 1
     it 'Test Decrypt news-letetr email method' do
       email = 'test@ss.com'
       params = {key: "edededede"}
@@ -43,8 +43,10 @@ class NewsLetterControllerUnitTest < MiniTest::Test
         end
       end
       assert_equal(true, resp)
+      @mintest_mock1.verify
     end
-    # Case: 2
+
+    # # Case: 2
     it 'Test error while creating the news letter email in google sheets' do
       email = 'test@ss1.com'
       params = {key: "edededede"}
@@ -56,6 +58,31 @@ class NewsLetterControllerUnitTest < MiniTest::Test
         end
       end
       assert_equal(false, resp)
+      @mintest_mock1.verify
+    end
+
+    # Case: 3
+    it 'Test successfully create the news letter email in google sheets method' do
+      email = 'test@ss1.com'
+      params = {key: "edededede"}
+      google_sheet = OpenStruct.new
+      google_sheet.updates = OpenStruct.new
+      google_sheet.updates.spreadsheet_id = "wed11"
+      @mintest_mock1.expect(:call, ['test@ss.com'])
+      @mintest_mock2.expect(:call, google_sheet, [email])
+
+
+      resp = nil
+      @nl_controller.stub :news_letter_google_spread_sheet_emails, @mintest_mock1 do
+        EncryptDecryptString.stub :decrypt_string, email, [params['key']] do
+          @nl_controller.stub :write_news_letter_emails_to_google_sheets, @mintest_mock2 do
+            resp = @nl_controller.create_news_letter_email_in_google_sheets(params)
+          end
+        end
+      end
+      assert_equal(true, resp)
+      @mintest_mock1.verify
+      @mintest_mock2.verify
     end
   end
 end
