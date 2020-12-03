@@ -27,4 +27,20 @@ class NewsLetterControllerUnitTest < MiniTest::Test
       assert_nil(resp)
     end
   end
+
+
+  describe 'Test news-letter email is decrypted or not' do
+    it 'Decrypt news-letetr email' do
+      email = 'test@ss.com'
+      params = {key: "edededede"}
+      @mintest_mock1.expect(:call, ['test@ss.com'])
+      resp = nil
+      @nl_controller.stub :news_letter_google_spread_sheet_emails, @mintest_mock1 do
+        EncryptDecryptString.stub :decrypt_string, [email], [params['key']] do
+          resp = @nl_controller.create_news_letter_email_in_google_sheets(params)
+        end
+      end
+      assert_equal(false, resp)
+    end
+  end
 end
