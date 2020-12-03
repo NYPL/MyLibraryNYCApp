@@ -268,6 +268,8 @@ class User < ActiveRecord::Base
   def save_as_pending!
     # do we need to fill in a provisional barcode?
     unless self.barcode.present?
+      # Note: assign_barcode could throw a RangeError.
+      # If it does, we want it to propagate up the stack to the calling method.
       self.barcode = self.assign_barcode!
     end
 
@@ -294,6 +296,23 @@ class User < ActiveRecord::Base
     min_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MINIMUM'])
     max_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MAXIMUM'])
 
+    # if we're being asked to increment our barcode because it's
+    # non-unique in Sierra, then do so here
+    if self.barcode
+      # random number between 5 and 10 is a cheap way of helping prevent collisions,
+      # and we have the barcode range to spare.
+      self.assign_attributes({ barcode: self.barcode + rand(5..10)})
+
+      # Did we go over the limit?  No use stepping back, tell the app we'll
+      # need to ask Sierra team for a wider barcode range.
+      if self.barcode > max_barcode
+        raise RangeError, "MLN app has run out of available user barcodes"
+      end
+
+      return self.barcode
+    end
+
+    # runs when this is our first time in this method for this user
     # some databases sort nulls to top of order, other databases sort nulls to bottom of order
     last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
     # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
@@ -352,6 +371,8 @@ class User < ActiveRecord::Base
     # Throw an exception if called with malformed data.
 
     if barcode_to_check.blank?
+      # TODO: would be good to throw an exception here, but let's make sure
+      # our rails version of ActiveJob can handle it.
       return false
     end
 
@@ -411,12 +432,17 @@ class User < ActiveRecord::Base
 
     # TODO: future branches: move user.assign_barcode over to its own multithreaded job,
     # and move save_as_complete over to after have successfully sent to Sierra
-    self.assign_barcode!
-    self.save_as_complete!
+    # self.assign_barcode!  # TODO: make sure this is still happening in another place
+    # self.save_as_complete!  # TODO: make sure this is still happening in another place
+
+    # Enqueue a job to be performed as soon as the queuing system is free.
+    FindAvailableUserBarcodeJob.new.perform(user: self)
   end
 
 
   def multiple_barcodes?
+    # Legacy method, still being used in a mailer.
+
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
   # ################ /THE BARCODES SECTION! ################

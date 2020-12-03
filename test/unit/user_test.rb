@@ -14,12 +14,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
 
-  # TODO: integration: mock sierra response of barcode not found, make sure the user keeps its
-  # barcode and changes status and saves.
-  # TODO: integration: sierra response of barcode found or exception, make sure user increments barcode and tries again.
-  # TODO: if pass blank barcode to check_barcode_found_in_sierra, it returns false, so make sure
-  # the calling code is responsible for checking barcode string to exist and be reasonable
-  # TODO: if there was a problem, and the problem is resolved, user does save with new status and barcode
 
   [generate_barcode].each do |barcode|
     test 'sierra user can be found by barcode' do
