@@ -2,15 +2,17 @@
 
 class NewsLetterController < ApplicationController
   include EncryptDecryptString
+  GOOGLE_SPREAD_SHEET_ID = ENV['NEWS_LETTER_GOOGLE_SPREAD_SHEET_ID']
+  RANGE = "Sheet1!A1:B"
 
   def index
     flash[:error] = nil
     email = params['email']
     # Checking input email is valid format or not.
     validate_news_letter_email_is_valid
-    # Connect's to google sheets
-    google_sheet = GoogleSpreadSheet.new.google_sheet_client
-    emails_arr = google_sheet.rows.flatten
+    # Connect's to google sheets and get's google sheet emails.
+    emails_arr = news_letter_google_spread_sheet_emails
+
     # Checking here input email is already in google sheets or not.
     email_already_in_google_sheets?(emails_arr, email)
     # After input validations, send news-letter confirmation email to news-letter subscriber.
@@ -32,6 +34,8 @@ class NewsLetterController < ApplicationController
   # For email validation using ruby gem, this is not custom regular expression validation.
   def validate_news_letter_email_is_valid
     is_valid = EmailValidator.valid? params['email']
+    LogWrapper.log('INFO', {'message' => "News letter input email: #{params['email']}",
+                            'method' => 'validate_news_letter_email_is_valid'})
     raise "Please enter a valid email address" unless is_valid
   end
 
@@ -54,23 +58,40 @@ class NewsLetterController < ApplicationController
     raise 'That email is already subscribed to the MyLibraryNYC newsletter.' 
   end
 
+  
+  # Connect's to google client and get all news-letter emails
+  def news_letter_google_spread_sheet_emails
+    service = GoogleApiClient.new.sheets_client
+    response = service.get_spreadsheet_values(GOOGLE_SPREAD_SHEET_ID, RANGE)
+    response.values.present? ? response.values.flatten : []
+  end
+
+
+  # Connect's to google client and append news-letter emails to google sheet.
+  def write_news_letter_emails_to_google_sheets(email)
+    service = GoogleApiClient.new.sheets_client
+    value_range_object = Google::Apis::SheetsV4::ValueRange.new(values: [[email]])
+    service.append_spreadsheet_value(GOOGLE_SPREAD_SHEET_ID, RANGE, value_range_object, value_input_option: 'RAW')
+  end
+
 
   # Create news-letter email into google sheets
   # After clicking the confirmation email this method receive the input.
   # confirmation email link: eg: qa-www.mylibrarynyc.org/newsletter_confirmation?key=600BA5ABC25914E3B1
   # this method returns boolean value. Based on this value we are showing the success or failure message.
   def create_news_letter_email_in_google_sheets(params)
-    google_sheet = GoogleSpreadSheet.new.google_sheet_client
-    emails_arr = google_sheet.rows.flatten
+    emails_arr = news_letter_google_spread_sheet_emails
+
     # Decryt the confirmation email string, than save to google sheets.
     decrypt_email = EncryptDecryptString.decrypt_string(params["key"])
     # Email is already in google sheets return true. Do not overwrite to google sheets.
     return true if emails_arr.include?(decrypt_email)
     
-    google_sheet.insert_rows(google_sheet.num_rows + 1, [[decrypt_email]])
-    is_saved_in_google_sheets = google_sheet.save
-    LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params}",
-                            'method' => 'create_news_letter_email_in_google_sheets'})
+    # Append news letter emails to google sheeets
+    response = write_news_letter_emails_to_google_sheets(decrypt_email)
+    is_saved_in_google_sheets = true
+    LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params}, 
+                             tableRange: #{response.table_range}", 'method' => 'create_news_letter_email_in_google_sheets'})
     is_saved_in_google_sheets
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occured while creating the newsletter email in google sheets, params: #{params},

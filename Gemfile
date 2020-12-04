@@ -51,6 +51,7 @@ gem 'acts_as_list'
 gem 'google_drive'
 gem 'email_validator'
 gem 'elasticsearch', '6.8'
+gem 'google-api-client'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'

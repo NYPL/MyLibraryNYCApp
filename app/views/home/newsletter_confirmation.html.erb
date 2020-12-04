@@ -1,9 +1,13 @@
 <div id="news-letter-conf-message" class="nl-conf-msg">
 <% if @is_success %>
-	<span class="nl-conf-size bold"> MyLibraryNYC Newsletter Subscription Confirmed </span>
+  <span class="nl-conf-size bold"> MyLibraryNYC Newsletter Subscription Confirmed </span>
   <p class="">Thank you for subscribing to the MyLibraryNYC newsletter. Your email has been confirmed.</p>
 <% else %>
-	<span class="nl-conf-size bold"> MyLibraryNYC Newsletter Subscription Unsuccessful </span>
+  <span class="nl-conf-size bold"> MyLibraryNYC Newsletter Subscription Unsuccessful </span>
   <p class="">Unfortunately there was a problem subscribing to the MyLibraryNYC Newsletter. Please try subscribing again at <a href="https://www.mylibrarynyc.org/">www.mylibrarynyc.org</a> or contact <a href='mailto:help@mylibrarynyc.org'>help@mylibrarynyc.org</a>.</p>
 <% end %>
 </div>
+
+<script type="text/javascript">
+  $("#error_messages_id").hide();
+</script>
