@@ -5,9 +5,9 @@ require 'googleauth'
 require 'google/apis/analytics_v3'
 require 'google/apis/sheets_v4'
 
-class GoogleApiClient
+module GoogleApiClient
   # Connect's to google sheet client
-  def sheets_client
+  def self.sheets_client
     json = JSON.parse(ENV['NEWS_LETTER_GOOGLE_CREDENTIALS'])
     ENV["GOOGLE_ACCOUNT_TYPE"] = 'service_account'
     ENV["GOOGLE_CLIENT_EMAIL"] = json["client_email"]
