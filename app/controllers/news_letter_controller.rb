@@ -10,9 +10,7 @@ class NewsLetterController < ApplicationController
   def index
     flash[:error] = nil
     email = params['email']
-    puts "test test test test test     #{email}"
-    LogWrapper.log('INFO', {'message' => "News letter email...............#{email}",
-                             'method' => 'news_letter_index'})
+    
     # Checking input email is valid format or not.
     validate_news_letter_email_is_valid
     # Connect's to google sheets and get's google sheet emails.
