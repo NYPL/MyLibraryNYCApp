@@ -2,6 +2,8 @@
 
 class NewsLetterController < ApplicationController
   include EncryptDecryptString
+  include GoogleApiClient
+
   GOOGLE_SPREAD_SHEET_ID = ENV['NEWS_LETTER_GOOGLE_SPREAD_SHEET_ID']
   RANGE = "Sheet1!A1:B"
 
@@ -64,7 +66,7 @@ class NewsLetterController < ApplicationController
   
   # Connect's to google client and get all news-letter emails
   def news_letter_google_spread_sheet_emails
-    service = GoogleApiClient.new.sheets_client
+    service = GoogleApiClient.sheets_client
     response = service.get_spreadsheet_values(GOOGLE_SPREAD_SHEET_ID, RANGE)
     response.values.present? ? response.values.flatten : []
   end
@@ -72,7 +74,7 @@ class NewsLetterController < ApplicationController
 
   # Connect's to google client and append news-letter emails to google sheet.
   def write_news_letter_emails_to_google_sheets(email)
-    service = GoogleApiClient.new.sheets_client
+    service = GoogleApiClient.sheets_client
     value_range_object = Google::Apis::SheetsV4::ValueRange.new(values: [[email]])
     service.append_spreadsheet_value(GOOGLE_SPREAD_SHEET_ID, RANGE, value_range_object, value_input_option: 'RAW')
   end
