@@ -106,7 +106,7 @@ function validateNewsLetterEmail(event) {
    }
 }
 
-function veriryNewsLetterEmailInSignUpPage(val, email, alt_email) {
+function verifyNewsLetterEmailInSignUpPage(val, email, alt_email) {
   // If alternate email is present in sign-up page take alternate-email to send news-letters other-wise DOE email.
   news_letter_email = alt_email
   if (news_letter_email == ""){
@@ -143,6 +143,7 @@ function veriryNewsLetterEmailInSignUpPage(val, email, alt_email) {
     }
     else {
       $('#news-letter-ajax-message').html('');
+      $("#sign_up_button").css("background-color","#af2228")
     }
   },
   error: function (error){
