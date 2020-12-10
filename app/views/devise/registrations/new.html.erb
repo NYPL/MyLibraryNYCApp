@@ -29,7 +29,7 @@
   <%= custom_devise_error_messages(local_assigns[:error_msg_hash]) %>
   <div class="field-group">
     <%= label_tag :email, "Your DOE email address", :id => 'userEmail-label' %>
-    <%= f.email_field :email, :autofocus => true, "aria-labelledby" => 'userEmail-label user_email_error'  %>
+    <%= f.email_field :email, :autofocus => true, "aria-labelledby" => 'userEmail-label user_email_error', :onkeyup => "newsLetterCheckbox();"  %>
     <div id='check_email_div'>
       <span class ='spinner'></span>
       <span id='check_email_span'>
@@ -42,7 +42,7 @@
   </div>
   <div class="field-group">
     <%= label_tag :user_alt_email, "Alternate email address (optional)", :id => 'userAltEmail-label' %>
-    <%= f.email_field :alt_email, "aria-labelledby" => 'userAltEmail-label user_alt_email_error' %>
+    <%= f.email_field :alt_email, "aria-labelledby" => 'userAltEmail-label user_alt_email_error', :onkeyup => "newsLetterCheckbox();" %>
   </div>
   <div class="field-group">
     <%= label_tag :user_first_name, "First name", :id => 'userFirstName-label' %>
@@ -70,9 +70,16 @@
     </span>
   </div>
 
+  <div>
+    <%= check_box_tag 'news_letter_email', '1', false, :onclick=>"verifyNewsLetterEmailInSignUpPage(this.value, $('#user_email').val(), $('#user_alt_email').val())", :title => "MyLibraryNYC newsletter", :class => "nl_check_box" %>
+    <span class="nl_check_box_text">Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)</span>
+    <div id="news-letter-ajax-message" style="display: none;"></div>
+  </div>
+  <br/>
   <div class="actions">
     <%= f.submit "Sign Up", :class=> "button", :id =>'sign_up_button' %>
   </div>
 <% end %>
 
 </html>
+

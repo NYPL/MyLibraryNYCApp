@@ -76,14 +76,14 @@
 }
 
 .site-logo {
-	@media not all and (min-width: 500px) {
+  @media not all and (min-width: 500px) {
     height: 0px;
     width: 90px;
   }
 }
 
 .navigation a {
-	@media not all and (min-width: 500px) {
+  @media not all and (min-width: 500px) {
     float: inherit !important;
     font-size: 9px !important;
   }
@@ -154,7 +154,7 @@ th, td {
   width: 19em !important;
   background: #FFF !important;
   @media all and (min-width: 400px) {
-  	width: 12em;
+    width: 12em;
   }
  }
 
@@ -223,16 +223,27 @@ th, td {
   font-size: 15px;
  /* box-shadow: 0 0 2px #000000;*/
   cursor: pointer;
- 	@media only screen and (max-width:280px) {
-  	margin-top: -44px;
+  @media only screen and (max-width:280px) {
+    margin-top: -44px;
     margin-left: 210px;
   }
 
   @media only screen and (max-width:320px) {
-  	margin-top: -44px;
+    margin-top: -44px;
     margin-left: 210px;
   }
 }
 .school_inbox:not(:valid) ~ .close-icon {
   display: none;
 }
+
+.nl_check_box {
+  height:15px !important;
+  width: 15px !important;
+ }
+
+ .nl_check_box_text {
+   padding-left: 5px;
+ }
+
+
