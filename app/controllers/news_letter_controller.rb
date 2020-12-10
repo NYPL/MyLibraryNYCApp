@@ -12,7 +12,7 @@ class NewsLetterController < ApplicationController
     email = params['email']
     
     # Checking input email is valid format or not.
-    validate_news_letter_email_is_valid
+    validate_news_letter_email
     # Connect's to google sheets and get's google sheet emails.
     emails_arr = news_letter_google_spread_sheet_emails
 
@@ -31,14 +31,33 @@ class NewsLetterController < ApplicationController
     flash.now[:error] = e.message[0..75]
   end
 
+  
+  # Validate news-letter email from user-signup page.
+  def validate_news_letter_email_from_user_sign_up_page
+    email = params['email']
+    
+    # Checking input email is valid format or not.
+    validate_news_letter_email
+    # Connect's to google sheets and get's google sheet emails.
+    emails_arr = news_letter_google_spread_sheet_emails
 
+    # Checking here input email is already in google sheets or not.
+    email_already_in_google_sheets?(emails_arr, email)
+    render json: { success: "success" }
+  rescue StandardError => e
+    LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
+                             'method' => 'validate_news_letter_email'})
+    render json: { error: e.message[0..75] }
+  end
+
+  
   # Validate news-letter email is valid or not.
   # This below method allows these formats only. eg: test@dd.com, test@com.
   # For email validation using ruby gem, this is not custom regular expression validation.
-  def validate_news_letter_email_is_valid
+  def validate_news_letter_email
     is_valid = EmailValidator.valid? params['email']
     LogWrapper.log('INFO', {'message' => "News letter input email: #{params['email']}",
-                            'method' => 'validate_news_letter_email_is_valid'})
+                            'method' => 'validate_news_letter_email'})
     raise "Please enter a valid email address" unless is_valid
   end
 
