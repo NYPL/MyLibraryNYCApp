@@ -69,13 +69,14 @@
       Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363).
     </span>
   </div>
-
-  <div>
-    <%= check_box_tag 'news_letter_email', '1', false, :onclick=>"verifyNewsLetterEmailInSignUpPage(this.value, $('#user_email').val(), $('#user_alt_email').val())", :title => "MyLibraryNYC newsletter", :class => "nl_check_box" %>
-    <span class="nl_check_box_text">Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)</span>
-    <div id="news-letter-ajax-message" style="display: none;"></div>
-  </div>
-  <br/>
+  <% if MlnConfigurationController.new.feature_flag_config('news_letter.enabled') %>
+    <div>
+      <%= check_box_tag 'news_letter_email', '1', false, :onclick=>"verifyNewsLetterEmailInSignUpPage(this.value, $('#user_email').val(), $('#user_alt_email').val())", :title => "MyLibraryNYC newsletter", :class => "nl_check_box" %>
+      <span class="nl_check_box_text">Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)</span>
+      <div id="news-letter-ajax-message" style="display: none;"></div>
+    </div>
+    <br/>
+  <% end %>
   <div class="actions">
     <%= f.submit "Sign Up", :class=> "button", :id =>'sign_up_button' %>
   </div>
