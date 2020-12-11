@@ -20,13 +20,16 @@ class RegistrationsController < Devise::RegistrationsController
         # save the user object as pending
         resource.save_as_pending!
 
+        puts "\n\nRegistrationsController.create: calling user.find_unique_new_barcode"
         # find fresh new barcode that's available in both MLN db and Sierra
         resource.find_unique_new_barcode
+        puts "RegistrationsController.create: done user.find_unique_new_barcode"
 
         # TODO: on timeouts/exceptions/negative results,
         # don't send request to Patron Service, keep user as pending
-        resource.send_request_to_patron_creator_service
-        resource.save
+        #resource.send_request_to_patron_creator_service
+        #resource.save_as_complete!
+
         yield resource if block_given?
         if resource.persisted?
           if resource.active_for_authentication?
@@ -44,6 +47,12 @@ class RegistrationsController < Devise::RegistrationsController
           respond_with resource
         end
       rescue Net::ReadTimeout
+        set_flash_message :notice, :time_out if is_flashing_format?
+        render :template => '/devise/registrations/new'
+      rescue StandardError => exception
+        puts "reg: StdError1a: #{exception.message}"
+        puts "reg: StdError1b: #{exception.backtrace.join('\n')}"
+
         set_flash_message :notice, :time_out if is_flashing_format?
         render :template => '/devise/registrations/new'
       end

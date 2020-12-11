@@ -132,7 +132,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode!.to_s],
+      'barcodes' => [self.barcode.present? ? self.barcode.to_s : self.assign_barcode!.to_s],
       'addresses': [
         {
           'lines': [
@@ -157,6 +157,7 @@ class User < ActiveRecord::Base
        'status' => 'start',
        'dataSent' => query
       })
+    puts "\n\nSENDING TO SIERRA: #{query}"
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
@@ -257,8 +258,17 @@ class User < ActiveRecord::Base
   # complete and done.  Note: Usually, expect the next step to be the calling of
   # Patron Service to create the user in Sierra.
   def save_as_complete!
+    puts "user.save_as_complete!: saving self: #{self} with id: #{self.id || 'NA'} and barcode: #{self.barcode || 'NA'}"
     self.status = STATUS_LABELS['complete']
+
+    LogWrapper.log('DEBUG', {
+       'message' => "Saving as complete #{self.id}",
+       'method' => "save_as_complete!",
+       'status' => "before save action"
+      })
+
     self.save!
+    puts "user.save_as_complete!: done saving"
   end
 
 
@@ -274,6 +284,13 @@ class User < ActiveRecord::Base
     end
 
     self.status = STATUS_LABELS['barcode_pending']
+
+    LogWrapper.log('DEBUG', {
+       'message' => "Saving as pending #{self.id}",
+       'method' => "save_as_pending!",
+       'status' => "before save action"
+      })
+
     self.save!
   end
 
@@ -282,6 +299,9 @@ class User < ActiveRecord::Base
 
   # ################ THE BARCODES SECTION! ################
 
+  # Assigns a barcode based on the current range in the MLN db.
+  # Does not check the barcode for availability/uniqueness in Sierra.
+  # We have an ActiveJob for that.
   def assign_barcode!
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
@@ -345,6 +365,7 @@ class User < ActiveRecord::Base
        'barcode' => "#{self.barcode}",
        'user' => {email: self.email}
       })
+
     return self.barcode
   end
 
@@ -413,7 +434,7 @@ class User < ActiveRecord::Base
       # Includes response of 500.  Be liberal and assume the barcode is free.
       LogWrapper.log('ERROR', {
           'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service threw error while looking for user(#{barcode_to_check}) in Sierra",
+          'message' => "patron service threw an error while looking for user(#{barcode_to_check}) in Sierra",
           'status' => response.code,
           'responseData' => response.body
         })
@@ -430,13 +451,23 @@ class User < ActiveRecord::Base
     # b) make sure it'd be new and unique in Sierra
     # c) repeat until b) is true
 
-    # TODO: future branches: move user.assign_barcode over to its own multithreaded job,
-    # and move save_as_complete over to after have successfully sent to Sierra
-    # self.assign_barcode!  # TODO: make sure this is still happening in another place
-    # self.save_as_complete!  # TODO: make sure this is still happening in another place
-
     # Enqueue a job to be performed as soon as the queuing system is free.
-    FindAvailableUserBarcodeJob.new.perform(user: self)
+    begin
+      FindAvailableUserBarcodeJob.new.perform(user: self)
+    rescue StandardError => exception
+      LogWrapper.log('ERROR', {
+          'method' => "#{model_name}.find_unique_new_barcode",
+          'message' => "Sierra threw an error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+        })
+      raise exception
+    rescue Exceptions => exception
+      LogWrapper.log('ERROR', {
+          'method' => "#{model_name}.find_unique_new_barcode",
+          'message' => "Sierra threw an error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+        })
+      raise exception
+    end
+
   end
 
 
