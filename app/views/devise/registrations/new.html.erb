@@ -71,7 +71,7 @@
   </div>
   <% if MlnConfigurationController.new.feature_flag_config('news_letter.enabled') %>
     <div>
-      <%= check_box_tag 'news_letter_email', '1', false, :onclick=>"verifyNewsLetterEmailInSignUpPage(this.value, $('#user_email').val(), $('#user_alt_email').val())", :title => "MyLibraryNYC newsletter", :class => "nl_check_box" %>
+      <%= check_box_tag 'news_letter_email[]', '1', false, :id => "news_letter_email", :onclick=>"verifyNewsLetterEmailInSignUpPage(this.value, $('#user_email').val(), $('#user_alt_email').val())", :title => "MyLibraryNYC newsletter", :class => "nl_check_box" %>
       <span class="nl_check_box_text">Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)</span>
       <div id="news-letter-ajax-message" style="display: none;"></div>
     </div>
