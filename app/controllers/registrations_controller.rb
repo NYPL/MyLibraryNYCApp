@@ -19,9 +19,11 @@ class RegistrationsController < Devise::RegistrationsController
       begin
         resource.send_request_to_patron_creator_service
         resource.save
-        # User alt_email is present in the signup page input params use alt_email other-wise user-email.
-        email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
-        NewsLetterController.new.send_news_letter_confirmation_email(email)
+        if params['news_letter_email'].present?
+          # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
+          email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
+          NewsLetterController.new.send_news_letter_confirmation_email(email)
+        end
         yield resource if block_given?
         if resource.persisted?
           if resource.active_for_authentication?
