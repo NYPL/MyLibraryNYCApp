@@ -122,18 +122,19 @@ function verifyNewsLetterEmailInSignUpPage(val, email, alt_email) {
   $.ajax({ type: "POST", url: "/news_letter/validate_news_letter_email_from_user_sign_up_page", contentType: "application/json; charset=utf-8",
            data: JSON.stringify({email: news_letter_email, sign_up_page: true}), dataType: "json", success: function (result) {
 
-    if ($('input[name=news_letter_email]').is(':checked')) {
+
+    if ($('input[id=news_letter_email]').is(':checked')) {
       if (result.success == "success") {
         $('#news-letter-ajax-message').html('');
         $("#news_letter_email").attr("disabled", true);
-        $('input[name=news_letter_email]').attr('checked', true);
+        $('input[id=news_letter_email]').attr('checked', true);
       }
       else if (result.error != "") {
         $('#news-letter-ajax-message').html(result.error);
         if (result.error == "Please enter a valid email address"){
           $("#news_letter_email").attr("disabled", false);
         } else {
-          $('input[name=news_letter_email]').attr('checked', false);
+          $('input[id=news_letter_email]').attr('checked', false);
           $("#news_letter_email").attr("disabled", true);
           
         }
@@ -154,5 +155,5 @@ function verifyNewsLetterEmailInSignUpPage(val, email, alt_email) {
 function newsLetterCheckbox() {
   $('#news-letter-ajax-message').html('');
   $("#news_letter_email").attr("disabled", false);
-  $('input[name=news_letter_email]').attr('checked', false);
+  $('input[id=news_letter_email]').attr('checked', false);
 }
