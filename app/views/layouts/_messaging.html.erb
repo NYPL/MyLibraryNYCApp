@@ -1,5 +1,6 @@
 <% flash.each_with_index do |(name, msg), i| %> 
   <div id="alert-<%=i%>" data-alert class="alert main-alert fade-in-out-longer %> <%= name %>">
+    <% unless name.to_s == 'timedout' %>
       <%= msg %>
     <% end %>
   </div>
