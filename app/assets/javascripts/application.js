@@ -126,7 +126,7 @@ function verifyNewsLetterEmailInSignUpPage(val, email, alt_email) {
     if ($('input[id=news_letter_email]').is(':checked')) {
       if (result.success == "success") {
         $('#news-letter-ajax-message').html('');
-        $("#news_letter_email").attr("disabled", true);
+        //$("#news_letter_email").attr("disabled", true);
         $('input[id=news_letter_email]').attr('checked', true);
       }
       else if (result.error != "") {
