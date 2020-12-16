@@ -1,5 +1,9 @@
-<% flash.each_with_index do |(name, msg), i| %>
+<% flash.each_with_index do |(name, msg), i| %> 
   <div id="alert-<%=i%>" data-alert class="alert main-alert fade-in-out-longer %> <%= name %>">
-    <%= msg %>
+    <% if name.to_s == 'timedout' %>
+      <%= "Your session has expired. Please sign in again to continue." %>
+    <% else %>
+      <%= msg %>
+    <% end %>
   </div>
 <% end %>
