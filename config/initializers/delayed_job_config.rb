@@ -18,7 +18,7 @@ Delayed::Worker.max_run_time = 15.minutes
 
 Delayed::Worker.read_ahead = 10
 
-Delayed::Worker.default_queue_name = 'default'
+Delayed::Worker.default_queue_name = 'user_barcode_queue'
 
 
 # don't run delayed_job in test mode
