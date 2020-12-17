@@ -263,7 +263,7 @@ class User < ActiveRecord::Base
 
     LogWrapper.log('DEBUG', {
        'message' => "Saving as complete #{self.id}",
-       'method' => "save_as_complete!",
+       'method' => "#{model_name}.save_as_complete!",
        'status' => "before save action"
       })
 
@@ -276,6 +276,12 @@ class User < ActiveRecord::Base
   # 'pending' and save.  In the future, there may be other conditions that
   # could set the user to "pending", and we'll be checking for those here, as well.
   def save_as_pending!
+    LogWrapper.log('DEBUG', {
+       'message' => "Saving as pending #{self.id}",
+       'method' => "#{model_name}.save_as_pending!",
+       'status' => "before save action"
+    })
+
     # do we need to fill in a provisional barcode?
     unless self.barcode.present?
       # Note: assign_barcode could throw a RangeError.
@@ -284,12 +290,6 @@ class User < ActiveRecord::Base
     end
 
     self.status = STATUS_LABELS['barcode_pending']
-
-    LogWrapper.log('DEBUG', {
-       'message' => "Saving as pending #{self.id}",
-       'method' => "save_as_pending!",
-       'status' => "before save action"
-      })
 
     self.save!
   end
@@ -305,9 +305,8 @@ class User < ActiveRecord::Base
   def assign_barcode!
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
-       'method' => "assign_barcode",
-       'status' => "start",
-       'user' => {email: self.email}
+       'method' => "#{model_name}.assign_barcode",
+       'status' => "start"
       })
 
     # Integer(string) can raise ArgumentError.  we choose not to rescue it, because
@@ -326,15 +325,32 @@ class User < ActiveRecord::Base
       # Did we go over the limit?  No use stepping back, tell the app we'll
       # need to ask Sierra team for a wider barcode range.
       if self.barcode > max_barcode
+        LogWrapper.log('ERROR', {
+            'method' => "#{model_name}.assign_barcode!",
+            'message' => "MLN app has run out of available user barcodes"
+        })
         raise RangeError, "MLN app has run out of available user barcodes"
       end
 
+      LogWrapper.log('DEBUG', {
+         'message' => "Had a barcode.  Changed it to #{self.barcode}.  Returning from method.",
+         'method' => "#{model_name}.assign_barcode!",
+         'status' => "end",
+         'user' => {email: self.email}
+        })
       return self.barcode
     end
 
     # runs when this is our first time in this method for this user
     # some databases sort nulls to top of order, other databases sort nulls to bottom of order
     last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
+    LogWrapper.log('DEBUG', {
+       'message' => "Found last_user_barcode: #{last_user_barcode || "NIL"}.",
+       'method' => "#{model_name}.assign_barcode!",
+       'status' => "end",
+       'user' => {email: self.email}
+      })
+
     # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
     if last_user_barcode.blank?
       # Check to see if we're in an empty database, or if it's the opposite case:
@@ -348,6 +364,10 @@ class User < ActiveRecord::Base
         # No more barcodes left in the range available to MLN.
         # Throw an Exception-level exception -- we can't operate with
         # no available barcodes, and this exception shouldn't be caught
+        LogWrapper.log('ERROR', {
+            'method' => "#{model_name}.assign_barcode!",
+            'message' => "MLN app has run out of available user barcodes"
+        })
         raise RangeError, "MLN app has run out of available user barcodes"
       end
     end
@@ -360,10 +380,9 @@ class User < ActiveRecord::Base
 
     LogWrapper.log('DEBUG', {
        'message' => "Barcode has been assigned to #{self.email}",
-       'method' => "assign_barcode",
+       'method' => "#{model_name}.assign_barcode!",
        'status' => "end",
-       'barcode' => "#{self.barcode}",
-       'user' => {email: self.email}
+       'barcode' => "#{self.barcode}"
       })
 
     return self.barcode
@@ -390,6 +409,12 @@ class User < ActiveRecord::Base
     # New users and users whose records have been purged from Sierra might not.
     # Return "true" if a user is found, false otherwise.  Default to "false".
     # Throw an exception if called with malformed data.
+
+    LogWrapper.log('DEBUG', {
+       'message' => "Checking barcode #{barcode_to_check || 'NIL'}",
+       'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+       'status' => "start"
+      })
 
     if barcode_to_check.blank?
       # TODO: would be good to throw an exception here, but let's make sure
@@ -450,6 +475,11 @@ class User < ActiveRecord::Base
     # a) pick barcode in MLN db
     # b) make sure it'd be new and unique in Sierra
     # c) repeat until b) is true
+    LogWrapper.log('DEBUG', {
+       'message' => "Checking user #{self.id || 'NIL'}",
+       'method' => "#{model_name}.find_unique_new_barcode",
+       'status' => "start"
+      })
 
     # Enqueue a job to be performed as soon as the queuing system is free.
     begin

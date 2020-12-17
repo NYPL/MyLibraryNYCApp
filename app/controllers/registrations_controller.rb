@@ -46,20 +46,28 @@ class RegistrationsController < Devise::RegistrationsController
           set_minimum_password_length
           respond_with resource
         end
-      rescue Net::ReadTimeout
+      rescue Net::ReadTimeout => exception
+        LogWrapper.log('ERROR', {
+            'message' => "Creating new patron threw a Net::ReadTimeout error: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
+        })
         set_flash_message :notice, :time_out if is_flashing_format?
         render :template => '/devise/registrations/new'
       rescue StandardError => exception
         puts "reg: StdError1a: #{exception.message}"
         puts "reg: StdError1b: #{exception.backtrace.join('\n')}"
-
+        LogWrapper.log('ERROR', {
+            'message' => "Creating new patron threw a StandardError: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
+        })
         set_flash_message :notice, :time_out if is_flashing_format?
         render :template => '/devise/registrations/new'
       end
     else
       render :template => '/devise/registrations/new', :locals => { :error_msg_hash => error_msg_hash }
     end
-  rescue Exceptions::InvalidResponse
+  rescue Exceptions::InvalidResponse => exception
+    LogWrapper.log('ERROR', {
+        'message' => "Creating new patron threw an Exceptions::InvalidResponse: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
+    })
     set_flash_message :registration_error, :invalid_response if is_flashing_format?
     render :template => '/devise/registrations/new'
   end
