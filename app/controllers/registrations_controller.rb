@@ -13,7 +13,11 @@ class RegistrationsController < Devise::RegistrationsController
   # In addition, overriding the method allows us to validate the incoming data from the form, send the data
   # to the microservice, and create a record on MyLibraryNYC depending on if the microservice is working properly.
   def create
-    LogWrapper.log('INFO','message' => "Creating new user record")
+    LogWrapper.log('INFO', {
+      'method' => "RegistrationsController.create",
+      'message' => "Creating new user record: start"
+    })
+
     build_resource(sign_up_params)
     if resource.valid?
       begin
@@ -48,7 +52,8 @@ class RegistrationsController < Devise::RegistrationsController
         end
       rescue Net::ReadTimeout => exception
         LogWrapper.log('ERROR', {
-            'message' => "Creating new patron threw a Net::ReadTimeout error: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
+          'method' => "RegistrationsController.create",
+          'message' => "Creating new patron threw a Net::ReadTimeout error: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
         })
         set_flash_message :notice, :time_out if is_flashing_format?
         render :template => '/devise/registrations/new'
@@ -56,7 +61,8 @@ class RegistrationsController < Devise::RegistrationsController
         puts "reg: StdError1a: #{exception.message}"
         puts "reg: StdError1b: #{exception.backtrace.join('\n')}"
         LogWrapper.log('ERROR', {
-            'message' => "Creating new patron threw a StandardError: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
+          'method' => "RegistrationsController.create",
+          'message' => "Creating new patron threw a StandardError: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
         })
         set_flash_message :notice, :time_out if is_flashing_format?
         render :template => '/devise/registrations/new'
@@ -66,7 +72,8 @@ class RegistrationsController < Devise::RegistrationsController
     end
   rescue Exceptions::InvalidResponse => exception
     LogWrapper.log('ERROR', {
-        'message' => "Creating new patron threw an Exceptions::InvalidResponse: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
+      'method' => "RegistrationsController.create",
+      'message' => "Creating new patron threw an Exceptions::InvalidResponse: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
     })
     set_flash_message :registration_error, :invalid_response if is_flashing_format?
     render :template => '/devise/registrations/new'
