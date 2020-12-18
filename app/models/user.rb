@@ -483,7 +483,7 @@ class User < ActiveRecord::Base
 
     # Enqueue a job to be performed as soon as the queuing system is free.
     begin
-      FindAvailableUserBarcodeJob.new.perform(user: self)
+      FindAvailableUserBarcodeJob.perform_later(user: self)
     rescue StandardError => exception
       LogWrapper.log('ERROR', {
           'method' => "#{model_name}.find_unique_new_barcode",
