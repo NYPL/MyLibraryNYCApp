@@ -740,10 +740,11 @@ class TeacherSet < ActiveRecord::Base
 
   # Save teacher-set set_type value
   def update_teacher_set_set_type_value(set_type_val)
-    set_type =  update_set_type(set_type_val)
+    set_type = update_set_type(set_type_val)
     self.set_type = set_type
     self.save!
-    LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type} saved in DB", 'method' => 'teacher_set.update_teacher_set_set_type_value'})
+    LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type} saved in DB", 
+                            'method' => 'teacher_set.update_teacher_set_set_type_value'})
   end
 
 
