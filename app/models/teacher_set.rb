@@ -738,6 +738,16 @@ class TeacherSet < ActiveRecord::Base
   end
   
 
+  # Save teacher-set set_type value
+  def update_teacher_set_set_type_value(set_type_val)
+    set_type = update_set_type(set_type_val)
+    self.set_type = set_type
+    self.save!
+    LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type} saved in DB", 
+                            'method' => 'teacher_set.update_teacher_set_set_type_value'})
+  end
+
+
   # Set type value varFields entry with the marcTag=526
   # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
   # If subfields.content type is "Topic Set", set_type value  stored as 'multi' in teacher_sets table.

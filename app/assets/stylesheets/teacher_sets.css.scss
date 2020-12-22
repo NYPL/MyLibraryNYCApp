@@ -523,7 +523,7 @@
         height: 100%;
         @media (min-width: $containerMaxWidth) {
           height: auto;
-          width: 100%;
+          width: auto;
         }
       }
       span {
