@@ -30,11 +30,6 @@ app.controller('TeacherSetListCtrl', [ '$scope', '$timeout', '$cookieStore', '$l
       //$('#keyword').blur();
     };
 
-    $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-      if (newUrl.substr(newUrl.lastIndexOf('/')+1) === 'teacher_sets'){
-        window.history.go(0);
-      }
-    });
 
     // show the facets initially, then hide
     var sawFacetTab = $cookieStore.get('sawFacetTab');
