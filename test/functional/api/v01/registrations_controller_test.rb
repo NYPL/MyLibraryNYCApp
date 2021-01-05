@@ -2,9 +2,9 @@
 
 require 'test_helper'
 
-class Api::RegistrationsControllerTest < ActionController::TestCase
+class RegistrationsControllerTest < ActionController::TestCase
   def setup
-    @controller = Api::V01::RegistrationsController.new
+    @controller = RegistrationsController.new
   end
 
 
