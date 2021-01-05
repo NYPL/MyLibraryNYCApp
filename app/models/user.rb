@@ -157,7 +157,7 @@ class User < ActiveRecord::Base
        'status' => 'start',
        'dataSent' => query
       })
-    puts "\n\nSENDING TO SIERRA: #{query}"
+
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
@@ -258,17 +258,21 @@ class User < ActiveRecord::Base
   # complete and done.  Note: Usually, expect the next step to be the calling of
   # Patron Service to create the user in Sierra.
   def save_as_complete!
-    puts "user.save_as_complete!: saving self: #{self} with id: #{self.id || 'NA'} and barcode: #{self.barcode || 'NA'}"
     self.status = STATUS_LABELS['complete']
 
     LogWrapper.log('DEBUG', {
-       'message' => "Saving as complete #{self.id}",
+       'message' => "user.save_as_complete!: saving self: #{self} with id: #{self.id || 'NA'} and barcode: #{self.barcode || 'NA'}",
        'method' => "#{model_name}.save_as_complete!",
        'status' => "before save action"
       })
 
     self.save!
-    puts "user.save_as_complete!: done saving"
+
+    LogWrapper.log('DEBUG', {
+       'message' => "user.save_as_complete!: done saving}",
+       'method' => "#{model_name}.save_as_complete!",
+       'status' => "before save action"
+      })
   end
 
 

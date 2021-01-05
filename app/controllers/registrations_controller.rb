@@ -24,10 +24,16 @@ class RegistrationsController < Devise::RegistrationsController
         # save the user object as pending
         resource.save_as_pending!
 
-        puts "\n\nRegistrationsController.create: calling user.find_unique_new_barcode"
+        LogWrapper.log('DEBUG', {
+          'method' => "RegistrationsController.create",
+          'message' => "calling: user.find_unique_new_barcode"
+        })
         # find fresh new barcode that's available in both MLN db and Sierra
         resource.find_unique_new_barcode
-        puts "RegistrationsController.create: done user.find_unique_new_barcode"
+        LogWrapper.log('DEBUG', {
+          'method' => "RegistrationsController.create",
+          'message' => "done: user.find_unique_new_barcode"
+        })
 
         if params['news_letter_email'].present?
           # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
