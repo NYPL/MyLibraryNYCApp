@@ -9,4 +9,16 @@ teacher_set_two:
   description: MyText1
   title: MyString1
   available_copies: 2
-  bnumber: '1234'
+  bnumber: '12345'
+teacher_set_three:
+  description: MyText1
+  title: MyString1
+  available_copies: 2
+  bnumber: '123416'
+  set_type: 'Book Club Set'
+teacher_set_four:
+  description: MyText1
+  title: MyString1
+  available_copies: 2
+  bnumber: '123418'
+  set_type: 'Topic Set'

@@ -65,7 +65,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
           lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
           available_copies: ts_items_info[:available_count],
           total_copies: ts_items_info[:total_count],
-          availability: ts_items_info[:availability_string]
+          availability: ts_items_info[:availability_string],
+          set_type: teacher_set.update_set_type(var_field('526')) # Set type value varFields entry with the marcTag=526
         )
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
@@ -99,8 +100,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         ).deliver
       end
       begin
-        # Set type value varFields entry with the marcTag=526
-        teacher_set.update_included_book_list(teacher_set_record, var_field('526'))
+        teacher_set.update_included_book_list(teacher_set_record)
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
         AdminMailer.failed_bibs_controller_api_request(
