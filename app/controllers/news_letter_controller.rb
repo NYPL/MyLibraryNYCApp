@@ -24,7 +24,7 @@ class NewsLetterController < ApplicationController
       format.html 
       format.js 
     end
-    flash.now[:notice] = "Thanks for subscribing! You should receive an e-mail confirmation shortly."
+    flash.now[:notice] = "Thanks for subscribing! You should receive an email confirmation shortly."
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
                              'method' => 'index'})
