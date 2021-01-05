@@ -349,7 +349,7 @@ class User < ActiveRecord::Base
     # some databases sort nulls to top of order, other databases sort nulls to bottom of order
     last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
     LogWrapper.log('DEBUG', {
-       'message' => "Found last_user_barcode: #{last_user_barcode || "NIL"}.",
+       'message' => "Found last_user_barcode: #{last_user_barcode || 'NIL'}.",
        'method' => "#{model_name}.assign_barcode!",
        'status' => "end",
        'user' => {email: self.email}
@@ -501,7 +501,6 @@ class User < ActiveRecord::Base
         })
       raise exception
     end
-
   end
 
 

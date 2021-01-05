@@ -13,10 +13,7 @@ class RegistrationsController < Devise::RegistrationsController
   # In addition, overriding the method allows us to validate the incoming data from the form, send the data
   # to the microservice, and create a record on MyLibraryNYC depending on if the microservice is working properly.
   def create
-    LogWrapper.log('INFO', {
-      'method' => "RegistrationsController.create",
-      'message' => "Creating new user record: start"
-    })
+    LogWrapper.log('INFO', { 'method' => "RegistrationsController.create", 'message' => "Creating new user record: start" })
 
     build_resource(sign_up_params)
     if resource.valid?
@@ -24,16 +21,10 @@ class RegistrationsController < Devise::RegistrationsController
         # save the user object as pending
         resource.save_as_pending!
 
-        LogWrapper.log('DEBUG', {
-          'method' => "RegistrationsController.create",
-          'message' => "calling: user.find_unique_new_barcode"
-        })
+        LogWrapper.log('DEBUG', { 'method' => "RegistrationsController.create", 'message' => "calling: user.find_unique_new_barcode" })
         # find fresh new barcode that's available in both MLN db and Sierra
         resource.find_unique_new_barcode
-        LogWrapper.log('DEBUG', {
-          'method' => "RegistrationsController.create",
-          'message' => "done: user.find_unique_new_barcode"
-        })
+        LogWrapper.log('DEBUG', { 'method' => "RegistrationsController.create", 'message' => "done: user.find_unique_new_barcode" })
 
         if params['news_letter_email'].present?
           # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
@@ -58,19 +49,13 @@ class RegistrationsController < Devise::RegistrationsController
           respond_with resource
         end
       rescue Net::ReadTimeout => exception
-        LogWrapper.log('ERROR', {
-          'method' => "RegistrationsController.create",
-          'message' => "Creating new patron threw a Net::ReadTimeout error: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
-        })
+        LogWrapper.log('ERROR', { 'method' => "RegistrationsController.create",
+          'message' => "Creating new patron threw Net::ReadTimeout error: #{exception.message}, backtrace: #{exception.backtrace.join('\n')}" })
         set_flash_message :notice, :time_out if is_flashing_format?
         render :template => '/devise/registrations/new'
       rescue StandardError => exception
-        puts "reg: StdError1a: #{exception.message}"
-        puts "reg: StdError1b: #{exception.backtrace.join('\n')}"
-        LogWrapper.log('ERROR', {
-          'method' => "RegistrationsController.create",
-          'message' => "Creating new patron threw a StandardError: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
-        })
+        LogWrapper.log('ERROR', { 'method' => "RegistrationsController.create",
+          'message' => "Creating new patron threw a StandardError: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}" })
         set_flash_message :notice, :time_out if is_flashing_format?
         render :template => '/devise/registrations/new'
       end
@@ -78,10 +63,8 @@ class RegistrationsController < Devise::RegistrationsController
       render :template => '/devise/registrations/new', :locals => { :error_msg_hash => error_msg_hash }
     end
   rescue Exceptions::InvalidResponse => exception
-    LogWrapper.log('ERROR', {
-      'method' => "RegistrationsController.create",
-      'message' => "Creating new patron threw an Exceptions::InvalidResponse: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}"
-    })
+    LogWrapper.log('ERROR', { 'method' => "RegistrationsController.create",
+      'message' => "Creating new patron threw Exceptions::InvalidResponse: #{exception.message}, backtrace: #{exception.backtrace.join('\n')}" })
     set_flash_message :registration_error, :invalid_response if is_flashing_format?
     render :template => '/devise/registrations/new'
   end

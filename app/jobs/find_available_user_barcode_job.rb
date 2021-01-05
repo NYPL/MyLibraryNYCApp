@@ -26,7 +26,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
     # Number of retries should ideally be controlled by ActiveJob/DelayedJob config.
     # However, this works better until next rail upgrade.
     number_tries = 0
-    while already_there == true and number_tries < 7 do
+    while already_there == true && number_tries < 7
       # ask the user to ask Platform Service to ask Sierra if it
       # already knows this barcode candidate
       begin
@@ -70,12 +70,10 @@ class FindAvailableUserBarcodeJob < ApplicationJob
         # so that the ActiveJob mechanism would take care of retrying.
         # However, such exception handling will become available to us once
         # we upgrade our rails version.  For now, go simpler.
-        Rails.logger.error "#{self.class.name}: user.send_request_to_patron_creator_service or user.save_as_complete! threw an error: #{exception.message || 'nil'}"
+        Rails.logger.error "#{self.class.name}: send_request_to_patron_creator_service or user.save_as_complete threw: #{exception.message || 'nil'}"
         raise exception
       end
     else
-      # FindAvailableUserBarcodeJob.perform: already_there still true
-
       # TODO: Decide on action.  We can let this go by silently.
       # In that case, the user's record will exist in MLN db with the status
       # of "pending", and there will be no Sierra record made.  The user will
@@ -84,6 +82,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
       # incomplete user records to manually correct.
       # Alternatively, we could show an error message to the user, or send an
       # email to MLN help address.
+      Rails.logger.debug "#{self.class.name}: FindAvailableUserBarcodeJob.perform: already_there still true"
     end
 
 
@@ -102,9 +101,10 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
 
   private
-    def around_cleanup
-      # Do something before perform
-      yield
-      # Do something after perform
-    end
+
+  def around_cleanup
+    # Do something before perform
+    yield
+    # Do something after perform
+  end
 end
