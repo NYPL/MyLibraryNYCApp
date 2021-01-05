@@ -3829,7 +3829,7 @@ class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
         :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
-        :mock_send_request_to_bib_service
+        :mock_send_request_to_bib_service, :mock_find_unique_new_barcode
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #

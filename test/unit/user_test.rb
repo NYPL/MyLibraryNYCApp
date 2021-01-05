@@ -168,17 +168,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal('Invalid status code of: 500', exception.message)
   end
 
-
-  test "sending user to sierra changes status from pending to complete" do
-    crank(:queens_user, barcode: 27777011111111)
-    assert_equal("barcode_pending", @user.status)
-    @user.find_unique_new_barcode
-    # TODO: future change:
-    # @user.send_request_to_patron_creator_service
-    assert_equal("complete", @user.status)
-  end
-
-
   test "Queens patron's patron_type is set based on their school's borough" do
     assert(@user.patron_type == 149)
   end

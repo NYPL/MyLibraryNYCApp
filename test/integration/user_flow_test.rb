@@ -17,6 +17,11 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
       user = crank!(:user, barcode: Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MINIMUM']))
       SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
+
+      mock_check_barcode_request(user.barcode.to_s, '404')
+      increased_barcode = user.barcode + 1
+      mock_check_barcode_request(increased_barcode.to_s, '404')
+
       get '/users/signup'
       assert_select 'h1', 'Sign Up'
       post '/users', params: {
