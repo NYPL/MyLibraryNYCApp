@@ -1193,6 +1193,7 @@ DEPENDENCIES
   faker
   figaro
   font-awesome-rails
+  google-api-client
   google_drive
   httparty
   jquery-rails (> 4.0)

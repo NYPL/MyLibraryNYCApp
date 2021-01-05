@@ -67,6 +67,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           total_copies: ts_items_info[:total_count],
           availability: ts_items_info[:availability_string]
         )
+        teacher_set.update_teacher_set_set_type_value(var_field('526'))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
         AdminMailer.failed_bibs_controller_api_request(
@@ -99,8 +100,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         ).deliver
       end
       begin
-        # Set type value varFields entry with the marcTag=526
-        teacher_set.update_included_book_list(teacher_set_record, var_field('526'))
+        teacher_set.update_included_book_list(teacher_set_record)
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
         AdminMailer.failed_bibs_controller_api_request(
