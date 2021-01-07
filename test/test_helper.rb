@@ -6,7 +6,6 @@ SimpleCov.start 'rails' do
   add_filter '/bin/'
   add_filter '/db/'
   add_filter '/test/' # for minitest
-  add_filter '/app/admin/'
 end
 # fail unit tests if total coverage dips below acceptable limit
 SimpleCov.minimum_coverage 50
