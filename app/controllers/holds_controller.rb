@@ -129,7 +129,8 @@ class HoldsController < ApplicationController
     unless (c = params[:hold_change]).nil?
       if c[:status] == 'cancelled'
         # Update teacher-set available copies while cancelling the hold.
-        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies + @hold.teacher_set.holds_count_for_user(current_user, @hold.id)
+        user_holds_count = @hold.teacher_set.holds_count_for_user(current_user, @hold.id).to_i
+        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies.to_i + user_holds_count
         @hold.teacher_set.save!
         LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
         @hold.cancel! c[:comment]
