@@ -13,7 +13,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
   def perform(user: nil, pin_code: nil, **args)
     # perform code on its own thread
-    Delayed::Worker.logger.info("#{self.class.name}: Performing FindAvailableUserBarcodeJob with user: #{user || 'nil'} arguments: #{args.inspect || 'nil'}")
+    Delayed::Worker.logger.info("#{self.class.name}: FindAvailableUserBarcodeJob.perform, user: #{user || 'nil'} arguments: #{args.inspect || 'nil'}")
 
     # if we got passed bad user data, something un-recoverably bad is possibly happening
     if user.blank? || pin_code.blank?
@@ -70,7 +70,8 @@ class FindAvailableUserBarcodeJob < ApplicationJob
         # Ideally, we would be logging the exception here, then re-raising, so that the ActiveJob mechanism
         # would take care of retrying.  However, such exception handling will not become available to us
         # until we upgrade our rails version.  For now, go simpler - log, and squash in our own rescue_from method below.
-        Delayed::Worker.logger.error("#{self.class.name}: send_request_to_patron_creator_service or user.save_as_complete threw: #{exception.message || 'nil'}")
+        Delayed::Worker.logger.error("#{self.class.name}: \
+          send_request_to_patron_creator_service or user.save_as_complete threw: #{exception.message || 'nil'}")
         raise exception
       end
     else

@@ -119,12 +119,16 @@ class User < ActiveRecord::Base
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
-  def send_request_to_patron_creator_service(pin_code)
+  def send_request_to_patron_creator_service(pin_code: nil)
     LogWrapper.log('DEBUG', {
        'message' => "user.send_request_to_patron_creator_service: start with self=#{self || 'NA'}",
        'method' => "#{model_name}.send_request_to_patron_creator_service",
        'status' => "start"
     })
+
+    if pin_code.blank?
+      pin_code = self.pin
+    end
 
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
