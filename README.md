@@ -117,6 +117,8 @@ In many rails projects when you run the server with `rails s` Rails sets RAILS_E
 
 Multithreading
 ========================
+Why: Our asynchronous code is currently used for user barcode creation on account create.  During that process, we need to talk to Sierra one or more times, and those calls can take up time and resources.  For more info on barcodes, see https://confluence.nypl.org/display/DIGTL/User+Barcodes .
+
 Our multithreading functionality is done through ActiveJob, which employs DelayedJob on the backend.
 ActiveJob gets better after rails 5.2, so keep in mind that there is some functionality that is not perfect, until we can upgrade rails.
 
@@ -144,8 +146,6 @@ There are two places you'll see information on the scheduled code runs.  One is 
 config > initializers > delayed_job_config.rb
 ```
 The second place is the log.  Our is here: ``` tail -500f log/delayed_job.log ``` .
-
-Our asynchronous code is currently used for user barcode creation on account create.  During that process, we need to talk to Sierra one or more times, and those calls can take up time and resources.  For more info on barcodes, see https://confluence.nypl.org/display/DIGTL/User+Barcodes .
 
 
 Testing
