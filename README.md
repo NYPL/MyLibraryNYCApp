@@ -162,7 +162,6 @@ from the job's perform method
 ```
 
 
-
 Testing
 ========================
 First, set up a test database:
