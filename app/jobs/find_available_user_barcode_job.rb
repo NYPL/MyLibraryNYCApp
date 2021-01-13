@@ -11,14 +11,14 @@ class FindAvailableUserBarcodeJob < ApplicationJob
   around_perform :around_cleanup
 
 
-  def perform(user: nil, **args)
+  def perform(user: nil, pin_code: nil, **args)
     # perform code on its own thread
-    Delayed::Worker.logger.info("#{self.class.name}: Performing FindAvailableUserBarcodeJob with user: #{user || 'nil'} arguments: #{args.inspect || 'nil'}")
+    Delayed::Worker.logger.info("#{self.class.name}: FindAvailableUserBarcodeJob.perform, user: #{user || 'nil'} arguments: #{args.inspect || 'nil'}")
 
     # if we got passed bad user data, something un-recoverably bad is possibly happening
-    if user.blank?
-      Delayed::Worker.logger.error("FindAvailableUserBarcodeJob called with nil user.")
-      raise Exceptions::ArgumentError, "FindAvailableUserBarcodeJob called with nil user."
+    if user.blank? || pin_code.blank?
+      Delayed::Worker.logger.error("FindAvailableUserBarcodeJob called with nil user or pin.")
+      raise Exceptions::ArgumentError, "FindAvailableUserBarcodeJob called with nil user or pin."
     end
 
 
@@ -62,16 +62,16 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
         # TODO: on timeouts/exceptions/negative results,
         # don't send request to Patron Service, keep user as pending
-        user.send_request_to_patron_creator_service
+        user.send_request_to_patron_creator_service(pin_code)
 
         Delayed::Worker.logger.info("#{self.class.name}: Patron creator service ran. Saving user in MLN db.")
         user.save_as_complete!
       rescue Exceptions::InvalidResponse => exception
-        # Ideally, we would be logging the exception here, then re-raising,
-        # so that the ActiveJob mechanism would take care of retrying.
-        # However, such exception handling will become available to us once
-        # we upgrade our rails version.  For now, go simpler.
-        Delayed::Worker.logger.error("#{self.class.name}: send_request_to_patron_creator_service or user.save_as_complete threw: #{exception.message || 'nil'}")
+        # Ideally, we would be logging the exception here, then re-raising, so that the ActiveJob mechanism
+        # would take care of retrying.  However, such exception handling will not become available to us
+        # until we upgrade our rails version.  For now, go simpler - log, and squash in our own rescue_from method below.
+        Delayed::Worker.logger.error("#{self.class.name}: \
+          send_request_to_patron_creator_service or user.save_as_complete threw: #{exception.message || 'nil'}")
         raise exception
       end
     else
@@ -96,7 +96,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
 
   rescue_from Exception do |exception|
-    Delayed::Worker.logger.error("#{self.class.name}: threw an error: #{exception.message || 'nil'}")
+    Delayed::Worker.logger.error("#{self.class.name}.rescue_from: threw an error: #{exception.message || 'nil'}")
   end
 
 
