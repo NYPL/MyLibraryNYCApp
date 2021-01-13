@@ -141,11 +141,25 @@ Perform, and perform_later calls are scheduled to go at some schedule you've set
 At this point, if you have not started your second worker (remember delayed_job start?), your call will go on your regular app stack.  Multithreading will not happen.  If you have a second worker going, your asynchronous call will be put on that second worker's thread.  If you have multiple asynchronous calls going at the same time, they will be put on the second worker thread, but be single-threaded (schedule one after another) within that thread's stack.
 
 DelayedJob Logging:
-There are two places you'll see information on the scheduled code runs.  One is the ```delayed_jobs``` database table.  Here, you can see the jobs that are scheduled to be run.  Usually, after a job is completed, its row will be removed from the table.  So be aware that you won't see historical jobs in that table.  DelayedJob configuration is in:
+There are two places you'll see information on the scheduled code runs.  One is the ```delayed_jobs``` database table.  Here, you can see the jobs that are scheduled to be run.  Usually, after a job is completed, its row will be removed from the table.  So be aware that you won't see historical jobs in that table.  For debugging purposes, you can set DelayedJob to keep failed jobs' record in the table, but there is no option to keep a record of the successes, unless you try something like .  
+
+DelayedJob configuration is in:
 ```
 config > initializers > delayed_job_config.rb
+
+see the
+Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))
+line for logging configuration
 ```
-The second place is the log.  Our is here: ``` tail -500f log/delayed_job.log ``` .
+
+The second place is the log.  Ours is here:
+```
+tail -500f log/delayed_job.log
+
+Write to the log with something like
+Delayed::Worker.logger.info()
+from the job's perform method
+```
 
 
 Testing
