@@ -65,8 +65,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
           available_copies: ts_items_info[:available_count],
           total_copies: ts_items_info[:total_count],
-          availability: ts_items_info[:availability_string],
-          bib_code_3: fixed_field('31', true) # Bib code 3 values 'n' or 'e', or '-'
+          availability: ts_items_info[:availability_string]
         )
         teacher_set.update_teacher_set_set_type_value(var_field('526'))
       rescue => exception
@@ -181,10 +180,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
     end
 
 
-    def fixed_field(marcTag, value=nil)
+    def fixed_field(marcTag)
       begin
-        fixed_field = @teacher_set_record['fixedFields'][marcTag]
-        value.present? ? fixed_field['value'] : fixed_field['display']
+        @teacher_set_record['fixedFields'][marcTag]['display']
       rescue
         return nil
       end
