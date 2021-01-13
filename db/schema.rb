@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201108232811) do
+ActiveRecord::Schema.define(version: 20210112182505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -217,6 +217,7 @@ ActiveRecord::Schema.define(version: 20201108232811) do
     t.text     "set_type"
     t.text     "contents"
     t.text     "last_book_change"
+    t.string   "bib_code_3"
     t.index ["area_of_study"], name: "index_area_of_study", using: :btree
     t.index ["availability"], name: "index_teacher_sets_availaibilty", using: :btree
     t.index ["bnumber"], name: "index_teacher_sets_bnumber", unique: true, using: :btree

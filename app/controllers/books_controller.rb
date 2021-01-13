@@ -9,9 +9,12 @@ class BooksController < ApplicationController
   
   def show
     @book = Book.find params[:id]
+    bib_code_3_vals = @book.teacher_sets.collect{|i| i.bib_code_3}
+    # If the bib record has "n" or "e" in the "Bib Code 3 field" we should not show the "View in catalog" link on the book show page.
     render json: {
       :book => @book,
-      :teacher_sets => @book.teacher_sets
+      :teacher_sets => @book.teacher_sets,
+      :show_catalog_link => !(['n', 'e'] & bib_code_3_vals).any?
     }
   end
 
