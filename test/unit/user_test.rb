@@ -152,7 +152,7 @@ class UserTest < ActiveSupport::TestCase
     a 201 illustrating patron was created through
       patron creator microservice" do
     crank(:queens_user, barcode: 27777011111111)
-    assert_equal(true, @user.send_request_to_patron_creator_service)
+    assert_equal(true, @user.send_request_to_patron_creator_service(@user.pin))
   end
 
   # Need to call twice, in order to receive the second response
@@ -161,9 +161,9 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     an exception illustrating patron was not created
       through patron creator micro-service" do
-    @user.send_request_to_patron_creator_service
+    @user.send_request_to_patron_creator_service(@user.pin)
     exception = assert_raise(Exceptions::InvalidResponse) do
-      @user.send_request_to_patron_creator_service
+      @user.send_request_to_patron_creator_service(@user.pin)
     end
     assert_equal('Invalid status code of: 500', exception.message)
   end
