@@ -178,7 +178,8 @@ class Book < ActiveRecord::Base
         description: var_field(book_attributes, '520'),
         physical_description: var_field(book_attributes, '300'),
         format: var_field(book_attributes, '020'),
-        cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}"
+        cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}",
+        bib_code_3: fixed_field(book_attributes, '31', true)
       )
     rescue => exception
       # catch any error such as string field is receiving more than 255 characters or an expected attribute is missing
@@ -237,6 +238,19 @@ class Book < ActiveRecord::Base
   def var_field(book_attributes, marcTag)
     begin
       book_attributes['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].map{ |x| x['content']}.join(', ')
+    rescue
+      return nil
+    end
+  end
+
+
+  # This method returns Fixed Field values from bib response
+  # eg: book_attributes = "fixedFields"=> {"24"=>{"label"=>"Language", "value"=>"eng", "display"=>"English"}
+  # Return result value = "a"
+  def fixed_field(book_attributes, marcTag, value=nil)
+    begin
+      fixed_field = book_attributes['fixedFields'][marcTag]
+      value.present? ? fixed_field['value'] : fixed_field['display']
     rescue
       return nil
     end

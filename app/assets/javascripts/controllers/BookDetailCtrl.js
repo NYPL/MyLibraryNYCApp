@@ -16,9 +16,9 @@ app.controller('BookDetailCtrl', ['$scope', '$routeParams', '$http', '$location'
     };
     
     $http.get('/books/'+$scope.book_id+'.json').success(function(data) {
-      // console.log(data);
       $scope.book = data.book;
       $scope.teacher_sets = data.teacher_sets;
+      $scope.show_catalog_link = data.show_catalog_link;
       $scope.loaded = true;
     });
   }
