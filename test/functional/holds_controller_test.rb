@@ -50,9 +50,7 @@ class HoldsControllerTest < ActionController::TestCase
 
   test "test update method with empty holds" do
     sign_in @user
-    expected_ts_available_copies = 4
     resp = post :update, params: { id: @hold4.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
-    resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold1.id)
     assert_nil(flash[:notice])
   end
 
