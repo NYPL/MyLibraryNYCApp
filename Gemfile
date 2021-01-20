@@ -73,4 +73,7 @@ group :test do
   gem 'minitest', '~> 5.6.1'
   gem 'simplecov', '~> 0.17.1'
   gem 'database_cleaner'
+  gem 'factory_bot_rails'
+  gem "rspec-rails"
+  gem 'shoulda-matchers', '~> 4.0'
 end
