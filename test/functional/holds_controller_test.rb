@@ -50,7 +50,7 @@ class HoldsControllerTest < ActionController::TestCase
 
   test "test update method with empty holds" do
     sign_in @user
-    resp = post :update, params: { id: @hold4.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
+    post :update, params: { id: @hold4.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
     assert_nil(flash[:notice])
   end
 
