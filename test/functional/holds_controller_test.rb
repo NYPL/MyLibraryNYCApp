@@ -8,6 +8,7 @@ class HoldsControllerTest < ActionController::TestCase
     @user = holds(:hold1).user
     @hold1 = holds(:hold1)
     @hold2 = holds(:hold2)
+    @hold4 = holds(:hold4)
     @school_two = schools(:school_two)
   end
 
@@ -45,6 +46,12 @@ class HoldsControllerTest < ActionController::TestCase
     assert_equal(expected_ts_available_copies, TeacherSet.find(resp_hold_obj.teacher_set_id).available_copies)
     assert_response :redirect
     assert_equal("Your order was successfully updated.", flash[:notice])
+  end
+
+  test "test update method with empty holds" do
+    sign_in @user
+    post :update, params: { id: @hold4.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
+    assert_nil(flash[:notice])
   end
 
   test "Should fail hold cancelaltion" do
