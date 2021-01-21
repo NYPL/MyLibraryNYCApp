@@ -119,6 +119,11 @@ class User < ActiveRecord::Base
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
+  # Note: This method can be called from an ActiveJob process, that is,
+  # in turn, called by the User object.  The User handler (object) is then serialized
+  # before being passed to the ActiveJob.  Serialization isn't picking up the pin field.
+  # In lieu of writing a custom serializer for User, we chose to pass the pin/pin_code
+  # around manually. 
   def send_request_to_patron_creator_service(pin_code)
     LogWrapper.log('DEBUG', {
        'message' => "user.send_request_to_patron_creator_service: start with self=#{self || 'NA'}",

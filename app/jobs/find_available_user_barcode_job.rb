@@ -23,16 +23,16 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
 
     # TODO: stop on barcode out of available range
-    already_there = true
+    barcode_already_in_sierra = true
     # Number of retries should ideally be controlled by ActiveJob/DelayedJob config.
     # However, this works better until next rail upgrade.
     number_tries = 0
-    while already_there == true && number_tries < 7
+    while barcode_already_in_sierra == true && number_tries < 7
       # ask the user to ask Platform Service to ask Sierra if it
       # already knows this barcode candidate
       begin
         number_tries += 1
-        already_there = user.check_barcode_uniqueness_with_sierra(user.barcode)
+        barcode_already_in_sierra = user.check_barcode_uniqueness_with_sierra(user.barcode)
       rescue Exceptions::InvalidResponse => exception
         # Ideally, we would be logging the exception here, then re-raising,
         # so that the ActiveJob mechanism would take care of retrying.
@@ -46,7 +46,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
       # barcode found to already be in Sierra for another user?
       # well, we can't be saving this user with a duplicate barcode.
       # ask the user to increment its barcode, and try again.
-      if already_there
+      if barcode_already_in_sierra
         Delayed::Worker.logger.info("#{self.class.name}: barcode [#{user.barcode}] was already in Sierra, calling user.assign_barcode again")
         user.assign_barcode!
         # wait a bit before hitting Sierra up again
@@ -56,7 +56,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
 
     # We tried to find a unique barcode, coordinating our actions with sierra.
     # If we succeeded, it's time to tell the User object that its barcode is no longer pending
-    if already_there == false
+    if barcode_already_in_sierra == false
       begin
         Delayed::Worker.logger.info("#{self.class.name}: barcode [#{user.barcode}] is available in Sierra, calling patron creator service.")
 
@@ -83,7 +83,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
       # incomplete user records to manually correct.
       # Alternatively, we could show an error message to the user, or send an
       # email to MLN help address.
-      Delayed::Worker.logger.info("#{self.class.name}: FindAvailableUserBarcodeJob.perform: already_there still true")
+      Delayed::Worker.logger.info("#{self.class.name}: FindAvailableUserBarcodeJob.perform: barcode_already_in_sierra still true")
     end
 
 

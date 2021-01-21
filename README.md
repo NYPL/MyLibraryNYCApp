@@ -115,30 +115,39 @@ Server
 In many rails projects when you run the server with `rails s` Rails sets RAILS_ENV to "development".  If you do that with this app, you will connect to the development database on AWS (if you have permission to decrypt the value).  Instead, run `RAILS_ENV=local rails s` to start the server and `RAILS_ENV=local rails c` to run the console.
 
 
-Multithreading
+Asynchronous Execution
 ========================
-Why: Our asynchronous code is currently used for user barcode creation on account create.  During that process, we need to talk to Sierra one or more times, and those calls can take up time and resources.  For more info on barcodes, see https://confluence.nypl.org/display/DIGTL/User+Barcodes .
+Why: Our asynchronous code is currently used for user barcode creation on account create.  During that process, we need to talk to Sierra one or more times, and those calls can take up time and resources.  We'd like the user to be able to peruse the site while their barcode is being computed.  For more info on barcodes, see https://confluence.nypl.org/display/DIGTL/User+Barcodes .
 
-Our multithreading functionality is done through ActiveJob, which employs DelayedJob on the backend.
+Our asynchronous functionality is done through ActiveJob, which employs DelayedJob on the backend.
 ActiveJob gets better after rails 5.2, so keep in mind that there is some functionality that is not perfect, until we can upgrade rails.
 
-Backstory:  Rails runs on a single thread.  Even when you schedule asynchronous operations, s.a. sending a request with HTTParty, that request is executed on the same thread as the rest of the application.  Rails simulates multithreading with creative use of scheduling.
+Backstory:  Rails runs on a single thread within a single process.  When you send a request with HTTParty, that request is executed on the same thread as the rest of the application.  Rails will sometimes simulate asynchronicity with creative use of scheduling on IO operations on some of the Rails servers/environments.  But, generally, HttParty will be running on the same thread and process as your app, and will hold up app execution, if it's stuck.
 
-To put something on its own thread, you have to first create the second thread by starting the second worker on the same EC2 server:
+To make code asynchronous, we're making a second worker, which will start its own process, which will spin its own thread:
 ```
 RAILS_ENV=qa bin/delayed_job start
 ```
 
-There are several options for implementing the multithreading backend in the code.  Sidekiq and DelayedJob are two of the more popular ones.  We chose DelayedJob, for its relative simplicity.  Each backend implementation can be used on its own, or through ActiveJob hooks (https://edgeguides.rubyonrails.org/active_job_basics.html).
+To run the whole shebang locally, start your app in one terminal tab:
+```
+$ RAILS_ENV=local rails s
+```
+then in a second terminal tab:
+```
+$ RAILS_ENV=local bin/delayed_job start
+```
 
-It's a good idea to use ActiveJob.  Even though using DelayedJob directly can give more powerful functionality, using the ActiveJob intermediary will allow future maintainers to switch implementations without rewriting app code.
+There are several options for implementing the backend.  Sidekiq and DelayedJob are two of the more popular ones.  We chose DelayedJob, for its relative simplicity.  Each backend implementation can be used on its own, or through ActiveJob hooks (https://edgeguides.rubyonrails.org/active_job_basics.html).
+
+We chose to use ActiveJob.  Even though using DelayedJob directly can give more powerful functionality, using the ActiveJob intermediary will allow future maintainers to switch implementations without rewriting app code.
 
 How do you call a method asynchronously?  Call it like we do here:
 ```
 FindAvailableUserBarcodeJob.perform_later(user: self)
 ```
 Perform, and perform_later calls are scheduled to go at some schedule you've set up.  
-At this point, if you have not started your second worker (remember delayed_job start?), your call will go on your regular app stack.  Multithreading will not happen.  If you have a second worker going, your asynchronous call will be put on that second worker's thread.  If you have multiple asynchronous calls going at the same time, they will be put on the second worker thread, but be single-threaded (schedule one after another) within that thread's stack.
+At this point, if you have not started your second worker (remember delayed_job start?), your call will go on your regular app stack, and be executed on the app thread and process.  (This can be useful if you want to do a quickie debug of the functional part of the methods.)  If you have a second worker going, your asynchronous call will be put on that second worker's thread.  If you have multiple asynchronous calls going at the same time, they will be put on the second worker thread, but be single-threaded (schedule one after another) within that thread's stack.
 
 DelayedJob Logging:
 There are two places you'll see information on the scheduled code runs.  One is the ```delayed_jobs``` database table.  Here, you can see the jobs that are scheduled to be run.  Usually, after a job is completed, its row will be removed from the table.  So be aware that you won't see historical jobs in that table.  For debugging purposes, you can set DelayedJob to keep failed jobs' record in the table, but there is no option to keep a record of the successes, unless you try something like .  
