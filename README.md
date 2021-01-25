@@ -117,14 +117,14 @@ In many rails projects when you run the server with `rails s` Rails sets RAILS_E
 
 Asynchronous Execution
 ========================
-Why: Our asynchronous code is currently used for user barcode creation on account create.  During that process, we need to talk to Sierra one or more times, and those calls can take up time and resources.  We'd like the user to be able to peruse the site while their barcode is being computed.  For more info on barcodes, see https://confluence.nypl.org/display/DIGTL/User+Barcodes .
+Why: Our asynchronous code is currently used for user barcode creation on account create.  During that process, we need to talk to Sierra one or more times, and those calls can take up time and resources.  We'd like the user to be able to peruse the site while their barcode is being computed, and we'd like the app to remain operational when Sierra is down.  For more info on barcodes, see https://confluence.nypl.org/display/DIGTL/User+Barcodes .
 
 Our asynchronous functionality is done through ActiveJob, which employs DelayedJob on the backend.
 ActiveJob gets better after rails 5.2, so keep in mind that there is some functionality that is not perfect, until we can upgrade rails.
 
 Backstory:  Rails runs on a single thread within a single process.  When you send a request with HTTParty, that request is executed on the same thread as the rest of the application.  Rails will sometimes simulate asynchronicity with creative use of scheduling on IO operations on some of the Rails servers/environments.  But, generally, HttParty will be running on the same thread and process as your app, and will hold up app execution, if it's stuck.
 
-To make code asynchronous, we're making a second worker, which will start its own process, which will spin its own thread:
+To make code asynchronous, we're making a second worker and process, which will spin its own separate thread:
 ```
 RAILS_ENV=qa bin/delayed_job start
 ```
