@@ -17,8 +17,7 @@ class User < ActiveRecord::Base
 
 
   # Validation's for email and pin only occurs when a user record is being
-  # created on sign up. Does not occur when updating
-  # the record.
+  # created on sign up. Does not occur when updating the record.
   validates :first_name, :last_name, :presence => true
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
@@ -120,11 +119,26 @@ class User < ActiveRecord::Base
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
-  def send_request_to_patron_creator_service
+  # Note: This method can be called from an ActiveJob process, that is,
+  # in turn, called by the User object.  The User handler (object) is then serialized
+  # before being passed to the ActiveJob.  Serialization isn't picking up the pin field.
+  # In lieu of writing a custom serializer for User, we chose to pass the pin/pin_code
+  # around manually. 
+  def send_request_to_patron_creator_service(pin_code)
+    LogWrapper.log('DEBUG', {
+       'message' => "user.send_request_to_patron_creator_service: start with self=#{self || 'NA'}",
+       'method' => "#{model_name}.send_request_to_patron_creator_service",
+       'status' => "start"
+    })
+
+    if pin_code.blank?
+      pin_code = self.pin
+    end
+
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
-      'pin' => pin,
+      'pin' => pin_code,
       'patronType' => patron_type,
       'patronCodes' => {
         'pcode1' => '-',
@@ -170,8 +184,7 @@ class User < ActiveRecord::Base
     case response.code
     when 201
       LogWrapper.log('DEBUG', {
-          'message' => "The account with e-mail #{email} was
-           successfully created from the micro-service!",
+          'message' => "The account with e-mail #{email} was successfully created from the micro-service!",
           'status' => response.code
         })
     else
@@ -179,7 +192,7 @@ class User < ActiveRecord::Base
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
           'responseData' => response.body
-        })
+      })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
@@ -487,7 +500,8 @@ class User < ActiveRecord::Base
 
     # Enqueue a job to be performed as soon as the queuing system is free.
     begin
-      FindAvailableUserBarcodeJob.perform_later(user: self)
+      # Note: user.pin is not getting serialized properly, hence passing as its own var
+      FindAvailableUserBarcodeJob.perform_later(user: self, pin_code: self.pin)
     rescue StandardError => exception
       LogWrapper.log('ERROR', {
           'method' => "#{model_name}.find_unique_new_barcode",
