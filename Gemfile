@@ -15,11 +15,11 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 
 
-gem 'rails', '5.0.7.1'
-gem 'actionpack', '5.0.7.1'
+gem 'rails', '>= 5.2'
+gem 'actionpack', '>= 5.2'
 gem 'activeadmin', '2.4.0'
 gem 'activeadmin_reorderable'
-gem 'activemodel', '5.0.7.1'
+gem 'activemodel', '>= 5.2'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'acts_as_list'
 gem 'addressable'
@@ -47,11 +47,13 @@ gem 'paper_trail', github: 'paper-trail-gem/paper_trail', branch: '5-stable'
 gem 'pg', '~> 0.18'
 gem 'rack-cors'
 gem 'rails-controller-testing'
+gem 'react_on_rails', '12.0.4'
 gem 'rubocop','~> 0.59.1', require: false
 gem 'test-unit'
 gem 'travis'
-gem 'will_paginate', '~> 3.0'
 gem 'webmock'
+gem 'webpacker', '~> 5.x'  # needed for React
+gem 'will_paginate', '~> 3.0'
 gem 'yaml_db'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
