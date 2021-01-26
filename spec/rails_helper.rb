@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-require 'spec_helper'
+#require 'spec_helper'
 require 'simplecov'
+require 'spec_helper'
 
 SimpleCov.start 'rails' do
-  add_filter '/bin/'
-  add_filter '/db/'
-  add_filter '/test/' # for minitest
+
 end
 # fail unit tests if total coverage dips below acceptable limit
 SimpleCov.minimum_coverage 50
@@ -15,7 +14,6 @@ SimpleCov.minimum_coverage 50
 SimpleCov.minimum_coverage_by_file 0
 
 ENV['RAILS_ENV'] ||= 'test'
-require 'spec_helper'
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'shoulda/matchers'

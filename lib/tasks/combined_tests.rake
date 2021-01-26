@@ -4,8 +4,9 @@
 # if have issues, bring the line back into code.
 # require "bundler/gem_tasks"
 require "rake/testtask"
+require 'rspec/core/rake_task'
 
-Rake::Task['test:run'].clear
+Rake::Task["default"].clear
 
 namespace :combined_tests do
 
@@ -46,6 +47,9 @@ namespace :combined_tests do
     t.verbose = false
   end
 
-  # set the test task as default for safety
-  # task default: :test
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    t.pattern = Dir.glob('spec/**/**/*_spec.rb')
+  end
+
+  task default: [:test, :spec]
 end
