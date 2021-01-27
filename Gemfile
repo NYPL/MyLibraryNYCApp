@@ -33,6 +33,7 @@ gem 'email_validator'
 gem 'faker'
 gem 'figaro'
 gem 'font-awesome-rails'
+gem 'foreman'
 gem 'google-api-client'
 gem 'google_drive'
 gem 'httparty'
@@ -76,3 +77,5 @@ group :test do
   gem 'simplecov', '~> 0.17.1'
   gem 'database_cleaner'
 end
+
+gem 'mini_racer', platforms: :ruby

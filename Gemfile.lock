@@ -934,6 +934,7 @@ GEM
       thor (~> 0.14)
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
+    foreman (0.87.2)
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
@@ -1013,6 +1014,7 @@ GEM
     kaminari-core (1.1.1)
     launchy (2.4.3)
       addressable (~> 2.3)
+    libv8 (8.4.255.0)
     lograge (0.11.2)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -1033,6 +1035,8 @@ GEM
     mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
+    mini_racer (0.3.1)
+      libv8 (~> 8.4.255)
     minitest (5.6.1)
     multi_json (1.14.1)
     multi_xml (0.6.0)
@@ -1247,6 +1251,7 @@ DEPENDENCIES
   faker
   figaro
   font-awesome-rails
+  foreman
   google-api-client
   google_drive
   httparty
@@ -1255,6 +1260,7 @@ DEPENDENCIES
   json
   lograge (~> 0.11.2)
   logstash-event!
+  mini_racer
   minitest (~> 5.6.1)
   nokogiri
   open_uri_redirections
