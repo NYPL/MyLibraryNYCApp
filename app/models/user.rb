@@ -123,7 +123,7 @@ class User < ActiveRecord::Base
   # in turn, called by the User object.  The User handler (object) is then serialized
   # before being passed to the ActiveJob.  Serialization isn't picking up the pin field.
   # In lieu of writing a custom serializer for User, we chose to pass the pin/pin_code
-  # around manually. 
+  # around manually.
   def send_request_to_patron_creator_service(pin_code)
     LogWrapper.log('DEBUG', {
        'message' => "user.send_request_to_patron_creator_service: start with self=#{self || 'NA'}",
@@ -500,7 +500,9 @@ class User < ActiveRecord::Base
 
     # Enqueue a job to be performed as soon as the queuing system is free.
     begin
-      # Note: user.pin is not getting serialized properly, hence passing as its own var
+      # Note: user.pin is not getting serialized properly, hence passing as its own var.
+      # Note: user.pin is no longer persisted to MLN db, taking us one step closer
+      # to the goal of using Sierra as the source of truth.
       FindAvailableUserBarcodeJob.perform_later(user: self, pin_code: self.pin)
     rescue StandardError => exception
       LogWrapper.log('ERROR', {
