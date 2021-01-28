@@ -100,12 +100,4 @@ class FindAvailableUserBarcodeJob < ApplicationJob
   end
 
 
-
-  private
-
-  def around_cleanup
-    # Do something before perform
-    yield
-    # Do something after perform
-  end
 end
