@@ -32,11 +32,19 @@ class User < ActiveRecord::Base
 
   belongs_to :school
 
-  # Set default password if one is not set
+  # Set default password if one is not set.
+  # (TODO: Check if the default_password field is still relevant to the app.)
+  # If alt_email is coming in empty, set it to NULL, so that we can save
+  # to the database with the uniqueness constraint on the users.alt_email column.
   before_validation(on: :create) do
     self.password ||= User.default_password
     self.password_confirmation ||= User.default_password
+    empty_alt_email_must_be_null
   end
+
+  # If alt_email is coming in empty, set it to NULL, so that we can save
+  # to the database with the uniqueness constraint on the users.alt_email column.
+  before_validation :empty_alt_email_must_be_null, on: :update
 
 
   STATUS_LABELS = {'barcode_pending' => 'barcode_pending', 'complete' => 'complete'}.freeze
@@ -351,4 +359,15 @@ class User < ActiveRecord::Base
   def pcode4
     school.sierra_code
   end
+
+
+  private
+
+  # If alt_email is empty, set it to NIL.
+  def empty_alt_email_must_be_null
+    if self.alt_email.blank?
+      self.alt_email = nil
+    end
+  end
+
 end
