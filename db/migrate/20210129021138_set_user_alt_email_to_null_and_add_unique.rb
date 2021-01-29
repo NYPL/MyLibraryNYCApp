@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetUserAltEmailToNull < ActiveRecord::Migration[5.0]
   def change
     execute "UPDATE users SET alt_email=NULL where alt_email=''"
