@@ -6,8 +6,7 @@ hold1:
   quantity: 2
   teacher_set: teacher_set_one
   user: user1
-
-
+  
 hold2:
   access_key: access_key2
   status: new
