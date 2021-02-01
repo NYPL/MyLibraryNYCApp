@@ -17,8 +17,7 @@ class User < ActiveRecord::Base
 
 
   # Validation's for email and pin only occurs when a user record is being
-  # created on sign up. Does not occur when updating
-  # the record.
+  # created on sign up. Does not occur when updating the record.
   validates :first_name, :last_name, :presence => true
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
@@ -120,11 +119,26 @@ class User < ActiveRecord::Base
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
-  def send_request_to_patron_creator_service
+  # Note: This method can be called from an ActiveJob process, that is,
+  # in turn, called by the User object.  The User handler (object) is then serialized
+  # before being passed to the ActiveJob.  Serialization isn't picking up the pin field.
+  # In lieu of writing a custom serializer for User, we chose to pass the pin/pin_code
+  # around manually.
+  def send_request_to_patron_creator_service(pin_code)
+    LogWrapper.log('DEBUG', {
+       'message' => "user.send_request_to_patron_creator_service: start with self=#{self || 'NA'}",
+       'method' => "#{model_name}.send_request_to_patron_creator_service",
+       'status' => "start"
+    })
+
+    if pin_code.blank?
+      pin_code = self.pin
+    end
+
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
-      'pin' => pin,
+      'pin' => pin_code,
       'patronType' => patron_type,
       'patronCodes' => {
         'pcode1' => '-',
@@ -132,7 +146,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode!.to_s],
+      'barcodes' => [self.barcode.present? ? self.barcode.to_s : self.assign_barcode!.to_s],
       'addresses': [
         {
           'lines': [
@@ -157,6 +171,7 @@ class User < ActiveRecord::Base
        'status' => 'start',
        'dataSent' => query
       })
+
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,
@@ -169,8 +184,7 @@ class User < ActiveRecord::Base
     case response.code
     when 201
       LogWrapper.log('DEBUG', {
-          'message' => "The account with e-mail #{email} was
-           successfully created from the micro-service!",
+          'message' => "The account with e-mail #{email} was successfully created from the micro-service!",
           'status' => response.code
         })
     else
@@ -178,7 +192,7 @@ class User < ActiveRecord::Base
           'message' => "An error has occured when sending a request to the patron creator service",
           'status' => response.code,
           'responseData' => response.body
-        })
+      })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
@@ -258,7 +272,20 @@ class User < ActiveRecord::Base
   # Patron Service to create the user in Sierra.
   def save_as_complete!
     self.status = STATUS_LABELS['complete']
+
+    LogWrapper.log('DEBUG', {
+       'message' => "user.save_as_complete!: saving self: #{self} with id: #{self.id || 'NA'} and barcode: #{self.barcode || 'NA'}",
+       'method' => "#{model_name}.save_as_complete!",
+       'status' => "before save action"
+      })
+
     self.save!
+
+    LogWrapper.log('DEBUG', {
+       'message' => "user.save_as_complete!: done saving}",
+       'method' => "#{model_name}.save_as_complete!",
+       'status' => "before save action"
+      })
   end
 
 
@@ -266,12 +293,21 @@ class User < ActiveRecord::Base
   # 'pending' and save.  In the future, there may be other conditions that
   # could set the user to "pending", and we'll be checking for those here, as well.
   def save_as_pending!
+    LogWrapper.log('DEBUG', {
+       'message' => "Saving as pending #{self.id}",
+       'method' => "#{model_name}.save_as_pending!",
+       'status' => "before save action"
+    })
+
     # do we need to fill in a provisional barcode?
     unless self.barcode.present?
+      # Note: assign_barcode could throw a RangeError.
+      # If it does, we want it to propagate up the stack to the calling method.
       self.barcode = self.assign_barcode!
     end
 
     self.status = STATUS_LABELS['barcode_pending']
+
     self.save!
   end
 
@@ -280,12 +316,14 @@ class User < ActiveRecord::Base
 
   # ################ THE BARCODES SECTION! ################
 
+  # Assigns a barcode based on the current range in the MLN db.
+  # Does not check the barcode for availability/uniqueness in Sierra.
+  # We have an ActiveJob for that.
   def assign_barcode!
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
-       'method' => "assign_barcode",
-       'status' => "start",
-       'user' => {email: self.email}
+       'method' => "#{model_name}.assign_barcode",
+       'status' => "start"
       })
 
     # Integer(string) can raise ArgumentError.  we choose not to rescue it, because
@@ -294,8 +332,42 @@ class User < ActiveRecord::Base
     min_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MINIMUM'])
     max_barcode = Integer(ENV['USER_BARCODE_ALLOTTED_RANGE_MAXIMUM'])
 
+    # if we're being asked to increment our barcode because it's
+    # non-unique in Sierra, then do so here
+    if self.barcode
+      # random number between 5 and 10 is a cheap way of helping prevent collisions,
+      # and we have the barcode range to spare.
+      self.assign_attributes({ barcode: self.barcode + rand(5..10)})
+
+      # Did we go over the limit?  No use stepping back, tell the app we'll
+      # need to ask Sierra team for a wider barcode range.
+      if self.barcode > max_barcode
+        LogWrapper.log('ERROR', {
+            'method' => "#{model_name}.assign_barcode!",
+            'message' => "MLN app has run out of available user barcodes"
+        })
+        raise RangeError, "MLN app has run out of available user barcodes"
+      end
+
+      LogWrapper.log('DEBUG', {
+         'message' => "Had a barcode.  Changed it to #{self.barcode}.  Returning from method.",
+         'method' => "#{model_name}.assign_barcode!",
+         'status' => "end",
+         'user' => {email: self.email}
+        })
+      return self.barcode
+    end
+
+    # runs when this is our first time in this method for this user
     # some databases sort nulls to top of order, other databases sort nulls to bottom of order
     last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
+    LogWrapper.log('DEBUG', {
+       'message' => "Found last_user_barcode: #{last_user_barcode || 'NIL'}.",
+       'method' => "#{model_name}.assign_barcode!",
+       'status' => "end",
+       'user' => {email: self.email}
+      })
+
     # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
     if last_user_barcode.blank?
       # Check to see if we're in an empty database, or if it's the opposite case:
@@ -309,6 +381,10 @@ class User < ActiveRecord::Base
         # No more barcodes left in the range available to MLN.
         # Throw an Exception-level exception -- we can't operate with
         # no available barcodes, and this exception shouldn't be caught
+        LogWrapper.log('ERROR', {
+            'method' => "#{model_name}.assign_barcode!",
+            'message' => "MLN app has run out of available user barcodes"
+        })
         raise RangeError, "MLN app has run out of available user barcodes"
       end
     end
@@ -321,11 +397,11 @@ class User < ActiveRecord::Base
 
     LogWrapper.log('DEBUG', {
        'message' => "Barcode has been assigned to #{self.email}",
-       'method' => "assign_barcode",
+       'method' => "#{model_name}.assign_barcode!",
        'status' => "end",
-       'barcode' => "#{self.barcode}",
-       'user' => {email: self.email}
+       'barcode' => "#{self.barcode}"
       })
+
     return self.barcode
   end
 
@@ -351,7 +427,15 @@ class User < ActiveRecord::Base
     # Return "true" if a user is found, false otherwise.  Default to "false".
     # Throw an exception if called with malformed data.
 
+    LogWrapper.log('DEBUG', {
+       'message' => "Checking barcode #{barcode_to_check || 'NIL'}",
+       'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
+       'status' => "start"
+      })
+
     if barcode_to_check.blank?
+      # TODO: would be good to throw an exception here, but let's make sure
+      # our rails version of ActiveJob can handle it.
       return false
     end
 
@@ -392,7 +476,7 @@ class User < ActiveRecord::Base
       # Includes response of 500.  Be liberal and assume the barcode is free.
       LogWrapper.log('ERROR', {
           'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service threw error while looking for user(#{barcode_to_check}) in Sierra",
+          'message' => "patron service threw an error while looking for user(#{barcode_to_check}) in Sierra",
           'status' => response.code,
           'responseData' => response.body
         })
@@ -408,15 +492,37 @@ class User < ActiveRecord::Base
     # a) pick barcode in MLN db
     # b) make sure it'd be new and unique in Sierra
     # c) repeat until b) is true
+    LogWrapper.log('DEBUG', {
+       'message' => "Checking user #{self.id || 'NIL'}",
+       'method' => "#{model_name}.find_unique_new_barcode",
+       'status' => "start"
+      })
 
-    # TODO: future branches: move user.assign_barcode over to its own multithreaded job,
-    # and move save_as_complete over to after have successfully sent to Sierra
-    self.assign_barcode!
-    self.save_as_complete!
+    # Enqueue a job to be performed as soon as the queuing system is free.
+    begin
+      # Note: user.pin is not getting serialized properly, hence passing as its own var.
+      # Note: user.pin is no longer persisted to MLN db, taking us one step closer
+      # to the goal of using Sierra as the source of truth.
+      FindAvailableUserBarcodeJob.perform_later(user: self, pin_code: self.pin)
+    rescue StandardError => exception
+      LogWrapper.log('ERROR', {
+          'method' => "#{model_name}.find_unique_new_barcode",
+          'message' => "Sierra threw an error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+        })
+      raise exception
+    rescue Exceptions => exception
+      LogWrapper.log('ERROR', {
+          'method' => "#{model_name}.find_unique_new_barcode",
+          'message' => "Sierra threw an error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+        })
+      raise exception
+    end
   end
 
 
   def multiple_barcodes?
+    # Legacy method, still being used in a mailer.
+
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
   # ################ /THE BARCODES SECTION! ################

@@ -43,4 +43,6 @@ MyLibraryNYC::Application.configure do
   config.logger.level = Logger::DEBUG
 
   config.eager_load = false
+
+  config.active_job.queue_adapter = :delayed_job
 end

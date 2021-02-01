@@ -5,7 +5,7 @@ ActiveAdmin.register User do
   actions :all
 
   before_create do |user|
-    user.send_request_to_patron_creator_service if user.valid? # if not valid, errors will show on the form
+    user.send_request_to_patron_creator_service(user.pin) if user.valid? # if not valid, errors will show on the form
   end
 
   csv do
@@ -100,12 +100,12 @@ ActiveAdmin.register User do
     def edit # the edit page title has to be handled this way, source: https://github.com/activeadmin/activeadmin/wiki/Set-page-title
       @page_title = resource.name(true)
     end
-    
-    
+
+
     # Setting up Strong Parameters
     # You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
     def permitted_params
-      params.permit user: [:email, :password, :password_confirmation, :remember_me, :barcode, :alt_barcodes, :first_name, 
+      params.permit user: [:email, :password, :password_confirmation, :remember_me, :barcode, :alt_barcodes, :first_name,
                            :last_name, :alt_email, :school_id]
     end
   end

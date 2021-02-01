@@ -13,25 +13,25 @@ class RegistrationsController < Devise::RegistrationsController
   # In addition, overriding the method allows us to validate the incoming data from the form, send the data
   # to the microservice, and create a record on MyLibraryNYC depending on if the microservice is working properly.
   def create
-    LogWrapper.log('INFO','message' => "Creating new user record")
+    LogWrapper.log('INFO', { 'method' => "RegistrationsController.create", 'message' => "Creating new user record: start" })
+
     build_resource(sign_up_params)
     if resource.valid?
       begin
         # save the user object as pending
         resource.save_as_pending!
 
+        LogWrapper.log('DEBUG', { 'method' => "RegistrationsController.create", 'message' => "calling: user.find_unique_new_barcode" })
         # find fresh new barcode that's available in both MLN db and Sierra
         resource.find_unique_new_barcode
+        LogWrapper.log('DEBUG', { 'method' => "RegistrationsController.create", 'message' => "done: user.find_unique_new_barcode" })
 
-        # TODO: on timeouts/exceptions/negative results,
-        # don't send request to Patron Service, keep user as pending
-        resource.send_request_to_patron_creator_service
-        resource.save
         if params['news_letter_email'].present?
           # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
           email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
           NewsLetterController.new.send_news_letter_confirmation_email(email)
         end
+
         yield resource if block_given?
         if resource.persisted?
           if resource.active_for_authentication?
@@ -48,14 +48,23 @@ class RegistrationsController < Devise::RegistrationsController
           set_minimum_password_length
           respond_with resource
         end
-      rescue Net::ReadTimeout
+      rescue Net::ReadTimeout => exception
+        LogWrapper.log('ERROR', { 'method' => "RegistrationsController.create",
+          'message' => "Creating new patron threw Net::ReadTimeout error: #{exception.message}, backtrace: #{exception.backtrace.join('\n')}" })
+        set_flash_message :notice, :time_out if is_flashing_format?
+        render :template => '/devise/registrations/new'
+      rescue StandardError => exception
+        LogWrapper.log('ERROR', { 'method' => "RegistrationsController.create",
+          'message' => "Creating new patron threw a StandardError: #{exception.message}, with backtrace: #{exception.backtrace.join('\n')}" })
         set_flash_message :notice, :time_out if is_flashing_format?
         render :template => '/devise/registrations/new'
       end
     else
       render :template => '/devise/registrations/new', :locals => { :error_msg_hash => error_msg_hash }
     end
-  rescue Exceptions::InvalidResponse
+  rescue Exceptions::InvalidResponse => exception
+    LogWrapper.log('ERROR', { 'method' => "RegistrationsController.create",
+      'message' => "Creating new patron threw Exceptions::InvalidResponse: #{exception.message}, backtrace: #{exception.backtrace.join('\n')}" })
     set_flash_message :registration_error, :invalid_response if is_flashing_format?
     render :template => '/devise/registrations/new'
   end

@@ -14,13 +14,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
 
-  # TODO: integration: mock sierra response of barcode not found, make sure the user keeps its
-  # barcode and changes status and saves.
-  # TODO: integration: sierra response of barcode found or exception, make sure user increments barcode and tries again.
-  # TODO: if pass blank barcode to check_barcode_found_in_sierra, it returns false, so make sure
-  # the calling code is responsible for checking barcode string to exist and be reasonable
-  # TODO: if there was a problem, and the problem is resolved, user does save with new status and barcode
-
   [generate_barcode].each do |barcode|
     test 'sierra user can be found by barcode' do
       mock_check_barcode_request(barcode, '200')
@@ -159,7 +152,7 @@ class UserTest < ActiveSupport::TestCase
     a 201 illustrating patron was created through
       patron creator microservice" do
     crank(:queens_user, barcode: 27777011111111)
-    assert_equal(true, @user.send_request_to_patron_creator_service)
+    assert_equal(true, @user.send_request_to_patron_creator_service(@user.pin))
   end
 
   # Need to call twice, in order to receive the second response
@@ -168,23 +161,12 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     an exception illustrating patron was not created
       through patron creator micro-service" do
-    @user.send_request_to_patron_creator_service
+    @user.send_request_to_patron_creator_service(@user.pin)
     exception = assert_raise(Exceptions::InvalidResponse) do
-      @user.send_request_to_patron_creator_service
+      @user.send_request_to_patron_creator_service(@user.pin)
     end
     assert_equal('Invalid status code of: 500', exception.message)
   end
-
-
-  test "sending user to sierra changes status from pending to complete" do
-    crank(:queens_user, barcode: 27777011111111)
-    assert_equal("barcode_pending", @user.status)
-    @user.find_unique_new_barcode
-    # TODO: future change:
-    # @user.send_request_to_patron_creator_service
-    assert_equal("complete", @user.status)
-  end
-
 
   test "Queens patron's patron_type is set based on their school's borough" do
     assert(@user.patron_type == 149)

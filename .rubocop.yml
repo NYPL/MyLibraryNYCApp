@@ -8,37 +8,40 @@ Documentation:
 Layout/AlignHash:
   Enabled: false
 
+Layout/AlignParameters:
+  SupportedStyles:
+    - with_first_parameter
+    - with_fixed_indentation
+
+Layout/EmptyLineBetweenDefs:
+  NumberOfEmptyLines: 2
+
 Layout/IndentHash:
   Enabled: false
 
 Layout/TrailingEmptyLines:
   Enabled: false
 
-Style/BracesAroundHashParameters:
+Metrics/AbcSize:
   Enabled: false
-
-Layout/AlignParameters:
-  SupportedStyles:
-    - with_first_parameter
-    - with_fixed_indentation  
-
-Metrics/MethodLength:
-  Max: 40
 
 Metrics/ClassLength:
   Max: 600
 
-Layout/EmptyLineBetweenDefs:
-  NumberOfEmptyLines: 2
-
 Metrics/LineLength:
   Max: 150
+
+Metrics/MethodLength:
+  Max: 50
+
+Style/BracesAroundHashParameters:
+  Enabled: false
 
 Style/IfUnlessModifier:
   Enabled: false
 
-Metrics/AbcSize:
+Style/Next:
   Enabled: false
-  
+
 Style/SymbolProc:
   Enabled: false
