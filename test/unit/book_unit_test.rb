@@ -35,4 +35,22 @@ class BookUnitTest < MiniTest::Test
     @mintest_mock1.verify
     assert_equal(true, response)
   end
+
+
+  # This method returns Fixed Field values from bib response
+  # eg: book_attributes = "fixedFields" => {"24" => {"label" => "Language", "value" => "eng", "display" => "English"}
+  # Return result value = "English"
+  describe 'test bib response fixed field method' do
+    it 'Test fixed field display value' do
+      book_attributes =  {"fixedFields" => {"24" => {"label" => "Language", "value" => "eng", "display" => "English"}}}
+      response = @book_model.send(:fixed_field, book_attributes, '24')
+      assert_equal("English", response)
+    end
+
+    it 'Test fixed field value' do
+      book_attributes =  {"fixedFields" => {"24" => {"label" => "Language", "value" => "eng", "display" => "English"}}}
+      response = @book_model.send(:fixed_field, book_attributes, '24', true)
+      assert_equal("eng", response)
+    end
+  end
 end

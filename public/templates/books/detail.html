@@ -27,7 +27,7 @@
       <dt ng-show="book.notes">Notes</dt>
       <dd>{{book.notes}}</dd>
     </dl>
-    <p><a href="{{book.details_url}}" target="_blank">View in catalog</a></p>
+    <p ng-show="show_catalog_link"><a href="{{book.details_url}}" target="_blank">View in catalog</a></p>
   </div>
   
   <hr />
