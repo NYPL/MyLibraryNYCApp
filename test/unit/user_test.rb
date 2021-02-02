@@ -149,9 +149,24 @@ class UserTest < ActiveSupport::TestCase
   end
 
 
+
+  test 'save user as complete sets status' do
+    crank(:queens_user, barcode: 27777011111111)
+    assert_equal(User::STATUS_LABELS['barcode_pending'], @user.status)
+    @user.save_as_complete!
+    assert_equal(User::STATUS_LABELS['complete'], @user.status)
+  end
+
+
+  test 'save user as pending sets status' do
+    crank(:queens_user, barcode: 27777011111111)
+    @user.save_as_pending!
+    assert_equal(User::STATUS_LABELS['barcode_pending'], @user.status)
+  end
+
+
   test 'user method send_request_to_patron_creator_service raises
     an exception on bad parameters' do
-    # crank(:queens_user, barcode: 27777011111111)
     save_pin = @user.pin
     @user.pin = nil
     exception = assert_raise(StandardError) do
@@ -173,7 +188,6 @@ class UserTest < ActiveSupport::TestCase
   test "user method send_request_to_patron_creator_service returns
     a 201 illustrating patron was created through
       patron creator microservice" do
-    crank(:queens_user, barcode: 27777011111111)
     assert_equal(true, @user.send_request_to_patron_creator_service(@user.pin))
   end
 
