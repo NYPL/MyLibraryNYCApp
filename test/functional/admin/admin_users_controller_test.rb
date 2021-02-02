@@ -22,5 +22,5 @@ class Admin::AdminUsersControllerTest < ActionController::TestCase
     put :enable_or_disable, params: {id: @admin_user.id}
     assert_response :redirect
   end
-
 end
+

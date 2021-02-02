@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'pry'
-class Admin::FaqsControllerTest < ActionController::TestCase
+class Admin::UsersControllerTest < ActionController::TestCase
 
   setup do
-    @faq = faqs(:one)
+    @user = users(:user1)
     sign_in AdminUser.create!(email: 'admin@example.com', password: 'password')
   end
 
@@ -14,14 +13,13 @@ class Admin::FaqsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "test show method" do
-    get :show, params: { id: @faq.id}
+  test 'test form method' do
+    post :new, params: {user: @user.id}
     assert_response :success
   end
 
-  test 'test edit method' do
-    get :edit, id: @faq.id
+   test "test show method" do
+    get :show, params: { id: @user.id}
     assert_response :success
   end
 end
-
