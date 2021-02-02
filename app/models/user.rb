@@ -140,7 +140,7 @@ class User < ActiveRecord::Base
       LogWrapper.log('ERROR', {
           'message' => error_message
       })
-      raise StandardError.new(error_message)
+      raise StandardError, error_message
     end
 
     # this can happen if we haven't yet called save_as_pending, which calls assign_barcode
@@ -149,7 +149,7 @@ class User < ActiveRecord::Base
       LogWrapper.log('ERROR', {
           'message' => error_message
       })
-      raise StandardError.new(error_message)
+      raise StandardError, error_message
     end
 
     query = {
@@ -522,13 +522,13 @@ class User < ActiveRecord::Base
     rescue StandardError => exception
       LogWrapper.log('ERROR', {
           'method' => "#{model_name}.find_unique_new_barcode",
-          'message' => "Sierra threw an application-level error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+          'message' => "Application-level error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
         })
       raise exception
     rescue Exceptions => exception
       LogWrapper.log('ERROR', {
           'method' => "#{model_name}.find_unique_new_barcode",
-          'message' => "Sierra threw a system-level error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+          'message' => "System-level error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
         })
       raise exception
     end
