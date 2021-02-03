@@ -148,12 +148,49 @@ class UserTest < ActiveSupport::TestCase
       end
   end
 
+
+
+  test 'save user as complete sets status' do
+    crank(:queens_user, barcode: 27777011111111)
+    assert_equal(User::STATUS_LABELS['barcode_pending'], @user.status)
+    @user.save_as_complete!
+    assert_equal(User::STATUS_LABELS['complete'], @user.status)
+  end
+
+
+  test 'save user as pending sets status' do
+    crank(:queens_user, barcode: 27777011111111)
+    @user.save_as_pending!
+    assert_equal(User::STATUS_LABELS['barcode_pending'], @user.status)
+  end
+
+
+  test 'user method send_request_to_patron_creator_service raises
+    an exception on bad parameters' do
+    save_pin = @user.pin
+    @user.pin = nil
+    exception = assert_raise(StandardError) do
+      @user.send_request_to_patron_creator_service(nil)
+    end
+    assert_equal("send_request_to_patron_creator_service called with no pin. User: #{@user.id || 0}", exception.message)
+
+    @user.pin = save_pin
+    save_barcode = @user.barcode
+    @user.barcode = nil
+    exception = assert_raise(StandardError) do
+      @user.send_request_to_patron_creator_service(nil)
+    end
+    assert_equal("send_request_to_patron_creator_service called with no barcode in user object: #{@user.id || 0}", exception.message)
+    @user.barcode = save_barcode
+  end
+
+
   test "user method send_request_to_patron_creator_service returns
     a 201 illustrating patron was created through
       patron creator microservice" do
-    crank(:queens_user, barcode: 27777011111111)
     assert_equal(true, @user.send_request_to_patron_creator_service(@user.pin))
   end
+
 
   # Need to call twice, in order to receive the second response
   # in the mock_send_request_to_patron_creator_service

@@ -135,6 +135,23 @@ class User < ActiveRecord::Base
       pin_code = self.pin
     end
 
+    if pin_code.blank?
+      error_message = "send_request_to_patron_creator_service called with no pin. User: #{self.id || 0}"
+      LogWrapper.log('ERROR', {
+          'message' => error_message
+      })
+      raise StandardError, error_message
+    end
+
+    # this can happen if we haven't yet called save_as_pending, which calls assign_barcode
+    if self.barcode.blank?
+      error_message = "send_request_to_patron_creator_service called with no barcode in user object: #{self.id || 0}"
+      LogWrapper.log('ERROR', {
+          'message' => error_message
+      })
+      raise StandardError, error_message
+    end
+
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
@@ -146,7 +163,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.barcode.present? ? self.barcode.to_s : self.assign_barcode!.to_s],
+      'barcodes' => [self.barcode.to_s],
       'addresses': [
         {
           'lines': [
@@ -434,9 +451,7 @@ class User < ActiveRecord::Base
       })
 
     if barcode_to_check.blank?
-      # TODO: would be good to throw an exception here, but let's make sure
-      # our rails version of ActiveJob can handle it.
-      return false
+      raise ArgumentError, "check_barcode_uniqueness_with_sierra called with blank barcode."
     end
 
     @barcode_found_in_sierra = false
@@ -507,13 +522,13 @@ class User < ActiveRecord::Base
     rescue StandardError => exception
       LogWrapper.log('ERROR', {
           'method' => "#{model_name}.find_unique_new_barcode",
-          'message' => "Sierra threw an error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+          'message' => "Application-level error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
         })
       raise exception
     rescue Exceptions => exception
       LogWrapper.log('ERROR', {
           'method' => "#{model_name}.find_unique_new_barcode",
-          'message' => "Sierra threw an error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+          'message' => "System-level error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
         })
       raise exception
     end

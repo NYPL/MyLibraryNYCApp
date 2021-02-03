@@ -18,7 +18,7 @@ class FindAvailableUserBarcodeJob < ApplicationJob
     # if we got passed bad user data, something un-recoverably bad is possibly happening
     if user.blank? || pin_code.blank?
       Delayed::Worker.logger.error("FindAvailableUserBarcodeJob called with nil user or pin.")
-      raise Exceptions::ArgumentError, "FindAvailableUserBarcodeJob called with nil user or pin."
+      raise ArgumentError, "FindAvailableUserBarcodeJob called with nil user or pin."
     end
 
 
@@ -38,8 +38,15 @@ class FindAvailableUserBarcodeJob < ApplicationJob
         # so that the ActiveJob mechanism would take care of retrying.
         # However, such exception handling will become available to us once
         # we upgrade our rails version.  For now, go simpler.
-        Delayed::Worker.logger.error("#{self.class.name}: user.check_barcode_uniqueness_with_sierra threw an error: #{exception.message || 'nil'}")
+        Delayed::Worker.logger.error("#{self.class.name}: user.check_barcode_uniqueness_with_sierra \
+          threw a communications error: #{exception.message || 'nil'}")
         raise exception
+      rescue ArgumentError => exception
+        # this is extremely unlikely, but shouldn't be insurmountable.
+        # let's log, and ask the following code to try again.
+        Delayed::Worker.logger.error("#{self.class.name}: user.check_barcode_uniqueness_with_sierra \
+          threw a parameter error: #{exception.message || 'nil'}")
+        barcode_already_in_sierra = true
       end
 
 
