@@ -4,14 +4,16 @@ require 'cgi'
 require 'uri'
 
 begin
-  # NOTE: remove the logging once launch on production, and comment out for now unless need it.
-  # Not a good idea to declare private stuff in log files.
-  # LogWrapper.log('WARNING', {'message' => 'DATABASE_URL: before parsing the URL', 'method' => 'database.yml load'})
   uri = URI.parse(ENV["DATABASE_URL"])
-  # LogWrapper.log('WARNING', {'message' => "DATABASE_URL: after parsing the URL=[#{uri or 'empty_uri'}]", 'method' => 'database.yml load'})
-
 rescue URI::InvalidURIError
-  raise "Invalid DATABASE_URL: hello#{ENV['DATABASE_URL']}world"
+  # NOTE: Not specifying the actual DATABASE_URL is intentional --
+  # wouldn't be a good idea to declare private stuff in production log files.
+  error_message = 'Invalid DATABASE_URL.'
+  if ENV['DATABASE_URL'].nil? || ENV['DATABASE_URL'].blank?
+    error_message = error_message + '  No DATABASE_URL present'
+  end
+  LogWrapper.log('ERROR', {'message' => "#{error_message}]", 'method' => 'database.yml load'})
+  raise "Invalid DATABASE_URL: [#{error_message}]"
 end
 
 raise "No RACK_ENV or RAILS_ENV found" unless ENV["RAILS_ENV"] || ENV["RACK_ENV"]
