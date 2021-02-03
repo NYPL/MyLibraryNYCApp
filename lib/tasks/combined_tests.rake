@@ -5,7 +5,7 @@
 # require "bundler/gem_tasks"
 require "rake/testtask"
 
-Rake::Task["test:run"].clear
+Rake::Task['test:run'].clear
 
 namespace :combined_tests do
 
