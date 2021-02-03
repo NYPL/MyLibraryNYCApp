@@ -10,16 +10,19 @@ module Admin
 
     test "test index method" do
       get :index
+      assert_equal("200", response.code)
       assert_response :success
     end
 
     test 'test form method' do
       post :new, params: { id: @user.id }
+      assert_equal("200", response.code)
       assert_response :success
     end
 
     test "test show method" do
       get :show, params: { id: @user.id }
+      assert_equal("200", response.code)
       assert_response :success
     end
   end

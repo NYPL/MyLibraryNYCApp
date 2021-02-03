@@ -10,17 +10,20 @@ module Admin
     end
 
     test "test index method" do
-      get :index
+      response = get :index
+      assert_equal("200", response.code)
       assert_response :success
     end
 
     test "test show method" do
-      get :show, params: { id: @faq.id}
+      response = get :show, params: { id: @faq.id}
+      assert_equal("200", response.code)
       assert_response :success
     end
 
     test 'test edit method' do
-      get :edit, id: @faq.id
+      response = get :edit, id: @faq.id
+      assert_equal("200", response.code)
       assert_response :success
     end
   end

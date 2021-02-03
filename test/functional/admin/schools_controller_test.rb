@@ -12,31 +12,37 @@ module Admin
 
     test "test index method" do
       get :index
+      assert_equal("200", response.code)
       assert_response :success
     end
 
     test "test show method" do
       get :show, params: { id: @school.id }
+      assert_equal("200", response.code)
       assert_response :success
     end
 
     test "test activate method" do
       put :activate, params: { id: @school.id }
+      assert_equal("302", response.code)
       assert_response :redirect
     end
 
     test "test activate method with format js" do
       put :activate, params: { id: @school.id }, format: :js
+      assert_equal("200", response.code)
       assert_response :success
     end
 
     test "test inactivate method" do
       put :inactivate, params: { id: @school.id }
+      assert_equal("302", response.code)
       assert_response :redirect
     end
 
     test "test inactivate method with format js" do
       put :inactivate, params: { id: @school.id }, format: :js
+      assert_equal("200", response.code)
       assert_response :success
     end
   end

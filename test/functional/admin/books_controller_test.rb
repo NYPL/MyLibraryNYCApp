@@ -10,11 +10,13 @@ module Admin
 
     test "test index method" do
       get :index
+      assert_equal("200", response.code)
       assert_response :success
     end
     
     test "test show method" do
       get :show, params: { id: @book.id }
+      assert_equal("200", response.code)
       assert_response :success
     end
   end

@@ -10,18 +10,21 @@ module Admin
     end
 
     test "test index method" do
-      get :index
+      response = get :index
+      assert_equal("200", response.code)
       assert_response :success
     end
     
     test "test form method" do
-      get :edit, id: @admin_user.id
+      response = get :edit, id: @admin_user.id
+      assert_equal("200", response.code)
       assert_response :success
     end
 
     test 'test enable_or_disable' do
-      put :enable_or_disable, params: {id: @admin_user.id}
+      response = put :enable_or_disable, params: {id: @admin_user.id}
       assert_equal("E-mail notification change made!", flash[:notice])
+      assert_equal("302", response.code)
       assert_response :redirect
     end
   end
