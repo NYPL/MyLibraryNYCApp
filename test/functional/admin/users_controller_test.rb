@@ -22,10 +22,5 @@ module Admin
       get :show, params: { id: @user.id }
       assert_response :success
     end
-
-    test "test csv method" do
-      get :csv
-      assert_response :success
-    end
   end
 end
