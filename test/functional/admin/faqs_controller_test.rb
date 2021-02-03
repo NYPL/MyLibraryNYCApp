@@ -6,6 +6,7 @@ module Admin
 
     setup do
       @faq = faqs(:one)
+      @faq2 = faqs(:two)
       sign_in AdminUser.create!(email: 'admin@example.com', password: 'password')
     end
 

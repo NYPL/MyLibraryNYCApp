@@ -17,6 +17,7 @@ module Admin
     end
 
     test "test show method" do
+      create_school_version
       get :show, params: { id: @school.id }
       assert_equal("200", response.code)
       assert_response :success
@@ -44,6 +45,21 @@ module Admin
       put :inactivate, params: { id: @school.id }, format: :js
       assert_equal("200", response.code)
       assert_response :success
+    end
+
+    test "test history method" do
+      create_school_version
+      get :history, params: { id: @school.id }
+      assert_equal("200", response.code)
+      assert_response :success
+    end
+
+    private
+
+    def create_school_version
+      school = School.find(@school.id)
+      school.phone_number = '324532222'
+      school.save!
     end
   end
 end

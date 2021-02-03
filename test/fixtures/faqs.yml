@@ -7,8 +7,9 @@
 one:
   question: "text"
   answer: "text"
-  position: "integer"
+  position: 1
 # column: value
 #
-two: {}
-# column: value
+two: 
+  question: "text"
+  answer: "text"
