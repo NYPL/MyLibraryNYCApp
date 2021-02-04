@@ -140,8 +140,10 @@ ActiveAdmin.register Hold do
 
   member_action :close, :method => :put do
     hold = Hold.find(params[:id])
-    user.close!
-    redirect_to action: :show, notice: "Hold closed!"
+    if hold.present? && hold.user.present?
+      hold.close!(hold.user.first_name) 
+      redirect_to action: :show, notice: "Hold closed!"
+    end
   end
 
   i = 0
