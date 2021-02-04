@@ -17,8 +17,14 @@ module Admin
     end
 
     test "test show method" do
-      create_school_version
       get :show, params: { id: @school.id }
+      assert_equal("200", response.code)
+      assert_response :success
+    end
+
+    test "test show method with version param" do
+      create_school_version
+      get :show, params: { id: @school.id, version: 1 }
       assert_equal("200", response.code)
       assert_response :success
     end
