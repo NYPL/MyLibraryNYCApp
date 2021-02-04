@@ -3,7 +3,9 @@
 books_one:
   title: title
   details_url: details_url
+  cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807"
 
 books_two:
   title: title1
   details_url: details_url1
+  cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807"

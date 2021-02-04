@@ -6,10 +6,8 @@ ActiveAdmin.register_page "Dashboard" do
 
   content :title => proc{ I18n.t("active_admin.dashboard") } do
     order_param = params[:order]
-
     order = nil
     pending_order = nil
-
     if !order_param.nil? && order_param[0] == 'p'
       pending_order = case(order_param)
       when 'p_school_desc'
@@ -78,7 +76,6 @@ ActiveAdmin.register_page "Dashboard" do
       end
     end
 
-
     if (order.nil?)
       holds = Hold.unseen
     elsif order_param == 'call_number_desc' or
@@ -89,7 +86,6 @@ ActiveAdmin.register_page "Dashboard" do
     else
       holds = Hold.unseen.joins('JOIN users on users.id = holds.user_id').order(order)
     end
-
     if (pending_order.nil?)
       pending_holds = Hold.pending
     elsif order_param == 'p_call_number_desc' or

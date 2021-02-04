@@ -45,8 +45,8 @@ class Hold < ActiveRecord::Base
 
 
   def close!(by_whom)
-    status = 'closed'
     puts "closing hold: #{self.inspect}"
+    status = 'closed'
   end
 
 
