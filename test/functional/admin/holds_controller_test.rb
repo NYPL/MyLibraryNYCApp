@@ -19,5 +19,11 @@ module Admin
       assert_equal("200", response.code)
       assert_response :success
     end
+
+    test "test close method with format js" do
+      put :close, params: { id: @hold.id }
+      assert_equal("302", response.code)
+      assert_response :redirect
+    end
   end
 end
