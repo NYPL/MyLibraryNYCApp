@@ -49,7 +49,10 @@ ActiveAdmin.register HoldChange do
       f.input :comment, :label => 'Note to Requester', :input_html => { :class => 'message' }
       f.input :hold_id, :as => :hidden # :input_html => { :disabled => true } 
     end
-    f.actions
+    f.actions do
+      f.action :submit
+      f.action :cancel, :label => 'Cancel'
+    end
   end
 
   controller do
