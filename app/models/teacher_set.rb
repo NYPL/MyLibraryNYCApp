@@ -826,7 +826,7 @@ class TeacherSet < ActiveRecord::Base
     LogWrapper.log('DEBUG', {'message' => 'update_subjects_via_api.start','method' => 'teacher_set.update_subjects_via_api'})
 
     # teacher_set.rb facets_for_query uses cached results of each query
-    Rails.cache.clear unless Rails.env.test?
+    # Rails.cache.clear unless Rails.env.test?
 
     return if subject_name_array.blank?
 
