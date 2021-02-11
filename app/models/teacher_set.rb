@@ -823,13 +823,14 @@ class TeacherSet < ActiveRecord::Base
   # Delete all records for a teacher set in the join table SubjectTeacherSet, then
   # create new records (and subjects if they do not exist) in that join table.
   def update_subjects_via_api(subject_name_array)
-    LogWrapper.log('DEBUG', {'message' => 'update_subjects_via_api.start','method' => 'teacher_set.update_subjects_via_api'})
-    
-    return if subject_name_array.blank?
+    LogWrapper.log('INFO', {'message' => 'update_subjects_via_api.start','method' => "teacher_set.update_subjects_via_api, 
+      subject_name_array= #{subject_name_array}, rails_env = #{Rails.env.test?}"})
+
 
     # teacher_set.rb facets_for_query uses cached results of each query
     Rails.cache.clear unless Rails.env.test?
 
+    return if subject_name_array.blank?
 
     # record the list of current teacher set <--> subject associations,
     # so we can prune the subjects later.
