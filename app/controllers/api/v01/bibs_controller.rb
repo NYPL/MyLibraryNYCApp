@@ -26,6 +26,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
       # overwrite @teacher_set_record instance variable so it can be read in the var_field and fixed_field methods
       @teacher_set_record = teacher_set_record
 
+      next if teacher_set_record['id'] == "18848678"
+
       # validate each teacher_set_record
       bnumber = teacher_set_record['id']
       title = teacher_set_record['title']
@@ -87,9 +89,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
         teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
       rescue => exception
         log_error('create_or_update_teacher_sets', exception)
-        # AdminMailer.failed_bibs_controller_api_request(
-        #   @request_body, "Error updating subjects via API: #{exception.message[0..200]}...", action_name, teacher_set
-        # ).deliver
+        AdminMailer.failed_bibs_controller_api_request(
+          @request_body, "Error updating subjects via API: #{exception.message[0..200]}...", action_name, teacher_set
+        ).deliver
       end
       begin
         teacher_set.update_notes(var_field('500', true))
