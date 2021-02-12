@@ -174,7 +174,7 @@ class TeacherSetTest < ActiveSupport::TestCase
     # Case: 2
     it 'update subjects' do
       subject_ids = subjects(:subjects_one)
-      subject_name_array =  ["Authors, Russiantest", "Social"]
+      subject_name_array = ["Authors, Russiantest", "Social"]
       resp = @teacher_set.update_subjects_via_api(subject_name_array)
       assert_equal(subject_ids.id, resp[0])
     end
