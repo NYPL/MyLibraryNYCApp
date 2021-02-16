@@ -79,11 +79,11 @@ class Book < ActiveRecord::Base
 
 
   def update_from_catalog_item(item)
-    self.update_attributes :details_url => item['details_url']
+    self.update :details_url => item['details_url']
 
-    self.update_attributes :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
-                           :call_number => item['call_number'], :description => item['description'], 
-                           :statement_of_responsibility => item['statement_of_responsibility']
+    self.update :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
+                :call_number => item['call_number'], :description => item['description'], 
+                :statement_of_responsibility => item['statement_of_responsibility']
 
     self.update_attributes :format => item['format']['name'] unless item['format'].nil?
     self.update_attributes :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
