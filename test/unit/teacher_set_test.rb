@@ -177,6 +177,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       subject_two = subjects(:subjects_two)
       subject_name_array = ["Authors, Russiantest", "Social"]
       resp = @teacher_set.update_subjects_via_api(subject_name_array)
+      puts ">>>>>>. #{resp} <<<<<<<"
       assert_equal(subject_one.id, resp[0])
       assert_equal(subject_two.id, resp[1])
     end
