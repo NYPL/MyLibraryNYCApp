@@ -151,7 +151,7 @@ class UserTest < ActiveSupport::TestCase
     a 201 illustrating patron was created through
       patron creator microservice" do
     crank(:queens_user, barcode: 27777011111111)
-    assert_equal(true, @user.send_request_to_patron_creator_service)
+    assert_equal(206, @user.send_request_to_patron_creator_service)
   end
 
   # Need to call twice, in order to receive the second response
