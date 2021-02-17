@@ -827,9 +827,9 @@ class TeacherSet < ActiveRecord::Base
 
     return if subject_name_array.blank?
 
-    # If Elastic search feature flag is enabled teacher-set data saves in elastic-search cluster.
+    # If Elastic search feature-flag is enabled, teacher-set data saves in elastic-search cluster.
     # Other wise teacher-set data saves in database and rails cache.
-    # If Elastic search feature flag is enabled no need to clear the rails cache.
+    # If Elastic search feature-flag is enabled no need to clear the rails cache.
     unless MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
       # teacher_set.rb facets_for_query uses cached results of each query
       Rails.cache.clear unless Rails.env.test?
