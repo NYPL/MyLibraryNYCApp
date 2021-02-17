@@ -6,14 +6,14 @@ teacher_set_one:
   available_copies: 2
   bnumber: '123'
   books: books_one
-  subjects: subjects_one
+  subjects: [subjects_one, subjects_two]
 teacher_set_two:
   description: MyText1
   title: MyString1
   available_copies: 2
   bnumber: '12345'
   books: books_two
-  subjects: subjects_one
+  subjects: subjects_two
 teacher_set_three:
   description: MyText1
   title: MyString1
