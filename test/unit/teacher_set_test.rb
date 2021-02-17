@@ -32,7 +32,7 @@ class TeacherSetTest < ActiveSupport::TestCase
     it 'test updating a teacher set creates a version' do
       teacher_set = crank!(:teacher_set)
 
-      teacher_set.update_attributes(title: 'Title2')
+      teacher_set.update(title: 'Title2')
       assert_equal(1, PaperTrail::Version.count)
     end
   end
@@ -53,7 +53,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
       @model.stub :send_request_to_items_microservice, @mintest_mock1 do
         @model.stub :parse_items_available_and_total_count, @mintest_mock2 do
-          @model.stub :update_attributes, true, [total_copies: total_count, available_copies: available_count, availability: 'available'] do
+          @model.stub :update, true, [total_copies: total_count, available_copies: available_count, availability: 'available'] do
             resp = @model.update_available_and_total_count(bib_id)
           end
         end
