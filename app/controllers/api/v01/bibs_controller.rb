@@ -119,7 +119,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         end
       end
       saved_teacher_sets << teacher_set
-      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set.
+      LogWrapper.log('INFO', {'message' => "create_or_update_teacher_sets:finished making teacher set. bibId: #{bnumber}
                      Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
                      'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
