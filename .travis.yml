@@ -40,7 +40,7 @@ deploy:
   bucket_path: my-library-nyc-app-dev-1002
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: rails-6.1.0-sub-branch # Need to revert after testing
+    branch: development
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
