@@ -163,6 +163,26 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   end
 
+  describe 'test update_subjects method' do
+    # Case: 1
+    it 'test with empty subjects' do
+      subject_name_array = []
+      resp = @teacher_set.update_subjects_via_api(subject_name_array)
+      assert_nil(resp)
+    end
+
+    # Case: 2
+    it 'update subjects' do
+      subject_one = subjects(:subjects_one)
+      subject_two = subjects(:subjects_two)
+      subject_name_array = ["Authors, Russiantest", "Social"]
+      resp = @teacher_set.update_subjects_via_api(subject_name_array)
+      puts ">>>>>>. #{resp} <<<<<<<"
+      assert_equal(subject_one.id, resp[0])
+      assert_equal(subject_two.id, resp[1])
+    end
+  end
+
   def test_teacher_set_query
     params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
     resp = TeacherSet.for_query(params)

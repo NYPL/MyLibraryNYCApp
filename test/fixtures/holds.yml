@@ -6,15 +6,13 @@ hold1:
   quantity: 2
   teacher_set: teacher_set_one
   user: user1
-
-
+  
 hold2:
   access_key: access_key2
   status: new
   quantity: 1
   teacher_set: teacher_set_one
   user: user1
-
 
 hold3:
   access_key: access_key3
@@ -27,3 +25,27 @@ hold4:
   access_key: access_key4
   status: cancelled
   teacher_set: teacher_set_four
+
+hold5:
+  access_key: access_key5
+  status: pending
+  teacher_set: teacher_set_four
+  user: user1
+
+hold6:
+  access_key: access_key6
+  status: transit
+  teacher_set: teacher_set_four
+  user: user1
+
+hold7:
+  access_key: access_key7
+  status: trouble
+  teacher_set: teacher_set_four
+  user: user1
+
+hold8:
+  access_key: access_key8
+  status: n_a
+  teacher_set: teacher_set_four
+  user: user1

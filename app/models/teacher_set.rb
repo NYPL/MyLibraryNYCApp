@@ -825,10 +825,16 @@ class TeacherSet < ActiveRecord::Base
   def update_subjects_via_api(subject_name_array)
     LogWrapper.log('DEBUG', {'message' => 'update_subjects_via_api.start','method' => 'teacher_set.update_subjects_via_api'})
 
-    # teacher_set.rb facets_for_query uses cached results of each query
-    Rails.cache.clear unless Rails.env.test?
-
     return if subject_name_array.blank?
+
+    # If Elastic search feature-flag is enabled, teacher-set data saves in elastic-search cluster.
+    # Other wise teacher-set data saves in database and rails cache.
+    # If Elastic search feature-flag is enabled no need to clear the rails cache.
+    unless MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      # teacher_set.rb facets_for_query uses cached results of each query
+      Rails.cache.clear unless Rails.env.test?
+    end
+
 
     # record the list of current teacher set <--> subject associations,
     # so we can prune the subjects later.
