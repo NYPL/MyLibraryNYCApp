@@ -131,7 +131,7 @@ namespace :ingest do
             end
 
             user.home_library = school_code.strip.downcase
-            user.update_attributes({
+            user.update({
               :first_name => first_name,
               :last_name => last_name,
               :barcode => barcode.to_i,
@@ -192,7 +192,7 @@ namespace :ingest do
 
       user = User.find_or_initialize_by_email(email.downcase)
       user.home_library = home_library
-      user.update_attributes({
+      user.update({
         :first_name => first_name,
         :last_name => last_name,
         :barcode => barcode,
@@ -335,7 +335,7 @@ namespace :ingest do
       end
 
       user = User.find_or_initialize_by_email(email.downcase)
-      user.update_attributes({
+      user.update({
         :first_name => first_name,
         :last_name => last_name,
         :home_library => home_library,
@@ -661,7 +661,7 @@ namespace :ingest do
 
 
           user = User.find_or_create_by_email(email.downcase)
-          user.update_attributes({
+          user.update({
             :first_name => first_name,
             :last_name => last_name,
             :home_library => home_library,

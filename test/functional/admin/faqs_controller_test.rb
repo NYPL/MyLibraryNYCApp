@@ -17,13 +17,13 @@ module Admin
     end
 
     test "test show method" do
-      response = get :show, params: { id: @faq.id}
+      response = get :show, params: { id: @faq.id }
       assert_equal("200", response.code)
       assert_response :success
     end
 
     test 'test edit method' do
-      response = get :edit, id: @faq.id
+      response = get :edit, params: { id: @faq.id }
       assert_equal("200", response.code)
       assert_response :success
     end
