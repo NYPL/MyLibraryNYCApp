@@ -15,7 +15,7 @@ class SettingsController < ApplicationController
     end
 
     unless params[:settings].nil?
-      current_user.update_attributes({
+      current_user.update({
         :alt_email => params[:settings][:contact_email],
         :school_id => params[:settings][:school][:id]
       })

@@ -16,7 +16,7 @@ module Admin
     end
     
     test "test form method" do
-      response = get :edit, id: @admin_user.id
+      response = get :edit, params: { id: @admin_user.id }
       assert_equal("200", response.code)
       assert_response :success
     end

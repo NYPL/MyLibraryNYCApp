@@ -34,7 +34,7 @@ class TeacherSetsControllerTest < ActionController::TestCase
   end
 
   test "test teacher-set strong params" do
-    post :create, { id: 1}
+    post :create, params: { id: 1 }
     assert_response :success
   end
 end

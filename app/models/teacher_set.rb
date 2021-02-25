@@ -347,7 +347,7 @@ class TeacherSet < ActiveRecord::Base
 
     # title.sub!
 
-    self.update_attributes({
+    self.update({
       :title => title,
       :call_number => item['call_number'],
       :description => item['description'],
@@ -359,11 +359,11 @@ class TeacherSet < ActiveRecord::Base
       :contents => item['contents'].join("\n")
     })
 
-    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
-    self.update_attributes :language => item['languages'].first['name'] if !item['languages'].empty?
-    self.update_attributes :physical_description => item['physical_description'].first if !item['physical_description'].empty?
-    self.update_attributes :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
-    self.update_attributes :series => item['series'].first['name'] if !item['series'].nil? && !item['series'].empty?
+    self.update :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
+    self.update :language => item['languages'].first['name'] if !item['languages'].empty?
+    self.update :physical_description => item['physical_description'].first if !item['physical_description'].empty?
+    self.update :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
+    self.update :series => item['series'].first['name'] if !item['series'].nil? && !item['series'].empty?
 
     grade_begin = nil
     grade_end = nil
@@ -386,14 +386,14 @@ class TeacherSet < ActiveRecord::Base
         end
       end
     end
-    self.update_attributes :grade_begin => grade_begin, :grade_end => grade_end
+    self.update :grade_begin => grade_begin, :grade_end => grade_end
 
     lang = nil
     unless item['primary_language'].nil? || item['primary_language'].empty?
       lang = item['primary_language']['name']
       lang = nil if ['Undetermined'].include? lang
     end
-    self.update_attributes :primary_language => lang
+    self.update :primary_language => lang
 
     self.teacher_set_notes.destroy_all
     item['notes'].each do |n|
@@ -450,7 +450,7 @@ class TeacherSet < ActiveRecord::Base
 
       elsif (p = permalink[:href].match(/record=(b[0-9]+)/)) && p.size == 2
         bnumber = p[1]
-        ret = self.update_attributes :bnumber => bnumber
+        ret = self.update :bnumber => bnumber
         # puts "    BNUMBER: #{self.bnumber} saved? #{self.persisted?} errors? #{self.errors.full_messages}"
       end
 
@@ -477,7 +477,7 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Update atts
-    self.update_attributes({
+    self.update({
       :available_copies => available_copies,
       :total_copies => total_copies
     })
@@ -765,7 +765,7 @@ class TeacherSet < ActiveRecord::Base
       set_type = BOOK_CLUB_SET
     end
     LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
-    self.update_attributes(set_type: set_type)
+    self.update(set_type: set_type)
     set_type
   end
 
@@ -924,7 +924,7 @@ class TeacherSet < ActiveRecord::Base
     response = get_items_info_from_bibs_service(bibid)
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{response[:available_count]}, total_count: #{response[:total_count]},
     availability: #{response[:availability_string]}", b_number: "#{bibid}")
-    self.update_attributes(total_copies: response[:total_count], available_copies: response[:available_count],
+    self.update(total_copies: response[:total_count], available_copies: response[:available_count],
       availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
   end
