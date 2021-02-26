@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
-require File.expand_path('../boot', __FILE__)
+
+require_relative 'boot'
 
 require 'rails/all'
+
+require File.expand_path('../boot', __FILE__)
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
