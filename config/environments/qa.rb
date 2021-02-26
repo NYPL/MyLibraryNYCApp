@@ -9,6 +9,7 @@ MyLibraryNYC::Application.configure do
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
+  config.active_storage.service = :amazon
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME']]
   config.eager_load = true
 end
