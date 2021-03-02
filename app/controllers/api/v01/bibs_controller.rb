@@ -54,7 +54,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       ts_items_info = teacher_set.get_items_info_from_bibs_service(bnumber)
 
       begin
-        teacher_set.update_attributes(
+        teacher_set.update(
           title: title,
           call_number: var_field('091'),
           description: var_field('520'),

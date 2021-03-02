@@ -21,7 +21,7 @@ class BooksControllerTest < ActionController::TestCase
   end
 
   test "test book strong params" do
-    post :create, { id: 1}
+    post :create, params: { call_number: "call_number" }
     assert_response :success
   end
 

@@ -35,7 +35,7 @@ namespace :cleanup do
                 puts "There are #{associated_records_for_associated_model} associated #{associated_model_name}s to update."
                 associated_records_for_associated_model.each do |associated_record_for_associated_model|
                   puts "Changing teacher_set_id for #{associated_model_name} ##{associated_record_for_associated_model.id}"
-                  associated_record_for_associated_model.update_attributes(teacher_set_id: first_duplicate_record.id)
+                  associated_record_for_associated_model.update(teacher_set_id: first_duplicate_record.id)
                 end
               end
               # delete any duplicates in the join tables (this loop doesn't get triggered so there must be none)
@@ -48,7 +48,7 @@ namespace :cleanup do
                 "There are #{associated_records_for_associated_model} associated #{associated_model_name}s to update."
                 associated_records_for_associated_model.each do |associated_record_for_associated_model|
                   puts "Changing book_id for #{associated_model_name} ##{associated_record_for_associated_model.id}"
-                  associated_record_for_associated_model.update_attributes(book: first_duplicate_record)
+                  associated_record_for_associated_model.update(book: first_duplicate_record)
                 end
               end
               # delete any duplicates in the join tables (this loop doesn't get triggered so there must be none)
