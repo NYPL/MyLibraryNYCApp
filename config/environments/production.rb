@@ -71,7 +71,7 @@ MyLibraryNYC::Application.configure do
 
   # Active Storage facilitates uploading files to a cloud storage service like Amazon S3, Google Cloud Storage
   # Store files on Amazon S3.
-  config.active_storage.service = :amazon
+  # config.active_storage.service = :amazon
 
   config.action_mailer.default_url_options = { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
 
