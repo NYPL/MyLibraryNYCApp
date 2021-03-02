@@ -32,7 +32,6 @@ gem 'addressable'
 gem 'auto-session-timeout'
 gem 'actionview', '6.1.0'
 gem 'aws-sdk', '~> 3'
-gem 'aws-sdk-s3', require: false
 gem 'client_side_validations', '17.2.0'
 gem 'cranky'
 gem 'devise', '4.7.3'

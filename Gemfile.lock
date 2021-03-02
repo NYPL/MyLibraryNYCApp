@@ -1520,7 +1520,6 @@ DEPENDENCIES
   addressable
   auto-session-timeout
   aws-sdk (~> 3)
-  aws-sdk-s3
   client_side_validations (= 17.2.0)
   coffee-rails
   cranky
