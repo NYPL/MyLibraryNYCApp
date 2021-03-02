@@ -34,6 +34,3 @@
 # Coverage reports produced by SimpleCov
 /coverage
 
-# The RAILS_MASTER_KEY is the key that Rails will use to decrypt your config/credentials.yml.enc
-# When you upgrade Rails to >= v5.2, we are going to store all private credentials in config/credentials.yml.enc.
-/config/master.key

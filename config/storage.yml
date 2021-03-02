@@ -1,6 +1,0 @@
-amazon:
-  service: S3
-  access_key_id: <%= Rails.application.credentials.dig(ENV['RAILS_ENV'].to_sym, :aws, :access_key_id) %>
-  secret_access_key: <%= Rails.application.credentials.dig(ENV['RAILS_ENV'].to_sym, :aws, :secret_access_key)  %>
-  region: us-east-1
-  bucket: "my-library-nyc-config-#{ENV['RAILS_ENV']}"
