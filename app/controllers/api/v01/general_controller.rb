@@ -11,9 +11,10 @@ class Api::V01::GeneralController < ApplicationController
 
   # set the @request_body instance variable so it can be used in other methods;
   # check for parsing errors.
-  def set_request_body
+  def set_request_body(params=nil)
     begin
-      @request_body = params[:_json] || JSON.parse(request.body.read)
+      json = params.present? ? params[:_json] : nil
+      @request_body = json || JSON.parse(request.body.read)
     rescue => e
       @parsing_error = e
     end
@@ -72,7 +73,11 @@ class Api::V01::GeneralController < ApplicationController
   end
 
   
-  def api_response_builder(http_status, http_response=nil)
-    render status: http_status, json: http_response
+  def api_response_builder(http_status, http_response=nil, response=nil)
+    if response
+      {status: http_status, json: http_response}
+    else
+      render status: http_status, json: http_response
+    end
   end
 end

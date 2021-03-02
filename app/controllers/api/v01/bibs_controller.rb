@@ -11,6 +11,14 @@ class Api::V01::BibsController < Api::V01::GeneralController
   # All records are inside @request_body.
   # Find or create a teacher set in the MLN db and its associated books.
   PREK_ARR = ['PRE K', 'PRE-K', 'PREK'].freeze
+
+
+  def update_mln_bib_ids(params)
+    set_request_body(params)
+    @reponse = true
+    create_or_update_teacher_sets
+  end
+
   def create_or_update_teacher_sets
     LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets.start','method' => 'bibs_controller.create_or_update_teacher_sets'})
 
@@ -123,7 +131,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
                      Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
                      'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
-    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json)
+    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json, @reponse)
   end
 
 
