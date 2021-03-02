@@ -42,7 +42,7 @@ MyLibraryNYC::Application.configure do
 
   config.logger = Logger.new(STDOUT)
   config.logger.level = Logger::DEBUG
-  
+
   # Turn off asset pipline information showing in logs
   config.assets.logger = true
 
