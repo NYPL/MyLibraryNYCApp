@@ -9,10 +9,6 @@ MyLibraryNYC::Application.configure do
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
-
-  # Active Storage facilitates uploading files to a cloud storage service like Amazon S3, Google Cloud Storage
-  # Store files on Amazon S3.
-  # config.active_storage.service = :amazon
   
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME']]
   config.eager_load = true
