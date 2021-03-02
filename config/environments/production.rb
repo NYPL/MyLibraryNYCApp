@@ -68,7 +68,11 @@ MyLibraryNYC::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.action_mailer.perform_deliveries = true
+
+  # Active Storage facilitates uploading files to a cloud storage service like Amazon S3, Google Cloud Storage
+  # Store files on Amazon S3.
   config.active_storage.service = :amazon
+
   config.action_mailer.default_url_options = { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
