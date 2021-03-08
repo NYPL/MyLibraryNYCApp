@@ -971,6 +971,12 @@ class TeacherSet < ActiveRecord::Base
     set_type
   end
 
+  
+  # Make a call to bib micro-service to get the bib-id information.
+  def self.get_bib_response_by_bib_id(bibid)
+    send_request_to_bibs_microservice(bibid)
+  end
+
 
   private
 
@@ -1021,35 +1027,36 @@ class TeacherSet < ActiveRecord::Base
     send(__method__, bibid, offset, response, items_hash)
   end
 
+  class << self
+    # Sends a request to the bibs microservice.(Get bib response by bibid)
+    # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
+    def send_request_to_bibs_microservice(bibid)
+      bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
+      response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 
+        'Content-Type' => 'application/json' }, timeout: 10)
 
-  # Sends a request to the bibs microservice.(Get bib response by bibid)
-  # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
-  def send_request_to_bibs_microservice(bibid)
-    bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
-    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 
-      'Content-Type' => 'application/json' }, timeout: 10)
-
-    if response.code == 200
-      LogWrapper.log('DEBUG', {
-        'message' => "Response from bib services api",
-        'method' => 'send_request_to_bibs_microservice',
-        'status' => response.code,
-        'responseData' => response.message
-      })
-    elsif response.code == 404
-      items_hash = response
-      LogWrapper.log('DEBUG', {
-        'message' => "The bib service could not find with bibid=#{bibid}",
-        'method' => 'send_request_to_bibs_microservice',
-        'status' => response.code
-      })
-    else
-      LogWrapper.log('ERROR', {
-        'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
-        'method' => 'send_request_to_bibs_microservice',
-        'status' => response.code
-      })
+      if response.code == 200
+        LogWrapper.log('DEBUG', {
+          'message' => "Response from bib services api",
+          'method' => 'send_request_to_bibs_microservice',
+          'status' => response.code,
+          'responseData' => response.message
+        })
+      elsif response.code == 404
+        items_hash = response
+        LogWrapper.log('DEBUG', {
+          'message' => "The bib service could not find with bibid=#{bibid}",
+          'method' => 'send_request_to_bibs_microservice',
+          'status' => response.code
+        })
+      else
+        LogWrapper.log('ERROR', {
+          'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
+          'method' => 'send_request_to_bibs_microservice',
+          'status' => response.code
+        })
+      end
+      response
     end
-    response
   end
 end
