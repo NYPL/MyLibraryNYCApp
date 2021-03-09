@@ -534,6 +534,8 @@ Metrics/AbcSize:
 # ExcludedMethods: refine
 Metrics/BlockLength:
   Max: 432
+  Exclude:
+    - 'lib/tasks/ingest.rake'
 
 # Offense count: 10
 # Configuration parameters: CountBlocks.
