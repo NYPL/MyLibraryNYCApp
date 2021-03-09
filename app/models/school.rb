@@ -32,4 +32,22 @@ class School < ActiveRecord::Base
 
     return match.sierra_code
   end
+
+
+  def self.active_schools
+    active.map do |school|
+      [school.name + school_code(school), school.id] 
+    end
+  end
+
+
+  def self.inactive_school(school)
+    ["[INACTIVE] #{school.name + school_code(school)}", school.id]
+  end
+
+
+  def self.school_code(school)
+    school.code.present? ? " (#{school.code[1..-1].upcase})" : ""
+  end
+
 end
