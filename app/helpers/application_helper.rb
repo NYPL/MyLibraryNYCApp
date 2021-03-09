@@ -9,8 +9,7 @@ module ApplicationHelper
   #:pin=>["PIN does not meet our requirements. Please try again."]}
   def custom_devise_error_messages(error_msg_hash={})
     return "" if resource.errors.empty?
-
-    messages = resource.errors.messages.update(error_msg_hash)
+    messages = resource.errors.messages.merge(error_msg_hash)
     messages = messages.values.flatten!.map { |msg| content_tag(:li, msg) }.join
     sentence = I18n.t("errors.messages.not_saved",
                       count: resource.errors.count,
