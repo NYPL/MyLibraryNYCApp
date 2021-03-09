@@ -41,7 +41,6 @@ class User < ActiveRecord::Base
 
   STATUS_LABELS = {'barcode_pending' => 'barcode_pending', 'complete' => 'complete'}.freeze
 
-
   ## NOTE: Validation methods, including this one, are called twice when
   # making new user from the admin interface. While not a behavior we want,
   # it doesn't currently pose a problem.
@@ -209,7 +208,7 @@ class User < ActiveRecord::Base
     if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
       true
     else
-      errors.add(:pin, 'does not meet our requirements. Please try again.')
+      errors.add(:pin, 'PIN does not meet our requirements. Please try again.')
       false
     end
   end
