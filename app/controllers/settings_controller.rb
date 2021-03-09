@@ -23,8 +23,8 @@ class SettingsController < ApplicationController
 
     resp = {}
     #Active schools from school table.
-    @schools = School.active.map do |s| 
-      [s.name + " (#{s.code[1..-1].upcase})", s.id] 
+    @schools = School.active.map do |s|
+      [s.name + school_code(s), s.id] 
     end
 
     if current_user.present?
@@ -33,8 +33,9 @@ class SettingsController < ApplicationController
       @contact_email = current_user.contact_email
       @school = current_user.school
       @holds = current_user.holds.order("created_at DESC")
+
       #If school is inactive for current user still need to show in school drop down.
-      @schools << ["[INACTIVE] #{@school.name} (#{@school.code[1..-1].upcase})", @school.id] unless @school.active
+      @schools << ["[INACTIVE] #{@school.name} #{school_code(@school)}", @school.id] unless @school.active
       resp = {:id => current_user.id, :contact_email => @contact_email, :school => @school, :email => @email, :alt_email => @alt_email}
     end
 
@@ -42,6 +43,12 @@ class SettingsController < ApplicationController
       format.html # new.html.erb
       format.json { render json: resp }
     end
+  end
+
+  private
+
+  def school_code(school)
+    school.code.present? ? " (#{school.code[1..-1].upcase})" : ""
   end
 
 end

@@ -6,7 +6,9 @@ class SettingsControllerTest < ActionController::TestCase
 
   setup do
     @user = users(:user1)
+    @user3 = users(:user3)
     @school = schools(:school_one)
+    @school3 = schools(:school_three)
   end
 
   test "test index method with current_user" do
@@ -19,5 +21,11 @@ class SettingsControllerTest < ActionController::TestCase
     get :index, params: { settings: { contact_email: "test@gmail.com", school: { id: @school.id } } }
     assert_equal("You must be logged in to access this page", flash[:error])
     assert_response :redirect
+  end
+
+  test "test index method with out school code" do
+    sign_in @user3
+    get :index, params: { settings: { contact_email: "test@gmail.com", school: { id: @school3.id } } }
+    assert_response :success
   end
 end

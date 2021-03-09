@@ -11,3 +11,8 @@ school_two:
   active: true
   id: 38227439
   code: z38227441
+
+school_three:
+  name: MyText2
+  active: true
+  id: 38227476
