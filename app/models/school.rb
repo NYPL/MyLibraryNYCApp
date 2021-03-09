@@ -33,7 +33,8 @@ class School < ActiveRecord::Base
     return match.sierra_code
   end
 
-
+  
+  # Get all active schools
   def self.active_schools
     active.map do |school|
       [school.name + school_code(school), school.id] 
