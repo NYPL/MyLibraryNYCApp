@@ -3,7 +3,7 @@
 class Api::V01::GeneralController < ApplicationController
   include LogWrapper
 
-  # Failed bib-id Retry configuration
+  # Retry configuration
   MAX_RETRY_SEC = 5
   INITIAL_RETRY_INTERVAL = 2
   RETRY_MULTIPLER = 3

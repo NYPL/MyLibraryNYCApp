@@ -2,7 +2,6 @@
 
 require 'net/http'
 require 'uri'
-require 'pry'
 require 'csv'
 
 FAILED_BIB_RETRY_LIMIT = 3

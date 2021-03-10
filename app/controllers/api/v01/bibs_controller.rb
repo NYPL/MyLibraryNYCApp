@@ -128,12 +128,13 @@ class Api::V01::BibsController < Api::V01::GeneralController
   end
 
 
+  # Get exponential backoff time in secs.
   def exponential_backoff_sec(retry_count)
     exponential_backoff_in_sec(retry_count)
   end
 
 
-  # Re-index teacher-set bib-ids.
+  # Re-index teacher-set bibs.
   def update_mln_bib_ids(params)
     LogWrapper.log('DEBUG', {'message' => 'update_mln_bib_ids.start','method' => 'bibs_controller.update_mln_bib_ids'})
     @request_body = params[:_json]
