@@ -46,13 +46,15 @@ class Api::GeneralControllerTest < MiniTest::Test
   end
 
   describe '#log error' do
-    it 'test log error' do
+    it 'test log error method' do
       exception = OpenStruct.new(message: 'error occured', backtrace: 'error' ) 
       resp = @controller.send(:log_error, 'log_error', exception)
       assert_equal(129, resp)
     end
   end
 
+  # An exponential backoff algorithm retries requests exponentially, 
+  # increasing the waiting time between retries up to a maximum backoff time
   describe 'test exponential backoff method' do
     it 'test exponential backoff' do
       resp = @controller.send(:exponential_backoff_in_sec, 1)
