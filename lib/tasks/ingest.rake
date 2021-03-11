@@ -581,8 +581,7 @@ namespace :ingest do
     def update_all_teacher_set_bibs(failed_bibs, retry_count)
       bib_response = nil
       # Collect all bib_ids from teacher-set table.
-      ts_bnumbers = failed_bibs.present? ? failed_bibs : ["b20536004", "b20798130"]
-      # TeacherSet.all.collect { |ts| ts.bnumber }.compact
+      ts_bnumbers = failed_bibs.present? ? failed_bibs : TeacherSet.all.collect { |ts| ts.bnumber }.compact
       
       ts_bnumbers.each do |bnumber|
         bib_id = bnumber.delete "b"
@@ -601,8 +600,7 @@ namespace :ingest do
         params = {_json: bib_response['data']}
         # Update teacher-sets
         Api::V01::BibsController.new.update_mln_bib_ids(params)
-        LogWrapper.log('INFO', {'message' => "Successfully updated TeacherSet data. BIB id:#{bib_id},
-                                   bibResponse: #{bib_response}" })
+        LogWrapper.log('INFO', {'message' => "Successfully updated TeacherSet data. BIB id:#{bib_id}" })
       rescue StandardError => e
         LogWrapper.log('ERROR', {'message' => "Error occured while updating the bib_id. BIB id:#{bib_id},
                                  bibResponse: #{bib_response} " })

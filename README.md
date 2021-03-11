@@ -308,4 +308,16 @@ Example1: pg_restore --verbose --host localhost --dbname qa_new_name1 qa-new_nam
 Example2: psql --host localhost --dbname latest_qa1 -f qa-new_name.out
 
 
-``` 
+```
+
+```
+Commands to update all MyLibtaryNyc teacher-set bib ids
+============================================================
+
+LOCAL: 
+RAILS_ENV=local rake ingest:update_all_teacher_set_bibs
+
+QA || PRODUCTION
+rake ingest:update_all_teacher_set_bibs
+
+```
