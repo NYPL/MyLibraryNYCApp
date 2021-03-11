@@ -35,7 +35,7 @@ MyLibraryNYC::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-
+  config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME']]
   config.action_mailer.default_url_options = { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
   config.action_mailer.perform_deliveries = false
 
