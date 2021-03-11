@@ -11,7 +11,6 @@ require "action_view/railtie"
 require "action_cable/engine"
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
-require "active_storage/engine"
 require File.expand_path('../boot', __FILE__)
 
 if defined?(Bundler)
