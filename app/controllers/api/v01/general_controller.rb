@@ -90,8 +90,8 @@ class Api::V01::GeneralController < ApplicationController
   end
 
   
-  def api_response_builder(http_status, http_response=nil, api_reponse=true)
-    if !api_reponse
+  def api_response_builder(http_status, http_response=nil, json_resp=nil)
+    if json_resp
       { status: http_status, json: http_response }
     else
       render status: http_status, json: http_response

@@ -124,7 +124,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
                      Teacher set availableCount: #{ts_items_info[:available_count]}, totalCount: #{ts_items_info[:total_count]}",
                      'method' => "bibs_controller.create_or_update_teacher_sets"})
     end
-    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json, @api_reponse)
+    api_response_builder(200, { teacher_sets: saved_teacher_sets_json_array(saved_teacher_sets) }.to_json, @json_resp)
   end
 
 
@@ -138,7 +138,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
   def update_mln_bib_ids(params)
     LogWrapper.log('DEBUG', {'message' => 'update_mln_bib_ids.start','method' => 'bibs_controller.update_mln_bib_ids'})
     @request_body = params[:_json]
-    @api_reponse = false
+    @json_resp = true
     create_or_update_teacher_sets
   end
 
