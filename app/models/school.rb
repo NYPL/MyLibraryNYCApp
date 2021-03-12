@@ -43,12 +43,12 @@ class School < ActiveRecord::Base
   # Parse schoool name and id
   def name_id
     status_label = active ? "" : "[INACTIVE] "
-    ["#{status_label}#{name + school_code(self)}", id]
+    ["#{status_label}#{name + school_code}", id]
   end
 
 
-  def school_code(school)
-    school.code.present? ? " (#{school.code[1..-1].upcase})" : ""
+  def school_code
+    code.present? ? " (#{code[1..-1].upcase})" : ""
   end
 
 end
