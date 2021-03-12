@@ -36,7 +36,7 @@ class School < ActiveRecord::Base
   
   # Get all active schools
   def self.active_schools_data
-    active.map { |school| school.name_id }
+    active.map(&:name_id)
   end
 
 
