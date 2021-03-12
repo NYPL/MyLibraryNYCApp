@@ -33,7 +33,7 @@ class SettingsController < ApplicationController
       @holds = current_user.holds.order("created_at DESC")
 
       #If school is inactive for current user still need to show in school drop down.
-      @schools << School.name_id(@school) unless @school.active
+      @schools << @school.name_id unless @school.active
       resp = {:id => current_user.id, :contact_email => @contact_email, :school => @school, :email => @email, :alt_email => @alt_email}
     end
 
