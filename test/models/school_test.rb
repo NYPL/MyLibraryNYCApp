@@ -23,7 +23,7 @@ class SchoolTest < ActionController::TestCase
 
   test 'test with school code value' do
     resp = @school1.school_code
-    assert_equal(" (#{@school1.code[1..-1].upcase})", resp)
+    assert_equal(" (38227442)", resp)
   end
 
   test 'test with-out school code value' do
