@@ -35,19 +35,21 @@ class School < ActiveRecord::Base
 
   
   # Get all active schools
-  def self.active_schools
+  def self.active_schools_data
     active.map do |school|
-      [school.name + school_code(school), school.id] 
+      School.name_id(school)
     end
   end
 
 
-  def self.inactive_school(school)
-    ["[INACTIVE] #{school.name + school_code(school)}", school.id]
+  # Parse schoool name and id
+  def self.name_id(school)
+    status_lable = school.active ? "" : "[INACTIVE] "
+    ["#{status_lable}#{school.name + School.code(school)}", school.id]
   end
 
 
-  def self.school_code(school)
+  def self.code(school)
     school.code.present? ? " (#{school.code[1..-1].upcase})" : ""
   end
 
