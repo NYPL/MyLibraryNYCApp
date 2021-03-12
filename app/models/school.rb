@@ -44,8 +44,8 @@ class School < ActiveRecord::Base
 
   # Parse schoool name and id
   def self.name_id(school)
-    status_lable = school.active ? "" : "[INACTIVE] "
-    ["#{status_lable}#{school.name + School.code(school)}", school.id]
+    status = school.active ? "" : "[INACTIVE] "
+    ["#{status}#{school.name + School.code(school)}", school.id]
   end
 
 
