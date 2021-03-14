@@ -20,3 +20,11 @@ user2:
   school: school_one
   first_name: 'firstname'
   last_name: 'lastname'
+
+user3:
+  id: "12345"
+  email: myText5@test.com
+  school_id: 38227476
+  school: school_three
+  first_name: 'firstname3'
+  last_name: 'lastname3'

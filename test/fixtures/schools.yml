@@ -1,13 +1,24 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 school_one:
-  name: MyText
+  name: Myschool1
   active: true
   id: 382274395
   code: z38227442
 
 school_two:
-  name: MyText2
+  name: Myschool2
   active: true
   id: 38227439
   code: z38227441
+
+school_three:
+  name: Myschool3
+  active: true
+  id: 38227476
+
+school_four:
+  name: Myschool4
+  active: false
+  id: 38227478
+  code: z38227445
