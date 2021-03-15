@@ -74,9 +74,8 @@ class Api::BibsControllerTest < ActionController::TestCase
 
   test "should delete teacher sets when given a bib number" do
     TeacherSet.where(bnumber: "b#{BNUMBER1}").first_or_create
-    # TODO: Need to fix
-    # delete 'delete_teacher_sets', params: { _json: TWO_TEACHER_SETS_TO_DELETE }
-    # assert_response :success
-    # assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}"]
+    delete 'delete_teacher_sets', params: { _json: TWO_TEACHER_SETS_TO_DELETE }
+    assert_response :success
+    assert JSON.parse(response.body)['teacher_sets'].map{ |x| x['bnumber'] } == ["b#{BNUMBER1}"]
   end
 end
