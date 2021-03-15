@@ -110,6 +110,30 @@ class BibsControllerTest < MiniTest::Test
     end
   end
 
+
+  describe 'Test var, fixed field methods' do
+    it 'test var field method' do
+      @teacher_set_record = SIERRA_USER["data"][0]
+      @controller.instance_variable_set(:@teacher_set_record, @teacher_set_record)
+      resp = @controller.send(:var_field, '091')
+      assert_equal("English Language Arts., content", resp)
+    end
+
+    it 'test fixed field method' do
+      @teacher_set_record = SIERRA_USER["data"][0]
+      @controller.instance_variable_set(:@teacher_set_record, @teacher_set_record)
+      resp = @controller.send(:fixed_field, '44')
+      assert_equal("English", resp)
+    end
+
+    it 'test all_var_fields method' do
+      @teacher_set_record = SIERRA_USER["data"][0]
+      @controller.instance_variable_set(:@teacher_set_record, @teacher_set_record)
+      resp = @controller.send(:var_field, '091')
+      assert_equal("English Language Arts., content", resp)
+    end
+  end
+
   private
 
   def req_body_for_item
