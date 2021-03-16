@@ -17,7 +17,7 @@ class BookTest < ActiveSupport::TestCase
     assert PaperTrail::Version.count == 0
     TeacherSetBook.create(teacher_set: teacher_set, book: book)
     assert PaperTrail::Version.count == 1
-    book.update_attributes(title: 'Title2')
+    book.update(title: 'Title2')
     # one update of a book creates a new version for that book and for its teacher set so the count increments by 2
     assert PaperTrail::Version.count == 3
   end

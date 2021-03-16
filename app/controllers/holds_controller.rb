@@ -79,7 +79,7 @@ class HoldsController < ApplicationController
       @hold.user = current_user
 
       unless params[:settings].nil?
-        current_user.update_attributes(params.require(:settings).to_hash)
+        current_user.update(params.require(:settings).to_hash)
       end
 
       quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
@@ -138,7 +138,7 @@ class HoldsController < ApplicationController
     end
     respond_to do |format|
       params.permit!
-      if @hold.update_attributes(params[:hold])
+      if @hold.update(params[:hold])
         format.html { redirect_to @hold, notice: 'Your order was successfully updated.' }
         format.json { render json: @hold }
       else

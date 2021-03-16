@@ -18,7 +18,7 @@ class SchoolsControllerTest < ActionController::TestCase
   end
 
   test "test school strong params" do
-    post :create, { name: @school.name }
+    post :create, params: { name: "school_name" }
     assert_response :success
   end
 end

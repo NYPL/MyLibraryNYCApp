@@ -32,4 +32,23 @@ class School < ActiveRecord::Base
 
     return match.sierra_code
   end
+
+  
+  # Get all active schools
+  def self.active_schools_data
+    active.map(&:name_id)
+  end
+
+
+  # Parse schoool name and id
+  def name_id
+    status_label = active ? "" : "[INACTIVE] "
+    ["#{status_label}#{name + school_code}", id]
+  end
+
+
+  def school_code
+    code.present? ? " (#{code[1..-1].upcase})" : ""
+  end
+
 end

@@ -15,7 +15,7 @@ class SettingsController < ApplicationController
     end
 
     unless params[:settings].nil?
-      current_user.update_attributes({
+      current_user.update({
         :alt_email => params[:settings][:contact_email],
         :school_id => params[:settings][:school][:id]
       })
@@ -23,9 +23,7 @@ class SettingsController < ApplicationController
 
     resp = {}
     #Active schools from school table.
-    @schools = School.active.map do |s| 
-      [s.name + " (#{s.code[1..-1].upcase})", s.id] 
-    end
+    @schools = School.active_schools_data
 
     if current_user.present?
       @email = current_user.email
@@ -33,8 +31,9 @@ class SettingsController < ApplicationController
       @contact_email = current_user.contact_email
       @school = current_user.school
       @holds = current_user.holds.order("created_at DESC")
+
       #If school is inactive for current user still need to show in school drop down.
-      @schools << ["[INACTIVE] #{@school.name} (#{@school.code[1..-1].upcase})", @school.id] unless @school.active
+      @schools << @school.name_id unless @school.active
       resp = {:id => current_user.id, :contact_email => @contact_email, :school => @school, :email => @email, :alt_email => @alt_email}
     end
 

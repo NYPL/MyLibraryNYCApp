@@ -91,7 +91,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with 4 of the same repeated digits as pin' do
       @user.pin = "1111"
       @user.save
-      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+      assert_equal(@user.errors.messages[:pin],["PIN does not meet our requirements. Please try again."])
     end
   end
 
@@ -99,7 +99,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with alternate repeated digits as pin' do
       @user.pin = "1212"
       @user.save
-      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+      assert_equal(@user.errors.messages[:pin],["PIN does not meet our requirements. Please try again."])
     end
   end
 
@@ -107,7 +107,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with 3 of the same repeated digits in a row as pin' do
       @user.pin = "0007"
       @user.save
-      assert_equal(@user.errors.messages[:pin],["does not meet our requirements. Please try again."])
+      assert_equal(@user.errors.messages[:pin],["PIN does not meet our requirements. Please try again."])
     end
   end
 
@@ -151,7 +151,7 @@ class UserTest < ActiveSupport::TestCase
     a 201 illustrating patron was created through
       patron creator microservice" do
     crank(:queens_user, barcode: 27777011111111)
-    assert_equal(true, @user.send_request_to_patron_creator_service)
+    assert_equal(206, @user.send_request_to_patron_creator_service)
   end
 
   # Need to call twice, in order to receive the second response

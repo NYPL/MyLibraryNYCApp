@@ -79,18 +79,18 @@ class Book < ActiveRecord::Base
 
 
   def update_from_catalog_item(item)
-    self.update_attributes :details_url => item['details_url']
+    self.update :details_url => item['details_url']
 
-    self.update_attributes :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
-                           :call_number => item['call_number'], :description => item['description'], 
-                           :statement_of_responsibility => item['statement_of_responsibility']
+    self.update :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
+                :call_number => item['call_number'], :description => item['description'], 
+                :statement_of_responsibility => item['statement_of_responsibility']
 
-    self.update_attributes :format => item['format']['name'] unless item['format'].nil?
-    self.update_attributes :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
-    self.update_attributes :notes => item['notes'].join(';') unless item['notes'].nil?
+    self.update :format => item['format']['name'] unless item['format'].nil?
+    self.update :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
+    self.update :notes => item['notes'].join(';') unless item['notes'].nil?
     url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
-    self.update_attributes :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
-    self.update_attributes :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
+    self.update :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
+    self.update :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
     self
   end
 
@@ -157,7 +157,7 @@ class Book < ActiveRecord::Base
 
   def create_teacher_set_version_on_update
     teacher_sets.all.each do |teacher_set|
-      teacher_set.update_attributes(last_book_change: "updated-#{self.id}-#{self.title}")
+      teacher_set.update(last_book_change: "updated-#{self.id}-#{self.title}")
     end
   end
 
@@ -168,7 +168,7 @@ class Book < ActiveRecord::Base
 
     begin
       book_attributes = JSON.parse(response.body)['data'][0]
-      self.update_attributes(
+      self.update(
         bnumber: book_attributes['id'],
         title: book_attributes['title'],
         publication_date: book_attributes['publishYear'],
