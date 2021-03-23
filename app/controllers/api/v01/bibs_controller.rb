@@ -21,7 +21,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       # validate req body input params
       validate_input_params(req_body, true)
 
-      # Call bib service method to create/update teacher-set information.
+      # create/update teacher-set information.
       teacher_set = TeacherSet.new.create_or_update_teacher_set_data(req_body)
       response = SYS_SUCCESS.call('TeacherSet successlly created', { teacher_set: bib_response(teacher_set) }.to_json)
     rescue InvalidInputException => e
@@ -42,7 +42,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         ).deliver
     end
     LogWrapper.log('INFO', {'message' => "message: #{message}, http_status: #{http_status}",
-                            'method' => 'teacher_set.update_set_type'})
+                            'method' => 'create_or_update_teacher_sets'})
     api_response_builder(http_status, response)
   end
 

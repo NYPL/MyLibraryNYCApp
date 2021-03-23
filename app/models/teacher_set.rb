@@ -171,16 +171,17 @@ class TeacherSet < ActiveRecord::Base
 
   def create_or_update_teacher_set_data(req_body)
     @req_body = req_body
-    teacher_set = TeacherSet.where(bnumber: "b#{req_body['id']}").first_or_initialize
+    bib_id = req_body['id']
+    teacher_set = TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
 
     # Calls Bib service for items.
     # Calculates the total number of items and available items in the list.
-    ts_items_info = get_items_info_from_bibs_service(teacher_set.bnumber)
+    ts_items_info = get_items_info_from_bibs_service(bib_id)
+    
+    binding.pry
 
-    teacher_set.update_teacher_set_attribuites(teacher_set, ts_items_info, req_body)
-
-    teacher_set.update_set_type(var_field_data('526'))
-
+    teacher_set.update_teacher_set_attribuites(ts_items_info, req_body)
+    binding.pry
     # clean up the area of study field to match the subject field string rules.
     teacher_set.clean_primary_subject
 
@@ -202,9 +203,9 @@ class TeacherSet < ActiveRecord::Base
     teacher_set
   end
 
-  def update_teacher_set_attribuites(teacher_set, ts_items_info, req_body)
+  def update_teacher_set_attribuites(ts_items_info, req_body)
     @req_body = req_body
-    teacher_set.update(
+    self.update(
       title: req_body['title'],
       call_number: var_field_data('091'),
       description: var_field_data('520'),
@@ -215,7 +216,7 @@ class TeacherSet < ActiveRecord::Base
       contents: var_field_data('505'),
       area_of_study: var_field_data('690', false),
       physical_description: physical_description,
-      details_url: "http://catalog.nypl.org/record=b#{teacher_set.id}~S1",
+      details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
       # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
       grade_begin: grade_or_lexile_array('grade')[0] || '',
       grade_end: grade_or_lexile_array('grade')[1] || '',
@@ -223,9 +224,9 @@ class TeacherSet < ActiveRecord::Base
       lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
       available_copies: ts_items_info[:available_count],
       total_copies: ts_items_info[:total_count],
-      availability: ts_items_info[:availability_string]
+      availability: ts_items_info[:availability_string],
+      set_type: get_set_type_value(var_field_data('526'))
     )
-    teacher_set
   end
 
 
@@ -885,15 +886,7 @@ class TeacherSet < ActiveRecord::Base
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   def update_set_type(set_type_val)
     begin
-      set_type = set_type_val
-      books = TeacherSet.find(self.id).books
-      if set_type.present?
-        set_type = set_type_val.strip().gsub(/\.$/, '').titleize
-      elsif books.count.to_i > 1
-        set_type = TOPIC_SET
-      elsif books.count.to_i == 1
-        set_type = BOOK_CLUB_SET
-      end
+      set_type = get_set_type_value(set_type_val)
       LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
       self.update(set_type: set_type)
     rescue StandardError => e
@@ -905,6 +898,20 @@ class TeacherSet < ActiveRecord::Base
     set_type
   end
 
+
+  def get_set_type_value(set_type_val)
+    set_type = set_type_val
+
+    books = self.id.present? ? TeacherSet.find(self.id).books : []
+    if set_type.present?
+      set_type = set_type_val.strip().gsub(/\.$/, '').titleize
+    elsif books.count.to_i > 1
+      set_type = TOPIC_SET
+    elsif books.count.to_i == 1
+      set_type = BOOK_CLUB_SET
+    end
+    set_type
+  end
 
   # Update teacher sets set-type nil to value from sierra
   def update_set_type_from_nil_to_value
