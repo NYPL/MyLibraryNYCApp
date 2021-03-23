@@ -202,6 +202,50 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
+  # Create or update teacherset document in elastic search.
+  def create_or_update_teacherset_document_in_es(ts_object)
+    body = teacher_set_info(ts_object)
+    begin
+      # If teacherset document is found in elastic search than update document in ES.
+      ElasticSearch.new.update_document_by_id(body[:id], body)
+      LogWrapper.log('DEBUG', {'message' => "Successfullly updated elastic search doc. Teacher set id #{body[:id]}", 
+                               'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+      # If teacherset document not found in elastic search than create document in ES.
+      resp = ElasticSearch.new.create_document(body[:id], body)
+      if resp['result'] == "created"
+        LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}", 
+                                 'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+      else
+        LogWrapper.log('ERROR', {'message' => "Elastic search document not created/updated. Error: #{e.message}. Teacher set id #{body[:id]}", 
+                                 'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+      end
+    rescue StandardError => e
+      raise MlnException::ElasticsearchException.new(MlnResponse::ELASTIC_SEARCH_STANDARD_EXCEPTION[:code],
+            MlnResponse::ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
+      LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}. Error: #{e.message}",
+                               'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+    end
+  end
+
+  
+  # When Delete request comes from sierra, than delete teacher set document in elastic search.
+  def delete_teacherset_record_from_es(id)
+    begin
+      resp = ElasticSearch.new.delete_document_by_id(id)
+      return unless resp["result"] == "deleted"
+      
+      LogWrapper.log('DEBUG', {'message' => "Successfullly deleted elastic search doc. Teacher set id #{id}", 
+                               'method' => 'app/helpers/delete_teacherset_record_from_es'})
+    rescue StandardError => e
+      raise MlnException::ElasticsearchException.new(MlnResponse::ELASTIC_SEARCH_STANDARD_EXCEPTION[:code],
+            MlnResponse::ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
+      LogWrapper.log('ERROR', {'message' => "Error occured while deleting elastic search doc. Teacher set id #{body[:id]}. Error: #{e.message}",
+                               'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+
+    end
+  end
+
 
   def self.for_query(params)
     sets = self.paginate(:page => params[:page])
