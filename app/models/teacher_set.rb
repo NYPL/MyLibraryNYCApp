@@ -4,6 +4,9 @@
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
   include LogWrapper
+  include TeacherSetConcern
+  include MlnException
+  include MlnResponse
 
   has_paper_trail
   before_save :disable_papertrail
@@ -144,6 +147,60 @@ class TeacherSet < ActiveRecord::Base
   def image_uri(size = :small)
     books.first.image_uri(size) if !books.empty?
   end
+
+  # Delete teacher-set record from db and elastic search.
+  def delete_teacher_set(bib_id)
+     # Get teacher-set record by bib_id
+    teacher_set = get_teacher_set_by_bnumber(bib_id)
+    unless teacher_set.present?
+      raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code],BIB_RECORD_NOT_FOUND[:msg])
+    end
+
+    # Delete teacher-set record
+    resp = teacher_set.destroy
+    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+    # If feature flag is enabled delete data from elasticsearch.
+    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      # After deletion of teacherset data from db than delete teacherset doc from elastic search
+      delete_teacherset_record_from_es(teacher_set.id) if resp.destroyed?
+    end
+    teacher_set
+  end
+  
+
+  def create_or_update_teacher_set_data(req_body)
+    @req_body = req_body
+    teacher_set = TeacherSet.where(bnumber: "b#{req_body['id']}").first_or_initialize
+
+    # Calls Bib service for items.
+    # Calculates the total number of items and available items in the list.
+    ts_items_info = get_items_info_from_bibs_service(teacher_set.bnumber)
+
+    teacher_set = update_teacher_set_attribuites(teacher_set, ts_items_info)
+
+    teacher_set.update_set_type(var_field_data('526'))
+
+    # clean up the area of study field to match the subject field string rules.
+    teacher_set.clean_primary_subject
+
+    # update all teacher-set subjects.
+    teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
+
+    # Create/Update all teacher-set notes table.
+    teacher_set.update_notes(var_field_data('500', true))
+
+    # Create/Update all books.
+    teacher_set.update_included_book_list(req_body)
+      
+    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+    # If feature flag is enabled create/update data in elasticsearch.
+    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      # When ever there is a create/update on bib than need to create/update the data in elastic search document.
+      create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
+    end
+    teacher_set
+  end
+
 
 
   def self.for_query(params)
@@ -741,10 +798,10 @@ class TeacherSet < ActiveRecord::Base
   # Save teacher-set set_type value
   def update_teacher_set_set_type_value(set_type_val)
     set_type = update_set_type(set_type_val)
-    self.set_type = set_type
-    self.save!
     LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type} saved in DB", 
                             'method' => 'teacher_set.update_teacher_set_set_type_value'})
+  rescue StandardError => e
+    raise DBException.new(TEACHERSET_SETTYPE_ERROR[:code], TEACHERSET_SETTYPE_ERROR[:msg])
   end
 
 
@@ -755,17 +812,24 @@ class TeacherSet < ActiveRecord::Base
   # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   def update_set_type(set_type_val)
-    set_type = set_type_val
-    books = TeacherSet.find(self.id).books
-    if set_type_val.present?
-      set_type = set_type_val.strip().gsub(/\.$/, '').titleize
-    elsif books.count.to_i > 1
-      set_type = TOPIC_SET
-    elsif books.count.to_i == 1
-      set_type = BOOK_CLUB_SET
+    begin
+      set_type = set_type_val
+      books = TeacherSet.find(self.id).books
+      if set_type.present?
+        set_type = set_type_val.strip().gsub(/\.$/, '').titleize
+      elsif books.count.to_i > 1
+        set_type = TOPIC_SET
+      elsif books.count.to_i == 1
+        set_type = BOOK_CLUB_SET
+      end
+      LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
+      self.update(set_type: set_type)
+    rescue StandardError => e
+      LogWrapper.log('ERROR', {'message' => "Error occcured while updating the set_type value: #{set_type}",
+                               'method' => 'teacher_set.update_set_type'})
+
+      raise DBException.new(TEACHERSET_SETTYPE_ERROR[:code],TEACHERSET_SETTYPE_ERROR[:msg])
     end
-    LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
-    self.update(set_type: set_type)
     set_type
   end
 
@@ -839,6 +903,7 @@ class TeacherSet < ActiveRecord::Base
     # record the list of current teacher set <--> subject associations,
     # so we can prune the subjects later.
     old_subjects = Array.new
+
     self.subjects.each do |subject|
       old_subjects.push(subject.id)
     end
@@ -907,11 +972,16 @@ class TeacherSet < ActiveRecord::Base
   # Delete all records for a teacher set in the table TeacherSetNotes, then
   # create new records in that table.
   def update_notes(teacher_set_notes_string)
-    TeacherSetNote.where(teacher_set_id: self.id).destroy_all
-    return if teacher_set_notes_string.blank?
+    begin
+      TeacherSetNote.where(teacher_set_id: self.id).destroy_all
+      return if teacher_set_notes_string.blank?
 
-    teacher_set_notes_string.split(',').each do |note_content|
-      TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
+      teacher_set_notes_string.split(',').each do |note_content|
+        TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
+      end
+    rescue StandardError => e
+      raise TeacherSetNoteException.new(TEACHER_SET_NOTE_EXCEPTION[:code],
+                                                      TEACHER_SET_NOTE_EXCEPTION[:msg])
     end
   end
 
