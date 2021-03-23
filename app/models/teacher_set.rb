@@ -4,9 +4,10 @@
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
   include LogWrapper
-  include TeacherSetConcern
+  include TeacherSetsHelper
   include MlnException
   include MlnResponse
+  include TeacherSets::ElasticSearch
 
   has_paper_trail
   before_save :disable_papertrail
@@ -176,7 +177,7 @@ class TeacherSet < ActiveRecord::Base
     # Calculates the total number of items and available items in the list.
     ts_items_info = get_items_info_from_bibs_service(teacher_set.bnumber)
 
-    teacher_set = update_teacher_set_attribuites(teacher_set, ts_items_info)
+    teacher_set.update_teacher_set_attribuites(teacher_set, ts_items_info, req_body)
 
     teacher_set.update_set_type(var_field_data('526'))
 
@@ -186,7 +187,7 @@ class TeacherSet < ActiveRecord::Base
     # update all teacher-set subjects.
     teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
 
-    # Create/Update all teacher-set notes table.
+    # Create/Update all teacher-set notes.
     teacher_set.update_notes(var_field_data('500', true))
 
     # Create/Update all books.
@@ -201,8 +202,34 @@ class TeacherSet < ActiveRecord::Base
     teacher_set
   end
 
+  def update_teacher_set_attribuites(teacher_set, ts_items_info, req_body)
+    @req_body = req_body
+    teacher_set.update(
+      title: req_body['title'],
+      call_number: var_field_data('091'),
+      description: var_field_data('520'),
+      edition: var_field_data('250'),
+      isbn: var_field_data('020'),
+      primary_language: fixed_field('24'),
+      publisher: var_field_data('260'),
+      contents: var_field_data('505'),
+      area_of_study: var_field_data('690', false),
+      physical_description: physical_description,
+      details_url: "http://catalog.nypl.org/record=b#{teacher_set.id}~S1",
+      # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
+      grade_begin: grade_or_lexile_array('grade')[0] || '',
+      grade_end: grade_or_lexile_array('grade')[1] || '',
+      lexile_begin: grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
+      lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
+      available_copies: ts_items_info[:available_count],
+      total_copies: ts_items_info[:total_count],
+      availability: ts_items_info[:availability_string]
+    )
+    teacher_set
+  end
 
-  # Create or update teacherset document in elastic search.
+
+# Create or update teacherset document in elastic search.
   def create_or_update_teacherset_document_in_es(ts_object)
     body = teacher_set_info(ts_object)
     begin
@@ -228,7 +255,7 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
-  
+    
   # When Delete request comes from sierra, than delete teacher set document in elastic search.
   def delete_teacherset_record_from_es(id)
     begin
@@ -245,6 +272,7 @@ class TeacherSet < ActiveRecord::Base
 
     end
   end
+
 
 
   def self.for_query(params)

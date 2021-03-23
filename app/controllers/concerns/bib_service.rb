@@ -1,26 +1,13 @@
 # frozen_string_literal: true
 
 module BibService
-  include LogWrapper
-  include MlnException
-  include MlnResponse
-  include TeacherSetConcern
+  include TeacherSetsHelper
 
-  
-  # Create or update teacher-set data
+  def validate_input_params(req_body, validate=false)
 
-  def create_or_update_teacher_set_data(req_body)
-    TeacherSet.new.create_or_update_teacher_set_data(req_body)
-  end
-
-
-  def delete_teacher_set(bib_id)    
-    TeacherSet.new.delete_teacher_set(bib_id)
-  end
-
-
-  def validate_input_params(bnumber, title=nil, physical_description=nil, validate=false)
-    # validate each teacher_set_record
+    bnumber = req_body['id']
+    title = req_body['title']
+    physical_description = var_field('300', req_body)
 
     req_body_params = []
 
@@ -37,8 +24,6 @@ module BibService
     end
 
     if req_body_params.present?
-      # Need to talk about sending email.
-      # AdminMailer.teacher_set_update_missing_required_fields(bnumber, title, physical_description).deliver
       validate_empty_values(req_body_params)
     end
   end
