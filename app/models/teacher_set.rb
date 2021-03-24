@@ -7,7 +7,6 @@ class TeacherSet < ActiveRecord::Base
   include TeacherSetsHelper
   include MlnException
   include MlnResponse
-  include TeacherSets::ElasticSearch
 
   has_paper_trail
   before_save :disable_papertrail
@@ -215,7 +214,7 @@ class TeacherSet < ActiveRecord::Base
       contents: var_field_data('505'),
       area_of_study: var_field_data('690', false),
       physical_description: physical_description,
-      details_url: "http://catalog.nypl.org/record=b#{teacher_set_record['id']}~S1",
+      details_url: "http://catalog.nypl.org/record=b#{req_body['id']}~S1",
       # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
       grade_begin: grade_or_lexile_array('grade')[0] || '',
       grade_end: grade_or_lexile_array('grade')[1] || '',

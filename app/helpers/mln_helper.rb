@@ -11,10 +11,10 @@ module MlnHelper
   def parse_request_body(request)
     request.body.rewind
     body = request.body.read
-    raise InvalidInputException.new(EMPTY_REQUEST_BODY[:code],EMPTY_REQUEST_BODY[:msg]) unless body.present?
+    raise MlnException::InvalidInputException.new(MlnResponse::EMPTY_REQUEST_BODY[:code],MlnResponse::EMPTY_REQUEST_BODY[:msg]) unless body.present?
 
-    raise InvalidInputException.new(MLN_INVALID_REQUEST_BODY[:code],
-                                    MLN_INVALID_REQUEST_BODY[:msg]) unless json_valid?(body)
+    raise MlnException::InvalidInputException.new(MlnResponse::MLN_INVALID_REQUEST_BODY[:code],
+                                    MlnResponse::MLN_INVALID_REQUEST_BODY[:msg]) unless json_valid?(body)
     JSON.parse body
   end
 

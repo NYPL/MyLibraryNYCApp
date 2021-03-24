@@ -2,6 +2,7 @@
 
 module BibService
   include TeacherSetsHelper
+  include MlnResponse
 
   def validate_input_params(req_body, validate=false)
 
