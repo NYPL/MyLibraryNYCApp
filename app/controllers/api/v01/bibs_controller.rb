@@ -11,7 +11,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
 
   # Receive teacher sets from a POST request.
   # Find or create a teacher set in the MLN db and its associated books.
-  def create_or_update_teacher_sets
+  def create_or_update_teacher_set
     begin
       LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets.start','method' => 'bibs_controller.create_or_update_teacher_sets'})
       http_status = 200
@@ -46,7 +46,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
   end
 
 
-  def delete_teacher_sets
+  def delete_teacher_set
     begin
       http_status = 200
       req_body = parse_request_body(request)[0]
@@ -75,7 +75,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
         ).deliver
     end
     LogWrapper.log('INFO', {'message' => "message: #{message}, http_status: #{http_status}",
-                            'method' => 'teacher_set.update_set_type'})
+                            'method' => 'teacher_set.delete_teacher_set'})
     
     api_response_builder(http_status, response)
   end
