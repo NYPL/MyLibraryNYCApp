@@ -41,5 +41,4 @@ module BibService
     return nil unless ts.present?
     { id: ts.id, bnumber: ts.bnumber, title: ts.title }
   end
-
 end

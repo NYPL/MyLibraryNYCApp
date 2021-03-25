@@ -21,7 +21,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       # validate req body input params
       validate_input_params(req_body, true)
 
-      # create/update teacher-set information.
+      # create/update teacher-set data from bib request_body.
       teacher_set = TeacherSet.new.create_or_update_teacher_set_data(req_body)
       response = SYS_SUCCESS.call('TeacherSet successlly created', { teacher_set: bib_response(teacher_set) }.to_json)
     rescue InvalidInputException => e
@@ -34,11 +34,10 @@ class Api::V01::BibsController < Api::V01::GeneralController
       response = SYS_FAILURE.call(e.code, e.message)
     rescue StandardError => e
       http_status = 500
-      binding.pry
       message = e.message
       response = SYS_FAILURE.call(UNEXPECTED_EXCEPTION[:code], UNEXPECTED_EXCEPTION[:msg])
       AdminMailer.failed_bibs_controller_api_request(
-          req_body, "Error while updating the teacherset: #{e.message[0..200]}...", action_name, teacher_set
+          req_body, "Error while creating/updating the teacherset: #{e.message[0..200]}...", action_name, teacher_set
         ).deliver
     end
     LogWrapper.log('INFO', {'message' => "message: #{message}, http_status: #{http_status}",

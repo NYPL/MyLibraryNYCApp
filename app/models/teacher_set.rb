@@ -178,7 +178,7 @@ class TeacherSet < ActiveRecord::Base
     ts_items_info = get_items_info_from_bibs_service(bib_id)
     
 
-    teacher_set.update_teacher_set_attribuites(ts_items_info, req_body)
+    teacher_set.update_teacher_set_attribuites_from_bib_request(ts_items_info, req_body)
 
     # clean up the area of study field to match the subject field string rules.
     teacher_set.clean_primary_subject
@@ -201,7 +201,7 @@ class TeacherSet < ActiveRecord::Base
     teacher_set
   end
 
-  def update_teacher_set_attribuites(ts_items_info, req_body)
+  def update_teacher_set_attribuites_from_bib_request(ts_items_info, req_body)
     @req_body = req_body
     self.update(
       title: req_body['title'],

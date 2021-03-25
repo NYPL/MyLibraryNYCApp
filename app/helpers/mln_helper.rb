@@ -1,5 +1,6 @@
 module MlnHelper
-	#Validating the empty values(string, nil, empty array)
+  
+  #Validating the empty values(string, nil, empty array)
   def validate_empty_values(input_params)
     input_params.each do |input|
       raise MlnException::InvalidInputException.new(MlnResponse::INVALID_INPUT[:code], 
@@ -7,7 +8,7 @@ module MlnHelper
     end
   end
 
-
+  
   def parse_request_body(request)
     request.body.rewind
     body = request.body.read
