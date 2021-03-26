@@ -36,9 +36,8 @@ class Api::V01::BibsController < Api::V01::GeneralController
       http_status = 500
       message = e.message
       response = SYS_FAILURE.call(UNEXPECTED_EXCEPTION[:code], UNEXPECTED_EXCEPTION[:msg])
-      AdminMailer.failed_bibs_controller_api_request(
-          req_body, "Error while creating/updating the teacherset: #{e.message[0..200]}...", action_name, teacher_set
-        ).deliver
+      AdminMailer.failed_bibs_controller_api_request(req_body, "Error while creating/updating the teacherset: #{e.message[0..200]}...", 
+                                                     action_name, teacher_set).deliver
     end
     LogWrapper.log('INFO', {'message' => "message: #{message}, http_status: #{http_status}",
                             'method' => 'create_or_update_teacher_sets'})
@@ -70,12 +69,11 @@ class Api::V01::BibsController < Api::V01::GeneralController
       http_status = 500
       message = e.message
       response = SYS_FAILURE.call(UNEXPECTED_EXCEPTION[:code], UNEXPECTED_EXCEPTION[:msg])
-      AdminMailer.failed_bibs_controller_api_request(
-          req_body, "Error while deleting the teacherset: #{e.message[0..200]}...", action_name, teacher_set
-        ).deliver
+      AdminMailer.failed_bibs_controller_api_request(req_body, "Error while deleting the teacherset: #{e.message[0..200]}...", 
+                                                     action_name, teacher_set).deliver
     end
     LogWrapper.log('INFO', {'message' => "message: #{message}, http_status: #{http_status}",
-                            'method' => 'teacher_set.delete_teacher_set'})
+                            'method' => __method__})
     
     api_response_builder(http_status, response)
   end

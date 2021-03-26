@@ -7,6 +7,7 @@ class TeacherSet < ActiveRecord::Base
   include TeacherSetsHelper
   include MlnException
   include MlnResponse
+  include LogWrapper
 
   has_paper_trail
   before_save :disable_papertrail
@@ -148,9 +149,10 @@ class TeacherSet < ActiveRecord::Base
     books.first.image_uri(size) if !books.empty?
   end
 
+  
   # Delete teacher-set record from db and elastic search.
   def self.delete_teacher_set(bib_id)
-     # Get teacher-set record by bib_id
+    # Get teacher-set record by bib_id
     teacher_set = get_teacher_set_by_bnumber(bib_id)
     unless teacher_set.present?
       raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code],BIB_RECORD_NOT_FOUND[:msg])
@@ -197,82 +199,75 @@ class TeacherSet < ActiveRecord::Base
     # If feature flag is enabled create/update data in elasticsearch.
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
       # When ever there is a create/update on bib than need to create/update the data in elastic search document.
-      teacher_set.create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
+      teacher_set.create_or_update_teacherset_document_in_es
     end
     teacher_set
   end
 
 
-  def self.update_teacher_set_attributes_from_bib_request(ts, ts_items_info)
-    ts.update(
+  def self.update_teacher_set_attributes_from_bib_request(t_set, ts_items_info)
+    t_set.update(
       title: @req_body['title'],
-      call_number: ts.var_field_data('091'),
-      description: ts.var_field_data('520'),
-      edition: ts.var_field_data('250'),
-      isbn: ts.var_field_data('020'),
-      primary_language: ts.fixed_field('24'),
-      publisher: ts.var_field_data('260'),
-      contents: ts.var_field_data('505'),
-      area_of_study: ts.var_field_data('690', false),
-      physical_description: ts.var_field_data('300', false),
+      call_number: t_set.var_field_data('091'),
+      description: t_set.var_field_data('520'),
+      edition: t_set.var_field_data('250'),
+      isbn: t_set.var_field_data('020'),
+      primary_language: t_set.fixed_field('24'),
+      publisher: t_set.var_field_data('260'),
+      contents: t_set.var_field_data('505'),
+      area_of_study: t_set.var_field_data('690', false),
+      physical_description: t_set.var_field_data('300', false),
       details_url: "http://catalog.nypl.org/record=b#{@req_body['id']}~S1",
       # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
-      grade_begin: ts.grade_or_lexile_array('grade')[0] || '',
-      grade_end: ts.grade_or_lexile_array('grade')[1] || '',
-      lexile_begin: ts.grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
-      lexile_end: ts.grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
+      grade_begin: t_set.grade_or_lexile_array('grade')[0] || '',
+      grade_end: t_set.grade_or_lexile_array('grade')[1] || '',
+      lexile_begin: t_set.grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
+      lexile_end: t_set.grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
       available_copies: ts_items_info[:available_count],
       total_copies: ts_items_info[:total_count],
       availability: ts_items_info[:availability_string],
-      set_type: ts.get_set_type_value(ts.var_field_data('526'))
+      set_type: get_set_type_value(ts, t_set.var_field_data('526'))
     )
-    teacher_set
+    ts
   end
 
-# Create or update teacherset document in elastic search.
-  def self.create_or_update_teacherset_document_in_es(ts_object)
-    body = teacher_set_info(ts_object)
+  
+  # Create or update teacherset document in elastic search.
+  def create_or_update_teacherset_document_in_es
+    body = teacher_set_info(self)
     begin
       # If teacherset document is found in elastic search than update document in ES.
       ElasticSearch.new.update_document_by_id(body[:id], body)
-      LogWrapper.log('DEBUG', {'message' => "Successfullly updated elastic search doc. Teacher set id #{body[:id]}", 
-                               'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+      LogWrapper.log('DEBUG', {'message' => "Successfullly updated elastic search doc. Teacher set id #{body[:id]}",'method' => __method__})
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
       # If teacherset document not found in elastic search than create document in ES.
       resp = ElasticSearch.new.create_document(body[:id], body)
       if resp['result'] == "created"
-        LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}", 
-                                 'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+        LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}",'method' => __method__})
       else
-        LogWrapper.log('ERROR', {'message' => "Elastic search document not created/updated. Error: #{e.message}. Teacher set id #{body[:id]}", 
-                                 'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+        LogWrapper.log('ERROR', {'message' => "Elastic search document not created/updated. Error: #{e.message}, ts-id: #{body[:id]}", 
+                                 'method' => __method__})
       end
     rescue StandardError => e
-      raise MlnException::ElasticsearchException.new(MlnResponse::ELASTIC_SEARCH_STANDARD_EXCEPTION[:code],
-            MlnResponse::ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
-      LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}. Error: #{e.message}",
-                               'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
+      LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}, message: #{e.message}",
+                               'method' => __method__})
+      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
     end
   end
 
     
   # When Delete request comes from sierra, than delete teacher set document in elastic search.
   def self.delete_teacherset_record_from_es(id)
-    begin
-      resp = ElasticSearch.new.delete_document_by_id(id)
-      return unless resp["result"] == "deleted"
-      
-      LogWrapper.log('DEBUG', {'message' => "Successfullly deleted elastic search doc. Teacher set id #{id}", 
-                               'method' => 'app/helpers/delete_teacherset_record_from_es'})
-    rescue StandardError => e
-      raise MlnException::ElasticsearchException.new(MlnResponse::ELASTIC_SEARCH_STANDARD_EXCEPTION[:code],
-            MlnResponse::ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
-      LogWrapper.log('ERROR', {'message' => "Error occured while deleting elastic search doc. Teacher set id #{body[:id]}. Error: #{e.message}",
-                               'method' => 'app/helpers/create_or_update_teacherset_document_in_es'})
-
-    end
+    resp = ElasticSearch.new.delete_document_by_id(id)
+    return unless resp["result"] == "deleted"
+    
+    LogWrapper.log('DEBUG', {'message' => "Successfullly deleted elastic search doc. Teacher set id #{id}", 
+                             'method' => __method__})
+  rescue StandardError => e
+    LogWrapper.log('ERROR', {'message' => "Error occured while deleting elastic search doc. Teacher set id #{body[:id]}. Error: #{e.message}",
+                             'method' => __method__})
+    raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
   end
-
 
 
   def self.for_query(params)
@@ -898,10 +893,9 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
-  def self.get_set_type_value(set_type_val)
+  def self.get_set_type_value(t_set, set_type_val)
     set_type = set_type_val
-
-    books = self.id.present? ? TeacherSet.find(self.id).books : []
+    books = t_set.id.present? ? TeacherSet.find(t_set.id).books : []
     if set_type.present?
       set_type = set_type_val.strip().gsub(/\.$/, '').titleize
     elsif books.count.to_i > 1
@@ -912,6 +906,7 @@ class TeacherSet < ActiveRecord::Base
     set_type
   end
 
+  
   # Update teacher sets set-type nil to value from sierra
   def update_set_type_from_nil_to_value
     teacher_sets = TeacherSet.where(set_type: nil)
@@ -1050,17 +1045,14 @@ class TeacherSet < ActiveRecord::Base
   # Delete all records for a teacher set in the table TeacherSetNotes, then
   # create new records in that table.
   def update_notes(teacher_set_notes_string)
-    begin
-      TeacherSetNote.where(teacher_set_id: self.id).destroy_all
-      return if teacher_set_notes_string.blank?
+    TeacherSetNote.where(teacher_set_id: self.id).destroy_all
+    return if teacher_set_notes_string.blank?
 
-      teacher_set_notes_string.split(',').each do |note_content|
-        TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
-      end
-    rescue StandardError => e
-      raise TeacherSetNoteException.new(TEACHER_SET_NOTE_EXCEPTION[:code],
-                                                      TEACHER_SET_NOTE_EXCEPTION[:msg])
+    teacher_set_notes_string.split(',').each do |note_content|
+      TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
+  rescue StandardError => e
+    raise TeacherSetNoteException.new(TEACHER_SET_NOTE_EXCEPTION[:code], TEACHER_SET_NOTE_EXCEPTION[:msg])
   end
 
   

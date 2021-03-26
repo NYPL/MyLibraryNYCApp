@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module TeacherSetsHelper
+  # Supporting only below grades
+  GRADES_1_12 = %w[1 2 3 4 5 6 7 8 9 10 11 12].freeze
+  PREK_K_GRADES = ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek', 'K', 'k'].freeze
+  PREK_ARR = ['PRE K', 'PRE-K', 'PREK'].freeze
 
   # Make request input body to create teacherset document in elastic search.
   # Input param ts_obj eg: <TeacherSet:0x00007fd79383a640 id: 350, title: "Step",call_number: "Teacher",
@@ -134,18 +138,18 @@ module TeacherSetsHelper
   end
 
 
-  def all_var_fields(marcTag, tag)
+  def all_var_fields(marc_tag, tag)
     begin
-      @req_body['varFields'].select{ |hash| hash['marcTag'] == marcTag }.map{|x| x['subfields'][0]['content']}
+      @req_body['varFields'].select{ |hash| hash['marc_tag'] == marc_tag }.map{|x| x['subfields'][0]['content']}
     rescue
       return nil
     end
   end
 
 
-  def fixed_field(marcTag)
+  def fixed_field(marc_tag)
     begin
-      @req_body['fixedFields'][marcTag]['display']
+      @req_body['fixedFields'][marc_tag]['display']
     rescue
       return nil
     end
