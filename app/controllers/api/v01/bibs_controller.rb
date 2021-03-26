@@ -5,7 +5,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
   include MlnException
   include MlnResponse
   include MlnHelper
-  include BibService
+  include BibHelper
 
   before_action :validate_source_of_request
 
@@ -22,7 +22,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       validate_input_params(req_body, true)
 
       # create/update teacher-set data from bib request_body.
-      teacher_set = TeacherSet.new.create_or_update_teacher_set_data(req_body)
+      teacher_set = TeacherSet.create_or_update_teacher_set_data(req_body)
       response = SYS_SUCCESS.call('TeacherSet successlly created', { teacher_set: bib_response(teacher_set) }.to_json)
     rescue InvalidInputException => e
       http_status = 400
@@ -52,7 +52,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       req_body = parse_request_body(request)[0]
       bib_id = req_body['id']
       validate_input_params(bib_id)
-      teacher_set = TeacherSet.new.delete_teacher_set(bib_id)
+      teacher_set = TeacherSet.delete_teacher_set(bib_id)
       response = SYS_SUCCESS.call('TeacherSet successlly deleted', { teacher_set: bib_response(teacher_set) }.to_json)
     rescue InvalidInputException => e
       http_status = 400

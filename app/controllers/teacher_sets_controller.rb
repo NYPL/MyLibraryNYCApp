@@ -2,7 +2,7 @@
 
 class TeacherSetsController < ApplicationController
 
-  include TeacherSetsHelper
+  include TeacherSetsEsHelper
 
   before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
 

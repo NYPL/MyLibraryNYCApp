@@ -149,7 +149,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
   # Delete teacher-set record from db and elastic search.
-  def delete_teacher_set(bib_id)
+  def self.delete_teacher_set(bib_id)
      # Get teacher-set record by bib_id
     teacher_set = get_teacher_set_by_bnumber(bib_id)
     unless teacher_set.present?
@@ -168,26 +168,27 @@ class TeacherSet < ActiveRecord::Base
   end
   
 
-  def create_or_update_teacher_set_data(req_body)
+  def self.create_or_update_teacher_set_data(req_body)
     @req_body = req_body
+
     bib_id = req_body['id']
     teacher_set = TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
 
     # Calls Bib service for items.
     # Calculates the total number of items and available items in the list.
-    ts_items_info = get_items_info_from_bibs_service(bib_id)
+    ts_items_info = teacher_set.get_items_info_from_bibs_service(bib_id)
     
-
-    teacher_set.update_teacher_set_attribuites_from_bib_request(ts_items_info, req_body)
+    
+    teacher_set = update_teacher_set_attributes_from_bib_request(teacher_set, ts_items_info)
 
     # clean up the area of study field to match the subject field string rules.
     teacher_set.clean_primary_subject
 
-    # update all teacher-set subjects.
-    teacher_set.update_subjects_via_api(all_var_fields('650', 'a'))
+    # update all teacher-set subjects.    
+    teacher_set.update_subjects_via_api(teacher_set.all_var_fields('650', 'a'))
 
     # Create/Update all teacher-set notes.
-    teacher_set.update_notes(var_field_data('500', true))
+    teacher_set.update_notes(teacher_set.var_field_data('500', true))
 
     # Create/Update all books.
     teacher_set.update_included_book_list(req_body)
@@ -196,40 +197,40 @@ class TeacherSet < ActiveRecord::Base
     # If feature flag is enabled create/update data in elasticsearch.
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
       # When ever there is a create/update on bib than need to create/update the data in elastic search document.
-      create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
+      teacher_set.create_or_update_teacherset_document_in_es(TeacherSet.find(teacher_set.id))
     end
     teacher_set
   end
 
-  def update_teacher_set_attribuites_from_bib_request(ts_items_info, req_body)
-    @req_body = req_body
-    self.update(
-      title: req_body['title'],
-      call_number: var_field_data('091'),
-      description: var_field_data('520'),
-      edition: var_field_data('250'),
-      isbn: var_field_data('020'),
-      primary_language: fixed_field('24'),
-      publisher: var_field_data('260'),
-      contents: var_field_data('505'),
-      area_of_study: var_field_data('690', false),
-      physical_description: physical_description,
-      details_url: "http://catalog.nypl.org/record=b#{req_body['id']}~S1",
+
+  def self.update_teacher_set_attributes_from_bib_request(ts, ts_items_info)
+    ts.update(
+      title: @req_body['title'],
+      call_number: ts.var_field_data('091'),
+      description: ts.var_field_data('520'),
+      edition: ts.var_field_data('250'),
+      isbn: ts.var_field_data('020'),
+      primary_language: ts.fixed_field('24'),
+      publisher: ts.var_field_data('260'),
+      contents: ts.var_field_data('505'),
+      area_of_study: ts.var_field_data('690', false),
+      physical_description: ts.var_field_data('300', false),
+      details_url: "http://catalog.nypl.org/record=b#{@req_body['id']}~S1",
       # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
-      grade_begin: grade_or_lexile_array('grade')[0] || '',
-      grade_end: grade_or_lexile_array('grade')[1] || '',
-      lexile_begin: grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
-      lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
+      grade_begin: ts.grade_or_lexile_array('grade')[0] || '',
+      grade_end: ts.grade_or_lexile_array('grade')[1] || '',
+      lexile_begin: ts.grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
+      lexile_end: ts.grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
       available_copies: ts_items_info[:available_count],
       total_copies: ts_items_info[:total_count],
       availability: ts_items_info[:availability_string],
-      set_type: get_set_type_value(var_field_data('526'))
+      set_type: ts.get_set_type_value(ts.var_field_data('526'))
     )
+    teacher_set
   end
 
-
 # Create or update teacherset document in elastic search.
-  def create_or_update_teacherset_document_in_es(ts_object)
+  def self.create_or_update_teacherset_document_in_es(ts_object)
     body = teacher_set_info(ts_object)
     begin
       # If teacherset document is found in elastic search than update document in ES.
@@ -256,7 +257,7 @@ class TeacherSet < ActiveRecord::Base
 
     
   # When Delete request comes from sierra, than delete teacher set document in elastic search.
-  def delete_teacherset_record_from_es(id)
+  def self.delete_teacherset_record_from_es(id)
     begin
       resp = ElasticSearch.new.delete_document_by_id(id)
       return unless resp["result"] == "deleted"
@@ -884,7 +885,7 @@ class TeacherSet < ActiveRecord::Base
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   def update_set_type(set_type_val)
     begin
-      set_type = get_set_type_value(set_type_val)
+      set_type = self.get_set_type_value(set_type_val)
       LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
       self.update(set_type: set_type)
     rescue StandardError => e
@@ -897,7 +898,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
-  def get_set_type_value(set_type_val)
+  def self.get_set_type_value(set_type_val)
     set_type = set_type_val
 
     books = self.id.present? ? TeacherSet.find(self.id).books : []
