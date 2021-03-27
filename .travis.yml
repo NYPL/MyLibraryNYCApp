@@ -29,7 +29,6 @@ script:
 # - bundle exec rake db:test:prepare  # NOTE: might need this later.
 - bundle exec rake combined_tests:test
 
-- cd ext/mimemagic && bundle exec rake
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
