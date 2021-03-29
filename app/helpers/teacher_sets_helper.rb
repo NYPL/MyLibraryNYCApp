@@ -51,8 +51,8 @@ module TeacherSetsHelper
     else
       @req_body['varFields'].detect { |hash| hash['marc_tag'] == marc_tag }['subfields'].detect { |hash| hash['tag'] == 'a' }['content']
     end
-  rescue
-    return nil
+  rescue StandardError
+    nil
   end
 
   
@@ -108,7 +108,7 @@ module TeacherSetsHelper
     grades_resp.each do |grade_or_lexile_json|
       begin
         if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
-          return grade_or_lexile_json.delete('Lexile ').delete('L').split(' ')[0].split('-')
+          grade_or_lexile_json.delete('Lexile ').delete('L').split(' ')[0].split('-')
         elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
           if grade_or_lexile_json.upcase.include?('PRE')
             # Prek values: ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek'] - supporting these values only
@@ -131,7 +131,7 @@ module TeacherSetsHelper
           return grade_or_lexile_json.delete('.').split('-')
         end
       end
-    rescue
+    rescue StandardError
       []
     end
   end
@@ -139,14 +139,14 @@ module TeacherSetsHelper
 
   def all_var_fields(marc_tag)
     @req_body['varFields'].select { |hash| hash['marc_tag'] == marc_tag }.map { |x| x['subfields'][0]['content'] }
-  rescue
-    return nil
+  rescue StandardError
+    nil
   end
 
 
   def fixed_field(marc_tag)
     @req_body['fixedFields'][marc_tag]['display']
-  rescue
-    return nil
+  rescue StandardError
+    nil
   end
 end

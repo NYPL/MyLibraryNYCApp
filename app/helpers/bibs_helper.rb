@@ -5,7 +5,6 @@ module BibHelper
   include MlnResponse
 
   def validate_input_params(req_body, validate = false)
-
     bnumber = req_body['id']
     title = req_body['title']
     physical_description = var_field('300', req_body)
