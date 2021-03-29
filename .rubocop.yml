@@ -26,7 +26,10 @@ Metrics/MethodLength:
   Max: 40
 
 Metrics/ClassLength:
-  Max: 600
+  Max: 800
+
+Metrics/ModuleLength:
+  Max: 400
 
 Layout/EmptyLineBetweenDefs:
   NumberOfEmptyLines: 2

@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 module MlnException
-
   # Mln Application Exceptions
-
   class MlnException < StandardError
     attr_accessor :code
     attr_accessor :detailed_msg
-    def initialize(code, message, detailed_msg=nil)
+    def initialize(code, message, detailed_msg = nil)
       super(message)
       @code = code
       @detailed_msg = detailed_msg

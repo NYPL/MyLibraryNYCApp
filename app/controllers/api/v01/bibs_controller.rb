@@ -5,7 +5,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
   include MlnException
   include MlnResponse
   include MlnHelper
-  include BibHelper
+  include BibsHelper
 
   before_action :validate_source_of_request
 

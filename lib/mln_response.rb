@@ -1,10 +1,16 @@
-## KeikoResponse Module defines all the System responses
+# frozen_string_literal: true
+
+# KeikoResponse Module defines all the System responses
 
 module MlnResponse
-  SYS_SUCCESS                               = lambda { |msg, data = {}| { code: '00000', success: true, message: msg,
-                                                                          data: data, endpoint: 'TODO', timestamp: Time.zone.now} }
-  SYS_FAILURE                               = lambda { |code, msg, data = {} | { code: code, success: false, message: msg,
-                                                                                 data: data, endpoint: 'TODO', timestamp: Time.zone.now } }
+  SYS_SUCCESS = lambda do |msg, data = {}| 
+    { code: '00000', success: true, message: msg, data: data, timestamp: Time.zone.now } 
+  end
+
+  SYS_FAILURE = lambda do |code, msg, data = {}| 
+    { code: code, success: false, message: msg, data: data, timestamp: Time.zone.now }
+  end
+
   API_BAD_REQUEST                           = {code: 'MLN-00001', msg: 'Bad Request.'}.freeze
   API_AUTHENTICATION_FAILURE                = {code: 'MLN-00002', msg: 'Authentication failed.'}.freeze
   INVALID_INPUT                             = {code: 'MLN-00003', msg: 'Invalid Input.'}.freeze

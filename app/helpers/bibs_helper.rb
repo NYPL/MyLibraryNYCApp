@@ -4,7 +4,7 @@ module BibHelper
   include TeacherSetsHelper
   include MlnResponse
 
-  def validate_input_params(req_body, validate=false)
+  def validate_input_params(req_body, validate = false)
 
     bnumber = req_body['id']
     title = req_body['title']
@@ -24,21 +24,20 @@ module BibHelper
       req_body_params << { value: physical_description, error_msg: PHYSICAL_DESCRIPTION_EMPTY[:msg]}
     end
 
-    if req_body_params.present?
-      validate_empty_values(req_body_params)
-    end
+    validate_empty_values(req_body_params) if req_body_params.present?
   end
 
 
-  def var_field(marcTag, req_body)
+  def var_field(marc_tag, req_body)
     @req_body = req_body
-    var_field_data(marcTag)
+    var_field_data(marc_tag)
   end
 
 
   # build saved_teacher_sets_json_array for the response body
-  def bib_response(ts)
-    return nil unless ts.present?
-    { id: ts.id, bnumber: ts.bnumber, title: ts.title }
+  def bib_response(t_set)
+    return nil unless t_set.present?
+
+    { id: t_set.id, bnumber: t_set.bnumber, title: t_set.title }
   end
 end

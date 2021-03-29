@@ -45,19 +45,18 @@ module TeacherSetsHelper
   PREK_K_GRADES = ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek', 'K', 'k'].freeze
   PREK_ARR = ['PRE K', 'PRE-K', 'PREK'].freeze
 
-  def var_field_data(marcTag, merge = true)
-    begin
-      if merge == true
-        @req_body['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].map{ |x| x['content']}.join(', ')
-      else
-        @req_body['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].detect{ |hash| hash['tag'] == 'a' }['content']
-      end
-    rescue
-      return nil
+  def var_field_data(marc_tag, merge = true)
+    if merge == true
+      @req_body['varFields'].detect { |hash| hash['marc_tag'] == marc_tag }['subfields'].map { |x| x['content'] }.join(', ')
+    else
+      @req_body['varFields'].detect { |hash| hash['marc_tag'] == marc_tag }['subfields'].detect { |hash| hash['tag'] == 'a' }['content']
     end
+  rescue
+    return nil
   end
 
-  # "marcTag": "521" {"tag": "a", "content": "11-12" } if field does not match with grades returns 'Pre-K +'.
+  
+  # "marc_tag": "521" {"tag": "a", "content": "11-12" } if field does not match with grades returns 'Pre-K +'.
   # eg: ["dd", "11-444", "Z", "1130L"] -  only 11 is matched with supporting grades. It returns 11 +
   # eg: ["9", "11-444", "Z", "1130L"] -  9 and 11 matched with supporting grades. It returns 9 +
   # eg: ["9", "114-4", "Z", "1130L"] -  4 matched with supporting grades. It returns 4 +
@@ -68,8 +67,8 @@ module TeacherSetsHelper
     grade_and_lexile_json.each do |gd|
       grade = gd.strip
       return [grade] if grade.upcase.include?('PRE')
-
-      grade_arr = grade.gsub('.', '').split('-')
+      
+      grade_arr = grade.delete('.').split('-')
       if grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
         grades_arr << grade
         return grades_arr
@@ -109,27 +108,27 @@ module TeacherSetsHelper
     grades_resp.each do |grade_or_lexile_json|
       begin
         if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
-          return grade_or_lexile_json.gsub('Lexile ', '').gsub('L', '').split(' ')[0].split('-')
+          return grade_or_lexile_json.delete('Lexile ').delete('L').split(' ')[0].split('-')
         elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
           if grade_or_lexile_json.upcase.include?('PRE')
             # Prek values: ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek'] - supporting these values only
             PREK_ARR.each do |val|
-              grades = grade_or_lexile_json.upcase.gsub('.', '').split("#{val}-")
+              grades = grade_or_lexile_json.upcase.delete('.').split("#{val}-")
               return [TeacherSet::PRE_K_VAL, grade_val(grades[1])] if grades.length > 1
             end
           elsif grade_or_lexile_json.upcase.include?('K')
             # K values: [K, k] - supporting these values only
-            grade = grade_or_lexile_json.upcase.gsub('.', '').split('K-')[1]
+            grade = grade_or_lexile_json.upcase.delete('.').split('K-')[1]
             return [TeacherSet::K_VAL, grade_val(grade)]
           else
-            return grade_or_lexile_json.gsub('.', '').split('-')
+            return grade_or_lexile_json.delete('.').split('-')
           end
         elsif grade_or_lexile_json.upcase.include?('K')
           # K values: [K, k] - supporting these values only
-          grade = grade_or_lexile_json.upcase.gsub('.', '').split('K-')[1]
+          grade = grade_or_lexile_json.upcase.delete('.').split('K-')[1]
           return [TeacherSet::K_VAL, grade_val(grade)]
         else
-          return grade_or_lexile_json.gsub('.', '').split('-')
+          return grade_or_lexile_json.delete('.').split('-')
         end
       end
     rescue
@@ -138,20 +137,16 @@ module TeacherSetsHelper
   end
 
 
-  def all_var_fields(marc_tag, tag)
-    begin
-      @req_body['varFields'].select{ |hash| hash['marc_tag'] == marc_tag }.map{|x| x['subfields'][0]['content']}
-    rescue
-      return nil
-    end
+  def all_var_fields(marc_tag)
+    @req_body['varFields'].select { |hash| hash['marc_tag'] == marc_tag }.map { |x| x['subfields'][0]['content'] }
+  rescue
+    return nil
   end
 
 
   def fixed_field(marc_tag)
-    begin
-      @req_body['fixedFields'][marc_tag]['display']
-    rescue
-      return nil
-    end
+    @req_body['fixedFields'][marc_tag]['display']
+  rescue
+    return nil
   end
 end
