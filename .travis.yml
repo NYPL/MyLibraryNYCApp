@@ -1,9 +1,19 @@
 language: ruby
+  # 2020-08-04: caching significantly reduces build time in travis,
+  # but we're currently having issues with obtaining correct cached rvm
+  # cache:
+  #   bundler: true
+  #   directories:
+  #   - "/home/travis/.rvm/"
 rvm:
 - 2.5.7
 before_install:
+  # 2019-10-16: added to fix errors when upgrading rails env
+  # 2020-08-04: removed to fix errors with travis deployment -- 
+  # looks like travis internal rvm handling has changed
+  # - rvm use 2.5.7 --install --binary --fuzzy
 - gem --version
-- gem install bundler -v '< 2'
+- gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
 before_script:
 - bundle exec rubocop
@@ -12,16 +22,17 @@ services:
 script:
 - bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
+# recreate test database from db/schema.rb
 - bundle exec rake db:schema:load RAILS_ENV=test
+# helps travis update its test db.  seems the schema load below doesn't always do it.
 - bundle exec rake db:migrate RAILS_ENV=test
-- bundle exec rake combined_tests:test
+# - bundle exec rake db:test:prepare  # NOTE: might need this later.
+# - bundle exec rake combined_tests:test
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
-  access_key_id:
-    secure: 7Qp2i0ce0h67Rsk9/2irUAJttcqzmJf8chrZiXq1a+WWWYuKpYd7STqcJz2wRV/WD044jAWAJt2117vb+0zmMamOGmyVMnd3gwILrdBjmllz2aH6Z/GKUsIXYH7GQ+zjEPICaRdsVSkEgweDtkA7fsIij8HAQ/YfXsdGq03V6903EDBJ327qsxs8JIWUx6tM4owRgo5swrzyPH+KQ7oUiWOizLF5Op/FeIDeQkwhgs5sQGejkAU01ey4H2wDw3RZbKgyCZK/PUK++kkesia8RkYIi7C0u+jBDkqjJylaBeMhtMVwl2PC0aMGuF0pBrmR71x+zNVxhhekskaJN9DkMOoycB4/t8yTFPWSuU+vKcqeut+jgV+XxNb+cmw3kmRTlR/s73hCcIga5GTmVoWB6/fN0ttYipTU+BiCDgIOdyd3KPC451z5+PzDTaWOgHN2fw1UGRxHXYp4DsnpWyxpRLc3U6hebwSUn8LB0zx6/AI+CODD0SzDzTsdcWdK3sj2ZhLxioEaAydLI2pLsf4dOIG/xPBgPqr4mQzcU6cX2e2gT5UrcRJnE1i+pqKkpKpfxAnS0CCiBxY/fhFWIJLodZjDH6x5fztgez9B5VQk/mhhgiiRv15PV0ZOOibtqao7vAp3ZkfJeVkqLyDG4bQfEnWgW9tAYkY+mqse7g84i8E=
-  secret_access_key:
-    secure: kHUJAlXQa7tDgVguVZndX0nC+xJ7l0gvLeKo4zHalwC1Sy9Z9is0sTSigEzFo4JdVfh8tSBjOxKoeFs1ZU98vgJPGunVMeYxjj5pszxhVGL9PBk0ec4CVdLRDr7wNkhvAnUhNbiSCKOufRcN1NsCXKe3DINyYel0QmJSyuVyt9Y4pWtIOD4hTn1R3N4E5+GZJ7xkOLGEKVk9a479f+TCZG1fTg4HKZSE6ZhpGAv8D6+55POmmZZ+CkUat8ukACY+pYz5444bfZRP662HmNsEnUudxSQtLR4H9/mzkNXWDZuxu6y3j8fSZSIRyJsqIzB9carRLcViqglvJlZrs2Sb3r8ta31VgN6ugpn+Oujj8TF+OsvUMbsHo66GsyB1Ly/drtSboOcdAlTn2Qcae+7hdY2zqJjxPQdgL9iHacM6HEaGNDGHfDOaNwCE0JeLLcCNsL/R6feDIKjokus+M/fczzk0yMcO0v/kqHjKtgJZKmGPeKas8kwNtsTMR6f/ziFiHHbaM0MRgIRYNyUJTfbmhfJL/Ll3IRVNiCPVJmwPLXtE0mzvo6tkfMNXFutkGs195sGpDId9BjuzcoU42y/dupMl5iTm+a0OSJ0YePa4CbTe1grIJQrtrpy6RRjXoS4UYg7HOHpP1OQfv1IxeNzm90qtFJ0Z0kHyOy3p+YO18x8=
+  access_key_id: "$AWS_ACCESS_KEY_ID_DEVELOPMENT"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY_DEVELOPMENT"
   region: us-east-1
   app: my-library-nyc-app
   env: my-library-nyc-app-dev-1002
@@ -32,10 +43,8 @@ deploy:
     branch: development
 - provider: elasticbeanstalk
   skip_cleanup: true
-  access_key_id:
-    secure: FOCoAtIpdP8eBQsqfnnHKXdQhen7lNzOO1INTzKLjBGuSGlfcgKseWlY3Y7hQH4RUnUtOcUhbTpDTuKFy2KHDb8OvNFKD1OuDR2GgjlY3YAeOlRYGGdzqg274U06Z1G3LoexKNtlks0pb3RL1bgudIyPZ5jJE001P3RnxY4wTvC3rU1YzEf0hvxUR5Ow6fhqa3xw5QW6t3bUOpGeLwXa8pthxZpWwd5mKJ2ehhgznVqbVg2Bu8uX56DDqLV2xupaf8yert8karWQSEd7Xf9WzjO7vuH+9SZa6MFdZZ4ofF3H+xAcpfkcSWYScNmPDBqW/lt1xBTMBSCX0XpgFxPBT8BCQc5y9fxQUeXmJMwEP0H1Lte6Z7KKKYSXDY716u7Mu/DtgcsGIzkCqdHeHXUgxMYMg1uagK4MIuAOywMXMCfroTTeyniAOGYWKPzsUzQAmxMmn8Xr6tonnsG5lwo+zQbyFoAw6OMZCxdarGOg+pzoDSvvBhdSH9vJb8z5wqlVrkAa92vq60CEyWeCxW2BPANnZptL8/Cvc/L2SJBjmFtXrKYTG5u2ILuqyN6rOCcjfs66xIVzg+qe9QBb9qKFP4vzEelfwYe8RK3NPimjpO5SpWFXJ1I+murDghqL/g1O3AGBA93HCs0dzPcOPAcIpZqrt1zlRZ8QTrRSr2YgaXg=
-  secret_access_key:
-    secure: tL2bf5kopX8yCddyyHcrEbUL/TlyhwqWmaNHFiV26lgIZrZ/WW4dIn2DJaKTsYXpMUhAsBzXZkRD31/eiI9jYcIbuV9PaAjWvULR/TIM0PoHQokprkRKcxIZr4N4d8wzqb2N7VGdq/9Uo2jsziFSye26eTRDz0qolZZHs8rbZ3tMVviw/Usk7zbRQHPjzCO9C4Kvl1HHkkKmJMf1AADsYtB1N8vsMYDgDktdTswipQf35k//Lxrvg2BshueBw0cX7/aqV6Mf0OUEeyXGAVqYnW1VnVo2i15d3jmzbsbpTs6Faz2c62+SSqUe4v6pBqiEsta9iyEcqXyuIuqgG7bpJ0Km4nHmB6sKSSw+MkjwB6g2SYm97Gh/TsgAR9CtbONclDIpTWQYYgpYbChCsxNrujzDxf8wD3sq5mzxlN4oCrCg0uwFZ/jDdnVtTBjd6DUQDC9OcTpXkNQGcy/Z72S7jG7leFCR84CBRDD2jhnpgMcK+PLCL5x1knchqvSJmcLF0K6ENAxHMJkv+XeBUyUWNJ3sBdZy6m45enMVBzfUrVUHYj/+iogjXnA3Mgexaj+O26YuFIredPnv6M6larbUOUtA+dYAT7nwx5rHDkRR6aWf5/dhVTrNiRp312P218rQ09L1alsVbHzstFFOc3a8wmEUGDdLlEvM8IgG97inOGE=
+  access_key_id: "$AWS_ACCESS_KEY_ID_QA"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY_QA"
   region: us-east-1
   app: my-library-nyc-app
   env: my-library-nyc-app-qa25
