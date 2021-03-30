@@ -31,10 +31,8 @@ script:
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
-  access_key_id: 
-    secure: "$AWS_ACCESS_KEY_ID_DEVELOPMENT"
-  secret_access_key:
-    secure: "$AWS_SECRET_ACCESS_KEY_DEVELOPMENT"
+  access_key_id: "$AWS_ACCESS_KEY_ID_DEVELOPMENT"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY_DEVELOPMENT"
   region: us-east-1
   app: my-library-nyc-app
   env: my-library-nyc-app-dev-1002
