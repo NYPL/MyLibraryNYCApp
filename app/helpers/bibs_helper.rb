@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module BibHelper
+module BibsHelper
   include TeacherSetsHelper
   include MlnResponse
 
