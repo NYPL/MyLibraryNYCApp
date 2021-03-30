@@ -33,6 +33,7 @@ deploy:
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_DEVELOPMENT"
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_DEVELOPMENT"
+  bucket: 'my-library-nyc-config-development'
   region: us-east-1
   app: my-library-nyc-app
   env: my-library-nyc-app-dev-1002
@@ -45,6 +46,7 @@ deploy:
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_QA"
+  bucket: 'my-library-nyc-config-qa'
   region: us-east-1
   app: my-library-nyc-app
   env: my-library-nyc-app-qa25
