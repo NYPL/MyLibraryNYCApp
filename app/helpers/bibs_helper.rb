@@ -3,6 +3,7 @@
 module BibsHelper
   include TeacherSetsHelper
   include MlnResponse
+  include MlnHelper
 
   def validate_input_params(req_body, validate = false)
     bnumber = req_body['id']

@@ -3754,6 +3754,7 @@ TWO_TEACHER_SETS_TO_DELETE = [{
 SIERRA_USER = {"data"=>
   [{"barCodes"=>["27777023005746"],
     "id"=>7899158,
+    "title"=>'title',
     "updatedDate"=>"2020-07-28T23:24:45+00:00",
     "createdDate"=>"2020-07-28T23:24:45+00:00",
     "deleted"=>false,
@@ -3814,6 +3815,7 @@ SIERRA_USER = {"data"=>
       {"fieldTag"=>"z", "content"=>"qa-tester-8132@rssnyc.org"},
       {"fieldTag"=>"a", "content"=>"443 WEST 135 STREET$MANHATTAN, NY 10031"},
       {"fieldTag"=>"n", "content"=>"TESTER, QA"},
+      {"fieldTag"=>"r", "marcTag"=>"300", "content"=>"", "subfields"=>[{"tag"=>"a", "content"=>"physical desc"}]},
       {"fieldTag"=>"t", "content"=>"212-690-6800"}]}],
  "count"=>1,
  "statusCode"=>200}

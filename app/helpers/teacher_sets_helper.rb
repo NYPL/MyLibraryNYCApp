@@ -47,9 +47,9 @@ module TeacherSetsHelper
 
   def var_field_data(marc_tag, merge = true)
     if merge == true
-      @req_body['varFields'].detect { |hash| hash['marc_tag'] == marc_tag }['subfields'].map { |x| x['content'] }.join(', ')
+      @req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].map { |x| x['content'] }.join(', ')
     else
-      @req_body['varFields'].detect { |hash| hash['marc_tag'] == marc_tag }['subfields'].detect { |hash| hash['tag'] == 'a' }['content']
+      @req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].detect { |hash| hash['tag'] == 'a' }['content']
     end
   rescue StandardError
     nil
@@ -138,7 +138,7 @@ module TeacherSetsHelper
 
 
   def all_var_fields(marc_tag)
-    @req_body['varFields'].select { |hash| hash['marc_tag'] == marc_tag }.map { |x| x['subfields'][0]['content'] }
+    @req_body['varFields'].select { |hash| hash['marcTag'] == marc_tag }.map { |x| x['subfields'][0]['content'] }
   rescue StandardError
     nil
   end
