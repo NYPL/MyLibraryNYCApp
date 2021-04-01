@@ -103,21 +103,21 @@ class TeacherSetTest < ActiveSupport::TestCase
   describe "test get set_type value method" do
     it "Get set_type value " do
       set_type_val = "Topic Set."
-      resp = TeacherSet.get_set_type_value(@teacher_set, set_type_val)
+      resp = TeacherSet.derive_set_type(set_type_val)
       assert_equal("Topic Set", resp)
     end
 
     # Books count > 1
     it "Calculate set_type value based on the books count > 1" do
       set_type_val = "Book Club Set"
-      resp = TeacherSet.get_set_type_value(@teacher_set2, nil)
+      resp = TeacherSet.derive_set_type(nil)
       assert_equal(set_type_val, resp)
     end
 
     # Books count == 1
     it "Calculate set_type value based on the books count == 1" do
       set_type_val = "Topic Set"
-      resp = TeacherSet.get_set_type_value(@teacher_set, nil)
+      resp = TeacherSet.derive_set_type(nil)
       assert_equal(set_type_val, resp)
     end
   end

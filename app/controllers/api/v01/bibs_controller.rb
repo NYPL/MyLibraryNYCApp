@@ -50,21 +50,21 @@ class Api::V01::BibsController < Api::V01::GeneralController
       http_status = 200
       req_body = parse_request_body(request)[0]
       bib_id = req_body['id']
-      validate_input_params(bib_id)
+      validate_input_params(req_body)
       teacher_set = TeacherSet.delete_teacher_set(bib_id)
       response = SYS_SUCCESS.call('TeacherSet successlly deleted', { teacher_set: bib_response(teacher_set) }.to_json)
     rescue InvalidInputException => e
       http_status = 400
       message = e.message
-      response = SYS_FAILURE.call(e.code, e.message)
+      response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg)
     rescue BibRecordNotFoundException => e
       http_status = 404
       message = e.message
-      response = SYS_FAILURE.call(e.code, e.message)
+      response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg)
     rescue DBException, ElasticsearchException => e
       http_status = 500
       message = e.message
-      response = SYS_FAILURE.call(e.code, e.message)
+      response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg)
     rescue StandardError => e
       http_status = 500
       message = e.message
