@@ -2,37 +2,33 @@
 
 require 'test_helper'
 
-class TeacherSetsHelperTest < MiniTest::Test
+class TeacherSetsHelperTest < ActiveSupport::TestCase
   extend Minitest::Spec::DSL
   include LogWrapper
   include TeacherSetsHelper
 
-  def setup
+  before do
     @mintest_mock1 = MiniTest::Mock.new
     @mintest_mock2 = MiniTest::Mock.new
     @mintest_mock3 = MiniTest::Mock.new
     created_at = Time.zone.parse("2014-10-19 1:00:00")
     updated_at = Time.zone.parse("2014-10-19 1:00:00")
-    @teacher_set_obj = TeacherSet.new(title: "title", description: "description", contents: "contents", 
-      id: "123", details_url: "details_url", grade_end: 1, 
-      grade_begin: 1, availability: "available", total_copies: 1,
-      call_number: 12345, language: "English", physical_description: "physical_description",
-      primary_language: "English", created_at: created_at, updated_at: updated_at,
-      available_copies: 1, bnumber: "B456", set_type: "set_type",
-      area_of_study: "area_of_study", subjects: [])
-    @expected_resp = {:title => "title",:description => "description",:contents => "contents",
-       :id => 123,:details_url => "details_url",:grade_end => 1,:grade_begin => 1,:availability => "available",
-       :total_copies => 1, :call_number => "12345",:language => "English",
-       :physical_description => "physical_description",:primary_language => "English",
-       :created_at => "2014-10-19T01:00:00+0000",:updated_at => "2014-10-19T01:00:00+0000",:available_copies => 1,
-       :bnumber => "B456",:set_type => "set_type",:area_of_study => "area_of_study",:subjects => []}
+    @expected_resp = {:title => "MyString", :description => "MyText", :contents => nil,
+     :id => 252051579, :details_url => nil, :grade_end => nil, :grade_begin => nil,
+     :availability => nil, :total_copies => nil, :call_number => nil, :language => nil,
+     :physical_description => nil, :primary_language => nil, :created_at => "2014-10-19T01:00:00+0000",
+     :updated_at => "2014-10-19T01:00:00+0000", :available_copies => 2,
+     :bnumber => "123", :set_type => nil, :area_of_study => nil,
+     :subjects => [{:id => 570218967, :title => "Authors Russiantest", :created_at => "2021-04-01T14:52:07+0000", :updated_at => "2021-04-01T14:52:07+0000"},
+    {:id => 173724997, :title => "Social", :created_at => "2021-04-01T14:52:07+0000", :updated_at => "2021-04-01T14:52:07+0000"}]}
   end
 
   # test teacher set object method.
   describe "test teacher set object" do
     it 'test teacher set object' do
-      resp = teacher_set_info(@teacher_set_obj)
-      assert_equal(@expected_resp, resp)
+      @teacher_set = teacher_sets(:teacher_set_one)
+      resp = teacher_set_info(@teacher_set)
+      assert_equal(@expected_resp[:title], resp[:title])
     end
   end
 
