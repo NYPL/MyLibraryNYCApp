@@ -27,11 +27,11 @@ class Api::V01::BibsController < Api::V01::GeneralController
     rescue InvalidInputException => e
       http_status = 400
       message = e.message
-      response = SYS_FAILURE.call(e.code, e.message)
+      response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg)
     rescue DBException, ElasticsearchException => e
       http_status = 500
       message = e.message
-      response = SYS_FAILURE.call(e.code, e.message)
+      response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg)
     rescue StandardError => e
       http_status = 500
       message = e.message

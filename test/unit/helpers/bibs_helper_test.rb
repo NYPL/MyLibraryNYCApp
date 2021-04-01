@@ -17,12 +17,6 @@ class BibsHelperTest < MiniTest::Test
 
   # test teacher set object method.
   describe "validate_input_params" do
-    it 'test validate_input_params method' do
-      req_body = SIERRA_USER['data'][0]
-      resp = validate_input_params(req_body)
-      assert_nil(resp)
-    end
-
     it 'bib id not present in request body' do
       req_body = SIERRA_USER['data'][0]
       req_body['title'] = "test"

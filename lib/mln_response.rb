@@ -3,12 +3,12 @@
 # KeikoResponse Module defines all the System responses
 
 module MlnResponse
-  SYS_SUCCESS = lambda do |msg, data = {}| 
-    { code: '00000', success: true, message: msg, data: data, timestamp: Time.zone.now } 
+  SYS_SUCCESS = lambda do |msg, detailed_msg = nil, data = {}| 
+    { code: '00000', success: true, message: "#{msg} #{detailed_msg}", data: data, timestamp: Time.zone.now } 
   end
 
-  SYS_FAILURE = lambda do |code, msg, data = {}| 
-    { code: code, success: false, message: msg, data: data, timestamp: Time.zone.now }
+  SYS_FAILURE = lambda do |code, msg, detailed_msg = nil, data = {}| 
+    { code: code, success: false, message: "#{msg} #{detailed_msg}", data: data, timestamp: Time.zone.now }
   end
 
   API_BAD_REQUEST                           = {code: 'MLN-00001', msg: 'Bad Request.'}.freeze

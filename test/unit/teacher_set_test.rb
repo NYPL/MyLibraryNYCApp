@@ -12,6 +12,7 @@ class TeacherSetTest < ActiveSupport::TestCase
     @hold1 = holds(:hold1)
     @hold2 = holds(:hold2)
     @teacher_set = teacher_sets(:teacher_set_one)
+    @teacher_set2 = teacher_sets(:teacher_set_two)
     @teacher_set3 = teacher_sets(:teacher_set_three)
     @teacher_set4 = teacher_sets(:teacher_set_four)
     @model = TeacherSet.new
@@ -99,25 +100,24 @@ class TeacherSetTest < ActiveSupport::TestCase
   # If subfields.content type is "Book Club Set" set_type value  stored as 'single' in teacher_sets table.
   # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
-  describe "update set_type value in teacher set table" do
-    it "test set_type value with Topic set" do
-      set_type_val = "Topic Set"
-      teacher_set = @teacher_set4
-      resp = teacher_set.update_set_type(set_type_val)
-      assert_equal(set_type_val, resp)
+  describe "test get set_type value method" do
+    it "Get set_type value " do
+      set_type_val = "Topic Set."
+      resp = TeacherSet.get_set_type_value(@teacher_set, set_type_val)
+      assert_equal("Topic Set", resp)
     end
 
-    it "test set_type value with Book Club Set" do
+    # Books count > 1
+    it "Calculate set_type value based on the books count > 1" do
       set_type_val = "Book Club Set"
-      teacher_set = @teacher_set3
-      resp = teacher_set.update_set_type(set_type_val)
+      resp = TeacherSet.get_set_type_value(@teacher_set2, nil)
       assert_equal(set_type_val, resp)
     end
 
-    it "test set_type value with nil" do
-      set_type_val = nil
-      teacher_set = crank!(:teacher_set)
-      resp = teacher_set.update_set_type(set_type_val)
+    # Books count == 1
+    it "Calculate set_type value based on the books count == 1" do
+      set_type_val = "Topic Set"
+      resp = TeacherSet.get_set_type_value(@teacher_set, nil)
       assert_equal(set_type_val, resp)
     end
   end
@@ -188,6 +188,58 @@ class TeacherSetTest < ActiveSupport::TestCase
     assert_equal(4, resp.count)
   end
 
+
+  # Update teacher-set document in ES
+  describe '#test create or update teacherset' do
+    before do
+      @es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
+                "_id" => "353", "_version" => 11, "result" => "noop", 
+                "_shards" => {"total" => 0, "successful" => 0, "failed" => 0}}
+      
+      created_at = Time.zone.parse("2014-10-19 1:00:00")
+      updated_at = Time.zone.parse("2014-10-19 1:00:00")
+      @ts_obj = TeacherSet.new(title: "title", description: "description", contents: "contents", 
+      id: 123, details_url: "details_url", grade_end: 1, 
+      grade_begin: 1, availability: "available", total_copies: 1,
+      call_number: 12345, language: "English", physical_description: "physical_description",
+      primary_language: "English", created_at: created_at, updated_at: updated_at,
+      available_copies: 1, bnumber: "B456", set_type: "set_type",
+      area_of_study: "area_of_study", subjects: [])
+
+      @expected_resp = {:title => "title",:description => "description",:contents => "contents",
+       :id => 123,:details_url => "details_url",:grade_end => 1,:grade_begin => 1,:availability => "available",
+       :total_copies => 1, :call_number => "12345",:language => "English",
+       :physical_description => "physical_description",:primary_language => "English",
+       :created_at => "2014-10-19T01:00:00+0000",:updated_at => "2014-10-19T01:00:00+0000",:available_copies => 1,
+       :bnumber => "B456",:set_type => "set_type",:area_of_study => "area_of_study",:subjects => []}
+    end
+
+    it 'update teacher-set document in es' do
+      resp = nil
+      @mintest_mock1.expect(:call, @expected_resp, [@ts_obj])
+      @mintest_mock2.expect(:update_document_by_id, @es_doc, [@expected_resp[:id], @expected_resp])
+      @ts_obj.stub :teacher_set_info, @mintest_mock1 do
+        ElasticSearch.stub :new, @mintest_mock2 do
+          resp = @ts_obj.create_or_update_teacherset_document_in_es
+        end
+      end
+      assert_equal(188, resp)
+    end
+  end
+
+  # Delete teacher-set document in ES
+  describe "delete teacherset record from_es" do
+    it 'test delete_teacherset_record_from_es' do
+      expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => "354", "_version" => 2, "result" => "deleted", 
+        "_shards" => {"total" => 2, "successful" => 1, "failed" => 0}, "_seq_no" => 294, "_primary_term" => 2}
+      @mintest_mock2.expect(:delete_document_by_id, expected_resp, [354])
+      resp = nil
+      ElasticSearch.stub :new, @mintest_mock2 do
+        resp = TeacherSet.delete_teacherset_record_from_es(354)
+      end
+      assert_equal(178, resp)
+    end
+  end
 
   private
 

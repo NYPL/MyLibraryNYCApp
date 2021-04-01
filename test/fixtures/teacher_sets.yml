@@ -5,7 +5,7 @@ teacher_set_one:
   title: MyString
   available_copies: 2
   bnumber: '123'
-  books: books_one
+  books: [books_one, books_two]
   subjects: [subjects_one, subjects_two]
 teacher_set_two:
   description: MyText1
