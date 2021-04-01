@@ -40,10 +40,6 @@ module TeacherSetsHelper
       area_of_study: ts_obj.area_of_study, subjects: subjects_arr }
   end
 
-  # Supporting only below grades
-  GRADES_1_12 = %w[1 2 3 4 5 6 7 8 9 10 11 12].freeze
-  PREK_K_GRADES = ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek', 'K', 'k'].freeze
-  PREK_ARR = ['PRE K', 'PRE-K', 'PREK'].freeze
 
   def var_field_data(marc_tag, merge = true)
     if merge == true

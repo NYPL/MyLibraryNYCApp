@@ -3771,7 +3771,7 @@ SIERRA_USER = {"data"=>
     "phones"=>[{"number"=>"212-690-6800", "type"=>"t"}, {"number"=>"A. Philip Randolph Campus High School", "type"=>"o"}],
     "moneyOwed"=>0.0,
     "fixedFields"=>
-     {"44"=>{"label"=>"E-Communications", "value"=>"-"},
+     {"44"=>{"label"=>"E-Communications", "value"=>"-", "display"=>"English"},
       "45"=>{"label"=>"Education Level", "value"=>"-"},
       "46"=>{"label"=>"Home Region", "value"=>"2"},
       "47"=>{"label"=>"Patron Type", "value"=>"151"},

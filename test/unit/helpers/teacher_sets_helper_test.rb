@@ -36,4 +36,44 @@ class TeacherSetsHelperTest < MiniTest::Test
     end
   end
 
+
+  describe 'Get var field data from request body' do
+    it 'test var-field method' do
+      self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
+      resp = var_field_data('300', merge = true)
+      assert_equal("physical desc", resp)
+
+      resp = var_field_data('300')
+      assert_equal("physical desc", resp)
+    end
+  end
+
+  describe 'Get all_var_fields data from request body' do
+    it 'test all_var_fields method' do
+      self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
+      resp = all_var_fields('300')
+      assert_equal(["physical desc"], resp)
+    end
+  end
+
+  describe 'test grade value method' do
+    it 'test pre-k grades' do
+      resp = grade_val('K')
+      assert_equal(0, resp)
+
+      resp = grade_val('PRE K')
+      assert_equal(-1, resp)
+
+      resp = grade_val(1)
+      assert_equal(1, resp)
+    end
+  end
+
+  describe 'Get fixed_field data from request body' do
+    it 'test fixed_field method' do
+      self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
+      resp = fixed_field('44')
+      assert_equal("English", resp)
+    end
+  end
 end
