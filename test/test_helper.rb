@@ -3952,7 +3952,7 @@ class ActiveSupport::TestCase
   end
 
   def mock_send_request_to_bib_service
-    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=&nyplSource=sierra-nypl").
+    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=998&nyplSource=sierra-nypl").
       with(headers: {
         'content-Type'=>'application/json',
         'Authorization'=>'Bearer testoken'
