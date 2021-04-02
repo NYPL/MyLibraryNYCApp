@@ -10,6 +10,6 @@ MyLibraryNYC::Application.configure do
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
-                  "my-library-nyc-app-qa25.unpc66pkwp.us-east-1.elasticbeanstalk.com"]
+                  ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL']]
   config.eager_load = true
 end
