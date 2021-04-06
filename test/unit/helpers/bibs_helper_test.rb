@@ -34,7 +34,7 @@ class BibsHelperTest < MiniTest::Test
 
     it 'title not present in request body' do
       req_body = SIERRA_USER['data'][0]
-      req_body['id'] = "456"
+      req_body['id'] = "7899158"
       req_body['title'] = ''
 
       exp_resp = { value: req_body['title'], error_msg: TITLE_EMPTY[:msg]}

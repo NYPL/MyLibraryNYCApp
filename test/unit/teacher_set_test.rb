@@ -189,8 +189,8 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'create_or_update_teacherset_document_in_es' do
-    it 'test create_or_update_teacherset_document_in_es' do
+  describe 'create_or_update_teacherset ' do
+    it 'test create or update teacherset' do
       ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
       TeacherSet.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
       bnumber = {bnumber: "b7899158"}
