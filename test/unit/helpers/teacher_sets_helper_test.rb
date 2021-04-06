@@ -15,7 +15,7 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
 
   describe 'Get var field data from request body' do
     it 'test var-field method' do
-      @teacher_set.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
+      self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
       assert_equal("physical desc", var_field_data('300', true))
     end
 
@@ -103,7 +103,7 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
       @mintest_mock1.expect(:call, grades, [var_field_entry])
       @mintest_mock2.expect(:call, grades, [grades])
 
-      return_grades = %w[3,8]
+      return_grades = %w[3 8]
       self.stub :all_var_fields, @mintest_mock1 do
         self.stub :get_grades, @mintest_mock2 do
           resp = grade_or_lexile_array('grade')
@@ -123,7 +123,7 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
       @mintest_mock2.expect(:call, grades, [grades])
 
       # Test1:
-      return_grades = %w[3,8]
+      return_grades = %w[3 8]
       self.stub :all_var_fields, @mintest_mock1 do
         self.stub :get_grades, @mintest_mock2 do
           resp = grade_or_lexile_array('521')
