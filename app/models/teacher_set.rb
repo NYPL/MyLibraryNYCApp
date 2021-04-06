@@ -168,18 +168,22 @@ class TeacherSet < ActiveRecord::Base
     end
     teacher_set
   end
+
   
+  def self.initialize_teacher_set(bib_id)
+    TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
+  end
+
 
   def self.create_or_update_teacher_set_data(req_body)
     @req_body = req_body
-
     bib_id = req_body['id']
-    teacher_set = TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
+    teacher_set = self.initialize_teacher_set(bib_id)
 
     # Calls Bib service for items.
     # Calculates the total number of items and available items in the list.
     ts_items_info = teacher_set.get_items_info_from_bibs_service(bib_id)
-    
+
     teacher_set.instance_variable_set(:@req_body, req_body)
     teacher_set.update_teacher_set_attributes_from_bib_request(ts_items_info)
 
@@ -187,10 +191,10 @@ class TeacherSet < ActiveRecord::Base
     teacher_set.clean_primary_subject
 
     # update all teacher-set subjects.
-    teacher_set.update_subjects_via_api(all_var_fields('650'))
+    teacher_set.update_subjects_via_api(teacher_set.all_var_fields('650'))
 
     # Create/Update all teacher-set notes.
-    teacher_set.update_notes(var_field_data('500', true))
+    teacher_set.update_notes(teacher_set.var_field_data('500', true))
 
     # Create/Update all books.
     teacher_set.update_included_book_list(req_body)
@@ -270,6 +274,7 @@ class TeacherSet < ActiveRecord::Base
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
   end
 
+  
   # Make request input body to create teacherset document in elastic search.
   # Input param ts_obj eg: <TeacherSet:0x00007fd79383a640 id: 350, title: "Step",call_number: "Teacher",
   # description: "Book", details_url: "http://catalog.nypl.org/record=b21378444~S1","updated-7571-Step up to the plate, Maria Singh">
@@ -930,7 +935,12 @@ class TeacherSet < ActiveRecord::Base
   def derive_set_type(set_type_field)
     set_type = set_type_field
     return set_type.strip().gsub(/\.$/, '').titleize if set_type.present?
-    self.books.count.to_i > 1 ? TOPIC_SET : self.books.count.to_i == 1? BOOK_CLUB_SET : nil
+    
+    if self.books.count.to_i > 1
+      return TOPIC_SET
+    elsif self.books.count.to_i == 1
+      return BOOK_CLUB_SET
+    end
   end
 
   

@@ -8,38 +8,25 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
   include TeacherSetsHelper
 
   before do
+    @teacher_set = TeacherSet.new
     @mintest_mock1 = MiniTest::Mock.new
     @mintest_mock2 = MiniTest::Mock.new
-    @mintest_mock3 = MiniTest::Mock.new
-    created_at = Time.zone.parse("2014-10-19 1:00:00")
-    updated_at = Time.zone.parse("2014-10-19 1:00:00")
-    @expected_resp = {:title => "MyString", :description => "MyText", :contents => nil,
-     :id => 252051579, :details_url => nil, :grade_end => nil, :grade_begin => nil,
-     :availability => nil, :total_copies => nil, :call_number => nil, :language => nil,
-     :physical_description => nil, :primary_language => nil, :created_at => "2014-10-19T01:00:00+0000",
-     :updated_at => "2014-10-19T01:00:00+0000", :available_copies => 2,
-     :bnumber => "123", :set_type => nil, :area_of_study => nil,
-     :subjects => [{:id => 570218967, :title => "Authors Russiantest", :created_at => "2021-04-01T14:52:07+0000", :updated_at => "2021-04-01T14:52:07+0000"},
-    {:id => 173724997, :title => "Social", :created_at => "2021-04-01T14:52:07+0000", :updated_at => "2021-04-01T14:52:07+0000"}]}
   end
-
-  # test teacher set object method.
-  describe "test teacher set object" do
-    it 'test teacher set object' do
-      @teacher_set = teacher_sets(:teacher_set_one)
-      resp = teacher_set_info(@teacher_set)
-      assert_equal(@expected_resp[:title], resp[:title])
-    end
-  end
-
 
   describe 'Get var field data from request body' do
     it 'test var-field method' do
-      self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
-      assert_equal("physical desc", var_field_data('300', merge = true))
+      @teacher_set.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
+      assert_equal("physical desc", var_field_data('300', true))
+    end
 
-      resp = var_field_data('300')
-      assert_equal("physical desc", var_field_data('300'))
+    it 'test var-field method with content' do
+      self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
+      assert_equal("physical desc", var_field_data('300', false))
+    end
+
+    it 'test var-field method with req_body nil' do
+      self.instance_variable_set(:@req_body, nil)
+      assert_equal(nil, var_field_data('300'))
     end
   end
 
@@ -48,10 +35,15 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
       self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
       assert_equal(["physical desc"], all_var_fields('300'))
     end
+
+    it 'test all_var_fields method with req_body nil' do
+      self.instance_variable_set(:@req_body, nil)
+      assert_nil(all_var_fields('300'))
+    end
   end
 
   describe 'test grade value method' do
-    it 'test pre-k grades' do
+    it 'test pre-k and K grades' do
       assert_equal(0, grade_val('K'))
 
       assert_equal(-1, grade_val('PRE K'))
@@ -61,10 +53,85 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
   end
 
   describe 'Get fixed_field data from request body' do
-    it 'test fixed_field method' do
+    it 'test fixed_field method with req_body' do
       self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
       resp = fixed_field('44')
       assert_equal("English", resp)
+    end
+
+    it 'test fixed_field method with req_body nil' do
+      self.instance_variable_set(:@req_body, nil)
+      resp = fixed_field('44')
+      assert_nil(resp)
+    end
+  end
+
+  describe 'test grades' do
+    it 'test grades from prek-12' do
+      grades = ["3-8"]
+      resp = get_grades(grades)
+      assert_equal(grades, resp)
+    end
+
+    it 'test unknown grades' do
+      grades = ["14"]
+      resp = get_grades(grades)
+      assert_equal([-1], resp)
+
+      grades = ["1-14"]
+      resp = get_grades(grades)
+      assert_equal(["1"], resp)
+
+      grades = ["14-2"]
+      resp = get_grades(grades)
+      assert_equal(["2"], resp)
+    end
+  end
+
+  describe 'return grades array' do
+    before do
+      @mintest_mock1 = MiniTest::Mock.new
+      @mintest_mock1 = MiniTest::Mock.new
+      TeacherSetsHelper.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
+    end
+
+    it 'test teacher_set grades' do
+      # Test1
+      grades = ["3-8."]
+      var_field_entry = '521'
+      resp = nil
+      @mintest_mock1.expect(:call, grades, [var_field_entry])
+      @mintest_mock2.expect(:call, grades, [grades])
+
+      return_grades = %w[3,8]
+      self.stub :all_var_fields, @mintest_mock1 do
+        self.stub :get_grades, @mintest_mock2 do
+          resp = grade_or_lexile_array('grade')
+        end
+      end
+      assert_equal(resp, return_grades)
+      @mintest_mock1.verify
+      @mintest_mock2.verify
+    end
+
+    # Test2
+    it 'test unknown teacher_set grades' do
+      grades = ["3-8."]
+      var_field_entry = '521'
+      resp = nil
+      @mintest_mock1.expect(:call, grades, [var_field_entry])
+      @mintest_mock2.expect(:call, grades, [grades])
+
+      # Test1:
+      return_grades = %w[3,8]
+      self.stub :all_var_fields, @mintest_mock1 do
+        self.stub :get_grades, @mintest_mock2 do
+          resp = grade_or_lexile_array('521')
+        end
+      end
+      assert_equal(resp, return_grades)
+      @mintest_mock1.verify
+      @mintest_mock2.verify
     end
   end
 end
