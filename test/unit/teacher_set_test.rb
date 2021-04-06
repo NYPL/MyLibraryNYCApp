@@ -25,6 +25,7 @@ class TeacherSetTest < ActiveSupport::TestCase
     @mintest_mock7 = MiniTest::Mock.new
     @mintest_mock8 = MiniTest::Mock.new
     @mintest_mock9 = MiniTest::Mock.new
+    @mintest_mock10 = MiniTest::Mock.new
   end
   
 
@@ -206,6 +207,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       @mintest_mock7.expect(:call, "Learning set", ['500', true])
       @mintest_mock8.expect(:call, teacher_set, ["Learning set"])
       @mintest_mock9.expect(:call, teacher_set, [SIERRA_USER["data"][0]])
+      @mintest_mock10.expect(:call, teacher_set)
 
       TeacherSet.stub :initialize_teacher_set, teacher_set, ['7899158'] do
         teacher_set.stub :get_items_info_from_bibs_service, @mintest_mock2 do
@@ -216,7 +218,9 @@ class TeacherSetTest < ActiveSupport::TestCase
                   teacher_set.stub :var_field_data, @mintest_mock7 do
                     teacher_set.stub :update_notes, @mintest_mock8 do
                       teacher_set.stub :update_included_book_list, @mintest_mock9 do
-                        resp = TeacherSet.create_or_update_teacher_set_data(SIERRA_USER["data"][0])
+                        teacher_set.stub :create_or_update_teacherset_document_in_es, @mintest_mock10 do
+                          resp = TeacherSet.create_or_update_teacher_set_data(SIERRA_USER["data"][0])
+                        end
                       end
                     end
                   end
@@ -236,6 +240,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       @mintest_mock7.verify
       @mintest_mock8.verify
       @mintest_mock9.verify
+      @mintest_mock10.verify
     end
   end
 
