@@ -40,6 +40,9 @@ Metrics/LineLength:
 Style/IfUnlessModifier:
   Enabled: false
 
+Style/RedundantSelf:
+  Enabled: false
+
 Metrics/AbcSize:
   Enabled: false
   
