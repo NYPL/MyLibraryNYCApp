@@ -244,6 +244,27 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
+
+  describe 'delete teacher_set record from db and ES' do
+    it 'test delete_teacher_set_method' do
+      bib_id = SIERRA_USER["data"][0]['id']
+      teacher_set = TeacherSet.new(bnumber: "b#{bib_id}")
+      @mintest_mock1.expect(:call, teacher_set, [bib_id])
+      @mintest_mock2.expect(:call, teacher_set)
+      @mintest_mock3.expect(:call, teacher_set)
+
+      resp = nil
+      TeacherSet.stub :get_teacher_set_by_bnumber, @mintest_mock1 do
+        teacher_set.stub :destroy, @mintest_mock2 do
+          teacher_set.stub :delete_teacherset_record_from_es, @mintest_mock3 do
+            resp = TeacherSet.delete_teacher_set(bib_id)
+          end
+        end
+      end
+      assert_equal(teacher_set.bnumber, resp.bnumber)
+    end
+  end
+
   def test_teacher_set_query
     params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
     resp = TeacherSet.for_query(params)
