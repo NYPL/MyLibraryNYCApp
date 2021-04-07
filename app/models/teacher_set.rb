@@ -150,26 +150,6 @@ class TeacherSet < ActiveRecord::Base
   end
 
   
-  # Delete teacher-set record from db and elastic search.
-  def self.delete_teacher_set(bib_id)
-    # Get teacher-set record by bib_id
-    teacher_set = self.get_teacher_set_by_bnumber(bib_id)
-    unless teacher_set.present?
-      raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code],BIB_RECORD_NOT_FOUND[:msg])
-    end
-
-    # Delete teacher-set record
-    resp = teacher_set.destroy
-    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
-    # If feature flag is enabled delete data from elasticsearch.
-    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      # After deletion of teacherset data from db than delete teacherset doc from elastic search
-      teacher_set.delete_teacherset_record_from_es if resp.destroyed?
-    end
-    teacher_set
-  end
-
-  
   def self.initialize_teacher_set(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
   end
@@ -209,6 +189,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
+  # Update teacher-set table from bib request body.
   def update_teacher_set_attributes_from_bib_request(ts_items_info)
     self.update(
       title: @req_body['title'],
@@ -259,7 +240,28 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+
+  # Delete teacher-set record from db and elastic search.
+  def self.delete_teacher_set(bib_id)
+    # Get teacher-set record by bib_id
+    teacher_set = self.get_teacher_set_by_bnumber(bib_id)
+    unless teacher_set.present?
+      raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code],BIB_RECORD_NOT_FOUND[:msg])
+    end
     
+    # Delete teacher-set record
+    resp = teacher_set.destroy
+
+    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+    # If feature flag is enabled delete data from elasticsearch.
+    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      # After deletion of teacherset data from db than delete teacherset doc from elastic search
+      teacher_set.delete_teacherset_record_from_es if resp.destroyed?
+    end
+    teacher_set
+  end
+
+
   # When Delete request comes from sierra, than delete teacher set document in elastic search.
   def delete_teacherset_record_from_es
     ts_id = self.id
