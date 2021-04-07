@@ -15,10 +15,9 @@ class Api::V01::BibsController < Api::V01::GeneralController
     begin
       LogWrapper.log('DEBUG', {'message' => 'create_or_update_teacher_sets.start','method' => 'bibs_controller.create_or_update_teacher_sets'})
       http_status = 200
-      
       req_body = parse_request_body(request)[0]
 
-      # validate req body input params
+      # Raise validations if input params missing
       validate_input_params(req_body, true)
 
       # create/update teacher-set data from bib request_body.
@@ -50,7 +49,11 @@ class Api::V01::BibsController < Api::V01::GeneralController
       http_status = 200
       req_body = parse_request_body(request)[0]
       bib_id = req_body['id']
+
+      # Raise validations if input params missing
       validate_input_params(req_body)
+
+      # Delete teacher-set from db and elastic-search.
       teacher_set = TeacherSet.delete_teacher_set(bib_id)
       response = SYS_SUCCESS.call('TeacherSet successlly deleted', { teacher_set: bib_response(teacher_set) }.to_json)
     rescue InvalidInputException => e

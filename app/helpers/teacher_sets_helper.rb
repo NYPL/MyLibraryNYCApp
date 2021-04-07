@@ -6,11 +6,17 @@ module TeacherSetsHelper
   PREK_K_GRADES = ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek', 'K', 'k'].freeze
   PREK_ARR = ['PRE K', 'PRE-K', 'PREK'].freeze
 
+  
   def var_field_data(marc_tag, merge = true)
+    var_field(@req_body, marc_tag, merge)
+  end
+
+
+  def var_field(req_body, marc_tag, merge = true)
     if merge == true
-      @req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].map { |x| x['content'] }.join(', ')
+      req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].map { |x| x['content'] }.join(', ')
     else
-      @req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].detect { |hash| hash['tag'] == 'a' }['content']
+      req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].detect { |hash| hash['tag'] == 'a' }['content']
     end
   rescue StandardError
     nil

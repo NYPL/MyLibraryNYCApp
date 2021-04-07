@@ -15,7 +15,6 @@ module MlnHelper
 
   
   def parse_request_body(request)
-    request.body.rewind
     body = request.body.read
     raise InvalidInputException.new(EMPTY_REQUEST_BODY[:code], EMPTY_REQUEST_BODY[:msg]) unless body.present?
 

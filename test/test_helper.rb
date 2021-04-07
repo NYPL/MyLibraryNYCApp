@@ -3753,7 +3753,7 @@ TWO_TEACHER_SETS_TO_DELETE = [{
 
 SIERRA_USER = {"data"=>
   [{"barCodes"=>["27777023005746"],
-    "id"=>7899158,
+    "id"=>'7899158',
     "title"=>'title',
     "updatedDate"=>"2020-07-28T23:24:45+00:00",
     "createdDate"=>"2020-07-28T23:24:45+00:00",

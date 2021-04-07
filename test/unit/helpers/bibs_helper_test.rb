@@ -61,7 +61,7 @@ class BibsHelperTest < MiniTest::Test
   describe 'read var field value' do
     it 'test var field method' do
       req_body = SIERRA_USER['data'][0]
-      resp = var_field('300', req_body)
+      resp = var_field(req_body, '300')
       assert_equal('physical desc', resp)
     end
   end

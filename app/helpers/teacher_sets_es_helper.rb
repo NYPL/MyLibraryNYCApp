@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module TeacherSetsEsHelper
-  # Make teacherset object from elastic search json
-  def create_ts_object_from_es_json(json)
+  # Make teacherset object from elastic search document
+  def teacher_set_from_es_json(es_doc)
     arr = []
-    if json[:hits].present? && json[:hits].present?
-      json[:hits].each do |ts|
-        teacher_set = TeacherSet.new
+    if es_doc[:hits].present? && es_doc[:hits].present?
+      es_doc[:hits].each do |ts|
         next if ts["_source"]['mappings'].present?
-
+        
+        teacher_set = TeacherSet.new
         teacher_set.title = ts["_source"]['title']
         teacher_set.description = ts["_source"]['description']
         teacher_set.contents = ts["_source"]['contents']

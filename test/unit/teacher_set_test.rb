@@ -209,8 +209,8 @@ class TeacherSetTest < ActiveSupport::TestCase
       @mintest_mock9.expect(:call, teacher_set, [SIERRA_USER["data"][0]])
       @mintest_mock10.expect(:call, teacher_set)
 
-      TeacherSet.stub :initialize_teacher_set, teacher_set, ['7899158'] do
-        teacher_set.stub :get_items_info_from_bibs_service, @mintest_mock2 do
+      TeacherSet.stub :initialize_teacher_set, teacher_set, [7899158] do
+        teacher_set.stub :get_items_info_from_bibs_service, ts_items_info, [7899158] do
           teacher_set.stub :update_teacher_set_attributes_from_bib_request, @mintest_mock3 do
             teacher_set.stub :clean_primary_subject, @mintest_mock4 do
               teacher_set.stub :all_var_fields, @mintest_mock5 do
@@ -231,8 +231,6 @@ class TeacherSetTest < ActiveSupport::TestCase
         end
       end
       assert_equal(teacher_set.bnumber, resp.bnumber)
-      @mintest_mock1.verify
-      @mintest_mock2.verify
       @mintest_mock3.verify
       @mintest_mock4.verify
       @mintest_mock5.verify
@@ -247,7 +245,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'delete teacher_set record from db and ES' do
     it 'test delete_teacher_set_method' do
-      bib_id = SIERRA_USER["data"][0]['id']
+      bib_id = '1234'
       teacher_set = TeacherSet.new(bnumber: "b#{bib_id}")
       @mintest_mock1.expect(:call, teacher_set, [bib_id])
       @mintest_mock2.expect(:call, teacher_set)
@@ -262,6 +260,8 @@ class TeacherSetTest < ActiveSupport::TestCase
         end
       end
       assert_equal(teacher_set.bnumber, resp.bnumber)
+      @mintest_mock1.verify
+      @mintest_mock2.verify
     end
   end
 
@@ -299,13 +299,17 @@ class TeacherSetTest < ActiveSupport::TestCase
 
     it 'update teacher-set document in es' do
       resp = nil
-      @mintest_mock1.expect(:call, @expected_resp, [@ts_obj])
+      @mintest_mock1.expect(:call, @expected_resp)
       @mintest_mock2.expect(:update_document_by_id, @es_doc, [@expected_resp[:id], @expected_resp])
-      @teacher_set.stub :teacher_set_info, @mintest_mock1 do
+      
+      @ts_obj.stub :teacher_set_info, @mintest_mock1 do
         ElasticSearch.stub :new, @mintest_mock2 do
           resp = @ts_obj.create_or_update_teacherset_document_in_es
         end
       end
+
+      @mintest_mock1.verify
+      @mintest_mock2.verify
       assert_equal(188, resp)
     end
   end
@@ -315,11 +319,12 @@ class TeacherSetTest < ActiveSupport::TestCase
     it 'test delete_teacherset_record_from_es' do
       expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => @teacher_set.id, "_version" => 2, "result" => "deleted", 
         "_shards" => {"total" => 2, "successful" => 1, "failed" => 0}, "_seq_no" => 294, "_primary_term" => 2}
-      @mintest_mock2.expect(:delete_document_by_id, expected_resp, [@teacher_set.id])
+      @mintest_mock1.expect(:delete_document_by_id, expected_resp, [@teacher_set.id])
       resp = nil
-      ElasticSearch.stub :new, @mintest_mock2 do
+      ElasticSearch.stub :new, @mintest_mock1 do
         resp = @teacher_set.delete_teacherset_record_from_es
       end
+      @mintest_mock1.verify
       assert_equal(184, resp)
     end
   end
@@ -334,6 +339,25 @@ class TeacherSetTest < ActiveSupport::TestCase
       assert_equal(@teacher_set.subjects.count, resp[:subjects].count)
     end
   end
+
+
+  describe 'update set_type value in teacher_set table' do
+    it 'test update_set_type value' do
+      resp = nil
+      set_type_val = @teacher_set3.set_type
+      @mintest_mock1.expect(:call, set_type_val, [set_type_val])
+      @mintest_mock2.expect(:call, true, [set_type: set_type_val])
+
+      @teacher_set3.stub :derive_set_type, @mintest_mock1 do
+        TeacherSet.stub :update, @mintest_mock2 do
+          resp = @teacher_set3.update_set_type(set_type_val)
+        end
+      end
+      assert_equal(set_type_val, resp)
+      @mintest_mock1.verify
+    end
+  end
+
 
   private
 

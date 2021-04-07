@@ -8,7 +8,7 @@ module BibsHelper
   def validate_input_params(req_body, validate = false)
     bnumber = req_body['id']
     title = req_body['title']
-    physical_description = var_field('300', req_body)
+    physical_description = var_field(req_body, '300')
 
     req_body_params = []
 
@@ -25,12 +25,6 @@ module BibsHelper
     end
 
     validate_empty_values(req_body_params) if req_body_params.present?
-  end
-
-
-  def var_field(marc_tag, req_body)
-    @req_body = req_body
-    var_field_data(marc_tag)
   end
 
 
