@@ -55,36 +55,30 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
   describe 'Get fixed_field data from request body' do
     it 'test fixed_field method with req_body' do
       self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
-      resp = fixed_field('44')
-      assert_equal("English", resp)
+      assert_equal("English", fixed_field('44'))
     end
 
     it 'test fixed_field method with req_body nil' do
       self.instance_variable_set(:@req_body, nil)
-      resp = fixed_field('44')
-      assert_nil(resp)
+      assert_nil(fixed_field('44'))
     end
   end
 
   describe 'test grades' do
     it 'test grades from prek to 12' do
       grades = ["3-8"]
-      resp = get_grades(grades)
-      assert_equal(grades, resp)
+      assert_equal(grades, get_grades(grades))
     end
 
     it 'test unknown grades' do
       grades = ["14"]
-      resp = get_grades(grades)
-      assert_equal([-1], resp)
+      assert_equal([-1], get_grades(grades))
 
       grades = ["1-14"]
-      resp = get_grades(grades)
-      assert_equal(["1"], resp)
+      assert_equal(["1"], get_grades(grades))
 
       grades = ["14-2"]
-      resp = get_grades(grades)
-      assert_equal(["2"], resp)
+      assert_equal(["2"], get_grades(grades))
     end
   end
 

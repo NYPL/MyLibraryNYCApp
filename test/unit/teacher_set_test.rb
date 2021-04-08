@@ -354,8 +354,8 @@ class TeacherSetTest < ActiveSupport::TestCase
 
 
   # Delete teacher-set document in ES
-  describe "delete teacherset record from_es" do
-    it 'test delete_teacherset_record_from_es' do
+  describe "delete teacherset record from elastic search" do
+    it 'test delete_teacherset_record_from_es method' do
       expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => @teacher_set.id, "_version" => 2, "result" => "deleted", 
         "_shards" => {"total" => 2, "successful" => 1, "failed" => 0}, "_seq_no" => 294, "_primary_term" => 2}
       @mintest_mock1.expect(:delete_document_by_id, expected_resp, [@teacher_set.id])
@@ -395,7 +395,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
 
   describe 'update set_type value in teacher_set table' do
-    it 'test update_set_type value' do
+    it 'test update_set_type value method' do
       resp = nil
       set_type_val = @teacher_set3.set_type
       @mintest_mock1.expect(:call, set_type_val, [set_type_val])
@@ -410,17 +410,17 @@ class TeacherSetTest < ActiveSupport::TestCase
       @mintest_mock1.verify
     end
 
-    it 'test StandardError value' do
+    it 'test StandardError while updating the set_type' do
       resp = nil
       teacher_set = TeacherSet.new
-      set_type_val = "&&&&&&7"
-      @mintest_mock1.expect(:call, set_type_val)
-      @mintest_mock2.expect(:call, nil, [type: set_type_val])
+      invalid_set_type = "&&&&&&7"
+      @mintest_mock1.expect(:call, invalid_set_type)
+      @mintest_mock2.expect(:call, nil, [type: invalid_set_type])
 
       resp = assert_raises(StandardError) do
         teacher_set.stub :derive_set_type, @mintest_mock1 do
           TeacherSet.stub :update, @mintest_mock2 do
-            resp = teacher_set.update_set_type(set_type_val)
+            resp = teacher_set.update_set_type(invalid_set_type)
           end
         end
       end
@@ -454,7 +454,7 @@ class TeacherSetTest < ActiveSupport::TestCase
   end
 
 
-  describe 'test clear primary_subject column' do
+  describe 'clear primary_subject column in teacher_set table' do
     it 'test clean_primary_subject method' do
       resp = @teacher_set4.clean_primary_subject
       assert_equal(144, resp)

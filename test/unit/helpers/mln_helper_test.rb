@@ -10,11 +10,7 @@ class MlnHelperTest < MiniTest::Test
   include MlnHelper
 
   describe 'validate input params' do
-    it 'validate api input params' do
-      input_params = [{ value: 'bnumber', error_msg: BIB_NUMBER_EMPTY[:msg]}]
-      resp = validate_empty_values(input_params)
-      assert_equal(input_params[0][:value], resp[0][:value])
-
+    it 'validate empty value' do
       input_params = [{ value: [], error_msg: BIB_NUMBER_EMPTY[:msg]}]
       resp = assert_raises(InvalidInputException) do
         validate_empty_values(input_params)
