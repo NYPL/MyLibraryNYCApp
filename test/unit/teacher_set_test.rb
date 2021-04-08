@@ -402,12 +402,13 @@ class TeacherSetTest < ActiveSupport::TestCase
       @mintest_mock2.expect(:call, true, [set_type: set_type_val])
 
       @teacher_set3.stub :derive_set_type, @mintest_mock1 do
-        TeacherSet.stub :update, @mintest_mock2 do
+        @teacher_set3.stub :update, @mintest_mock2 do
           resp = @teacher_set3.update_set_type(set_type_val)
         end
       end
       assert_equal(set_type_val, resp)
       @mintest_mock1.verify
+      @mintest_mock2.verify
     end
 
     it 'test StandardError while updating the set_type' do
