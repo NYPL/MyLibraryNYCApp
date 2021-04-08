@@ -251,38 +251,35 @@ class TeacherSetTest < ActiveSupport::TestCase
       bib_id = '1234'
       teacher_set = TeacherSet.new(bnumber: "b#{bib_id}")
       @mintest_mock1.expect(:call, teacher_set, [bib_id])
-      @mintest_mock2.expect(:call, teacher_set)
-      @mintest_mock3.expect(:call, teacher_set)
+  
 
       resp = nil
       TeacherSet.stub :get_teacher_set_by_bnumber, @mintest_mock1 do
-        teacher_set.stub :destroy, @mintest_mock2 do
-          teacher_set.stub :delete_teacherset_record_from_es, @mintest_mock3 do
+        teacher_set.stub :destroy, teacher_set do
+          teacher_set.stub :delete_teacherset_record_from_es, teacher_set do
             resp = TeacherSet.delete_teacher_set(bib_id)
           end
         end
       end
       assert_equal(teacher_set.bnumber, resp.bnumber)
       @mintest_mock1.verify
-      @mintest_mock2.verify
     end
 
     it 'test bib record not found exception' do
       bib_id = '1234'
+      resp = nil
       teacher_set = TeacherSet.new(bnumber: "")
       @mintest_mock1.expect(:call, [], [bib_id])
-      @mintest_mock2.expect(:call, teacher_set)
-
-      resp = nil
       resp = assert_raises(BibRecordNotFoundException) do
         TeacherSet.stub :get_teacher_set_by_bnumber, @mintest_mock1 do
-          teacher_set.stub :delete_teacherset_record_from_es, @mintest_mock2 do
+          teacher_set.stub :delete_teacherset_record_from_es, teacher_set do
             resp = TeacherSet.delete_teacher_set(bib_id)
           end
         end
       end
       assert_equal(BIB_RECORD_NOT_FOUND[:code], resp.code)
       assert_equal(BIB_RECORD_NOT_FOUND[:msg], resp.message)
+      @mintest_mock1.verify
     end
   end
 
@@ -414,15 +411,12 @@ class TeacherSetTest < ActiveSupport::TestCase
     it 'test StandardError while updating the set_type' do
       resp = nil
       teacher_set = TeacherSet.new
-      invalid_set_type = "&&&&&&7"
-      @mintest_mock1.expect(:call, invalid_set_type)
-      @mintest_mock2.expect(:call, nil, [type: invalid_set_type])
+      set_type = "Topic Set"
+      @mintest_mock1.expect(:call, set_type)
 
       resp = assert_raises(StandardError) do
         teacher_set.stub :derive_set_type, @mintest_mock1 do
-          TeacherSet.stub :update, @mintest_mock2 do
-            resp = teacher_set.update_set_type(invalid_set_type)
-          end
+          resp = teacher_set.update_set_type(set_type)
         end
       end
       assert_equal(TEACHERSET_SETTYPE_ERROR[:code], resp.code)
