@@ -915,8 +915,7 @@ class TeacherSet < ActiveRecord::Base
   def update_set_type(set_type_val)
     begin
       set_type = derive_set_type(set_type_val)
-      LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
-      self.update(set_type: set_type)
+      update(set_type: set_type)
     rescue StandardError => e
       LogWrapper.log('ERROR', {'message' => "Error occcured while updating the set_type value: #{set_type}",
                                'method' => 'teacher_set.update_set_type'})
