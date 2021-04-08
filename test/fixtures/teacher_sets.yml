@@ -4,7 +4,7 @@ teacher_set_one:
   description: MyText
   title: MyString
   available_copies: 2
-  bnumber: '123'
+  bnumber: 'b123'
   books: [books_one, books_two]
   subjects: [subjects_one, subjects_two]
   created_at: Time.zone.parse("2014-10-19 1:00:00")

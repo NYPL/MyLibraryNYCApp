@@ -359,6 +359,30 @@ class TeacherSetTest < ActiveSupport::TestCase
   end
 
 
+  describe 'recalculate teacher-set availability column' do
+    it 'test recalculate_availability method' do
+      resp = @teacher_set3.recalculate_availability
+      assert_equal(true, resp)
+    end
+  end
+
+
+  describe 'Get teacher_set by bib number' do
+    it 'test get_teacher_set_by_bnumber method' do
+      bib_id = 123
+      resp = TeacherSet.get_teacher_set_by_bnumber(bib_id)
+      assert_equal("b#{bib_id}", resp.bnumber)
+    end
+  end
+
+  describe 'create or get teacher_set' do
+    it 'test initialize_teacher_set method' do
+      bib_id = 123
+      resp = TeacherSet.initialize_teacher_set(bib_id)
+      assert_equal("b#{bib_id}", resp.bnumber)
+    end
+  end
+
   private
 
   def bib_id_not_found_response
