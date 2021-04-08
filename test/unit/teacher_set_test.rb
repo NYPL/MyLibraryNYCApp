@@ -7,6 +7,7 @@ class TeacherSetTest < ActiveSupport::TestCase
   extend Minitest::Spec::DSL
   include LogWrapper
   include MlnResponse
+  include MlnException
 
   before do
     @user = holds(:hold1).user
@@ -264,6 +265,24 @@ class TeacherSetTest < ActiveSupport::TestCase
       assert_equal(teacher_set.bnumber, resp.bnumber)
       @mintest_mock1.verify
       @mintest_mock2.verify
+    end
+
+    it 'test bib record not found exception' do
+      bib_id = '1234'
+      teacher_set = TeacherSet.new(bnumber: "")
+      @mintest_mock1.expect(:call, [], [bib_id])
+      @mintest_mock2.expect(:call, teacher_set)
+
+      resp = nil
+      resp = assert_raises(BibRecordNotFoundException) do
+        TeacherSet.stub :get_teacher_set_by_bnumber, @mintest_mock1 do
+          teacher_set.stub :delete_teacherset_record_from_es, @mintest_mock2 do
+            resp = TeacherSet.delete_teacher_set(bib_id)
+          end
+        end
+      end
+      assert_equal(BIB_RECORD_NOT_FOUND[:code], resp.code)
+      assert_equal(BIB_RECORD_NOT_FOUND[:msg], resp.message)
     end
   end
 

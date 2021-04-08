@@ -156,7 +156,6 @@ class TeacherSet < ActiveRecord::Base
 
 
   def self.create_or_update_teacher_set_data(req_body)
-    @req_body = req_body
     bib_id = req_body['id']
     teacher_set = self.initialize_teacher_set(bib_id)
 
