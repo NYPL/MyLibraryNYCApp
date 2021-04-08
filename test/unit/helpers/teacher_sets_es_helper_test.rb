@@ -23,7 +23,7 @@ class TeacherSetsEsHelperTest < MiniTest::Test
                       "area_of_study" => "English Language Arts", 
                       "subjects" => [{"id" => 65025, "title" => "East Indian Americans", "created_at" => "2020-05-11T16:39:52+0000", 
                                       "updated_at" => "2020-05-11T16:39:52+0000"}]},"sort" => [1.0, "available", 1589311935000, "352"]}]}
-      resp = teacher_set_from_es_json(es_json)
+      resp = teacher_set_from_elastic_search_doc(es_json)
       assert_equal(es_json[:hits].first["_id"], resp.first.id.to_s)
     end
   end

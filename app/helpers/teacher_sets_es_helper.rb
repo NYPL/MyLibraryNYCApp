@@ -2,7 +2,7 @@
 
 module TeacherSetsEsHelper
   # Make teacherset object from elastic search document
-  def teacher_set_from_es_json(es_doc)
+  def teacher_set_from_elastic_search_doc(es_doc)
     arr = []
     if es_doc[:hits].present? && es_doc[:hits].present?
       es_doc[:hits].each do |ts|
