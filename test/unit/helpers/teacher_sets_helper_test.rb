@@ -67,7 +67,7 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
   end
 
   describe 'test grades' do
-    it 'test grades from prek-12' do
+    it 'test grades from prek to 12' do
       grades = ["3-8"]
       resp = get_grades(grades)
       assert_equal(grades, resp)

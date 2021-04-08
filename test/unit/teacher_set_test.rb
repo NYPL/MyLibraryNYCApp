@@ -409,6 +409,37 @@ class TeacherSetTest < ActiveSupport::TestCase
       assert_equal(set_type_val, resp)
       @mintest_mock1.verify
     end
+
+    it 'test StandardError value' do
+      resp = nil
+      teacher_set = TeacherSet.new
+      set_type_val = "&&&&&&7"
+      @mintest_mock1.expect(:call, set_type_val)
+      @mintest_mock2.expect(:call, nil, [type: set_type_val])
+
+      resp = assert_raises(StandardError) do
+        teacher_set.stub :derive_set_type, @mintest_mock1 do
+          TeacherSet.stub :update, @mintest_mock2 do
+            resp = teacher_set.update_set_type(set_type_val)
+          end
+        end
+      end
+      assert_equal(TEACHERSET_SETTYPE_ERROR[:code], resp.code)
+      assert_equal(TEACHERSET_SETTYPE_ERROR[:msg], resp.message)
+    end
+  end
+
+
+  describe 'get set-type value method' do
+    it 'test book club set set_type value' do
+      resp = @teacher_set.get_set_type('single')
+      assert_equal(TeacherSet::BOOK_CLUB_SET, resp)
+    end
+
+    it 'test topic set set_type value' do
+      resp = @teacher_set.get_set_type('multi')
+      assert_equal(TeacherSet::TOPIC_SET, resp)
+    end
   end
 
 

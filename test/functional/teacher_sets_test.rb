@@ -14,11 +14,6 @@ class TeacherSetsTest < ActionController::TestCase
     @ts_one = teacher_sets(:teacher_set_one)
   end
 
-  test "test school strong params" do
-    @teacher_set.update_set_type_from_nil_to_value
-    assert_response :success
-  end
-
   test 'test item microservice api endpoint' do
     @teacher_set.send(:send_request_to_items_microservice, BNUMBER1)
     assert_response :success
