@@ -3818,6 +3818,7 @@ SIERRA_USER = {"data"=>
       {"fieldTag"=>"d", "marcTag"=>"650", "ind1"=>"", "ind2"=>"0", "content"=>"null", "subfields"=>[{"tag"=>"a", "content"=>"Elections."}]},
       {"fieldTag"=>"r", "marcTag"=>"300", "content"=>"", "subfields"=>[{"tag"=>"a", "content"=>"physical desc"}]},
       {"fieldTag"=>"n", "marcTag"=>"500", "ind1"=>" ", "ind2"=>" ", "content"=>"null", "subfields"=> [{"tag"=>"a", "content"=> "Learning set"}]},
+      {"fieldTag"=>"n", "marcTag"=>"526", "ind1"=>" ", "ind2"=>" ", "content"=>"null", "subfields"=> [{"tag"=>"a", "content"=> "Topic Set"}]},
       {"fieldTag"=>"t", "content"=>"212-690-6800"}]}],
  "count"=>1,
  "statusCode"=>200}

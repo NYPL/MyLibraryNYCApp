@@ -29,6 +29,7 @@ teacher_set_four:
   available_copies: 2
   bnumber: '123418'
   set_type: 'Topic Set'
+  area_of_study: 'English'
   subjects: school_one
 teacher_set_five:
   description: MyText1

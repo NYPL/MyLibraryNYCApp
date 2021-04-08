@@ -454,6 +454,13 @@ class TeacherSetTest < ActiveSupport::TestCase
   end
 
 
+  describe 'test clear primary_subject column' do
+    it 'test clean_primary_subject method' do
+      resp = @teacher_set4.clean_primary_subject
+      assert_equal(144, resp)
+    end
+  end
+
   describe 'recalculate teacher-set availability column' do
     it 'test recalculate_availability method' do
       resp = @teacher_set3.recalculate_availability
