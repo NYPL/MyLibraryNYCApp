@@ -430,7 +430,7 @@ class TeacherSetTest < ActiveSupport::TestCase
   end
 
 
-  describe 'get set-type value method' do
+  describe 'get set-type value' do
     it 'test book club set set_type value' do
       resp = @teacher_set.get_set_type('single')
       assert_equal(TeacherSet::BOOK_CLUB_SET, resp)
@@ -438,6 +438,17 @@ class TeacherSetTest < ActiveSupport::TestCase
 
     it 'test topic set set_type value' do
       resp = @teacher_set.get_set_type('multi')
+      assert_equal(TeacherSet::TOPIC_SET, resp)
+    end
+
+    it 'get set_type value from bib_response' do
+      bib_id = 7899158
+      resp = OpenStruct.new(data: SIERRA_USER["data"], code: 200)
+      @mintest_mock1.expect(:call, resp, [bib_id])
+      resp = nil
+      @teacher_set3.stub :send_request_to_bibs_microservice, @mintest_mock1 do
+        resp = @teacher_set3.get_set_type_value_from_bib_response(bib_id)
+      end
       assert_equal(TeacherSet::TOPIC_SET, resp)
     end
   end
