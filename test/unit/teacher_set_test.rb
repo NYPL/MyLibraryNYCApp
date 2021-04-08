@@ -6,6 +6,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   extend Minitest::Spec::DSL
   include LogWrapper
+  include MlnResponse
 
   before do
     @user = holds(:hold1).user
@@ -15,6 +16,7 @@ class TeacherSetTest < ActiveSupport::TestCase
     @teacher_set2 = teacher_sets(:teacher_set_two)
     @teacher_set3 = teacher_sets(:teacher_set_three)
     @teacher_set4 = teacher_sets(:teacher_set_four)
+
     @model = TeacherSet.new
     @mintest_mock1 = MiniTest::Mock.new
     @mintest_mock2 = MiniTest::Mock.new
@@ -268,7 +270,7 @@ class TeacherSetTest < ActiveSupport::TestCase
   def test_teacher_set_query
     params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
     resp = TeacherSet.for_query(params)
-    assert_equal(4, resp.count)
+    assert_equal(5, resp.count)
   end
 
 
@@ -312,7 +314,25 @@ class TeacherSetTest < ActiveSupport::TestCase
       @mintest_mock2.verify
       assert_equal(188, resp)
     end
+
+    it 'test StandardError while updating elastic-search' do
+      resp = nil
+      @mintest_mock1.expect(:call, @expected_resp)
+      @mintest_mock2.expect(:update_document_by_id, @es_doc, [nil, @expected_resp])
+    
+      resp = assert_raises(StandardError) do
+        @ts_obj.stub :teacher_set_info, @mintest_mock1 do
+          ElasticSearch.stub :new, @mintest_mock2 do
+            resp = @ts_obj.create_or_update_teacherset_document_in_es
+          end
+        end
+      end
+      assert_equal(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], resp.code)
+      assert_equal(ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg], resp.message)
+      @mintest_mock1.verify
+    end
   end
+
 
   # Delete teacher-set document in ES
   describe "delete teacherset record from_es" do
@@ -326,6 +346,20 @@ class TeacherSetTest < ActiveSupport::TestCase
       end
       @mintest_mock1.verify
       assert_equal(184, resp)
+    end
+
+    it 'test StandardError while deleting elastic-search document' do
+      expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => @teacher_set.id, "_version" => 2, "result" => "deleted", 
+        "_shards" => {"total" => 2, "successful" => 1, "failed" => 0}, "_seq_no" => 294, "_primary_term" => 2}
+      @mintest_mock1.expect(:delete_document_by_id, expected_resp, [nil])
+      resp = nil
+      resp = assert_raises(StandardError) do
+        ElasticSearch.stub :new, @mintest_mock1 do
+          resp = @teacher_set.delete_teacherset_record_from_es
+        end
+      end
+      assert_equal(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], resp.code)
+      assert_equal(ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg], resp.message)
     end
   end
 
@@ -369,7 +403,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'Get teacher_set by bib number' do
     it 'test get_teacher_set_by_bnumber method' do
-      bib_id = 123
+      bib_id = 998
       resp = TeacherSet.get_teacher_set_by_bnumber(bib_id)
       assert_equal("b#{bib_id}", resp.bnumber)
     end
@@ -377,7 +411,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'create or get teacher_set' do
     it 'test initialize_teacher_set method' do
-      bib_id = 123
+      bib_id = 998
       resp = TeacherSet.initialize_teacher_set(bib_id)
       assert_equal("b#{bib_id}", resp.bnumber)
     end

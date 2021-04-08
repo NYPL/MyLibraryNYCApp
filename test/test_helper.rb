@@ -3832,7 +3832,7 @@ class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
         :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
-        :mock_send_request_to_bib_service, :mock_items_response_with_7899158
+        :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -4046,6 +4046,19 @@ class ActiveSupport::TestCase
 
   def mock_items_response_with_7899158
     stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=7899158&limit=25&offset=0").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization'=>'Bearer testoken',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Ruby'
+        }).to_return(status: 200, body: "", headers: {})
+  end
+
+
+  def mock_bib_response_with_123
+    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=123&nyplSource=sierra-nypl").
       with(
         headers: {
         'Accept'=>'*/*',

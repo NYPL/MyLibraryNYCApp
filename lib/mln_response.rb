@@ -21,8 +21,8 @@ module MlnResponse
   EMPTY_REQUEST_BODY                        = {code: 'MLN-00008', msg: 'Requested body is missing'}.freeze
   MLN_INVALID_REQUEST_BODY                  = {code: 'MLN-00009', msg: 'Request body is invalid'}.freeze
   UNEXPECTED_EXCEPTION                      = {code: 'MLN-00010', msg: 'Mln system error. Please contact the system administrator.'}.freeze
-  ELASTIC_SEARCH_STANDARD_EXCEPTION         = {code: 'MLN-00011', msg: 'Unexpected exception occurred at elasticsearch. \n
-                                                                        Please contact the system administrator.'}.freeze
+  ELASTIC_SEARCH_STANDARD_EXCEPTION         = {code: 'MLN-00011', msg: 'Unexpected exception occurred at elasticsearch.
+    Please contact the system administrator.'}.freeze
   TEACHER_SET_NOTE_EXCEPTION                = {code: 'MLN-00012', msg: 'Exception occurred while creating the teacher-set note'}.freeze
   BIB_RECORD_NOT_FOUND                      = {code: 'MLN-00013', msg: 'Bib record not found in MLN DB'}.freeze
 end
