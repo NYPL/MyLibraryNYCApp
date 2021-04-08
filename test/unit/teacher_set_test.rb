@@ -403,7 +403,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'Get teacher_set by bib number' do
     it 'test get_teacher_set_by_bnumber method' do
-      bib_id = 998
+      bib_id = 123
       resp = TeacherSet.get_teacher_set_by_bnumber(bib_id)
       assert_equal("b#{bib_id}", resp.bnumber)
     end
@@ -411,7 +411,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'create or get teacher_set' do
     it 'test initialize_teacher_set method' do
-      bib_id = 998
+      bib_id = 123
       resp = TeacherSet.initialize_teacher_set(bib_id)
       assert_equal("b#{bib_id}", resp.bnumber)
     end
