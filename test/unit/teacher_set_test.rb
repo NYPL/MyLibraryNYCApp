@@ -228,9 +228,6 @@ class TeacherSetTest < ActiveSupport::TestCase
       @es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
                 "_id" => "353", "_version" => 11, "result" => "updated", 
                 "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
-      
-      created_at = Time.zone.parse("2014-10-19 1:00:00")
-      updated_at = Time.zone.parse("2014-10-19 1:00:00")
     
       @expected_resp = {:title=>"MyString",:description=>"MyText",:contents=>nil,:id=>252051579,:details_url=>nil,
                         :grade_end=>nil,:grade_begin=>nil,:availability=>nil,:total_copies=>nil,
@@ -251,7 +248,6 @@ class TeacherSetTest < ActiveSupport::TestCase
       ElasticSearch.stub :new, elasticsearch_adapter_mock do
         resp = @teacher_set.create_or_update_teacherset_document_in_es
       end
-      assert_equal(@es_doc['result'], resp['result'])
       elasticsearch_adapter_mock.verify
     end
 
