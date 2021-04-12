@@ -186,21 +186,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'create_or_update_teacherset ' do
-
-    it 'test create or update teacherset' do
-      resp = nil
-      ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
-
-      @teacher_set6.stub :get_items_info_from_bibs_service, ts_items_info, [7899158] do
-        @teacher_set6.stub :create_or_update_teacherset_document_in_es, @teacher_set6 do
-          resp = TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
-        end
-      end
-      assert_equal(@teacher_set6.bnumber, resp.bnumber)
-    end
-  end
-
 
   describe 'test bib record not found exception' do
     it 'test bib record not found exception' do

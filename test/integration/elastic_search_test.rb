@@ -11,7 +11,7 @@ class ElasticSearchTest < ActionDispatch::IntegrationTest
   end
 
 
-  test 'Create teacher_set in  db and elastic-search' do
+  test 'Create teacher_set in db and elastic-search' do
     resp = TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
     assert_equal(SIERRA_USER["data"][0]['title'], resp.title)
   end
