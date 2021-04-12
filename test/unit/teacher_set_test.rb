@@ -382,6 +382,17 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
+
+  describe 'update teacher_set attributes form bib response' do
+    it 'test update_teacher_set_attributes_from_bib_request method' do
+      ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
+      req_body = SIERRA_USER['data'][0]
+      @teacher_set.instance_variable_set(:@req_body, req_body)
+      resp = @teacher_set.update_teacher_set_attributes_from_bib_request(ts_items_info)
+      assert_equal(@teacher_set.bnumber, resp.bnumber)
+    end
+  end
+
   private
 
   def bib_id_not_found_response

@@ -13,4 +13,9 @@ class Api::BibsControllerTest < ActionController::TestCase
     post 'create_or_update_teacher_set'
   end
 
+
+  test "delete teacher set" do
+    @controller.request = ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS
+    post 'delete_teacher_set'
+  end
 end
