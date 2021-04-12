@@ -29,7 +29,7 @@ class ElasticSearch
   def es_host(config)
     return unless config['host'].present?
 
-    return config['host'] if ENV['RAILS_ENV'] == "local"
+    return config['host'] if ["local", "test"].include?(ENV['RAILS_ENV'])
 
     es_host = AwsDecrypt.decrypt_kms(config['host'])
     return unless es_host.present?

@@ -35,7 +35,7 @@ namespace :combined_tests do
       # 'test/functional/schools_controller_test.rb',
       # 'test/functional/info_site_controller_test.rb',
       # 'test/functional/s3_controller_test.rb',
-      'test/functional/teacher_sets_test.rb',
+      'test/functional/teacher_sets_test.rb'
       # 'test/functional/*.rb',
       # 'test/functional/admin/*.rb',
       # 'test/unit/user_test.rb', 'test/unit/*.rb',
@@ -43,7 +43,7 @@ namespace :combined_tests do
       # 'test/unit/encrypt_decrypt_string_test.rb',
       # 'test/unit/news_letter_controller_unit_test.rb',
       # 'test/models/school_test.rb',
-      'test/unit/helpers/*.rb'
+      #'test/unit/helpers/*.rb'
     ].shuffle
 
     t.verbose = false
