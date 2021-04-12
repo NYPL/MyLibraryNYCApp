@@ -7,6 +7,7 @@ SimpleCov.start 'rails' do
   add_filter '/db/'
   add_filter '/test/' # for minitest
   add_filter 'lib/tasks/cleanup.rake'
+  add_filter 'lib/tasks/sync_users.rake'
 end
 # fail unit tests if total coverage dips below acceptable limit
 SimpleCov.minimum_coverage 61.3
