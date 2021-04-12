@@ -234,7 +234,7 @@ class TeacherSet < ActiveRecord::Base
     rescue StandardError => e
       LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}, message: #{e.message}",
                                'method' => __method__})
-      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
+      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], "#{e.message} #{e.backtrace}")
     end
   end
 
