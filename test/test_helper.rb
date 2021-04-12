@@ -4110,6 +4110,19 @@ class ActiveSupport::TestCase
         }).
       to_return(status: 200, body: "", headers: {})
   end
+
+  def mock_item_response_with_empty_bib
+    stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=&limit=25&offset=0").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization'=>'Bearer testoken',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Ruby'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
 end
 
 begin
