@@ -218,13 +218,13 @@ class TeacherSet < ActiveRecord::Base
   # Create or update teacherset document in elastic search.
   def create_or_update_teacherset_document_in_es
     body = teacher_set_info
-    @elastic_search = ElasticSearch.new
+    elastic_search = ElasticSearch.new
     begin
       # If teacherset document is found in elastic search than update document in ES.
-      @elastic_search.update_document_by_id(body[:id], body)
+      elastic_search.update_document_by_id(body[:id], body)
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
       # If teacherset document not found in elastic search than create document in ES.
-      resp = @elastic_search.create_document(body[:id], body)
+      resp = elastic_search.create_document(body[:id], body)
       if resp['result'] == "created"
         LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}",'method' => __method__})
       else
