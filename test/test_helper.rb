@@ -4055,7 +4055,7 @@ class ActiveSupport::TestCase
         'Authorization'=>'Bearer testoken',
         'Content-Type'=>'application/json',
         'User-Agent'=>'Ruby'
-        }).to_return(status: 200, body: "", headers: {})
+        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
   end
 
 

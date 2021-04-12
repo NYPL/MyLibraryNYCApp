@@ -39,3 +39,11 @@ teacher_set_five:
   set_type: 'Topic Set'
   subjects: school_one
   books: books_two
+teacher_set_six:
+  description: MyText1
+  title: MyString1
+  available_copies: 2
+  bnumber: 'b7899158'
+  set_type: 'Topic Set'
+  subjects: school_one
+  books: books_two

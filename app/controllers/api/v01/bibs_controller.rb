@@ -21,7 +21,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
       validate_input_params(req_body, true)
 
       # create/update teacher-set data from bib request_body.
-      teacher_set = TeacherSet.create_or_update_teacher_set_data(req_body)
+      teacher_set = TeacherSet.create_or_update_teacher_set(req_body)
       response = SYS_SUCCESS.call('TeacherSet successlly created', { teacher_set: bib_response(teacher_set) }.to_json)
     rescue InvalidInputException => e
       http_status = 400

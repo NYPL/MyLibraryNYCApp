@@ -17,18 +17,11 @@ class TeacherSetTest < ActiveSupport::TestCase
     @teacher_set2 = teacher_sets(:teacher_set_two)
     @teacher_set3 = teacher_sets(:teacher_set_three)
     @teacher_set4 = teacher_sets(:teacher_set_four)
-
+    @teacher_set6 = teacher_sets(:teacher_set_six)
     @model = TeacherSet.new
     @mintest_mock1 = MiniTest::Mock.new
     @mintest_mock2 = MiniTest::Mock.new
-    @mintest_mock3 = MiniTest::Mock.new
-    @mintest_mock4 = MiniTest::Mock.new
-    @mintest_mock5 = MiniTest::Mock.new
-    @mintest_mock6 = MiniTest::Mock.new
-    @mintest_mock7 = MiniTest::Mock.new
-    @mintest_mock8 = MiniTest::Mock.new
-    @mintest_mock9 = MiniTest::Mock.new
-    @mintest_mock10 = MiniTest::Mock.new
+    @elasticsearch_adapter_mock = Minitest::Mock.new
   end
   
 
@@ -194,99 +187,38 @@ class TeacherSetTest < ActiveSupport::TestCase
   end
 
   describe 'create_or_update_teacherset ' do
+
     it 'test create or update teacherset' do
-      ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
-      TeacherSet.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
-      bnumber = {bnumber: "b7899158"}
-      teacher_set = TeacherSet.new(bnumber: "b7899158")
-      subjects_arr = ["Elections."]
-
       resp = nil
-      @mintest_mock2.expect(:call, ts_items_info, [7899158])
-      @mintest_mock3.expect(:call, teacher_set, [ts_items_info])
-      @mintest_mock4.expect(:call, teacher_set)
-      @mintest_mock5.expect(:call, subjects_arr, ['650'])
-      @mintest_mock6.expect(:call, teacher_set, [subjects_arr])
-      @mintest_mock7.expect(:call, "Learning set", ['500', true])
-      @mintest_mock8.expect(:call, teacher_set, ["Learning set"])
-      @mintest_mock9.expect(:call, teacher_set, [SIERRA_USER["data"][0]])
-      @mintest_mock10.expect(:call, teacher_set)
+      ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
 
-      TeacherSet.stub :initialize_teacher_set, teacher_set, [7899158] do
-        teacher_set.stub :get_items_info_from_bibs_service, ts_items_info, [7899158] do
-          teacher_set.stub :update_teacher_set_attributes_from_bib_request, @mintest_mock3 do
-            teacher_set.stub :clean_primary_subject, @mintest_mock4 do
-              teacher_set.stub :all_var_fields, @mintest_mock5 do
-                teacher_set.stub :update_subjects_via_api, @mintest_mock6 do
-                  teacher_set.stub :var_field_data, @mintest_mock7 do
-                    teacher_set.stub :update_notes, @mintest_mock8 do
-                      teacher_set.stub :update_included_book_list, @mintest_mock9 do
-                        teacher_set.stub :create_or_update_teacherset_document_in_es, @mintest_mock10 do
-                          resp = TeacherSet.create_or_update_teacher_set_data(SIERRA_USER["data"][0])
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
+      @teacher_set6.stub :get_items_info_from_bibs_service, ts_items_info, [7899158] do
+        @teacher_set6.stub :create_or_update_teacherset_document_in_es, @teacher_set6 do
+          resp = TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
         end
       end
-      assert_equal(teacher_set.bnumber, resp.bnumber)
-      @mintest_mock3.verify
-      @mintest_mock4.verify
-      @mintest_mock5.verify
-      @mintest_mock6.verify
-      @mintest_mock7.verify
-      @mintest_mock8.verify
-      @mintest_mock9.verify
-      @mintest_mock10.verify
+      assert_equal(@teacher_set6.bnumber, resp.bnumber)
     end
   end
 
 
-  describe 'delete teacher_set record from db and ES' do
-    it 'test delete_teacher_set_method' do
-      bib_id = '1234'
-      teacher_set = TeacherSet.new(bnumber: "b#{bib_id}")
-      @mintest_mock1.expect(:call, teacher_set, [bib_id])
-  
-
-      resp = nil
-      TeacherSet.stub :get_teacher_set_by_bnumber, @mintest_mock1 do
-        teacher_set.stub :destroy, teacher_set do
-          teacher_set.stub :delete_teacherset_record_from_es, teacher_set do
-            resp = TeacherSet.delete_teacher_set(bib_id)
-          end
-        end
-      end
-      assert_equal(teacher_set.bnumber, resp.bnumber)
-      @mintest_mock1.verify
-    end
-
+  describe 'test bib record not found exception' do
     it 'test bib record not found exception' do
-      bib_id = '1234'
+      bib_id = '000'
       resp = nil
-      teacher_set = TeacherSet.new(bnumber: "")
-      @mintest_mock1.expect(:call, [], [bib_id])
+
       resp = assert_raises(BibRecordNotFoundException) do
-        TeacherSet.stub :get_teacher_set_by_bnumber, @mintest_mock1 do
-          teacher_set.stub :delete_teacherset_record_from_es, teacher_set do
-            resp = TeacherSet.delete_teacher_set(bib_id)
-          end
-        end
+        TeacherSet.delete_teacher_set(bib_id)
       end
       assert_equal(BIB_RECORD_NOT_FOUND[:code], resp.code)
       assert_equal(BIB_RECORD_NOT_FOUND[:msg], resp.message)
-      @mintest_mock1.verify
     end
   end
 
   def test_teacher_set_query
     params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
     resp = TeacherSet.for_query(params)
-    assert_equal(5, resp.count)
+    assert_equal(6, resp.count)
   end
 
 
@@ -294,88 +226,97 @@ class TeacherSetTest < ActiveSupport::TestCase
   describe '#test create or update teacherset' do
     before do
       @es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-                "_id" => "353", "_version" => 11, "result" => "noop", 
-                "_shards" => {"total" => 0, "successful" => 0, "failed" => 0}}
+                "_id" => "353", "_version" => 11, "result" => "updated", 
+                "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
       
       created_at = Time.zone.parse("2014-10-19 1:00:00")
       updated_at = Time.zone.parse("2014-10-19 1:00:00")
-      @ts_obj = TeacherSet.new(title: "title", description: "description", contents: "contents", 
-      id: 123, details_url: "details_url", grade_end: 1, 
-      grade_begin: 1, availability: "available", total_copies: 1,
-      call_number: 12345, language: "English", physical_description: "physical_description",
-      primary_language: "English", created_at: created_at, updated_at: updated_at,
-      available_copies: 1, bnumber: "B456", set_type: "set_type",
-      area_of_study: "area_of_study", subjects: [])
-
-      @expected_resp = {:title => "title",:description => "description",:contents => "contents",
-       :id => 123,:details_url => "details_url",:grade_end => 1,:grade_begin => 1,:availability => "available",
-       :total_copies => 1, :call_number => "12345",:language => "English",
-       :physical_description => "physical_description",:primary_language => "English",
-       :created_at => "2014-10-19T01:00:00+0000",:updated_at => "2014-10-19T01:00:00+0000",:available_copies => 1,
-       :bnumber => "B456",:set_type => "set_type",:area_of_study => "area_of_study",:subjects => []}
-    end
-
-    it 'update teacher-set document in es' do
-      resp = nil
-      @mintest_mock1.expect(:call, @expected_resp)
-      @mintest_mock2.expect(:update_document_by_id, @es_doc, [@expected_resp[:id], @expected_resp])
-      
-      @ts_obj.stub :teacher_set_info, @mintest_mock1 do
-        ElasticSearch.stub :new, @mintest_mock2 do
-          resp = @ts_obj.create_or_update_teacherset_document_in_es
-        end
-      end
-
-      @mintest_mock1.verify
-      @mintest_mock2.verify
-      assert_equal(188, resp)
-    end
-
-    it 'test StandardError while updating elastic-search' do
-      resp = nil
-      @mintest_mock1.expect(:call, @expected_resp)
-      @mintest_mock2.expect(:update_document_by_id, @es_doc, [nil, @expected_resp])
     
-      resp = assert_raises(StandardError) do
-        @ts_obj.stub :teacher_set_info, @mintest_mock1 do
-          ElasticSearch.stub :new, @mintest_mock2 do
-            resp = @ts_obj.create_or_update_teacherset_document_in_es
-          end
+      @expected_resp = {:title=>"MyString",:description=>"MyText",:contents=>nil,:id=>252051579,:details_url=>nil,
+                        :grade_end=>nil,:grade_begin=>nil,:availability=>nil,:total_copies=>nil,
+                        :call_number=>nil,:language=>nil,:physical_description=>nil,:primary_language=>nil,:created_at=>"2014-10-19T01:00:00+0000",
+                        :updated_at=>"2014-10-19T01:00:00+0000",:available_copies=>2,:bnumber=>"123",
+                        :set_type=>nil,:area_of_study=>nil,
+                        :subjects=>[{:id=>570218967, :title=>"Authors Russiantest", 
+                                     :created_at=>"2014-10-19T01:00:00+0000", :updated_at=>"2014-10-19T01:00:00+0000"},
+                                    {:id=>173724997, :title=>"Social", :created_at=>"2014-10-19T01:00:00+0000", 
+                                     :updated_at=>"2014-10-19T01:00:00+0000"}]}
+    end
+
+    it 'update teacher-set document in ElasticSearch' do
+      resp = nil
+      @elasticsearch_adapter_mock.expect(:update_document_by_id, @es_doc, [@teacher_set.id, @expected_resp])
+      
+      ElasticSearch.stub :new, @elasticsearch_adapter_mock do
+        resp = @teacher_set.create_or_update_teacherset_document_in_es
+      end
+      assert_equal(@es_doc['result'], resp['result'])
+      @elasticsearch_adapter_mock.verify
+    end
+
+    it 'raises ElasticsearchException when ElasticSearch raises StandardError' do
+      resp = nil
+      detail_msg = 'exception occured'
+      @elasticsearch_adapter_mock.expect(:update_document_by_id, nil) do
+        raise StandardError, detail_msg
+      end
+    
+      resp = assert_raises(ElasticsearchException) do
+        ElasticSearch.stub :new, @elasticsearch_adapter_mock do
+          @teacher_set.create_or_update_teacherset_document_in_es
         end
       end
       assert_equal(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], resp.code)
       assert_equal(ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg], resp.message)
-      @mintest_mock1.verify
+      @elasticsearch_adapter_mock.verify
     end
   end
 
 
   # Delete teacher-set document in ES
-  describe "delete teacherset record from elastic search" do
-    it 'test delete_teacherset_record_from_es method' do
-      expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => @teacher_set.id, "_version" => 2, "result" => "deleted", 
-        "_shards" => {"total" => 2, "successful" => 1, "failed" => 0}, "_seq_no" => 294, "_primary_term" => 2}
-      @mintest_mock1.expect(:delete_document_by_id, expected_resp, [@teacher_set.id])
+  describe "Delete teacherset record from elastic search" do
+
+    it 'Delete teacher_set document from Elastic search' do
+      response = {"found" => true, "result" => 'deleted'}
+      @elasticsearch_adapter_mock.expect(:delete_document_by_id, response, [@teacher_set.id])
       resp = nil
-      ElasticSearch.stub :new, @mintest_mock1 do
-        resp = @teacher_set.delete_teacherset_record_from_es
+      ElasticSearch.stub :new, @elasticsearch_adapter_mock do
+        @teacher_set.delete_teacherset_record_from_es
       end
-      @mintest_mock1.verify
-      assert_equal(184, resp)
+      @elasticsearch_adapter_mock.verify
     end
 
-    it 'test StandardError while deleting elastic-search document' do
-      expected_resp = {"_index" => "teacherset", "_type" => "teacherset", "_id" => @teacher_set.id, "_version" => 2, "result" => "deleted", 
-        "_shards" => {"total" => 2, "successful" => 1, "failed" => 0}, "_seq_no" => 294, "_primary_term" => 2}
-      @mintest_mock1.expect(:delete_document_by_id, expected_resp, [nil])
+    it 'raises ElasticsearchException when ElasticSearch raises NotFound' do
       resp = nil
-      resp = assert_raises(StandardError) do
-        ElasticSearch.stub :new, @mintest_mock1 do
-          resp = @teacher_set.delete_teacherset_record_from_es
+      detail_msg = "Teacher set data not found."
+      @elasticsearch_adapter_mock.expect(:delete_document_by_id, nil) do
+        raise Elasticsearch::Transport::Transport::Errors::NotFound, detail_msg
+      end
+
+      resp = assert_raises(ElasticsearchException) do
+        ElasticSearch.stub :new, @elasticsearch_adapter_mock do
+          @teacher_set.delete_teacherset_record_from_es
+        end
+      end
+      assert_equal(TEACHER_SET_NOT_FOUND_IN_ES[:code], resp.code)
+      assert_equal(TEACHER_SET_NOT_FOUND_IN_ES[:msg], resp.message)
+      @elasticsearch_adapter_mock.verify
+    end
+
+    it 'raises ElasticsearchException when ElasticSearch raises StandardError' do
+      resp = nil
+      detail_msg = 'exception occured'
+      @elasticsearch_adapter_mock.expect(:delete_document_by_id, nil) do
+        raise StandardError, detail_msg
+      end
+      resp = assert_raises(ElasticsearchException) do
+        ElasticSearch.stub :new, @elasticsearch_adapter_mock do
+          @teacher_set.delete_teacherset_record_from_es
         end
       end
       assert_equal(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], resp.code)
       assert_equal(ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg], resp.message)
+      @elasticsearch_adapter_mock.verify
     end
   end
 
@@ -395,66 +336,27 @@ class TeacherSetTest < ActiveSupport::TestCase
     it 'test update_set_type value method' do
       resp = nil
       set_type_val = @teacher_set3.set_type
-      @mintest_mock1.expect(:call, set_type_val, [set_type_val])
-      @mintest_mock2.expect(:call, true, [set_type: set_type_val])
-
-      @teacher_set3.stub :derive_set_type, @mintest_mock1 do
-        @teacher_set3.stub :update, @mintest_mock2 do
-          resp = @teacher_set3.update_set_type(set_type_val)
-        end
-      end
+      resp = @teacher_set3.update_set_type(set_type_val)
       assert_equal(set_type_val, resp)
-      @mintest_mock1.verify
-      @mintest_mock2.verify
-    end
-
-    it 'test StandardError while updating the set_type' do
-      resp = nil
-      teacher_set = TeacherSet.new
-      set_type = "Topic Set"
-      @mintest_mock1.expect(:call, set_type)
-
-      resp = assert_raises(StandardError) do
-        teacher_set.stub :derive_set_type, @mintest_mock1 do
-          resp = teacher_set.update_set_type(set_type)
-        end
-      end
-      assert_equal(TEACHERSET_SETTYPE_ERROR[:code], resp.code)
-      assert_equal(TEACHERSET_SETTYPE_ERROR[:msg], resp.message)
     end
   end
 
 
   describe 'get set-type value' do
-    it 'test book club set set_type value' do
-      resp = @teacher_set.get_set_type('single')
-      assert_equal(TeacherSet::BOOK_CLUB_SET, resp)
-    end
-
-    it 'test topic set set_type value' do
-      resp = @teacher_set.get_set_type('multi')
-      assert_equal(TeacherSet::TOPIC_SET, resp)
-    end
 
     it 'get set_type value from bib_response' do
       bib_id = 7899158
-      resp = OpenStruct.new(data: SIERRA_USER["data"], code: 200)
-      @mintest_mock1.expect(:call, resp, [bib_id])
+      expected_resp = OpenStruct.new(data: SIERRA_USER["data"], code: 200)
+      @mintest_mock1.expect(:call, expected_resp, [bib_id])
       resp = nil
       @teacher_set3.stub :send_request_to_bibs_microservice, @mintest_mock1 do
         resp = @teacher_set3.get_set_type_value_from_bib_response(bib_id)
       end
       assert_equal(TeacherSet::TOPIC_SET, resp)
+      @mintest_mock1.verify
     end
   end
 
-
-  describe 'clear primary_subject column in teacher_set table' do
-    it 'test clean_primary_subject method' do
-      resp = @teacher_set4.clean_primary_subject
-      assert_equal(144, resp)
-    end
-  end
 
   describe 'recalculate teacher-set availability column' do
     it 'test recalculate_availability method' do

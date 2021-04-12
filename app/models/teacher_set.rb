@@ -155,10 +155,9 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
-  def self.create_or_update_teacher_set_data(req_body)
+  def self.create_or_update_teacher_set(req_body)
     bib_id = req_body['id']
     teacher_set = self.initialize_teacher_set(bib_id)
-
     # Calls Bib service for items.
     # Calculates the total number of items and available items in the list.
     ts_items_info = teacher_set.get_items_info_from_bibs_service(bib_id)
@@ -222,7 +221,6 @@ class TeacherSet < ActiveRecord::Base
     begin
       # If teacherset document is found in elastic search than update document in ES.
       ElasticSearch.new.update_document_by_id(body[:id], body)
-      LogWrapper.log('DEBUG', {'message' => "Successfullly updated elastic search doc. Teacher set id #{body[:id]}",'method' => __method__})
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
       # If teacherset document not found in elastic search than create document in ES.
       resp = ElasticSearch.new.create_document(body[:id], body)
@@ -250,7 +248,6 @@ class TeacherSet < ActiveRecord::Base
     
     # Delete teacher-set record
     resp = teacher_set.destroy
-
     # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
     # If feature flag is enabled delete data from elasticsearch.
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
@@ -264,11 +261,9 @@ class TeacherSet < ActiveRecord::Base
   # When Delete request comes from sierra, than delete teacher set document in elastic search.
   def delete_teacherset_record_from_es
     ts_id = self.id
-    resp = ElasticSearch.new.delete_document_by_id(ts_id)
-    return unless resp["result"] == "deleted"
-    
-    LogWrapper.log('DEBUG', {'message' => "Successfullly deleted elastic search doc. Teacher set id #{ts_id}", 
-                             'method' => __method__})
+    ElasticSearch.new.delete_document_by_id(ts_id)
+  rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+    raise ElasticsearchException.new(TEACHER_SET_NOT_FOUND_IN_ES[:code], TEACHER_SET_NOT_FOUND_IN_ES[:msg])
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occured while deleting elastic search doc. Teacher set id #{ts_id}. Error: #{e.message}",
                              'method' => __method__})
@@ -890,17 +885,6 @@ class TeacherSet < ActiveRecord::Base
 
   # end
 
-
-  # If set_type value is 'single' return set_type value as 'Book Club Set'
-  # If set_type value is 'multi' return set_type value as 'Topic Set'
-  def get_set_type(set_type)
-    return unless set_type.present?
-    return BOOK_CLUB_SET if set_type == 'single'
-    return TOPIC_SET if set_type == 'multi'
-
-    set_type
-  end
-  
 
   # Save teacher-set set_type value
   def update_teacher_set_set_type_value(set_type_val)
