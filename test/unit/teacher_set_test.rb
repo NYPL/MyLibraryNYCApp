@@ -245,13 +245,14 @@ class TeacherSetTest < ActiveSupport::TestCase
 
     it 'update teacher-set document in ElasticSearch' do
       resp = nil
-      @elasticsearch_adapter_mock.expect(:update_document_by_id, @es_doc, [@teacher_set.id, @expected_resp])
+      elasticsearch_adapter_mock = Minitest::Mock.new
+      elasticsearch_adapter_mock.expect(:update_document_by_id, @es_doc, [@teacher_set.id, @expected_resp])
       
-      ElasticSearch.stub :new, @elasticsearch_adapter_mock do
+      ElasticSearch.stub :new, elasticsearch_adapter_mock do
         resp = @teacher_set.create_or_update_teacherset_document_in_es
       end
       assert_equal(@es_doc['result'], resp['result'])
-      @elasticsearch_adapter_mock.verify
+      elasticsearch_adapter_mock.verify
     end
 
     it 'raises ElasticsearchException when ElasticSearch raises StandardError' do
