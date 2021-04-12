@@ -3836,7 +3836,7 @@ class ActiveSupport::TestCase
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
         :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
         :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123, :mock_item_response_with_empty_bib,
-        :mock_elastic_search, :mock_elastic_search_token
+        :mock_elastic_search, :mock_elastic_search_token, :test1, :test2
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -4147,6 +4147,30 @@ class ActiveSupport::TestCase
         'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
         'User-Agent'=>'aws-sdk-ruby3/3.112.0',
         'X-Aws-Ec2-Metadata-Token-Ttl-Seconds'=>'21600'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
+
+
+  def test1
+    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'User-Agent'=>'aws-sdk-ruby3/3.112.0'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
+
+
+  def test2
+    stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'User-Agent'=>'aws-sdk-ruby3/3.112.0'
         }).
       to_return(status: 200, body: "", headers: {})
   end
