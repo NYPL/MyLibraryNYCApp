@@ -27,9 +27,9 @@ class ElasticSearch
   
   # Decode aws elastic-search url
   def es_host(config)
-    return unless config['host'].present?
+    return if !config['host'].present? || ENV['RAILS_ENV'] == "test"
 
-    return config['host'] if ["local", "test"].include?(ENV['RAILS_ENV'])
+    return config['host'] if ENV['RAILS_ENV'] == "local"
 
     es_host = AwsDecrypt.decrypt_kms(config['host'])
     return unless es_host.present?
