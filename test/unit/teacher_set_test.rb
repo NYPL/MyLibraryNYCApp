@@ -243,11 +243,14 @@ class TeacherSetTest < ActiveSupport::TestCase
     it 'update teacher-set document in ElasticSearch' do
       resp = nil
       elasticsearch_adapter_mock = Minitest::Mock.new
+      @teacher_set.instance_variable_set(:@elastic_search, elasticsearch_adapter_mock)
+      
       elasticsearch_adapter_mock.expect(:update_document_by_id, @es_doc, [@teacher_set.id, @expected_resp])
       
       ElasticSearch.stub :new, elasticsearch_adapter_mock do
-        resp = @teacher_set.create_or_update_teacherset_document_in_es
+        @teacher_set.create_or_update_teacherset_document_in_es
       end
+
       elasticsearch_adapter_mock.verify
     end
 
