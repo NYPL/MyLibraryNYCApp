@@ -3835,7 +3835,8 @@ class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
         :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
-        :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123, :mock_item_response_with_empty_bib
+        :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123, :mock_item_response_with_empty_bib,
+        :mock_elastic_search
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -4121,6 +4122,18 @@ class ActiveSupport::TestCase
         'Authorization'=>'Bearer testoken',
         'Content-Type'=>'application/json',
         'User-Agent'=>'Ruby'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
+
+
+  def mock_elastic_search
+    stub_request(:post, "http://aqecahjqalewp8jbjnxiqvr4oy795dyg7inagr1glmstegetggaaalqwgbegcsqgsib3dqehbqcbozcboaibadcbmgyjkozihvcnaqcbmb4gcwcgsaflawqbljarbays9hsnvergrdg9vuwcarcabzytb/RGgKYco/pRRFwU2rC2P6CMfQs4ExV20e693vMOqQiBHalhLXLASQVJZkR8Izatvt9G3pdhB7RdWbFaUh1HBiwQemuRV0rUnM3bhhAYh7I2SVUJFVCG3a07zmDDBLeVtEW+KbVXv9Qw0E0=:9200/teacherset/teacherset/914202741/_update?refresh=true").
+      with(
+        body: "{\"doc\":{\"title\":\"title\",\"description\":null,\"contents\":null,\"id\":914202741,\"details_url\":\"http://catalog.nypl.org/record=b7899158~S1\",\"grade_end\":null,\"grade_begin\":null,\"availability\":\"unavailable\",\"total_copies\":0,\"call_number\":null,\"language\":null,\"physical_description\":\"physical desc\",\"primary_language\":null,\"created_at\":\"2021-04-12T18:23:59+0000\",\"updated_at\":\"2021-04-12T18:23:59+0000\",\"available_copies\":0,\"bnumber\":\"b7899158\",\"set_type\":\"Topic Set\",\"area_of_study\":null,\"subjects\":[]}}",
+        headers: {
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Faraday v0.17.4'
         }).
       to_return(status: 200, body: "", headers: {})
   end
