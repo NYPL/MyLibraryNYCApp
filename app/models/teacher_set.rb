@@ -176,7 +176,7 @@ class TeacherSet < ActiveRecord::Base
 
     # Create/Update all books.
     teacher_set.update_included_book_list(req_body)
-      
+
     # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
     # If feature flag is enabled create/update data in elasticsearch.
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
@@ -234,7 +234,7 @@ class TeacherSet < ActiveRecord::Base
     rescue StandardError => e
       LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}, message: #{e.message}",
                                'method' => __method__})
-      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], "#{e.message} #{e.backtrace}")
+      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
     end
   end
 
