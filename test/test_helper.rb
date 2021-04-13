@@ -3770,7 +3770,7 @@ SIERRA_USER = {"data"=>
     "phones"=>[{"number"=>"212-690-6800", "type"=>"t"}, {"number"=>"A. Philip Randolph Campus High School", "type"=>"o"}],
     "moneyOwed"=>0.0,
     "fixedFields"=>
-     {"44"=>{"label"=>"E-Communications", "value"=>"-"},
+     {"44"=>{"label"=>"E-Communications", "value"=>"-", 'display'=>"English"},
       "45"=>{"label"=>"Education Level", "value"=>"-"},
       "46"=>{"label"=>"Home Region", "value"=>"2"},
       "47"=>{"label"=>"Patron Type", "value"=>"151"},
@@ -3807,8 +3807,9 @@ SIERRA_USER = {"data"=>
       "270"=>{"label"=>"Total Registrations", "value"=>"0"},
       "271"=>{"label"=>"Total Programs Attended", "value"=>"0"},
       "297"=>{"label"=>"Waitlists on Record", "value"=>"0"}},
-    "varFields"=>
-     [{"fieldTag"=>"=", "content"=>"$6$WuFQmJQ68AA65p/b$EgG1Jiq1yUGYqpryzsQu6EtAJczrNzWfn/IUv5w.o0xxmccep0t1/Rm5aGESFSpOSWqNoPXItH6jnYZlqfTF3."},
+    "varFields" => [{"fieldTag" => "=", "marcTag" => "091", 
+      "subfields" => [{ "tag" => "a", "content" => "English Language Arts." }, {"tag" => "2", "content" => "content" }],
+        "content" => "$6$WuFQmJQ68AA65p/b$EgG1Jiq1yUGYqpryzsQu6EtAJczrNzWfn/IUv5w.o0xxmccep0t1/Rm5aGESFSpOSWqNoPXItH6jnYZlqfTF3."},
       {"fieldTag"=>"b", "content"=>"27777023005746"},
       {"fieldTag"=>"o", "content"=>"A. Philip Randolph Campus High School"},
       {"fieldTag"=>"z", "content"=>"qa-tester-8132@rssnyc.org"},

@@ -578,49 +578,46 @@ namespace :ingest do
   task :update_all_teacher_set_bibs, [] => :environment do |t, args|
     failed_bibs = []
     retry_count = 0
-    def update_all_teacher_set_bibs(failed_bibs, retry_count)
-      bib_response = nil
-      # Collect all bib_ids from teacher-set table.
-      ts_bnumbers = failed_bibs.present? ? failed_bibs : TeacherSet.all.collect { |ts| ts.bnumber }.compact
-      
-      ts_bnumbers.each do |bnumber|
-        bib_id = bnumber.delete "b"
-        # Send request to bib microservice
-        bib_response = TeacherSet.get_bib_response_by_bib_id(bib_id)
+    bib_response = nil
+    # Collect all bib_ids from teacher-set table.
+    ts_bnumbers = failed_bibs.present? ? failed_bibs : TeacherSet.all.collect { |ts| ts.bnumber }.compact
+    
+    ts_bnumbers.each do |bnumber|
+      bib_id = bnumber.delete "b"
+      # Send request to bib microservice
+      bib_response = TeacherSet.get_bib_response_by_bib_id(bib_id)
 
-        # If Bib response code is 404 skip to next bib
-        next if bib_response["statusCode"] == 404
+      # If Bib response code is 404 skip to next bib
+      next if bib_response["statusCode"] == 404
 
-        # Save failed bibs and re-try if bib response code is 500.
-        if bib_response["statusCode"] != 200
-          failed_bibs << bnumber
-          next
-        end
-
-        params = {_json: bib_response['data']}
-        # Update teacher-sets
-        Api::V01::BibsController.new.update_mln_bib_ids(params)
-        LogWrapper.log('INFO', {'message' => "Successfully updated TeacherSet data. BIB id:#{bib_id}" })
-      rescue StandardError => e
-        LogWrapper.log('ERROR', {'message' => "Error occured while updating the bib_id. BIB id:#{bib_id},
-                                 bibResponse: #{bib_response} " })
+      # Save failed bibs and re-try if bib response code is 500.
+      if bib_response["statusCode"] != 200
         failed_bibs << bnumber
-        failed_bibs.uniq!
         next
       end
 
-      LogWrapper.log('INFO', {'message' => "failedBibIds: #{failed_bibs}" })
-
-      # Recursive call
-      # Retry If any failed_bibs present 
-      return if !(failed_bibs.present? && retry_count < FAILED_BIB_RETRY_LIMIT)
-
-      backing_off = Api::V01::BibsController.new.exponential_backoff_sec(retry_count)
-      sleep(backing_off)
-      retry_count += 1
-      send(__method__, failed_bibs, retry_count)      
+      params = {_json: bib_response['data']}
+      # Update teacher-sets
+      Api::V01::BibsController.new.update_mln_bib_ids(params)
+      LogWrapper.log('INFO', {'message' => "Successfully updated TeacherSet data. BIB id:#{bib_id}" })
+    rescue StandardError => e
+      LogWrapper.log('ERROR', {'message' => "Error occured while updating the bib_id. BIB id:#{bib_id},
+                               bibResponse: #{bib_response} " })
+      failed_bibs << bnumber
+      failed_bibs.uniq!
+      next
     end
-    update_all_teacher_set_bibs(failed_bibs, retry_count)
+
+    LogWrapper.log('INFO', {'message' => "failedBibIds: #{failed_bibs}" })
+
+    # Recursive call
+    # Retry If any failed_bibs present 
+    return if !(failed_bibs.present? && retry_count < FAILED_BIB_RETRY_LIMIT)
+
+    backing_off = Api::V01::BibsController.new.exponential_backoff_sec(retry_count)
+    sleep(backing_off)
+    retry_count += 1
+    send(__method__, failed_bibs, retry_count)      
   end
 
 =begin

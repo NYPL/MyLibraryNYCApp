@@ -974,7 +974,7 @@ class TeacherSet < ActiveRecord::Base
   
   # Make a call to bib service to get the bib-id information.
   def self.get_bib_response_by_bib_id(bibid)
-    send_request_to_bibs_microservice(bibid)
+    self.send_request_to_bibs_microservice(bibid)
   end
 
 
