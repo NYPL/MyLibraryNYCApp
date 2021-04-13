@@ -3,12 +3,30 @@
 class Api::V01::GeneralController < ApplicationController
   include LogWrapper
 
+  # Retry configuration
+  MAX_RETRY_SEC = 5
+  INITIAL_RETRY_INTERVAL = 2
+  RETRY_MULTIPLER = 3
+
   def unauthorized
     render json: { 'message': 'Unauthorized message from MLN Api::V01::GeneralController' }, status: 401
   end
 
+  
+
   private
 
+  # An exponential backoff algorithm retries requests exponentially, 
+  # increasing the waiting time between retries up to a maximum backoff time
+  def exponential_backoff_in_sec(retry_count)
+    backoff_sec = INITIAL_RETRY_INTERVAL * (RETRY_MULTIPLER**retry_count.to_i)
+    # Set backoff sec to max if it reached its limit
+    return MAX_RETRY_SEC if backoff_sec > MAX_RETRY_SEC
+
+    backoff_sec
+  end
+
+  
   # set the @request_body instance variable so it can be used in other methods;
   # check for parsing errors.
   def set_request_body
@@ -72,7 +90,11 @@ class Api::V01::GeneralController < ApplicationController
   end
 
   
-  def api_response_builder(http_status, http_response=nil)
-    render status: http_status, json: http_response
+  def api_response_builder(http_status, http_response=nil, json_resp=nil)
+    if json_resp
+      { status: http_status, json: http_response }
+    else
+      render status: http_status, json: http_response
+    end
   end
 end

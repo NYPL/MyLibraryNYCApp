@@ -96,6 +96,44 @@ class BibsControllerTest < MiniTest::Test
     end
   end
 
+
+  describe 'Test update mln bib ids' do
+    it 'test update mln bib ids method' do
+      resp = nil
+      expected_resp = "{\"teacher_sets\":[{\"id\":20536004052907,\"bnumber\":\"b20536004\",\"title\":\"Banned Books (Set II).\"}]}"
+      @mintest_mock1.expect(:call, expected_resp)
+      params = { _json: req_body_for_item }
+      @controller.stub :create_or_update_teacher_sets, @mintest_mock1 do
+        resp = @controller.update_mln_bib_ids(params)
+      end
+      assert_equal(JSON.parse(expected_resp), JSON.parse(resp))
+    end
+  end
+
+
+  describe 'Test var, fixed field methods' do
+    it 'test var field method' do
+      @teacher_set_record = SIERRA_USER["data"][0]
+      @controller.instance_variable_set(:@teacher_set_record, @teacher_set_record)
+      resp = @controller.send(:var_field, '091')
+      assert_equal("English Language Arts., content", resp)
+    end
+
+    it 'test fixed field method' do
+      @teacher_set_record = SIERRA_USER["data"][0]
+      @controller.instance_variable_set(:@teacher_set_record, @teacher_set_record)
+      resp = @controller.send(:fixed_field, '44')
+      assert_equal("English", resp)
+    end
+
+    it 'test all_var_fields method' do
+      @teacher_set_record = SIERRA_USER["data"][0]
+      @controller.instance_variable_set(:@teacher_set_record, @teacher_set_record)
+      resp = @controller.send(:var_field, '091')
+      assert_equal("English Language Arts., content", resp)
+    end
+  end
+
   private
 
   def req_body_for_item
