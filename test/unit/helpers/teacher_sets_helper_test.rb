@@ -87,7 +87,6 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
     it 'test teacher_set grades' do
       self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
       return_grades = %w[3 8]
-      resp = grade_or_lexile_array('grade')
       assert_equal(return_grades, grade_or_lexile_array('grade'))
     end
   end
