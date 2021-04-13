@@ -20,7 +20,7 @@ namespace :combined_tests do
     # for now, specify the test file to run.
     # this will also help automate for travis
     t.test_files = Rake::FileList[
-      # 'test/unit/teacher_set_test.rb',
+       'test/unit/teacher_set_test.rb'
       # 'test/unit/ingest_rake_task_test.rb',
       # 'test/integration/user_flow_test.rb',
       # 'test/functional/exceptions_controller_test.rb',
@@ -35,7 +35,7 @@ namespace :combined_tests do
       # 'test/functional/schools_controller_test.rb',
       # 'test/functional/info_site_controller_test.rb',
       # 'test/functional/s3_controller_test.rb',
-      'test/functional/teacher_sets_test.rb'
+      # 'test/functional/teacher_sets_test.rb'
       # 'test/functional/*.rb',
       # 'test/functional/admin/*.rb',
       # 'test/unit/user_test.rb', 'test/unit/*.rb',
