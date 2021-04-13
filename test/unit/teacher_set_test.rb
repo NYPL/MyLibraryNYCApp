@@ -187,7 +187,20 @@ class TeacherSetTest < ActiveSupport::TestCase
   end
 
 
-  describe 'test bib record not found exception' do
+  describe 'Test delete teacher_set record' do
+    it 'Delete teacher_set record in db and elastic search' do
+      es_resp = {"found" => true, "result" => 'deleted'}
+      bib_id = '999999'
+      # Create dedicated teacher-set record with bib_id '99999'.
+      TeacherSet.new(bnumber: "b#{bib_id}").save
+      resp = nil
+      # Delete teacher_set record
+      TeacherSet.stub_any_instance :delete_teacherset_record_from_es, es_resp do
+        resp = TeacherSet.delete_teacher_set(bib_id)
+      end
+      assert_equal("b#{bib_id}", resp.bnumber)
+    end
+
     it 'test bib record not found exception' do
       bib_id = '000'
       resp = nil
