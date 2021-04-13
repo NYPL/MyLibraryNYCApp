@@ -82,50 +82,13 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'return grades array' do
-    before do
-      @mintest_mock1 = MiniTest::Mock.new
-      @mintest_mock1 = MiniTest::Mock.new
-      TeacherSetsHelper.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
-    end
-
+  describe 'return teacher-set grades' do
+    # Test1
     it 'test teacher_set grades' do
-      # Test1
-      grades = ["3-8."]
-      var_field_entry = '521'
-      resp = nil
-      @mintest_mock1.expect(:call, grades, [var_field_entry])
-      @mintest_mock2.expect(:call, grades, [grades])
-
+      self.instance_variable_set(:@req_body, SIERRA_USER["data"][0])
       return_grades = %w[3 8]
-      self.stub :all_var_fields, @mintest_mock1 do
-        self.stub :get_grades, @mintest_mock2 do
-          resp = grade_or_lexile_array('grade')
-        end
-      end
-      assert_equal(resp, return_grades)
-      @mintest_mock1.verify
-      @mintest_mock2.verify
-    end
-
-    # Test2
-    it 'test unknown teacher_set grades' do
-      grades = ["3-8."]
-      var_field_entry = '521'
-      resp = nil
-      @mintest_mock1.expect(:call, grades, [var_field_entry])
-      @mintest_mock2.expect(:call, grades, [grades])
-
-      # Test1:
-      return_grades = %w[3 8]
-      self.stub :all_var_fields, @mintest_mock1 do
-        self.stub :get_grades, @mintest_mock2 do
-          resp = grade_or_lexile_array('521')
-        end
-      end
-      assert_equal(resp, return_grades)
-      @mintest_mock1.verify
-      @mintest_mock2.verify
+      resp = grade_or_lexile_array('grade')
+      assert_equal(return_grades, grade_or_lexile_array('grade'))
     end
   end
 end
