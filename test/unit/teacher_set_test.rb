@@ -212,9 +212,14 @@ class TeacherSetTest < ActiveSupport::TestCase
       resp = nil
       es_resp = {"_index"=>"teacherset", "_type"=>"teacherset", "_id"=>914202741, "_version"=>11, 
                  "result"=>"updated", "_shards"=>{"total"=>0, "successful"=>1, "failed"=>0}}
+      bibd_id = SIERRA_USER["data"][0]['id']
+
+      ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
       
-      TeacherSet.stub_any_instance :create_or_update_teacherset_document_in_es, es_resp do
-        resp = TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
+      TeacherSet.stub_any_instance :get_items_info_from_bibs_service, ts_items_info do
+        TeacherSet.stub_any_instance :create_or_update_teacherset_document_in_es, es_resp do
+          resp = TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
+        end
       end
       assert_equal(@teacher_set6.bnumber, resp.bnumber)
     end
