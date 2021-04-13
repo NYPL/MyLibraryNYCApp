@@ -329,9 +329,9 @@ class TeacherSetTest < ActiveSupport::TestCase
   describe 'update set_type value in teacher_set table' do
     it 'test update_set_type value method' do
       resp = nil
-      set_type_val = @teacher_set3.set_type
-      resp = @teacher_set3.update_set_type(set_type_val)
-      assert_equal(set_type_val, resp)
+      set_type = "Book Club Set ."
+      resp = @teacher_set3.update_set_type(set_type)
+      assert_equal(@teacher_set3.set_type, resp)
     end
   end
 
