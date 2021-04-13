@@ -211,25 +211,37 @@ class TeacherSetTest < ActiveSupport::TestCase
   describe '#test create or update teacherset' do
     before do
       @es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-                "_id" => "353", "_version" => 11, "result" => "updated", 
+                "_id" => 8888, "_version" => 11, "result" => "updated", 
                 "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
-      @expected_resp = {:title=>"MyString",:description=>"MyText",:contents=>nil,:id=>252051579,:details_url=>nil,
-                        :grade_end=>nil,:grade_begin=>nil,:availability=>nil,:total_copies=>nil,
-                        :call_number=>nil,:language=>nil,:physical_description=>nil,:primary_language=>nil,:created_at=>"2014-10-19T01:00:00+0000",
-                        :updated_at=>"2014-10-19T01:00:00+0000",:available_copies=>2,:bnumber=>"123",
-                        :set_type=>nil,:area_of_study=>nil,
-                        :subjects=>[{:id=>570218967, :title=>"Authors Russiantest", 
-                                     :created_at=>"2014-10-19T01:00:00+0000", :updated_at=>"2014-10-19T01:00:00+0000"},
-                                    {:id=>173724997, :title=>"Social", :created_at=>"2014-10-19T01:00:00+0000", 
-                                     :updated_at=>"2014-10-19T01:00:00+0000"}]}
+      @expected_resp = {:title=>nil,
+             :description=>nil,
+             :contents=>nil,
+             :id=>8888,
+             :details_url=>nil,
+             :grade_end=>nil,
+             :grade_begin=>nil,
+             :availability=>nil,
+             :total_copies=>nil,
+             :call_number=>nil,
+             :language=>nil,
+             :physical_description=>nil,
+             :primary_language=>nil,
+             :created_at=>nil,
+             :updated_at=>nil,
+             :available_copies=>nil,
+             :bnumber=>"bnumber",
+             :set_type=>nil,
+             :area_of_study=>nil,
+             :subjects=>[]}
     end
 
     it 'update teacher-set document in ElasticSearch' do
       resp = nil
+      teacher_set = TeacherSet.new(bnumber: "bnumber", id: "8888")
       elasticsearch_adapter_mock = Minitest::Mock.new
-      elasticsearch_adapter_mock.expect(:update_document_by_id, @es_doc, [@teacher_set.id, @expected_resp])
+      elasticsearch_adapter_mock.expect(:update_document_by_id, @es_doc, [teacher_set.id, @expected_resp])
       ElasticSearch.stub :new, elasticsearch_adapter_mock do
-        @teacher_set.create_or_update_teacherset_document_in_es
+        teacher_set.create_or_update_teacherset_document_in_es
       end
       elasticsearch_adapter_mock.verify
     end
