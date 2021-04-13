@@ -42,7 +42,8 @@ namespace :combined_tests do
       'test/unit/elastic_search_test.rb',
       'test/unit/encrypt_decrypt_string_test.rb',
       'test/unit/news_letter_controller_unit_test.rb',
-      'test/functional/api/v01/general_controller_test.rb'
+      'test/models/school_test.rb',
+      'test/unit/helpers/*.rb'
     ].shuffle
 
     t.verbose = false
