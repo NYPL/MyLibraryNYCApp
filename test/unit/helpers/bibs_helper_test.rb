@@ -24,7 +24,6 @@ class BibsHelperTest < MiniTest::Test
 
       exp_resp = { value: req_body['id'], error_msg: BIB_NUMBER_EMPTY[:msg]}
 
-      @mintest_mock1.expect(:call, exp_resp)
       resp = assert_raises(InvalidInputException) do
         validate_input_params(req_body)
       end
@@ -39,7 +38,6 @@ class BibsHelperTest < MiniTest::Test
 
       exp_resp = { value: req_body['title'], error_msg: TITLE_EMPTY[:msg]}
 
-      @mintest_mock1.expect(:call, exp_resp)
       resp = assert_raises(InvalidInputException) do
         validate_input_params(req_body, true)
       end

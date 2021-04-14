@@ -203,8 +203,6 @@ class TeacherSetTest < ActiveSupport::TestCase
 
     it 'test bib record not found exception' do
       bib_id = '000'
-      resp = nil
-
       resp = assert_raises(BibRecordNotFoundException) do
         TeacherSet.delete_teacher_set(bib_id)
       end
@@ -265,7 +263,6 @@ class TeacherSetTest < ActiveSupport::TestCase
 
 
     it 'raises ElasticsearchException when ElasticSearch raises StandardError' do
-      resp = nil
       detail_msg = 'exception occured'
       teacher_set = TeacherSet.new(title: 'title', description: 'desc', bnumber: "bnumber", id: "8888")
       elasticsearch_adapter_mock = Minitest::Mock.new
@@ -299,7 +296,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
 
     it 'raises ElasticsearchException when ElasticSearch raises NotFound' do
-      resp = nil
       detail_msg = "Teacher set data not found."
       @elasticsearch_adapter_mock.expect(:delete_document_by_id, nil) do
         raise Elasticsearch::Transport::Transport::Errors::NotFound, detail_msg
@@ -316,7 +312,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
 
     it 'raises ElasticsearchException when ElasticSearch raises StandardError' do
-      resp = nil
       detail_msg = 'exception occured'
       @elasticsearch_adapter_mock.expect(:delete_document_by_id, nil) do
         raise StandardError, detail_msg
