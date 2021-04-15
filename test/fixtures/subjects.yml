@@ -2,6 +2,11 @@
 
 subjects_one:
   title: "Authors Russiantest"
+  created_at: Time.zone.parse("2014-10-19 1:00:00")
+  updated_at: Time.zone.parse("2014-10-19 1:00:00")
 
 subjects_two:
   title: "Social"
+  created_at: Time.zone.parse("2014-10-19 1:00:00")
+  updated_at: Time.zone.parse("2014-10-19 1:00:00")
+  

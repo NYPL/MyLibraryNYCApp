@@ -2,7 +2,7 @@
 
 class TeacherSetsController < ApplicationController
 
-  include TeacherSetsHelper
+  include TeacherSetsEsHelper
 
   before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
 
@@ -21,7 +21,7 @@ class TeacherSetsController < ApplicationController
     
         # Get teachersets and facets from elastic search
         teacher_sets, @facets = ElasticSearch.new.get_teacher_sets_from_es(params)
-        @teacher_sets = create_ts_object_from_es_json(teacher_sets)
+        @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
       else
         LogWrapper.log('INFO', {'message' => "Calling database to get teacher-sets", 
                                 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
