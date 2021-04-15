@@ -6,9 +6,11 @@ SimpleCov.start 'rails' do
   add_filter '/bin/'
   add_filter '/db/'
   add_filter '/test/' # for minitest
+  add_filter 'lib/tasks/cleanup.rake'
+  add_filter 'lib/tasks/sync_users.rake'
 end
 # fail unit tests if total coverage dips below acceptable limit
-SimpleCov.minimum_coverage 61.3
+SimpleCov.minimum_coverage 62
 # fail unit tests if any file's individual coverage dips below acceptable limit
 SimpleCov.minimum_coverage_by_file 0
 
@@ -3753,7 +3755,8 @@ TWO_TEACHER_SETS_TO_DELETE = [{
 
 SIERRA_USER = {"data"=>
   [{"barCodes"=>["27777023005746"],
-    "id"=>7899158,
+    "id"=>'7899158',
+    "title"=>'title',
     "updatedDate"=>"2020-07-28T23:24:45+00:00",
     "createdDate"=>"2020-07-28T23:24:45+00:00",
     "deleted"=>false,
@@ -3770,7 +3773,7 @@ SIERRA_USER = {"data"=>
     "phones"=>[{"number"=>"212-690-6800", "type"=>"t"}, {"number"=>"A. Philip Randolph Campus High School", "type"=>"o"}],
     "moneyOwed"=>0.0,
     "fixedFields"=>
-     {"44"=>{"label"=>"E-Communications", "value"=>"-"},
+     {"44"=>{"label"=>"E-Communications", "value"=>"-", "display"=>"English"},
       "45"=>{"label"=>"Education Level", "value"=>"-"},
       "46"=>{"label"=>"Home Region", "value"=>"2"},
       "47"=>{"label"=>"Patron Type", "value"=>"151"},
@@ -3814,6 +3817,11 @@ SIERRA_USER = {"data"=>
       {"fieldTag"=>"z", "content"=>"qa-tester-8132@rssnyc.org"},
       {"fieldTag"=>"a", "content"=>"443 WEST 135 STREET$MANHATTAN, NY 10031"},
       {"fieldTag"=>"n", "content"=>"TESTER, QA"},
+      {"fieldTag"=>"d", "marcTag"=>"650", "ind1"=>"", "ind2"=>"0", "content"=>"null", "subfields"=>[{"tag"=>"a", "content"=>"Elections."}]},
+      {"fieldTag"=>"r", "marcTag"=>"300", "content"=>"", "subfields"=>[{"tag"=>"a", "content"=>"physical desc"}]},
+      {"fieldTag"=>"n", "marcTag"=>"500", "ind1"=>" ", "ind2"=>" ", "content"=>"null", "subfields"=> [{"tag"=>"a", "content"=> "Learning set"}]},
+      {"fieldTag"=>"n", "marcTag"=>"526", "ind1"=>" ", "ind2"=>" ", "content"=>"null", "subfields"=> [{"tag"=>"a", "content"=> "Topic Set"}]},
+      {"fieldTag"=>"n", "marcTag"=>"521", "ind1"=>" ", "ind2"=>" ", "content"=>"null", "subfields"=> [{"tag"=>"a", "content"=> "3-8"}]},
       {"fieldTag"=>"t", "content"=>"212-690-6800"}]}],
  "count"=>1,
  "statusCode"=>200}
@@ -3828,7 +3836,8 @@ class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
         :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
-        :mock_send_request_to_bib_service
+        :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123, :mock_item_response_with_empty_bib
+        
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -3950,7 +3959,7 @@ class ActiveSupport::TestCase
   end
 
   def mock_send_request_to_bib_service
-    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=&nyplSource=sierra-nypl").
+    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=998&nyplSource=sierra-nypl").
       with(headers: {
         'content-Type'=>'application/json',
         'Authorization'=>'Bearer testoken'
@@ -4040,6 +4049,31 @@ class ActiveSupport::TestCase
         }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
   end
 
+  def mock_items_response_with_7899158
+    stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=7899158&limit=25&offset=0").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization'=>'Bearer testoken',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Ruby'
+        }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
+  end
+
+
+  def mock_bib_response_with_123
+    stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=123&nyplSource=sierra-nypl").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization'=>'Bearer testoken',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Ruby'
+        }).to_return(status: 200, body: "", headers: {})
+  end
+
   def mock_security_credentials
     stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/").with(
       headers: {
@@ -4076,6 +4110,19 @@ class ActiveSupport::TestCase
         'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
         'Content-Type'=>'application/json',
         'User-Agent'=>'Faraday v1.0.1'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
+
+  def mock_item_response_with_empty_bib
+    stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=&limit=25&offset=0").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization'=>'Bearer testoken',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Ruby'
         }).
       to_return(status: 200, body: "", headers: {})
   end

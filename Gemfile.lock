@@ -1322,6 +1322,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
     minitest (5.14.3)
+    minitest-stub_any_instance (1.0.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
@@ -1544,6 +1545,7 @@ DEPENDENCIES
   lograge (~> 0.11.2)
   logstash-event!
   minitest (~> 5.14.2)
+  minitest-stub_any_instance
   nokogiri
   open_uri_redirections
   paper_trail (~> 11.1)

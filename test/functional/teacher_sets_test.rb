@@ -8,8 +8,24 @@ require 'test_helper'
 # brought back, with changes that reflect the new ActiveRecord version.
 
 class TeacherSetsTest < ActionController::TestCase
-  test "test school strong params" do
-    TeacherSet.new.update_set_type_from_nil_to_value
+
+  setup do
+    @teacher_set = TeacherSet.new
+    @ts_one = teacher_sets(:teacher_set_one)
+  end
+
+  test 'test item microservice api endpoint' do
+    @teacher_set.send(:send_request_to_items_microservice, BNUMBER1)
+    assert_response :success
+  end
+
+  test 'test bib microservice api endpoint' do
+    @teacher_set.send(:send_request_to_bibs_microservice, BNUMBER1)
+    assert_response :success
+  end
+
+  test 'test update book method' do
+    @teacher_set.update_included_book_list(SIERRA_USER['data'][0])
     assert_response :success
   end
 end
