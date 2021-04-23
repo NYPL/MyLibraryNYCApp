@@ -103,8 +103,8 @@ ActiveRecord::Schema.define(version: 20210129185752) do
     t.string "file_name"
     t.string "file_path"
     t.binary "file"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
