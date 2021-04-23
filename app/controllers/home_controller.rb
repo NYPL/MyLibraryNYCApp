@@ -45,4 +45,19 @@ class HomeController < ApplicationController
     @is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
   end
 
+
+  def mln_calendar_of_event
+      @mln_calendar_event = Document.calendar_of_event.first
+      respond_to do |format|
+        format.pdf { 
+          send_data(@mln_calendar_event.file,
+                    filename: @mln_calendar_event.file_name, 
+                    type: "application/pdf",
+                    disposition: :inline)
+        }
+        
+      end
+
+  end
+
 end

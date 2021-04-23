@@ -91,6 +91,7 @@ MyLibraryNYC::Application.routes.draw do
   match '/about/participating-schools' => 'schools#index', via: [:get]
   match '/help' => 'home#help', via: [:get]
   match '/faq' => 'home#faq', via: [:get]
+  match '/home/mln_calendar_of_event' => '/home/mln_calendar_of_event', via: [:get]
   match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]
   match '/help/access-digital-resources' => 'home#digital_resources', via: [:get]
 

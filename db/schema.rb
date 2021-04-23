@@ -98,6 +98,15 @@ ActiveRecord::Schema.define(version: 20210129185752) do
     t.integer "position"
   end
 
+  create_table "documents", force: :cascade do |t|
+    t.string "event_type"
+    t.string "file_name"
+    t.string "file_path"
+    t.binary "file"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
     t.integer  "attempts",   default: 0, null: false
