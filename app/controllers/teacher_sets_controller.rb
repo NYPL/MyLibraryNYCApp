@@ -11,7 +11,6 @@ class TeacherSetsController < ApplicationController
   # Called on loading the teacher set list page and when the user selects
   # a facet to filter by.
   def index
-    LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     begin
       # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' means gets teacher-set documents from elastic search.
       # teacherset.data.from.elasticsearch.enabled = false means gets teacher-set data from database.
@@ -92,8 +91,6 @@ class TeacherSetsController < ApplicationController
 
   # GET /teacher_sets/1.json
   def show
-    LogWrapper.log('DEBUG', {'message' => 'show.start', 'method' => 'app/controllers/teacher_sets_controller.rb.show'})
-
     # Stores the current location in session, so if an un-authenticated user
     # tries to order this teacher set, we can ask the user to sign in, and
     # then redirect back to this teacher_set detail page.
@@ -139,7 +136,6 @@ class TeacherSetsController < ApplicationController
 
   # Gets current user teacherset holds from database.
   def teacher_set_holds
-    LogWrapper.log('DEBUG', {'message' => 'teacher_set_holds.start', 'method' => 'app/controllers/teacher_sets_controller.rb.teacher_set_holds'})
     @set = TeacherSet.find(params[:id])
     @holds = @set.holds_for_user(current_user)
   end
