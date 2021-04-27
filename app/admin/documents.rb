@@ -1,10 +1,12 @@
 # frozen_string_literal: true
+#require 'libreconv'
+require 'pandoc-ruby'
+#  brew install pandoc
+
 
 ActiveAdmin.register Document do
   menu :priority => 12
   permit_params :file, :event_type, :file_name, :file_path
-
-  #actions :index, :show, :new, :create, :update
 
 
   controller do
@@ -14,8 +16,9 @@ ActiveAdmin.register Document do
       @document[:event_type] = attrs[:event_type]
 
       if attrs[:file].present?
-        @document[:file_name] = attrs[:file].original_filename
-        @document[:file] = attrs[:file].read
+        path = PandocRuby.new([attrs[:file].tempfile.path], from: 'docx').to_pdf
+        @document[:file_name] = "mln_doc.pdf"
+        @document[:file] = path
         @document[:file_path] = attrs[:file].tempfile.path
       end
       if @document.save

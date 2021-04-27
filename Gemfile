@@ -65,6 +65,9 @@ gem 'rexml', '~> 3.2'
 gem 'thread_safe', '~> 0.3.6'
 gem "ratonvirus"
 gem "ratonvirus-clamby"
+gem 'libreconv'
+gem 'pandoc-ruby'
+gem 'utf8-cleaner'
 
 
 group :assets do # Gems used only for assets and not required in production environments by default.
