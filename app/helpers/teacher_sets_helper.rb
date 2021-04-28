@@ -116,4 +116,19 @@ module TeacherSetsHelper
   rescue StandardError
     nil
   end
+
+
+  # Parses out the items duedate, items code is '-' which determines if an item is available or not.
+  # Calculates the total number of items in the list, the number of items that are
+  # available to lend.
+  def parse_items_available_and_total_count(response)
+    available_count = 0
+    total_count = 0
+    response['data'].each do |item|
+      total_count += 1 unless (item['status']['code'].present? && ['w', 'm', 'k', 'u'].include?(item['status']['code']))
+      available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
+    end
+    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
+    return total_count, available_count
+  end
 end
