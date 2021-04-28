@@ -11,47 +11,44 @@ class TeacherSetsController < ApplicationController
   # Called on loading the teacher set list page and when the user selects
   # a facet to filter by.
   def index
-    LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-    begin
-      # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' means gets teacher-set documents from elastic search.
-      # teacherset.data.from.elasticsearch.enabled = false means gets teacher-set data from database.
-      if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-        LogWrapper.log('INFO', {'message' => "Calling elastic search to get teacher-sets", 
-                                'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-    
-        # Get teachersets and facets from elastic search
-        teacher_sets, @facets = ElasticSearch.new.get_teacher_sets_from_es(params)
-        @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
-      else
-        LogWrapper.log('INFO', {'message' => "Calling database to get teacher-sets", 
-                                'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-        @teacher_sets = TeacherSet.for_query params
-        @facets = TeacherSet.facets_for_query @teacher_sets
-      end
-      # Determine what facets are selected based on query string
-      @facets.each do |f|
-        f[:items].each do |v|
-          k = f[:label].underscore
-          v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)
-        end
-      end
-
-      @facets = teacher_set_facets(params)
-      # Attach custom :q param to each facet with query params to be applied to that link
-      if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-        render json: { teacher_sets: @teacher_sets, facets: @facets }
-      else
-        render json: { teacher_sets: @teacher_sets, facets: @facets }, serializer: SearchSerializer, include_books: false, include_contents: false
-      end
-    rescue StandardError => e
-      LogWrapper.log('DEBUG', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
-                               'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-      render json: {
-        errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},
-        teacher_sets: {},
-        facets: {}
-      }, serializer: SearchSerializer, include_books: false, include_contents: false
+    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' means gets teacher-set documents from elastic search.
+    # teacherset.data.from.elasticsearch.enabled = false means gets teacher-set data from database.
+    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      LogWrapper.log('INFO', {'message' => "Calling elastic search to get teacher-sets", 
+                              'method' => 'app/controllers/teacher_sets_controller.rb.index'})
+  
+      # Get teachersets and facets from elastic search
+      teacher_sets, @facets = ElasticSearch.new.get_teacher_sets_from_es(params)
+      @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
+    else
+      LogWrapper.log('INFO', {'message' => "Calling database to get teacher-sets", 
+                              'method' => 'app/controllers/teacher_sets_controller.rb.index'})
+      @teacher_sets = TeacherSet.for_query params
+      @facets = TeacherSet.facets_for_query @teacher_sets
     end
+    # Determine what facets are selected based on query string
+    @facets.each do |f|
+      f[:items].each do |v|
+        k = f[:label].underscore
+        v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)
+      end
+    end
+
+    @facets = teacher_set_facets(params)
+    # Attach custom :q param to each facet with query params to be applied to that link
+    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      render json: { teacher_sets: @teacher_sets, facets: @facets }
+    else
+      render json: { teacher_sets: @teacher_sets, facets: @facets }, serializer: SearchSerializer, include_books: false, include_contents: false
+    end
+  rescue StandardError => e
+    LogWrapper.log('ERROR', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
+                             'method' => 'app/controllers/teacher_sets_controller.rb.index'})
+    render json: {
+      errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},
+      teacher_sets: {},
+      facets: {}
+    }, serializer: SearchSerializer, include_books: false, include_contents: false
   end
 
 
@@ -92,8 +89,6 @@ class TeacherSetsController < ApplicationController
 
   # GET /teacher_sets/1.json
   def show
-    LogWrapper.log('DEBUG', {'message' => 'show.start', 'method' => 'app/controllers/teacher_sets_controller.rb.show'})
-
     # Stores the current location in session, so if an un-authenticated user
     # tries to order this teacher set, we can ask the user to sign in, and
     # then redirect back to this teacher_set detail page.
@@ -139,7 +134,6 @@ class TeacherSetsController < ApplicationController
 
   # Gets current user teacherset holds from database.
   def teacher_set_holds
-    LogWrapper.log('DEBUG', {'message' => 'teacher_set_holds.start', 'method' => 'app/controllers/teacher_sets_controller.rb.teacher_set_holds'})
     @set = TeacherSet.find(params[:id])
     @holds = @set.holds_for_user(current_user)
   end
