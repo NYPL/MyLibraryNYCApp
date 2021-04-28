@@ -194,12 +194,6 @@ class Book < ActiveRecord::Base
 
   # Sends a request to the bibs microservice.
   def send_request_to_bibs_microservice
-    LogWrapper.log('DEBUG', {
-       'message' => 'Request sent to bibs service',
-       'method' => 'send_request_to_bibs_microservice',
-       'status' => 'start',
-       'dataSent' => ENV['BIBS_MICROSERVICE_URL_V01'] + "?standardNumber=#{isbn}"
-      })
     response = HTTParty.get(
       ENV['BIBS_MICROSERVICE_URL_V01'] + "?standardNumber=#{isbn}",
       headers:
@@ -207,7 +201,6 @@ class Book < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
-
 
     case response.code
     when 200

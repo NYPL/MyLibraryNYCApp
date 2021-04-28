@@ -10,7 +10,6 @@ class HoldsController < ApplicationController
   end
 
   def index
-    LogWrapper.log('DEBUG', {'message' => 'index.start', 'method' => 'app/controllers/holds_controller.rb.index'})
     redirect_to root_url
   end
 
@@ -20,8 +19,6 @@ class HoldsController < ApplicationController
   # their holds history.  In routing terms, responds to a GET request on the
   # /holds/[hold id].json url.
   def show
-    LogWrapper.log('DEBUG', {'message' => 'show.start', 'method' => 'app/controllers/holds_controller.rb.show'})
-
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
 
@@ -35,7 +32,6 @@ class HoldsController < ApplicationController
 
   # GET /holds/new.json
   def new
-    LogWrapper.log('DEBUG', {'message' => 'new.start', 'method' => 'app/controllers/holds_controller.rb.new'})
     @hold = Hold.new
     @hold.teacher_set = TeacherSet.find params[:teacher_set_id]
     render json: {
@@ -47,7 +43,6 @@ class HoldsController < ApplicationController
 
   # GET /holds/1/cancel.json
   def cancel
-    LogWrapper.log('DEBUG', {'message' => 'cancel.start', 'method' => 'app/controllers/holds_controller.rb.cancel'})
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
     render json: {
@@ -62,7 +57,6 @@ class HoldsController < ApplicationController
   # Create holds and update quantity column in holds.
   # Calculate available copies from quantity saves in teacherset table.
   def create
-    LogWrapper.log('DEBUG', {'message' => 'create.start', 'method' => 'app/controllers/holds_controller.rb.create'})
     begin
       # If user's school is inactive, then display an error message and redirect to teacher set detail page.
       is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
@@ -109,7 +103,6 @@ class HoldsController < ApplicationController
 
 
   def error_message(exception)
-    LogWrapper.log('ERROR', 'message' => exception.message)
     # Note: don't need an explicit return here
     respond_to do |format|
       format.html {}
@@ -123,7 +116,6 @@ class HoldsController < ApplicationController
   
   # Here calculate the teacher-set available_copies based on the current-user holds than saves in teacher-set table and cancel the current-user holds.
   def update
-    LogWrapper.log('DEBUG', {'message' => 'update.start', 'method' => 'app/controllers/holds_controller.rb.update'})
     @hold = Hold.find_by_access_key(params[:id])
 
     unless (c = params[:hold_change]).nil?
@@ -151,7 +143,6 @@ class HoldsController < ApplicationController
   protected
 
   def check_ownership
-    LogWrapper.log('DEBUG', {'message' => 'check_ownership.start', 'method' => 'app/controllers/holds_controller.rb.check_ownership'})
     @hold = Hold.find_by_access_key(params[:id])
 
     if not user_signed_in?

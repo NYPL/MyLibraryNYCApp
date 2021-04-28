@@ -12,10 +12,6 @@ class UserMailer < ActionMailer::Base
   def unsubscribe(user)
     begin
       @user = user
-      LogWrapper.log('DEBUG', {
-        'message' => "About to send unsubscribe confirmation email to #{@user.email or 'unknown'}",
-        'method' => 'UserMailer unsubscribe'
-      })
       mail(:to => @user.contact_email, :subject => "You have now unsubscribed from MyLibraryNyc.")
     rescue => exception
       # something went wrong.  perhaps the user isn't set properly, or maybe the email couldn't be sent out.
