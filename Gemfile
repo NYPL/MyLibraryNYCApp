@@ -14,7 +14,7 @@ gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
-
+gem "minitest-stub_any_instance"
 gem 'rails', '6.1.0'
 gem 'actionpack', '6.1.0'
 gem 'actioncable', '6.1.0'

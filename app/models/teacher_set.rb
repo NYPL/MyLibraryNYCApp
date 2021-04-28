@@ -4,6 +4,10 @@
 class TeacherSet < ActiveRecord::Base
   include CatalogItemMethods
   include LogWrapper
+  include TeacherSetsHelper
+  include MlnException
+  include MlnResponse
+  include LogWrapper
 
   has_paper_trail
   before_save :disable_papertrail
@@ -59,7 +63,7 @@ class TeacherSet < ActiveRecord::Base
 
   
   # Get teacher-set record by bib_id
-  def get_teacher_set_by_bnumber(bib_id)
+  def self.get_teacher_set_by_bnumber(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first
   end
 
@@ -143,6 +147,162 @@ class TeacherSet < ActiveRecord::Base
   # Fetch first book cover uri, with size = (:small|:medium|:large)
   def image_uri(size = :small)
     books.first.image_uri(size) if !books.empty?
+  end
+
+  
+  def self.initialize_teacher_set(bib_id)
+    TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
+  end
+
+
+  def self.create_or_update_teacher_set(req_body)
+    bib_id = req_body['id']
+    teacher_set = self.initialize_teacher_set(bib_id)
+    # Calls Bib service for items.
+    # Calculates the total number of items and available items in the list.
+    ts_items_info = teacher_set.get_items_info_from_bibs_service(bib_id)
+
+    teacher_set.instance_variable_set(:@req_body, req_body)
+    teacher_set.update_teacher_set_attributes_from_bib_request(ts_items_info)
+
+    # clean up the area of study field to match the subject field string rules.
+    teacher_set.clean_primary_subject
+
+    # update all teacher-set subjects.
+    teacher_set.update_subjects_via_api(teacher_set.all_var_fields('650'))
+
+    # Create/Update all teacher-set notes.
+    teacher_set.update_notes(teacher_set.var_field_data('500', true))
+
+    # Create/Update all books.
+    teacher_set.update_included_book_list(req_body)
+
+    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+    # If feature flag is enabled create/update data in elasticsearch.
+    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      # When ever there is a create/update on bib than need to create/update the data in elastic search document.
+      teacher_set.create_or_update_teacherset_document_in_es
+    end
+    teacher_set
+  end
+
+
+  # Update teacher-set table from bib request body.
+  def update_teacher_set_attributes_from_bib_request(ts_items_info)
+    self.update(
+      title: @req_body['title'],
+      call_number: var_field_data('091'),
+      description: var_field_data('520'),
+      edition: var_field_data('250'),
+      isbn: var_field_data('020'),
+      primary_language: fixed_field('24'),
+      publisher: var_field_data('260'),
+      contents: var_field_data('505'),
+      area_of_study: var_field_data('690', false),
+      physical_description: var_field_data('300', false),
+      details_url: "http://catalog.nypl.org/record=b#{@req_body['id']}~S1",
+      # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
+      grade_begin: grade_or_lexile_array('grade')[0] || '',
+      grade_end: grade_or_lexile_array('grade')[1] || '',
+      lexile_begin: grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
+      lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
+      available_copies: ts_items_info[:available_count],
+      total_copies: ts_items_info[:total_count],
+      availability: ts_items_info[:availability_string],
+      set_type: derive_set_type(var_field_data('526'))
+    )
+    self
+  end
+
+  
+  # Create or update teacherset document in elastic search.
+  def create_or_update_teacherset_document_in_es
+    body = teacher_set_info
+    elastic_search = ElasticSearch.new
+    begin
+      # If teacherset document is found in elastic search than update document in ES.
+      elastic_search.update_document_by_id(body[:id], body)
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+      # If teacherset document not found in elastic search than create document in ES.
+      resp = elastic_search.create_document(body[:id], body)
+      if resp['result'] == "created"
+        LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}",'method' => __method__})
+      else
+        LogWrapper.log('ERROR', {'message' => "Elastic search document not created/updated. Error: #{e.message}, ts-id: #{body[:id]}", 
+                                 'method' => __method__})
+      end
+    rescue StandardError => e
+      LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}, message: #{e.message}",
+                               'method' => __method__})
+      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
+    end
+  end
+
+
+  # Delete teacher-set record from db and elastic search.
+  def self.delete_teacher_set(bib_id)
+    # Get teacher-set record by bib_id
+    teacher_set = self.get_teacher_set_by_bnumber(bib_id)
+    unless teacher_set.present?
+      raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code],BIB_RECORD_NOT_FOUND[:msg])
+    end
+    
+    # Delete teacher-set record
+    resp = teacher_set.destroy
+    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
+    # If feature flag is enabled delete data from elasticsearch.
+    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
+      # After deletion of teacherset data from db than delete teacherset doc from elastic search
+      teacher_set.delete_teacherset_record_from_es if resp.destroyed?
+    end
+    teacher_set
+  end
+
+
+  # When Delete request comes from sierra, than delete teacher set document in elastic search.
+  def delete_teacherset_record_from_es
+    ts_id = self.id
+    ElasticSearch.new.delete_document_by_id(ts_id)
+  rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+    raise ElasticsearchException.new(TEACHER_SET_NOT_FOUND_IN_ES[:code], TEACHER_SET_NOT_FOUND_IN_ES[:msg])
+  rescue StandardError => e
+    LogWrapper.log('ERROR', {'message' => "Error occured while deleting elastic search doc. Teacher set id #{ts_id}. Error: #{e.message}",
+                             'method' => __method__})
+    raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
+  end
+
+  
+  # Make request input body to create teacherset document in elastic search.
+  # Input param ts_obj eg: <TeacherSet:0x00007fd79383a640 id: 350, title: "Step",call_number: "Teacher",
+  # description: "Book", details_url: "http://catalog.nypl.org/record=b21378444~S1","updated-7571-Step up to the plate, Maria Singh">
+  # Expected response from this method {:title=>"Step Up", :description=> "Book", :contents=>"Step Up", :id=>350}
+  def teacher_set_info
+    created_at = self.created_at.present? ? self.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+    updated_at = self.updated_at.present? ? self.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+    availability = self.availability.present? ? self.availability.downcase : nil
+
+    subjects_arr = []
+    # Teacherset have has_many relationship with subjects
+    # Get teacherset subjects from db than update in elastic search.
+    if self.subjects.present?
+      self.subjects.distinct.each do |subject|
+        subjects_hash = {}
+        s_created_at = subject.created_at.present? ? subject.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+        s_updated_at = subject.updated_at.present? ? subject.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
+        subjects_hash[:id] = subject.id
+        subjects_hash[:title] = subject.title
+        subjects_hash[:created_at] = s_created_at
+        subjects_hash[:updated_at] = s_updated_at
+        subjects_arr << subjects_hash
+      end
+    end
+    {title: self.title, description: self.description, contents: self.contents, 
+      id: self.id.to_i, details_url: self.details_url, grade_end: self.grade_end, 
+      grade_begin: self.grade_begin, availability: availability, total_copies: self.total_copies,
+      call_number: self.call_number, language: self.language, physical_description: self.physical_description,
+      primary_language: self.primary_language, created_at: created_at, updated_at: updated_at,
+      available_copies: self.available_copies, bnumber: self.bnumber, set_type: self.set_type,
+      area_of_study: self.area_of_study, subjects: subjects_arr }
   end
 
 
@@ -727,24 +887,27 @@ class TeacherSet < ActiveRecord::Base
   # end
 
 
-  # If set_type value is 'single' return set_type value as 'Book Club Set'
-  # If set_type value is 'multi' return set_type value as 'Topic Set'
-  def get_set_type(set_type)
-    return unless set_type.present?
-    return BOOK_CLUB_SET if set_type == 'single'
-    return TOPIC_SET if set_type == 'multi'
-
-    set_type
-  end
-  
-
   # Save teacher-set set_type value
   def update_teacher_set_set_type_value(set_type_val)
     set_type = update_set_type(set_type_val)
-    self.set_type = set_type
-    self.save!
     LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type} saved in DB", 
                             'method' => 'teacher_set.update_teacher_set_set_type_value'})
+  rescue StandardError => e
+    raise DBException.new(TEACHERSET_SETTYPE_ERROR[:code], TEACHERSET_SETTYPE_ERROR[:msg])
+  end
+
+
+  def update_set_type(set_type_val)
+    begin
+      set_type = derive_set_type(set_type_val)
+      update(set_type: set_type)
+    rescue StandardError => e
+      LogWrapper.log('ERROR', {'message' => "Error occcured while updating the set_type value: #{set_type}",
+                               'method' => 'teacher_set.update_set_type'})
+
+      raise DBException.new(TEACHERSET_SETTYPE_ERROR[:code],TEACHERSET_SETTYPE_ERROR[:msg])
+    end
+    set_type
   end
 
 
@@ -754,22 +917,18 @@ class TeacherSet < ActiveRecord::Base
   # If subfields.content type is "Book Club Set" set_type value  stored as 'single' in teacher_sets table.
   # case 2: If it is not present in subfields.content, derive the set_type from the number of distinct books attached to a TeacherSet.
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
-  def update_set_type(set_type_val)
-    set_type = set_type_val
-    books = TeacherSet.find(self.id).books
-    if set_type_val.present?
-      set_type = set_type_val.strip().gsub(/\.$/, '').titleize
-    elsif books.count.to_i > 1
-      set_type = TOPIC_SET
-    elsif books.count.to_i == 1
-      set_type = BOOK_CLUB_SET
+  def derive_set_type(set_type_field)
+    set_type = set_type_field
+    return set_type.strip().gsub(/\.$/, '').titleize if set_type.present?
+    
+    if self.books.count.to_i > 1
+      return TOPIC_SET
+    elsif self.books.count.to_i == 1
+      return BOOK_CLUB_SET
     end
-    LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type}",'method' => 'teacher_set.update_set_type'})
-    self.update(set_type: set_type)
-    set_type
   end
 
-
+  
   # Update teacher sets set-type nil to value from sierra
   def update_set_type_from_nil_to_value
     teacher_sets = TeacherSet.where(set_type: nil)
@@ -823,8 +982,6 @@ class TeacherSet < ActiveRecord::Base
   # Delete all records for a teacher set in the join table SubjectTeacherSet, then
   # create new records (and subjects if they do not exist) in that join table.
   def update_subjects_via_api(subject_name_array)
-    LogWrapper.log('DEBUG', {'message' => 'update_subjects_via_api.start','method' => 'teacher_set.update_subjects_via_api'})
-
     return if subject_name_array.blank?
 
     # If Elastic search feature-flag is enabled, teacher-set data saves in elastic-search cluster.
@@ -839,6 +996,7 @@ class TeacherSet < ActiveRecord::Base
     # record the list of current teacher set <--> subject associations,
     # so we can prune the subjects later.
     old_subjects = Array.new
+
     self.subjects.each do |subject|
       old_subjects.push(subject.id)
     end
@@ -866,7 +1024,6 @@ class TeacherSet < ActiveRecord::Base
   def clean_primary_subject()
     self.area_of_study = self.clean_subject_string(self.area_of_study)
     self.save
-    LogWrapper.log('DEBUG', {'message' => 'clean_primary_subject.end','method' => 'teacher_set.clean_primary_subject'})
   end
 
 
@@ -913,6 +1070,8 @@ class TeacherSet < ActiveRecord::Base
     teacher_set_notes_string.split(',').each do |note_content|
       TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
+  rescue StandardError => e
+    raise TeacherSetNoteException.new(TEACHER_SET_NOTE_EXCEPTION[:code], TEACHER_SET_NOTE_EXCEPTION[:msg])
   end
 
   
@@ -922,8 +1081,6 @@ class TeacherSet < ActiveRecord::Base
   # Updated MLN DB with Total copies and available copies.
   def update_available_and_total_count(bibid)
     response = get_items_info_from_bibs_service(bibid)
-    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{response[:available_count]}, total_count: #{response[:total_count]},
-    availability: #{response[:availability_string]}", b_number: "#{bibid}")
     self.update(total_copies: response[:total_count], available_copies: response[:available_count],
       availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
