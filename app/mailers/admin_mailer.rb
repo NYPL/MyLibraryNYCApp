@@ -13,10 +13,6 @@ class AdminMailer < ActionMailer::Base
       @request_body = request_body
       @error_code_and_message = error_code_and_message
       emails = AdminUser.where(email_notifications:true).pluck(:email)
-      LogWrapper.log('DEBUG', {
-        'message' => "About to send failed_bibs_controller_api_request email.\n@error_code_and_message: #{@error_code_and_message || 'nil'}",
-        'method' => 'AdminMailer.failed_bibs_controller_api_request'
-      })
       mail(:to => emails, :subject => "Problem occurred updating bib from Sierra")
     rescue => exception
       LogWrapper.log('ERROR', {
@@ -35,10 +31,6 @@ class AdminMailer < ActionMailer::Base
       @title = title
       @physical_description = physical_description
       emails = AdminUser.where(email_notifications:true).pluck(:email)
-      LogWrapper.log('DEBUG', {
-        'message' => "About to send failed_bibs_controller_api_request email",
-        'method' => 'AdminMailer teacher_set_update_missing_required_fields'
-      })
       mail(:to => emails, :subject => "New teacher set bib in Sierra is missing required fields")
     rescue => exception
       LogWrapper.log('ERROR', {
@@ -54,10 +46,6 @@ class AdminMailer < ActionMailer::Base
   def failed_items_controller_api_request(error_code_and_message)
     begin
       emails = AdminUser.where(email_notifications:true).pluck(:email)
-      LogWrapper.log('DEBUG', {
-        'message' => "About to send failed_items_controller_api_request email.\n@error_code_and_message: #{@error_code_and_message || 'nil'}",
-        'method' => 'AdminMailer.failed_items_controller_api_request'
-      })
       mail(:to => emails, :subject => "Problem occurred updating bib availability")
     rescue => exception
       LogWrapper.log('ERROR', {

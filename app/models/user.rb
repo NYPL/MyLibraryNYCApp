@@ -250,12 +250,6 @@ class User < ActiveRecord::Base
         "content": school.name
       }]
     }
-    LogWrapper.log('DEBUG', {
-       'message' => 'Request sent to patron creator service',
-       'method' => 'send_request_to_patron_creator_service',
-       'status' => 'start',
-       'dataSent' => query
-      })
     response = HTTParty.post(
       ENV['PATRON_MICROSERVICE_URL_V02'],
       body: query.to_json,

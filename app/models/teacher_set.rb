@@ -982,8 +982,6 @@ class TeacherSet < ActiveRecord::Base
   # Delete all records for a teacher set in the join table SubjectTeacherSet, then
   # create new records (and subjects if they do not exist) in that join table.
   def update_subjects_via_api(subject_name_array)
-    LogWrapper.log('DEBUG', {'message' => 'update_subjects_via_api.start','method' => 'teacher_set.update_subjects_via_api'})
-
     return if subject_name_array.blank?
 
     # If Elastic search feature-flag is enabled, teacher-set data saves in elastic-search cluster.
@@ -1026,7 +1024,6 @@ class TeacherSet < ActiveRecord::Base
   def clean_primary_subject()
     self.area_of_study = self.clean_subject_string(self.area_of_study)
     self.save
-    LogWrapper.log('DEBUG', {'message' => 'clean_primary_subject.end','method' => 'teacher_set.clean_primary_subject'})
   end
 
 
@@ -1084,8 +1081,6 @@ class TeacherSet < ActiveRecord::Base
   # Updated MLN DB with Total copies and available copies.
   def update_available_and_total_count(bibid)
     response = get_items_info_from_bibs_service(bibid)
-    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{response[:available_count]}, total_count: #{response[:total_count]},
-    availability: #{response[:availability_string]}", b_number: "#{bibid}")
     self.update(total_copies: response[:total_count], available_copies: response[:available_count],
       availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
