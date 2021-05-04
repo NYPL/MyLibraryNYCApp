@@ -63,6 +63,7 @@ gem 'webmock'
 gem 'yaml_db'
 gem 'rexml', '~> 3.2'
 gem 'thread_safe', '~> 0.3.6'
+gem 'react_on_rails', '~> 12.2'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
