@@ -36,4 +36,8 @@ class Document < ActiveRecord::Base
     errors.add(:file, 'Please upload file') unless file.present?
   end
 
+  def mln_calendar_from_google_doc
+    service = GoogleApiClient.drive_client
+    service.export_file('1xU8CGyhdCaq73Jr9vPj9xBwLXJRNT3wTTOgOHW1PUqY', 'application/pdf')
+  end
 end

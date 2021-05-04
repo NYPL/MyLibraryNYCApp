@@ -18,7 +18,7 @@ ActiveAdmin.register Document do
       if attrs[:file].present?
         path = PandocRuby.new([attrs[:file].tempfile.path], from: 'docx').to_pdf
         @document[:file_name] = "mln_doc.pdf"
-        @document[:file] = path
+        @document[:file] = @document.mln_calendar_from_google_doc
         @document[:file_path] = attrs[:file].tempfile.path
       end
       if @document.save
