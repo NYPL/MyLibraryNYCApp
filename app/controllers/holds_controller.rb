@@ -85,6 +85,7 @@ class HoldsController < ApplicationController
           @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
           @hold.teacher_set.availability = TeacherSet::UNAVAILABLE if @hold.teacher_set.available_copies <= 0
           @hold.teacher_set.save!
+          @hold.update_teacher_set_availability
           LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
           format.html { redirect_to hold_url(@hold.access_key), notice:
             'Your order has been received by our system and will soon be delivered to your school.\
@@ -124,8 +125,9 @@ class HoldsController < ApplicationController
         # Update teacher-set available copies while cancelling the hold.
         user_holds_count = @hold.teacher_set.holds_count_for_user(current_user, @hold.id).to_i
         @hold.teacher_set.available_copies = @hold.teacher_set.available_copies.to_i + user_holds_count
-        @hold.teacher_set.availability = TeacherSet::AVAILABLE if @hold.teacher_set.available_copies > 0
+        @hold.teacher_set.availability = TeacherSet::AVAILABLE if @hold.teacher_set.available_copies.positive?
         @hold.teacher_set.save!
+        @hold.update_teacher_set_availability
         LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
         @hold.cancel! c[:comment]
       end

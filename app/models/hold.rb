@@ -65,6 +65,17 @@ class Hold < ActiveRecord::Base
   end
 
 
+  # Update teacher-set availability while creation/cancellation of hold.
+  def update_teacher_set_availability
+    body = {
+     :availability => self.teacher_set.availability,
+     :available_copies => self.teacher_set.available_copies,
+     :total_copies => self.teacher_set.total_copies
+    }
+    ElasticSearch.new.update_document_by_id(self.teacher_set.id, body)
+  end
+
+
   # After hold is created, recalculate teacher_set availability string in case
   # this hold was placed on last avail copy
   #
