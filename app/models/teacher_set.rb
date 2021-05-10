@@ -104,7 +104,7 @@ class TeacherSet < ActiveRecord::Base
 
 
   # Update teacher-set availability while creation/cancellation of hold.
-  def update_teacher_set_availability
+  def update_teacher_set_availability_in_elastic_search
     body = {
      :availability => self.availability,
      :available_copies => self.available_copies,
