@@ -103,6 +103,17 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
+  # Update teacher-set availability while creation/cancellation of hold.
+  def update_teacher_set_availability
+    body = {
+     :availability => self.availability,
+     :available_copies => self.available_copies,
+     :total_copies => self.total_copies
+    }
+    ElasticSearch.new.update_document_by_id(self.id, body)
+  end
+
+
   # Get teacher-set holds by user and hold_id
   def ts_holds_by_user_and_hold_id(user, hold_id)
     holds.where(:user_id => user.id, :id => hold_id).where.not(status: ['cancelled', 'closed'])
