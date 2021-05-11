@@ -102,17 +102,6 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
-
-  # Update teacher-set availability while creation/cancellation of hold.
-  def update_teacher_set_availability_in_elastic_search
-    body = {
-     :availability => self.availability,
-     :available_copies => self.available_copies,
-     :total_copies => self.total_copies
-    }
-    ElasticSearch.new.update_document_by_id(self.id, body)
-  end
-
   
   def teacher_set_availability(available_copies)
     available_copies.to_i > 0 ? AVAILABLE : UNAVAILABLE
@@ -136,6 +125,16 @@ class TeacherSet < ActiveRecord::Base
     self.available_copies = available_copies
     self.availability = availability
     self.save!
+  end
+
+
+  # Update teacher-set availability while creation/cancellation of hold.
+  def update_teacher_set_availability_in_elastic_search
+    body = {
+     :availability => self.availability,
+     :available_copies => self.available_copies
+    }
+    ElasticSearch.new.update_document_by_id(self.id, body)
   end
 
 

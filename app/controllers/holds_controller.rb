@@ -84,7 +84,7 @@ class HoldsController < ApplicationController
           teacher_set = @hold.teacher_set
          
           # Update teacher-set availability in DB
-          teacher_set.update_teacher_set_availability_in_db('create', @hold.quantity)
+          teacher_set.update_teacher_set_availability_in_db('create', quantity)
 
           # Update teacher-set availability in elastic search document
           teacher_set.update_teacher_set_availability_in_elastic_search
