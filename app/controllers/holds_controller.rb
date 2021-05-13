@@ -78,14 +78,13 @@ class HoldsController < ApplicationController
 
       quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
       @hold.quantity = quantity.to_i
-
       respond_to do |format|
         if @hold.save
           teacher_set = @hold.teacher_set
          
           # Update teacher-set availability in DB
-          teacher_set.update_teacher_set_availability_in_db('create', quantity)
-
+          teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
+          
           # Update teacher-set availability in elastic search document
           teacher_set.update_teacher_set_availability_in_elastic_search
           LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})

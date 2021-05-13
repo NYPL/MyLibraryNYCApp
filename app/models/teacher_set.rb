@@ -103,13 +103,13 @@ class TeacherSet < ActiveRecord::Base
   end
 
   
-  def teacher_set_availability
+  def availability
     self.available_copies.to_i > 0 ? AVAILABLE : UNAVAILABLE
   end
 
 
   # calculate teacher-set available copies while creating/cancelling the hold
-  def calculate_available_copies(status, quantity, current_user=nil, hold_id=nil)
+  def calculate_available_copies(status, quantity=nil, current_user=nil, hold_id=nil)
     if status == 'cancelled'
       user_holds_count = holds_count_for_user(current_user, hold_id).to_i
       available_copies = self.available_copies.to_i + user_holds_count
@@ -121,9 +121,9 @@ class TeacherSet < ActiveRecord::Base
 
 
   def update_teacher_set_availability_in_db(status, quantity=nil, current_user=nil, hold_id=nil)
-    available_copies, availability = calculate_available_copies(status, quantity, current_user, hold_id)
+    available_copies = calculate_available_copies(status, quantity, current_user, hold_id)
     self.available_copies = available_copies
-    self.availability = teacher_set_availability
+    self.availability = availability
     self.save!
   end
 
