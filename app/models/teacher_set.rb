@@ -108,7 +108,8 @@ class TeacherSet < ActiveRecord::Base
   end
 
 
-  def calculate_available_copies(status, quantity, current_user, hold_id)
+  # calculate teacher-set available copies while creating/cancelling the hold
+  def calculate_available_copies(status, quantity, current_user=nil, hold_id=nil)
     if status == 'cancelled'
       user_holds_count = holds_count_for_user(current_user, hold_id).to_i
       available_copies = self.available_copies.to_i + user_holds_count
