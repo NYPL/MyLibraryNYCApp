@@ -449,7 +449,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'teacher_set#teacher_set_availability' do
     it 'get teacher_set availability based on the available copies' do
-      ts_availability = @teacher_set2.teacher_set_availability
+      ts_availability = @teacher_set2.availability
       assert_equal('available', ts_availability)
     end
   end
