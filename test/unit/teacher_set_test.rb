@@ -415,15 +415,13 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'teacher_set#calculate_available_copies' do
     it 'calculate teacher-set available copies while cancelling the hold' do
-      available_copies, availability = @teacher_set2.calculate_available_copies('cancelled', nil, @user, @hold1.id)
+      available_copies = @teacher_set2.calculate_available_copies('cancelled', nil, @user, @hold1.id)
       assert_equal(2, available_copies)
-      assert_equal('available', availability)
     end
 
     it 'calculate teacher-set available copies while creating the hold' do
-      available_copies, availability = @teacher_set2.calculate_available_copies('create', @hold1.quantity)
+      available_copies = @teacher_set2.calculate_available_copies('create', @hold1.quantity)
       assert_equal(0, available_copies)
-      assert_equal('unavailable', availability)
     end
   end
 
@@ -451,7 +449,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'teacher_set#teacher_set_availability' do
     it 'get teacher_set availability based on the available copies' do
-      ts_availability = @teacher_set2.teacher_set_availability(@teacher_set.available_copies)
+      ts_availability = @teacher_set2.teacher_set_availability
       assert_equal('available', ts_availability)
     end
   end
