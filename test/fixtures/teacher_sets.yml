@@ -9,6 +9,7 @@ teacher_set_one:
   subjects: [subjects_one, subjects_two]
   created_at: Time.zone.parse("2014-10-19 1:00:00")
   updated_at: Time.zone.parse("2014-10-19 1:00:00")
+  availability: 'available'
 teacher_set_two:
   description: MyText1
   title: MyString1

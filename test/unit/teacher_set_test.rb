@@ -399,6 +399,63 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
+
+  describe 'teacher_set#update_teacher_set_availability_in_db' do
+    it 'update teacher-setavailability while creating the hold ' do
+      resp = @teacher_set2.update_teacher_set_availability_in_db('create', @hold1.quantity)
+      assert_equal(true, resp)
+    end
+
+    it 'update teacher-setavailability while cancelling the hold ' do
+      resp = @teacher_set2.update_teacher_set_availability_in_db('cancelled', nil, @user, @hold1.id)
+      assert_equal(true, resp)
+    end
+  end
+
+
+  describe 'teacher_set#calculate_available_copies' do
+    it 'calculate teacher-set available copies while cancelling the hold' do
+      available_copies, availability = @teacher_set2.calculate_available_copies('cancelled', nil, @user, @hold1.id)
+      assert_equal(2, available_copies)
+      assert_equal('available', availability)
+    end
+
+    it 'calculate teacher-set available copies while creating the hold' do
+      available_copies, availability = @teacher_set2.calculate_available_copies('create', @hold1.quantity)
+      assert_equal(0, available_copies)
+      assert_equal('unavailable', availability)
+    end
+  end
+
+  describe 'teacher_set#update_teacher_set_availability_in_elastic_search' do
+    it 'should call ElasticSearch#update_document_by_id' do
+      resp = nil
+      elasticsearch_adapter_mock = Minitest::Mock.new
+      es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
+                "_id" => @teacher_set2.id, "_version" => 11, "result" => "updated", 
+                "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
+      body = {
+         :availability => @teacher_set2.availability,
+         :available_copies => @teacher_set2.available_copies
+        }
+
+      elasticsearch_adapter_mock.expect(:update_document_by_id, es_doc, [@teacher_set2.id, body])
+      ElasticSearch.stub :new, elasticsearch_adapter_mock do
+        resp = @teacher_set2.update_teacher_set_availability_in_elastic_search
+      end
+      assert_equal(resp['result'], "updated")
+      elasticsearch_adapter_mock.verify
+    end
+  end
+
+
+  describe 'teacher_set#teacher_set_availability' do
+    it 'get teacher_set availability based on the available copies' do
+      ts_availability = @teacher_set2.teacher_set_availability(@teacher_set.available_copies)
+      assert_equal('available', ts_availability)
+    end
+  end
+
   private
 
   def bib_id_not_found_response

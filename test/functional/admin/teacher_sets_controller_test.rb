@@ -63,7 +63,7 @@ module Admin
 
     def create_teacher_set_version
       teacher_set = TeacherSet.find(@teacher_set.id)
-      teacher_set.availability = 'available'
+      teacher_set.call_number = '123'
       teacher_set.save!
     end
   end
