@@ -27,7 +27,7 @@ module Admin
       sign_in @user
       resp = post :create, params: { id: @hold_change.id, hold_change: {status: "closed", hold_id: @hold_change.hold_id}}
       resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold_change.hold_id)
-      assert_equal(2, resp_hold_obj.quantity)
+      assert_equal(1, resp_hold_obj.quantity)
       assert_equal("302", response.code)
       assert_response :redirect
     end
