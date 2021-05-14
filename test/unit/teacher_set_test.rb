@@ -13,6 +13,9 @@ class TeacherSetTest < ActiveSupport::TestCase
     @user = holds(:hold1).user
     @hold1 = holds(:hold1)
     @hold2 = holds(:hold2)
+    @hold4 = holds(:hold4)
+    @hold9 = holds(:hold9)
+    @user2 = holds(:hold9).user
     @teacher_set = teacher_sets(:teacher_set_one)
     @teacher_set2 = teacher_sets(:teacher_set_two)
     @teacher_set3 = teacher_sets(:teacher_set_three)
@@ -128,23 +131,14 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe "test teacher-set holds count" do
     # Test-1
-    it "test current-user holds count with hold_id not nil" do
-      @mintest_mock1.expect(:call, [@hold1], [@user, @hold1.id])
-      resp = nil
-      @model.stub :holds_for_user, @mintest_mock1 do
-        resp = @teacher_set.holds_count_for_user(@user, @hold1.id)
-      end
-      assert_equal(2, resp)
+    it "test current-user teacher-set holds count with hold_id" do
+      resp = @teacher_set2.holds_count_for_user(@user, @hold2.id)
+      assert_equal(1, resp)
     end
 
     # Test-2
-    it "test current-user holds count with hold_id nil" do
-      @mintest_mock1.expect(:call, [@hold1], [@user, nil])
-      resp = nil
-      @model.stub :holds_for_user, @mintest_mock1 do
-        resp = @teacher_set.holds_count_for_user(@user, @hold1.id)
-      end
-      assert_equal(2, resp)
+    it "test current-user holds count" do
+      assert_equal(1, @teacher_set2.holds_count_for_user(@user))
     end
   end
 
@@ -157,12 +151,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
     # Test-2
     it 'test current-user holds with hold_id' do
-      @mintest_mock1.expect(:call, [@hold1], [@user, @hold1.id])
-      resp = nil
-      @model.stub :ts_holds_by_user_and_hold_id, @mintest_mock1 do 
-        resp = @teacher_set.holds_for_user(@user, @hold1.id)
-      end
-      assert_equal([@hold1], resp)
+      assert_equal([@hold2], @teacher_set2.holds_for_user(@user, @hold2.id))
     end
 
   end
@@ -242,11 +231,12 @@ class TeacherSetTest < ActiveSupport::TestCase
       @es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
                 "_id" => 8888, "_version" => 11, "result" => "updated", 
                 "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
-      @expected_resp = {:title=>"title",:description=>"desc",:contents=>nil,:id=>8888,:details_url=>nil,
-                        :grade_end=>nil,:grade_begin=>nil,:availability=>nil,:total_copies=>nil,
-                        :call_number=>nil,:language=>nil,:physical_description=>nil,:primary_language=>nil,
-                        :created_at=>nil,:updated_at=>nil,:available_copies=>nil,
-                        :bnumber=>"bnumber",:set_type=>nil,:area_of_study=>nil,:subjects=>[]}
+      @expected_resp = {:title=>"title",:description=>"desc",
+                        :contents=>nil,:id=>8888,:details_url=>nil,:grade_end=>nil,
+                        :grade_begin=>nil,:availability=>"unavailable",:total_copies=>nil,:call_number=>nil,
+                        :language=>nil,:physical_description=>nil,:primary_language=>nil,
+                        :created_at=>nil,:updated_at=>nil,:available_copies=>nil,:bnumber=>"bnumber",
+                        :set_type=>nil,:area_of_study=>nil,:subjects=>[]}
     end
 
     it 'update teacher-set document in ElasticSearch' do
@@ -415,12 +405,18 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'teacher_set#calculate_available_copies' do
     it 'calculate teacher-set available copies while cancelling the hold' do
-      available_copies = @teacher_set2.calculate_available_copies('cancelled', nil, @user, @hold1.id)
-      assert_equal(2, available_copies)
+      # available_copies before cancelling hold
+      available_copies_before_cancellation = @teacher_set2.available_copies
+      available_copies = @teacher_set2.calculate_available_copies('cancelled', nil, @user, @hold2.id)
+      assert_equal(2, available_copies_before_cancellation)
+      assert_equal(3, available_copies)
     end
 
     it 'calculate teacher-set available copies while creating the hold' do
-      available_copies = @teacher_set2.calculate_available_copies('create', @hold1.quantity)
+      # available_copies before creating hold
+      available_copies_before_creation = @teacher_set2.available_copies
+      available_copies = @teacher_set4.calculate_available_copies('create', @hold4.quantity)
+      assert_equal(2, available_copies_before_creation)
       assert_equal(0, available_copies)
     end
   end

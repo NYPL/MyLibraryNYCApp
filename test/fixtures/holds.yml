@@ -4,15 +4,17 @@ hold1:
   access_key: access_key1
   status: new
   quantity: 2
-  teacher_set: teacher_set_one
+  teacher_set: [teacher_set_one, teacher_set_two]
   user: user1
+  teacher_set_id: teacher_set_two.id
   
 hold2:
   access_key: access_key2
   status: new
   quantity: 1
-  teacher_set: teacher_set_one
+  teacher_set: teacher_set_two
   user: user1
+  teacher_set_id: teacher_set_two.id
 
 hold3:
   access_key: access_key3
@@ -25,6 +27,8 @@ hold4:
   access_key: access_key4
   status: cancelled
   teacher_set: teacher_set_four
+  teacher_set_id: teacher_set_four.id
+  quantity: 2
 
 hold5:
   access_key: access_key5
@@ -49,3 +53,10 @@ hold8:
   status: n_a
   teacher_set: teacher_set_four
   user: user1
+
+hold9:
+  access_key: access_key9
+  status: new
+  teacher_set: teacher_set_one
+  user: user1
+  quantity: 2
