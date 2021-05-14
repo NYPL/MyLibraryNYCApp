@@ -45,6 +45,7 @@ class HoldsControllerTest < ActionController::TestCase
               "_id" => @hold2.teacher_set.id, "_version" => 11, "result" => "updated", 
               "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
 
+    # Teacher_set available_copies before cancellation of hold.
     assert_equal(2, @hold2.teacher_set.available_copies)
 
     TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
@@ -80,6 +81,9 @@ class HoldsControllerTest < ActionController::TestCase
               "_id" => @hold2.teacher_set.id, "_version" => 11, "result" => "updated", 
               "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
 
+    # Teacher_set available_copies before cancellation of hold.
+    assert_equal(2, @hold2.teacher_set.available_copies)
+    
     TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
       resp = post :update, params: { id: @hold2.access_key, hold_change: {"comment" => "qqq", "status" => "new"}, hold: {status: "new"} }
     end
@@ -99,7 +103,7 @@ class HoldsControllerTest < ActionController::TestCase
     es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
               "_id" => @hold2.teacher_set.id, "_version" => 11, "result" => "created", 
               "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
-    
+    # Teacher_set available_copies before creation of hold.
     assert_equal(2, @hold2.teacher_set.available_copies)
     TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
       resp = post :create, params: { id: @hold2.access_key, teacher_set_id: @hold2.teacher_set_id, query_params: {"quantity" => 1}, hold: {} }
