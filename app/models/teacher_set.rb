@@ -94,7 +94,6 @@ class TeacherSet < ActiveRecord::Base
   # Current user Teacher set holds
   def holds_for_user(user, hold_id)
     return [] unless user
-    
     if hold_id.present?
       ts_holds_by_user_and_hold_id(user, hold_id)
     else
@@ -109,6 +108,7 @@ class TeacherSet < ActiveRecord::Base
 
 
   # calculate teacher-set available copies while creating/cancelling the hold
+  # quantity = No.of holds requested while creation of hold.
   def calculate_available_copies(status, quantity=nil, current_user=nil, hold_id=nil)
     if status == 'cancelled'
       user_holds_count = holds_count_for_user(current_user, hold_id).to_i
