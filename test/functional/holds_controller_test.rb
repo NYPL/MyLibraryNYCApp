@@ -74,7 +74,6 @@ class HoldsControllerTest < ActionController::TestCase
 
   test "Should fail hold cancelaltion" do
     sign_in @user
-    expected_ts_available_copies = 4
     resp = nil
     es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
               "_id" => @teacher_set.id, "_version" => 11, "result" => "updated", 
