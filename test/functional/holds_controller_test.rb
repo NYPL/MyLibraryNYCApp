@@ -39,20 +39,22 @@ class HoldsControllerTest < ActionController::TestCase
 
   test "update teacher-set available_copies and cancel hold successfully" do
     sign_in @user
-    expected_ts_available_copies = 2
+    expected_ts_available_copies = 3
     resp = nil
     es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-              "_id" => @teacher_set2.id, "_version" => 11, "result" => "updated", 
+              "_id" => @hold2.teacher_set.id, "_version" => 11, "result" => "updated", 
               "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
 
-    TeacherSet.stub_any_instance :update_teacher_set_availability_in_db, true do
-      TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
-        resp = post :update, params: { id: @hold2.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
-      end
+    assert_equal(2, @hold2.teacher_set.available_copies)
+
+    TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
+      resp = post :update, params: { id: @hold2.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
     end
     resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold2.id)
     # After cancellation of hold, status changed from "new" to "cancelled"
     assert_equal(resp_hold_obj.status, "cancelled")
+    # Before cancellation of hold teacher-set available_copies count is 2.
+    # After cancellation of hold teacher-set available_copies count is 3.
     assert_equal(expected_ts_available_copies, TeacherSet.find(resp_hold_obj.teacher_set_id).available_copies)
     assert_response :redirect
     assert_equal("Your order was successfully updated.", flash[:notice])
@@ -61,50 +63,49 @@ class HoldsControllerTest < ActionController::TestCase
   test "test update method with empty holds" do
     sign_in @user
     es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-              "_id" => @teacher_set.id, "_version" => 11, "result" => "updated", 
+              "_id" => @hold4.teacher_set.id, "_version" => 11, "result" => "updated", 
               "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
 
-    TeacherSet.stub_any_instance :update_teacher_set_availability_in_db, true do
-      TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
-        post :update, params: { id: @hold4.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
-      end
+    TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
+      post :update, params: { id: @hold4.access_key, hold_change: {"comment" => "qqq", "status" => "cancelled"}, hold: {status: "MyText"} }
     end
     assert_nil(flash[:notice])
   end
 
   test "Should fail hold cancelaltion" do
+    expected_ts_available_copies = 2
     sign_in @user
     resp = nil
     es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-              "_id" => @teacher_set.id, "_version" => 11, "result" => "updated", 
+              "_id" => @hold2.teacher_set.id, "_version" => 11, "result" => "updated", 
               "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
 
-    TeacherSet.stub_any_instance :update_teacher_set_availability_in_db, true do
-      TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
-        resp = post :update, params: { id: @hold1.access_key, hold_change: {"comment" => "qqq", "status" => "new"}, hold: {status: "new"} }
-      end
+    TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
+      resp = post :update, params: { id: @hold2.access_key, hold_change: {"comment" => "qqq", "status" => "new"}, hold: {status: "new"} }
     end
-    resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold1.id)
+    resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold2.id)
     # Hold status not changed.
+    # teacher-set available_copies also not changed, because hold is not cancelled.
     assert_equal(resp_hold_obj.status, "new")
+    assert_equal(expected_ts_available_copies, TeacherSet.find(resp_hold_obj.teacher_set_id).available_copies)
     assert_response :redirect
   end
 
   test "create hold and update teacher-set available_copies" do
-    expected_ts_available_copies = 2
+    expected_ts_available_copies = 1
     # Before hold creation teacher-set available copies is 2.
     sign_in @user
     resp = nil
     es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-              "_id" => @teacher_set2.id, "_version" => 11, "result" => "created", 
+              "_id" => @hold2.teacher_set.id, "_version" => 11, "result" => "created", 
               "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
-
-    TeacherSet.stub_any_instance :update_teacher_set_availability_in_db, true do
-      TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
-        resp = post :create, params: { id: @hold2.access_key, teacher_set_id: @hold2.teacher_set_id, query_params: {"quantity" => 1}, hold: {} }
-      end
+    
+    assert_equal(2, @hold2.teacher_set.available_copies)
+    TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
+      resp = post :create, params: { id: @hold2.access_key, teacher_set_id: @hold2.teacher_set_id, query_params: {"quantity" => 1}, hold: {} }
     end
     resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold2.id)
+    # User requested 1 teacher-sets. After creation of hold teacher-set available_copies will 1.
     assert_equal(expected_ts_available_copies, TeacherSet.find(resp_hold_obj.teacher_set_id).available_copies)
   end
 
