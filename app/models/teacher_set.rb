@@ -94,6 +94,7 @@ class TeacherSet < ActiveRecord::Base
   # Current user Teacher set holds
   def holds_for_user(user, hold_id)
     return [] unless user
+    
     if hold_id.present?
       ts_holds_by_user_and_hold_id(user, hold_id)
     else
