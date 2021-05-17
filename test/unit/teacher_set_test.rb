@@ -405,19 +405,21 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe 'teacher_set#calculate_available_copies' do
     it 'calculate teacher-set available copies while cancelling the hold' do
-      # available_copies before cancelling hold
+      # available_copies before cancellation of hold
       available_copies_before_cancellation = @teacher_set2.available_copies
-      available_copies = @teacher_set2.calculate_available_copies('cancelled', nil, @user, @hold2.id)
+      available_copies_after_cancellation = @teacher_set2.calculate_available_copies('cancelled', nil, @user, @hold2.id)
       assert_equal(2, available_copies_before_cancellation)
-      assert_equal(3, available_copies)
+      # After cancellation of hold available_copies count increased.
+      assert_equal(3, available_copies_after_cancellation)
     end
 
     it 'calculate teacher-set available copies while creating the hold' do
       # available_copies before creating hold
       available_copies_before_creation = @teacher_set2.available_copies
-      available_copies = @teacher_set4.calculate_available_copies('create', @hold4.quantity)
+      available_copies_after_creation = @teacher_set4.calculate_available_copies('create', @hold4.quantity)
       assert_equal(2, available_copies_before_creation)
-      assert_equal(0, available_copies)
+      # After creation of hold available_copies count decreased.
+      assert_equal(0, available_copies_after_creation)
     end
   end
 
