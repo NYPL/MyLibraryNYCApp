@@ -10,6 +10,7 @@ class UserTest < ActiveSupport::TestCase
     @user = crank(:queens_user, barcode: 27777011111111)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: @user.school.code)
     AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
+    @pin_msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
   end
 
 
@@ -74,7 +75,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created without pin' do
       @user.pin = ""
       @user.save
-      assert_equal(["can't be blank", "may only contain numbers", "must be 4 digits."], @user.errors.messages[:pin])
+      assert_equal(["can't be blank", "is invalid", "must be 4 to 32 characters."], @user.errors.messages[:pin])
     end
   end
 
@@ -91,7 +92,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with 4 of the same repeated digits as pin' do
       @user.pin = "1111"
       @user.save
-      assert_equal(@user.errors.messages[:pin],["PIN does not meet our requirements. Please try again."])
+      assert_equal(@user.errors.messages[:pin],[@pin_msg])
     end
   end
 
@@ -99,7 +100,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with alternate repeated digits as pin' do
       @user.pin = "1212"
       @user.save
-      assert_equal(@user.errors.messages[:pin],["PIN does not meet our requirements. Please try again."])
+      assert_equal(@user.errors.messages[:pin],[@pin_msg])
     end
   end
 
@@ -107,7 +108,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with 3 of the same repeated digits in a row as pin' do
       @user.pin = "0007"
       @user.save
-      assert_equal(@user.errors.messages[:pin],["PIN does not meet our requirements. Please try again."])
+      assert_equal(@user.errors.messages[:pin],[@pin_msg])
     end
   end
 

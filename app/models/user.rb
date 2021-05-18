@@ -24,7 +24,8 @@ class User < ActiveRecord::Base
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
 
-  validates :pin, :presence => true, format: { with: /\w/}, length: { in: 4..32, message: 'must be 4 to 32 digits.' }, on: :create
+  # pin allows mix of uppercase, lowercase letters, numbers and symbols.For example: MyLib1731@!
+  validates :pin, :presence => true, format: { with: /\w/}, length: { in: 4..32, message: 'must be 4 to 32 characters.' }, on: :create
   validate :validate_pin_pattern, on: :create
   validate :validate_email_pattern, :on => :create
 
@@ -208,7 +209,8 @@ class User < ActiveRecord::Base
     if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
       true
     else
-      errors.add(:pin, 'PIN does not meet our requirements. Please try again. Password should not contain common patterns. e.g. aaatf54, abcabcab')
+      msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
+      errors.add(:pin, msg)
       false
     end
   end
