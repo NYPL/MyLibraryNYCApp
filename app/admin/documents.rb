@@ -11,16 +11,13 @@ ActiveAdmin.register Document do
 
   controller do
     def create
-      attrs = permitted_params[:document]
+      attrs = params[:document]
       @document = Document.new
       @document[:event_type] = attrs[:event_type]
+      # @document[:file_path] = attrs['file_path']
+      @document[:file_name] = attrs['file_path'].split('https://docs.google.com/document/d/')[1].gsub('/edit', '')
 
-      if attrs[:file].present?
-        path = PandocRuby.new([attrs[:file].tempfile.path], from: 'docx').to_pdf
-        @document[:file_name] = "mln_doc.pdf"
-        @document[:file] = @document.mln_calendar_from_google_doc
-        @document[:file_path] = attrs[:file].tempfile.path
-      end
+      binding.pry
       if @document.save
         redirect_to admin_document_path(@document)
       else
@@ -29,16 +26,13 @@ ActiveAdmin.register Document do
     end
 
     def update
-      attrs = permitted_params[:document]
+      binding.pry
+      attrs = params[:document]
       @document = Document.where(id: params[:id]).first!
       @document[:event_type] = attrs[:event_type]
-      @document[:file_path] = File.new(@document.file_path, "w").path
-      
-      if attrs[:file].present?
-        @document[:file_name] = attrs[:file].original_filename
-        @document[:file_path] = attrs[:file].tempfile.path
-        @document[:file] = attrs[:file].read
-      end
+      @document[:file_path] = attrs['file_path']
+      @document[:file_name] = attrs['file_path'].split('https://docs.google.com/document/d/')[1].gsub('/edit', '')
+
       if @document.save
         redirect_to admin_document_path(@document)
       else
@@ -72,10 +66,9 @@ ActiveAdmin.register Document do
   form do |f|
     f.inputs "Create MyLibraryNyc Documents" do
       f.input :event_type, collection: Document::EVENTS, include_blank: false
-      if !f.object.new_record?
-        f.input :file_name, :input_html => { :disabled => true } 
-      end
-      f.input :file, as: :file
+      #if !f.object.new_record?
+        f.input :file_path#, :input_html => { :disabled => true } 
+      #end
     end
     f.actions
   end

@@ -46,12 +46,13 @@ class HomeController < ApplicationController
   end
 
 
+
   def mln_calendar_of_event
-      @mln_calendar_event = Document.calendar_of_event.first
+      event, file = Document.mln_calendar_from_google_doc
       respond_to do |format|
         format.pdf { 
-          send_data(@mln_calendar_event.file,
-                    filename: @mln_calendar_event.file_name, 
+          send_data(file,
+                    filename: event.file_name, 
                     type: "application/pdf",
                     disposition: :inline)
         }

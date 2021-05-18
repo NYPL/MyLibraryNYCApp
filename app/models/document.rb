@@ -3,7 +3,6 @@ class Document < ActiveRecord::Base
   validate :validate_event_type, :on => [:create, :update]
   validate :event_type_already_exist, :on => :create
   validate :validate_antivirus, :on => [:create, :update]
-  validate :validate_file
 
   # Event-types  
   EVENTS = [['-- Select --', 0], ['Calendar of events', 'calendar_of_event']]
@@ -36,8 +35,10 @@ class Document < ActiveRecord::Base
     errors.add(:file, 'Please upload file') unless file.present?
   end
 
-  def mln_calendar_from_google_doc
+  def self.mln_calendar_from_google_doc
+    event = calendar_of_event.first
     service = GoogleApiClient.drive_client
-    service.export_file('1xU8CGyhdCaq73Jr9vPj9xBwLXJRNT3wTTOgOHW1PUqY', 'application/pdf')
+    file = service.export_file('13kuBBchhdhvIF7pFn-K5pdsGb_7M0MHeHTsYmrKaRP0', 'application/pdf')
+    [event, file]
   end
 end
