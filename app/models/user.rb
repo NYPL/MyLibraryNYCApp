@@ -209,7 +209,7 @@ class User < ActiveRecord::Base
     if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
       true
     else
-      msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
+      msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abab. Please try again.'
       errors.add(:pin, msg)
       false
     end

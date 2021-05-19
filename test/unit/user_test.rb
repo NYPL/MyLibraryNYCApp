@@ -10,7 +10,7 @@ class UserTest < ActiveSupport::TestCase
     @user = crank(:queens_user, barcode: 27777011111111)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: @user.school.code)
     AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
-    @pin_msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
+    @pin_error = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abab. Please try again.'
   end
 
 
@@ -79,6 +79,22 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+
+  [generate_email].each do |new_email|
+    test 'validate pin length less than 4 characters' do
+      @user.pin = "123"
+      @user.save
+      assert_equal(["must be 4 to 32 characters."], @user.errors.messages[:pin])
+    end
+
+    test 'validate pin length more than 32 characters' do
+      @user.pin = "1234!qwertyuioplkjhgfsaqwerwuytrwesrs"
+      @user.save
+      assert_equal(["must be 4 to 32 characters."], @user.errors.messages[:pin])
+    end
+  end
+
+
   [generate_email].each do |new_email|
     test 'user model cannot be created with an existing alternate e-mail address in database' do
       @user.save
@@ -92,7 +108,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with 4 of the same repeated digits as pin' do
       @user.pin = "1111"
       @user.save
-      assert_equal(@user.errors.messages[:pin],[@pin_msg])
+      assert_equal(@user.errors.messages[:pin],[@pin_error])
     end
   end
 
@@ -100,7 +116,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with alternate repeated digits as pin' do
       @user.pin = "1212"
       @user.save
-      assert_equal(@user.errors.messages[:pin],[@pin_msg])
+      assert_equal(@user.errors.messages[:pin],[@pin_error])
     end
   end
 
@@ -108,7 +124,7 @@ class UserTest < ActiveSupport::TestCase
     test 'user model cannot be created with 3 of the same repeated digits in a row as pin' do
       @user.pin = "0007"
       @user.save
-      assert_equal(@user.errors.messages[:pin],[@pin_msg])
+      assert_equal(@user.errors.messages[:pin],[@pin_error])
     end
   end
 
