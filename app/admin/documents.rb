@@ -12,12 +12,9 @@ ActiveAdmin.register Document do
   controller do
     def create
       attrs = params[:document]
-      @document = Document.new
+      @document = Document.new 
       @document[:event_type] = attrs[:event_type]
-      # @document[:file_path] = attrs['file_path']
-      @document[:file_name] = attrs['file_path'].split('https://docs.google.com/document/d/')[1].gsub('/edit', '')
-
-      binding.pry
+      @document[:file_path] = attrs['file_path']
       if @document.save
         redirect_to admin_document_path(@document)
       else
@@ -26,12 +23,10 @@ ActiveAdmin.register Document do
     end
 
     def update
-      binding.pry
       attrs = params[:document]
       @document = Document.where(id: params[:id]).first!
       @document[:event_type] = attrs[:event_type]
       @document[:file_path] = attrs['file_path']
-      @document[:file_name] = attrs['file_path'].split('https://docs.google.com/document/d/')[1].gsub('/edit', '')
 
       if @document.save
         redirect_to admin_document_path(@document)
@@ -44,7 +39,7 @@ ActiveAdmin.register Document do
   # Reorderable Index Table
   index do
     column :event_type
-    column :file_name
+    column :file_path
     column :created_at
     column :updated_at
     column :links do |resource|
@@ -67,7 +62,7 @@ ActiveAdmin.register Document do
     f.inputs "Create MyLibraryNyc Documents" do
       f.input :event_type, collection: Document::EVENTS, include_blank: false
       #if !f.object.new_record?
-        f.input :file_path#, :input_html => { :disabled => true } 
+      f.input :file_path#, :input_html => { :disabled => true } 
       #end
     end
     f.actions
@@ -76,7 +71,7 @@ ActiveAdmin.register Document do
    show do
     attributes_table do
       row :event_type
-      row :file_name
+      row :file_path
     end
   end
 
