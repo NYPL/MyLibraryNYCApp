@@ -23,16 +23,6 @@ class TeacherSetsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  # TODO: Fix: This test fails with the '"TeacherSet.count" didn't change by 1.'
-  # error message.
-  test "should create teacher_set" do
-    # assert_difference 'TeacherSet.count' do
-    #   post :create, params: {teacher_set: {description: @teacher_set.description, title: @teacher_set.title}}
-    # end
-    # assert_redirected_to teacher_set_path(assigns(:teacher_set))
-    assert_response :success
-  end
-
   test "test teacher-set strong params" do
     post :create, params: { id: 1 }
     assert_response :success

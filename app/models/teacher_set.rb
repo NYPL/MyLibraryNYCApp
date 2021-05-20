@@ -102,6 +102,42 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
+  
+  def availability
+    self.available_copies.to_i > 0 ? AVAILABLE : UNAVAILABLE
+  end
+
+
+  # calculate teacher-set available copies while creating/cancelling the hold
+  # quantity = No.of holds requested while creation of hold.
+  def calculate_available_copies(status, quantity=nil, current_user=nil, hold_id=nil)
+    if status == 'cancelled'
+      user_holds_count = holds_count_for_user(current_user, hold_id).to_i
+      available_copies = self.available_copies.to_i + user_holds_count
+    else
+      available_copies = self.available_copies - quantity.to_i
+    end
+    available_copies
+  end
+
+
+  def update_teacher_set_availability_in_db(status, quantity=nil, current_user=nil, hold_id=nil)
+    available_copies = calculate_available_copies(status, quantity, current_user, hold_id)
+    self.available_copies = available_copies
+    self.availability = availability
+    self.save!
+  end
+
+
+  # Update teacher-set availability while creation/cancellation of hold.
+  def update_teacher_set_availability_in_elastic_search
+    body = {
+     :availability => self.availability,
+     :available_copies => self.available_copies
+    }
+    ElasticSearch.new.update_document_by_id(self.id, body)
+  end
+
 
   # Get teacher-set holds by user and hold_id
   def ts_holds_by_user_and_hold_id(user, hold_id)
