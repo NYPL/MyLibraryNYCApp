@@ -11,11 +11,18 @@ ActiveAdmin.register Document do
 
   controller do
     def create
-      attrs = params[:document]
-      @document = Document.new 
-      @document[:event_type] = attrs[:event_type]
-      @document[:file_path] = attrs['file_path']
-      if @document.save
+      begin
+        attrs = params[:document]
+        @document = Document.new
+        @document[:event_type] = attrs[:event_type]
+        @document[:file_name] = attrs['file_name']
+        @document[:file_path] = attrs['file_path']
+        @document[:file] = google_document(attrs['file_path'])
+      rescue => e
+        flash[:error] = e.message
+      end
+
+      if !flash[:error] && @document.save
         redirect_to admin_document_path(@document)
       else
         render :new
@@ -23,23 +30,34 @@ ActiveAdmin.register Document do
     end
 
     def update
-      attrs = params[:document]
-      @document = Document.where(id: params[:id]).first!
-      @document[:event_type] = attrs[:event_type]
-      @document[:file_path] = attrs['file_path']
+      begin
+        attrs = params[:document]
+        @document = Document.where(id: params[:id]).first!
+        @document[:event_type] = attrs[:event_type]
+        @document[:file_name] = attrs['file_name']
+        @document[:file_path] = attrs['file_path']
+        @document[:file] = google_document(attrs['file_path'])
+      rescue => e
+        flash[:error] = e.message
+      end
 
-      if @document.save
+      if !flash[:error] && @document.save
         redirect_to admin_document_path(@document)
       else
         render :edit
       end
+    end
+
+    def google_document(file_path)
+      document_id = URI.split(file_path)[5].split('/')[3]
+      GoogleApiClient.export_file(document_id, "application/pdf")
     end
   end
 
   # Reorderable Index Table
   index do
     column :event_type
-    column :file_path
+    column :file_name
     column :created_at
     column :updated_at
     column :links do |resource|
@@ -61,7 +79,7 @@ ActiveAdmin.register Document do
   form do |f|
     f.inputs "Create MyLibraryNyc Documents" do
       f.input :event_type, collection: Document::EVENTS, include_blank: false
-      #if !f.object.new_record?
+      f.input :file_name
       f.input :file_path#, :input_html => { :disabled => true } 
       #end
     end
@@ -71,7 +89,7 @@ ActiveAdmin.register Document do
    show do
     attributes_table do
       row :event_type
-      row :file_path
+      row :file_name
     end
   end
 
