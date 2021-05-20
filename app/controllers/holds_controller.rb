@@ -78,12 +78,15 @@ class HoldsController < ApplicationController
 
       quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
       @hold.quantity = quantity.to_i
-
       respond_to do |format|
         if @hold.save
-          # Update teacher-set available_copies while creating the teacher-set order copies.
-          @hold.teacher_set.available_copies = @hold.teacher_set.available_copies - quantity.to_i
-          @hold.teacher_set.save!
+          teacher_set = @hold.teacher_set
+         
+          # Update teacher-set availability in DB
+          teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
+          
+          # Update teacher-set availability in elastic search document
+          teacher_set.update_teacher_set_availability_in_elastic_search
           LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
           format.html { redirect_to hold_url(@hold.access_key), notice:
             'Your order has been received by our system and will soon be delivered to your school.\
@@ -120,10 +123,14 @@ class HoldsController < ApplicationController
 
     unless (c = params[:hold_change]).nil?
       if c[:status] == 'cancelled'
-        # Update teacher-set available copies while cancelling the hold.
-        user_holds_count = @hold.teacher_set.holds_count_for_user(current_user, @hold.id).to_i
-        @hold.teacher_set.available_copies = @hold.teacher_set.available_copies.to_i + user_holds_count
-        @hold.teacher_set.save!
+        teacher_set = @hold.teacher_set
+        
+        # Update teacher-set availability in DB
+        teacher_set.update_teacher_set_availability_in_db('cancelled', nil, current_user, @hold.id)
+
+        # Update teacher-set availability in elastic search document
+        teacher_set.update_teacher_set_availability_in_elastic_search
+
         LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
         @hold.cancel! c[:comment]
       end
