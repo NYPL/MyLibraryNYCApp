@@ -64,7 +64,6 @@ gem 'yaml_db'
 gem 'rexml', '~> 3.2'
 gem 'thread_safe', '~> 0.3.6'
 
-
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
   gem 'coffee-rails'
