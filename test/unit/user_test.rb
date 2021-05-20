@@ -96,6 +96,7 @@ class UserTest < ActiveSupport::TestCase
     test 'pin length is 32 characters' do
       @user.pin = "1234!qwertyuioplkjhgfsaqwerwuytr"
       @user.save
+      assert_empty(@user.errors.messages)
     end
   end
 
