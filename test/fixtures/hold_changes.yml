@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 hold_changes1:
-  hold_id: hold1.id
+  hold_id: hold2.id
   admin_user_id: 1
   status: new
-  hold: hold1
+  hold: hold2
