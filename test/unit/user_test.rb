@@ -87,10 +87,15 @@ class UserTest < ActiveSupport::TestCase
       assert_equal(["must be 4 to 32 characters."], @user.errors.messages[:pin])
     end
 
-    test 'validate pin length more than 32 characters' do
-      @user.pin = "1234!qwertyuioplkjhgfsaqwerwuytrwesrs"
+    test 'validate pin length is 33 characters' do
+      @user.pin = "1234!qwertyuioplkjhgfsaqwerwuytr2"
       @user.save
       assert_equal(["must be 4 to 32 characters."], @user.errors.messages[:pin])
+    end
+
+    test 'pin length is 32 characters' do
+      @user.pin = "1234!qwertyuioplkjhgfsaqwerwuytr"
+      @user.save
     end
   end
 
