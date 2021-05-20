@@ -43,8 +43,26 @@ teacher_set_five:
 teacher_set_six:
   description: MyText1
   title: MyString1
-  available_copies: 2
+  available_copies: 0
   bnumber: 'b7899158'
   set_type: 'Topic Set'
   subjects: school_one
   books: books_two
+teacher_set_seven:
+  description: MyText1
+  title: MyString1
+  available_copies: 2
+  bnumber: 'b78158'
+  set_type: 'Topic Set'
+  subjects: school_one
+  books: books_two
+  availability: 'available'
+teacher_set_eight:
+  description: MyText1
+  title: MyString1
+  available_copies: 0
+  bnumber: 'b8158'
+  set_type: 'Topic Set'
+  subjects: school_one
+  books: books_two
+  availability: 'unavailable'

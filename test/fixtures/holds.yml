@@ -57,6 +57,15 @@ hold8:
 hold9:
   access_key: access_key9
   status: new
-  teacher_set: teacher_set_one
+  teacher_set: teacher_set_seven
   user: user1
   quantity: 2
+  teacher_set_id: teacher_set_seven.id
+
+hold10:
+  access_key: access_key10
+  status: new
+  teacher_set: teacher_set_eight
+  user: user1
+  quantity: 2
+  teacher_set_id: teacher_set_eight.id

@@ -15,12 +15,17 @@ class TeacherSetTest < ActiveSupport::TestCase
     @hold2 = holds(:hold2)
     @hold4 = holds(:hold4)
     @hold9 = holds(:hold9)
+    @hold10 = holds(:hold10)
     @user2 = holds(:hold9).user
+    @user3 = holds(:hold10).user
+    
     @teacher_set = teacher_sets(:teacher_set_one)
     @teacher_set2 = teacher_sets(:teacher_set_two)
     @teacher_set3 = teacher_sets(:teacher_set_three)
     @teacher_set4 = teacher_sets(:teacher_set_four)
     @teacher_set6 = teacher_sets(:teacher_set_six)
+    @teacher_set7 = teacher_sets(:teacher_set_seven)
+    @teacher_set8 = teacher_sets(:teacher_set_eight)
     @model = TeacherSet.new
     @mintest_mock1 = MiniTest::Mock.new
     @mintest_mock2 = MiniTest::Mock.new
@@ -200,12 +205,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-
-  def test_teacher_set_query
-    params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
-    resp = TeacherSet.for_query(params)
-    assert_equal(6, resp.count)
-  end
 
   describe 'create_or_update_teacherset ' do
     it 'test create or update teacherset' do
@@ -391,15 +390,29 @@ class TeacherSetTest < ActiveSupport::TestCase
 
 
   describe 'teacher_set#update_teacher_set_availability_in_db' do
-    it 'update teacher-setavailability while creating the hold ' do
-      resp = @teacher_set2.update_teacher_set_availability_in_db('create', @hold1.quantity)
+     it 'update teacher-set availability while creation the hold ' do
+      # Teacher-set available_copies and availability before creation of hold
+      assert_equal('available', @teacher_set7.availability)
+      assert_equal(2, @teacher_set7.available_copies)
+      resp = @teacher_set7.update_teacher_set_availability_in_db('create', @hold9.quantity)
+      # After creation of hold, available_copies is zero and availability changed to 'unavailable'
+      assert_equal("unavailable", @teacher_set7.availability)
+      assert_equal(0, @teacher_set7.available_copies)
       assert_equal(true, resp)
     end
 
-    it 'update teacher-setavailability while cancelling the hold ' do
-      resp = @teacher_set2.update_teacher_set_availability_in_db('cancelled', nil, @user, @hold1.id)
+    it 'update teacher-set availability while cancellation of hold ' do
+      # Teacher-set available_copies and availability before cancellation of hold
+      assert_equal('unavailable', @teacher_set8.availability)
+      assert_equal(0, @teacher_set8.available_copies)
+      resp = @teacher_set8.update_teacher_set_availability_in_db('cancelled', nil, @user3, @hold10.id)
+      
+      # After cancellation of hold available_copies count increased and availability status changed to 'available'
+      assert_equal(2, @teacher_set8.available_copies)
+      assert_equal('available', @teacher_set8.availability)
       assert_equal(true, resp)
     end
+
   end
 
 
