@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_23_130759) do
+ActiveRecord::Schema.define(version: 20210520175520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,7 +111,6 @@ ActiveRecord::Schema.define(version: 2021_04_23_130759) do
     t.string "event_type"
     t.string "file_name"
     t.string "file_path"
-    t.binary "tempfile"
     t.binary "file"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -279,4 +280,5 @@ ActiveRecord::Schema.define(version: 2021_04_23_130759) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "users", "schools", column: "school_id", primary_key: "id"
 end

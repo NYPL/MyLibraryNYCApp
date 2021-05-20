@@ -1,8 +1,4 @@
 # frozen_string_literal: true
-#require 'libreconv'
-require 'pandoc-ruby'
-#  brew install pandoc
-
 
 ActiveAdmin.register Document do
   menu :priority => 12
@@ -18,7 +14,7 @@ ActiveAdmin.register Document do
         @document[:file_name] = attrs['file_name']
         @document[:file_path] = attrs['file_path']
         @document[:file] = google_document(attrs['file_path'])
-      rescue => e
+      rescue StandardError => e
         flash[:error] = e.message
       end
 
@@ -29,6 +25,7 @@ ActiveAdmin.register Document do
       end
     end
 
+    
     def update
       begin
         attrs = params[:document]
@@ -37,7 +34,7 @@ ActiveAdmin.register Document do
         @document[:file_name] = attrs['file_name']
         @document[:file_path] = attrs['file_path']
         @document[:file] = google_document(attrs['file_path'])
-      rescue => e
+      rescue StandardError => e
         flash[:error] = e.message
       end
 
@@ -48,12 +45,16 @@ ActiveAdmin.register Document do
       end
     end
 
+
+    # Call GoogleApiClient to export google document.
     def google_document(file_path)
+      # Collect google document-id from file_apth.
       document_id = URI.split(file_path)[5].split('/')[3]
       GoogleApiClient.export_file(document_id, "application/pdf")
     end
   end
 
+  
   # Reorderable Index Table
   index do
     column :event_type
@@ -80,13 +81,13 @@ ActiveAdmin.register Document do
     f.inputs "Create MyLibraryNyc Documents" do
       f.input :event_type, collection: Document::EVENTS, include_blank: false
       f.input :file_name
-      f.input :file_path#, :input_html => { :disabled => true } 
-      #end
+      f.input :file_path
     end
     f.actions
   end
 
-   show do
+   
+  show do
     attributes_table do
       row :event_type
       row :file_name

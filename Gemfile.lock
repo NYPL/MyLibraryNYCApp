@@ -1145,7 +1145,6 @@ GEM
     cabin (0.9.0)
     character_set (1.4.1)
       sorted_set (~> 1.0)
-    clamby (1.6.6)
     client_side_validations (17.2.0)
       js_regex (~> 3.1)
       rails (>= 5.0.0.1, < 6.2)
@@ -1300,7 +1299,6 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    libreconv (0.9.5)
     lograge (0.11.2)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -1339,7 +1337,6 @@ GEM
     open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
     os (1.1.1)
-    pandoc-ruby (2.1.4)
     paper_trail (11.1.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
@@ -1411,11 +1408,6 @@ GEM
       activerecord (>= 5.2.4)
       activesupport (>= 5.2.4)
       i18n
-    ratonvirus (0.3.0)
-      activesupport (~> 6.0)
-    ratonvirus-clamby (0.3.0)
-      clamby (~> 1.6)
-      ratonvirus (~> 0.3.0)
     rbtree (0.4.4)
     regexp_parser (2.0.3)
     regexp_property_values (1.0.0)
@@ -1494,8 +1486,6 @@ GEM
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.7.0)
-    utf8-cleaner (1.0.0)
-      activesupport
     warden (1.2.9)
       rack (>= 2.0.9)
     webmock (3.11.2)
@@ -1552,14 +1542,12 @@ DEPENDENCIES
   jquery-rails (> 4.0)
   jquery-ui-rails
   json
-  libreconv
   lograge (~> 0.11.2)
   logstash-event!
   minitest (~> 5.14.2)
   minitest-stub_any_instance
   nokogiri
   open_uri_redirections
-  pandoc-ruby
   paper_trail (~> 11.1)
   pg (~> 1.2)
   pry (>= 0.10.0)
@@ -1572,8 +1560,6 @@ DEPENDENCIES
   rails (= 6.1.0)
   rails-controller-testing
   railties (~> 6.1.0)
-  ratonvirus
-  ratonvirus-clamby
   rexml (~> 3.2)
   rubocop (~> 0.59.1)
   sass-rails
@@ -1582,7 +1568,6 @@ DEPENDENCIES
   thread_safe (~> 0.3.6)
   travis
   uglifier (>= 1.0.3)
-  utf8-cleaner
   webmock
   will_paginate (~> 3.0)
   yaml_db
