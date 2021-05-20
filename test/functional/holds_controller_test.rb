@@ -75,10 +75,6 @@ class HoldsControllerTest < ActionController::TestCase
   test "test hold cancellation method with hold status new" do
     # If hold status is new, hold cancellation method is not allowed to cancel the hold.
     sign_in @user
-    resp = nil
-    es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-              "_id" => @hold2.teacher_set.id, "_version" => 11, "result" => "updated", 
-              "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
 
     # Teacher_set available_copies before cancellation of hold.
     assert_equal(2, @hold2.teacher_set.available_copies)

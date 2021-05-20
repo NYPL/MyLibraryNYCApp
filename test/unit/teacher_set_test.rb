@@ -390,7 +390,8 @@ class TeacherSetTest < ActiveSupport::TestCase
 
 
   describe 'teacher_set#update_teacher_set_availability_in_db' do
-     it 'update teacher-set availability while creation the hold ' do
+    
+    it 'update teacher-set availability while creation the hold ' do
       # Teacher-set available_copies and availability before creation of hold
       assert_equal('available', @teacher_set7.availability)
       assert_equal(2, @teacher_set7.available_copies)
