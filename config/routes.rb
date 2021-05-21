@@ -91,11 +91,9 @@ MyLibraryNYC::Application.routes.draw do
   match '/about/participating-schools' => 'schools#index', via: [:get]
   match '/help' => 'home#help', via: [:get]
   match '/faq' => 'home#faq', via: [:get]
-  match '/home/mln_calendar_of_event' => '/home/mln_calendar_of_event', via: [:get]
   match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]
   match '/help/access-digital-resources' => 'home#digital_resources', via: [:get]
 
-  
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -105,6 +103,8 @@ MyLibraryNYC::Application.routes.draw do
   post 'api/v0.1/mylibrarynyc/item-availability' => 'api/v01/items#update_availability'
 
   get 'api/unauthorized' => 'api/v01/general#unauthorized'
+  get 'home/:filename', to: 'home#mln_calendar'
+
 
   # See how all your routes lay out with "rake routes"
 

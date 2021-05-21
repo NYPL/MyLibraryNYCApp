@@ -18,14 +18,9 @@ class Document < ActiveRecord::Base
 
 
   def event_type_already_exist
-    return unless event_type.present?
+    return unless Document.where(event_type: event_type).present?
 
     errors.add(:event_type, "#{event_type.titleize} type already created. Please use another type.")
-  end
-
-
-  def event_type
-    Document.where(event_type: event_type)
   end
 
 end
