@@ -2,23 +2,19 @@
 
 ActiveAdmin.register Document do
   menu :priority => 12
-  permit_params :file, :event_type, :file_name, :file_path
 
+  permit_params :file, :event_type, :file_name, :url
 
   controller do
     def create
-      begin
-        attrs = params[:document]
-        @document = Document.new
-        @document[:event_type] = attrs[:event_type]
-        @document[:file_name] = attrs['file_name']
-        @document[:file_path] = attrs['file_path']
-        @document[:file] = google_document(attrs['file_path'])
-      rescue StandardError => e
-        flash[:error] = e.message
-      end
+      attrs = params[:document]
+      @document = Document.new
+      @document[:event_type] = attrs[:event_type]
+      @document[:file_name] = attrs['file_name']
+      @document[:url] = attrs['url']
+      @document[:file] = @document.google_document
 
-      if !flash[:error] && @document.save
+      if @document.save
         redirect_to admin_document_path(@document)
       else
         render :new
@@ -27,30 +23,18 @@ ActiveAdmin.register Document do
 
     
     def update
-      begin
-        attrs = params[:document]
-        @document = Document.where(id: params[:id]).first!
-        @document[:event_type] = attrs[:event_type]
-        @document[:file_name] = attrs['file_name']
-        @document[:file_path] = attrs['file_path']
-        @document[:file] = google_document(attrs['file_path'])
-      rescue StandardError => e
-        flash[:error] = e.message
-      end
-
-      if !flash[:error] && @document.save
+      attrs = params[:document]
+      @document = Document.where(id: params[:id]).first
+      @document[:event_type] = attrs[:event_type]
+      @document[:file_name] = attrs['file_name']
+      @document[:url] = attrs['url']
+      @document[:file] = @document.google_document
+      
+      if @document.save
         redirect_to admin_document_path(@document)
       else
         render :edit
       end
-    end
-
-
-    # Call GoogleApiClient to export google document.
-    def google_document(file_path)
-      # Collect google document-id from file_apth.
-      document_id = URI.split(file_path)[5].split('/')[3]
-      GoogleApiClient.export_file(document_id, "application/pdf")
     end
   end
 
@@ -81,7 +65,7 @@ ActiveAdmin.register Document do
     f.inputs "Create MyLibraryNyc Documents" do
       f.input :event_type, collection: Document::EVENTS, include_blank: false
       f.input :file_name
-      f.input :file_path
+      f.input :url
     end
     f.actions
   end
@@ -91,7 +75,16 @@ ActiveAdmin.register Document do
     attributes_table do
       row :event_type
       row :file_name
+      row :file do |f|
+        link_to("Download #{f.file_name}", download_pdf_admin_documents_path(f))
+      end
     end
+  end
+
+
+  collection_action :download_pdf, method: :get do
+    document = Document.find(params['format'])
+    send_data(document.file, type: "application/pdf")
   end
 
 
@@ -99,7 +92,7 @@ ActiveAdmin.register Document do
     # Setting up Strong Parameters
     # You must specify permitted_params within your document ActiveAdmin resource which reflects a document's expected params.
     def permitted_params
-      params.permit document: [:file, :event_type, :file_path, :created_at, :updated_at]
+      params.permit document: [:file, :event_type, :url, :created_at, :updated_at]
     end
   end
 end

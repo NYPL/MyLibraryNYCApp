@@ -47,11 +47,14 @@ class HomeController < ApplicationController
     @is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
   end
 
+  
   def calendar_event
     event = Document.calendar_of_event.first
     return unless event.present?
+    
     event
   end
+
 
   def mln_calendar
     if calendar_event.present? && calendar_event.file.present?
@@ -62,5 +65,4 @@ class HomeController < ApplicationController
       render :json => "Mylibrarynyc calendar not found. Please upload calendar event."
     end
   end
-
 end
