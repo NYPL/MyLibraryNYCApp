@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'pry'
+
 module Admin
   class SchoolsControllerTest < ActionController::TestCase
 

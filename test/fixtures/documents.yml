@@ -1,5 +1,5 @@
 one:
   event_type: "event"
   file_name: "file_name"
-  url: "mln_url"
+  url: "https://docs.google.com/document/d/133iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"
   file: "mln file"
