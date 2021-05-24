@@ -62,11 +62,7 @@
     <%= label_tag :user_pin, "PIN/PASSWORD", :id => 'userPin-label' %>
     <%= f.text_field :pin, "aria-labelledby" => 'userPin-label user_pin_error', :autocomplete => :off %>
     <span>
-    Your PIN serves as the password for your account. Make sure it is a number you will remember.
-    </span>
-    <br>
-    <span>
-      Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363).
+      Your PIN must be 4 to 32 characters. It cannot contain a characters that is repeated 3 or more times (1ddd01, aaaa9999) and cannot be a pair of repeated digits (abab, 12ab12ab12).
     </span>
   </div>
   <% if MlnConfigurationController.new.feature_flag_config('news_letter.enabled') %>
