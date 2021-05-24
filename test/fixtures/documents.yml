@@ -1,5 +1,5 @@
 one:
   event_type: "event"
-  file_name: "mln_name"
-  file_path: "mln/path"
+  file_name: "file_name"
+  url: "mln_url"
   file: "mln file"
