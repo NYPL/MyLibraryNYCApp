@@ -6,7 +6,7 @@ require 'minitest/stub_any_instance'
 module Admin
   class DocumentsControllerTest < ActionController::TestCase
 
-  	setup do
+    setup do
       @document = documents(:one)
       sign_in AdminUser.create!(email: 'admin@example.com', password: 'password')
     end
@@ -34,8 +34,8 @@ module Admin
 
 
     test 'create calendar_of_event in mln database' do
-      response = nil
-      params = {"event_type"=>"calendar_of_event", "file_name"=>"MylibraryNycCalenderevent123", "url"=>"https://docs.google.com/document/d/1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"}
+      params = {"event_type" => "calendar_of_event", "file_name" => "MylibraryNycCalenderevent123", 
+                "url" => "https://docs.google.com/document/d/1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"}
       Document.stub_any_instance :google_document, "file" do
         post :create, params: { document: params }
       end

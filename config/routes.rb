@@ -103,7 +103,7 @@ MyLibraryNYC::Application.routes.draw do
   post 'api/v0.1/mylibrarynyc/item-availability' => 'api/v01/items#update_availability'
 
   get 'api/unauthorized' => 'api/v01/general#unauthorized'
-  get 'home/:filename', to: 'home#mln_calendar'
+  get 'home/calendar_event/:filename', to: 'home#mln_calendar'
 
 
   # See how all your routes lay out with "rake routes"

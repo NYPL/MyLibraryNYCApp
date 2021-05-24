@@ -13,7 +13,6 @@ ActiveAdmin.register Document do
       @document[:file_name] = attrs['file_name']
       @document[:url] = attrs['url']
       @document[:file] = @document.google_document
-
       if @document.save
         redirect_to admin_document_path(@document)
       else
@@ -76,7 +75,7 @@ ActiveAdmin.register Document do
       row :event_type
       row :file_name
       row :file do |f|
-        link_to("Download #{f.file_name}", download_pdf_admin_documents_path(f))
+        link_to("Download #{f.file_name}.pdf", download_pdf_admin_documents_path(f))
       end
     end
   end
@@ -84,7 +83,7 @@ ActiveAdmin.register Document do
 
   collection_action :download_pdf, method: :get do
     document = Document.find(params['format'])
-    send_data(document.file, type: "application/pdf")
+    send_data(document.file, filename: "#{document.file_name}.pdf", type: "application/pdf")
   end
 
 

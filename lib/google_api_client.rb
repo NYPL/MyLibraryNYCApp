@@ -30,7 +30,8 @@ module GoogleApiClient
 
 
   def self.auth(scope)
-    json = JSON.parse(ENV['MLN_GOOGLE_ACCCOUNT']) || {}
+    google_doc = ENV['MLN_GOOGLE_ACCCOUNT'] || {}
+    json = JSON.parse(google_doc)
     ENV["GOOGLE_ACCOUNT_TYPE"] = 'service_account'
     ENV["GOOGLE_CLIENT_EMAIL"] = json["client_email"]
     ENV["GOOGLE_PRIVATE_KEY"] = json["private_key"]

@@ -36,7 +36,7 @@ class Document < ActiveRecord::Base
 
 
   def google_client_error_message(error)
-    if error.status_code == 404
+    if error.present? && error.status_code == 404
       "Please check the url and/or share document this #{JSON.parse(ENV['MLN_GOOGLE_ACCCOUNT'])['client_email']}"
     else
       error.message
