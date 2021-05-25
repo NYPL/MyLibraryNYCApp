@@ -40,7 +40,7 @@ module Admin
       Document.stub_any_instance :google_document, "file" do
         post :create, params: { document: params }
       end
-      assert_response :redirect
+      assert_response :success
     end
   end
 end
