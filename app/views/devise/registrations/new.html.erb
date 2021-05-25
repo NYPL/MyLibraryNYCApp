@@ -61,12 +61,14 @@
   <div class="field-group">
     <%= label_tag :user_pin, "PIN/PASSWORD", :id => 'userPin-label' %>
     <%= f.text_field :pin, "aria-labelledby" => 'userPin-label user_pin_error', :autocomplete => :off %>
-    <span>
-      Your Password must be between 4-32 characters long. It can include a mix of uppercase, lowercase letters, numbers and symbols. For example: MyLib1731@!.
-    </span><br>
-    <span>
-      It cannot contain common patterns such as consecutively repeating a character three or more times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab
-    </span>
+    <ul>
+      <li>
+        Your Password must be between 4-32 characters long. It can include a mix of uppercase, lowercase letters, numbers and symbols. For example: MyLib1731@!.
+      </li>
+      <li class="pin_password">
+        It cannot contain common patterns such as consecutively repeating a character three or more times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab
+      </li>
+    </ul>
   </div>
   <% if MlnConfigurationController.new.feature_flag_config('news_letter.enabled') %>
     <div>
