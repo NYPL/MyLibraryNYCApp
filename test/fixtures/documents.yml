@@ -1,5 +1,17 @@
 one:
-  event_type: "event"
+  event_type: "calendar_of_event"
   file_name: "file_name"
   url: "https://docs.google.com/document/d/133iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"
   file: "mln file"
+
+two:
+  event_type: "event2"
+  file_name: "file_name2"
+  url: "https://docs.google.com/document/GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"
+  file: "mln file2"
+
+three:
+  event_type: "0"
+  file_name: "file_name3"
+  url: "https://docs.google.com/document/GGOCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"
+  file: "mln file3"

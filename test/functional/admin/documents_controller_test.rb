@@ -8,6 +8,7 @@ module Admin
 
     setup do
       @document = documents(:one)
+      @document2 = documents(:two)
       sign_in AdminUser.create!(email: 'admin@example.com', password: 'password')
     end
 
