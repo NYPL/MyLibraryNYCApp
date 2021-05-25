@@ -11,7 +11,7 @@ class Document < ActiveRecord::Base
 
   validates :url, :file_name, :presence => true, uniqueness: true
 
-  validate :google_document, on: :create
+  validate :google_document, :on => [:create, :update]
 
   def validate_event_type
     errors.add(:event_type, 'Please select event_type') if event_type.to_s == "0"
@@ -35,9 +35,18 @@ class Document < ActiveRecord::Base
   end
 
 
+  def self.calendar_event
+    event = Document.calendar_of_event.first
+    return unless event.present?
+    
+    event
+  end
+
+
   def google_client_error_message(error)
-    if error.present? && error.status_code == 404
-      "Please check the url and/or share document this #{JSON.parse(ENV['MLN_GOOGLE_ACCCOUNT'])['client_email']}"
+    if error.status_code == 404
+      email = JSON.parse(ENV['MLN_GOOGLE_ACCCOUNT'])['client_email']
+      "There was an error accessing this file. Please check this URL is valid, and that the document is shared with #{email}"
     else
       error.message
     end

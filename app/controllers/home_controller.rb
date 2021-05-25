@@ -4,7 +4,8 @@ class HomeController < ApplicationController
   layout 'empty', :only => [ :extend_session_iframe ]
 
   def index
-    @mln_calendar_file_name = calendar_event.present? ? calendar_event.file_name : "error"
+    calendar_event = Document.calendar_event
+    @mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
   end
 
 
@@ -47,22 +48,14 @@ class HomeController < ApplicationController
     @is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
   end
 
-  
-  def calendar_event
-    event = Document.calendar_of_event.first
-    return unless event.present?
-    
-    event
-  end
-
 
   def mln_calendar
-    if calendar_event.present? && calendar_event.file.present?
-      respond_to do |format|
-        format.pdf { send_data(calendar_event.file, type: "application/pdf", disposition: :inline) }
-      end
-    else
-      render :json => "Mylibrarynyc calendar not found. Please upload calendar event."
+    @calendar_event = Document.calendar_event
+    return if @calendar_event.nil? && params["filename"] == "error"
+    
+    file = @calendar_event.present? && @calendar_event.file.present? ? @calendar_event.file : nil
+    respond_to do |format|
+      format.pdf { send_data(file, type: "application/pdf", disposition: :inline) }
     end
   end
 end
