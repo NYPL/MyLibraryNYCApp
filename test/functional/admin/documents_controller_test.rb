@@ -42,5 +42,10 @@ module Admin
       end
       assert_response :success
     end
+
+    test 'test download mylibrarynyc pdf method' do
+      get :download_pdf, params: { format: @document.id }
+      assert_response :success
+    end
   end
 end
