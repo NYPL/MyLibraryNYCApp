@@ -27,7 +27,9 @@ class Document < ActiveRecord::Base
 
   # Call GoogleApiClient to export google document.
   def google_document
-    # Collect google document-id from input url.
+    # Eg: url = https://docs.google.com/document/d/1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit
+    # Split google document url than collect document-id.
+    # document_id = 1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U
     document_id = URI.split(url)[5].split('/')[3]
     GoogleApiClient.export_file(document_id, "application/pdf")
   rescue StandardError => error

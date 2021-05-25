@@ -11,7 +11,10 @@ ActiveAdmin.register Document do
       @document = Document.new
       @document[:event_type] = attrs[:event_type]
       @document[:file_name] = attrs['file_name']
+      # attrs['url'] = Google document url.
+      # Eg: url = https://docs.google.com/document/d/DrqT7Iu4U/edit
       @document[:url] = attrs['url']
+      # Connet's to google client, retrieves the google document and save's to 'file' column with pdf format.
       @document[:file] = @document.google_document
       if @document.save
         redirect_to admin_document_path(@document)
@@ -26,9 +29,11 @@ ActiveAdmin.register Document do
       @document = Document.where(id: params[:id]).first
       @document[:event_type] = attrs[:event_type]
       @document[:file_name] = attrs['file_name']
+      # attrs['url'] = Google document url
+      # Eg: url = https://docs.google.com/document/d/DrqT7Iu4U/edit
       @document[:url] = attrs['url']
+      # Connet's to google client, retrieves the google document and save's to 'file' column with pdf format.
       @document[:file] = @document.google_document
-      
       if @document.save
         redirect_to admin_document_path(@document)
       else
@@ -80,7 +85,7 @@ ActiveAdmin.register Document do
     end
   end
 
-
+  # Download document from show page.
   collection_action :download_pdf, method: :get do
     document = Document.find(params['format'])
     send_data(document.file, filename: "#{document.file_name}.pdf", type: "application/pdf")

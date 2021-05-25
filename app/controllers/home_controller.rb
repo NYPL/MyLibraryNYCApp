@@ -49,6 +49,7 @@ class HomeController < ApplicationController
   end
 
 
+  # Read MylibraryNyc calendar pdf from document table and display's in home page.
   def mln_calendar
     @calendar_event = Document.calendar_event
     return if @calendar_event.nil? && params["filename"] == "error"
