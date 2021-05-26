@@ -22,7 +22,7 @@ class DocumentTest < ActionController::TestCase
   end
 
 
-  test 'get calendar_event from document table' do
+  test 'Get calendar_event from document table' do
     assert_equal('calendar_of_event', Document.calendar_event.event_type)
   end
 
@@ -34,7 +34,7 @@ class DocumentTest < ActionController::TestCase
   end
 
 
-  test 'document event type should not be blank' do
+  test 'Event type should not be blank' do
     @document3.validate_event_type
     assert_equal(@document3.errors.messages[:event_type], ['Please select event_type'])
   end
