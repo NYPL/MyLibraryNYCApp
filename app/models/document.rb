@@ -7,7 +7,7 @@ class Document < ActiveRecord::Base
 
   EVENTS = [['-- Select --', 0], ['Calendar of events', 'calendar_of_events']].freeze
 
-  scope :calendar_of_events, -> { where(event_type: 'calendar_of_events') }
+  scope :calendar_of_events, -> { where(event_type: 'calendar_of_events').first }
 
   validates :url, :file_name, :presence => true, uniqueness: true
 

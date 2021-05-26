@@ -28,7 +28,7 @@ module Admin
 
 
     test 'Test document form ' do
-      response = get :edit, params: { id: @document.id }
+      response = get :edit, params: { id: @document.id, file_name: 'mln document name' }
       assert_equal("200", response.code)
       assert_response :success
     end
@@ -41,9 +41,23 @@ module Admin
       Document.stub_any_instance :google_document, file do
         post :create, params: { document: params }
       end
-      document = Document.where(file: file)
+      document = Document.where(file: file).first
       assert_equal(file, document.file)
-      assert_response :success
+      assert_response :redirect
+    end
+
+
+    test 'update calendar_of_event in mln database' do
+      params = {id: @document.id, "event_type" => "calendar_of_events_test", "file_name" => "MylibraryNycCalenderevent123", 
+                "url" => "https://docs.google.com/document/d/1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit" }
+      file = "update file"
+      Document.stub_any_instance :google_document, file do
+        post :update, params: {id: @document.id, document: params }
+      end
+
+      document = Document.where(file: file).first
+      assert_equal(file, document.file)
+      assert_response :redirect
     end
 
 

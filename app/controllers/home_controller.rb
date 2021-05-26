@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   layout 'empty', :only => [ :extend_session_iframe ]
 
   def index
-    calendar_event = Document.calendar_of_events.first
+    calendar_event = Document.calendar_of_events
     @mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
   end
 
@@ -51,7 +51,7 @@ class HomeController < ApplicationController
 
   # Read MylibraryNyc calendar pdf from document table and display's in home page.
   def mln_calendar
-    @calendar_event = Document.calendar_of_events.first
+    @calendar_event = Document.calendar_of_events
     return if @calendar_event.nil? && params["filename"] == "error"
     
     file = @calendar_event.present? && @calendar_event.file.present? ? @calendar_event.file : nil

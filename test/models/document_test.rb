@@ -23,7 +23,7 @@ class DocumentTest < ActionController::TestCase
 
 
   test 'Get calendar_event from document table' do
-    assert_equal('calendar_of_events', Document.calendar_of_events.first.event_type)
+    assert_equal('calendar_of_events', Document.calendar_of_events.event_type)
   end
 
 
