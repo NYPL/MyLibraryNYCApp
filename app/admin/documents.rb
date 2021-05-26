@@ -7,15 +7,8 @@ ActiveAdmin.register Document do
 
   controller do
     def create
-      attrs = params[:document]
       @document = Document.new
-      @document[:event_type] = attrs[:event_type]
-      @document[:file_name] = attrs['file_name']
-      # attrs['url'] = Google document url.
-      # Eg: url = https://docs.google.com/document/d/DrqT7Iu4U/edit
-      @document[:url] = attrs['url']
-      # Connet's to google client, retrieves the google document and save's to 'file' column with pdf format.
-      @document[:file] = @document.google_document
+      @document = document_attributes
       if @document.save
         redirect_to admin_document_path(@document)
       else
@@ -24,9 +17,8 @@ ActiveAdmin.register Document do
     end
 
     
-    def update
+    def document_attributes
       attrs = params[:document]
-      @document = Document.where(id: params[:id]).first
       @document[:event_type] = attrs[:event_type]
       @document[:file_name] = attrs['file_name']
       # attrs['url'] = Google document url
@@ -34,6 +26,13 @@ ActiveAdmin.register Document do
       @document[:url] = attrs['url']
       # Connet's to google client, retrieves the google document and save's to 'file' column with pdf format.
       @document[:file] = @document.google_document
+      @document
+    end
+
+
+    def update
+      @document = Document.where(id: params[:id]).first
+      @document = document_attributes
       if @document.save
         redirect_to admin_document_path(@document)
       else
