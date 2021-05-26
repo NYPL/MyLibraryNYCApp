@@ -40,7 +40,7 @@ class DocumentTest < ActionController::TestCase
   end
 
 
-  test 'Document not found in google client sends file not found error' do
+  test 'Google document not found' do
     error_obj = OpenStruct.new(status_code: 404, body: 'body')
     email = JSON.parse(ENV['MLN_GOOGLE_ACCCOUNT'])['client_email']
     error_msg = "There was an error accessing this file. Please check this URL is valid, and that the document is shared with #{email}"
