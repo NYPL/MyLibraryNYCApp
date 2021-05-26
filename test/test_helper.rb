@@ -3836,7 +3836,7 @@ class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
         :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
-        :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123, :mock_item_response_with_empty_bib
+        :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123, :mock_item_response_with_empty_bib, :mock_google_address
         
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
@@ -4123,6 +4123,19 @@ class ActiveSupport::TestCase
         'Authorization'=>'Bearer testoken',
         'Content-Type'=>'application/json',
         'User-Agent'=>'Ruby'
+        }).
+      to_return(status: 200, body: "", headers: {})
+  end
+
+
+  def mock_google_address
+    stub_request(:get, "http://169.254.169.254/").
+      with(
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Metadata-Flavor'=>'Google',
+        'User-Agent'=>'Faraday v0.17.4'
         }).
       to_return(status: 200, body: "", headers: {})
   end

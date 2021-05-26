@@ -3,7 +3,10 @@
 class HomeController < ApplicationController
   layout 'empty', :only => [ :extend_session_iframe ]
 
-  def index; end
+  def index
+    calendar_event = Document.calendar_of_events
+    @mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
+  end
 
 
   def swagger_docs
@@ -45,4 +48,15 @@ class HomeController < ApplicationController
     @is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
   end
 
+
+  # Read MylibraryNyc calendar pdf from document table and display's in home page.
+  def mln_calendar
+    @calendar_event = Document.calendar_of_events
+    return if @calendar_event.nil? && params["filename"] == "error"
+    
+    file = @calendar_event.present? && @calendar_event.file.present? ? @calendar_event.file : nil
+    respond_to do |format|
+      format.pdf { send_data(file, type: "application/pdf", disposition: :inline) }
+    end
+  end
 end
