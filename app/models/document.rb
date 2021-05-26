@@ -5,9 +5,9 @@ class Document < ActiveRecord::Base
   validate :validate_event_type, :on => [:create, :update]
   validate :event_type_already_exist, :on => :create
 
-  EVENTS = [['-- Select --', 0], ['Calendar of events', 'calendar_of_event']].freeze
+  EVENTS = [['-- Select --', 0], ['Calendar of events', 'calendar_of_events']].freeze
 
-  scope :calendar_of_event, -> { where(event_type: 'calendar_of_event') }
+  scope :calendar_of_events, -> { where(event_type: 'calendar_of_events') }
 
   validates :url, :file_name, :presence => true, uniqueness: true
 
@@ -21,7 +21,7 @@ class Document < ActiveRecord::Base
   def event_type_already_exist
     return unless Document.where(event_type: event_type).present?
 
-    errors.add(:event_type, "#{event_type.titleize} type already created. Please use another type.")
+    errors.add(:event_type, "#{event_type.titleize} type already created. Please use another type, or use the 'edit' link if you are trying to update #{event_type.titleize}")
   end
 
 
@@ -34,14 +34,6 @@ class Document < ActiveRecord::Base
     GoogleApiClient.export_file(document_id, "application/pdf")
   rescue StandardError => error
     errors.add(:url, google_client_error_message(error))
-  end
-
-
-  def self.calendar_event
-    event = Document.calendar_of_event.first
-    return unless event.present?
-    
-    event
   end
 
 
