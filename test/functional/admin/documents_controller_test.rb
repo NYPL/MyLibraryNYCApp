@@ -35,13 +35,17 @@ module Admin
 
 
     test 'create calendar_of_event in mln database' do
-      params = {"event_type" => "calendar_of_events", "file_name" => "MylibraryNycCalenderevent123", 
-                "url" => "https://docs.google.com/document/d/1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"}
-      Document.stub_any_instance :google_document, "file" do
+      params = {"event_type" => "calendar_of_events_test", "file_name" => "MylibraryNycCalenderevent123", 
+                "url" => "https://docs.google.com/document/d/1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit" }
+      file = "test file"
+      Document.stub_any_instance :google_document, file do
         post :create, params: { document: params }
       end
+      document = Document.where(file: file)
+      assert_equal(file, document.file)
       assert_response :success
     end
+
 
     test 'test download mylibrarynyc pdf method' do
       get :download_pdf, params: { format: @document.id }
