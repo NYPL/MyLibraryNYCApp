@@ -23,13 +23,14 @@ class DocumentTest < ActionController::TestCase
 
 
   test 'Get calendar_event from document table' do
-    assert_equal('calendar_of_event', Document.calendar_event.event_type)
+    assert_equal('calendar_of_events', Document.calendar_of_events.first.event_type)
   end
 
 
   test 'Event type already exist in document table' do
     @document.event_type_already_exist
-    error_msg = "#{@document.event_type.titleize} type already created. Please use another type."
+    e_type = @document.event_type.titleize
+    error_msg = "#{e_type} type already created. Please use another type, or use the 'edit' link if you are trying to update #{e_type}"
     assert_equal(@document.errors.messages[:event_type], [error_msg])
   end
 

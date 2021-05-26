@@ -35,7 +35,7 @@ module Admin
 
 
     test 'create calendar_of_event in mln database' do
-      params = {"event_type" => "calendar_of_event", "file_name" => "MylibraryNycCalenderevent123", 
+      params = {"event_type" => "calendar_of_events", "file_name" => "MylibraryNycCalenderevent123", 
                 "url" => "https://docs.google.com/document/d/1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"}
       Document.stub_any_instance :google_document, "file" do
         post :create, params: { document: params }

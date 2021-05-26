@@ -1,5 +1,5 @@
 one:
-  event_type: "calendar_of_event"
+  event_type: "calendar_of_events"
   file_name: "file_name"
   url: "https://docs.google.com/document/d/133iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit"
   file: "mln file"
