@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210129185752) do
+ActiveRecord::Schema.define(version: 20210521154547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -269,6 +269,15 @@ ActiveRecord::Schema.define(version: 20210129185752) do
     t.datetime "created_at"
     t.text     "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.string "event_type"
+    t.string "url"
+    t.string "file_name"
+    t.binary "file"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "users", "schools", column: "school_id", primary_key: "id"
