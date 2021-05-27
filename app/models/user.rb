@@ -216,13 +216,19 @@ class User < ActiveRecord::Base
     if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
       true
     else
-      msg = 'PIN does not meet our requirements. Please try again.'
-      return errors.add(:pin, msg) unless MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled') 
-      
-      msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abab. Please try again.'
-      errors.add(:pin, msg)
-      false
+      pin_error_messages
     end
+  end
+
+
+  def pin_error_messages
+    if MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled') 
+      msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abab. Please try again.'
+    else
+      msg = 'PIN does not meet our requirements. Please try again.'
+    end
+    errors.add(:pin, msg)
+    false
   end
 
 
