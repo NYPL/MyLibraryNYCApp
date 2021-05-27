@@ -24,8 +24,15 @@ class User < ActiveRecord::Base
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
 
-  # pin allows mix of uppercase, lowercase letters, numbers and symbols.For example: MyLib1731@!
-  validates :pin, :presence => true, format: { with: /\w/}, length: { in: 4..32, message: 'must be 4 to 32 characters.' }, on: :create
+  
+  if MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled')
+    # pin allows mix of uppercase, lowercase letters, numbers and symbols.For example: MyLib1731@!
+    validates :pin, :presence => true, format: { with: /\w/}, length: { in: 4..32, message: 'must be 4 to 32 characters.' }, on: :create
+  else
+    validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
+    length: { is: 4, message: 'must be 4 digits.' }, on: :create
+  end
+
   validate :validate_pin_pattern, on: :create
   validate :validate_email_pattern, :on => :create
 
@@ -209,9 +216,11 @@ class User < ActiveRecord::Base
     if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
       true
     else
+      msg = 'PIN does not meet our requirements. Please try again.'
+      return errors.add(:pin, msg) unless MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled') 
+
       msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abab. Please try again.'
       errors.add(:pin, msg)
-      false
     end
   end
 
