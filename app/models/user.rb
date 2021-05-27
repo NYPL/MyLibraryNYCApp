@@ -221,7 +221,6 @@ class User < ActiveRecord::Base
 
       msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abab. Please try again.'
       errors.add(:pin, msg)
-      false
     end
   end
 

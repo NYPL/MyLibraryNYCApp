@@ -60,8 +60,8 @@
 
   <div class="field-group">
     <% pin_password_flag  = MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled') %>
-    <% pin = pin_password_flag ? "PIN/PASSWORD" : "PIN" %>
-    <%= label_tag :user_pin, pin, :id => 'userPin-label' %>
+    <% pin_label = pin_password_flag ? "PIN/PASSWORD" : "PIN" %>
+    <%= label_tag :user_pin, pin_label, :id => 'userPin-label' %>
     <%= f.text_field :pin, "aria-labelledby" => 'userPin-label user_pin_error', :autocomplete => :off %>
 
     <% if pin_password_flag %>
