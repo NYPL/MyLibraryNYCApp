@@ -214,7 +214,7 @@ class UserTest < ActiveSupport::TestCase
 
 
   test 'validate different pin pattern' do
-    #user model cannot be created with alternate repeated words as pin
+    # user model cannot be created with alternate repeated words as pin
     # Test1
     @user.pin = "abcabc"
     @user.save
@@ -234,7 +234,7 @@ class UserTest < ActiveSupport::TestCase
     @user.pin = "ababab"
     @user.save
     assert_equal(@user.errors.messages[:pin], [@pin_error])
-    
+
     # Test5
     @user.pin = "aaabb111333444"
     @user.save
