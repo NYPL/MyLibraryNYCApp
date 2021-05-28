@@ -10,7 +10,7 @@ class UserTest < ActiveSupport::TestCase
     @user = crank(:queens_user, barcode: 27777011111111)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: @user.school.code)
     AllowedUserEmailMasks.create(active:true, email_pattern: "@schools.nyc.gov")
-    @pin_error = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abab. Please try again.'
+    @pin_error = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
   end
 
 
@@ -210,5 +210,39 @@ class UserTest < ActiveSupport::TestCase
     user = crank(:bronx_user)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
     assert(user.pcode4 == user.school.sierra_code)
+  end
+
+
+  test 'validate different pin pattern' do
+    # Test1
+    @user.pin = "abcabc"
+    @user.save
+    assert_equal(@user.errors.messages[:pin], [@pin_error])
+
+    # Test2
+    @user.pin = "abcabcabcabc"
+    @user.save
+    assert_equal(@user.errors.messages[:pin], [@pin_error])
+
+    # Test3
+    @user.pin = "abab"
+    @user.save
+    assert_equal(@user.errors.messages[:pin], [@pin_error])
+
+    # Test4
+    @user.pin = "ababab"
+    @user.save
+    assert_equal(@user.errors.messages[:pin], [@pin_error])
+
+    # Test5
+    @user.pin = "aaabb111333444"
+    @user.save
+    assert_equal(@user.errors.messages[:pin], [@pin_error])
+
+    # Test6
+    @user.pin = "@@>>@@>>abc123"
+    @user.save
+    assert_equal(@user.errors.messages[:pin], [@pin_error])
+
   end
 end
