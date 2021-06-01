@@ -13,11 +13,19 @@ class TeacherSetTest < ActiveSupport::TestCase
     @user = holds(:hold1).user
     @hold1 = holds(:hold1)
     @hold2 = holds(:hold2)
+    @hold4 = holds(:hold4)
+    @hold9 = holds(:hold9)
+    @hold10 = holds(:hold10)
+    @user2 = holds(:hold9).user
+    @user3 = holds(:hold10).user
+    
     @teacher_set = teacher_sets(:teacher_set_one)
     @teacher_set2 = teacher_sets(:teacher_set_two)
     @teacher_set3 = teacher_sets(:teacher_set_three)
     @teacher_set4 = teacher_sets(:teacher_set_four)
     @teacher_set6 = teacher_sets(:teacher_set_six)
+    @teacher_set7 = teacher_sets(:teacher_set_seven)
+    @teacher_set8 = teacher_sets(:teacher_set_eight)
     @model = TeacherSet.new
     @mintest_mock1 = MiniTest::Mock.new
     @mintest_mock2 = MiniTest::Mock.new
@@ -128,23 +136,14 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   describe "test teacher-set holds count" do
     # Test-1
-    it "test current-user holds count with hold_id not nil" do
-      @mintest_mock1.expect(:call, [@hold1], [@user, @hold1.id])
-      resp = nil
-      @model.stub :holds_for_user, @mintest_mock1 do
-        resp = @teacher_set.holds_count_for_user(@user, @hold1.id)
-      end
-      assert_equal(2, resp)
+    it "test current-user teacher-set holds count with hold_id" do
+      resp = @teacher_set2.holds_count_for_user(@user, @hold2.id)
+      assert_equal(1, resp)
     end
 
     # Test-2
-    it "test current-user holds count with hold_id nil" do
-      @mintest_mock1.expect(:call, [@hold1], [@user, nil])
-      resp = nil
-      @model.stub :holds_for_user, @mintest_mock1 do
-        resp = @teacher_set.holds_count_for_user(@user, @hold1.id)
-      end
-      assert_equal(2, resp)
+    it "test current-user holds count" do
+      assert_equal(1, @teacher_set2.holds_count_for_user(@user))
     end
   end
 
@@ -157,12 +156,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
     # Test-2
     it 'test current-user holds with hold_id' do
-      @mintest_mock1.expect(:call, [@hold1], [@user, @hold1.id])
-      resp = nil
-      @model.stub :ts_holds_by_user_and_hold_id, @mintest_mock1 do 
-        resp = @teacher_set.holds_for_user(@user, @hold1.id)
-      end
-      assert_equal([@hold1], resp)
+      assert_equal([@hold2], @teacher_set2.holds_for_user(@user, @hold2.id))
     end
 
   end
@@ -212,12 +206,6 @@ class TeacherSetTest < ActiveSupport::TestCase
   end
 
 
-  def test_teacher_set_query
-    params = {"page"=>"1", "controller"=>"teacher_sets", "action"=>"index", "format"=>"json"}
-    resp = TeacherSet.for_query(params)
-    assert_equal(6, resp.count)
-  end
-
   describe 'create_or_update_teacherset ' do
     it 'test create or update teacherset' do
       resp = nil
@@ -242,11 +230,12 @@ class TeacherSetTest < ActiveSupport::TestCase
       @es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
                 "_id" => 8888, "_version" => 11, "result" => "updated", 
                 "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
-      @expected_resp = {:title=>"title",:description=>"desc",:contents=>nil,:id=>8888,:details_url=>nil,
-                        :grade_end=>nil,:grade_begin=>nil,:availability=>nil,:total_copies=>nil,
-                        :call_number=>nil,:language=>nil,:physical_description=>nil,:primary_language=>nil,
-                        :created_at=>nil,:updated_at=>nil,:available_copies=>nil,
-                        :bnumber=>"bnumber",:set_type=>nil,:area_of_study=>nil,:subjects=>[]}
+      @expected_resp = {:title=>"title",:description=>"desc",
+                        :contents=>nil,:id=>8888,:details_url=>nil,:grade_end=>nil,
+                        :grade_begin=>nil,:availability=>"unavailable",:total_copies=>nil,:call_number=>nil,
+                        :language=>nil,:physical_description=>nil,:primary_language=>nil,
+                        :created_at=>nil,:updated_at=>nil,:available_copies=>nil,:bnumber=>"bnumber",
+                        :set_type=>nil,:area_of_study=>nil,:subjects=>[]}
     end
 
     it 'update teacher-set document in ElasticSearch' do
@@ -396,6 +385,84 @@ class TeacherSetTest < ActiveSupport::TestCase
       @teacher_set.instance_variable_set(:@req_body, req_body)
       resp = @teacher_set.update_teacher_set_attributes_from_bib_request(ts_items_info)
       assert_equal(@teacher_set.bnumber, resp.bnumber)
+    end
+  end
+
+
+  describe 'teacher_set#update_teacher_set_availability_in_db' do
+    
+    it 'update teacher-set availability while creation the hold ' do
+      # Teacher-set available_copies and availability before creation of hold
+      assert_equal('available', @teacher_set7.availability)
+      assert_equal(2, @teacher_set7.available_copies)
+      resp = @teacher_set7.update_teacher_set_availability_in_db('create', @hold9.quantity)
+      # After creation of hold, available_copies is zero and availability changed to 'unavailable'
+      assert_equal("unavailable", @teacher_set7.availability)
+      assert_equal(0, @teacher_set7.available_copies)
+      assert_equal(true, resp)
+    end
+
+    it 'update teacher-set availability while cancellation of hold ' do
+      # Teacher-set available_copies and availability before cancellation of hold
+      assert_equal('unavailable', @teacher_set8.availability)
+      assert_equal(0, @teacher_set8.available_copies)
+      resp = @teacher_set8.update_teacher_set_availability_in_db('cancelled', nil, @user3, @hold10.id)
+      
+      # After cancellation of hold available_copies count increased and availability status changed to 'available'
+      assert_equal(2, @teacher_set8.available_copies)
+      assert_equal('available', @teacher_set8.availability)
+      assert_equal(true, resp)
+    end
+
+  end
+
+
+  describe 'teacher_set#calculate_available_copies' do
+    it 'calculate teacher-set available copies while cancelling the hold' do
+      # available_copies before cancellation of hold
+      available_copies_before_cancellation = @teacher_set2.available_copies
+      available_copies_after_cancellation = @teacher_set2.calculate_available_copies('cancelled', nil, @user, @hold2.id)
+      assert_equal(2, available_copies_before_cancellation)
+      # After cancellation of hold available_copies count increased.
+      assert_equal(3, available_copies_after_cancellation)
+    end
+
+    it 'calculate teacher-set available copies while creating the hold' do
+      # available_copies before creating hold
+      available_copies_before_creation = @teacher_set2.available_copies
+      available_copies_after_creation = @teacher_set4.calculate_available_copies('create', @hold4.quantity)
+      assert_equal(2, available_copies_before_creation)
+      # After creation of hold available_copies count decreased.
+      assert_equal(0, available_copies_after_creation)
+    end
+  end
+
+  describe 'teacher_set#update_teacher_set_availability_in_elastic_search' do
+    it 'should call ElasticSearch#update_document_by_id' do
+      resp = nil
+      elasticsearch_adapter_mock = Minitest::Mock.new
+      es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
+                "_id" => @teacher_set2.id, "_version" => 11, "result" => "updated", 
+                "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
+      body = {
+         :availability => @teacher_set2.availability,
+         :available_copies => @teacher_set2.available_copies
+        }
+
+      elasticsearch_adapter_mock.expect(:update_document_by_id, es_doc, [@teacher_set2.id, body])
+      ElasticSearch.stub :new, elasticsearch_adapter_mock do
+        resp = @teacher_set2.update_teacher_set_availability_in_elastic_search
+      end
+      assert_equal(resp['result'], "updated")
+      elasticsearch_adapter_mock.verify
+    end
+  end
+
+
+  describe 'teacher_set#teacher_set_availability' do
+    it 'get teacher_set availability based on the available copies' do
+      ts_availability = @teacher_set2.availability
+      assert_equal('available', ts_availability)
     end
   end
 

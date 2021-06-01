@@ -4,7 +4,7 @@ require 'test_helper'
 module Admin
   class HoldsControllerTest < ActionController::TestCase
     setup do
-      @hold = holds(:hold1)
+      @hold = holds(:hold2)
       sign_in AdminUser.create!(email: 'admin@example.com', password: 'password')
     end
 

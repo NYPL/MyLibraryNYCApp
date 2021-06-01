@@ -8,13 +8,39 @@ require 'google/apis/sheets_v4'
 module GoogleApiClient
   # Connect's to google sheet client
   def self.sheets_client
-    json = JSON.parse(ENV['NEWS_LETTER_GOOGLE_CREDENTIALS'])
-    ENV["GOOGLE_ACCOUNT_TYPE"] = 'service_account'
-    ENV["GOOGLE_CLIENT_EMAIL"] = json["client_email"]
-    ENV["GOOGLE_PRIVATE_KEY"] = json["private_key"]
     client = Google::Apis::SheetsV4::SheetsService.new
-    scope = Google::Apis::SheetsV4::AUTH_SPREADSHEETS
-    client.authorization = Google::Auth.get_application_default(scope)
+    client.authorization = auth_sheet
     client
+  end
+
+  # Connect's to google drive client
+  def self.drive_client
+    client = Google::Apis::DriveV3::DriveService.new
+    client.authorization = auth_drive
+    client
+  end
+
+  def self.auth_sheet
+    auth(scope: Google::Apis::SheetsV4::AUTH_SPREADSHEETS)
+  end
+
+  def self.auth_drive
+    auth(scope: Google::Apis::DriveV3::AUTH_DRIVE)
+  end
+
+
+  def self.auth(scope)
+    google_account_json = ENV['MLN_GOOGLE_ACCCOUNT'] || {}
+    google_account = JSON.parse(google_account_json)
+    ENV["GOOGLE_ACCOUNT_TYPE"] = 'service_account'
+    ENV["GOOGLE_CLIENT_EMAIL"] = google_account["client_email"]
+    ENV["GOOGLE_PRIVATE_KEY"] = google_account["private_key"]
+    Google::Auth.get_application_default(scope)
+  end
+
+
+  def self.export_file(document_id, format)
+    client = drive_client
+    client.export_file(document_id, format)
   end
 end

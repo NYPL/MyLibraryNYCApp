@@ -1,15 +1,20 @@
 local:
   teacherset.data.from.elasticsearch.enabled: true
   news_letter.enabled: true
+  signup.pin_password.enabled: false
 development:
   teacherset.data.from.elasticsearch.enabled: true
   news_letter.enabled: true
+  signup.pin_password.enabled: false
 qa:
   teacherset.data.from.elasticsearch.enabled: true
   news_letter.enabled: true
+  signup.pin_password.enabled: false
 production:
-  teacherset.data.from.elasticsearch.enabled: false
-  news_letter.enabled: false
+  teacherset.data.from.elasticsearch.enabled: true
+  news_letter.enabled: true
+  signup.pin_password.enabled: false
 test:
   teacherset.data.from.elasticsearch.enabled: true
   news_letter.enabled: true
+  signup.pin_password.enabled: true

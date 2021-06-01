@@ -23,8 +23,16 @@ class User < ActiveRecord::Base
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
-  validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
+
+  
+  if MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled')
+    # pin allows mix of uppercase, lowercase letters, numbers and symbols.For example: MyLib1731@!
+    validates :pin, :presence => true, format: { with: /\w/}, length: { in: 4..32, message: 'must be 4 to 32 characters.' }, on: :create
+  else
+    validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
     length: { is: 4, message: 'must be 4 digits.' }, on: :create
+  end
+
   validate :validate_pin_pattern, on: :create
   validate :validate_email_pattern, :on => :create
 
@@ -200,16 +208,20 @@ class User < ActiveRecord::Base
 
   # Checks pin patterns against
   # the following examples:
-  # 1111, 2929, 0003, 5999.
+  # 1111, 2929, 0003, 5999, abcabc, abab, "aaabb111333444", "@@>>@@>>abc123".
   # Sierra will return the following
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
+
   def validate_pin_pattern
-    if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..)\1{1,}/)&.empty? == true
+    if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..+)\1{1,}/)&.empty? == true
       true
     else
-      errors.add(:pin, 'PIN does not meet our requirements. Please try again.')
-      false
+      msg = 'PIN does not meet our requirements. Please try again.'
+      return errors.add(:pin, msg) unless MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled') 
+
+      msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
+      errors.add(:pin, msg)
     end
   end
 
