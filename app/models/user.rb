@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   # it doesn't currently pose a problem.
   def validate_email_pattern
     if (!defined?(email) || email.blank? || !email.index('@'))
-      errors.add(:email, 'is required and should end in @schools.nyc.gov or another participating school address')
+      errors.add(:email, ' is required and should end in @schools.nyc.gov or another participating school address')
       return false
     end
     email.downcase.strip
@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
     if (index && (allowed_email_patterns.include? email[index..-1]))
       return true
     else
-      errors.add(:email, 'should end in @schools.nyc.gov or another participating school address')
+      errors.add(:email, ' should end in @schools.nyc.gov or another participating school address')
       return false
     end
   end

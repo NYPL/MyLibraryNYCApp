@@ -105,6 +105,10 @@ form fieldset ol > li label {
   width: 16% !important;
 }
 
+form fieldset > ol > li p.inline-errors {
+    margin: 0em !important;
+}
+
 body.active_admin {
   #hold_change_cancel_action {
     margin-right: 10px;
