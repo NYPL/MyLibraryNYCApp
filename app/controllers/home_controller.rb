@@ -54,11 +54,14 @@ class HomeController < ApplicationController
     @calendar_event = Document.calendar_of_events
     return @calendar_event if @calendar_event.nil? && params["filename"] == "error"
     
-    if @calendar_event.present?
-      file = @calendar_event.file.present? ? @calendar_event.file : nil
+    file = @calendar_event.present? && @calendar_event.file.present? ? @calendar_event.file : nil
+    
+    if params["filename"] != "error"
       respond_to do |format|
         format.pdf { send_data(file, type: "application/pdf", disposition: :inline) }
       end
+    elsif @calendar_event.present? && params["filename"] == "error"
+      redirect_to root_url
     end
   end
 end
