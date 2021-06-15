@@ -52,11 +52,16 @@ class HomeController < ApplicationController
   # Read MylibraryNyc calendar pdf from document table and display's in home page.
   def mln_calendar
     @calendar_event = Document.calendar_of_events
-    return if @calendar_event.nil? && params["filename"] == "error"
+    return @calendar_event if @calendar_event.nil? && params["filename"] == "error"
     
     file = @calendar_event.present? && @calendar_event.file.present? ? @calendar_event.file : nil
-    respond_to do |format|
-      format.pdf { send_data(file, type: "application/pdf", disposition: :inline) }
+    
+    if params["filename"] != "error"
+      respond_to do |format|
+        format.pdf { send_data(file, type: "application/pdf", disposition: :inline) }
+      end
+    elsif @calendar_event.present? && params["filename"] == "error"
+      redirect_to root_url
     end
   end
 end
