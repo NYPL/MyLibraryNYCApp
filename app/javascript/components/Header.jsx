@@ -3,10 +3,28 @@ import { Layout, Menu } from "antd";
 
 const { Header } = Layout;
 
+
+import {
+  Button,
+  ButtonTypes,
+  Modal,
+  Card,
+} from '@nypl/design-system-react-components';
+
+
 export default () => (
 	<Header>
-		<div className="maintenance-banner-color" style={{ align: "center" }}>
+		<div className="header" style={{ align: "center" }}>
 			This is Header
 		</div>
+
+    			<Button
+            buttonType={ButtonTypes.Secondary}
+            className="button"
+            
+          >
+            Log off
+          </Button>
+
 	</Header>
 );
