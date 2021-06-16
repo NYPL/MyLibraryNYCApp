@@ -5,12 +5,8 @@ const { Header } = Layout;
 
 export default () => (
 	<Header>
-		<div className="logo" />
-		<div>This is Header</div>
-		<Menu theme="dark" mode="horizontal">
-			<Menu.Item key="1">Home</Menu.Item>
-			<Menu.Item key="2">Our Services</Menu.Item>
-			<Menu.Item key="3">Contact</Menu.Item>
-		</Menu>
+		<div className="maintenance-banner-color" style={{ align: "center" }}>
+			This is Header
+		</div>
 	</Header>
 );
