@@ -87,3 +87,4 @@ group :test do
 end
 
 gem "webpacker", "~> 5.4"
+gem 'mini_racer', platforms: :ruby
