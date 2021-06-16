@@ -9,7 +9,7 @@ export default () => (
 	<Layout className="layout">
 		<Content style={{ padding: "0 50px" }}>
 			<div className="site-layout-content" style={{ margin: "100px auto" }}>
-				<h1>Beer's Catalog</h1>
+				<h1>Home page</h1>
 			</div>
 		</Content>
 	</Layout>

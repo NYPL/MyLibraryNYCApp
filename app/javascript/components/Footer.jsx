@@ -7,6 +7,6 @@ const { Footer } = Layout;
 export default () => (
 	<Footer>
 		<div className="logo" />
-		<div>This is Footer</div>
+		<div className="maintenance-banner-color">This is Footer</div>
 	</Footer>
 );
