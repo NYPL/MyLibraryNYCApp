@@ -1,3 +1,4 @@
+
 /* eslint no-console:0 */
 // This file is automatically compiled by Webpack, along with any other files
 // present in this directory. You're encouraged to place your actual application logic in
@@ -16,3 +17,13 @@
 // const imagePath = (name) => images(name, true)
 
 console.log('Hello World from Webpacker')
+import '../stylesheets/application'
+
+
+// import React from "react";
+// import { render } from "react-dom";
+// import App from "../components/App";
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   render(<App />, document.body.appendChild(document.createElement("div")));
+// });

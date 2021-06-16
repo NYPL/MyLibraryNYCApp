@@ -9,8 +9,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="google-site-verification" content="mAHyiTqiyVJ_7ZySPu4ohaiJsgnlGlHmP6Tfyd6fGQI" />
 
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%#= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_pack_tag "application" %>
+  <%= stylesheet_pack_tag  "application", :media => "all" %>
   <%= yield :head %>
   <%= csrf_meta_tags %>
 </head>
