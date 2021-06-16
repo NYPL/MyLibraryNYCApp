@@ -1,8 +1,9 @@
 import { Layout } from "antd";
 import React from "react";
 import Header from "./Header";
+import Footer from "./Footer";
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 export default () => (
 	<Layout className="layout">
@@ -12,8 +13,6 @@ export default () => (
 				<h1>Beer's Catalog</h1>
 			</div>
 		</Content>
-		<Footer style={{ textAlign: "center" }}>
-			Honeybadger ©2020.
-		</Footer>
+		<Footer />
 	</Layout>
 );
