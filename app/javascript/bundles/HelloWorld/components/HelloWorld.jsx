@@ -19,7 +19,7 @@ const HelloWorld = (props) => {
       <h3>Hello, {name}!</h3>
       <hr />
        <Button
-            buttonType={ButtonTypes.Secondary}
+            buttonType={ButtonTypes.Primary}
             className="button"
           >
             Log off
