@@ -248,5 +248,23 @@ th, td {
 
 
 .pin_password{
-	margin-top: 10px;
+  margin-top: 10px;
+}
+
+.header {
+  height: 104px;
+  width: 1280px;
+  left: 0px;
+  top: 0px;
+  border-radius: 0px;
+}
+
+.mln-home-page-logo {
+  position: absolute;
+  left: 4.92%;
+  right: 82.03%;
+  top: 30.77%;
+  bottom: 30.77%;
+  background-image: url(/assets/mylibrarynyc-logo-white-mini.png);
+  /*background: url(homepage-banner.jpg) center no-repeat;*/
 }

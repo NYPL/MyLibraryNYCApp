@@ -78,11 +78,13 @@
     "react-dom": "^16.12.0",
     "react-ga": "1.2.0",
     "react-hot-loader": "1.2.8",
+    "react-icons": "^4.2.0",
     "react-number-format": "2.0.4",
     "react-on-rails": "12.2.0",
     "react-onclickout": "2.0.6",
     "react-redux": "^7.2.1",
     "react-router": "3.0.5",
+    "react-router-dom": "^5.2.0",
     "react-router-scroll": "^0.4.4",
     "react-tappable": "0.8.0",
     "redux": "^4.0.5",
@@ -92,6 +94,7 @@
     "sass-loader": "^7.2.0",
     "scroll-behavior": "0.4.0",
     "style-loader": "0.13.0",
+    "styled-components": "^5.3.0",
     "underscore": "1.8.3",
     "url-parse": "^1.4.7",
     "validator": "7.2.0",
@@ -99,5 +102,18 @@
     "webpack-cli": "^3.3.12",
     "webpack-merge": "^0.20.0",
     "winston": "2.3.1"
-  }
+  },
+  "name": "mylibrarynycapp",
+  "description": "MyLibraryNYC ============",
+  "version": "1.0.0",
+  "main": "babel.config.js",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": ""
 }
