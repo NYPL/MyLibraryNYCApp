@@ -15,7 +15,7 @@ const HelloWorld = (props) => {
   const [name, setName] = useState(props.name);
 
   return (
-    <div>
+    <div className="maintenance-banner-color">
       <h3>Hello, {name}!</h3>
       <hr />
        <Button
