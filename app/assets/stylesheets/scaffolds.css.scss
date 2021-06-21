@@ -312,13 +312,12 @@ input.fakespan {
 }
 
 /* Grid */
-.container {
-  max-width: $containerMaxWidth;
-  margin: 0 auto;
-  @media (max-width: $containerMaxWidth) {
-    width: auto;
-    margin: 0 $basePadding;
-  }
+.main {
+  height: 1913px;
+  width: 1280px;
+  left: 2110px;
+  top: 769px;
+  border-radius: 0px;
 }
 .row {
   @include clearfix();
@@ -348,7 +347,6 @@ input.fakespan {
   position: fixed;
   top: 0;
   left: 0;
-  background: lighten($red,5%);
   z-index: 100;
   // border-bottom: 1px solid darken($red,10%); 
   .container {

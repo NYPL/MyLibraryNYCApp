@@ -10,11 +10,13 @@ import Navbar from "../components/Navbar";
 
 //import Footer from "./footer";
 
+import { Link } from '@nypl/design-system-react-components';
+
+
 export default (
   <Router>
     <div>
-      <Navbar />
-      <hr />
+      <Header />
         <Switch>
           <Route path="/faq" component={Faq} />
         </Switch>
