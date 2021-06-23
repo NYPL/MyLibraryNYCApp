@@ -1,16 +1,16 @@
 import React from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 
-const ParticipatingSchools = (props) => {
+const SignIn = (props) => {
   return (
     <div>
     	<AppBreadcrumbs />
-      <h1 className="pg--title">ParticipatingSchools</h1>
+      <h1 className="pg--title">SignIn</h1>
   		<div className="pg--content">
-  			ParticipatingSchools
+  			SignIn page
   		</div>
     </div>
   );
 }
 
-export default ParticipatingSchools;
+export default SignIn;
