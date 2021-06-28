@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 const ParticipatingSchools = (props) => {
   return (
     <div>
-    	<AppBreadcrumbs />
+      <AppBreadcrumbs />
       <h1 className="pg--title">ParticipatingSchools</h1>
   		<div className="pg--content">
   			ParticipatingSchools

@@ -10,24 +10,52 @@ import {
 
 import "../styles/application.scss"
 
+let breadcrumbs_text;
+let path_url;
+import BreadcrumbsList from "./BreadcrumbsList";
+
+
 const AppBreadcrumbs = (props) => {
   return (
     <div>
-      {console.log(props)}
       <Breadcrumbs
         breadcrumbs={[
           { url: 'https://www.nypl.org/', text: 'Home' },
-          { url: 'https://www.nypl.org/research', text: 'Research' }
+          { url: 'https://www.nypl.org/research', text: BreadcrumbsData(window.location.href.split('/')[3]) }
         ]}
         className="breadcrumbs"
       />
-      
       <div className="breadcrumb-title-details">
-        
+        {BreadcrumbsData(window.location.href.split('/')[3])}
       </div>
     </div>
 
   );
 }
+
+
+const BreadcrumbsData = (levelString) => {
+    console.log({levelString})
+  switch (levelString) {
+    case 'participating-schools':
+      return 'Participating schools';
+    case 'faq':
+      return 'Frequently Asked Questions';
+    case 'help':
+      return 'Contacts';
+    case 'error':
+      return 3;
+    case 'warning':
+      return 4;
+    case 'notice':
+      return 5;
+    case 'info':
+      return 6;
+    case 'debug':
+      return 7;
+    default:
+      return 'n/a';
+  }
+};
 
 export default AppBreadcrumbs;

@@ -7,8 +7,9 @@ import Footer from "../components/Footer";
 import Faq from "../components/Faq";
 import Navbar from "../components/Navbar";
 import Contacts from "../components/Contacts";
-import AlertMessage from "../components/AlertMessage";
+import Banner from "../components/Banner";
 import ParticipatingSchools from "../components/ParticipatingSchools";
+import AppBreadcrumbs from "../components/AppBreadcrumbs";
 import SignIn from "../components/SignIn";
 
 
@@ -20,7 +21,7 @@ import { Link } from '@nypl/design-system-react-components';
 export default (
   <Router>
     <div>
-      <AlertMessage />
+      <Banner />
       <div className="mainContent">
         <Header />
         <Switch>
