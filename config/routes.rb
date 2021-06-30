@@ -89,7 +89,7 @@ MyLibraryNYC::Application.routes.draw do
   # just remember to delete public/index.html.
 
   root :to => 'home#index'
-  match '/participating-schools' => 'home#help', via: [:get]
+  match '/participating-schools' => 'schools#participating_schools_data', via: [:get]
   match '/help' => 'home#help', via: [:get]
   match '/faq' => 'home#faq', via: [:get]
   match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]

@@ -1,4 +1,4 @@
-<div role="main">
+<!-- <div role="main">
   <div class="participating_schools">Participating Schools</div><br>
     <div class="school_header">Does your school participate in MyLibraryNYC?</div><br>
     <div>Find your school using the following links:</div>
@@ -26,3 +26,10 @@
     <% end %>
   </div>
 </div>
+ -->
+
+
+ <h1>Hello World</h1>
+<%#= react_component("HelloWorld", props: @hello_world_props, prerender: false) %>
+
+<%= react_component("ParticipatingSchools", props: { name: School.all.collect{|i| i.id} }, prerender: false) %>

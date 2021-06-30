@@ -20,12 +20,11 @@ class SchoolsController < ApplicationController
       end
       @schools_arr << school_hash
     end
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: schools }
-    end
+    render json: { schools: @schools_arr }
   end
 
+  def participating_schools_data
+  end
   
   def create
     School.create(school_params)

@@ -13,6 +13,7 @@ import AppBreadcrumbs from "../components/AppBreadcrumbs";
 import SignIn from "../components/SignIn";
 
 
+
 //import Footer from "./footer";
 
 import { Link } from '@nypl/design-system-react-components';
@@ -27,7 +28,7 @@ export default (
         <Switch>
           <Route path="/faq" component={Faq} />
           <Route path="/help" component={Contacts} />
-          <Route path="/participating-schools" component={ParticipatingSchools} />
+          <Route path="/participating-schools" component={ParticipatingSchools}  />
           <Route path="/users/start" component={SignIn} />
         </Switch>
         <Footer />

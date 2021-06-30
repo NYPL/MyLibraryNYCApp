@@ -110,3 +110,8 @@
     <div> <%= render :partial => 'news_letter/news_letter_form' %> </div>
   <% end %>
 </div>
+
+
+
+<h1>Hello World</h1>
+<%= react_component("ParticipatingSchools", props: {name: School.all.collect {|i| i.id}}, prerender: false) %>
