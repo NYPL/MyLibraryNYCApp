@@ -488,3 +488,7 @@ a:hover {
   top: 21.5068359375px;
   border-radius: nullpx;
 }
+
+.participating_schools_list {
+  padding: 15px 130px;
+}
