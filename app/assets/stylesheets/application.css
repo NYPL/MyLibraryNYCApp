@@ -182,7 +182,6 @@ th, td {
   border: 1px solid #ccc;
   outline: 0;
   border-radius: 3px;
-  margin: 6px -9px !important;
 }
 .school_inbox:focus {
   border: 2px solid #bebede;
@@ -426,8 +425,6 @@ a:hover {
 }
 
 .participating_schools {
-  height: 19px;
-  width: 153px;
   left: 518px;
   top: 5px;
   border-radius: nullpx;
@@ -493,6 +490,18 @@ a:hover {
   padding: 15px 130px;
 }
 
+.bold {
+  font-weight: bold;
+}
+
+.large {
+  font-size: xx-large;
+}
+
+
+.bold {
+  font-weight: bold;
+}
 
 .schoolList {
   padding-top: 30px
