@@ -7,11 +7,12 @@ import {
   Select,
 } from '@nypl/design-system-react-components';
 
+
 export default class Faqs extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { faqs: [], collapsed: true };
+    this.state = { faqs: [], collapsed: true, clicked: {} };
   }
 
 
@@ -21,6 +22,17 @@ export default class Faqs extends Component {
       collapsed : !collapsed
     }))
   }
+
+
+  handleClick = i => {
+    this.setState(prevState => {
+      // const clicked = [...prevState.clicked]; // <- if clicked is declared as an array
+      const clicked = { ...prevState.clicked };
+      console.log(`prevState.clicked, clicked`, prevState.clicked, clicked);
+      clicked[i] = !clicked[i];
+      return { clicked };
+    });
+  };
 
 
   componentDidMount() {
@@ -35,22 +47,23 @@ export default class Faqs extends Component {
 
 
   FrequentlyAskedQuestions() {    
-      return this.state.faqs.map(data => {
-        const { collapsed } = this.state;
+      return this.state.faqs.map((data, i) => {
         return <table>
-          <tr>
-            <td> 
-             <h3>
-                <div  onClick={this.onToggle} className={collapsed ? 'expanded' : 'collapsed'}>
-                  {data["question"]}
-                </div>
-              </h3>
+        <tbody>
+            <tr>
+              <td> 
+               <h3>
+                  <div key={data["id"]} onClick={() => this.handleClick(i)} className={this.state.clicked[i] ? 'expanded' : 'collapsed'}>
+                      {data["question"]}
+                  </div>
+                </h3>
 
-              <div style={{display : collapsed ? 'none' :'block'}}>
-                {data["answer"]}
-              </div>
-            </td>
-          </tr>
+                <div className={this.state.clicked[i] ? 'display_block slide-down' : 'display_none slide-up'}>
+                  {data["answer"]}
+                </div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       })
   }
