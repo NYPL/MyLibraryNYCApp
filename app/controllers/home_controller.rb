@@ -39,9 +39,14 @@ class HomeController < ApplicationController
 
 
   def faq
-    @faqs = FaqsController.new.frequently_asked_questions
+    binding.pry
+    faqs = FaqsController.new.frequently_asked_questions
+    render json: { faqs: faqs }
   end
 
+  def faq_data
+    
+  end
 
   # Create news-letter confirmation email in google sheets
   def newsletter_confirmation

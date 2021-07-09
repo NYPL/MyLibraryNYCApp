@@ -4,7 +4,7 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Faq from "../components/Faq";
+import Faqs from "../components/Faqs";
 import Navbar from "../components/Navbar";
 import Contacts from "../components/Contacts";
 import Banner from "../components/Banner";
@@ -26,7 +26,7 @@ export default (
       <div className="mainContent">
         <Header />
         <Switch>
-          <Route path="/faq" component={Faq} />
+          <Route path="/faq" component={Faqs} />
           <Route path="/help" component={Contacts} />
           <Route path="/participating-schools" component={ParticipatingSchools}  />
           <Route path="/users/start" component={SignIn} />

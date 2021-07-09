@@ -2,8 +2,8 @@
 
 class FaqsController < ApplicationController
 
-  def frequently_asked_questions
+  def show
     # Get all frequently asked questions by position ASC order.
-    Faq.get_faqs   
+    render json: { faqs: Faq.get_faqs }
   end
 end

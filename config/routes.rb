@@ -17,6 +17,8 @@ MyLibraryNYC::Application.routes.draw do
   end
   resources :books
   resources :schools, :only => [:index, :create]
+  resources :faqs
+
   match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel, via: [:get, :post]
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
 
@@ -91,7 +93,7 @@ MyLibraryNYC::Application.routes.draw do
   root :to => 'home#index'
   match '/participating-schools' => 'schools#participating_schools_data', via: [:get]
   match '/help' => 'home#help', via: [:get]
-  match '/faq' => 'home#faq', via: [:get]
+  match '/faq' => 'home#faq_data', via: [:get]
   match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]
   match '/help/access-digital-resources' => 'home#digital_resources', via: [:get]
 

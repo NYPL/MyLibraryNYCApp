@@ -363,7 +363,7 @@ a:hover {
   height: 36px;
   width: 100%;
   margin: 0 !important;
-  padding: 0px 80px;
+  padding: 0px 87px;
 }
 
 .breadcrumb-title-details {
@@ -379,7 +379,7 @@ a:hover {
   font-style: normal;
   color: #FFFFFF;
   font-size: 36px;
-  padding: 15px 130px;
+  padding: 15px 140px;
 }
 
 
@@ -487,7 +487,7 @@ a:hover {
 }
 
 .participating_schools_list {
-  padding: 15px 130px;
+  padding: 15px 140px;
 }
 
 .bold {
@@ -505,4 +505,44 @@ a:hover {
 
 .schoolList {
   padding-top: 30px
+}
+
+.contacts_page {
+  padding: 15px 140px;
+}
+
+.faq_page {
+  padding: 15px 140px;
+}
+
+.contacts_page_text {
+  font-family: system-ui, sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27.5px
+  letter-spacing: 0px;
+  text-align: left;
+  color: #000000;
+}
+
+.contact_email_text {
+  font-family: system-ui, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22.5px
+  color: #000000;
+}
+
+.contact_email {
+  font-family: system-ui, sans-serif;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 40px;
+  text-decoration-line: underline;
+}
+
+.display_none {
+  display: none;
 }
