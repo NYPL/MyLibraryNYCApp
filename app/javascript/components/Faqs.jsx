@@ -34,24 +34,19 @@ export default class Faqs extends Component {
   }
 
 
-  FrequentlyAskedQuestions() {
-    const { collapsed } = this.state;
-    console.log(collapsed)
-
-    
+  FrequentlyAskedQuestions() {    
       return this.state.faqs.map(data => {
+        const { collapsed } = this.state;
         return <table>
           <tr>
             <td> 
              <h3>
-                <div className="questions">{data["question"]}
-                  <span onClick={this.onToggle}>
-                    {collapsed ? '+' : '-'}
-                  </span>
+                <div  onClick={this.onToggle} className={collapsed ? 'expanded' : 'collapsed'}>
+                  {data["question"]}
                 </div>
               </h3>
 
-              <div className="answers" style={{ display :"none" }}>
+              <div style={{display : collapsed ? 'none' :'block'}}>
                 {data["answer"]}
               </div>
             </td>

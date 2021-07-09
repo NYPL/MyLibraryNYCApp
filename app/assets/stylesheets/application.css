@@ -546,3 +546,18 @@ a:hover {
 .display_none {
   display: none;
 }
+
+
+.submenu {
+  height: 0;
+  overflow: hidden;
+}
+
+.collapsed::after {
+  content: "+";
+}
+
+.expanded::after {
+  content: "—";
+}
+
