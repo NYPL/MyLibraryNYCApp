@@ -18,8 +18,6 @@ ReactOnRails.register(
 	}
 );
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
   render(
     <BrowserRouter>

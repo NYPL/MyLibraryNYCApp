@@ -584,7 +584,7 @@ a:hover {
 .expanded::after {
   content: "—";
   float: right;
-  font-size: xx-large;
+  font-size: large;
   font-weight: 200;
   transition: height 300ms;
 }
