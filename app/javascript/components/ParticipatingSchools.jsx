@@ -30,22 +30,21 @@ export default class ParticipatingSchools extends Component {
 
   Schools() {
     return this.state.schools.map((data, i) => {
-    
       let filteredSchools = data['school_names'].filter (
         (school) => {
           let value = this.state.search_school.trim().toLowerCase();
-
-          return school.toLowerCase().indexOf(value) !== -1
+          return school.toLowerCase().indexOf(value) > -1
         }
       );
 
-      return <ul> 
-        <li className="schoolList alphabet_anchor">{data['alphabet_anchor']}</li>
-
-        {filteredSchools.map(item =>
-          <li key="{item}">{item}<br/></li>
-        )}
-      </ul>
+      if(filteredSchools.length > 0) {
+        return <ul> 
+          <li className="schoolList alphabet_anchor">{data['alphabet_anchor']}</li>
+          {filteredSchools.map(school =>
+            <li key="{school}">{school}<br/></li>
+          )}
+        </ul>
+      }
     })
   }
  

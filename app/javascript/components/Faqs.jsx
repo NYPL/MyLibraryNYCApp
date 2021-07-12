@@ -48,23 +48,18 @@ export default class Faqs extends Component {
 
   FrequentlyAskedQuestions() {    
       return this.state.faqs.map((data, i) => {
-        return <table>
-        <tbody>
-            <tr>
-              <td> 
-               <h3>
-                  <div key={data["id"]} onClick={() => this.handleClick(i)} className={this.state.clicked[i] ? 'expanded' : 'collapsed'}>
-                      {data["question"]}
-                  </div>
-                </h3>
+        let status = this.state.clicked[i] ? 'expanded' : 'collapsed ';
+        return <div className="faq-data">
 
-                <div className={this.state.clicked[i] ? 'display_block slide-down' : 'display_none slide-up'}>
-                  {data["answer"]}
+                <div key={data["id"]} onClick={() => this.handleClick(i)} className={status}>
+                    <span className="faq-question">{data["question"]}</span>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+
+                <div className={this.state.clicked[i] ? 'display_block slide-down faq-answer' : 'display_none slide-up faq-answer'}>
+                    {data["answer"]}
+                </div>
+              </div>
       })
   }
 

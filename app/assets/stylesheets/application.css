@@ -544,13 +544,15 @@ a:hover {
 }
 
 .display_none {
-  animation-name: fadeIn;
-  display: none;
+  overflow: hidden;  /* Hide the element content, while height = 0 */
+    height: 0;
+    opacity: 0;
+    transition: height 300ms 400ms, opacity 400ms 0ms;
 }
 
 .display_block {
-  display: block;
-  animation-name: fadeOut;
+  height: auto; opacity: 1;
+  transition: height 400ms 0ms, opacity 600ms 0ms;
 }
 
 
@@ -572,10 +574,19 @@ a:hover {
 
 .collapsed::after {
   content: "+";
+  float: right;
+  font-size: xx-large;
+  font-weight: 200;
+  transition: height 300ms;
+
 }
 
 .expanded::after {
   content: "—";
+  float: right;
+  font-size: xx-large;
+  font-weight: 200;
+  transition: height 300ms;
 }
 
 .react-slidedown.my-dropdown-slidedown {
@@ -589,3 +600,33 @@ a:hover {
   transition-timing-function: ease-in-out;
 }
 
+.faq-data {
+  text-align: left;
+  border-collapse: collapse;
+  padding: 24px 15px;
+  width: 853px;
+  background: #FFFFFF;
+  border: 1px solid #BDBDBD;
+  box-sizing: border-box;
+}
+
+.faq-question {
+  font-family: system-ui, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 27.5px;
+  align-items: center;
+  color: #000000;
+  padding-left: 10px;
+}
+
+.faq-answer {
+  font-family: system-ui, sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+  padding: 18px 10px;
+}
