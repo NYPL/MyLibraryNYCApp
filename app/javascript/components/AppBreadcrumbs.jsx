@@ -20,8 +20,8 @@ const AppBreadcrumbs = (props) => {
     <div>
       <Breadcrumbs
         breadcrumbs={[
-          { url: 'https://www.nypl.org/', text: 'Home' },
-          { url: 'https://www.nypl.org/research', text: BreadcrumbsData(window.location.href.split('/')[3]) }
+          { url: 'http://dev-www.mylibrarynyc.local:3000/', text: 'Home' },
+          { url: 'http://dev-www.mylibrarynyc.local:3000/ ', text: BreadcrumbsData(window.location.href.split('/')[3]) }
         ]}
         className="breadcrumbs"
       />
@@ -35,7 +35,6 @@ const AppBreadcrumbs = (props) => {
 
 
 const BreadcrumbsData = (levelString) => {
-    console.log({levelString})
   switch (levelString) {
     case 'participating-schools':
       return 'Participating schools';
@@ -54,7 +53,7 @@ const BreadcrumbsData = (levelString) => {
     case 'debug':
       return 7;
     default:
-      return 'n/a';
+      return levelString;
   }
 };
 

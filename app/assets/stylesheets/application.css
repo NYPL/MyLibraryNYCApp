@@ -630,3 +630,7 @@ a:hover {
   color: #000000;
   padding: 18px 10px;
 }
+
+.alphabet_anchor_padding {
+  padding-top: 30px;
+}
