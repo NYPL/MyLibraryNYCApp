@@ -32,7 +32,7 @@ const Contacts = (props) => {
           Delivery Questions{<br/>}
           <a className="contact_email" href="mailto:delivery@mylibrarynyc.org">delivery@mylibrarynyc.org</a>{<br/>}{<br/>}
 
-          <span class="help-text contacts_page_text">Have questions about MyLibraryNYC or how to join?</span>{<br/>}
+          <span className="help-text contacts_page_text">Have questions about MyLibraryNYC or how to join?</span>{<br/>}
 
           Search our list of schools to see if your school already participates{<br/>}
           <a className="contact_email" href="http://www.mylibrarynyc.org/about/participating-schools">Participating schools</a>{<br/>}{<br/>}

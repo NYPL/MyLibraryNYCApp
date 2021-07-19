@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>MyLibraryNYC<%= content_for?(:title) ? " | #{yield(:title)}" : "" %></title>
-  <meta name="description" content="MyLibraryNYC is an innovative new pilot program for school and public libraries in New York City. It encourages student reading by expanding student and teacher access to public library books and removing common barriers to borrowing them.">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="google-site-verification" content="mAHyiTqiyVJ_7ZySPu4ohaiJsgnlGlHmP6Tfyd6fGQI" />
-  <%= csrf_meta_tags %>
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_pack_tag 'index' %>
-  <%= yield :head %>
-  <%= csrf_meta_tags %>
-</head>
+  <head>
+    <title>ReactOnRailsWithWebpacker</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag 'application' %>
+    <%= javascript_pack_tag 'index' %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
+

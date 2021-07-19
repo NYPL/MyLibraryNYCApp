@@ -3,9 +3,7 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
-  Input,
-  SearchBar,
-  Select,
+  Input, TextInput, List
 } from '@nypl/design-system-react-components';
 
 
@@ -15,7 +13,7 @@ export default class ParticipatingSchools extends Component {
   constructor(props) {
     super(props);
     this.state = { schools: [], search_school: "" };
-    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -38,23 +36,21 @@ export default class ParticipatingSchools extends Component {
       );
 
       if(filteredSchools.length > 0) {
-        return <ul>
-            
+        return <List type="ul">
           <li className="schoolList alphabet_anchor">
             <a className="alphabet_anchor_padding" name={data['alphabet_anchor']}>{data['alphabet_anchor']}</a>
           </li>
           {filteredSchools.map(school =>
             <li key="{school}">{school}<br/></li>
           )}
-        </ul>
+        </List>
       }
     })
   }
  
-  handleKeyUp = event => {
+  handleChange = event => {
     this.setState({search_school: event.target.value});
   }
-
 
   render() {
     return (
@@ -71,7 +67,8 @@ export default class ParticipatingSchools extends Component {
               id="search_participating_school"
               type="text"
               className="school_inbox"
-              onChange={this.handleKeyUp}
+              onChange={this.handleChange}
+              placeholder="Search shool"
             />
           {this.Schools()}
         </div>

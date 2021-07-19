@@ -5,18 +5,15 @@ import { BrowserRouter } from "react-router-dom";
 
 
 
-import ReactOnRails from 'react-on-rails';
+// import ReactOnRails from 'react-on-rails';
 
-import ParticipatingSchools from '../components/ParticipatingSchools';
+// import SearchTeacherSets from '../bundles/SearchTeacherSets/components/SearchTeacherSets';
 
+// ReactOnRails.register({
+//   SearchTeacherSets,
+// });
 
-// This is how react_on_rails can see the HelloWorld in the browser.
-ReactOnRails.register(
-
-	{
-	  ParticipatingSchools,
-	}
-);
+import "../styles/application.scss"
 
 document.addEventListener("DOMContentLoaded", () => {
   render(

@@ -5,7 +5,8 @@ import {
   SearchBar,
   Select,
   Button,
-  ButtonTypes
+  ButtonTypes,
+  Hero
 } from '@nypl/design-system-react-components';
 
 import "../styles/application.scss"
@@ -25,9 +26,14 @@ const AppBreadcrumbs = (props) => {
         ]}
         className="breadcrumbs"
       />
-      <div className="breadcrumb-title-details">
-        {BreadcrumbsData(window.location.href.split('/')[3])}
-      </div>
+
+      <Hero
+        heading={<Heading blockName="hero" id="1" level={1} text={BreadcrumbsData(window.location.href.split('/')[3])} />}
+        heroType="SECONDARY"
+      />
+
+
+     
     </div>
 
   );

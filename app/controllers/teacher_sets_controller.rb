@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TeacherSetsController < ApplicationController
-
   include TeacherSetsEsHelper
 
   before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
@@ -138,6 +137,10 @@ class TeacherSetsController < ApplicationController
     @holds = @set.holds_for_user(current_user)
   end
 
+
+  def teacher_set_data
+    @faqs = { faqs: Faq.get_faqs}
+  end
 
   # TODO: Fix: create currently fails our functional tests.
   def create

@@ -1,7 +1,12 @@
 import React from 'react';
-import {NavLink}  from 'react-router-dom'
 
-import { Link, LinkTypes} from '@nypl/design-system-react-components';
+import {
+  BrowserRouter as Router,
+  Link as ReactRouterLink,
+} from "react-router-dom";
+
+import { Link, LinkTypes } from "@nypl/design-system-react-components";
+
 
 const url = "http://dev-www.mylibrarynyc.local:3000/"
   
@@ -15,34 +20,35 @@ const Navbar = () => {
       <div className="navMenuList" >
         <ul className="float-right" >
           <li className="navMenuFont header-navMenu-list sign_in">
-            <NavLink className="nav-link-colors" to='/users/start'
-              type={LinkTypes.Default} attributes={{ target: '_blank'}}> Sign In 
-            </NavLink>
+            <Link className="nav-link-colors" href='/users/start'> Sign In </Link>
           </li>
 
+          
           <li className="navMenuFont header-navMenu-list search_teacher_sets">
-            <NavLink className="nav-link-colors"  to='/faq'
-              type={LinkTypes.Default} attributes={{ target: '_blank'}}> Search Teacher Sets 
-            </NavLink>
+            <Link className="nav-link-colors" type={LinkTypes.Action}>
+              <ReactRouterLink to="/faq" className="nav-link-colors">Search Teacher Sets</ReactRouterLink>
+            </Link>
           </li>
 
           <li className="navMenuFont header-navMenu-list contacts">
-            <NavLink className="nav-link-colors"  to='/help'
-              type={LinkTypes.Default} attributes={{ target: '_blank'}}> Contacts
-            </NavLink>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink>
+            </Link>
           </li>
+          
 
           <li className="navMenuFont header-navMenu-list faqs">
-            <NavLink className="nav-link-colors" to='/faq'
-              type={LinkTypes.Default} attributes={{ target: '_blank'}}> FAQs
-            </NavLink>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink>
+            </Link>
           </li>
 
 
           <li className="navMenuFont header-navMenu-list participating_schools">
-            <NavLink className="nav-link-colors" to='/participating-schools' 
-              type={LinkTypes.Default} attributes={{ target: '_blank'}}> Participating Schools
-            </NavLink>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/participating-schools" className="nav-link-colors">Participating Schools</ReactRouterLink>
+            </Link>
+
           </li>
         </ul>
       </div>

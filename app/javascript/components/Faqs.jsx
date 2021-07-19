@@ -1,12 +1,7 @@
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
-import {
-  Input,
-  SearchBar,
-  Select,
-} from '@nypl/design-system-react-components';
-
+import { Accordion, Link, List } from '@nypl/design-system-react-components';
 
 export default class Faqs extends Component {
 
@@ -26,9 +21,7 @@ export default class Faqs extends Component {
 
   handleClick = i => {
     this.setState(prevState => {
-      // const clicked = [...prevState.clicked]; // <- if clicked is declared as an array
       const clicked = { ...prevState.clicked };
-      console.log(`prevState.clicked, clicked`, prevState.clicked, clicked);
       clicked[i] = !clicked[i];
       return { clicked };
     });
@@ -41,26 +34,30 @@ export default class Faqs extends Component {
         this.setState({ faqs: res.data.faqs });
       })
       .catch(function (error) {
-        console.log("asdfasdfasd sdjfsd ")
     })
   }
 
 
-  FrequentlyAskedQuestions() {    
+  FrequentlyAskedQuestions() {
       return this.state.faqs.map((data, i) => {
-        let status = this.state.clicked[i] ? 'expanded' : 'collapsed ';
-        return <div className="faq-data">
-
-                <div key={data["id"]} onClick={() => this.handleClick(i)} className={status}>
-                    <span className="faq-question">{data["question"]}</span>
-                </div>
-
-
-                <div className={this.state.clicked[i] ? 'display_block slide-down faq-answer' : 'display_none slide-up faq-answer'}>
-                    {data["answer"]}
-                </div>
-              </div>
-      })
+        return <List modifiers={['no-list-styling' ]} type="ul">
+          <li>
+          <Accordion
+            accordionLabel={data["question"]}
+            inputId={"accordionBtn-" + i}
+            modifiers={[
+              'faq'
+            ]}
+          >
+            <React.Fragment key=".{i}">
+              <p>
+                {data["answer"]}
+              </p>
+            </React.Fragment>
+          </Accordion>
+        </li>
+      </List>
+    })
   }
 
 
@@ -68,7 +65,7 @@ export default class Faqs extends Component {
     return (
       <div>
         <AppBreadcrumbs />
-        <div className="participating_schools_list">
+        <div className="faq_list">
           {this.FrequentlyAskedQuestions()}
         </div>
       </div>

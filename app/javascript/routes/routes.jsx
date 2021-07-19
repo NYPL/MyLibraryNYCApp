@@ -13,6 +13,13 @@ import AppBreadcrumbs from "../components/AppBreadcrumbs";
 import SignIn from "../components/SignIn";
 
 
+import ReactOnRails from 'react-on-rails';
+
+import SearchTeacherSets from '../bundles/SearchTeacherSets/components/SearchTeacherSets';
+
+ReactOnRails.register({
+  SearchTeacherSets,
+});
 
 //import Footer from "./footer";
 
@@ -27,9 +34,10 @@ export default (
         <Header />
         <Switch>
           <Route path="/faq" component={Faqs} />
-          <Route path="/help" component={Contacts} />
+          <Route path="/contacts" component={Contacts} />
           <Route path="/participating-schools" component={ParticipatingSchools}  />
           <Route path="/users/start" component={SignIn} />
+          <Route path="/teacher_set_data"/>
         </Switch>
         <Footer />
       </div>

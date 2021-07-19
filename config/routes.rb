@@ -3,6 +3,8 @@
 MyLibraryNYC::Application.routes.draw do
 
   get 'hello_world', to: 'hello_world#index'
+  get 'teacher_set_data', to: 'teacher_sets#teacher_set_data'
+
   devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
 
   devise_scope :user do
@@ -92,8 +94,10 @@ MyLibraryNYC::Application.routes.draw do
 
   root :to => 'home#index'
   match '/participating-schools' => 'schools#participating_schools_data', via: [:get]
-  match '/help' => 'home#help', via: [:get]
+  match '/contacts' => 'home#help', via: [:get]
   match '/faq' => 'home#faq_data', via: [:get]
+
+
   match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]
   match '/help/access-digital-resources' => 'home#digital_resources', via: [:get]
 

@@ -15,5 +15,14 @@
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-console.log('Hello World from Webpacker')
+console.log('Hello World from Webpackerssss')
+
 import "../styles/application.scss"
+
+import ReactOnRails from 'react-on-rails';
+
+import SearchTeacherSets from '../bundles/SearchTeacherSets/components/SearchTeacherSets';
+
+ReactOnRails.register({
+  SearchTeacherSets,
+});
