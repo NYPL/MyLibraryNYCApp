@@ -19,8 +19,10 @@ const Navbar = () => {
 
       <div className="navMenuList" >
         <ul className="float-right" >
-          <li className="navMenuFont header-navMenu-list sign_in">
-            <Link className="nav-link-colors" href='/users/start'> Sign In </Link>
+          <li className="navMenuFont header-navMenu-list sign_in">          
+            <Link className="nav-link-colors" type={LinkTypes.Action}>
+              <ReactRouterLink to="/users/start" className="nav-link-colors">Sign In</ReactRouterLink>
+            </Link>
           </li>
 
           
