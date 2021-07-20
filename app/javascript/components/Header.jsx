@@ -6,9 +6,9 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 
 function Header() {
   return (
-  <>
-    <Navbar />
-  </>
+  	<div className="content-header">
+    	<Navbar />
+    </div>
   );
 }
 export default Header;

@@ -63,12 +63,16 @@ export default class Faqs extends Component {
 
   render() {
     return (
-      <div>
+      <>
+      <main className="main">
         <AppBreadcrumbs />
-        <div className="faq_list">
-          {this.FrequentlyAskedQuestions()}
-        </div>
-      </div>
+          <div className="content-primary">
+            <div className="faq_list">
+              {this.FrequentlyAskedQuestions()}
+            </div>
+           </div>
+        </main>
+      </>
     )
   }
 }

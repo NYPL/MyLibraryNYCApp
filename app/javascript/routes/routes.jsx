@@ -28,19 +28,21 @@ import { Link } from '@nypl/design-system-react-components';
 
 export default (
   <Router>
-    <div>
-      <Banner />
-      <div className="mainContent">
+    <div className="layout-container nypl-ds">
+      <header className="header">
+        <Banner />
         <Header />
-        <Switch>
-          <Route path="/faq" component={Faqs} />
-          <Route path="/contacts" component={Contacts} />
-          <Route path="/participating-schools" component={ParticipatingSchools}  />
-          <Route path="/users/start" component={SignIn} />
-          <Route path="/teacher_set_data"/>
-        </Switch>
+      </header>
+      <Switch>
+        <Route path="/faq" component={Faqs} />
+        <Route path="/contacts" component={Contacts} />
+        <Route path="/participating-schools" component={ParticipatingSchools}  />
+        <Route path="/users/start" component={SignIn} />
+        <Route path="/teacher_set_data"/>
+      </Switch>
+      <footer className="footer">
         <Footer />
-      </div>
+      </footer>
     </div>
   </Router>
 );

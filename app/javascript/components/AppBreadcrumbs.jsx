@@ -31,9 +31,6 @@ const AppBreadcrumbs = (props) => {
         heading={<Heading blockName="hero" id="1" level={1} text={BreadcrumbsData(window.location.href.split('/')[3])} />}
         heroType="SECONDARY"
       />
-
-
-     
     </div>
 
   );
