@@ -35,8 +35,7 @@ export default (
         <Header />
       </header>
       <Switch>
-        <Route exact path="/" render={() => { return ( <Redirect to="/home" /> ) }} />
-        <Route exact path="/home" component={Home} />
+        <Route exact path="/" component={Home} />
         <Route path="/faq" component={Faqs} />
         <Route path="/contacts" component={Contacts} />
         <Route path="/participating-schools" component={ParticipatingSchools}  />
