@@ -312,12 +312,7 @@ input.fakespan {
 }
 
 /* Grid */
-.main {
-  width: 1280px;
-  left: 2110px;
-  top: 769px;
-  border-radius: 0px;
-}
+
 .row {
   @include clearfix();
   margin-left: -$basePadding/2;

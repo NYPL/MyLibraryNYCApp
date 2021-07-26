@@ -664,3 +664,12 @@ h1 {
 ul.list li:before {
   color: #FFF !important;
 }
+
+
+.hero_campaigh_height {
+  margin-top: 320px
+}
+
+.align_left {
+  align: left;
+}

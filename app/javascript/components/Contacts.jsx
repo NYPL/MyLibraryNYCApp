@@ -3,8 +3,9 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 
 const Contacts = (props) => {
   return (
+    <>
+    <AppBreadcrumbs />
     <main className="main">
-      <AppBreadcrumbs />
       <div className="content-primary">
         <div className="contacts_page">
 
@@ -45,6 +46,7 @@ const Contacts = (props) => {
         </div>
       </div>
     </main>
+    </>
   );
 }
 
