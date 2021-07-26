@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch , Redirect} from "react-router-dom";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Home from "../components/Home";
 import Faqs from "../components/Faqs";
 import Navbar from "../components/Navbar";
 import Contacts from "../components/Contacts";
@@ -34,6 +35,8 @@ export default (
         <Header />
       </header>
       <Switch>
+        <Route exact path="/" render={() => { return ( <Redirect to="/home" /> ) }} />
+        <Route exact path="/home" component={Home} />
         <Route path="/faq" component={Faqs} />
         <Route path="/contacts" component={Contacts} />
         <Route path="/participating-schools" component={ParticipatingSchools}  />
