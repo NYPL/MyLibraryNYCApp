@@ -257,13 +257,9 @@ th, td {
   width: 167px;
   border-radius: 0px;
   float: left;
-  padding: 0px 0px 0px 130px !important;
+  padding: 12px 130px !important;
 }
 
-
-.search_teacher_sets {
-  float: left;
-}
 
 .contacts {
   float: left;
@@ -284,7 +280,7 @@ th, td {
   padding: 0;
   line-height: 24px;
   letter-spacing: 0.28px;
-  margin: 34px 16px 0px 10px;
+  margin: 15px 16px 0px 10px;
   float: left;
 }
 
@@ -389,7 +385,7 @@ a:hover {
   border-radius: nullpx;
 }
 
-.search_teacher_sets {
+.teacher_sets_link {
   height: 19px;
   width: 148px;
   left: 192px;
@@ -672,4 +668,128 @@ ul.list li:before {
 
 .align_left {
   align: left;
+}
+
+.have_questions {
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #000000;
+  margin-top: 20px;
+}
+
+.float-left {
+  float: left;
+}
+
+
+.home_page_text {
+  height: 70px;
+  font-family: system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 27.5px;
+  color: #000000;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.float-right {
+  float: right;
+}
+
+
+/*.input, .react-autosuggest__input {
+  width: 620px !important;
+  height: 36px !important;
+  padding: 7.5px 16px !important;
+}
+*/
+
+
+.search-bar .button {
+  /*width: 94px;*/
+  height: 36px !important;
+  padding: 7.5px 16px !important;
+  padding: 7px 13px !important;
+  background: #000000 !important;
+}
+
+.have_questions_links {
+  font-weight: 300;  
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+  letter-spacing: -0.4099999964237213px;
+  text-align: left;
+  margin-top: 7px;
+}
+
+.home_page_left {
+  margin-left: 0.5rem;
+}
+
+.horizontal-rule { 
+  background-color: #C4C4C4 !important;
+  width: 856px !important;
+  height: 3px !important;
+  margin-left: 40px;
+}
+
+.have_questions_section {
+  float: right;
+  padding-right: 80px;
+}
+
+.search_teacher_sets .search-bar {
+  padding-left: 42px !important;
+  width: 620px;
+}
+
+.HorizontalLine {
+  margin-top: 45px;
+}
+
+.plain_text {
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.alignment {
+  padding: 0px 42px;
+}
+
+.home_page_padding {
+  margin-top: -30px;
+}
+
+.background_black_color {
+  background: #000000 !important;
+}
+
+.calendar_button {
+  height: 36px;
+  width: 165px;
+  border-radius: 2px;
+  margin: 7px 32px 7px 0px;
+}
+
+.access_digital_resources {
+  height: 50px;
+  font-family: system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 27.5px;
+  color: #000000;
 }
