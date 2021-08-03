@@ -7,7 +7,6 @@ export default class AccessDigitalResources extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { access_digital_resources: ["Database", "E-Books and More", "Other Resources"] };
   }
 
 
@@ -19,11 +18,11 @@ export default class AccessDigitalResources extends Component {
         'faq'
       ]}>
       <React.Fragment key=".{1}">
-        <p>
+        <p className="plain_text">
           Access databases from anywhere with an internet connection by entering the barcode on the back of your MyLibraryNYC card."<br/>
 
             <a href="http://www.bklynlibrary.org/eresources">Brooklyn Public Library Articles and Databases</a><br/>
-             Provides a list of databases for children, teens, and adults.<br/><br/>
+             Provides a list of databases for children, teens, and adults.<br/>
 
             <a href="http://www.nypl.org/collections/articles-databases">New York Public Library Databases</a><br/>
               Offers the option to limit searches by audience to children or teens/young adults.<br/><br/>
@@ -47,7 +46,7 @@ export default class AccessDigitalResources extends Component {
         'faq'
       ]}>
       <React.Fragment key=".{2}">
-        <p>
+        <p className="plain_text">
          Find titles for children and young adults in your public library’s ebook collection. <br/><br/>
           <a href="http://www.bklynlibrary.org/e-books-and-more">Brooklyn Public Library Ebooks</a><br/>
           <a href="http://www.nypl.org/ebooks">New York Public Library Ebooks</a><br/>
@@ -66,7 +65,7 @@ export default class AccessDigitalResources extends Component {
         'faq'
       ]}>
       <React.Fragment key=".{3}">
-        <p>
+        <p className="plain_text">
           <a href="http://www.bklynlibrary.org/brooklyncollection/connections">Brooklyn Connections</a><br/>
           Gives rare access to original archival materials in Brooklyn Public Library's Brooklyn Collection while students complete customized, standards-based projects.<br/><br/>
 

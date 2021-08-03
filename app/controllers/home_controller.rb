@@ -39,7 +39,6 @@ class HomeController < ApplicationController
 
 
   def faq
-    binding.pry
     faqs = FaqsController.new.frequently_asked_questions
     render json: { faqs: faqs }
   end

@@ -12,15 +12,10 @@ import Banner from "../components/Banner";
 import ParticipatingSchools from "../components/ParticipatingSchools";
 import AppBreadcrumbs from "../components/AppBreadcrumbs";
 import SignIn from "../components/SignIn";
+import CalendarOfEvents from "../components/CalendarOfEvents";
+import SearchTeacherSets from "../bundles/SearchTeacherSets/components/SearchTeacherSets";
 
 
-import ReactOnRails from 'react-on-rails';
-
-import SearchTeacherSets from '../bundles/SearchTeacherSets/components/SearchTeacherSets';
-
-ReactOnRails.register({
-  SearchTeacherSets,
-});
 
 //import Footer from "./footer";
 

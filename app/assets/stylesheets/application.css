@@ -785,6 +785,11 @@ ul.list li:before {
   margin: 7px 32px 7px 0px;
 }
 
+.calendar_button .calendar_link {
+  text-decoration: none !important;
+  color: #FFFFFF !important;
+}
+
 .access_digital_resources {
   height: 50px;
   font-family: system-ui, sans-serif;

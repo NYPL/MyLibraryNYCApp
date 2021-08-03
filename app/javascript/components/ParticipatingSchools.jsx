@@ -22,7 +22,7 @@ export default class ParticipatingSchools extends Component {
         this.setState({ schools: res.data.schools });
       })
       .catch(function (error) {
-          console.log(error);
+        console.log(error);
     })
   }
 

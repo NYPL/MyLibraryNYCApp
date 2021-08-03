@@ -4,15 +4,6 @@ import App from "../components/App";
 import { BrowserRouter } from "react-router-dom";
 
 
-
-// import ReactOnRails from 'react-on-rails';
-
-// import SearchTeacherSets from '../bundles/SearchTeacherSets/components/SearchTeacherSets';
-
-// ReactOnRails.register({
-//   SearchTeacherSets,
-// });
-
 import "../styles/application.scss"
 
 document.addEventListener("DOMContentLoaded", () => {
