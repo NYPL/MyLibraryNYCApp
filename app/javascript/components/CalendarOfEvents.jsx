@@ -31,7 +31,7 @@ render() {
   return (
     <div className="alignment" style={{ display: "flex", justifyContent: "flex-start", paddingTop: "34px"}}>
       <Button onclick="" className="calendar_button background_black_color" buttonType={ButtonTypes.Primary}>
-          <Link className="calendar_link" target="_blank" href={"http://dev-www.mylibrarynyc.local:3000/home/calendar_event/"+ this.state.mln_calendar_file_name } > Calendar of Events </Link>
+        <Link className="calendar_link" target="_blank" href={"http://dev-www.mylibrarynyc.local:3000/home/calendar_event/"+ this.state.mln_calendar_file_name } > Calendar of Events </Link>
       </Button>
       
       <Button className="calendar_button background_black_color" buttonType={ButtonTypes.Primary}> 

@@ -790,6 +790,10 @@ ul.list li:before {
   color: #FFFFFF !important;
 }
 
+.href_link {
+  text-decoration: none !important;
+}
+
 .access_digital_resources {
   height: 50px;
   font-family: system-ui, sans-serif;

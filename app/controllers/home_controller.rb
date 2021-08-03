@@ -4,10 +4,14 @@ class HomeController < ApplicationController
   layout 'empty', :only => [ :extend_session_iframe ]
 
   def index
-    calendar_event = Document.calendar_of_events
-    @mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
   end
 
+
+  def get_mln_file_name
+    calendar_event = Document.calendar_of_events
+    mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
+    render json: { mln_calendar_file_name: mln_calendar_file_name }
+  end
 
   def swagger_docs
   	render :json => File.read("app/controllers/api/swagger/swaggerDoc.json")
