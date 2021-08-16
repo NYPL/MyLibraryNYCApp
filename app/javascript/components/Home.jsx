@@ -1,11 +1,11 @@
 import React, { Component, useState } from 'react';
 
 import HaveQuestions from "./HaveQuestions";
-import SearchTeacherSets from "./SearchTeacherSets";
+import SearchTeacherSetsBox from "./SearchTeacherSetsBox";
 import AccessDigitalResources from "./AccessDigitalResources";
 import CalendarOfEvents from "./CalendarOfEvents";
 
-import { HorizontalRule, ButtonTypes, Button } from '@nypl/design-system-react-components';
+import { HorizontalRule, ButtonTypes, Button, Hero,  Heading, Image} from '@nypl/design-system-react-components';
 import ReactOnRails from 'react-on-rails';
 
 
@@ -20,13 +20,20 @@ export default class Home extends Component {
   render() {
     return (
       <>
+      <div>
+        <Hero
+          backgroundImageSrc="/assets/hero_campaign_bg.jpg"
+          heading={<Heading blockName="hero" id="1" level={1} text="Welcome To MyLibrary NYC"/>}
+          heroType="CAMPAIGN"
+          image={<Image alt="Image example" blockName="hero" src="/assets/hero_campaign_left.png"/>}
+          subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City’s public library systems as well as instructional support and professional development opportunities."/>
+        
         <main className="main main--with-sidebar">
           <div className="content-top">
-            <div className="hero_campaigh_height"> </div>
             <div className="float-left">
               <HorizontalRule />
               <div className="home_page_text alignment">Search For Teacher Sets</div>
-              <SearchTeacherSets />
+              <SearchTeacherSetsBox />
             </div>
           <div className="have_questions_section"><HaveQuestions /></div>
           </div>
@@ -55,6 +62,7 @@ export default class Home extends Component {
 
           </div>
         </main>
+      </div>
       </>
     )
   }

@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react';
 
 import HaveQuestions from "./HaveQuestions";
-import SearchTeacherSets from "./SearchTeacherSets";
 import AccessDigitalResources from "./AccessDigitalResources";
 import axios from 'axios';
 import { Accordion, Link, List } from '@nypl/design-system-react-components';

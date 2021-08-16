@@ -13,8 +13,9 @@ import ParticipatingSchools from "../components/ParticipatingSchools";
 import AppBreadcrumbs from "../components/AppBreadcrumbs";
 import SignIn from "../components/SignIn";
 import CalendarOfEvents from "../components/CalendarOfEvents";
-import SearchTeacherSets from "../bundles/SearchTeacherSets/components/SearchTeacherSets";
-
+import SearchTeacherSets from "../components/SearchTeacherSets";
+import Accounts from "../components/Accounts";
+import ContactsFaqsSchoolsNavMenu from "../components/ContactsFaqsSchoolsNavMenu";
 
 
 //import Footer from "./footer";
@@ -35,7 +36,9 @@ export default (
         <Route path="/contacts" component={Contacts} />
         <Route path="/participating-schools" component={ParticipatingSchools}  />
         <Route path="/users/start" component={SignIn} />
-        <Route path="/teacher_set_data"/>
+        <Route path="/teacher_set_data" component={SearchTeacherSets}/>
+        <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu}/>
+
       </Switch>
       <footer className="footer">
         <Footer />

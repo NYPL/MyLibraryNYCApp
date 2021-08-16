@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
+import AppBreadcrumbs from "./AppBreadcrumbs";
 
 import {
   Button,
@@ -16,7 +17,7 @@ import {
 } from '@nypl/design-system-react-components';
 
 
-export default class Home extends Component {
+export default class SearchTeacherSets extends Component {
 
   constructor(props) {
     super(props);
@@ -25,35 +26,14 @@ export default class Home extends Component {
   render() {
     return (
       <>
-        <div className="search_teacher_sets">
-          <SearchBar showHelperText showSelect>
-            <Input
-              ariaLabelledBy="buttonBasic"
-              attributes={{
-                'aria-describedby': 'helperTextBasic'
-              }}
-              id="inputBasic"
-              placeholder="Item Search"
-              required
-              type="text"
-            />
-            <Button
-              buttonType="filled"
-              id="buttonBasic"
-              type="submit"
-            >
-              <Icon
-                decorative
-                modifiers={[
-                  'small',
-                  'icon-left'
-                ]}
-                name="search"
-              />
-              Search
-            </Button>
-          </SearchBar>
-        </div>
+        <AppBreadcrumbs />
+        <main className="main">
+          <div className="content-primary">
+            <div className="search_teacher_sets">
+              Teacher sets page
+            </div>
+          </div>
+        </main>
       </>
     )
   }

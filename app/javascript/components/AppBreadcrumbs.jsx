@@ -27,9 +27,10 @@ const AppBreadcrumbs = (props) => {
         className="breadcrumbs"
       />
 
-      <Hero
+      <Hero className=""
+        backgroundColor="#D23B42"
         heading={<Heading blockName="hero" id="1" level={1} text={BreadcrumbsData(window.location.href.split('/')[3])} />}
-        heroType="SECONDARY"
+        heroType="TERTIARY"
       />
     </div>
 

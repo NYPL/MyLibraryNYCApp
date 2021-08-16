@@ -5,7 +5,7 @@ MyLibraryNYC::Application.routes.draw do
   get 'hello_world', to: 'hello_world#index'
   get 'teacher_set_data', to: 'teacher_sets#teacher_set_data'
 
-  devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
+  devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }#, :controllers => { :registrations => :registrations, :sessions => :sessions }
 
   devise_scope :user do
     get 'timeout_check' => 'sessions#timeout_check'
@@ -48,6 +48,7 @@ MyLibraryNYC::Application.routes.draw do
   match '/news_letter/index' => 'news_letter#index', via: [:get, :post]
 
   match '/home/get_mln_file_name' => 'home#get_mln_file_name', via: [:get]
+  match '/secondary_menu' => 'home#secondary_menu', via: [:get]
 
   match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page', via: [:get, :post]
   match '/news_letter/news_letter_email_is_valid' => 'news_letter#news_letter_email_is_valid', via: [:get, :post]
