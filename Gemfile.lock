@@ -1141,6 +1141,9 @@ GEM
     bcrypt (3.1.16)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
+    breakpoint (2.4.6)
+      sass (~> 3.3.0)
+      sassy-maps (< 1.0.0)
     builder (3.2.4)
     cabin (0.9.0)
     character_set (1.4.1)
@@ -1299,7 +1302,7 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    libv8-node (15.14.0.0-x86_64-darwin-18)
+    libv8-node (15.14.0.0)
     lograge (0.11.2)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -1444,6 +1447,7 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.4)
+    sass (3.3.14)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -1454,6 +1458,8 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    sassy-maps (0.4.0)
+      sass (~> 3.3)
     semantic_range (3.0.0)
     set (1.0.1)
     signet (0.14.1)
@@ -1541,6 +1547,7 @@ DEPENDENCIES
   addressable
   auto-session-timeout
   aws-sdk (~> 3)
+  breakpoint (~> 2.4.0)
   client_side_validations (= 17.2.0)
   coffee-rails
   cranky

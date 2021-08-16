@@ -16,9 +16,13 @@
  *= require ./vendor/jquery.swipeshow
  *= require font-awesome
  *= require scaffolds
+ *= require breakpoint-sass
+ *= require mobile-header
+ *= require viewports
  */
  
 @charset "UTF-8";/*!*
+
 
 .maintenance-banner-color {
   background: #fff7a5;
@@ -248,6 +252,10 @@ th, td {
   top: 0px;
   border-radius: 0px;
   background: #FFFFFF;
+  @include breakpoint($breakpoint-medium) {
+    flex-flow: row wrap;
+  }
+
   /*margin: 18px 1050px -15px 63px;*/
 }
 
@@ -337,7 +345,6 @@ body {
 .nav-link-colors {
   text-decoration: none !important;
   color: #000000 !important;
-  cursor: pointer !important;
 }
 
 a:hover {
@@ -348,7 +355,7 @@ a:hover {
   text-decoration: none;
   background-color: #B9292F !important;
   height: 36px;
-  padding: 0px 87px;
+  padding-left: 47px
 }
 
 .breadcrumb-title-details {
@@ -637,7 +644,20 @@ a:hover {
   padding: 15px 140px;
 }*/
 
-.hero__heading {
+.breadcrumbs__heading {
+  font-weight: 300 !important;
+  color: #FFFFFF !important;
+  height: 77px !important;
+  font-weight: 300 !important;
+  letter-spacing: 0px !important;
+  line-height: 75px !important;
+  font-style: normal !important;
+  color: #FFFFFF !important;
+  font-size: 36px !important;
+}
+
+
+/*.breadcrumbs__heading {
   --ui-black: #D23B42 !important;
   font-weight: 300 !important;
   color: #FFFFFF !important;
@@ -649,7 +669,7 @@ a:hover {
   color: #FFFFFF !important;
   font-size: 36px !important;
   padding: 0px 46px !important;
-}
+}*/
 
 
 h1 {
@@ -714,9 +734,9 @@ ul.list li:before {
 
 .search-bar .button {
   /*width: 94px;*/
-  height: 36px !important;
+  /*height: 36px !important;
   padding: 7.5px 16px !important;
-  padding: 7px 13px !important;
+  padding: 7px 13px !important;*/
   background: #000000 !important;
 }
 
@@ -780,7 +800,7 @@ ul.list li:before {
 
 .calendar_button {
   height: 36px;
-  width: 165px;
+/*  width: 165px;*/
   border-radius: 2px;
   margin: 7px 32px 7px 0px;
 }
@@ -802,3 +822,7 @@ ul.list li:before {
   line-height: 27.5px;
   color: #000000;
 }
+
+
+
+

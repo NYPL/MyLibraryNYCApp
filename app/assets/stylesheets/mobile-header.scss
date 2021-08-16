@@ -1,0 +1,134 @@
+@import 'viewports';
+
+.navMenu-wrapper {
+  /*display: inline-block;
+  position: inherit;*/
+
+  @include min-screen(769px) {
+    display: none;
+  }
+}
+
+.mobileHeader {
+  @include min-screen(769px) {
+    display: none;
+  }
+}
+
+.navMenuList {
+  display: inline-block;
+  position: inherit;
+
+  @include max-screen(768px) {
+    display: none;
+  }
+}
+
+
+.header-mobile-navMenu {
+  display: inline-block;
+  padding: 0;
+  margin: 0 0 0 4px;
+  line-height: normal;
+  @include max-screen(768px) {
+    display: none;
+  }
+}
+
+.header-mobile-navMenu-wrapper {
+  /*box-shadow: 0 6px 4px rgb(100 100 100 / 40%);*/
+  line-height: normal;
+  margin-top: -2.5px;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  background-color: #FFF;
+  @include max-screen(768px) {
+    display: none;
+  }
+}
+
+.header-mobile-wrapper.active {
+  left: 0;
+  /*box-shadow: 0 6px 4px hsl(0deg 0% 39% / 40%);*/
+  line-height: normal;
+  margin-top: -2.5px;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+}
+
+
+.header-mobile-navMenu-list {
+  display: none;
+  background-color: #2B2B2B;
+  padding: 10px 0;
+  margin: 0;
+  list-style-type: none;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.navMenu {
+  position: relative;
+  display: block;
+}
+
+#navMenu-List {
+  display: block;
+  line-height: 40px !important;
+}
+
+.navMenu-List {
+  list-style-type: square !important;
+}
+
+
+.navMenu-wrapper {
+  /*box-shadow: 0 6px 4px rgba(100, 100, 100, 0.4);*/
+  line-height: normal;
+  margin-top: -2.5px;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  background-color: #FFF;
+  border-top: 1px solid #D23B42;
+}
+
+.mobileHeader-menuButton.active{
+  background-color: #D23B42 !important;
+}
+
+.menu-list {
+  cursor: pointer;
+  display: block;
+  position: relative;
+}
+
+.nav-menu-link {
+  cursor: pointer !important;
+  padding: 0 20px !important;
+}
+
+.menu-list .nav-menu-link:after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  display: block;
+  border-bottom: 1px dotted #000;
+}
+
+.icon-div {
+  display: block;
+  position: relative;
+  background: #FFF;
+  width: 100%;
+  top:266px;
+}
+
+.icon-shuttle {
+  position: absolute;
+  left: 67.5%;
+  background: #D23B42;
+}
