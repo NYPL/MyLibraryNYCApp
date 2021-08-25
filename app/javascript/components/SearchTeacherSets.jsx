@@ -29,7 +29,7 @@ export default class SearchTeacherSets extends Component {
         <AppBreadcrumbs />
         <main className="main">
           <div className="content-primary">
-            <div className="search_teacher_sets">
+            <div className="">
               Teacher sets page
             </div>
           </div>

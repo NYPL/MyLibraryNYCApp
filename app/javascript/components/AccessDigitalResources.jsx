@@ -91,7 +91,7 @@ export default class AccessDigitalResources extends Component {
   }
 
   AccessResources() {
-    return <List modifiers={['no-list-styling' ]} type="ul">
+    return <div className="nypl-ds"><List  modifiers={['no-list-styling' ]} type="ul">
       <li>
         {this.Databases()}
       </li>
@@ -104,6 +104,7 @@ export default class AccessDigitalResources extends Component {
         {this.OtherDigitalResources()}
       </li>
     </List>
+    </div>
   }
 
 

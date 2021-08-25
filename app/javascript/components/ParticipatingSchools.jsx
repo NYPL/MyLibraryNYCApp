@@ -57,7 +57,7 @@ export default class ParticipatingSchools extends Component {
       <>
         <AppBreadcrumbs />
         <main className="main">
-          <div className="content-primary">
+          <div className="content-primary content-primary--with-sidebar-right">
             <div className="participating_schools_list">
               <div className="school_header schoolList bold">Does your school participate in MyLibraryNYC?</div>
               <div className="schoolList">Find your school using the following links:</div>

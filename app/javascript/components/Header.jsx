@@ -7,8 +7,10 @@ import MobileHeader from "./MobileHeader"
 function Header() {
   return (
   	<div className="content-header">
-    	<Navbar />
-    	<MobileHeader />
+  		<div className="header-wrapper">
+	    	<Navbar />
+	    	<MobileHeader />
+	    </div>
     </div>
   );
 }

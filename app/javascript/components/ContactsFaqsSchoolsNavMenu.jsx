@@ -6,7 +6,7 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-import { Link, LinkTypes } from "@nypl/design-system-react-components";
+import { Link, LinkTypes, Icon } from "@nypl/design-system-react-components";
 
 
 export default class ContactsFaqsSchoolsNavMenu extends Component {
@@ -31,6 +31,7 @@ export default class ContactsFaqsSchoolsNavMenu extends Component {
 
 	          <ul className={`${this.props.className}-list`} id="navMenu-List">
 	            <li className='menu-list'>
+					      <Icon className="testClass" decorative modifiers={[ 'small', 'icon-left' ]} name="brooklyn" />
 					      <Link type={LinkTypes.Action}>
 					        <ReactRouterLink to="/contacts" className="nav-link-colors nav-menu-link">Contacts</ReactRouterLink>
 					      </Link>
@@ -38,6 +39,7 @@ export default class ContactsFaqsSchoolsNavMenu extends Component {
 					    
 
 					    <li className='menu-list'>
+					    	<Icon className="testClass" decorative modifiers={[ 'small', 'icon-left' ]} name="brooklyn" />
 					      <Link type={LinkTypes.Action}>
 					        <ReactRouterLink to="/faq" className="nav-link-colors nav-menu-link">FAQs</ReactRouterLink>
 					      </Link>
@@ -45,6 +47,7 @@ export default class ContactsFaqsSchoolsNavMenu extends Component {
 
 
 					    <li className='menu-list'>
+					    	<Icon className="testClass" decorative modifiers={[ 'small']} name="brooklyn" />
 					      <Link type={LinkTypes.Action}>
 					        <ReactRouterLink to="/participating-schools" className="nav-link-colors nav-menu-link">Participating Schools</ReactRouterLink>
 					      </Link>

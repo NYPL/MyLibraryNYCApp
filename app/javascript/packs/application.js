@@ -20,9 +20,3 @@ console.log('Hello World from Webpackerssss')
 import "../styles/application.scss"
 
 import ReactOnRails from 'react-on-rails';
-
-import SearchTeacherSets from '../bundles/SearchTeacherSets/components/SearchTeacherSets';
-
-ReactOnRails.register({
-  SearchTeacherSets,
-});

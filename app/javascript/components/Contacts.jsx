@@ -6,7 +6,7 @@ const Contacts = (props) => {
     <>
     <AppBreadcrumbs />
     <main className="main">
-      <div className="content-primary">
+      <div className="content-primary content-primary--with-sidebar-right">
         <div className="contacts_page">
 
           <div className="contacts_page_text">

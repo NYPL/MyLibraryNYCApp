@@ -16,7 +16,7 @@
  *= require ./vendor/jquery.swipeshow
  *= require font-awesome
  *= require scaffolds
- *= require breakpoint-sass
+ *= require breakpoint
  *= require mobile-header
  *= require viewports
  */
@@ -199,6 +199,7 @@ th, td {
   cursor: pointer;
   margin-left: -28px;
 }
+
 .close-icon:after {
   content: "X";
   display: block;
@@ -243,29 +244,6 @@ th, td {
 
 .pin_password{
   margin-top: 10px;
-}
-
-.app-header {
-  height: 104px;
-  width: 100%;
-  left: 0px;
-  top: 0px;
-  border-radius: 0px;
-  background: #FFFFFF;
-  @include breakpoint($breakpoint-medium) {
-    flex-flow: row wrap;
-  }
-
-  /*margin: 18px 1050px -15px 63px;*/
-}
-
-
-.mln-home-page-logo {
-  height: 40px;
-  width: 167px;
-  border-radius: 0px;
-  float: left;
-  padding: 12px 130px !important;
 }
 
 
@@ -330,7 +308,6 @@ th, td {
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.28px;
-  /* or 24px */
   color: #000000;
   width: 893px;
   height: 52px;
@@ -349,13 +326,6 @@ body {
 
 a:hover {
   color: #000000 !important;
-}
-
-.breadcrumbs {
-  text-decoration: none;
-  background-color: #B9292F !important;
-  height: 36px;
-  padding-left: 47px
 }
 
 .breadcrumb-title-details {
@@ -461,30 +431,26 @@ a:hover {
 
 
 .breadcrumbs__list {
-  list-style: none;
+  /*list-style: none;
   font-family: sans-serif !important;
   font-weight: 300 !important;
   margin: 0px 0px auto 40px !important;
-  letter-spacing: 0px !important;
+  letter-spacing: 0px !important;*/
 }
 
 
 .breadcrumbs_title {
-  height: 33.155845642089844px;
+ /* height: 33.155845642089844px;
   width: 1144.06201171875px;
   left: 63.50390625px;
   top: 21.5068359375px;
-  border-radius: nullpx;
+  border-radius: nullpx;*/
 }
 
 .participating_schools_list {
-  padding: 15px 47px !important;
+  padding: 15px 0px !important;
 }
 
-.faq_list {
-  padding: 15px 225px 15px 47px !important;
-  width: 1135px;
-}
 
 .bold {
   font-weight: bold;
@@ -504,11 +470,11 @@ a:hover {
 }
 
 .contacts_page {
-  padding: 15px 47px;
+  padding: 25px 0px;
 }
 
 .faq_page {
-  padding: 15px 140px;
+  padding: 25px 0px;
 }
 
 .contacts_page_text {
@@ -645,7 +611,7 @@ a:hover {
 }*/
 
 .breadcrumbs__heading {
-  font-weight: 300 !important;
+  /*font-weight: 300 !important;
   color: #FFFFFF !important;
   height: 77px !important;
   font-weight: 300 !important;
@@ -653,7 +619,7 @@ a:hover {
   line-height: 75px !important;
   font-style: normal !important;
   color: #FFFFFF !important;
-  font-size: 36px !important;
+  font-size: 36px !important;*/
 }
 
 
@@ -707,12 +673,12 @@ ul.list li:before {
 
 
 .home_page_text {
-  height: 70px;
+  /*height: 70px;
   font-family: system-ui, sans-serif;
   font-weight: 500;
   font-size: 22px;
   line-height: 27.5px;
-  color: #000000;
+  color: #000000;*/
 }
 
 .lowercase {
@@ -755,21 +721,9 @@ ul.list li:before {
   margin-left: 0.5rem;
 }
 
-.horizontal-rule { 
-  background-color: #C4C4C4 !important;
-  width: 856px !important;
-  height: 3px !important;
-  margin-left: 40px;
-}
-
-.have_questions_section {
-  float: right;
-  padding-right: 80px;
-}
 
 .search_teacher_sets .search-bar {
-  padding-left: 42px !important;
-  width: 620px;
+  padding-top: 20px;
 }
 
 .HorizontalLine {
@@ -787,7 +741,7 @@ ul.list li:before {
 }
 
 .alignment {
-  padding: 0px 42px;
+  /*padding: 0px 42px;*/
 }
 
 .home_page_padding {
@@ -824,5 +778,18 @@ ul.list li:before {
 }
 
 
+.medium_font {
+  font-family: system-ui, sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27.5px
+  letter-spacing: 0px;
+  text-align: left;
+  color: #000000;
+}
 
 
+.faq_list {
+  padding-top: 15px 0px;
+}

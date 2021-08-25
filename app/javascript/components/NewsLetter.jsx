@@ -12,11 +12,12 @@ import {
   Icon,
   IconNames,
   HelperErrorText,
-  LibraryExample
+  LibraryExample,
+  Heading
 } from '@nypl/design-system-react-components';
 
 
-export default class SearchTeacherSetsBox extends Component {
+export default class NewsLetter extends Component {
 
   constructor(props) {
     super(props);
@@ -24,12 +25,17 @@ export default class SearchTeacherSetsBox extends Component {
   
   render() {
     return (
-      <>
-        <div className="search_teacher_sets">
-          <SearchBar showHelperText showSelect>
+      <div className="newsLetter">
+        <div className="newsLetterBox">
+          <Heading className="newsLetterHeader"
+            id="heading1"
+            level={3}
+            text="Learn about new teacher sets, best practices &amp; exclusive events when you sign up fo ra "
+          />
+          <SearchBar>
             <Input
               id="input"
-              placeholder="Enter teacher-set"
+              placeholder="Enter your email"
               required={true}
               type={InputTypes.text}
             />
@@ -42,8 +48,7 @@ export default class SearchTeacherSetsBox extends Component {
             </Button>
           </SearchBar>
         </div>
-      </>
+      </div>
     )
   }
 }
-

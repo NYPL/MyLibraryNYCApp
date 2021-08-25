@@ -65,12 +65,16 @@ export default class Faqs extends Component {
     return (
       <>
       <AppBreadcrumbs />
-      <main className="main">
-          <div className="content-primary">
+      <main className="main nypl-ds">
+          <div className="content-primary content-primary--with-sidebar-right">
             <div className="faq_list">
               {this.FrequentlyAskedQuestions()}
             </div>
            </div>
+
+           <div className="content-secondary content-secondary--with-sidebar-right">
+            
+          </div>
         </main>
       </>
     )

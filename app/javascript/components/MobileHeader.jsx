@@ -144,8 +144,12 @@ toggleMobileActiveBtn(activeButton) {
 }
 
 
-OpenLinks() {
-  console.log("jjj")
+componentDidMount() {
+  document.body.addEventListener("click", () => {
+    if (this.state.activeButton) {
+      this.setState({ activeButton: "" });
+    }
+  });
 }
 
 
@@ -207,19 +211,25 @@ renderMenuButton() {
 render() {
   return (
       <div className={this.props.className} style={styles.base}>
+        <Link type={LinkTypes.Action}>
+          <ReactRouterLink to="/">
+          <img className="homeLogo" border="0" src="/assets/MLN_Logo_red.png"/></ReactRouterLink>
+        </Link>
         <ul style={styles.list} >
-          <Link className="nav-link-colors" type={LinkTypes.Action}>
-            <ReactRouterLink to="/users/start" className="nav-link-colors">
-              <LoginIcon ariaHidden fill="#000" focusable={false} />
-            </ReactRouterLink>
-          </Link>
-
-          <Link className="nav-link-colors" type={LinkTypes.Action}>
-            <ReactRouterLink to="/teacher_set_data" className="nav-link-colors">
-              <SearchIcon ariaHidden fill="#000" focusable={false} />
-            </ReactRouterLink>
-          </Link>
-
+          <li style={styles.listItem}>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/users/start" className="nav-link-colors">
+                <LoginIcon ariaHidden fill="#000" focusable={false} />
+              </ReactRouterLink>
+            </Link>
+          </li>
+          <li style={styles.listItem}>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/teacher_set_data" className="nav-link-colors">
+                <SearchIcon ariaHidden fill="#000" focusable={false} />
+              </ReactRouterLink>
+            </Link>
+            </li>
           {this.renderMenuButton()}
         </ul>
       </div>

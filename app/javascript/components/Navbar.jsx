@@ -5,59 +5,62 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-import { Link, LinkTypes } from "@nypl/design-system-react-components";
+import { Link, LinkTypes, Icon } from "@nypl/design-system-react-components";
 
+const styles = {
+  headerNav: {
+    position: 'absolute',
+    top: '28px',
+    display: 'block',
+  }
+}
 
 const url = "http://dev-www.mylibrarynyc.local:3000/"
   
 const Navbar = () => {
   return (
-   <div className="app-header">
-    <ul>
-      <li className="navMenuFont header-navMenu-list mln-home-page-logo float-left">
-        <Link className="nav-link-colors" type={LinkTypes.Action}>
-          <ReactRouterLink to="/" className="nav-link-colors"><img border="0" src="/assets/MLN_Logo_red.png"/></ReactRouterLink>
-        </Link>
-      </li>
-    </ul>
+   <div className="header-topWrapper">
 
-      <div className="navMenuList" >
+      <ReactRouterLink to="/">
+        <div className="header-logo"><img border="0" src="/assets/MLN_Logo_red.png"/></div>
+      </ReactRouterLink>
+    
+      <nav className="header-buttons" style={styles.headerNav}>
         <ul className="float-right">
-          <li className="navMenuFont header-navMenu-list sign_in">          
-            <Link className="nav-link-colors" type={LinkTypes.Action}>
-              <ReactRouterLink to="/users/start" className="nav-link-colors float-right">Sign In</ReactRouterLink>
+          <li>          
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/users/start" className="nav-link-colors ">Sign In</ReactRouterLink>
             </Link>
           </li>
 
           
-          <li className="navMenuFont header-navMenu-list teacher_sets_link">
-            <Link className="nav-link-colors" type={LinkTypes.Action}>
-              <ReactRouterLink to="/faq" className="nav-link-colors float-right">Search Teacher Sets</ReactRouterLink>
+          <li>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/faq" className="nav-link-colors ">Search Teacher Sets</ReactRouterLink>
             </Link>
           </li>
 
-          <li className="navMenuFont header-navMenu-list contacts">
-            <Link className="nav-link-colors" type={LinkTypes.Action}>
-              <ReactRouterLink to="/contacts" className="nav-link-colors float-right">Contacts</ReactRouterLink>
+          <li>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/contacts" className="nav-link-colors ">Contacts</ReactRouterLink>
             </Link>
           </li>
           
 
-          <li className="navMenuFont header-navMenu-list faqs">
-            <Link className="nav-link-colors" type={LinkTypes.Action}>
-              <ReactRouterLink to="/faq" className="nav-link-colors float-right">FAQs</ReactRouterLink>
+          <li>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/faq" className="nav-link-colors ">FAQs</ReactRouterLink>
             </Link>
           </li>
 
 
-          <li className="navMenuFont header-navMenu-list participating_schools">
-            <Link className="nav-link-colors" type={LinkTypes.Action}>
-              <ReactRouterLink to="/participating-schools" className="nav-link-colors float-right">Participating Schools</ReactRouterLink>
+          <li>
+            <Link type={LinkTypes.Action}>
+              <ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink>
             </Link>
-
           </li>
         </ul>
-      </div>
+      </nav>
     </div>
   );
 };
