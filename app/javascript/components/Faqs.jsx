@@ -64,15 +64,15 @@ export default class Faqs extends Component {
   render() {
     return (
       <>
-      <AppBreadcrumbs />
-      <main className="main nypl-ds">
+        <AppBreadcrumbs />
+        <main className="main main--with-sidebar nypl-ds">
           <div className="content-primary content-primary--with-sidebar-right">
-            <div className="faq_list">
+            <div className="faq_list nypl-ds">
               {this.FrequentlyAskedQuestions()}
             </div>
-           </div>
+          </div>
 
-           <div className="content-secondary content-secondary--with-sidebar-right">
+          <div className="content-secondary content-secondary--with-sidebar-right">
             
           </div>
         </main>

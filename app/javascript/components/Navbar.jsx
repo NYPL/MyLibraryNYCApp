@@ -15,7 +15,6 @@ const styles = {
   }
 }
 
-const url = "http://dev-www.mylibrarynyc.local:3000/"
   
 const Navbar = () => {
   return (

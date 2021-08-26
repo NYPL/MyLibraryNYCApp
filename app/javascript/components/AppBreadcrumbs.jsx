@@ -1,4 +1,6 @@
-import React from "react";
+import React, { Component, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import {
   Breadcrumbs,
   Heading,
@@ -16,25 +18,32 @@ let path_url;
 import BreadcrumbsList from "./BreadcrumbsList";
 
 
-const AppBreadcrumbs = (props) => {
-  return (
-    <div>
-      <Breadcrumbs
-        breadcrumbs={[
-          { url: 'http://dev-www.mylibrarynyc.local:3000/', text: 'Home' },
-          { url: 'http://dev-www.mylibrarynyc.local:3000/ ', text: BreadcrumbsData(window.location.href.split('/')[3]) }
-        ]}
-        className="breadcrumbs"
-      />
 
-      <Hero className=""
-        backgroundColor="#D23B42"
-        heading={<Heading blockName="hero" id="1" level={1} text={BreadcrumbsData(window.location.href.split('/')[3])} />}
-        heroType="TERTIARY"
-      />
-    </div>
+export default class AppBreadcrumbs extends Component {
 
-  );
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        <Breadcrumbs
+          breadcrumbs={[
+            { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: 'Home' },
+            { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: BreadcrumbsData(window.location.href.split('/')[3]) }
+          ]}
+          className="breadcrumbs"
+        />
+
+        <Hero className=""
+          backgroundColor="#D23B42"
+          heading={<Heading blockName="hero" id="1" level={1} text={BreadcrumbsData(window.location.href.split('/')[3])} />}
+          heroType="TERTIARY"
+        />
+      </div>
+    )
+  }
 }
 
 
@@ -60,5 +69,3 @@ const BreadcrumbsData = (levelString) => {
       return levelString;
   }
 };
-
-export default AppBreadcrumbs;

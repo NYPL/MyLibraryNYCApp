@@ -30,16 +30,17 @@ render() {
   return (
     <div className="calendarButton">
       <Button onclick="" className="calendar_button background_black_color" buttonType={ButtonTypes.Primary}>
-        <Link className="calendar_link" target="_blank" href={"http://dev-www.mylibrarynyc.local:3000/home/calendar_event/"+ this.state.mln_calendar_file_name } > Calendar of Events </Link>
+        <Link className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/home/calendar_event/" + this.state.mln_calendar_file_name } > Calendar of Events </Link>
       </Button>
-      
+
       <Button className="calendar_button background_black_color" buttonType={ButtonTypes.Primary}> 
-        <Link className="calendar_link" target="_blank" href="http://dev-www.mylibrarynyc.local:3000/assets/2018_2019_School_Outreach_Menu_of_Services.pdf" > Menu of Services </Link>
+        <Link className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/assets/2018_2019_School_Outreach_Menu_of_Services.pdf" } > Menu of Services </Link>
       </Button>
     </div>
   )
   }
 }
+
 
 export default CalendarOfEvents;
 

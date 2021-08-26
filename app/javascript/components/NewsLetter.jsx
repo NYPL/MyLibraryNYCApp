@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
+import axios from 'axios';
 
 import {
   Button,
@@ -22,6 +23,18 @@ export default class NewsLetter extends Component {
   constructor(props) {
     super(props);
   }
+
+
+  componentDidMount() {
+    axios.get('/schools')
+      .then(res => {
+        this.setState({ schools: res.data.schools });
+      })
+      .catch(function (error) {
+        console.log(error);
+    })
+  }
+  
   
   render() {
     return (
