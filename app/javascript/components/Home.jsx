@@ -64,17 +64,16 @@ export default class Home extends Component {
               <HorizontalRule align="left" height="3px" width="856px" />
 
               <AccessDigitalResources />
-
-              <div className="nypl-ds">
-                <NewsLetter />
-              </div>
-
             </div>
           </div>
+
           <div className="content-secondary content-secondary--with-sidebar-right">
             
           </div>
         </main>
+        <div className="nypl-ds">
+          <NewsLetter />
+        </div>
       </div>
       </>
     )
