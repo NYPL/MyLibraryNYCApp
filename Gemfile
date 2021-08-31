@@ -87,4 +87,4 @@ group :test do
   gem 'simplecov', '~> 0.17.1'
   gem 'database_cleaner'
 end
-gem 'mini_racer', platforms: :ruby
+gem 'mini_racer', '~> 0.4.0'

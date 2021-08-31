@@ -1569,7 +1569,7 @@ DEPENDENCIES
   json
   lograge (~> 0.11.2)
   logstash-event!
-  mini_racer
+  mini_racer (~> 0.4.0)
   minitest (~> 5.14.2)
   minitest-stub_any_instance
   nokogiri
