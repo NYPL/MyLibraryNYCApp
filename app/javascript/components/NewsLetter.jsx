@@ -29,12 +29,15 @@ export default class NewsLetter extends Component {
 
 
   handleNewsLetterEmail = event => {
+    this.state.isError = 'none'
+    
     this.setState({
       email: event.target.value
     })
   }
 
   handleSubmit = event => {
+    this.state.isError = 'none'
     event.preventDefault()
      axios.get('/news_letter/index', {
         params: {
