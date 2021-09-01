@@ -22,7 +22,6 @@ services:
 script:
 - bundle install
 - psql -c "CREATE DATABASE mln_test;" -U postgres
-- bundle exec RAILS_ENV=development rails webpacker:compile
 
 # For testing commeting below code
 # recreate test database from db/schema.rb

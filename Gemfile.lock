@@ -1302,6 +1302,7 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
+    libv8 (3.16.14.19)
     lograge (0.11.2)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -1421,6 +1422,7 @@ GEM
       rails (>= 3.2)
       rainbow (~> 3.0)
       webpacker (>= 4.0)
+    ref (2.0.0)
     regexp_parser (2.0.3)
     regexp_property_values (1.0.0)
     representable (3.0.4)
@@ -1482,6 +1484,9 @@ GEM
       sprockets (>= 3.0.0)
     test-unit (3.4.0)
       power_assert
+    therubyracer (0.12.3)
+      libv8 (~> 3.16.14.15)
+      ref
     thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -1555,6 +1560,7 @@ DEPENDENCIES
   devise (= 4.7.3)
   elasticsearch (= 6.8)
   email_validator
+  execjs
   faker
   figaro
   font-awesome-rails
@@ -1588,6 +1594,7 @@ DEPENDENCIES
   sass-rails
   simplecov (~> 0.17.1)
   test-unit
+  therubyracer
   thread_safe (~> 0.3.6)
   travis
   uglifier (>= 1.0.3)

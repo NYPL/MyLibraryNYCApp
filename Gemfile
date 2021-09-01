@@ -66,6 +66,8 @@ gem 'thread_safe', '~> 0.3.6'
 gem "react_on_rails", "12.0.0"
 gem "webpacker", "~> 5"
 gem "breakpoint", "~>2.4.0"
+gem 'execjs'
+gem 'therubyracer', :platforms => :ruby
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
