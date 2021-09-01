@@ -34,6 +34,9 @@ node_js:
 - '14.16.1'
 install:
 - npm install
+before_deploy:
+- bundle install
+- bundle exec rails webpacker:compile
 
 deploy:
 - provider: elasticbeanstalk
