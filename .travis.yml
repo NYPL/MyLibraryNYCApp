@@ -30,10 +30,10 @@ script:
 # - bundle exec rake db:migrate RAILS_ENV=test
 # - bundle exec rake db:test:prepare  # NOTE: might need this later.
 # - bundle exec rake combined_tests:test
-node_js:
-- '14.16.1'
-install:
-- npm install
+
+before_install:
+- nvm install '14.16.1'
+
 before_deploy:
 - bundle install
 - bundle exec rails webpacker:compile
