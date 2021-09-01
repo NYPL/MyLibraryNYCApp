@@ -36,6 +36,7 @@ before_install:
 
 before_deploy:
 - bundle install
+- bundle exec rails webpacker:install
 - bundle exec rails webpacker:compile
 
 deploy:
