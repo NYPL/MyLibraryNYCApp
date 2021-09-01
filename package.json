@@ -121,8 +121,8 @@
     "test": "test"
   },
   "scripts": {
-    "build-dev": "webpack --mode development",
-    "build-prod": "webpack --mode production",
+    "build:dev": "rm -rf public/webpack/development && RAILS_ENV=development NODE_ENV=development bin/webpack",
+    "build:clean": "rm -rf public/webpack || true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": ""
