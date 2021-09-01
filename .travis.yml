@@ -34,7 +34,7 @@ node_js:
 - '14.16.1'
 install:
 - npm install
-- bundle exec rails webpacker:compile RAILS_ENV=development
+
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
