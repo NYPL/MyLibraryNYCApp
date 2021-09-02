@@ -22,10 +22,8 @@ export default class NewsLetter extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {message: "", error_msg: {}, email: "", display_block: "block", display_none: "none",  isError: "none", buttondisabled: false, buttonColor: '#000000'};
+    this.state = {message: "", error_msg: {}, email: "", display_block: "block", display_none: "none",  isError: "none", buttondisabled: false};
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state.disable = false
-    this.state.setDisable = false
   }
 
 
@@ -55,7 +53,6 @@ export default class NewsLetter extends Component {
             this.state.display_block = 'none' 
           } else {
             this.state.buttondisabled = false
-            this.state.buttonColor = "#000000"
             this.state.isError = 'block'
           }
           this.setState({ message: res.data.message });
@@ -88,7 +85,6 @@ export default class NewsLetter extends Component {
                 buttonType={ButtonTypes.Primary}
                 id="button"
                 type="submit"
-                style={{background: this.state.buttonColor}}
               >
                 Submit
               </Button>
@@ -103,7 +99,7 @@ export default class NewsLetter extends Component {
           
           <div style={{ display: this.state.display_none }}>
             <div className="NewsLetterHeaderStyles">
-              Thank you for sign up for MyLibraryNYC Newsletter!
+              Thank you for signing up to the MyLibraryNYC Newsletter!
             </div>
             Check your email to learn about teacher sets, best practices & exclusive events.
           </div>
