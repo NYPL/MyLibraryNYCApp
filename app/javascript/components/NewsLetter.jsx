@@ -18,13 +18,14 @@ import {
 } from '@nypl/design-system-react-components';
 
 
-
 export default class NewsLetter extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {message: "", error_msg: {}, email: "", display_block: "block", display_none: "none",  isError: "none"};
+    this.state = {message: "", error_msg: {}, email: "", display_block: "block", display_none: "none",  isError: "none", buttondisabled: false, buttonColor: '#000000'};
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.state.disable = false
+    this.state.setDisable = false
   }
 
 
@@ -37,8 +38,12 @@ export default class NewsLetter extends Component {
   }
 
   handleSubmit = event => {
-    this.state.isError = 'none'
     event.preventDefault()
+    this.setState({
+      buttondisabled: true,
+      buttonColor: '#CCC'
+    })
+
      axios.get('/news_letter/index', {
         params: {
           email: this.state.email
@@ -49,6 +54,8 @@ export default class NewsLetter extends Component {
             this.state.display_none = 'block'
             this.state.display_block = 'none' 
           } else {
+            this.state.buttondisabled = false
+            this.state.buttonColor = "#000000"
             this.state.isError = 'block'
           }
           this.setState({ message: res.data.message });
@@ -59,17 +66,14 @@ export default class NewsLetter extends Component {
     
   }
 
+
   render() {
     return (
       <div className="newsLetter">
         <div className="newsLetterBox">
 
           <div style={{ display: this.state.display_block }}>
-            <Heading className="newsLetterHeader"
-              id="heading1"
-              level={3}
-              text="Learn about new teacher sets, best practices &amp; exclusive events when you sign up fo ra "
-            />
+            <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
             <SearchBar onSubmit={this.handleSubmit}>
               <Input
                 id="email"
@@ -80,9 +84,11 @@ export default class NewsLetter extends Component {
                 onChange={this.handleNewsLetterEmail}
               />
               <Button
+                disabled={this.state.buttondisabled}
                 buttonType={ButtonTypes.Primary}
                 id="button"
                 type="submit"
+                style={{background: this.state.buttonColor}}
               >
                 Submit
               </Button>
@@ -96,12 +102,10 @@ export default class NewsLetter extends Component {
           </div>
           
           <div style={{ display: this.state.display_none }}>
-            <Heading className="newsLetterHeader"
-              id="heading1"
-              level={3}
-              text="Thank you for sign up for MyLibraryNYC Newsletter! "
-            />
-            Check your email to learn about new teacher sets, best practice & exclusive events.
+            <div className="NewsLetterHeaderStyles">
+              Thank you for sign up for MyLibraryNYC Newsletter!
+            </div>
+            Check your email to learn about teacher sets, best practices & exclusive events.
           </div>
 
         </div>
