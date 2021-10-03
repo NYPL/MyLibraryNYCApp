@@ -1549,6 +1549,7 @@ DEPENDENCIES
   addressable
   auto-session-timeout
   aws-sdk (~> 3)
+  bcrypt (~> 3.1.7)
   breakpoint (~> 2.4.0)
   client_side_validations (= 17.2.0)
   coffee-rails

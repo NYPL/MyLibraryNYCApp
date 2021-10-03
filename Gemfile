@@ -68,6 +68,7 @@ gem "webpacker", "~> 5"
 gem "breakpoint", "~>2.4.0"
 gem 'execjs'
 gem 'therubyracer', :platforms => :ruby
+gem 'bcrypt', '~> 3.1.7'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'

@@ -5,12 +5,17 @@ MyLibraryNYC::Application.routes.draw do
   get 'hello_world', to: 'hello_world#index'
   get 'teacher_set_data', to: 'teacher_sets#teacher_set_data'
 
-  devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }#, :controllers => { :registrations => :registrations, :sessions => :sessions }
+  devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
 
   devise_scope :user do
     get 'timeout_check' => 'sessions#timeout_check'
     get 'timeout' => 'sessions#timeout'
+    get '/logged_in', to: 'sessions#is_logged_in?'
+    post '/login', to: 'sessions#create'
+    delete '/logout', to: 'sessions#destroy'
   end
+
+
 
   get 'extend_session_iframe' => 'home#extend_session_iframe'
 
@@ -21,8 +26,10 @@ MyLibraryNYC::Application.routes.draw do
   resources :schools, :only => [:index, :create]
   resources :faqs
 
-  match 'holds/:id/cancel' => 'holds#cancel', :as => :holds_cancel, via: [:get, :post]
+  match '/login' => 'teacher_sets#teacher_set_details', via: [:get, :post]
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
+  match 'teacher_set_details/:id' => 'teacher_sets#teacher_set_details', via: [:get]
+  match 'ordered_holds/:cache_key' => 'holds#ordered_holds_details', via: [:get]
 
   resources :holds
 
@@ -40,7 +47,7 @@ MyLibraryNYC::Application.routes.draw do
   post '/require_login', to: 'application#require_login'
   post '/redirect_to_angular', to: 'application#redirect_to_angular'
 
-  match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
+  # match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
 
   match 'settings' => 'settings#index', via: [:get, :patch, :post]
 

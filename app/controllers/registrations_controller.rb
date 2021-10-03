@@ -12,44 +12,44 @@ class RegistrationsController < Devise::RegistrationsController
   # The purpose for overriding the method was to add rescuing if the request to the microservice timed out.
   # In addition, overriding the method allows us to validate the incoming data from the form, send the data
   # to the microservice, and create a record on MyLibraryNYC depending on if the microservice is working properly.
-  def create
-    build_resource(sign_up_params)
-    if resource.valid?
-      begin
-        resource.send_request_to_patron_creator_service
-        resource.save
-        if params['news_letter_email'].present?
-          # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
-          email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
-          NewsLetterController.new.send_news_letter_confirmation_email(email)
-        end
-        yield resource if block_given?
-        if resource.persisted?
-          if resource.active_for_authentication?
-            set_flash_message :notice, :signed_up if is_flashing_format?
-            sign_up(resource_name, resource)
-            respond_with resource, location: after_sign_up_path_for(resource)
-          else
-            set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
-            expire_data_after_sign_in!
-            respond_with resource, location: after_inactive_sign_up_path_for(resource)
-          end
-        else
-          clean_up_passwords resource
-          set_minimum_password_length
-          respond_with resource
-        end
-      rescue Net::ReadTimeout
-        set_flash_message :notice, :time_out if is_flashing_format?
-        render :template => '/devise/registrations/new'
-      end
-    else
-      render :template => '/devise/registrations/new', :locals => { :error_msg_hash => error_msg_hash }
-    end
-  rescue Exceptions::InvalidResponse
-    set_flash_message :registration_error, :invalid_response if is_flashing_format?
-    render :template => '/devise/registrations/new'
-  end
+  # def create
+  #   build_resource(sign_up_params)
+  #   if resource.valid?
+  #     begin
+  #       resource.send_request_to_patron_creator_service
+  #       resource.save
+  #       if params['news_letter_email'].present?
+  #         # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
+  #         email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
+  #         NewsLetterController.new.send_news_letter_confirmation_email(email)
+  #       end
+  #       yield resource if block_given?
+  #       if resource.persisted?
+  #         if resource.active_for_authentication?
+  #           set_flash_message :notice, :signed_up if is_flashing_format?
+  #           sign_up(resource_name, resource)
+  #           respond_with resource, location: after_sign_up_path_for(resource)
+  #         else
+  #           set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
+  #           expire_data_after_sign_in!
+  #           respond_with resource, location: after_inactive_sign_up_path_for(resource)
+  #         end
+  #       else
+  #         clean_up_passwords resource
+  #         set_minimum_password_length
+  #         respond_with resource
+  #       end
+  #     rescue Net::ReadTimeout
+  #       set_flash_message :notice, :time_out if is_flashing_format?
+  #       render :template => '/devise/registrations/new'
+  #     end
+  #   else
+  #     render :template => '/devise/registrations/new', :locals => { :error_msg_hash => error_msg_hash }
+  #   end
+  # rescue Exceptions::InvalidResponse
+  #   set_flash_message :registration_error, :invalid_response if is_flashing_format?
+  #   render :template => '/devise/registrations/new'
+  # end
 
 
   # PUT /resource
@@ -76,6 +76,22 @@ class RegistrationsController < Devise::RegistrationsController
       respond_with resource
     end
   end
+
+
+    def new
+      @user = User.new
+    end
+    
+    def create
+      @user = User.new(user_params)
+      if @user.save
+      # stores saved user id in a session
+        session[:user_id] = @user.id
+        redirect_to root_path, notice: 'Successfully created account'
+      else
+        render :new
+      end
+    end
 
 
   def after_update_path_for(resource)

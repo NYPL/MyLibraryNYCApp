@@ -3,7 +3,7 @@
 class TeacherSetsController < ApplicationController
   include TeacherSetsEsHelper
 
-  before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
+  #before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
 
   ##
   # GET /teacher_sets.json
@@ -17,7 +17,7 @@ class TeacherSetsController < ApplicationController
                               'method' => 'app/controllers/teacher_sets_controller.rb.index'})
   
       # Get teachersets and facets from elastic search
-      teacher_sets, @facets = ElasticSearch.new.get_teacher_sets_from_es(params)
+      teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
     else
       LogWrapper.log('INFO', {'message' => "Calling database to get teacher-sets", 
@@ -36,9 +36,9 @@ class TeacherSetsController < ApplicationController
     @facets = teacher_set_facets(params)
     # Attach custom :q param to each facet with query params to be applied to that link
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: @facets }
+      render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count }
     else
-      render json: { teacher_sets: @teacher_sets, facets: @facets }, serializer: SearchSerializer, include_books: false, include_contents: false
+      render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count }, serializer: SearchSerializer, include_books: false, include_contents: false
     end
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
@@ -91,9 +91,9 @@ class TeacherSetsController < ApplicationController
     # Stores the current location in session, so if an un-authenticated user
     # tries to order this teacher set, we can ask the user to sign in, and
     # then redirect back to this teacher_set detail page.
-    if storable_location?
-      store_user_location!
-    end
+    # if storable_location?
+    #   store_user_location!
+    # end
 
     @set = TeacherSet.find(params[:id])
     @active_hold = nil
@@ -120,14 +120,13 @@ class TeacherSetsController < ApplicationController
 
     # Button should be disabled after teacher has ordered maximum.
     allowed_quantities = user_has_ordered_max ? [] : (1..max_copies_requestable.to_i).to_a
-
     render json: {
       teacher_set: @set,
       active_hold: @active_hold,
       user: current_user,
       allowed_quantities: allowed_quantities,
       books: ts_books
-    }, serializer: TeacherSetForUserSerializer, root: 'teacher_set'
+    }
   end
 
 
@@ -139,12 +138,15 @@ class TeacherSetsController < ApplicationController
 
 
   def teacher_set_data
-    @faqs = { faqs: Faq.get_faqs}
   end
 
   # TODO: Fix: create currently fails our functional tests.
   def create
     TeacherSet.create(teacherset_params)
+  end
+
+
+  def teacher_set_details
   end
 
   private

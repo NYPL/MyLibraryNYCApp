@@ -3,6 +3,31 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_action :redirect_if_old_domain
+  skip_before_action :verify_authenticity_token
+
+  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!
+
+  def login!
+    session[:user_id] = @user.id
+  end
+
+  def logged_in?
+    !!session[:user_id]
+  end
+
+  def current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+
+  def authorized_user?
+    @user == current_user
+  end
+  
+  def logout!
+    session.clear
+  end
+
+
 
   def append_info_to_payload(payload)
     super
@@ -24,29 +49,30 @@ class ApplicationController < ActionController::Base
 
 
   ##
-  # Decides where to take the user who has just successfully logged in.
-  def after_sign_in_path_for(resource)
-    LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
-                             'method' => 'app/controllers/application_controller.rb.after_sign_in_path_for'})
-    # be careful -- after first access stored_location_for clears to a nil, so read it once
-    # and store it in a local var before printing out or any other access
-    redirect_url = stored_location_for(:user)
-    unless redirect_url.present?
-      redirect_url = app_url
-    end
+  # # Decides where to take the user who has just successfully logged in.
+  # def after_sign_in_path_for(resource)
+  #   LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
+  #                            'method' => 'app/controllers/application_controller.rb.after_sign_in_path_for'})
+  #   # be careful -- after first access new_user_session_path clears to a nil, so read it once
+  #   # and store it in a local var before printing out or any other access
+  #   redirect_url = new_user_session_path
 
-    # Redirect to admin dashboard if this is an admin login
-    # Commenting this out due to inconsistency when demo-ing with account that are admins
-    # (PB: Uncommenting this out because I can't find a login flow that it effects. I think observed issue may have been something else..)
-    redirect_url = admin_dashboard_path if !resource.nil? && resource.is_a?(AdminUser)
+  #   unless redirect_url.present?
+  #     redirect_to new_user_session_path
+  #   end
 
-    # if session[:redirect_after_login]
-    #   redirect_url = session[:redirect_after_login]
-    #   session.delete(:redirect_after_login)
-    # end
+  #   # Redirect to admin dashboard if this is an admin login
+  #   # Commenting this out due to inconsistency when demo-ing with account that are admins
+  #   # (PB: Uncommenting this out because I can't find a login flow that it effects. I think observed issue may have been something else..)
+  #   redirect_url = admin_dashboard_path if !resource.nil? && resource.is_a?(AdminUser)
 
-    redirect_url
-  end
+  #   # if session[:redirect_after_login]
+  #   #   redirect_url = session[:redirect_after_login]
+  #   #   session.delete(:redirect_after_login)
+  #   # end
+
+  #   redirect_url
+  # end
 
 
   # Is called by functionality that needs to make sure the user is authenticated,
@@ -54,18 +80,16 @@ class ApplicationController < ActionController::Base
   def require_login
     unless user_signed_in?
       flash[:error] = "Please sign in to complete your order!"
-      respond_to do |format|
-        format.html {
-          # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
-          # session[:redirect_after_login] = request.original_url
-          redirect_to new_user_session_path
-        }
-        format.json {
+      #respond_to do |format|
+        # format.html {
+        #   # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
+        #   # session[:redirect_after_login] = request.original_url
+        #   redirect_to new_user_session_path
+        # }
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = "#{app_url}##{request.fullpath}".gsub! '.json', ''
           render json: {:redirect_to => new_user_session_path}
-        }
-      end
+      #end
     end
   end
 
@@ -86,9 +110,9 @@ class ApplicationController < ActionController::Base
   # - The request is an Ajax request as this can lead to very unexpected behaviour.
   # However, the request_format for our hold requests is json, which is not considered a navigational format.
   # So we must exclude the standard "is_navigational_format?" requirement.
-  def storable_location?
-    request.get? && !devise_controller? && !request.xhr?
-  end
+  # def storable_location?
+  #   request.get? && !devise_controller? && !request.xhr?
+  # end
 
 
   # If it is old domain redirect to new domain
@@ -113,15 +137,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Need to fix this issue
+  # def store_user_location!
+  #   originating_location = request.fullpath
+  #   if originating_location.present?
+  #     # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
+  #     originating_location = "#{originating_location}"
+  #   end
 
-  def store_user_location!
-    originating_location = request.fullpath
-    if originating_location.present?
-      # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
-      originating_location = "#{app_url}##{originating_location}".gsub! '.json', ''
-    end
-
-    # :user is the scope we are authenticating
-    store_location_for(:user, originating_location)
-  end
+  #   # :user is the scope we are authenticating
+  #   store_location_for(:user, originating_location)
+  # end
 end

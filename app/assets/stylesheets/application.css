@@ -794,4 +794,53 @@ ul.list li:before {
   padding: 25px 0px;
 }
 
+.teacher-set-search-box {
+  padding-top: 30px;
+}
 
+.teacherSetResults {
+  padding-left: 20%;
+}
+
+.teacherSetHorizontal {
+  background-color: #D23B42 !important;
+}
+
+.cardImage {
+  width: 56px;
+  height: 40px;
+}
+
+.card.card--horizontal.card--center {
+  align-items: flex-start !important;
+}
+
+.card.card--horizontal .card__image--small {
+  flex: 0 0 75px !important;
+}
+
+
+.card_details {
+  margin-top: 50px;
+  width: 857px;
+}
+
+#teacher_set_details .search-bar .select {
+  flex: 0 0 20%;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.bookImage {
+/*  flex-direction: row;
+*/  display: flex;
+  flex-wrap: wrap
+}
+
+.signInButton {
+  background: #D23B42 !important;
+  width: 25%;
+  margin-top: 2%;
+}

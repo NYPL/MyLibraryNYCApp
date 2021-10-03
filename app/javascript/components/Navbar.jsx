@@ -35,7 +35,7 @@ const Navbar = () => {
           
           <li>
             <Link type={LinkTypes.Action}>
-              <ReactRouterLink to="/faq" className="nav-link-colors ">Search Teacher Sets</ReactRouterLink>
+              <ReactRouterLink to="/teacher_set_data" className="nav-link-colors ">Search Teacher Sets</ReactRouterLink>
             </Link>
           </li>
 

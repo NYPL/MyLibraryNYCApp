@@ -4,7 +4,6 @@ class HoldsController < ApplicationController
   include LogWrapper
 
   unless ENV['RAILS_ENV'] == 'test'
-    before_action :redirect_to_angular, only: [:show, :new, :cancel]
     before_action :check_ownership, only: [:show, :update]
     before_action :require_login, only: [:index, :new, :create, :check_ownership]
   end
@@ -53,6 +52,9 @@ class HoldsController < ApplicationController
   end
 
 
+  def ordered_holds_details
+
+  end
   ##
   # Create holds and update quantity column in holds.
   # Calculate available copies from quantity saves in teacherset table.
@@ -78,27 +80,27 @@ class HoldsController < ApplicationController
 
       quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
       @hold.quantity = quantity.to_i
-      respond_to do |format|
-        if @hold.save
-          teacher_set = @hold.teacher_set
-         
-          # Update teacher-set availability in DB
-          teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
-          
-          # Update teacher-set availability in elastic search document
-          teacher_set.update_teacher_set_availability_in_elastic_search
-          LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
-          format.html { redirect_to hold_url(@hold.access_key), notice:
-            'Your order has been received by our system and will soon be delivered to your school.\
-            <br/><br/>Check your email inbox for a message with further details.' 
-          }
-          format.json { render json: @hold, status: :created, location: @hold }
-        else
-          LogWrapper.log('DEBUG', {'message' => 'create: a new hold was generated', 'method' => 'app/controllers/holds_controller.rb.create'})
-          format.html { render action: 'new' }
-          format.json { render json: @hold.errors, status: :unprocessable_entity }
-        end
+      # respond_to do |format|
+      if @hold.save
+        teacher_set = @hold.teacher_set
+       
+        # Update teacher-set availability in DB
+        teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
+        
+        # Update teacher-set availability in elastic search document
+        teacher_set.update_teacher_set_availability_in_elastic_search
+        LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
+        # format.html { redirect_to hold_url(@hold.access_key), notice:
+        #   'Your order has been received by our system and will soon be delivered to your school.\
+        #   <br/><br/>Check your email inbox for a message with further details.' 
+        # }
+        render json: { hold: @hold, status: :created, location: @hold }
+      else
+        LogWrapper.log('DEBUG', {'message' => 'create: a new hold was generated', 'method' => 'app/controllers/holds_controller.rb.create'})
+        format.html { render action: 'new' }
+        format.json { render json: @hold.errors, status: :unprocessable_entity }
       end
+      #end
     rescue => exception
       error_message(exception)
     end

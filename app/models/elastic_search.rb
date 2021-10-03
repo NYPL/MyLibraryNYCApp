@@ -83,10 +83,9 @@ class ElasticSearch
     # Showing latest created teachersets.
     query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
     query[:aggs] = agg_hash
-
     teacherset_docs = search_by_query(query)
     facets = facets_for_teacher_sets(teacherset_docs)
-    [teacherset_docs, facets]
+    [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   end
 
 
