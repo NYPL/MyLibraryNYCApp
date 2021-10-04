@@ -7,9 +7,7 @@ language: ruby
   #   - "/home/travis/.rvm/"
 rvm:
 - 2.5.7
-
 before_install:
-- nvm install node
   # 2019-10-16: added to fix errors when upgrading rails env
   # 2020-08-04: removed to fix errors with travis deployment -- 
   # looks like travis internal rvm handling has changed
@@ -17,7 +15,6 @@ before_install:
 - gem --version
 - gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
-
 before_script:
 - bundle exec rubocop
 services:
@@ -30,7 +27,7 @@ script:
 # helps travis update its test db.  seems the schema load below doesn't always do it.
 - bundle exec rake db:migrate RAILS_ENV=test
 # - bundle exec rake db:test:prepare  # NOTE: might need this later.
-# - bundle exec rake combined_tests:test
+- bundle exec rake combined_tests:test
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
