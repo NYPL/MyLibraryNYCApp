@@ -15,6 +15,16 @@ before_install:
 - gem --version
 - gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
+
+install:
+- travis_retry nvm install 12
+- node -v
+- travis_retry npm i -g yarn
+- travis_retry bundle install
+- travis_retry yarn
+- bundle
+- yarn
+
 before_script:
 - bundle exec rubocop
 services:
@@ -27,7 +37,7 @@ script:
 # helps travis update its test db.  seems the schema load below doesn't always do it.
 - bundle exec rake db:migrate RAILS_ENV=test
 # - bundle exec rake db:test:prepare  # NOTE: might need this later.
-- bundle exec rake combined_tests:test
+# - bundle exec rake combined_tests:test
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
