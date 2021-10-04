@@ -7,6 +7,13 @@ language: ruby
   #   - "/home/travis/.rvm/"
 rvm:
 - 2.5.7
+language: node_js
+node_js:
+- '12'
+script: npm test
+install:
+- npm install
+
 before_install:
   # 2019-10-16: added to fix errors when upgrading rails env
   # 2020-08-04: removed to fix errors with travis deployment -- 
@@ -15,13 +22,6 @@ before_install:
 - gem --version
 - gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
-
-language: node_js
-node_js:
-- '12'
-script: npm test
-install:
-- npm install
 
 before_script:
 - bundle exec rubocop
