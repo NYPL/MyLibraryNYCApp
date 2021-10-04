@@ -12,6 +12,7 @@ before_install:
   # 2020-08-04: removed to fix errors with travis deployment -- 
   # looks like travis internal rvm handling has changed
   # - rvm use 2.5.7 --install --binary --fuzzy
+- nvm install --lts
 - gem --version
 - gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
