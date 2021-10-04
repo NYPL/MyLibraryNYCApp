@@ -1,22 +1,20 @@
-language: node_js
-node_js:
-  # pick your version of Node.js
-- '12'
-
-
+language: ruby
+  # 2020-08-04: caching significantly reduces build time in travis,
+  # but we're currently having issues with obtaining correct cached rvm
+  # cache:
+  #   bundler: true
+  #   directories:
+  #   - "/home/travis/.rvm/"
+rvm:
+- 2.5.7
 before_install:
   # 2019-10-16: added to fix errors when upgrading rails env
   # 2020-08-04: removed to fix errors with travis deployment -- 
   # looks like travis internal rvm handling has changed
   # - rvm use 2.5.7 --install --binary --fuzzy
-- ruby --version
-- rvm install 2.5.7
-- ruby --version
-
 - gem --version
 - gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
-
 before_script:
 - bundle exec rubocop
 services:
@@ -29,7 +27,7 @@ script:
 # helps travis update its test db.  seems the schema load below doesn't always do it.
 - bundle exec rake db:migrate RAILS_ENV=test
 # - bundle exec rake db:test:prepare  # NOTE: might need this later.
-# - bundle exec rake combined_tests:test
+- bundle exec rake combined_tests:test
 deploy:
 - provider: elasticbeanstalk
   skip_cleanup: true
