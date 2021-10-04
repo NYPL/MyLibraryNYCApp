@@ -1378,7 +1378,6 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    libv8-node (15.14.0.0)
     lograge (0.11.2)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -1397,8 +1396,6 @@ GEM
     mime-types-data (3.2021.0901)
     mini_mime (1.1.1)
     mini_portile2 (2.6.1)
-    mini_racer (0.4.0)
-      libv8-node (~> 15.14.0.0)
     minitest (5.14.4)
     minitest-stub_any_instance (1.0.2)
     multi_json (1.15.0)
@@ -1638,7 +1635,6 @@ DEPENDENCIES
   json
   lograge (~> 0.11.2)
   logstash-event!
-  mini_racer (= 0.4.0)
   minitest (~> 5.14.2)
   minitest-stub_any_instance
   nokogiri
