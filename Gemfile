@@ -63,7 +63,8 @@ gem 'webmock'
 gem 'yaml_db'
 gem 'rexml', '~> 3.2'
 gem 'thread_safe', '~> 0.3.6'
-gem 'react_on_rails', '12.0.4' 
+gem 'react_on_rails', '12.0.4'
+gem 'mini_racer'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
@@ -87,4 +88,3 @@ group :test do
 end
 
 gem "webpacker", "~> 5.4"
-gem 'mini_racer', platforms: :ruby
