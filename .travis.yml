@@ -13,7 +13,6 @@ node_js:
 script: npm test
 install:
 - npm install
-
 before_install:
   # 2019-10-16: added to fix errors when upgrading rails env
   # 2020-08-04: removed to fix errors with travis deployment -- 
