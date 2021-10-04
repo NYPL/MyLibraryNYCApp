@@ -17,13 +17,13 @@ before_install:
 - bundle config --global github.https true
 
 install:
-  - travis_retry nvm install 12
-  - node -v
-  - travis_retry npm i -g yarn
-  - travis_retry bundle install
-  - travis_retry yarn
-  - bundle
-  - yarn
+- travis_retry nvm install 12
+- node -v
+- travis_retry npm i -g yarn
+- travis_retry bundle install
+- travis_retry yarn
+- bundle
+- yarn
 
 before_script:
 - bundle exec rubocop
