@@ -17,12 +17,6 @@ before_install:
 - gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
 
-install:
-  # run whatever you have to do here. I have Makefile that lets you install
-  # all Node.js-related or Ruby-related dependencies as one step.
-  - make npm
-  - make bundler
-
 before_script:
 - bundle exec rubocop
 services:
