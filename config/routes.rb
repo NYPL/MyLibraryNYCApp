@@ -2,6 +2,7 @@
 
 MyLibraryNYC::Application.routes.draw do
 
+  get 'hello_world', to: 'hello_world#index'
   devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
 
   devise_scope :user do
