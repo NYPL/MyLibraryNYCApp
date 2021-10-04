@@ -16,14 +16,12 @@ before_install:
 - gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
 
+language: node_js
+node_js:
+- '12'
+script: npm test
 install:
-- travis_retry nvm install 12
-- node -v
-- travis_retry npm i -g yarn
-- travis_retry bundle install
-- travis_retry yarn
-- bundle
-- yarn
+- npm install
 
 before_script:
 - bundle exec rubocop
