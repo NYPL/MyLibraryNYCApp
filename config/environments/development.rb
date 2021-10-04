@@ -44,4 +44,5 @@ MyLibraryNYC::Application.configure do
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
                   ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL']]
   config.eager_load = false
+  config.public_file_server.enabled = true
 end
