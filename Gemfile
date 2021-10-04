@@ -64,7 +64,7 @@ gem 'yaml_db'
 gem 'rexml', '~> 3.2'
 gem 'thread_safe', '~> 0.3.6'
 gem 'react_on_rails', '12.0.4'
-gem 'mini_racer'
+gem 'mini_racer', '0.4.0'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
