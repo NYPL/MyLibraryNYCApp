@@ -46,13 +46,13 @@ deploy:
   access_key_id: "$AWS_ACCESS_KEY_ID_DEVELOPMENT"
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_DEVELOPMENT"
   region: us-east-1
-  app: my-library-nyc-app
-  env: my-library-nyc-app-dev-1002
+  app: my-library-nyc-app-react-dev
+  env: my-library-nyc-app-react-dev
   bucket_name: elasticbeanstalk-us-east-1-224280085904
-  bucket_path: my-library-nyc-app-dev-1002
+  bucket_path: my-library-nyc-app-react-dev
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: final-rr-test
+    branch: development
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
