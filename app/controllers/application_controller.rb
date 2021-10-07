@@ -26,6 +26,7 @@ class ApplicationController < ActionController::Base
   ##
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
+    binding.pry
     LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
                              'method' => 'app/controllers/application_controller.rb.after_sign_in_path_for'})
     # be careful -- after first access stored_location_for clears to a nil, so read it once
@@ -52,18 +53,19 @@ class ApplicationController < ActionController::Base
   # Is called by functionality that needs to make sure the user is authenticated,
   # s.a. making a teacher set order.  Takes the user to a login page.
   def require_login
+    binding.pry
     unless user_signed_in?
       flash[:error] = "Please sign in to complete your order!"
       respond_to do |format|
         format.html {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = request.original_url
-          redirect_to new_user_session_path
+          redirect_to "/users/start"
         }
         format.json {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = "#{app_url}##{request.fullpath}".gsub! '.json', ''
-          render json: {:redirect_to => new_user_session_path}
+          render json: {:redirect_to => "/users/start"}
         }
       end
     end
