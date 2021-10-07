@@ -49,7 +49,7 @@ deploy:
   app: my-library-nyc-app
   env: my-library-nyc-app-react-dev-18
   bucket_name: elasticbeanstalk-us-east-1-224280085904
-  bucket_path: my-library-nyc-app-dev-1002
+  bucket_path: my-library-nyc-app-react-dev-18
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: final-rr-test
