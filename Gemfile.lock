@@ -1438,6 +1438,8 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     public_suffix (4.0.6)
+    puma (5.5.0)
+      nio4r (~> 2.0)
     pusher-client (0.6.2)
       json
       websocket (~> 1.0)
@@ -1647,6 +1649,7 @@ DEPENDENCIES
   pry-remote
   pry-rescue
   pry-stack_explorer
+  puma (~> 5.5)
   rack-cors
   rails (= 6.1.4.1)
   rails-controller-testing
