@@ -6,7 +6,7 @@ language: ruby
   #   directories:
   #   - "/home/travis/.rvm/"
 rvm:
-- 2.5.7
+- 2.7.4
 before_install:
   # 2019-10-16: added to fix errors when upgrading rails env
   # 2020-08-04: removed to fix errors with travis deployment -- 
@@ -46,9 +46,9 @@ deploy:
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_DEVELOPMENT"
   region: us-east-1
   app: my-library-nyc-app
-  env: my-library-nyc-app-dev-1002
+  env: my-library-nyc-app-react-dev-18
   bucket_name: elasticbeanstalk-us-east-1-224280085904
-  bucket_path: my-library-nyc-app-dev-1002
+  bucket_path: my-library-nyc-app-react-dev-18
   on:
     repo: NYPL/MyLibraryNYCApp
     branch: reactonrails-development # for testing

@@ -48,7 +48,7 @@ default: &default
     - .jpeg
     - .jpg
 
-local:
+development:
   <<: *default
   compile: true
 
@@ -67,34 +67,6 @@ local:
     use_local_ip: false
     quiet: false
     pretty: false
-    headers:
-      'Access-Control-Allow-Origin': '*'
-    watch_options:
-      ignored: '**/node_modules/**'
-
-development:
-  <<: *default
-  compile: false
-
-  public_output_path: webpack/development
-
-  # Verifies that correct packages and versions are installed by inspecting package.json, yarn.lock, and node_modules
-  check_yarn_integrity: false
-
-  # Reference: https://webpack.js.org/configuration/dev-server/
-  dev_server:
-    https: false
-    host: localhost
-    port: 3035
-    public: localhost:3035
-    hmr: true
-    # Inline should be set to true if using HMR
-    inline: true
-    overlay: true
-    compress: true
-    disable_host_check: true
-    use_local_ip: false
-    quiet: false
     headers:
       'Access-Control-Allow-Origin': '*'
     watch_options:
@@ -119,3 +91,4 @@ production:
 
   # Cache manifest.json for performance
   cache_manifest: true
+  
