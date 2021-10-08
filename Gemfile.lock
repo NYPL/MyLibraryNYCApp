@@ -1405,7 +1405,7 @@ GEM
       connection_pool (~> 2.2)
     net-http-pipeline (1.0.1)
     nio4r (2.5.8)
-    nokogiri (1.12.4)
+    nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     oj (3.13.4)
@@ -1639,7 +1639,7 @@ DEPENDENCIES
   logstash-event!
   minitest (~> 5.14.2)
   minitest-stub_any_instance
-  nokogiri
+  nokogiri (~> 1.12.5)
   open_uri_redirections
   paper_trail (~> 11.1)
   pg (~> 1.2)
