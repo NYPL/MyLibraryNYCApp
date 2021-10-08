@@ -65,6 +65,8 @@ gem 'rexml', '~> 3.2'
 gem 'thread_safe', '~> 0.3.6'
 gem 'react_on_rails', '12.0.4'
 gem 'puma', '~> 5.5'
+gem 'pkg-config', '~> 1.1.7'
+
 # gem 'mini_racer', '0.4.0'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
