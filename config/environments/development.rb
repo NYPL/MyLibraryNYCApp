@@ -42,6 +42,7 @@ MyLibraryNYC::Application.configure do
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::DEBUG
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
-                  ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL']]
+                  ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL'],
+                  "http://my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com"]
   config.eager_load = false
 end
