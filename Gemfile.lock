@@ -1639,7 +1639,7 @@ DEPENDENCIES
   logstash-event!
   minitest (~> 5.14.2)
   minitest-stub_any_instance
-  nokogiri (~> 1.12.5)
+  nokogiri (>= 1.4.2)
   open_uri_redirections
   paper_trail (~> 11.1)
   pg (~> 1.2)
@@ -1672,4 +1672,4 @@ RUBY VERSION
    ruby 2.7.4p191
 
 BUNDLED WITH
-   2.1.4
+   1.12.5
