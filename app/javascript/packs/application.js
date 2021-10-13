@@ -17,6 +17,5 @@
 
 console.log('Hello World from Webpackerssss')
 
-import "../styles/application.scss"
 
 import ReactOnRails from 'react-on-rails';

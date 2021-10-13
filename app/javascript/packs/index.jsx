@@ -4,7 +4,6 @@ import App from "../components/App";
 import { BrowserRouter } from "react-router-dom";
 
 
-import "../styles/application.scss"
 
 document.addEventListener("DOMContentLoaded", () => {
   render(
