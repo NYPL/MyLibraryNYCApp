@@ -6,6 +6,8 @@ import AccessDigitalResources from "./AccessDigitalResources";
 import CalendarOfEvents from "./CalendarOfEvents";
 import NewsLetter from "./NewsLetter";
 import heroCampaignBg from '../images/hero_campaign_bg.jpg'
+import heroCampaignLeft from '../images/hero_campaign_left.jpg'
+
 
 
 
@@ -31,11 +33,10 @@ export default class Home extends Component {
       <>
       <div>
         <Hero
-          backgroundImageSrc={styles.heroCampaign}
           heading={<Heading blockName="hero" id="1" level={1} text="Welcome To MyLibrary NYC"/>}
           heroType="CAMPAIGN"
           style={styles.heroCampaign}
-          image={<Image alt="Image example" blockName="hero" src="/assets/hero_campaign_left.png"/>}
+          image={<Image alt="Image example" blockName="hero" src={heroCampaignLeft}/>}
           subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City’s public library systems as well as instructional support and professional development opportunities."/>
         
         <main className="main main--with-sidebar">
