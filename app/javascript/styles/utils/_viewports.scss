@@ -2,6 +2,8 @@
  * Reusable mixin used to generate
  * variations of media query properties.
  */
+
+ 
 @mixin generate-mq($args...) {
   $media-type: 'only screen';
   $media-type-key: 'media-type';

@@ -1,5 +1,16 @@
 @import '@nypl/design-system-react-components/dist/styles.css';
+@import 'utils/viewports';
+@import 'utils/breakpoint';
+
+@import 'mobile_header';
 
 .participating_schools_list {
   padding: 15px;
+}
+
+
+.mobileHeader {
+  @include min-screen(769px) {
+    display: none;
+  }
 }
