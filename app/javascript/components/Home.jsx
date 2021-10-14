@@ -5,14 +5,16 @@ import SearchTeacherSetsBox from "./SearchTeacherSetsBox";
 import AccessDigitalResources from "./AccessDigitalResources";
 import CalendarOfEvents from "./CalendarOfEvents";
 import NewsLetter from "./NewsLetter";
-import heroCampaignBg from '../../assets/images/hero_campaign_bg.jpg'
+import heroCampaignBg from '../images/hero_campaign_bg.jpg'
+
+
+
 import { HorizontalRule, ButtonTypes, Button, Hero,  Heading, Image} from '@nypl/design-system-react-components';
 import ReactOnRails from 'react-on-rails';
 
 
 const styles = {
   heroCampaign: {
-    background: "#F5F5F5",
     backgroundImage: `url(${heroCampaignBg})`
   }
 }
@@ -29,7 +31,7 @@ export default class Home extends Component {
       <>
       <div>
         <Hero
-          backgroundImageSrc={styles.heroCampaign.backgroundImage}
+          backgroundImageSrc={styles.heroCampaign}
           heading={<Heading blockName="hero" id="1" level={1} text="Welcome To MyLibrary NYC"/>}
           heroType="CAMPAIGN"
           style={styles.heroCampaign}
