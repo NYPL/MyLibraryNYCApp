@@ -51,7 +51,7 @@ export default class Routes extends React.Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/faq" component={Faqs} />
-            <Route path="/login" component={Contacts} />
+            <Route path="/contacts" component={Contacts} />
             <Route path="/participating-schools" component={ParticipatingSchools}  />
             <Route path="/users/start" component={SignIn} />
             <Route path="/teacher_set_data" component={SearchTeacherSets} />

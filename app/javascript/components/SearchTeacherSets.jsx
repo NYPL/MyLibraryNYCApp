@@ -25,6 +25,8 @@ import {
   Pagination, Checkbox
 } from '@nypl/design-system-react-components';
 
+import bookImage from '../images/book.png'
+
 import {
   BrowserRouter as Router,
   Link as ReactRouterLink,
@@ -113,7 +115,7 @@ export default class SearchTeacherSets extends Component {
       return <div className="teacherSetResults">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
 
-          <Card className="" layout={CardLayouts.Horizontal} center imageSrc="/assets/book.png" imageAlt="Alt text" imageAspectRatio={CardImageRatios.Square} imageSize={CardImageSizes.Small}>
+          <Card className="" layout={CardLayouts.Horizontal} center imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={CardImageRatios.Square} imageSize={CardImageSizes.Small}>
             <CardHeading level={3} id="heading1">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
                 {ts.title}
