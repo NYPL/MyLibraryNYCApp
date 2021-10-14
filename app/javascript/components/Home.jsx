@@ -9,15 +9,13 @@ import heroCampaignBg from '../images/hero_campaign_bg.jpg'
 import heroCampaignLeft from '../images/hero_campaign_left.jpg'
 
 
-
-
 import { HorizontalRule, ButtonTypes, Button, Hero,  Heading, Image} from '@nypl/design-system-react-components';
 import ReactOnRails from 'react-on-rails';
 
 
 const styles = {
   heroCampaign: {
-    backgroundImage: `url(${heroCampaignBg})`
+    background: "#F5F5F5"
   }
 }
 
@@ -33,6 +31,7 @@ export default class Home extends Component {
       <>
       <div>
         <Hero
+          backgroundImageSrc={heroCampaignBg}
           heading={<Heading blockName="hero" id="1" level={1} text="Welcome To MyLibrary NYC"/>}
           heroType="CAMPAIGN"
           style={styles.heroCampaign}

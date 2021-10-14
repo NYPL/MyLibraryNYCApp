@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 
 import { Link, LinkTypes, Icon } from "@nypl/design-system-react-components";
+import mlnLogoRed from '../images/MLN_Logo_red.png'
+
 
 const styles = {
   headerNav: {
@@ -21,7 +23,7 @@ const Navbar = () => {
    <div className="header-topWrapper">
 
       <ReactRouterLink to="/">
-        <div className="header-logo"><img border="0" src="/assets/MLN_Logo_red.png"/></div>
+        <div className="header-logo"><img border="0" src={mlnLogoRed}/></div>
       </ReactRouterLink>
     
       <nav className="header-buttons" style={styles.headerNav}>

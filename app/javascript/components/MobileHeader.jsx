@@ -14,6 +14,7 @@ import { Link, LinkTypes } from "@nypl/design-system-react-components";
 import { LionLogoIcon, LocatorIcon, MenuIcon, 
          LoginIcon, LoginIconSolid, SearchIcon, XIcon } from '@nypl/dgx-svg-icons';
 import { extend as _extend } from 'underscore';
+import mlnLogoRed from '../images/MLN_Logo_red.png'
 
 const styles = {
   base: {
@@ -213,7 +214,7 @@ render() {
       <div className={this.props.className} style={styles.base}>
         <Link type={LinkTypes.Action}>
           <ReactRouterLink to="/">
-          <img className="homeLogo" border="0" src="/assets/MLN_Logo_red.png"/></ReactRouterLink>
+          <img className="homeLogo" border="0" src={mlnLogoRed}/></ReactRouterLink>
         </Link>
         <ul style={styles.list} >
           <li style={styles.listItem}>
