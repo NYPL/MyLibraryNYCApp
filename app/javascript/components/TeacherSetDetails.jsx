@@ -67,7 +67,7 @@ export default class TeacherSetDetails extends React.Component {
         console.log(res.data.hold)
          console.log("gggggggg")
 
-        if (res.request.responseURL == "http://" +process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
           window.location = res.request.responseURL;
           return false;
         } else {

@@ -56,21 +56,18 @@ export default class Routes extends React.Component {
             <Route path="/users/start" component={SignIn} />
             <Route path="/teacher_set_data" component={SearchTeacherSets} />
             <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
-
             <Route
               path='/teacher_set_details/:id'
               render={routeProps => (
                 <TeacherSetDetails {...routeProps} handleTeacherSetOrderedData={this.handleTeacherSetOrderedData} />
               )}
             />
-
             <Route
               path='/ordered_holds/:access_key'
               render={routeProps => (
                 <TeacherSetOrder {...routeProps} holddetails={this.state.hold} />
               )}
             />
-
           </Switch>
           <footer className="footer">
             <Footer />
