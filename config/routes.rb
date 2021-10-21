@@ -30,6 +30,9 @@ MyLibraryNYC::Application.routes.draw do
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
   match 'teacher_set_details/:id' => 'teacher_sets#teacher_set_details', via: [:get]
   match 'ordered_holds/:cache_key' => 'holds#ordered_holds_details', via: [:get]
+  match 'holds/:id/cancel' => 'holds#holds_cancel_details', via: [:get, :post]
+  match 'holds/:id/cancel_details' => 'holds#cancel_details', via: [:get, :post]
+
 
   resources :holds
 

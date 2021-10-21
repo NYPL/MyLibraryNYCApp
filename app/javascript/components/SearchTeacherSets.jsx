@@ -38,27 +38,19 @@ export default class SearchTeacherSets extends Component {
     super(props);
     this.state = { teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
-                   computedCurrentPage: 1, pagination: "", keyword: "" };
-    console.log("test test")
-    console.log(props.location.search)
-    // Step1: parse props.localation.search and get keyword
-    // Step 2: set the value this.state.keyword = parse keyword
-    // Step3: Manually call axios.get with parse keyword
-    // 
+                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword') };
   }
 
 
   componentDidMount() {
     if (this.state.keyword !== "" ) {
-
+      this.getTeacherSets()
     }
   }
 
 
-  handleSubmit = event => {
-    event.preventDefault();
-
-     axios.get('/teacher_sets', {
+  getTeacherSets() {
+    axios.get('/teacher_sets', {
         params: {
           keyword: this.state.keyword
         }
@@ -68,7 +60,6 @@ export default class SearchTeacherSets extends Component {
 
         console.log(this.state.facets);
 
-        console.log(res.data.total_count > 20)
 
         if (res.data.total_count > 20) {
           this.state.pagination = 'block';
@@ -81,9 +72,18 @@ export default class SearchTeacherSets extends Component {
     })
   }
 
+  handleSubmit = event => {
+    event.preventDefault();
+
+    if (this.state.keyword !== null) {
+      this.props.history.push("/teacher_set_data"+ "?keyword=" + this.state.keyword)
+    }
+    this.getTeacherSets()
+  }
+
 
   
-  handleSearchKeyword = event => {    
+  handleSearchKeyword = event => {
     this.setState({
       keyword: event.target.value
     })
@@ -102,7 +102,6 @@ export default class SearchTeacherSets extends Component {
         }
      }).then(res => {
         this.setState({ teacher_sets: res.data.teacher_sets,  ts_total_count: res.data.total_count });
-        
       })
       .catch(function (error) {
        console.log(error)
@@ -157,7 +156,7 @@ export default class SearchTeacherSets extends Component {
                 <div className="search_teacher_sets">
                   <SearchBar onSubmit={this.handleSubmit}>
                     <Input
-                      id="input"
+                      id="search-teacher-setbox"
                       value={this.state.keyword}
                       placeholder="Enter teacher-set"
                       required={true}
@@ -201,3 +200,8 @@ export default class SearchTeacherSets extends Component {
     )
   }
 }
+
+SearchTeacherSets.defaultProps = {
+  keyword: ''
+};
+

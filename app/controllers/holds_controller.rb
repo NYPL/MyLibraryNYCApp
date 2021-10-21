@@ -20,12 +20,11 @@ class HoldsController < ApplicationController
   def show
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
-
     render json: {
-      hold: @hold,
-      teacher_set: @hold.teacher_set,
+      hold: @hold.as_json,
+      teacher_set: @hold.teacher_set.as_json,
       teacher_set_notes: @hold.teacher_set.teacher_set_notes
-    }, serializer: HoldExtendedSerializer, root: false
+    }
   end
 
 
@@ -41,14 +40,18 @@ class HoldsController < ApplicationController
 
 
   # GET /holds/1/cancel.json
-  def cancel
+  def cancel_details
+    binding.pry
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
     render json: {
-      hold: @hold,
-      teacher_set: @hold.teacher_set,
+      hold: @hold.as_json,
+      teacher_set: @hold.teacher_set.as_json,
       teacher_set_notes: @hold.teacher_set.teacher_set_notes
     }
+  end
+
+  def holds_cancel_details
   end
 
 
@@ -94,7 +97,7 @@ class HoldsController < ApplicationController
         #   'Your order has been received by our system and will soon be delivered to your school.\
         #   <br/><br/>Check your email inbox for a message with further details.' 
         # }
-        render json: { hold: @hold, status: :created, location: @hold }
+        render json: { hold: @hold.as_json, status: :created, location: @hold.as_json }
       else
         LogWrapper.log('DEBUG', {'message' => 'create: a new hold was generated', 'method' => 'app/controllers/holds_controller.rb.create'})
         format.html { render action: 'new' }

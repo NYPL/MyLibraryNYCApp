@@ -207,8 +207,6 @@ renderMenuButton() {
 }
 
 
-
-
 render() {
   return (
       <div className={this.props.className} style={styles.base}>

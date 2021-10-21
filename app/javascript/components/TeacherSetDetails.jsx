@@ -61,17 +61,11 @@ export default class TeacherSetDetails extends React.Component {
     axios.post('/holds', {
         teacher_set_id: this.props.match.params.id
      }).then(res => {
-
-        console.log(res.request.responseURL)
-        console.log("dddddddddddddd")
-        console.log(res.data.hold)
-         console.log("gggggggg")
-
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
           window.location = res.request.responseURL;
           return false;
         } else {
-          this.props.handleTeacherSetOrderedData(res.data)
+          this.props.handleTeacherSetOrderedData(res.data.hold, this.state.teacher_set)
           this.props.history.push("/ordered_holds/"+ res.data.hold["access_key"])
         }
       })
