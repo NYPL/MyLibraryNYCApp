@@ -9,8 +9,37 @@ import heroCampaignBg from '../images/hero_campaign_bg.jpg'
 import heroCampaignLeft from '../images/hero_campaign_left.jpg'
 
 
-import { HorizontalRule, ButtonTypes, Button, Hero,  Heading, Image} from '@nypl/design-system-react-components';
 import ReactOnRails from 'react-on-rails';
+
+
+import axios from 'axios';
+import {
+  Hero,
+  Image,
+  Button,
+  ButtonTypes,
+  SearchBar,
+  Select,
+  Input,
+  SearchButton,
+  InputTypes,
+  Icon,
+  IconNames,
+  HelperErrorText,
+  LibraryExample,
+  HorizontalRule,
+  Heading,
+  Card, 
+  CardHeading, 
+  CardContent,
+  CardLayouts,
+  CardImageRatios,
+  CardImageSizes,
+  Pagination, Checkbox
+} from '@nypl/design-system-react-components';
+
+import bookImage from '../images/book.png'
+
 
 
 const styles = {
@@ -24,8 +53,117 @@ export default class Home extends Component {
 
   constructor(props) {
     super(props);
+    this.state = { teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
+                   display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
+                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword') };
   }
+
+
+  componentDidMount() {
+    if (this.state.keyword !== "" ) {
+      this.getTeacherSets()
+    }
+  }
+
+
+  getTeacherSets() {
+    axios.get('/teacher_sets', {
+        params: {
+          keyword: this.state.keyword
+        }
+     }).then(res => {
+        this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
+                        ts_total_count: res.data.total_count });
+
+        console.log(this.state.facets);
+
+
+        if (res.data.total_count > 20) {
+          this.state.pagination = 'block';
+        } else {
+          this.state.pagination = 'none';
+        }
+      })
+      .catch(function (error) {
+       console.log(error)
+    })
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    console.log(this.state.keyword + "kskkkkk")
+
+    if (this.state.keyword !== null) {
+      this.props.history.push("/teacher_set_data"+ "?keyword=" + this.state.keyword)
+    } else {
+      this.props.history.push("/teacher_set_data")
+    }
+    this.getTeacherSets()
+  }
+
+
   
+  handleSearchKeyword = event => {
+    this.setState({
+      keyword: event.target.value
+    })
+  }
+
+
+
+
+  onPageChange = (page) => {
+    this.state.setComputedCurrentPage = page;
+
+    axios.get('/teacher_sets', {
+        params: {
+          keyword: this.state.keyword,
+          page: page
+        }
+     }).then(res => {
+        this.setState({ teacher_sets: res.data.teacher_sets,  ts_total_count: res.data.total_count });
+      })
+      .catch(function (error) {
+       console.log(error)
+    })
+
+  };
+
+  TeacherSetDetails() {
+    return this.state.teacher_sets.map((ts, i) => {
+      return <div className="teacherSetResults">
+        <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
+
+          <Card className="" layout={CardLayouts.Horizontal} center imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={CardImageRatios.Square} imageSize={CardImageSizes.Small}>
+            <CardHeading level={3} id="heading1">
+              <ReactRouterLink to={"/teacher_set_details/" + ts.id} className="removelink">
+                {ts.title}
+              </ReactRouterLink>
+            </CardHeading>
+            
+            <CardContent> {ts.suitabilities_string} </CardContent>
+            <CardContent> {ts.availability} </CardContent>
+            <CardContent> {ts.description} </CardContent>
+          </Card>
+          <HorizontalRule align="left" height="3px" width="856px" />
+        </div>
+        </div>
+    })
+  }
+
+
+  TeacherSetFacets() {
+    return this.state.facets.map((ts, i) => {
+      return <div className="nypl-ds">{<br/>}
+
+      <div> { ts.label } </div>
+        { ts.items.map((item, index) =>
+          <div> <Checkbox id="test_id" labelText={item["label"]} showLabel />  </div>
+        )}
+      </div>
+    })
+  }
   render() {
     return (
       <>
@@ -40,17 +178,33 @@ export default class Home extends Component {
         
         <main className="main main--with-sidebar">
           <div className="content-top nypl-ds">
-            
             <HorizontalRule align="left" height="3px" width="856px" />
-
             <div className="float-left">
               <div className="medium_font">Search For Teacher Sets</div>
-              <SearchTeacherSetsBox />
+              <div className="search_teacher_sets">
+                <SearchBar onSubmit={this.handleSubmit} >
+                  <Input
+                    id="input"
+                    value={this.state.keyword}
+                    placeholder="Enter teacher-set"
+                    required={true}
+                    type={InputTypes.text}
+                    onChange={this.handleSearchKeyword}
+                  />
+                  <Button
+                    buttonType={ButtonTypes.Primary}
+                    id="button"
+                    type="submit"
+                  >
+                    Search
+                  </Button>
+                </SearchBar>
+              </div>
             </div>
             <div className="have_questions_section"><HaveQuestions /></div>
           </div>
 
-         <div className="content-primary content-primary--with-sidebar-right">
+          <div className="content-primary content-primary--with-sidebar-right">
             <div className="nypl-ds">
               <HorizontalRule align="left" height="3px" width="856px" />
               <div className="medium_font">

@@ -116,7 +116,7 @@ export default class SearchTeacherSets extends Component {
 
           <Card className="" layout={CardLayouts.Horizontal} center imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={CardImageRatios.Square} imageSize={CardImageSizes.Small}>
             <CardHeading level={3} id="heading1">
-              <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
+              <ReactRouterLink to={"/teacher_set_details/" + ts.id} className="removelink">
                 {ts.title}
               </ReactRouterLink>
             </CardHeading>

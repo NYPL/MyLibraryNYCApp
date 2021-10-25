@@ -80,34 +80,32 @@ export default class TeacherSetOrder extends React.Component {
           <main className="main main--with-sidebar nypl-ds">
             <div className="content-primary content-primary--with-sidebar-right">
               <div className="content-top card_details">
-                  <Card layout={CardLayouts.Horizontal} border className="faq_list">
-                    <CardHeading level={4} id="heading1">
-                      Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details.
-                    </CardHeading>
+                <Card layout={CardLayouts.Horizontal} border className="faq_list">
+                  <CardHeading level={4} id="heading1">
+                    Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details.
+                  </CardHeading>
 
-                    <CardContent>
-                     { this.TeacherSetTitle() }
-                    </CardContent>
+                  <CardContent>
+                   { this.TeacherSetTitle() }
+                  </CardContent>
 
-                    <CardContent>
-                     { this.TeacherSetDescription() }
-                    </CardContent>
+                  <CardContent>
+                   { this.TeacherSetDescription() }
+                  </CardContent>
 
-                    <CardContent>
-                      { this.OrderDetails() }
-                    </CardContent>
+                  <CardContent>
+                    { this.OrderDetails() }
+                  </CardContent>
 
-                    <CardActions>
-                      <Link type={LinkTypes.Button} href={"/holds/" + this.props.match.params.access_key + "/cancel"} >
-                        Cancel My Order
-                      </Link>
-
-                    </CardActions>
-
-                  </Card>
-              </div>
+                  <CardActions>
+                    <Link className="button-color" type={LinkTypes.Button} href={"/holds/" + this.props.match.params.access_key + "/cancel"} >
+                      Cancel My Order
+                    </Link>
+                  </CardActions>
+                </Card>
+              </div>{<br/>}
+              <a href="/teacher_set_data">Go To Search Teacher Sets Page</a>
             </div>
-
             <div className="content-secondary content-secondary--with-sidebar-right"></div>
           </main>
         </div>

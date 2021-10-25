@@ -18,7 +18,7 @@ import {
   MDXCreateElement,
   Heading,
   Image,
-  List
+  List, Link, LinkTypes
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -28,24 +28,34 @@ export default class TeacherSetDetails extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { ts_details: {}, allowed_quantities: [], teacher_set: "", active_hold: "", books: [], quantity: "", access_key: "", hold: {} };
+    this.state = { ts_details: {}, allowed_quantities: [], teacher_set: "", active_hold: "", books: [], 
+                   quantity: "", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true };
   }
 
 
   componentDidMount() {
     axios.get('/teacher_sets/'+ this.props.match.params.id)
       .then(res => {
+
+        console.log(res.data.allowed_quantities.length + " kkkkk")
+
         this.setState({ allowed_quantities: res.data.allowed_quantities, 
                         teacher_set: res.data.teacher_set, 
                         books: res.data.books, 
-                        active_hold: res.data.active_hold
-
+                        active_hold: res.data.active_hold,
+                        teacher_set_notes: res.data.teacher_set_notes
                       });
 
+        if (res.data.allowed_quantities.length > 0) {
+          this.setState({ disableOrderButton: false })
+        }
       })
       .catch(function (error) {
         console.log(error);
     })
+
+
+    
   }
 
 
@@ -104,7 +114,15 @@ export default class TeacherSetDetails extends React.Component {
     })
   }
 
+  TeacherSetNotesContent() {
+    return this.state.teacher_set_notes.map((note, i) => {
+      return <div>{note.content}</div> 
+    })
+  }
 
+  ViewCatalogLink() {
+    return 
+  }
 
   render() {
     let allowed_quantities = this.state.allowed_quantities.map((item, i) => {
@@ -112,13 +130,15 @@ export default class TeacherSetDetails extends React.Component {
         <option key={i} value={item}>{item}</option>
       )
     }, this);
+
     let teacher_set =  this.state.teacher_set
     let suitabilities_string = teacher_set.suitabilities_string;
     let primary_language = teacher_set.primary_language;
     let set_type =  teacher_set.set_type;
     let physical_description = teacher_set.physical_description;
-    let notes = teacher_set.teacher_set_notes
+    let call_number = teacher_set.call_number;
     let access_key = this.state.access_key;
+    let details_url = teacher_set.details_url;
 
 
     return (
@@ -128,34 +148,31 @@ export default class TeacherSetDetails extends React.Component {
           <main className="main main--with-sidebar">
             <div className="content-primary content-primary--with-sidebar-right">
               <div className="content-top card_details">
-                <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
+                  <Card layout={CardLayouts.Horizontal} border className="order-list">
 
-                  <Card layout={CardLayouts.Horizontal} border className="faq_list">
-
-                    <CardHeading level={3} id="heading1">
+                    <CardHeading level={3} className="ts-details">
                      { this.TeacherSetTitle() }
                     </CardHeading>
 
-                    <CardHeading level={4} id="heading4">
+                    <CardHeading level={4} className="ts-details">
                      { this.AvailableCopies() }
                     </CardHeading>
 
-                    <CardContent className="italic" >
+                    <CardContent className="italic font-weight-300 tsDeliveryNote" >
                       Note : Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at help@mylibrarynyc.org
                     </CardContent>
 
-                    <CardHeading level={5} id="heading5">
+                    <CardHeading level={5}>
                       <div id="teacher_set_details">
                         <SearchBar onSubmit={this.handleSubmit}>
                           <Select ariaLabel="Filter Search" id="select-searchBar" onChange={this.handleQuantity} selectedOption={this.state.field} name="search_scope">
                             {allowed_quantities}      
                           </Select>
-                          <Button buttonType={ButtonTypes.Primary} id="button" type="submit"> Place Order </Button> 
+                          <Button disabled={this.state.disableOrderButton} buttonType={ButtonTypes.Primary} id="button" type="submit"> Place Order </Button> 
                         </SearchBar> 
                       </div>
                     </CardHeading>
                   </Card>
-                </div>
               </div>{<br/>}
               <div>
                 <Heading id="heading2" level={2} text="What is in the box" />
@@ -164,50 +181,58 @@ export default class TeacherSetDetails extends React.Component {
                 <div className="bookImage"> { this.TeacherSetBooks() } </div>
               </div>
 
-              <List id="nypl-list2" title="" type="dl">
-                <dt>
-                  Suggested Grade Range [New]
-                </dt>
-                <dd>
-                  {suitabilities_string}
-                </dd>
+              <div className="tsDetails">
+                <List type="dl">
+                  <dt className="font-weight-500 orderDetails">
+                    Suggested Grade Range [New]
+                  </dt>
+                  <dd className="orderDetails">
+                    {suitabilities_string}
+                  </dd>
 
-                <dt>
-                  Primary Language
-                </dt>
-                <dd>
-                  {primary_language}
-                </dd>
+                  <dt className="font-weight-500 orderDetails">
+                    Primary Language
+                  </dt>
+                  <dd className="orderDetails">
+                    {primary_language}
+                  </dd>
 
-                <dt>
-                  Type
-                </dt>
-                <dd>
-                  {set_type}
-                </dd>
+                  <dt className="font-weight-500 orderDetails">
+                    Type
+                  </dt>
+                  <dd className="orderDetails">
+                    {set_type}
+                  </dd>
 
-                <dt>
-                  Physical Description
-                </dt>
-                <dd>
-                  {physical_description}
-                </dd>
+                  <dt className="font-weight-500 orderDetails">
+                    Physical Description
+                  </dt>
+                  <dd className="orderDetails">
+                    {physical_description}
+                  </dd>
 
-                <dt>
-                  Notes
-                </dt>
-                <dd>
-                  {notes}
-                </dd>
-              </List>
+                  <dt className="font-weight-500 orderDetails">
+                    Notes
+                  </dt>
+                  <dd className="orderDetails">
+                    {this.TeacherSetNotesContent()}
+                  </dd>
+
+                  <dt className="font-weight-500 orderDetails">
+                    Call Number
+                  </dt>
+                  <dd className="orderDetails">
+                    {call_number}
+                  </dd>
+                </List>
+              </div>
+
+              <a target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>
             </div>
-
-            
 
             <div className="content-secondary content-secondary--with-sidebar-right">
             
             </div>
-
           </main>
 
         </div>

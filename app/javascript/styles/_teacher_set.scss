@@ -1,0 +1,33 @@
+.removelink {
+  text-decoration: none !important;
+}
+
+.tsDetails {
+  .list__definition-list {
+    border-bottom: 0px;
+  }
+
+  .list__definition-list dl {
+    grid-template-columns: 270px 1fr !important;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+.tsDeliveryNote {
+  font-size: 15px;
+  line-height: 20px;
+  margin: 0 0 2.5em !important;
+}
+
+.ts-details {
+  margin: 0 0 1em !important;
+}
+
+.order-list {
+  padding: 15px 22px 0px 15px;
+}
+
+.button-color {
+  background: #000000 !important;
+}

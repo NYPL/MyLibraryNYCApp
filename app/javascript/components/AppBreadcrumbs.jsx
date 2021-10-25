@@ -31,7 +31,7 @@ export default class AppBreadcrumbs extends Component {
         <Breadcrumbs
           breadcrumbs={[
             { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: 'Home' },
-            { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: BreadcrumbsData(window.location.href.split('/')[3]) }
+            { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsData(window.location.href.split('/')[3]) }
           ]}
           className="breadcrumbs"
         />
@@ -53,14 +53,14 @@ const BreadcrumbsData = (levelString) => {
       return 'Participating schools';
     case 'faq':
       return 'Frequently Asked Questions';
-    case 'help':
+    case 'contacts':
       return 'Contacts';
-    case 'error':
-      return 3;
-    case 'warning':
-      return 4;
-    case 'notice':
-      return 5;
+    case 'teacher_set_data':
+      return 'Teacher Sets';
+    case "teacher_set_details":
+      return 'Teacher Set Order Details';
+    case 'ordered_holds':
+      return 'Teacher Set Order';
     case 'info':
       return 6;
     case 'debug':
