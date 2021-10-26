@@ -71,7 +71,10 @@ export default class TeacherSetDetails extends React.Component {
     axios.post('/holds', {
         teacher_set_id: this.props.match.params.id
      }).then(res => {
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
+        console.log("tttttttttttttttttt")
+        console.log(res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start")
+        console.log("uuuuuuuuuuuuuuuuuu")
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
           window.location = res.request.responseURL;
           return false;
         } else {
