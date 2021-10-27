@@ -31,3 +31,27 @@
 .button-color {
   background: #000000 !important;
 }
+
+.order-message {
+  line-height: 25.3px;
+  .notification {
+    margin: 0px;
+    background: #F9F9F9;
+    padding-bottom: 0px;
+  }
+
+  .notification__container {
+    margin-left: 60px;
+  }
+}
+
+#order-cancel-button {
+  a:hover {
+    color: #CCC;
+  }
+
+  .button {
+    display: inline !important;
+  }
+}
+
