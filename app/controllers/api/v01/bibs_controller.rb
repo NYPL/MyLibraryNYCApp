@@ -31,10 +31,6 @@ class Api::V01::BibsController < Api::V01::GeneralController
       http_status = 404
       message = e.message
       response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg)
-    rescue InvalidInputException => e
-      http_status = 400
-      message = e.message
-      response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg)
     rescue DBException, ElasticsearchException => e
       http_status = 500
       message = e.message
@@ -47,7 +43,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
                                                      action_name, teacher_set).deliver
     end
     LogWrapper.log('INFO', {'message' => "message: #{message}, http_status: #{http_status}",
-                            'method' => 'create_or_update_teacher_sets', 'bib_id' => req_body['id'],
+                            'method' => __method__, 'bib_id' => req_body['id'],
                             'suppressed' => req_body["suppressed"]})
     api_response_builder(http_status, response)
   end
