@@ -222,6 +222,40 @@ class TeacherSetTest < ActiveSupport::TestCase
       end
       assert_equal(@teacher_set6.bnumber, resp.bnumber)
     end
+
+    it 'Bib request-body has suppressed value as true then delete teacher-set from database and elastic-search' do
+      bib_id = rand.to_s[2..8] 
+      # Create dedicated teacher-set record with bib_id
+      TeacherSet.new(bnumber: "b#{bib_id}").save
+
+      SIERRA_USER["data"][0]['suppressed'] = true
+      SIERRA_USER["data"][0]['id'] = bib_id
+
+      es_response = {"found" => true, "result" => 'deleted'}
+      resp = assert_raises(SuppressedBibRecordException) do
+        TeacherSet.stub_any_instance :delete_teacherset_record_from_es, es_response do
+          TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
+        end
+      end
+
+      assert_equal(BIB_RECORD_SUPPRESSED[:code], resp.code)
+      assert_equal(BIB_RECORD_SUPPRESSED[:msg], resp.message)
+    end
+
+    it 'Bib request-body has suppressed value as true but teacher-set record not found in database' do
+      bib_id = rand.to_s[2..8] 
+      # Created teacher-set record not saved in DB.
+      TeacherSet.new(bnumber: "b#{bib_id}")
+
+      SIERRA_USER["data"][0]['suppressed'] = true
+      SIERRA_USER["data"][0]['id'] = bib_id
+
+      resp = assert_raises(BibRecordNotFoundException) do
+        TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
+      end
+      assert_equal(BIB_RECORD_NOT_FOUND[:code], resp.code)
+      assert_equal(BIB_RECORD_NOT_FOUND[:msg], resp.message)
+    end
   end
 
   # Update teacher-set document in ES
