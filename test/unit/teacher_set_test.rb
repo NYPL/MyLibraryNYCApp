@@ -212,7 +212,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       es_resp = {"_index"=>"teacherset", "_type"=>"teacherset", "_id"=>914202741, "_version"=>11, 
                  "result"=>"updated", "_shards"=>{"total"=>0, "successful"=>1, "failed"=>0}}
       bibd_id = SIERRA_USER["data"][0]['id']
-
+      SIERRA_USER["data"][0]['suppressed'] = false
       ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
       
       TeacherSet.stub_any_instance :get_items_info_from_bibs_service, ts_items_info do
@@ -226,7 +226,7 @@ class TeacherSetTest < ActiveSupport::TestCase
     it 'Bib request-body has suppressed value as true then delete teacher-set from database and elastic-search' do
       bib_id = rand.to_s[2..8] 
       # Create dedicated teacher-set record with bib_id
-      TeacherSet.new(bnumber: "b#{bib_id}").save
+      TeacherSet.create(bnumber: "b#{bib_id}")
 
       SIERRA_USER["data"][0]['suppressed'] = true
       SIERRA_USER["data"][0]['id'] = bib_id
@@ -238,8 +238,8 @@ class TeacherSetTest < ActiveSupport::TestCase
         end
       end
 
-      assert_equal(BIB_RECORD_SUPPRESSED[:code], resp.code)
-      assert_equal(BIB_RECORD_SUPPRESSED[:msg], resp.message)
+      assert_equal(BIB_RECORD_SUPPRESSED_REMOVED_FROM_DB[:code], resp.code)
+      assert_equal(BIB_RECORD_SUPPRESSED_REMOVED_FROM_DB[:msg], resp.message)
     end
 
     it 'Bib request-body has suppressed value as true but teacher-set record not found in database' do
@@ -250,11 +250,11 @@ class TeacherSetTest < ActiveSupport::TestCase
       SIERRA_USER["data"][0]['suppressed'] = true
       SIERRA_USER["data"][0]['id'] = bib_id
 
-      resp = assert_raises(BibRecordNotFoundException) do
+      resp = assert_raises(SuppressedBibRecordException) do
         TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
       end
-      assert_equal(BIB_RECORD_NOT_FOUND[:code], resp.code)
-      assert_equal(BIB_RECORD_NOT_FOUND[:msg], resp.message)
+      assert_equal(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_DB[:code], resp.code)
+      assert_equal(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_DB[:msg], resp.message)
     end
   end
 
