@@ -238,8 +238,8 @@ class TeacherSetTest < ActiveSupport::TestCase
         end
       end
 
-      assert_equal(BIB_RECORD_SUPPRESSED_REMOVED_FROM_DB[:code], resp.code)
-      assert_equal(BIB_RECORD_SUPPRESSED_REMOVED_FROM_DB[:msg], resp.message)
+      assert_equal(BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:code], resp.code)
+      assert_equal(BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:msg], resp.message)
     end
 
     it 'Bib request-body has suppressed value as true but teacher-set record not found in database' do
@@ -253,8 +253,8 @@ class TeacherSetTest < ActiveSupport::TestCase
       resp = assert_raises(SuppressedBibRecordException) do
         TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
       end
-      assert_equal(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_DB[:code], resp.code)
-      assert_equal(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_DB[:msg], resp.message)
+      assert_equal(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:code], resp.code)
+      assert_equal(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:msg], resp.message)
     end
   end
 
