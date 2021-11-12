@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, useState } from 'react';
 
 import {
   BrowserRouter as Router,
@@ -18,10 +18,16 @@ const styles = {
 }
 
   
-const Navbar = () => {
+export default class Navbar extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { user_signed_in: this.props.userSignedIn}
+  }
+
+render() {
   return (
    <div className="header-topWrapper">
-
       <ReactRouterLink to="/">
         <div className="header-logo"><img border="0" src={mlnLogoRed}/></div>
       </ReactRouterLink>
@@ -64,6 +70,5 @@ const Navbar = () => {
       </nav>
     </div>
   );
+  }
 };
-  
-export default Navbar;

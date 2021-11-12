@@ -11,7 +11,8 @@ import {
   Heading,
   Image,
   List,
-  Link, LinkTypes
+  Link, LinkTypes, DSProvider, Notification, NotificationContent, NotificationTypes, NotificationHeading,
+  Icon
 } from '@nypl/design-system-react-components';
 
 
@@ -22,16 +23,23 @@ export default class TeacherSetOrder extends React.Component {
     super(props);
     this.state = { access_key: this.props.match.params.access_key, 
                    hold: this.props.holddetails, 
-                   teacher_set: this.props.teachersetdetails };
+                   teacher_set: this.props.teachersetdetails, status_label: this.props.statusLabel };
   }
   
 
   componentDidMount() {
+    console.log(typeof this.state.hold == 'string')
     if (typeof this.state.hold == 'string') {
       axios.get('/holds/' + this.props.match.params.access_key)
-        .then(res => {
-          this.setState({ teacher_set: res.data.teacher_set, 
-                          hold: res.data.hold });
+        .then((res) => {
+          const { data } = res;
+          if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
+            window.location = res.request.responseURL;
+            return false;
+          } else {
+            console.log(res.data.status_label + "status label")
+            this.setState({ teacher_set: res.data.teacher_set, hold: res.data.hold, status_label: res.data.status_label });
+          }
       })
       .catch(function (error) {
         console.log(error); 
@@ -47,63 +55,84 @@ export default class TeacherSetOrder extends React.Component {
     return <div>{this.state.teacher_set["description"]}</div>
   }
 
-  OrderDetails() {
-    return <List id="nypl-list2" title="" type="dl">
-      <dt className="orderDetails font-weight-500">
-        Quantity
-      </dt>
-      <dd className="orderDetails">
-        {this.state.hold["quantity"]}
-      </dd>
-
-      <dt className="orderDetails font-weight-500">
-        Status
-      </dt>
-      <dd className="orderDetails">
-        {this.state.hold["status"]}
-      </dd>
-
-      <dt className="orderDetails font-weight-500">
-        Order Placed
-      </dt>
-      <dd className="orderDetails">
-        {this.state.hold["created_at"]}
-      </dd>
-    </List>
+  OrderMessage() {
+    const order_message = "Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details." 
+    const cancelled_message = "Your order has been cancelled. If you want to reorder this Teacher Set please contact us at the help@mylibrarynyc.org."
+    return this.state.hold["status"] == 'cancelled' ? cancelled_message : order_message
   }
 
-  render() {  
+  showCancelButton() {
+    return this.state.hold.status == 'cancelled' ? 'none' : 'block'
+  }
+
+  OrderDetails() {
+    return <div className="tsDetails">
+      <List id="nypl-list2" title="" type="dl">
+        <dt className="orderDetails font-weight-500">
+          Quantity
+        </dt>
+        <dd className="orderDetails">
+          {this.state.hold["quantity"]}
+        </dd>
+
+        <dt className="orderDetails font-weight-500">
+          Status
+        </dt>
+        <dd className="orderDetails">
+          {this.state.hold["status"]}
+
+          {/*{console.log(Object.entries(this.state.status_label))}*/}
+
+
+        </dd>
+
+        <dt className="orderDetails font-weight-500">
+          Placed
+        </dt>
+        <dd className="orderDetails">
+          {this.state.hold["created_at"]}
+        </dd>
+      </List>
+    </div>
+  }
+
+  CancelButton() {
+    return <div id="order-cancel-button" style={{ display: this.showCancelButton() }}>
+      <Link className="button-color" type={LinkTypes.Button} href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
+    </div>
+  }
+
+  render() {
+
     return (
       <>
         <AppBreadcrumbs />
+        <div className="order-message">
+          <Notification>
+            {/*<NotificationHeading>*/}
+              { this.OrderMessage() }
+            {/*</NotificationHeading>*/}
+          </Notification>
+        </div>
+
         <div className="layout-container nypl-ds">
-          <main className="main main--with-sidebar nypl-ds">
+          <main className="main main--with-sidebar">
             <div className="content-primary content-primary--with-sidebar-right">
-              <div className="content-top card_details">
-                <Card layout={CardLayouts.Horizontal} border className="faq_list">
-                  <CardHeading level={4} id="heading1">
-                    Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details.
-                  </CardHeading>
-
-                  <CardContent>
+            
+              <div className="card_details">
+                  <Heading level={4}>
                    { this.TeacherSetTitle() }
-                  </CardContent>
+                  </Heading>
 
-                  <CardContent>
-                   { this.TeacherSetDescription() }
-                  </CardContent>
+                 
+                  { this.TeacherSetDescription() }
 
-                  <CardContent>
-                    { this.OrderDetails() }
-                  </CardContent>
+                  { this.OrderDetails() }
+              </div>
+              
+              { this.CancelButton() }
 
-                  <CardActions>
-                    <Link className="button-color" type={LinkTypes.Button} href={"/holds/" + this.props.match.params.access_key + "/cancel"} >
-                      Cancel My Order
-                    </Link>
-                  </CardActions>
-                </Card>
-              </div>{<br/>}
+              {<br/>}
               <a href="/teacher_set_data">Go To Search Teacher Sets Page</a>
             </div>
             <div className="content-secondary content-secondary--with-sidebar-right"></div>
@@ -111,6 +140,4 @@ export default class TeacherSetOrder extends React.Component {
         </div>
       </>
   )}
-
-
 }

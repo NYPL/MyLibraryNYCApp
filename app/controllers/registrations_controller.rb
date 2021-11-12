@@ -129,7 +129,7 @@ class RegistrationsController < Devise::RegistrationsController
 
 
   def user_params
-    params.require(:user).permit(:alt_email, :school_id, :email)
+    params.require(:registration)["user"].permit(:alt_email, :school_id, :email)
   end
 
 

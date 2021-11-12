@@ -61,10 +61,10 @@ const BreadcrumbsData = (levelString) => {
       return 'Teacher Set Order Details';
     case 'ordered_holds':
       return 'Teacher Set Order';
-    case 'info':
-      return 6;
-    case 'debug':
-      return 7;
+    case 'holds':
+      return 'Cancel Order';
+    case 'account':
+      return 'Accounts page';
     default:
       return levelString;
   }

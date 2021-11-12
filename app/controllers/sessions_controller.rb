@@ -9,12 +9,12 @@ class SessionsController < Devise::SessionsController
       login!
       render json: {
         logged_in: true,
-        user: @user
+        user: @user,
+        user_return_to: session["user_return_to"]
       }
     else
       render json: { 
-        status: 401,
-        errors: ['no such user', 'verify credentials and try again or signup']
+        logged_in: false
       }
     end
   end

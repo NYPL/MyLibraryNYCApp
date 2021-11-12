@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { Route, BrowserRouter as Router, Switch , Redirect} from "react-router-dom";
 
 import Header from "../components/Header";
@@ -19,7 +18,8 @@ import ContactsFaqsSchoolsNavMenu from "../components/ContactsFaqsSchoolsNavMenu
 import TeacherSetDetails from "../components/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
-
+import ReactDOM from "react-dom";
+import { render } from "react-dom";
 
 
 //import Footer from "./footer";
@@ -31,13 +31,13 @@ export default class Routes extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { hold: "", teacher_set: "" }
+    console.log(props)
+    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn}
     this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
-
   }
 
-  handleTeacherSetOrderedData(hold, teacher_set) {
-    this.setState({ hold: hold, teacher_set: teacher_set })
+  handleTeacherSetOrderedData(hold, teacher_set, status_label) {
+    this.setState({ hold: hold, teacher_set: teacher_set, status_label: status_label })
   }
 
   render() {
@@ -46,7 +46,7 @@ export default class Routes extends React.Component {
         <div className="layout-container nypl-ds">
           <header className="header">
             <Banner />
-            <Header />
+            <Header userSignedIn={this.state.userSignedIn}/>
           </header>
           <Switch>
             <Route exact path="/" component={Home} />
@@ -54,8 +54,9 @@ export default class Routes extends React.Component {
             <Route path="/contacts" component={Contacts} />
             <Route path="/participating-schools" component={ParticipatingSchools}  />
             <Route path="/users/start" component={SignIn} />
-            <Route path="/teacher_set_data" component={SearchTeacherSets} />
+            <Route path="/teacher_set_data" name="Teacher Sets" component={SearchTeacherSets} />
             <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
+            <Route path="/account" component={Accounts} />
             <Route
               path='/teacher_set_details/:id'
               render={routeProps => (
@@ -65,7 +66,7 @@ export default class Routes extends React.Component {
             <Route
               path='/ordered_holds/:access_key'
               render={routeProps => (
-                <TeacherSetOrder {...routeProps} holddetails={this.state.hold} teachersetdetails={this.state.teacher_set} />
+                <TeacherSetOrder {...routeProps} holddetails={this.state.hold} teachersetdetails={this.state.teacher_set} statusLabel={this.state.status_label} />
               )}
             />
             <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
@@ -75,6 +76,6 @@ export default class Routes extends React.Component {
           </footer>
         </div>
       </Router>
-  )
-}
+    )
+  }
 }
