@@ -41,7 +41,6 @@ class HoldsController < ApplicationController
 
   # GET /holds/1/cancel.json
   def cancel_details
-    binding.pry
     @hold = Hold.find_by_access_key(params[:id])
     head 401 if @hold.nil?
     render json: {
@@ -140,15 +139,18 @@ class HoldsController < ApplicationController
         @hold.cancel! c[:comment]
       end
     end
-    respond_to do |format|
-      params.permit!
-      if @hold.update(params[:hold])
-        format.html { redirect_to @hold, notice: 'Your order was successfully updated.' }
-        format.json { render json: @hold }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @hold.errors, status: :unprocessable_entity }
-      end
+    params.permit!
+
+    if @hold.update(params[:hold])
+      render json: {
+        hold: @hold.as_json,
+        teacher_set: @hold.teacher_set.as_json,
+        message: 'Your order was successfully updated.'
+      }
+    else
+      render json: {
+        status: :unprocessable_entity
+      }
     end
   end
 
