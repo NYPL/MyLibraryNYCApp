@@ -31,4 +31,8 @@ module MlnException
   class BibRecordNotFoundException < MlnException
 
   end
+
+  class SuppressedBibRecordException < MlnException
+    
+  end
 end
