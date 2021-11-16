@@ -11,7 +11,7 @@ import {
   Heading,
   Image,
   List,
-  Link, LinkTypes, DSProvider, Notification, NotificationContent, NotificationTypes, NotificationHeading,
+  Link, LinkTypes, DSProvider, Notification,
   Icon
 } from '@nypl/design-system-react-components';
 

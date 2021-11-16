@@ -71,24 +71,7 @@ export default class NewsLetter extends Component {
 
           <div style={{ display: this.state.display_block }}>
             <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
-            <SearchBar onSubmit={this.handleSubmit}>
-              <Input
-                id="email"
-                value={this.state.email}
-                placeholder="Enter your email"
-                required={true}
-                type={InputTypes.text}
-                onChange={this.handleNewsLetterEmail}
-              />
-              <Button
-                disabled={this.state.buttondisabled}
-                buttonType={ButtonTypes.Primary}
-                id="button"
-                type="submit"
-              >
-                Submit
-              </Button>
-            </SearchBar>
+            <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", placeholder: "Enter your email" }} />{<br/>}
 
             <HelperErrorText id="error-helperText" isError={true}>
               <div style={{ display: this.state.isError }}>

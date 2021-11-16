@@ -35,7 +35,7 @@ import {
   CardLayouts,
   CardImageRatios,
   CardImageSizes,
-  Pagination, Checkbox
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, HeroTypes, VStack, HeadingLevels
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -92,7 +92,7 @@ export default class Home extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    console.log(this.state.keyword + "kskkkkk")
+    console.log(event.target.value + " kskkkkk")
 
     if (this.state.keyword !== null) {
       this.props.history.push("/teacher_set_data"+ "?keyword=" + this.state.keyword)
@@ -105,9 +105,11 @@ export default class Home extends Component {
 
   
   handleSearchKeyword = event => {
-    this.setState({
-      keyword: event.target.value
-    })
+
+    //console.log(event + "  ololololo")
+    // this.setState({ 
+    //   keyword: event.target.value
+    // })
   }
 
 
@@ -166,73 +168,40 @@ export default class Home extends Component {
   }
   render() {
     return (
-      <>
-      <div>
-        <Hero
-          backgroundImageSrc={heroCampaignBg}
-          heading={<Heading blockName="hero" id="1" level={1} text="Welcome To MyLibrary NYC"/>}
-          heroType="CAMPAIGN"
-          style={styles.heroCampaign}
-          image={<Image alt="Image example" blockName="hero" src={heroCampaignLeft}/>}
-          subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City’s public library systems as well as instructional support and professional development opportunities."/>
-        
-        <main className="main main--with-sidebar">
-          <div className="content-top nypl-ds">
-            <HorizontalRule align="left" height="3px" width="856px" />
-            <div className="float-left">
-              <div className="medium_font">Search For Teacher Sets</div>
-              <div className="search_teacher_sets">
-                <SearchBar onSubmit={this.handleSubmit} >
-                  <Input
-                    id="input"
-                    value={this.state.keyword}
-                    placeholder="Enter teacher-set"
-                    required={true}
-                    type={InputTypes.text}
-                    onChange={this.handleSearchKeyword}
-                  />
-                  <Button
-                    buttonType={ButtonTypes.Primary}
-                    id="button"
-                    type="submit"
-                  >
-                    Search
-                  </Button>
-                </SearchBar>
-              </div>
-            </div>
-            <div className="have_questions_section"><HaveQuestions /></div>
-          </div>
+      <DSProvider>
+        <TemplateAppContainer
+          breakout={
+                    <Hero heroType={HeroTypes.Campaign} 
+                          heading={<Heading level={HeadingLevels.One} 
+                          id="campaign-hero" text="Welcome To MyLibrary NYC" />} 
+                          subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
+                          backgroundImageSrc={heroCampaignBg} 
+                          image={<Image alt="Image example" blockName="hero" src={heroCampaignLeft}/>} />}
+          
+          contentPrimary={
+                <div>
+                  <HorizontalRule align="left" height="3px" width="856px" />
+                  <div className="medium_font">Search For Teacher Sets</div>
+                  <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword()}} />{<br/>}
+                  <HorizontalRule align="left" height="3px" width="856px" />
+                  <div className="medium_font"> Professional Development & Exclusive Programs</div>
+                  <div className="plain_text">MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State's 
+                    Learning Standards to encourage reading and learning. From author talks to school programs, participating 
+                    MyLibraryNYC schools can access a range of exciting programming.
+                  </div>
+                  <CalendarOfEvents />
+                  <HorizontalRule align="left" height="3px" width="856px" />
+                  <AccessDigitalResources />
+                </div>
+              }
 
-          <div className="content-primary content-primary--with-sidebar-right">
-            <div className="nypl-ds">
-              <HorizontalRule align="left" height="3px" width="856px" />
-              <div className="medium_font">
-                Professional Development & Exclusive Programs
-              </div>
-                
-              <div className="plain_text">MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State’s 
-                Learning Standards to encourage reading and learning. From author talks to school programs, participating 
-                MyLibraryNYC schools can access a range of exciting programming.
-              </div>
-     
-              <CalendarOfEvents />
+          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          sidebar="right"
 
-              <HorizontalRule align="left" height="3px" width="856px" />
-
-              <AccessDigitalResources />
-            </div>
-          </div>
-
-          <div className="content-secondary content-secondary--with-sidebar-right">
-            
-          </div>
-        </main>
-        <div className="nypl-ds">
-          <NewsLetter />
-        </div>
-      </div>
-      </>
+          footer={<div><NewsLetter /></div>}
+          
+        />
+      </DSProvider>
     )
   }
 }

@@ -29,16 +29,16 @@ export default class AppBreadcrumbs extends Component {
     return (
       <div>
         <Breadcrumbs
-          breadcrumbs={[
+          breadcrumbsData={[
             { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: 'Home' },
-            { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsData(window.location.href.split('/')[3]) }
+            { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(window.location.href.split('/')[3]) }
           ]}
           className="breadcrumbs"
         />
 
         <Hero className=""
           backgroundColor="#D23B42"
-          heading={<Heading blockName="hero" id="1" level={1} text={BreadcrumbsData(window.location.href.split('/')[3])} />}
+          heading={<Heading blockName="hero" id="1" level={1} text={BreadcrumbsDataValue(window.location.href.split('/')[3])} />}
           heroType="TERTIARY"
         />
       </div>
@@ -47,7 +47,7 @@ export default class AppBreadcrumbs extends Component {
 }
 
 
-const BreadcrumbsData = (levelString) => {
+const BreadcrumbsDataValue = (levelString) => {
   switch (levelString) {
     case 'participating-schools':
       return 'Participating schools';

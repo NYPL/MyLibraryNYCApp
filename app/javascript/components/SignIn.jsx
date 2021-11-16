@@ -8,7 +8,7 @@ import {
   ButtonTypes,
   SearchBar,
   Select,
-  TextInput, TextInputTypes, HelperErrorText, NotificationHeading, Notification, NotificationContent, Icon
+  TextInput, TextInputTypes, HelperErrorText
 } from '@nypl/design-system-react-components';
 
 
