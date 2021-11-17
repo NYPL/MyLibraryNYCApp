@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
-import { Accordion, Link, List } from '@nypl/design-system-react-components';
+import { Accordion, Link, List, DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 
 export default class Faqs extends Component {
 
@@ -40,23 +40,10 @@ export default class Faqs extends Component {
 
   FrequentlyAskedQuestions() {
       return this.state.faqs.map((data, i) => {
-        return <List modifiers={['no-list-styling' ]} type="ul">
-          <li>
-          <Accordion
-            accordionLabel={data["question"]}
-            inputId={"accordionBtn-" + i}
-            modifiers={[
-              'faq'
-            ]}
-          >
-            <React.Fragment key=".{i}">
-              <p>
-                {data["answer"]}
-              </p>
-            </React.Fragment>
-          </Accordion>
-        </li>
-      </List>
+        return {
+          label: data["question"],
+          panel: data["answer"]
+        }
     })
   }
 
@@ -65,17 +52,18 @@ export default class Faqs extends Component {
     return (
       <>
         <AppBreadcrumbs />
-        <main className="main main--with-sidebar nypl-ds">
-          <div className="content-primary content-primary--with-sidebar-right">
-            <div className="faq_list nypl-ds">
-              {this.FrequentlyAskedQuestions()}
-            </div>
-          </div>
-
-          <div className="content-secondary content-secondary--with-sidebar-right">
-            
-          </div>
-        </main>
+        <DSProvider>
+          <TemplateAppContainer
+            breakout=""
+            contentPrimary={
+              <div className="faq_list nypl-ds">
+                <Accordion contentData={this.FrequentlyAskedQuestions()} />
+              </div>
+            }
+            contentSidebar=""
+            sidebar="right" 
+          />
+        </DSProvider>
       </>
     )
   }

@@ -24,7 +24,7 @@ import { render } from "react-dom";
 
 //import Footer from "./footer";
 
-import { Link } from '@nypl/design-system-react-components';
+import { DSProvider } from '@nypl/design-system-react-components';
 
 
 export default class Routes extends React.Component {

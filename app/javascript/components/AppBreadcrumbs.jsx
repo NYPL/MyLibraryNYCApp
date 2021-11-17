@@ -8,7 +8,7 @@ import {
   Select,
   Button,
   ButtonTypes,
-  Hero
+  Hero, DSProvider, ColorVariants, colorVariant, HeroTypes, HeadingLevels
 } from '@nypl/design-system-react-components';
 
 import "../styles/application.scss"
@@ -27,21 +27,21 @@ export default class AppBreadcrumbs extends Component {
 
   render() {
     return (
-      <div>
-        <Breadcrumbs
-          breadcrumbsData={[
-            { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: 'Home' },
-            { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(window.location.href.split('/')[3]) }
-          ]}
-          className="breadcrumbs"
-        />
+      <>
+        <DSProvider>
+          <Breadcrumbs breadcrumbsData={ [
+            { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+            { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(window.location.href.split('/')[3]) } 
+           ] } 
+            colorVariant="#B9292F"
+          />
+          <Hero heroType="tertiary"
+                backgroundColor="#D23B42"
+                heading={<Heading level={HeadingLevels.One} id="books-hero" text={BreadcrumbsDataValue(window.location.href.split('/')[3])} />} />
 
-        <Hero className=""
-          backgroundColor="#D23B42"
-          heading={<Heading blockName="hero" id="1" level={1} text={BreadcrumbsDataValue(window.location.href.split('/')[3])} />}
-          heroType="TERTIARY"
-        />
-      </div>
+        </DSProvider>
+
+      </>
     )
   }
 }
