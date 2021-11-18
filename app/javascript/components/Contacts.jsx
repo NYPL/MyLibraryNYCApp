@@ -3,11 +3,9 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 const Contacts = (props) => {
   return (
-    <>
-      <AppBreadcrumbs />
       <DSProvider>
         <TemplateAppContainer
-          breakout=""
+          breakout={<AppBreadcrumbs />}
           contentPrimary={
             <div className="contacts_page">
               <div className="contacts_page_text">
@@ -50,7 +48,6 @@ const Contacts = (props) => {
           sidebar="right"          
         />
       </DSProvider>
-    </>
   )
 }
 

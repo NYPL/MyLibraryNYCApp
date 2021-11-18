@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
-import { Route, BrowserRouter as Router, Switch , Redirect} from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch , Redirect, DSProvider, TemplateAppContainer} from "react-router-dom";
 
 import axios from 'axios';
 import {
@@ -145,11 +145,12 @@ export default class TeacherSetDetails extends React.Component {
     return (
       <>
         <AppBreadcrumbs />
+
         <div className="layout-container nypl-ds">
           <main className="main main--with-sidebar">
             <div className="content-primary content-primary--with-sidebar-right">
               <div className="content-top card_details">
-                  <Card layout={CardLayouts.Horizontal} border className="order-list">
+                  <Card layout="row" border className="order-list">
 
                     <CardHeading level={3} className="ts-details">
                      { this.TeacherSetTitle() }

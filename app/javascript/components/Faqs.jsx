@@ -50,21 +50,18 @@ export default class Faqs extends Component {
 
   render() {
     return (
-      <>
-        <AppBreadcrumbs />
-        <DSProvider>
-          <TemplateAppContainer
-            breakout=""
-            contentPrimary={
-              <div className="faq_list nypl-ds">
-                <Accordion contentData={this.FrequentlyAskedQuestions()} />
-              </div>
-            }
-            contentSidebar=""
-            sidebar="right" 
-          />
-        </DSProvider>
-      </>
+      <DSProvider>
+        <TemplateAppContainer
+          breakout={<AppBreadcrumbs />}
+          contentPrimary={
+            <div className="faq_list nypl-ds">
+              <Accordion contentData={this.FrequentlyAskedQuestions()} />
+            </div>
+          }
+          contentSidebar=""
+          sidebar="right" 
+        />
+      </DSProvider>
     )
   }
 }

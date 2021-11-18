@@ -22,7 +22,7 @@ import {
   CardLayouts,
   CardImageRatios,
   CardImageSizes,
-  Pagination, Checkbox
+  Pagination, Checkbox, DSProvider, TemplateAppContainer
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -84,9 +84,9 @@ export default class SearchTeacherSets extends Component {
 
   
   handleSearchKeyword = event => {
-    this.setState({
-      keyword: event.target.value
-    })
+    // this.setState({
+    //   keyword: event.target.value
+    // })
   }
 
 
@@ -113,8 +113,8 @@ export default class SearchTeacherSets extends Component {
     return this.state.teacher_sets.map((ts, i) => {
       return <div className="teacherSetResults">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
-
-          <Card className="" layout={CardLayouts.Horizontal} center imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={CardImageRatios.Square} imageSize={CardImageSizes.Small}>
+          <Card layout="row" center imageSrc={bookImage} 
+                imageAlt="Alt text" imageAspectRatio={CardImageRatios.TwoByOne} imageSize={CardImageSizes.Small}>
             <CardHeading level={3} id="heading1">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id} className="removelink">
                 {ts.title}
@@ -127,7 +127,7 @@ export default class SearchTeacherSets extends Component {
           </Card>
           <HorizontalRule align="left" height="3px" width="856px" />
         </div>
-        </div>
+      </div>
     })
   }
 
@@ -148,54 +148,29 @@ export default class SearchTeacherSets extends Component {
   render() {
     return (
       <>
-        <AppBreadcrumbs />
-        <div className="layout-container nypl-ds">
-          <main className="main main--with-sidebar nypl-ds">
-            <div className="content-top">
-              <div>
-                <div className="search_teacher_sets">
-                  <SearchBar onSubmit={this.handleSubmit}>
-                    <Input
-                      id="search-teacher-setbox"
-                      value={this.state.keyword}
-                      placeholder="Enter teacher-set"
-                      required={true}
-                      type={InputTypes.text}
-                      onChange={this.handleSearchKeyword}
-                      />
-                      <Button
-                        buttonType={ButtonTypes.Primary}
-                        id="button"
-                        type="submit"
-                      >
-                        Search
-                      </Button>
-                  </SearchBar>
-                </div>{<br/>}
+        <DSProvider>
+          <TemplateAppContainer
+            breakout={<AppBreadcrumbs />}
+            contentTop={<>
+                <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword()}} />
+                {<br/>}
                 <Heading id="heading2" level={2} text="Seach and Find Teacher Sets" />
                 <Heading id="heading5" level={5} text="Check Out Newly Arrived Teacher Sets" />
                 <HorizontalRule align="left" height="3px" width="856px" className="teacherSetHorizontal"/>
-              </div>
-
-            </div>
-
-            <div className="content-secondary content-secondary--with-sidebar-left">
-              <div>
-                {this.TeacherSetFacets()}
-              </div>
-            </div>
-            <div className="content-primary content-primary--with-sidebar-left">
-              <div>
-                {this.TeacherSetDetails()}
-              </div>
-      
-              <div style={{ display: this.state.pagination }}>
-                <Pagination currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.ts_total_count} />
-              </div>
-
-            </div>
-          </main>
-        </div>
+              </>
+            }
+            contentPrimary={
+                <>
+                  <div>{this.TeacherSetDetails()}</div>
+                  <div style={{ display: this.state.pagination }}>
+                    <Pagination currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.ts_total_count} />
+                  </div>
+                </>
+              }
+            contentSidebar={this.TeacherSetFacets()}
+            sidebar="left" 
+          />
+        </DSProvider>
       </>
     )
   }
