@@ -402,23 +402,25 @@ namespace :ingest do
       rows.each_with_index do |row, index|
         row_hash = row.to_hash
         school_name = row_hash['LOCATION_NAME'].strip
-        puts "Starting #{school_name}"
-        ['LOCATION_CODE', 'LOCATION_NAME', 'PRIMARY_ADDRESS_LINE_1', 'STATE_CODE', 'Location 1', 'PRINCIPAL_PHONE_NUMBER'].each do |column_header_name|
-          raise "The #{column_header_name} column is mislabeled or missing from the CSV or data for school #{school_name} is missing in that column." if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
-        end
+        address_line_1 = row_hash['PRIMARY_ADDRESS_LINE_1'].strip
+        state_code = row_hash['STATE_CODE'].strip
+        principal_phone_number = row_hash['PRINCIPAL_PHONE_NUMBER'].strip
+
         zcode = "z#{row_hash['LOCATION_CODE'].strip}".downcase
         school = School.where(code: zcode).first_or_initialize
-        school.name = school.name || school_name
-        school.address_line_1 = school.address_line_1 || row_hash['PRIMARY_ADDRESS_LINE_1'].strip
-        school.state = school.state || row_hash['STATE_CODE'].strip
+        school.name = school_name if school_name.present?
+        school.address_line_1 = address_line_1 if address_line_1.present?
+        school.state =  state_code if state_code.present?
         school.active = true if args.activate == true
+        school.phone_number = principal_phone_number if principal_phone_number.present?
+
         if row_hash['Location 1'].present?
           address_line_2 = row_hash['Location 1'].split("\n")[0].strip # sometimes the latitude and longitude are on the second line of the cell in CSV
-          school.address_line_2 = school.address_line_2 || address_line_2
-          school.borough = borough(address_line_2)
-          school.postal_code = school.postal_code || address_line_2[-5..-1]
+          school.address_line_2 = address_line_2 if address_line_2.present?
+          school.borough = borough(address_line_2) if borough(address_line_2).present?
+          school.postal_code = address_line_2[-5..-1] if address_line_2[-5..-1].present?
         end
-        school.phone_number = school.phone_number || row_hash['PRINCIPAL_PHONE_NUMBER'].strip
+
         if school.id.nil?
           school.created_at = Time.zone.now
           puts "Creating #{school.name}"
