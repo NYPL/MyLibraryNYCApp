@@ -211,7 +211,10 @@ class TeacherSetTest < ActiveSupport::TestCase
       resp = nil
       es_resp = {"_index"=>"teacherset", "_type"=>"teacherset", "_id"=>914202741, "_version"=>11, 
                  "result"=>"updated", "_shards"=>{"total"=>0, "successful"=>1, "failed"=>0}}
-      bibd_id = SIERRA_USER["data"][0]['id']
+
+      SIERRA_USER["data"][0]['id'] = rand.to_s[3..8]
+      bib_id = SIERRA_USER["data"][0]['id']
+
       SIERRA_USER["data"][0]['suppressed'] = false
       ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
       
@@ -220,7 +223,7 @@ class TeacherSetTest < ActiveSupport::TestCase
           resp = TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
         end
       end
-      assert_equal(@teacher_set6.bnumber, resp.bnumber)
+      assert_equal("b#{bib_id}", resp.bnumber)
     end
 
     it 'Bib request-body has suppressed value as true then delete teacher-set from database and elastic-search' do
