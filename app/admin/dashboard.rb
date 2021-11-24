@@ -170,9 +170,6 @@ ActiveAdmin.register_page "Dashboard" do
     columns do
       column do
         h2 "Pending"
-
-        LogWrapper.log('INFO', {'message' => 'pending_holds mln testing log','method' => "holds #{holds.count} pending_holds #{Hold.pending}"})
-
         if Hold.pending.count == 0
           div 'No Pending - Trouble holds'
         else
@@ -260,35 +257,40 @@ ActiveAdmin.register_page "Dashboard" do
       end
     end
 
-    # columns do
-    #   column do
-    #     h2 "Pending - Unavailable"
-    #     if Hold.unavailable.count == 0
-    #       div 'No Pending - Unavailable holds'
-    #     else
-    #       i = 0
-    #       table_for pending_unavailable, {sortable: 'pending', :class => 'index_table'} do
-    #         column "#" do i += 1 end
-    #         column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-    #         column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
-    #         column 'Quantity', sortable: :quantity do |h|
-    #           if !h.quantity.nil?
-    #             h.quantity
-    #           end
-    #         end
-    #         column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
-    #         column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-    #         column 'Date', sortable: :p_created_at do |h|
-    #           if !h.nil?
-    #             link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-    #           else
-    #             "Missing hold data"
-    #           end
-    #         end
-    #       end
-    #     end
-    #   end
-    # end
+    columns do
+      column do
+        h2 "Pending - Unavailable"
+        if Hold.unavailable.count == 0
+          div 'No Pending - Unavailable holds'
+        else
+          i = 0
+          begin
+            table_for pending_unavailable, {sortable: 'pending', :class => 'index_table'} do
+              column "#" do i += 1 end
+              column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
+              column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+              column 'Quantity', sortable: :quantity do |h|
+                if !h.quantity.nil?
+                  h.quantity
+                end
+              end
+              column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
+              column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
+              column 'Date', sortable: :p_created_at do |h|
+                if !h.nil?
+                  link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
+                else
+                  "Missing hold data"
+                end
+              end
+            end
+          rescue StandardError => e
+            LogWrapper.log('INFO', {'message' => 'pending_holds mln testing log','method' => "backtrace #{e.backtrace} pending_unavailable: pending_unavailable.count"})
+          end
+
+        end
+      end
+    end
 
   end # content
 end
