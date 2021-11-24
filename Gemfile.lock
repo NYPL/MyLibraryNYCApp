@@ -1632,7 +1632,8 @@ DEPENDENCIES
   pry-remote
   pry-rescue
   pry-stack_explorer
-  rack-cors
+  rack (~> 2.2.3)
+  rack-cors (~> 1.1.1)
   rails (= 6.1.4.1)
   rails-controller-testing
   railties (~> 6.1.4.1)
