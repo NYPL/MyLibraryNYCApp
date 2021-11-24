@@ -8,11 +8,8 @@ MyLibraryNYC::Application.configure do
 
   config.force_ssl = false
 
-  # config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
-  config.logger = Logger.new(STDOUT)
+  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
-  config.assets.logger = true
-
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
                   ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL']]
   config.eager_load = true

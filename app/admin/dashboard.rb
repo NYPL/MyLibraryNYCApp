@@ -2,9 +2,9 @@
 
 ActiveAdmin.register_page "Dashboard" do
 
-  menu :priority => 1, :label => "Dashboard"
+  menu :priority => 1, :label => proc{ I18n.t("active_admin.dashboard") }
 
-  content :title => "Dashboard" do
+  content :label => "Dashboard" do
     order_param = params[:order]
     order = nil
     pending_order = nil
