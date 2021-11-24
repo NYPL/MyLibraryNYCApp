@@ -100,72 +100,73 @@ ActiveAdmin.register_page "Dashboard" do
       pending_holds = Hold.pending.joins('JOIN users on users.id = holds.user_id').order(pending_order)
     end
 
-    LogWrapper.log('INFO', {'message' => 'mln testing log','method' => "holds #{holds.count} pending_holds #{pending_holds.count}"})
 
-    # pending_transit = Hold.transit
-    # pending_trouble = Hold.trouble
-    # pending_unavailable = Hold.unavailable
+    pending_transit = Hold.transit
+    pending_trouble = Hold.trouble
+    pending_unavailable = Hold.unavailable
 
-    # columns do
-    #   column do
-    #     h2 "New"
-    #     if Hold.unseen.count == 0
-    #       div 'No new holds'
-    #     else
-    #       i = 0
-    #       table_for holds, {sortable: 'new', :class => 'index_table'} do
-    #         column "#" do
-    #           i += 1
-    #         end
+    columns do
+      column do
+        h2 "New"
+        if Hold.unseen.count == 0
+          div 'No new holds'
+        else
+          i = 0
+          LogWrapper.log('INFO', {'message' => 'table mln testing log','method' => "holds #{holds.count} pending_holds #{pending_holds.count}"})
 
-    #         column 'Set', sortable: :set do |h|
-    #           if !h.teacher_set.nil?
-    #             link_to h.teacher_set.title, admin_hold_path(h)
-    #           else
-    #             "This teacher set no longer exists."
-    #           end
-    #         end
+          table_for holds, {sortable: 'new', :class => 'index_table'} do
+            column "#" do
+              i += 1
+            end
 
-    #         column 'Call Number', sortable: :call_number do |h|
-    #           if !h.teacher_set.nil?
-    #             link_to h.teacher_set.call_number, admin_hold_path(h)
-    #           end
-    #         end
+            column 'Set', sortable: :set do |h|
+              if !h.teacher_set.nil?
+                link_to h.teacher_set.title, admin_hold_path(h)
+              else
+                "This teacher set no longer exists."
+              end
+            end
 
-    #         column 'Quantity', sortable: :quantity do |h|
-    #           if !h.quantity.nil?
-    #             h.quantity
-    #           end
-    #         end
+            column 'Call Number', sortable: :call_number do |h|
+              if !h.teacher_set.nil?
+                link_to h.teacher_set.call_number, admin_hold_path(h)
+              end
+            end
 
-    #         column 'User', sortable: :user do |h|
-    #           if !h.user.nil?
-    #             link_to h.user.email, admin_hold_path(h)
-    #           else
-    #             "Missing user data"
-    #           end
-    #         end
+            column 'Quantity', sortable: :quantity do |h|
+              if !h.quantity.nil?
+                h.quantity
+              end
+            end
 
-    #         column 'Requester Barcode', sortable: :barcode do |h|
-    #           if !h.user.nil?
-    #             link_to h.user.barcode, admin_hold_path(h)
-    #           else
-    #             "Missing user data"
-    #           end
-    #         end
+            column 'User', sortable: :user do |h|
+              if !h.user.nil?
+                link_to h.user.email, admin_hold_path(h)
+              else
+                "Missing user data"
+              end
+            end
 
-    #         column 'Date', sortable: :created_at do |h|
-    #           if !h.nil?
-    #             link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-    #           else
-    #             "Missing hold data"
-    #           end
-    #         end
+            column 'Requester Barcode', sortable: :barcode do |h|
+              if !h.user.nil?
+                link_to h.user.barcode, admin_hold_path(h)
+              else
+                "Missing user data"
+              end
+            end
 
-    #       end
-    #     end
-    #   end
-    # end
+            column 'Date', sortable: :created_at do |h|
+              if !h.nil?
+                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
+              else
+                "Missing hold data"
+              end
+            end
+
+          end
+        end
+      end
+    end
 
     # columns do
     #   column do
