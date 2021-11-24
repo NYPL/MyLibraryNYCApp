@@ -1443,8 +1443,6 @@ GEM
       websocket (~> 1.0)
     racc (1.5.2)
     rack (2.2.3)
-    rack-cors (1.1.1)
-      rack (>= 2.0.0)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.1.4.1)
@@ -1632,8 +1630,6 @@ DEPENDENCIES
   pry-remote
   pry-rescue
   pry-stack_explorer
-  rack (~> 2.2.3)
-  rack-cors (~> 1.1.1)
   rails (= 6.1.4.1)
   rails-controller-testing
   railties (~> 6.1.4.1)
