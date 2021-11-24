@@ -100,191 +100,191 @@ ActiveAdmin.register_page "Dashboard" do
     #   pending_holds = Hold.pending.joins('JOIN users on users.id = holds.user_id').order(pending_order)
     # end
 
-    pending_transit = Hold.transit
-    pending_trouble = Hold.trouble
-    pending_unavailable = Hold.unavailable
+    # pending_transit = Hold.transit
+    # pending_trouble = Hold.trouble
+    # pending_unavailable = Hold.unavailable
 
-    columns do
-      column do
-        h2 "New"
-        if Hold.unseen.count == 0
-          div 'No new holds'
-        else
-          i = 0
-          table_for holds, {sortable: 'new', :class => 'index_table'} do
-            column "#" do
-              i += 1
-            end
+    # columns do
+    #   column do
+    #     h2 "New"
+    #     if Hold.unseen.count == 0
+    #       div 'No new holds'
+    #     else
+    #       i = 0
+    #       table_for holds, {sortable: 'new', :class => 'index_table'} do
+    #         column "#" do
+    #           i += 1
+    #         end
 
-            column 'Set', sortable: :set do |h|
-              if !h.teacher_set.nil?
-                link_to h.teacher_set.title, admin_hold_path(h)
-              else
-                "This teacher set no longer exists."
-              end
-            end
+    #         column 'Set', sortable: :set do |h|
+    #           if !h.teacher_set.nil?
+    #             link_to h.teacher_set.title, admin_hold_path(h)
+    #           else
+    #             "This teacher set no longer exists."
+    #           end
+    #         end
 
-            column 'Call Number', sortable: :call_number do |h|
-              if !h.teacher_set.nil?
-                link_to h.teacher_set.call_number, admin_hold_path(h)
-              end
-            end
+    #         column 'Call Number', sortable: :call_number do |h|
+    #           if !h.teacher_set.nil?
+    #             link_to h.teacher_set.call_number, admin_hold_path(h)
+    #           end
+    #         end
 
-            column 'Quantity', sortable: :quantity do |h|
-              if !h.quantity.nil?
-                h.quantity
-              end
-            end
+    #         column 'Quantity', sortable: :quantity do |h|
+    #           if !h.quantity.nil?
+    #             h.quantity
+    #           end
+    #         end
 
-            column 'User', sortable: :user do |h|
-              if !h.user.nil?
-                link_to h.user.email, admin_hold_path(h)
-              else
-                "Missing user data"
-              end
-            end
+    #         column 'User', sortable: :user do |h|
+    #           if !h.user.nil?
+    #             link_to h.user.email, admin_hold_path(h)
+    #           else
+    #             "Missing user data"
+    #           end
+    #         end
 
-            column 'Requester Barcode', sortable: :barcode do |h|
-              if !h.user.nil?
-                link_to h.user.barcode, admin_hold_path(h)
-              else
-                "Missing user data"
-              end
-            end
+    #         column 'Requester Barcode', sortable: :barcode do |h|
+    #           if !h.user.nil?
+    #             link_to h.user.barcode, admin_hold_path(h)
+    #           else
+    #             "Missing user data"
+    #           end
+    #         end
 
-            column 'Date', sortable: :created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
-                "Missing hold data"
-              end
-            end
+    #         column 'Date', sortable: :created_at do |h|
+    #           if !h.nil?
+    #             link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
+    #           else
+    #             "Missing hold data"
+    #           end
+    #         end
 
-          end
-        end
-      end
-    end
+    #       end
+    #     end
+    #   end
+    # end
 
-    columns do
-      column do
-        h2 "Pending"
-        if Hold.pending.count == 0
-          div 'No Pending - Trouble holds'
-        else
-          i = 0
-          table_for pending_holds, {sortable: 'pending', :class => 'index_table'} do
-            column "#" do i += 1 end
-            column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-            column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
-            column 'Quantity', sortable: :quantity do |h|
-              if !h.quantity.nil?
-                h.quantity
-              end
-            end
-            column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
-            column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-            column 'Date', sortable: :p_created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
-                "Missing hold data"
-              end
-            end
-          end
-        end
-      end
-    end
+    # columns do
+    #   column do
+    #     h2 "Pending"
+    #     if Hold.pending.count == 0
+    #       div 'No Pending - Trouble holds'
+    #     else
+    #       i = 0
+    #       table_for pending_holds, {sortable: 'pending', :class => 'index_table'} do
+    #         column "#" do i += 1 end
+    #         column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
+    #         column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+    #         column 'Quantity', sortable: :quantity do |h|
+    #           if !h.quantity.nil?
+    #             h.quantity
+    #           end
+    #         end
+    #         column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
+    #         column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
+    #         column 'Date', sortable: :p_created_at do |h|
+    #           if !h.nil?
+    #             link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
+    #           else
+    #             "Missing hold data"
+    #           end
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
 
-    columns do
-      column do
-        h2 "Pending - In Transit Aux"
-        if Hold.transit.count == 0
-          div 'No Pending - In Transit Aux holds'
-        else
-          i = 0
-          table_for pending_transit, {sortable: 'pending', :class => 'index_table'} do
-            column "#" do i += 1 end
-            column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-            column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
-            column 'Quantity', sortable: :quantity do |h|
-              if !h.quantity.nil?
-                h.quantity
-              end
-            end
-            column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
-            column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-            column 'Date', sortable: :p_created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
-                "Missing hold data"
-              end
-            end
-          end
-        end
-      end
-    end
+    # columns do
+    #   column do
+    #     h2 "Pending - In Transit Aux"
+    #     if Hold.transit.count == 0
+    #       div 'No Pending - In Transit Aux holds'
+    #     else
+    #       i = 0
+    #       table_for pending_transit, {sortable: 'pending', :class => 'index_table'} do
+    #         column "#" do i += 1 end
+    #         column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
+    #         column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+    #         column 'Quantity', sortable: :quantity do |h|
+    #           if !h.quantity.nil?
+    #             h.quantity
+    #           end
+    #         end
+    #         column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
+    #         column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
+    #         column 'Date', sortable: :p_created_at do |h|
+    #           if !h.nil?
+    #             link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
+    #           else
+    #             "Missing hold data"
+    #           end
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
 
-    columns do
-      column do
-        h2 "Pending - Trouble"
-        if Hold.trouble.count == 0
-          div 'No Pending - Trouble holds'
-        else
-          i = 0
-          table_for pending_trouble, {sortable: 'pending', :class => 'index_table'} do
-            column "#" do i += 1 end
-            column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-            column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
-            column 'Quantity', sortable: :quantity do |h|
-              if !h.quantity.nil?
-                h.quantity
-              end
-            end
-            column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
-            column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-            column 'Date', sortable: :p_created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
-                "Missing hold data"
-              end
-            end
-          end
-        end
-      end
-    end
+    # columns do
+    #   column do
+    #     h2 "Pending - Trouble"
+    #     if Hold.trouble.count == 0
+    #       div 'No Pending - Trouble holds'
+    #     else
+    #       i = 0
+    #       table_for pending_trouble, {sortable: 'pending', :class => 'index_table'} do
+    #         column "#" do i += 1 end
+    #         column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
+    #         column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+    #         column 'Quantity', sortable: :quantity do |h|
+    #           if !h.quantity.nil?
+    #             h.quantity
+    #           end
+    #         end
+    #         column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
+    #         column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
+    #         column 'Date', sortable: :p_created_at do |h|
+    #           if !h.nil?
+    #             link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
+    #           else
+    #             "Missing hold data"
+    #           end
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
 
-    columns do
-      column do
-        h2 "Pending - Unavailable"
-        if Hold.unavailable.count == 0
-          div 'No Pending - Unavailable holds'
-        else
-          i = 0
-          table_for pending_unavailable, {sortable: 'pending', :class => 'index_table'} do
-            column "#" do i += 1 end
-            column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-            column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
-            column 'Quantity', sortable: :quantity do |h|
-              if !h.quantity.nil?
-                h.quantity
-              end
-            end
-            column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
-            column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
-            column 'Date', sortable: :p_created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
-                "Missing hold data"
-              end
-            end
-          end
-        end
-      end
+    # columns do
+    #   column do
+    #     h2 "Pending - Unavailable"
+    #     if Hold.unavailable.count == 0
+    #       div 'No Pending - Unavailable holds'
+    #     else
+    #       i = 0
+    #       table_for pending_unavailable, {sortable: 'pending', :class => 'index_table'} do
+    #         column "#" do i += 1 end
+    #         column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
+    #         column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+    #         column 'Quantity', sortable: :quantity do |h|
+    #           if !h.quantity.nil?
+    #             h.quantity
+    #           end
+    #         end
+    #         column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
+    #         column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
+    #         column 'Date', sortable: :p_created_at do |h|
+    #           if !h.nil?
+    #             link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
+    #           else
+    #             "Missing hold data"
+    #           end
+    #         end
+    #       end
+    #     end
+    #   end
 
-    end
+    # end
 
   end # content
 end
