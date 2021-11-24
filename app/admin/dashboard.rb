@@ -6,99 +6,101 @@ ActiveAdmin.register_page "Dashboard" do
 
   content do
 
-    LogWrapper.log('INFO', {'message' => 'mln testing log','method' => "mln_params #{params}"})
+    order_param = params[:order]
+    order = nil
+    pending_order = nil
 
-    # order_param = params[:order]
-    # order = nil
-    # pending_order = nil
-    # # if !order_param.nil? && order_param[0] == 'p'
-    # #   pending_order = case(order_param)
-    # #   when 'p_school_desc'
-    # #     'users.home_library DESC'
-    # #   when 'p_school_asc'
-    # #     'users.home_library ASC'
-    # #   when 'p_user_desc'
-    # #     'users.email DESC'
-    # #   when 'p_user_asc'
-    # #     'users.email ASC'
-    # #   when 'p_barcode_asc'
-    # #     'users.barcode ASC'
-    # #   when 'p_barcode_desc'
-    # #     'users.barcode DESC'
-    # #   when 'p_call_number_asc'
-    # #     'teacher_sets.call_number ASC'
-    # #   when 'p_call_number_desc'
-    # #     'teacher_sets.call_number DESC'
-    # #   when 'p_set_asc'
-    # #     'teacher_sets.title ASC'
-    # #   when 'p_set_desc'
-    # #     'teacher_sets.title DESC'
-    # #   when 'p_created_at_asc'
-    # #     'created_at ASC'
-    # #   when 'p_created_at_desc'
-    # #     'created_at DESC'
-    # #   when 'p_quantity_asc'
-    # #     'quantity ASC'
-    # #   when 'p_quantity_desc'
-    # #     'quantity DESC'
-    # #   else
-    # #     nil
-    # #   end
-    # # elsif !order_param.nil?
-    # #   order = case(order_param)
-    # #   when 'school_desc'
-    # #     'users.home_library DESC'
-    # #   when 'school_asc'
-    # #     'users.home_library ASC'
-    # #   when 'user_desc'
-    # #     'users.email DESC'
-    # #   when 'user_asc'
-    # #     'users.email ASC'
-    # #   when 'barcode_asc'
-    # #     'users.barcode ASC'
-    # #   when 'barcode_desc'
-    # #     'users.barcode DESC'
-    # #   when 'call_number_asc'
-    # #     'teacher_sets.call_number ASC'
-    # #   when 'call_number_desc'
-    # #     'teacher_sets.call_number DESC'
-    # #   when 'set_asc'
-    # #     'teacher_sets.title ASC'
-    # #   when 'set_desc'
-    # #     'teacher_sets.title DESC'
-    # #   when 'created_at_asc'
-    # #     'created_at ASC'
-    # #   when 'created_at_desc'
-    # #     'created_at DESC'
-    # #   when 'quantity_asc'
-    # #     'quantity ASC'
-    # #   when 'quantity_desc'
-    # #     'quantity DESC'
-    # #   else
-    # #     nil
-    # #   end
-    # # end
+    if !order_param.nil? && order_param[0] == 'p'
+      pending_order = case(order_param)
+      when 'p_school_desc'
+        'users.home_library DESC'
+      when 'p_school_asc'
+        'users.home_library ASC'
+      when 'p_user_desc'
+        'users.email DESC'
+      when 'p_user_asc'
+        'users.email ASC'
+      when 'p_barcode_asc'
+        'users.barcode ASC'
+      when 'p_barcode_desc'
+        'users.barcode DESC'
+      when 'p_call_number_asc'
+        'teacher_sets.call_number ASC'
+      when 'p_call_number_desc'
+        'teacher_sets.call_number DESC'
+      when 'p_set_asc'
+        'teacher_sets.title ASC'
+      when 'p_set_desc'
+        'teacher_sets.title DESC'
+      when 'p_created_at_asc'
+        'created_at ASC'
+      when 'p_created_at_desc'
+        'created_at DESC'
+      when 'p_quantity_asc'
+        'quantity ASC'
+      when 'p_quantity_desc'
+        'quantity DESC'
+      else
+        nil
+      end
+    elsif !order_param.nil?
+      order = case(order_param)
+      when 'school_desc'
+        'users.home_library DESC'
+      when 'school_asc'
+        'users.home_library ASC'
+      when 'user_desc'
+        'users.email DESC'
+      when 'user_asc'
+        'users.email ASC'
+      when 'barcode_asc'
+        'users.barcode ASC'
+      when 'barcode_desc'
+        'users.barcode DESC'
+      when 'call_number_asc'
+        'teacher_sets.call_number ASC'
+      when 'call_number_desc'
+        'teacher_sets.call_number DESC'
+      when 'set_asc'
+        'teacher_sets.title ASC'
+      when 'set_desc'
+        'teacher_sets.title DESC'
+      when 'created_at_asc'
+        'created_at ASC'
+      when 'created_at_desc'
+        'created_at DESC'
+      when 'quantity_asc'
+        'quantity ASC'
+      when 'quantity_desc'
+        'quantity DESC'
+      else
+        nil
+      end
+    end
 
-    # if (order.nil?)
-    #   holds = Hold.unseen
-    # elsif order_param == 'call_number_desc' or
-    #     order_param == 'call_number_asc' or
-    #     order_param == 'set_desc' or
-    #     order_param == 'set_asc'
-    #   holds = Hold.unseen.joins('JOIN teacher_sets on teacher_sets.id = holds.teacher_set_id').order(order)
-    # else
-    #   holds = Hold.unseen.joins('JOIN users on users.id = holds.user_id').order(order)
-    # end
-    # if (pending_order.nil?)
-    #   pending_holds = Hold.pending
-    # elsif order_param == 'p_call_number_desc' or
-    #     order_param == 'p_call_number_asc' or
-    #     order_param == 'p_set_desc' or
-    #     order_param == 'p_set_asc'
-    #   pending_holds = Hold.pending.joins('JOIN teacher_sets on teacher_sets.id = holds.teacher_set_id').order(pending_order)
-    # else
-    #   pending_holds = Hold.pending.joins('JOIN users on users.id = holds.user_id').order(pending_order)
-    # end
+    if (order.nil?)
+      holds = Hold.unseen
+    elsif order_param == 'call_number_desc' or
+        order_param == 'call_number_asc' or
+        order_param == 'set_desc' or
+        order_param == 'set_asc'
+      holds = Hold.unseen.joins('JOIN teacher_sets on teacher_sets.id = holds.teacher_set_id').order(order)
+    else
+      holds = Hold.unseen.joins('JOIN users on users.id = holds.user_id').order(order)
+    end
+
+    if (pending_order.nil?)
+      pending_holds = Hold.pending
+    elsif order_param == 'p_call_number_desc' or
+        order_param == 'p_call_number_asc' or
+        order_param == 'p_set_desc' or
+        order_param == 'p_set_asc'
+      pending_holds = Hold.pending.joins('JOIN teacher_sets on teacher_sets.id = holds.teacher_set_id').order(pending_order)
+    else
+      pending_holds = Hold.pending.joins('JOIN users on users.id = holds.user_id').order(pending_order)
+    end
+
+    LogWrapper.log('INFO', {'message' => 'mln testing log','method' => "holds #{holds.count} pending_holds #{pending_holds.count}"})
 
     # pending_transit = Hold.transit
     # pending_trouble = Hold.trouble
