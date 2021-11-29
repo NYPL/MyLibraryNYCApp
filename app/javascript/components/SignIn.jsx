@@ -77,32 +77,26 @@ render() {
         breakout={<AppBreadcrumbs />}
 
         contentPrimary={
-              <>
-                <div className="content-primary content-primary--with-sidebar-right card_details">
-                {<Notification className="sign_in_notification_msg" dismissible >
-                  <Icon align="left" color="section.research.secondary" name="check" size="large"/>
-                  <NotificationContent>
-                    Your DOE email address will look like jsmith@schools.nyc.gov, consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
-                  </NotificationContent>
-                </Notification>}
-
-                {<Notification
-                  icon={<Icon align="left" color="section.research.secondary" name="check" size="large"/>}
-                  notificationContent={<>This is a Notification with a custom icon. Cras mattis consectetur purus sit amet fermentum. Maecenas faucibus mollis interdum. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</>}
-                  notificationHeading="Custom Icon"
-                />}
-
-                <TextInput placeholder="example@email.com" type={TextInputTypes.email} 
-                  onChange={this.handleEmail} required />
-                <HelperErrorText id="error-helperText" isError={true}>
-                  <div style={{ display: this.state.error_display }}>
-                    {this.state.invali_email_msg}
-                  </div>
-                </HelperErrorText>
-                <Button buttonType={ButtonTypes.Primary} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
-                <div className="sign-up-link">Not Registered? Please Sign Up</div>
-                </div>
-              </>
+          <>
+            <div style={{ border: '1px solid #ccc' }} >
+              <Notification className="sign_in_notification_msg"
+                dismissible
+                id="basic-notification"
+                
+                notificationContent={<>Your DOE email address will look like jsmith@schools.nyc.gov, consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.</>}
+                notificationType="announcement"
+              />
+            </div>{<br/>}
+            <TextInput placeholder="example@email.com" type={TextInputTypes.email} 
+              onChange={this.handleEmail} required />
+            <HelperErrorText id="error-helperText" isError={true}>
+              <div style={{ display: this.state.error_display }}>
+                {this.state.invali_email_msg}
+              </div>
+            </HelperErrorText>
+            <Button buttonType={ButtonTypes.Primary} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
+            <div className="sign-up-link">Not Registered? Please Sign Up</div>
+          </>
         }
         contentSidebar={<></>}
         sidebar="right"
