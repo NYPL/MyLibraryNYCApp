@@ -53,6 +53,7 @@ gem 'nokogiri'
 gem 'open_uri_redirections'
 gem 'paper_trail', '~> 11.1'
 gem 'pg', '~> 1.2'
+gem 'rack-cors'
 gem 'rails-controller-testing'
 gem 'rubocop','~> 0.59.1', require: false
 gem 'test-unit'
