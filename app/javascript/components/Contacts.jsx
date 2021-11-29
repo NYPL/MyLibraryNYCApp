@@ -7,7 +7,7 @@ const Contacts = (props) => {
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
-            <div className="contacts_page">
+            <div className="navbarPages">
               <div className="contacts_page_text">
                 Have a question about library cards, your account, or {<br/>}
                 library staff visiting your school for professional development?
@@ -44,7 +44,7 @@ const Contacts = (props) => {
               </div>
             </div>
           }
-          contentSidebar=""
+          contentSidebar={<></>}
           sidebar="right"          
         />
       </DSProvider>

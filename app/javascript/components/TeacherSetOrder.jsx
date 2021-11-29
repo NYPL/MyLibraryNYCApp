@@ -28,18 +28,20 @@ export default class TeacherSetOrder extends React.Component {
   
 
   componentDidMount() {
-    console.log(typeof this.state.hold == 'string')
+    console.log(this.props.match.params.access_key + "ppppp")
     if (typeof this.state.hold == 'string') {
       axios.get('/holds/' + this.props.match.params.access_key)
         .then((res) => {
           const { data } = res;
-          if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
-            window.location = res.request.responseURL;
-            return false;
-          } else {
-            console.log(res.data.status_label + "status label")
-            this.setState({ teacher_set: res.data.teacher_set, hold: res.data.hold, status_label: res.data.status_label });
-          }
+          console.log(res.data + "oooooooooooooooooooooo")
+          // This fix depending on the nypl design  system.
+          // if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
+          //   window.location = res.request.responseURL;
+          //   return false;
+          // } else {
+          //   console.log(res.data.status_label + "status label")
+          //   this.setState({ teacher_set: res.data.teacher_set, hold: res.data.hold, status_label: res.data.status_label });
+          // }
       })
       .catch(function (error) {
         console.log(error); 

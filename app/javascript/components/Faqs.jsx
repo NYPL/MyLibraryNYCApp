@@ -54,11 +54,11 @@ export default class Faqs extends Component {
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
-            <div className="faq_list nypl-ds">
+            <div className="navbarPages">
               <Accordion contentData={this.FrequentlyAskedQuestions()} />
             </div>
           }
-          contentSidebar=""
+          contentSidebar={<></>}
           sidebar="right" 
         />
       </DSProvider>

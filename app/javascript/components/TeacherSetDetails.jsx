@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
-import { Route, BrowserRouter as Router, Switch , Redirect, DSProvider, TemplateAppContainer} from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch , Redirect} from "react-router-dom";
 
 import axios from 'axios';
 import {
@@ -18,7 +18,7 @@ import {
   MDXCreateElement,
   Heading,
   Image,
-  List, Link, LinkTypes
+  List, Link, LinkTypes, DSProvider, TemplateAppContainer
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -132,6 +132,7 @@ export default class TeacherSetDetails extends React.Component {
       )
     }, this);
 
+
     let teacher_set =  this.state.teacher_set
     let suitabilities_string = teacher_set.suitabilities_string;
     let primary_language = teacher_set.primary_language;
@@ -143,13 +144,12 @@ export default class TeacherSetDetails extends React.Component {
 
 
     return (
-      <>
-        <AppBreadcrumbs />
-
-        <div className="layout-container nypl-ds">
-          <main className="main main--with-sidebar">
-            <div className="content-primary content-primary--with-sidebar-right">
-              <div className="content-top card_details">
+      <DSProvider>
+        <TemplateAppContainer
+          breakout={<AppBreadcrumbs />}
+          contentPrimary={
+            <>
+                <div className="content-top card_details">
                   <Card layout="row" border className="order-list">
 
                     <CardHeading level={3} className="ts-details">
@@ -166,12 +166,9 @@ export default class TeacherSetDetails extends React.Component {
 
                     <CardHeading level={5}>
                       <div id="teacher_set_details">
-                        <SearchBar onSubmit={this.handleSubmit}>
-                          <Select ariaLabel="Filter Search" id="select-searchBar" onChange={this.handleQuantity} selectedOption={this.state.field} name="search_scope">
-                            {allowed_quantities}      
-                          </Select>
-                          <Button disabled={this.state.disableOrderButton} buttonType={ButtonTypes.Primary} id="button" type="submit"> Place Order </Button> 
-                        </SearchBar> 
+                        
+                        <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search" }} />
+
                       </div>
                     </CardHeading>
                   </Card>
@@ -229,18 +226,11 @@ export default class TeacherSetDetails extends React.Component {
                 </List>
               </div>
 
-              <a target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>
-            </div>
-
-            <div className="content-secondary content-secondary--with-sidebar-right">
-            
-            </div>
-          </main>
-
-        </div>
-
-      </>
+              <a target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>           
+            </>
+          }
+        />
+      </DSProvider>
     )
   }
-
 }
