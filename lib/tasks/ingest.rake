@@ -478,7 +478,6 @@ namespace :ingest do
     end
   end
 
-
   desc "Deactivate schools from authorized list"
   task :deactivate_schools, [] => :environment do |t, args|
     path = 'db/2015SchoolUpdate/dropped-schools.csv' # TODO: remove hardcoding
