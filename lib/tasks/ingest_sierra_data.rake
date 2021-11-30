@@ -5,7 +5,7 @@ require 'uri'
 
 require 'csv'
 
-namespace :ingest_sierra_codes do
+namespace :ingest_sierra_data do
 
   desc "Import sierra_codes and zcodes"
   task :import_sierra_codes_and_zcodes, [:file_name] => :environment do |t, args|
