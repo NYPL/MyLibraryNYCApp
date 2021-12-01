@@ -147,31 +147,29 @@ export default class SearchTeacherSets extends Component {
 
   render() {
     return (
-      <>
-        <DSProvider>
-          <TemplateAppContainer
-            breakout={<AppBreadcrumbs />}
-            contentTop={<>
-                <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword()}} />
-                {<br/>}
-                <Heading id="heading2" level={2} text="Seach and Find Teacher Sets" />
-                <Heading id="heading5" level={5} text="Check Out Newly Arrived Teacher Sets" />
-                <HorizontalRule align="left" height="3px" width="856px" className="teacherSetHorizontal"/>
+      <DSProvider>
+        <TemplateAppContainer
+          breakout={<AppBreadcrumbs />}
+          contentTop={<>
+              <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword()}} />
+              {<br/>}
+              <Heading id="heading2" level={2} text="Seach and Find Teacher Sets" />
+              <Heading id="heading5" level={5} text="Check Out Newly Arrived Teacher Sets" />
+              <HorizontalRule align="left" height="3px" width="856px" className="teacherSetHorizontal"/>
+            </>
+          }
+          contentPrimary={
+              <>
+                <div>{this.TeacherSetDetails()}</div>
+                <div style={{ display: this.state.pagination }}>
+                  <Pagination currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.ts_total_count} />
+                </div>
               </>
             }
-            contentPrimary={
-                <>
-                  <div>{this.TeacherSetDetails()}</div>
-                  <div style={{ display: this.state.pagination }}>
-                    <Pagination currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.ts_total_count} />
-                  </div>
-                </>
-              }
-            contentSidebar={this.TeacherSetFacets()}
-            sidebar="left" 
-          />
-        </DSProvider>
-      </>
+          contentSidebar={this.TeacherSetFacets()}
+          sidebar="left" 
+        />
+      </DSProvider>
     )
   }
 }
