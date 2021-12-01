@@ -11,6 +11,7 @@ SimpleCov.start 'rails' do
 end
 # fail unit tests if total coverage dips below acceptable limit
 # SimpleCov.minimum_coverage 62.7 #for testing
+
 # fail unit tests if any file's individual coverage dips below acceptable limit
 SimpleCov.minimum_coverage_by_file 0
 
@@ -4139,6 +4140,7 @@ class ActiveSupport::TestCase
         }).
       to_return(status: 200, body: "", headers: {})
   end
+
 end
 
 begin

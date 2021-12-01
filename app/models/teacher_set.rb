@@ -190,9 +190,17 @@ class TeacherSet < ActiveRecord::Base
     TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
   end
 
-
+    
   def self.create_or_update_teacher_set(req_body)
     bib_id = req_body['id']
+
+    if req_body["suppressed"]
+      # If bib request-body has suppressed value as true then delete teacher-set from database and elastic-search.
+      teacher_set = self.delete_teacher_set(bib_id, req_body["suppressed"])
+      if teacher_set.destroyed?
+        raise SuppressedBibRecordException.new(BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:code], BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:msg])
+      end
+    end
     teacher_set = self.initialize_teacher_set(bib_id)
     # Calls Bib service for items.
     # Calculates the total number of items and available items in the list.
@@ -276,11 +284,15 @@ class TeacherSet < ActiveRecord::Base
 
 
   # Delete teacher-set record from db and elastic search.
-  def self.delete_teacher_set(bib_id)
+  def self.delete_teacher_set(bib_id, suppressed=false)
     # Get teacher-set record by bib_id
     teacher_set = self.get_teacher_set_by_bnumber(bib_id)
     unless teacher_set.present?
-      raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code],BIB_RECORD_NOT_FOUND[:msg])
+      if suppressed
+        raise SuppressedBibRecordException.new(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:code],BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:msg])
+      else
+        raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code],BIB_RECORD_NOT_FOUND[:msg])
+      end
     end
     
     # Delete teacher-set record

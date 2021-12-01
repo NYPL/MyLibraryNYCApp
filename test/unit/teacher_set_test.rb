@@ -211,8 +211,11 @@ class TeacherSetTest < ActiveSupport::TestCase
       resp = nil
       es_resp = {"_index"=>"teacherset", "_type"=>"teacherset", "_id"=>914202741, "_version"=>11, 
                  "result"=>"updated", "_shards"=>{"total"=>0, "successful"=>1, "failed"=>0}}
-      bibd_id = SIERRA_USER["data"][0]['id']
 
+      SIERRA_USER["data"][0]['id'] = rand.to_s[3..8]
+      bib_id = SIERRA_USER["data"][0]['id']
+
+      SIERRA_USER["data"][0]['suppressed'] = false
       ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
       
       TeacherSet.stub_any_instance :get_items_info_from_bibs_service, ts_items_info do
@@ -220,7 +223,41 @@ class TeacherSetTest < ActiveSupport::TestCase
           resp = TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
         end
       end
-      assert_equal(@teacher_set6.bnumber, resp.bnumber)
+      assert_equal("b#{bib_id}", resp.bnumber)
+    end
+
+    it 'Bib request-body has suppressed value as true then delete teacher-set from database and elastic-search' do
+      bib_id = rand.to_s[2..8] 
+      # Create dedicated teacher-set record with bib_id
+      TeacherSet.create(bnumber: "b#{bib_id}")
+
+      SIERRA_USER["data"][0]['suppressed'] = true
+      SIERRA_USER["data"][0]['id'] = bib_id
+
+      es_response = {"found" => true, "result" => 'deleted'}
+      resp = assert_raises(SuppressedBibRecordException) do
+        TeacherSet.stub_any_instance :delete_teacherset_record_from_es, es_response do
+          TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
+        end
+      end
+
+      assert_equal(BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:code], resp.code)
+      assert_equal(BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:msg], resp.message)
+    end
+
+    it 'Bib request-body has suppressed value as true but teacher-set record not found in database' do
+      bib_id = rand.to_s[2..8] 
+      # Created teacher-set record not saved in DB.
+      TeacherSet.new(bnumber: "b#{bib_id}")
+
+      SIERRA_USER["data"][0]['suppressed'] = true
+      SIERRA_USER["data"][0]['id'] = bib_id
+
+      resp = assert_raises(SuppressedBibRecordException) do
+        TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
+      end
+      assert_equal(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:code], resp.code)
+      assert_equal(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:msg], resp.message)
     end
   end
 

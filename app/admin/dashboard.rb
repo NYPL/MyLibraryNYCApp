@@ -171,8 +171,16 @@ ActiveAdmin.register_page "Dashboard" do
           i = 0
           table_for pending_holds, {sortable: 'pending', :class => 'index_table'} do
             column "#" do i += 1 end
-            column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-            column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+            column 'Set', sortable: :p_set do |h| 
+              if h.teacher_set.present?
+                link_to h.teacher_set.title, admin_hold_path(h)
+              else
+                "This teacher set no longer exists."
+              end
+            end
+            column 'Call Number', sortable: :p_call_number do |h| 
+              link_to h.teacher_set.call_number, admin_hold_path(h) if h.teacher_set.present?
+            end
             column 'Quantity', sortable: :quantity do |h|
               if !h.quantity.nil?
                 h.quantity
@@ -201,8 +209,16 @@ ActiveAdmin.register_page "Dashboard" do
           i = 0
           table_for pending_transit, {sortable: 'pending', :class => 'index_table'} do
             column "#" do i += 1 end
-            column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-            column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+            column 'Set', sortable: :p_set do |h|
+              if h.teacher_set.present?
+                link_to h.teacher_set.title, admin_hold_path(h)
+              else
+                "This teacher set no longer exists."
+              end
+            end
+            column 'Call Number', sortable: :p_call_number do |h|
+              link_to h.teacher_set.call_number, admin_hold_path(h) if h.teacher_set.present?
+            end
             column 'Quantity', sortable: :quantity do |h|
               if !h.quantity.nil?
                 h.quantity
@@ -231,8 +247,16 @@ ActiveAdmin.register_page "Dashboard" do
           i = 0
           table_for pending_trouble, {sortable: 'pending', :class => 'index_table'} do
             column "#" do i += 1 end
-            column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-            column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+            column 'Set', sortable: :p_set do |h|
+              if h.teacher_set.present?
+                link_to h.teacher_set.title, admin_hold_path(h)
+              else
+                "This teacher set no longer exists."
+              end
+            end
+            column 'Call Number', sortable: :p_call_number do |h|
+              link_to h.teacher_set.call_number, admin_hold_path(h) if h.teacher_set.present?
+            end
             column 'Quantity', sortable: :quantity do |h|
               if !h.quantity.nil?
                 h.quantity
@@ -261,8 +285,16 @@ ActiveAdmin.register_page "Dashboard" do
           i = 0
           table_for pending_unavailable, {sortable: 'pending', :class => 'index_table'} do
             column "#" do i += 1 end
-            column 'Set', sortable: :p_set do |h| link_to h.teacher_set.title, admin_hold_path(h) end
-            column 'Call Number', sortable: :p_call_number do |h| link_to h.teacher_set.call_number, admin_hold_path(h) end
+            column 'Set', sortable: :p_set do |h|
+              if h.teacher_set.present?
+                link_to h.teacher_set.title, admin_hold_path(h)
+              else
+                "This teacher set no longer exists."
+              end
+            end
+            column 'Call Number', sortable: :p_call_number do |h|
+              link_to h.teacher_set.call_number, admin_hold_path(h) if h.teacher_set.present?
+            end
             column 'Quantity', sortable: :quantity do |h|
               if !h.quantity.nil?
                 h.quantity
