@@ -14,6 +14,8 @@ class School < ActiveRecord::Base
   default_scope { order('name ASC') }
 
   scope :active, -> { where(active: true) }
+  
+  validates :name, :presence => true
 
   # Full name of school + comma & borough if borough is present.
   # Comma can be overridden with any other punctuation mark that is passed in as the one argument.
