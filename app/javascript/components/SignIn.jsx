@@ -11,6 +11,7 @@ import {
   TextInput, TextInputTypes, HelperErrorText, DSProvider, TemplateAppContainer, Icon, NotificationContent, Notification, Card,
   CardHeading, CardContent, CardLayouts, HeadingLevels
 } from '@nypl/design-system-react-components';
+import questionCircle from '../images/fa-question-circle.svg'
 
 
 export default class SignIn extends Component {
@@ -80,23 +81,14 @@ render() {
         contentPrimary={
           <>
             <div>
-              Your DOE Email Address
-              <Collapsible trigger={<Icon align="none" color="ui.black" iconRotation="rotate90" name="action_check_circle" size="small" />}>
-                <div style={{ border: '1px solid #ccc' }} >
-                  <Notification className="sign_in_notification_msg"
-                    dismissible
-                    id="basic-notification"
-                    
-                    notificationContent={<>Your DOE email address will look like jsmith@schools.nyc.gov, consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.</>}
-                    notificationType="announcement"
-                  />
+              <Collapsible trigger={<>Your DOE Email Address <Icon align="none" color="ui.black" iconRotation="rotate0" name="error_filled" size="small" /></>}>
+                {<br/>}
+                <div style={{ border: '1px solid #ccc', padding: '10px' }} className="font_size_12" >
+                  Your DOE email address will look like jsmith@schools.nyc.gov, consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
                 </div>
               </Collapsible> 
-            </div> {<br/>}
-            
-
-            
-
+            </div>
+            {<br/>}
             <TextInput placeholder="example@email.com" type={TextInputTypes.email} 
               onChange={this.handleEmail} required />
             <HelperErrorText id="error-helperText" isError={true}>
