@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
-
+import Collapsible from 'react-collapsible';
 import {
   Button,
   ButtonTypes,
@@ -79,15 +79,23 @@ render() {
 
         contentPrimary={
           <>
-            <div style={{ border: '1px solid #ccc' }} >
-              <Notification className="sign_in_notification_msg"
-                dismissible
-                id="basic-notification"
-                
-                notificationContent={<>Your DOE email address will look like jsmith@schools.nyc.gov, consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.</>}
-                notificationType="announcement"
-              />
-            </div>{<br/>}
+            <div>
+              Your DOE Email Address
+              <Collapsible trigger={<Icon align="none" color="ui.black" iconRotation="rotate90" name="action_check_circle" size="small" />}>
+                <div style={{ border: '1px solid #ccc' }} >
+                  <Notification className="sign_in_notification_msg"
+                    dismissible
+                    id="basic-notification"
+                    
+                    notificationContent={<>Your DOE email address will look like jsmith@schools.nyc.gov, consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.</>}
+                    notificationType="announcement"
+                  />
+                </div>
+              </Collapsible> 
+            </div> {<br/>}
+            
+
+            
 
             <TextInput placeholder="example@email.com" type={TextInputTypes.email} 
               onChange={this.handleEmail} required />
