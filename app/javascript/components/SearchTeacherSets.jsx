@@ -114,7 +114,7 @@ export default class SearchTeacherSets extends Component {
       return <div className="teacherSetResults">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
           <Card layout={CardLayouts.Row} center imageSrc={bookImage} 
-                imageAlt="Alt text" imageAspectRatio={CardImageRatios.TwoByOne} imageSize={CardImageSizes.Small}>
+                imageAlt="Alt text">
             <CardHeading level={3} id="heading1">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id} className="removelink">
                 {ts.title}

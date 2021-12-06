@@ -8,7 +8,8 @@ import {
   ButtonTypes,
   SearchBar,
   Select,
-  TextInput, TextInputTypes, HelperErrorText, DSProvider, TemplateAppContainer, Icon, NotificationContent, Notification
+  TextInput, TextInputTypes, HelperErrorText, DSProvider, TemplateAppContainer, Icon, NotificationContent, Notification, Card,
+  CardHeading, CardContent, CardLayouts, HeadingLevels
 } from '@nypl/design-system-react-components';
 
 
@@ -87,6 +88,7 @@ render() {
                 notificationType="announcement"
               />
             </div>{<br/>}
+
             <TextInput placeholder="example@email.com" type={TextInputTypes.email} 
               onChange={this.handleEmail} required />
             <HelperErrorText id="error-helperText" isError={true}>
