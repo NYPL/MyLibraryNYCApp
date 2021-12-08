@@ -81,7 +81,6 @@ ActiveAdmin.register Hold do
   end
 
   show do |ad|
-
     h2 "Status: #{ad.status}"
     h3 do link_to 'Change Status', new_admin_hold_change_path(:hold => ad) end
 

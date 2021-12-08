@@ -5,3 +5,8 @@ hold_changes1:
   admin_user_id: 1
   status: new
   hold: hold2
+hold_changes2:
+  hold_id: hold10.id
+  admin_user_id: 1
+  status: new
+  hold: hold10
