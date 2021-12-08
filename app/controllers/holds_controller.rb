@@ -81,13 +81,15 @@ class HoldsController < ApplicationController
       respond_to do |format|
         if @hold.save
           teacher_set = @hold.teacher_set
+          LogWrapper.log('INFO', {message: 'Teacher-set hold is created', method: __method__, 
+                         teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
          
           # Update teacher-set availability in DB
           teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
           
           # Update teacher-set availability in elastic search document
           teacher_set.update_teacher_set_availability_in_elastic_search
-          LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
+
           format.html { redirect_to hold_url(@hold.access_key), notice:
             'Your order has been received by our system and will soon be delivered to your school.\
             <br/><br/>Check your email inbox for a message with further details.' 
@@ -125,13 +127,13 @@ class HoldsController < ApplicationController
       if c[:status] == 'cancelled'
         teacher_set = @hold.teacher_set
         
+        LogWrapper.log('INFO', {message: 'Teacher-set hold is cancelled', method: __method__, 
+                                teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
         # Update teacher-set availability in DB
         teacher_set.update_teacher_set_availability_in_db('cancelled', nil, current_user, @hold.id)
 
         # Update teacher-set availability in elastic search document
         teacher_set.update_teacher_set_availability_in_elastic_search
-
-        LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
         @hold.cancel! c[:comment]
       end
     end
