@@ -60,6 +60,7 @@ class HoldMailer < ActionMailer::Base
     end
   end
 
+  
   def teacher_set_deleted_notification(hold, status, details)
     begin
       @hold = hold

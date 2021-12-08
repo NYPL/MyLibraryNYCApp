@@ -31,7 +31,7 @@ class HoldChange < ActiveRecord::Base
     HoldMailer.teacher_set_deleted_notification(hold, status, comment).deliver if ['closed', 'cancelled'].include? status
   end
   
-  
+
   def update_hold
     # puts "updating hold status: ", hold.status, status
     hold.status = status
