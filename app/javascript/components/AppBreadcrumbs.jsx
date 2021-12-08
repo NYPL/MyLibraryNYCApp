@@ -33,10 +33,10 @@ export default class AppBreadcrumbs extends Component {
             { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
             { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(window.location.href.split('/')[3]) } 
            ] } 
-            colorVariant="locations"
+            colorVariant="booksAndMore"
           />
           <Hero heroType="tertiary"
-                backgroundColor="#D23B42"
+                backgroundColor="var(--nypl-colors-brand-primary)"
                 heading={<Heading level={HeadingLevels.One} id="books-hero" text={BreadcrumbsDataValue(window.location.href.split('/')[3])} />} />
 
         </>
