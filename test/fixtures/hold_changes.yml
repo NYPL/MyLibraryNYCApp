@@ -6,7 +6,7 @@ hold_changes1:
   status: new
   hold: hold2
 hold_changes2:
-  hold_id: hold10.id
+  hold_id: hold11.id
   admin_user_id: 1
   status: new
   hold: hold10

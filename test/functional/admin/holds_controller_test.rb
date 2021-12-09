@@ -5,7 +5,7 @@ module Admin
   class HoldsControllerTest < ActionController::TestCase
     setup do
       @hold = holds(:hold2)
-      @hold10 = holds(:hold10)
+      @hold11 = holds(:hold11)
       sign_in AdminUser.create!(email: 'admin@example.com', password: 'password')
     end
 
@@ -23,8 +23,8 @@ module Admin
 
 
     test "Teacher set no longer exist for hold" do
-      # @hold10 = this hold does not have any teacher-set.
-      get :show, params: { id: @hold10.id }
+      # @hold11 = this hold does not have any teacher-set.
+      get :show, params: { id: @hold11.id }
       assert_equal("200", response.code)
       assert_response :success
     end

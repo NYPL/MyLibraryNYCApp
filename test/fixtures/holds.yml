@@ -64,8 +64,16 @@ hold9:
 
 hold10:
   access_key: access_key10
+  teacher_set: teacher_set_eight
+  status: new
+  user: user1
+  quantity: 2
+  teacher_set_id: teacher_set_eight.id
+hold11:
+  access_key: access_key11
   teacher_set: nil
   status: new
+  teacher_set: teacher_set_eight
   user: user1
   quantity: 2
   teacher_set_id: teacher_set_eight.id
