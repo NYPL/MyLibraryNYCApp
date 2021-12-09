@@ -67,7 +67,7 @@ class HoldMailer < ActionMailer::Base
       @hold.status = status
       @user = hold.user
       @details = details
-      mail(:to => @user.contact_email, :subject => "Order #{@hold.status} | Teacher Set you requested has been deleted.")
+      mail(:to => @user.contact_email, :subject => "Order #{@hold.status} | The Teacher Set you requested has been deleted")
     rescue => exception
       LogWrapper.log('ERROR', {
         'message' => "Cannot send teacher_set deleted notification email.  Backtrace=#{exception.backtrace}.",

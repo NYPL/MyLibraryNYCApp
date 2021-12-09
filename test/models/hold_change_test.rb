@@ -36,7 +36,7 @@ class HoldChangeTest < ActionController::TestCase
   test 'send hold teacher_set deleted email' do
     @hold_changes1.status = 'closed'
     resp = @hold_changes1.send_teacher_set_deleted_email
-    assert_equal("Order closed | Teacher Set you requested has been deleted.", resp.subject)
+    assert_equal("Order closed | The Teacher Set you requested has been deleted", resp.subject)
   end
 
   test 'send email after saving the hold_change' do
@@ -48,6 +48,6 @@ class HoldChangeTest < ActionController::TestCase
     # test2 : Send deleted teacher-set notification email If Teacher-set is not available
     @hold_changes2.status = 'closed'
     resp = @hold_changes2.do_after_save
-    assert_equal("Order closed | Teacher Set you requested has been deleted.", resp.subject)
+    assert_equal("Order closed | The Teacher Set you requested has been deleted", resp.subject)
   end
 end
