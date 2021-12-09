@@ -6,7 +6,8 @@ class SchoolsController < ApplicationController
     schools = School.active
     # Group by first letter of the school.
     group_by_schools = schools.group_by { |school| school.name[0] }
-    @schools_arr = []
+    schools_arr = []
+    anchor_tags = ["#"] + ('A'..'Z').to_a
     group_by_schools.each do |alphabet_anchor, school_objects|
       next unless alphabet_anchor.present?
       
@@ -14,13 +15,15 @@ class SchoolsController < ApplicationController
       # If school name starts with alphabet letter, school names will display under aplhabet anchor eg: 'A' Academy for Careers (12), Academy(22).
       # If school name does not start with alphabet letter, school names will display under '#' anchor. eg: '#' 486 newyork school (86),  56test(234).
       school_hash['alphabet_anchor'] = alphabet_anchor.match?(/[A-Za-z]/) ? alphabet_anchor : '#'
+      
+
       school_hash['school_names'] = school_objects.collect do |school|
         code = school.code.present? ? school.code[1..-1].upcase : ""
         "#{school.name} (#{code})"
       end
-      @schools_arr << school_hash
+      schools_arr << school_hash
     end
-    render json: { schools: @schools_arr }
+    render json: { schools: schools_arr, anchor_tags: anchor_tags }
   end
 
   def participating_schools_data
