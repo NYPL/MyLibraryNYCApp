@@ -81,7 +81,6 @@ ActiveAdmin.register Hold do
   end
 
   show do |ad|
-
     h2 "Status: #{ad.status}"
     h3 do link_to 'Change Status', new_admin_hold_change_path(:hold => ad) end
 
@@ -122,20 +121,28 @@ ActiveAdmin.register Hold do
           "Teacher set deleted. Please cancel the hold."
         end
       end
-      [:quantity, :date_required, :created_at, :updated_at].each do |prop|
+
+      if ad.teacher_set.present?
+        row :quantity
+      end
+
+      [:date_required, :created_at, :updated_at].each do |prop|
         row prop
       end
     end
 
-    panel "Books" do
-      if ad.teacher_set.books.count.positive?
-        table_for ad.teacher_set.books do
-          column 'Image' do |b| if b.image_uri.nil? then 'None' else link_to image_tag(b.image_uri(:small)), admin_book_path(b) end end
-          column 'Title' do |b| link_to b.title, admin_book_path(b) end
-          column 'Author(s)' do |b| link_to b.statement_of_responsibility, admin_book_path(b) end
+    if ad.teacher_set.present?
+      panel "Books" do
+        if ad.teacher_set.books.count.positive?
+          table_for ad.teacher_set.books do
+            column 'Image' do |b| if b.image_uri.nil? then 'None' else link_to image_tag(b.image_uri(:small)), admin_book_path(b) end end
+            column 'Title' do |b| link_to b.title, admin_book_path(b) end
+            column 'Author(s)' do |b| link_to b.statement_of_responsibility, admin_book_path(b) end
+          end
         end
       end
     end
+
   end
 
   member_action :close, :method => :put do
