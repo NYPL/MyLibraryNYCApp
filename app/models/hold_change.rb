@@ -13,7 +13,11 @@ class HoldChange < ActiveRecord::Base
 
   def do_after_save
     update_hold
-    send_change_status_email
+    if hold.teacher_set.present?
+      send_change_status_email
+    else
+      send_teacher_set_deleted_email
+    end
   end
 
   
@@ -22,7 +26,12 @@ class HoldChange < ActiveRecord::Base
     HoldMailer.status_change(hold, status, comment).deliver if ['error', 'pending', 'closed', 'cancelled'].include? status
   end
 
+
+  def send_teacher_set_deleted_email
+    HoldMailer.teacher_set_deleted_notification(hold, status, comment).deliver if ['closed', 'cancelled'].include? status
+  end
   
+
   def update_hold
     # puts "updating hold status: ", hold.status, status
     hold.status = status

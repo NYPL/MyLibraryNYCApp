@@ -1,0 +1,12 @@
+Your order status is <%= @hold.status %>.
+
+<p>
+  The Teacher Set you requested has been deleted, and so your hold has been cancelled.
+  Please visit <%= ENV['MLN_INFO_SITE_HOSTNAME'] %> to request a different Teacher Set."
+</p>
+
+<p>
+  Thank You,<br />
+  MyLibraryNYC<br />
+  <%= link_to "#{root_url}", root_url %>
+</p>
