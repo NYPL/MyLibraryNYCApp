@@ -54,7 +54,7 @@ export default class TeacherSetDetails extends React.Component {
   }
 
 
-  const handleQuantity = event => {
+  handleQuantity = event => {
     this.setState({
       quantity: event.target.value
     })
