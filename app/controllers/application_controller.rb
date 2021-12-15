@@ -52,7 +52,6 @@ class ApplicationController < ActionController::Base
   ##
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
-
     LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
                              'method' => 'app/controllers/application_controller.rb.after_sign_in_path_for'})
     # be careful -- after first access stored_location_for clears to a nil, so read it once
@@ -144,7 +143,9 @@ class ApplicationController < ActionController::Base
     originating_location = request.fullpath
     if originating_location.present?
       # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
-      originating_location = "#{app_url}##{originating_location}".gsub! '.json', ''
+      if params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
+        originating_location = "teacher_set_details/#{params["id"]}"
+      end
     end
 
     # :user is the scope we are authenticating

@@ -20,9 +20,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  CardImageRatios,
-  CardImageSizes,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -50,6 +48,7 @@ export default class SearchTeacherSets extends Component {
 
 
   getTeacherSets() {
+    console.log(this.state.keyword + "plplpl")
     axios.get('/teacher_sets', {
         params: {
           keyword: this.state.keyword
@@ -57,9 +56,6 @@ export default class SearchTeacherSets extends Component {
      }).then(res => {
         this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
                         ts_total_count: res.data.total_count });
-
-        console.log(this.state.facets);
-
 
         if (res.data.total_count > 20) {
           this.state.pagination = 'block';
@@ -84,11 +80,15 @@ export default class SearchTeacherSets extends Component {
 
   
   handleSearchKeyword = event => {
-    // this.setState({
-    //   keyword: event.target.value
-    // })
+    
+    if (event.target.value == "") {
+      delete this.state.keyword;
+      this.props.history.push("/teacher_set_data");
+      this.getTeacherSets();
+    } else {
+      this.setState({  keyword: event.target.value })
+    }
   }
-
 
 
 
@@ -113,13 +113,14 @@ export default class SearchTeacherSets extends Component {
     return this.state.teacher_sets.map((ts, i) => {
       return <div className="teacherSetResults">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
-          <Card layout={CardLayouts.Row} center imageSrc={bookImage} 
-                imageAlt="Alt text">
-            <CardHeading level={3} id="heading1">
+ 
+          <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.square} imageSize={ImageSizes.Small}>
+            <CardHeading level={HeadingLevels.Three} id="row2-heading1">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id} className="removelink">
                 {ts.title}
               </ReactRouterLink>
             </CardHeading>
+
             
             <CardContent> {ts.suitabilities_string} </CardContent>
             <CardContent> {ts.availability} </CardContent>
@@ -135,7 +136,6 @@ export default class SearchTeacherSets extends Component {
   TeacherSetFacets() {
     return this.state.facets.map((ts, i) => {
       return <div className="nypl-ds">{<br/>}
-
       <div> { ts.label } </div>
         { ts.items.map((item, index) =>
           <div> <Checkbox id="test_id" labelText={item["label"]} showLabel />  </div>
@@ -151,7 +151,14 @@ export default class SearchTeacherSets extends Component {
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentTop={<>
-              <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword()}} />
+              <SearchBar onSubmit={this.handleSubmit} 
+                textInputProps={{
+                  labelText: "Search Teacher set",
+                  name: "textInputName",
+                  onChange: this.handleSearchKeyword,
+                  placeholder: "Search Teacher set"
+                }}
+              />
               {<br/>}
               <Heading id="heading2" level={2} text="Seach and Find Teacher Sets" />
               <Heading id="heading5" level={5} text="Check Out Newly Arrived Teacher Sets" />
@@ -166,7 +173,9 @@ export default class SearchTeacherSets extends Component {
                 </div>
               </>
             }
-          contentSidebar={this.TeacherSetFacets()}
+          contentSidebar={<>
+              {this.TeacherSetFacets()}
+          </>}
           sidebar="left" 
         />
       </DSProvider>
@@ -175,6 +184,6 @@ export default class SearchTeacherSets extends Component {
 }
 
 SearchTeacherSets.defaultProps = {
-  keyword: ''
+  keyword: null
 };
 

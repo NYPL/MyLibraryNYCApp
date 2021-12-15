@@ -60,9 +60,7 @@ handleSubmit = event => {
         window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ':3000/' + res.data.user_return_to
         return false;
       } else {
-        console.log("ppppppppmmmmmm")
         this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
-
       }
 
     })
@@ -81,16 +79,15 @@ render() {
         contentPrimary={
           <>
             <div>
-              <Collapsible trigger={<>Your DOE Email Address <Icon align="none" color="ui.black" iconRotation="rotate0" name="error_filled" size="small" /></>}>
+              <Collapsible trigger={<>Your DOE Email Address <Icon align="none" color="ui.black" iconRotation="rotate0" name="action_help_default" size="small" /></>}>
                 {<br/>}
-                <div style={{ border: '1px solid #ccc', padding: '10px' }} className="font_size_12" >
-                  <Notification notificationType={NotificationTypes.Announcement} notificationContent={<>
+                <div className="font_size_12" >
+                  <Notification noMargin notificationType={NotificationTypes.Announcement} notificationContent={<>
                     Your DOE email address will look like jsmith@schools.nyc.gov, consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
                   </>} />
                 </div>
               </Collapsible> 
             </div>
-            {<br/>}
             <TextInput placeholder="example@email.com" type={TextInputTypes.email} 
               onChange={this.handleEmail} required />
             <HelperErrorText id="error-helperText" isError={true}>

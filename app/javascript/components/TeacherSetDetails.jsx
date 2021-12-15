@@ -18,17 +18,18 @@ import {
   MDXCreateElement,
   Heading,
   Image,
-  List, Link, LinkTypes, DSProvider, TemplateAppContainer
+  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
+
 
 
 export default class TeacherSetDetails extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { ts_details: {}, allowed_quantities: [], teacher_set: "", active_hold: "", books: [], 
+    this.state = { ts_details: {}, allowed_quantities: [], teacher_set: "", active_hold: "", books: [], value: "",
                    quantity: "", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true };
   }
 
@@ -36,9 +37,6 @@ export default class TeacherSetDetails extends React.Component {
   componentDidMount() {
     axios.get('/teacher_sets/'+ this.props.match.params.id)
       .then(res => {
-
-        console.log(res.data.allowed_quantities.length + " kkkkk")
-
         this.setState({ allowed_quantities: res.data.allowed_quantities, 
                         teacher_set: res.data.teacher_set, 
                         books: res.data.books, 
@@ -52,27 +50,28 @@ export default class TeacherSetDetails extends React.Component {
       })
       .catch(function (error) {
         console.log(error);
-    })
-
-
-    
+    })    
   }
 
 
-  handleQuantity = event => {  
+  const handleQuantity = event => {
     this.setState({
       quantity: event.target.value
     })
   }
 
-
   handleSubmit = event => {
+    console.log("order submit")
     event.preventDefault();
+
     axios.post('/holds', {
         teacher_set_id: this.props.match.params.id
      }).then(res => {
-        console.log(res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start")
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
+      
+        console.log(res.request.responseURL + " plpl")
+        console.log(process.env.MLN_INFO_SITE_HOSTNAME + " oookok")
+
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
           window.location = res.request.responseURL;
           return false;
         } else {
@@ -149,9 +148,9 @@ export default class TeacherSetDetails extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
+
                 <div className="content-top card_details">
                   <Card layout="row" border className="order-list">
-
                     <CardHeading level={3} className="ts-details">
                      { this.TeacherSetTitle() }
                     </CardHeading>
@@ -160,19 +159,23 @@ export default class TeacherSetDetails extends React.Component {
                      { this.AvailableCopies() }
                     </CardHeading>
 
-                    <CardContent className="italic font-weight-300 tsDeliveryNote" >
-                      Note : Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at help@mylibrarynyc.org
+                    <CardContent>
+                       <Text isItalic>Note : Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at help@mylibrarynyc.org</Text>
                     </CardContent>
 
-                    <CardHeading level={5}>
-                      <div id="teacher_set_details">
-                        
-                        <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search" }} />
+                    <CardContent level={5}>
 
-                      </div>
-                    </CardHeading>
+                      <Form onSubmit={this.handleSubmit} className="selectOrder">
+                        <Select onChange={this.handleQuantity} value="1" className="order_select" >
+                          {allowed_quantities}
+                        </Select>
+                        <Button className="order_select" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
+                      </Form>
+                      
+                    </CardContent>
                   </Card>
-              </div>{<br/>}
+                </div>{<br/>}
+
               <div>
                 <Heading id="heading2" level={2} text="What is in the box" />
                 <div> { this.TeacherSetDescription() } </div>{<br/>}
@@ -229,6 +232,8 @@ export default class TeacherSetDetails extends React.Component {
               <a target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>           
             </>
           }
+          contentSidebar={<></>}
+          sidebar="right"
         />
       </DSProvider>
     )

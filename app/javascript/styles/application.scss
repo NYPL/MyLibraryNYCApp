@@ -670,7 +670,7 @@ ul.list li:before {
 }
 
 .italic {
-  font-style: italic;
+  font-style: italic !important;
 }
 
 .bookImage {
@@ -729,4 +729,12 @@ ul.list li:before {
 
 .font_size_12 {
   font-size: 12px;
+}
+
+.order_select {
+  width: 100px;
+}
+
+.selectOrder {
+  flex-direction: row;
 }
