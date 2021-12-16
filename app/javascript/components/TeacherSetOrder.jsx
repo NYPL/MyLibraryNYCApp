@@ -12,7 +12,7 @@ import {
   Image,
   List,
   Link, LinkTypes, DSProvider, Notification,
-  Icon
+  Icon, TemplateAppContainer, NotificationTypes, Text
 } from '@nypl/design-system-react-components';
 
 
@@ -28,20 +28,20 @@ export default class TeacherSetOrder extends React.Component {
   
 
   componentDidMount() {
-    console.log(this.props.match.params.access_key + "ppppp")
+
     if (typeof this.state.hold == 'string') {
       axios.get('/holds/' + this.props.match.params.access_key)
         .then((res) => {
           const { data } = res;
           console.log(res.data + "oooooooooooooooooooooo")
           // This fix depending on the nypl design  system.
-          // if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
-          //   window.location = res.request.responseURL;
-          //   return false;
-          // } else {
-          //   console.log(res.data.status_label + "status label")
-          //   this.setState({ teacher_set: res.data.teacher_set, hold: res.data.hold, status_label: res.data.status_label });
-          // }
+          if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
+            window.location = res.request.responseURL;
+            return false;
+          } else {
+            console.log(res.data.status_label + "status label")
+            this.setState({ teacher_set: res.data.teacher_set, hold: res.data.hold, status_label: res.data.status_label });
+          }
       })
       .catch(function (error) {
         console.log(error); 
@@ -82,10 +82,7 @@ export default class TeacherSetOrder extends React.Component {
         </dt>
         <dd className="orderDetails">
           {this.state.hold["status"]}
-
           {/*{console.log(Object.entries(this.state.status_label))}*/}
-
-
         </dd>
 
         <dt className="orderDetails font-weight-500">
@@ -105,41 +102,45 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   render() {
-
+    console.log(this.state.hold["status"] + "olololo")
     return (
-      <>
-        <AppBreadcrumbs />
-        <div className="order-message">
-          <Notification>
-            {/*<NotificationHeading>*/}
-              { this.OrderMessage() }
-            {/*</NotificationHeading>*/}
-          </Notification>
-        </div>
-
-        <div className="layout-container nypl-ds">
-          <main className="main main--with-sidebar">
-            <div className="content-primary content-primary--with-sidebar-right">
-            
-              <div className="card_details">
-                  <Heading level={4}>
-                   { this.TeacherSetTitle() }
-                  </Heading>
-
-                 
-                  { this.TeacherSetDescription() }
-
-                  { this.OrderDetails() }
+      <DSProvider>
+        <TemplateAppContainer
+          breakout={<AppBreadcrumbs />}
+          contentPrimary={
+            <>
+              <div className="order-message">
+                <Notification noMargin notificationType={NotificationTypes.Announcement} 
+                  notificationContent={ <Text noSpace displaySize="tag"> { this.OrderMessage() }</Text> } />
               </div>
-              
-              { this.CancelButton() }
+              <div className="layout-container nypl-ds">
+                <main className="main main--with-sidebar">
+                  <div className="content-primary content-primary--with-sidebar-right">
+                  
+                    <div className="card_details">
+                        <Heading level={4}>
+                         { this.TeacherSetTitle() }
+                        </Heading>
 
-              {<br/>}
-              <a href="/teacher_set_data">Go To Search Teacher Sets Page</a>
-            </div>
-            <div className="content-secondary content-secondary--with-sidebar-right"></div>
-          </main>
-        </div>
-      </>
+                       
+                        { this.TeacherSetDescription() }
+
+                        { this.OrderDetails() }
+                    </div>
+                    
+                    { this.CancelButton() }
+
+                    {<br/>}
+                    <a href="/teacher_set_data">Go To Search Teacher Sets Page</a>
+                  </div>
+                  <div className="content-secondary content-secondary--with-sidebar-right"></div>
+                </main>
+              </div>
+            </>
+          }
+        contentSidebar={<></>}
+        sidebar="right"
+      />
+    </DSProvider>
   )}
 }

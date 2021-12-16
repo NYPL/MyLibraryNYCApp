@@ -4,7 +4,8 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
   Button, ButtonTypes,
-  SearchBar, Select, Input, SearchButton, Heading, Image, List, Link, LinkTypes, TextInput, Label
+  SearchBar, Select, Input, SearchButton, Heading, Image, List, Link, LinkTypes, TextInput, Label, DSProvider,
+  TemplateAppContainer
 } from '@nypl/design-system-react-components';
 
 
@@ -18,8 +19,6 @@ export default class TeacherSetOrder extends React.Component {
 
 
   componentDidMount() {
-    console.log(this.props.match.params)
-
     axios({method: 'get', url: '/holds/'+ this.props.match.params.id + '/cancel_details'}).then(res => {
       this.setState({ teacher_set: res.data.teacher_set, hold: res.data.hold });
     })
@@ -33,12 +32,10 @@ export default class TeacherSetOrder extends React.Component {
     this.setState({
       comment: event.target.value
     })
-    console.log(event.target.value + "pppppppp")
   }
 
 
   handleSubmit = event => {
-    console.log("cancel order")
     event.preventDefault();
     axios.put('/holds/'+ this.state.access_key, { hold_change: { status: 'cancelled', comment: this.state.comment } 
      }).then(res => {
@@ -50,7 +47,6 @@ export default class TeacherSetOrder extends React.Component {
         }
       })
       .catch(function (error) {
-        console.log("cancel order fail")
         console.log(error)
     })
   }
@@ -58,23 +54,30 @@ export default class TeacherSetOrder extends React.Component {
 
   render() {  
     return (
-      <>
-        <AppBreadcrumbs />
-        <div className="layout-container nypl-ds">
-          <main className="main main--with-sidebar nypl-ds">
-            <div className="content-primary content-primary--with-sidebar-right main-content">
-              <div className="cancel-header" >Please Confirm, Are you sure you want to cancle this order for </div>{<br/>}
-              <Label htmlFor="inputID-attrs" id={"label"} className="cancel-button-label">
-                Reason For cancelling (optional)
-              </Label>
-              <TextInput id="cancel-order-button" value={this.state.comment} showLabel showOptReqLabel type="text" onChange={this.handleCancelComment}/>
-              <Button className="button-color cancel-button" buttonType="primary" onClick={this.handleSubmit}> Cancel My Order </Button>
-            </div>
+      <DSProvider>
+        <TemplateAppContainer
+          breakout={<AppBreadcrumbs />}
+          contentPrimary={
+            <>
+              <div className="layout-container nypl-ds">
+                <main className="main main--with-sidebar nypl-ds">
+                  <div className="content-primary content-primary--with-sidebar-right main-content">
+                    <div className="cancel-header" >Please Confirm, Are you sure you want to cancle this order for </div>{<br/>}
+                    <Label htmlFor="inputID-attrs" id={"label"} className="cancel-button-label">
+                      Reason For cancelling (optional)
+                    </Label>
+                    <TextInput id="cancel-order-button" value={this.state.comment} showLabel showOptReqLabel type="text" onChange={this.handleCancelComment}/>
+                    <Button className="button-color cancel-button" buttonType="primary" onClick={this.handleSubmit}> Cancel My Order </Button>
+                  </div>
 
-            <div className="content-secondary content-secondary--with-sidebar-right"></div>
-          </main>
-        </div>
-      </>
+                  <div className="content-secondary content-secondary--with-sidebar-right"></div>
+                </main>
+              </div>
+            </>
+          }
+          contentSidebar={<></>}
+          sidebar="right"
+        />
+      </DSProvider>
   )}
-  
 }

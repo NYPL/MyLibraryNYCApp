@@ -8,8 +8,9 @@ import {
   ButtonTypes,
   SearchBar,
   Select,
-  TextInput, TextInputTypes, HelperErrorText, DSProvider, TemplateAppContainer, Icon, Notification, Card, NotificationTypes,
-  CardHeading, CardContent, CardLayouts, HeadingLevels
+  TextInput, TextInputTypes, HelperErrorText, DSProvider, TemplateAppContainer, Icon, 
+  Notification, Card, NotificationTypes,
+  CardHeading, CardContent, CardLayouts, HeadingLevels, Text
 } from '@nypl/design-system-react-components';
 import questionCircle from '../images/fa-question-circle.svg'
 
@@ -78,25 +79,24 @@ render() {
 
         contentPrimary={
           <>
-            <div>
-              <Collapsible trigger={<>Your DOE Email Address <Icon align="none" color="ui.black" iconRotation="rotate0" name="action_help_default" size="small" /></>}>
-                {<br/>}
-                <div className="font_size_12" >
-                  <Notification noMargin notificationType={NotificationTypes.Announcement} notificationContent={<>
-                    Your DOE email address will look like jsmith@schools.nyc.gov, consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
-                  </>} />
-                </div>
-              </Collapsible> 
-            </div>
-            <TextInput placeholder="example@email.com" type={TextInputTypes.email} 
-              onChange={this.handleEmail} required />
-            <HelperErrorText id="error-helperText" isError={true}>
+            <Collapsible trigger={<><Text noSpace displaySize="caption">Your DOE Email Address <Icon align="left" color="ui.black" iconRotation="rotate0" name="action_help_default" size="small" /></Text></>}>
+              <div className="signInEmailAlert">
+                <Notification noMargin notificationType={NotificationTypes.Announcement} 
+                notificationContent={
+                  <Text noSpace displaySize="mini">Your DOE email address will look like jsmith@schools.nyc.gov, 
+                    consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
+                  </Text>} />
+              </div>
+            </Collapsible> 
+            
+            <TextInput className="signInEmail" type={TextInputTypes.email} onChange={this.handleEmail} required />
+            <HelperErrorText isInvalid>
               <div style={{ display: this.state.error_display }}>
                 {this.state.invali_email_msg}
               </div>
             </HelperErrorText>
             <Button buttonType={ButtonTypes.Primary} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
-            <div className="sign-up-link">Not Registered? Please Sign Up</div>
+            <div className="sign-up-link"><Text noSpace displaySize="caption">Not Registered? Please Sign Up </Text></div>
           </>
         }
         contentSidebar={<></>}
