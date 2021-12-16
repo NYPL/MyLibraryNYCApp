@@ -289,6 +289,9 @@ body {
   text-align: center;
   background: #F9F9F9;
   padding-top: 65px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 
@@ -779,4 +782,10 @@ ul.list li:before {
 
 .bookTitlesCount {
   font-weight: 400;
+}
+
+.appTermsConditions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }

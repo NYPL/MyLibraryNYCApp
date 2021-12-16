@@ -25,7 +25,7 @@ import { render } from "react-dom";
 
 //import Footer from "./footer";
 
-import { DSProvider } from '@nypl/design-system-react-components';
+import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 
 
 export default class Routes extends React.Component {
@@ -42,41 +42,47 @@ export default class Routes extends React.Component {
 
   render() {
     return (
-      <Router>
-        <div className="layout-container nypl-ds">
-          <header className="header">
-            <Banner />
-            <Header userSignedIn={this.state.userSignedIn}/>
-          </header>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/faq" component={Faqs} />
-            <Route path="/contacts" component={Contacts} />
-            <Route path="/participating-schools" component={ParticipatingSchools}  />
-            <Route path="/users/start" component={SignIn} />
-            <Route path="/teacher_set_data" name="Teacher Sets" component={SearchTeacherSets} />
-            <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
-            <Route path="/account" component={Accounts} />
-            <Route
-              path='/teacher_set_details/:id'
-              render={routeProps => (
-                <TeacherSetDetails {...routeProps} handleTeacherSetOrderedData={this.handleTeacherSetOrderedData} />
-              )}
-            />
-            <Route
-              path='/ordered_holds/:access_key'
-              render={routeProps => (
-                <TeacherSetOrder {...routeProps} holddetails={this.state.hold} teachersetdetails={this.state.teacher_set} statusLabel={this.state.status_label} />
-              )}
-            />
-            <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
-            <Route path="/book_details/:id" component={TeacherSetBooks} />
-          </Switch>
-          <footer className="footer">
-            <Footer />
-          </footer>
-        </div>
-      </Router>
+      <DSProvider>
+        <TemplateAppContainer
+        contentPrimary={
+          <Router>
+            <div className="layout-container nypl-ds">
+              <header className="header">
+                <Banner />
+                <Header userSignedIn={this.state.userSignedIn}/>
+              </header>
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path="/faq" component={Faqs} />
+                <Route path="/contacts" component={Contacts} />
+                <Route path="/participating-schools" component={ParticipatingSchools}  />
+                <Route path="/users/start" component={SignIn} />
+                <Route path="/teacher_set_data" name="Teacher Sets" component={SearchTeacherSets} />
+                <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
+                <Route path="/account" component={Accounts} />
+                <Route
+                  path='/teacher_set_details/:id'
+                  render={routeProps => (
+                    <TeacherSetDetails {...routeProps} handleTeacherSetOrderedData={this.handleTeacherSetOrderedData} />
+                  )}
+                />
+                <Route
+                  path='/ordered_holds/:access_key'
+                  render={routeProps => (
+                    <TeacherSetOrder {...routeProps} holddetails={this.state.hold} teachersetdetails={this.state.teacher_set} statusLabel={this.state.status_label} />
+                  )}
+                />
+                <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
+                <Route path="/book_details/:id" component={TeacherSetBooks} />
+              </Switch>
+            </div>
+          </Router>
+        }
+
+        footer={<footer className="footer"> <Footer /></footer>}
+
+        />
+      </DSProvider>
     )
   }
 }

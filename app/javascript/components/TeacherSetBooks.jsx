@@ -42,6 +42,18 @@ export default class TeacherSetBooks extends React.Component {
     })    
   }
 
+
+  TeacherSets() {
+    return this.state.teacher_sets.map((data, i) => {
+      return <div>
+        <ReactRouterLink to={"/book_details/" + data.id} >
+          <Image imageSize="small" src={data.cover_uri} />
+        </ReactRouterLink>
+      </div>      
+    })
+  }
+
+
   render() {
     let book = this.state.book;
     let teacher_sets = this.state.teacher_sets
@@ -105,6 +117,9 @@ export default class TeacherSetBooks extends React.Component {
                 </dd>
               </List>
               <a target='_blank' href={book.details_url}>View in catalog</a>
+
+              <h3>Appears in These Sets:</h3>
+
             </>
           }
 
