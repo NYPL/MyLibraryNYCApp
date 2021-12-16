@@ -7,12 +7,8 @@ import {
   SearchBar, Select, Input,
   SearchButton, Card, CardHeading, CardLayouts,
   CardContent, CardActions,
-  MDXCreateElement,
-  Heading,
-  Image,
-  List,
-  Link, LinkTypes, DSProvider, Notification,
-  Icon, TemplateAppContainer, NotificationTypes, Text
+  MDXCreateElement,HeadingLevels,
+  Heading, Image,List, Link, LinkTypes, DSProvider, Notification, Icon, TemplateAppContainer, NotificationTypes, Text
 } from '@nypl/design-system-react-components';
 
 
@@ -33,13 +29,11 @@ export default class TeacherSetOrder extends React.Component {
       axios.get('/holds/' + this.props.match.params.access_key)
         .then((res) => {
           const { data } = res;
-          console.log(res.data + "oooooooooooooooooooooo")
           // This fix depending on the nypl design  system.
           if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
             window.location = res.request.responseURL;
             return false;
           } else {
-            console.log(res.data.status_label + "status label")
             this.setState({ teacher_set: res.data.teacher_set, hold: res.data.hold, status_label: res.data.status_label });
           }
       })
@@ -68,7 +62,7 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   OrderDetails() {
-    return <div className="tsDetails">
+    return <div className="tsOrderDetails">
       <List id="nypl-list2" title="" type="dl">
         <dt className="orderDetails font-weight-500">
           Quantity
@@ -97,44 +91,44 @@ export default class TeacherSetOrder extends React.Component {
 
   CancelButton() {
     return <div id="order-cancel-button" style={{ display: this.showCancelButton() }}>
-      <Link className="button-color" type={LinkTypes.Button} href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
+      <Link className="button-color" type={ButtonTypes.NoBrand} href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
     </div>
   }
 
   render() {
-    console.log(this.state.hold["status"] + "olololo")
     return (
       <DSProvider>
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <div className="order-message">
-                <Notification noMargin notificationType={NotificationTypes.Announcement} 
-                  notificationContent={ <Text noSpace displaySize="tag"> { this.OrderMessage() }</Text> } />
-              </div>
-              <div className="layout-container nypl-ds">
-                <main className="main main--with-sidebar">
-                  <div className="content-primary content-primary--with-sidebar-right">
+
+              <div>
+                <Card border className="orderPage">
+                  <CardHeading className="order_message">
+                    <Icon align="left" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="medium" />
+                    { this.OrderMessage() }
+                  </CardHeading>
+
+                  <CardHeading className="order_page_title">
+                    { this.TeacherSetTitle() }
+                  </CardHeading>
+
+                  <CardContent className="order_page_desc">
+                    { this.TeacherSetDescription() }
+                  </CardContent>
+
+                  <CardContent className="">
+                    { this.OrderDetails() }
+                  </CardContent>
                   
-                    <div className="card_details">
-                        <Heading level={4}>
-                         { this.TeacherSetTitle() }
-                        </Heading>
-
-                       
-                        { this.TeacherSetDescription() }
-
-                        { this.OrderDetails() }
-                    </div>
-                    
+                  <CardContent>
                     { this.CancelButton() }
+                  </CardContent>
 
-                    {<br/>}
-                    <a href="/teacher_set_data">Go To Search Teacher Sets Page</a>
-                  </div>
-                  <div className="content-secondary content-secondary--with-sidebar-right"></div>
-                </main>
+                  {<br/>}
+                  <a href="/teacher_set_data">Go To Search Teacher Sets Page</a>
+                </Card>
               </div>
             </>
           }

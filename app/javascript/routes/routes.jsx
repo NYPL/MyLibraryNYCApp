@@ -18,6 +18,7 @@ import ContactsFaqsSchoolsNavMenu from "../components/ContactsFaqsSchoolsNavMenu
 import TeacherSetDetails from "../components/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
+import TeacherSetBooks from "../components/TeacherSetBooks";
 import ReactDOM from "react-dom";
 import { render } from "react-dom";
 
@@ -31,7 +32,6 @@ export default class Routes extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn}
     this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
   }
@@ -70,6 +70,7 @@ export default class Routes extends React.Component {
               )}
             />
             <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
+            <Route path="/book_details/:id" component={TeacherSetBooks} />
           </Switch>
           <footer className="footer">
             <Footer />

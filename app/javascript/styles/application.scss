@@ -687,7 +687,7 @@ ul.list li:before {
 
 .orderDetails {
   border-top: 0px !important;
-  padding-top: 7px !important;
+  padding-top: 0px !important;
 }
 
 .font-weight-500 {
@@ -732,7 +732,7 @@ ul.list li:before {
 }
 
 .order_select {
-  width: 100px;
+  width: 250px;
 }
 
 .selectOrder {
@@ -749,5 +749,34 @@ ul.list li:before {
 
 .sign-up-link {
   margin-top: 0.8em;
+  font-weight: 400;
+}
+
+.order_page_title {
+  font-weight: 400 !important;
+  font-size: 18px !important;
+  padding-top: 10px !important;
+}
+
+.order_message {
+  font-weight: 500 !important;
+  font-size: 20px !important;
+}
+
+.order_page_desc {
+  font-weight: 300 !important;
+  font-size: 16px !important;
+  line-height: 17.6px;
+}
+
+.tsOrderDetails {
+  margin-top: 1.5em !important;
+}
+
+.orderPage {
+  padding-left: 10px !important;
+}
+
+.bookTitlesCount {
   font-weight: 400;
 }

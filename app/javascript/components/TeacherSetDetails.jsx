@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
-import { Route, BrowserRouter as Router, Switch , Redirect} from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink} from "react-router-dom";
 
 import axios from 'axios';
 import {
@@ -18,7 +18,7 @@ import {
   MDXCreateElement,
   Heading,
   Image,
-  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form
+  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -55,6 +55,7 @@ export default class TeacherSetDetails extends React.Component {
 
 
   handleQuantity = event => {
+    console.log("okokokokoko")
     this.setState({
       quantity: event.target.value
     })
@@ -104,13 +105,17 @@ export default class TeacherSetDetails extends React.Component {
   }
 
   BooksCount() {
-    return <div>{this.state.books.length > 0 ? this.state.books.length + " Titles" : ""}</div>
+    return <div className="bookTitlesCount">{this.state.books.length > 0 ? this.state.books.length + " Titles" : ""}</div>
   }
 
 
   TeacherSetBooks() {
     return this.state.books.map((data, i) => {
-      return <div><Image style={{ height: 170, width: 150, margin: 1 }} src={data.cover_uri} /></div>      
+      return <div>
+        <ReactRouterLink to={"/book_details/" + data.id} >
+          <Image imageSize="small" src={data.cover_uri} />
+        </ReactRouterLink>
+      </div>      
     })
   }
 
@@ -165,11 +170,13 @@ export default class TeacherSetDetails extends React.Component {
 
                     <CardContent level={5}>
 
-                      <Form onSubmit={this.handleSubmit} className="selectOrder">
-                        <Select onChange={this.handleQuantity} value="1" className="order_select" >
-                          {allowed_quantities}
-                        </Select>
-                        <Button className="order_select" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
+                      <Form onSubmit={this.handleSubmit} className="order_select">
+                        <FormRow >
+                          <Select labelText="What is your favorite color?" showLabel={false} onChange={this.handleQuantity} value="" >
+                            {allowed_quantities}
+                          </Select>
+                          <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
+                        </FormRow>
                       </Form>
                       
                     </CardContent>
