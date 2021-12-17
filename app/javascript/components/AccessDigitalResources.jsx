@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
-import { Accordion, Link, List, Heading, CardHeading, Card, CardLayouts, CardContent, CardImageRatios, HeadingLevels, DSProvider } from '@nypl/design-system-react-components';
+import { Accordion, Link, List, Heading, CardHeading, Card, CardLayouts, CardContent, HeadingLevels, DSProvider } from '@nypl/design-system-react-components';
 
 export default class AccessDigitalResources extends Component {
 

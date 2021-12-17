@@ -33,8 +33,6 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  CardImageRatios,
-  CardImageSizes,
   Pagination, Checkbox, DSProvider, TemplateAppContainer, HeroTypes, VStack, HeadingLevels
 } from '@nypl/design-system-react-components';
 
@@ -137,7 +135,7 @@ export default class Home extends Component {
       return <div className="teacherSetResults">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
 
-          <Card className="" layout={CardLayouts.Horizontal} center imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={CardImageRatios.Square} imageSize={CardImageSizes.Small}>
+          <Card className="" layout={CardLayouts.Horizontal} center imageSrc={bookImage} imageAlt="Alt text">
             <CardHeading level={3} id="heading1">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id} className="removelink">
                 {ts.title}

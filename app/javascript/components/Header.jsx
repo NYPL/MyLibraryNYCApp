@@ -12,7 +12,7 @@ export default class Header extends Component {
 
   constructor(props) {
     super(props); 
-    this.state = { user_signed_in: this.props.userSignedIn["user_signed_in"]}
+    this.state = { user_signed_in: this.props.userSignedIn}
   }
 
   render() {

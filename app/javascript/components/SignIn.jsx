@@ -32,7 +32,6 @@ handleSearchKeyword = event => {
 }
 
 handleEmail = event => {
-  
   this.setState({
     email: event.target.value
   })
@@ -46,7 +45,6 @@ handleEmail = event => {
   else {
     this.state.error_display = "none"
   }
-  
 }
 
 
@@ -63,7 +61,6 @@ handleSubmit = event => {
       } else {
         this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
       }
-
     })
     .catch(function (error) {
      console.log(error)

@@ -20,7 +20,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -80,7 +80,6 @@ export default class SearchTeacherSets extends Component {
 
   
   handleSearchKeyword = event => {
-    
     if (event.target.value == "") {
       delete this.state.keyword;
       this.props.history.push("/teacher_set_data");
@@ -132,7 +131,6 @@ export default class SearchTeacherSets extends Component {
     })
   }
 
-
   TeacherSetFacets() {
     return this.state.facets.map((ts, i) => {
       return <div className="nypl-ds">{<br/>}
@@ -144,6 +142,10 @@ export default class SearchTeacherSets extends Component {
     })
   }
 
+  TeacherSetSlider() {
+    return <>
+    </>
+  }
 
   render() {
     return (
@@ -151,7 +153,7 @@ export default class SearchTeacherSets extends Component {
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentTop={<>
-              <SearchBar onSubmit={this.handleSubmit} 
+              <SearchBar onSubmit={this.handleSubmit} className="teachersetSearchBar" 
                 textInputProps={{
                   labelText: "Search Teacher set",
                   name: "textInputName",

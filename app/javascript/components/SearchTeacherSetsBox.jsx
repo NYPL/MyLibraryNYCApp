@@ -20,8 +20,6 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  CardImageRatios,
-  CardImageSizes,
   Pagination, Checkbox
 } from '@nypl/design-system-react-components';
 

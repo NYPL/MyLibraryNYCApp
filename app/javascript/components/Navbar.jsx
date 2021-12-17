@@ -25,7 +25,21 @@ export default class Navbar extends Component {
     this.state = { user_signed_in: this.props.userSignedIn}
   }
 
+
+showAccountSigninLink() {
+    if (this.state.user_signed_in) {
+      return <Link type={LinkTypes.Action}>
+        <ReactRouterLink to="/account" className="nav-link-colors ">Account</ReactRouterLink>
+      </Link>
+    } else {
+      return <Link type={LinkTypes.Action}>
+        <ReactRouterLink to="/users/start" className="nav-link-colors ">Sign In</ReactRouterLink>
+      </Link>
+    }
+}
+
 render() {
+
   return (
    <div className="header-topWrapper">
       <ReactRouterLink to="/">
@@ -34,10 +48,8 @@ render() {
     
       <nav className="header-buttons" style={styles.headerNav}>
         <ul className="float-right">
-          <li>          
-            <Link type={LinkTypes.Action}>
-              <ReactRouterLink to="/users/start" className="nav-link-colors ">Sign In</ReactRouterLink>
-            </Link>
+          <li>           
+            {this.showAccountSigninLink()}
           </li>
 
           
