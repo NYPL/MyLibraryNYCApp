@@ -35,7 +35,6 @@ export default class TeacherSetBooks extends React.Component {
         this.setState({  
           book: res.data.book, teacher_sets: res.data.teacher_sets, 
         });
-
       })
       .catch(function (error) {
         console.log(error);

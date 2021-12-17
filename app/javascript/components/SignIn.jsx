@@ -4,12 +4,8 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import Collapsible from 'react-collapsible';
 import {
-  Button,
-  ButtonTypes,
-  SearchBar,
-  Select,
-  TextInput, TextInputTypes, HelperErrorText, DSProvider, TemplateAppContainer, Icon, 
-  Notification, Card, NotificationTypes,
+  Button, ButtonTypes, SearchBar, Select, TextInput, TextInputTypes, HelperErrorText, DSProvider, 
+  TemplateAppContainer, Icon, Notification, Card, NotificationTypes,
   CardHeading, CardContent, CardLayouts, HeadingLevels, Text
 } from '@nypl/design-system-react-components';
 import questionCircle from '../images/fa-question-circle.svg'
@@ -17,59 +13,53 @@ import questionCircle from '../images/fa-question-circle.svg'
 
 export default class SignIn extends Component {
 
-
-
-constructor(props) {
-  super(props);
-  this.state = { email: "", invali_email_msg: "", error_display: "none" };
-}
-
-
-handleSearchKeyword = event => {    
-  this.setState({
-    email: event.target.value
-  })
-}
-
-handleEmail = event => {
-  this.setState({
-    email: event.target.value
-  })
-
-  const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-  if(regex.test(this.state.email) == false) {
-    this.state.error_display = "block"
-    this.state.invali_email_msg = "Please enter a valid email address"
+  constructor(props) {
+    super(props);
+    this.state = { email: "", invali_email_msg: "", error_display: "none" };
   }
-  else {
-    this.state.error_display = "none"
-  }
-}
 
-
-// # need  to modify below code
-
-handleSubmit = event => {
-  event.preventDefault()
-  axios.post('/login', {
-      email: this.state.email
-   }).then(res => {
-      if (res.data.logged_in) {
-        window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ':3000/' + res.data.user_return_to
-        return false;
-      } else {
-        this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
-      }
+  handleSearchKeyword = event => {    
+    this.setState({
+      email: event.target.value
     })
-    .catch(function (error) {
-     console.log(error)
-  })
-}
+  }
 
+  handleEmail = event => {
+    this.setState({
+      email: event.target.value
+    })
 
-render() {
-  return (
+    const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+    if(regex.test(this.state.email) == false) {
+      this.state.error_display = "block"
+      this.state.invali_email_msg = "Please enter a valid email address"
+    }
+    else {
+      this.state.error_display = "none"
+    }
+  }
+
+  // # need  to modify below code
+  handleSubmit = event => {
+    event.preventDefault()
+    axios.post('/login', {
+        email: this.state.email
+     }).then(res => {
+        if (res.data.logged_in) {
+          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ':3000/' + res.data.user_return_to
+          return false;
+        } else {
+          this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
+        }
+      })
+      .catch(function (error) {
+       console.log(error)
+    })
+  }
+
+  render() {
+    return (
       <DSProvider>
       <TemplateAppContainer
         breakout={<AppBreadcrumbs />}
@@ -100,6 +90,6 @@ render() {
         sidebar="right"
       />
       </DSProvider>
-    );
+    )
   }
 }

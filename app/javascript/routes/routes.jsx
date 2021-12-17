@@ -19,12 +19,7 @@ import TeacherSetDetails from "../components/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks";
-import ReactDOM from "react-dom";
 import { render } from "react-dom";
-
-
-//import Footer from "./footer";
-
 import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 
 
