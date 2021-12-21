@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, ButtonTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select
+  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels
 } from '@nypl/design-system-react-components';
 
 
@@ -13,7 +13,7 @@ export default class Accounts extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {contact_email: "", school: "", alt_email: "", email: "", schools: ""}
+    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: ""}
   }
 
 
@@ -27,12 +27,36 @@ export default class Accounts extends Component {
       else {
         let account_details = res.data.accountdetails
         this.setState({ contact_email: account_details.contact_email, school: account_details.school, email: account_details.email,
-        alt_email: account_details.alt_email, schools: account_details.schools })
+        alt_email: account_details.alt_email, schools: account_details.schools, current_user: account_details.current_user,
+        holds: account_details.holds })
       }
     }).catch(function (error) {
         console.log("cancel order fail")
         console.log(error)
     })
+  }
+
+
+  handleSubmit = event => {
+    event.preventDefault();
+    console.log(event.target.value + "eveveveve")
+    axios.put('/users', {
+        user: { alt_email: this.state.alt_email, school_id: this.state.school_id }
+     }).then(res => {
+        console.log(res)
+      })
+      .catch(function (error) {
+       console.log(error)
+    })
+  }
+
+  handleAltEmail = event => {
+    this.setState ({ alt_email: event.target.value})
+  }
+
+
+  handleSchool = event => {
+    this.setState ({ school_id: event.target.value })
   }
 
 
@@ -45,13 +69,24 @@ export default class Accounts extends Component {
   }
   
 
+  HoldsDetails() {
+    return <List noStyling>
+      {this.state.holds.map((hold, index) =>
+        <div>hold.created_at</div>
+      )}
+    </List>
+  }
+
   render() {
+    let user_name = this.state.current_user.first_name
+
     return (
       <DSProvider>
       <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
-            <>                
+            <>
+              <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} />              
               <Form onSubmit={this.handleSubmit}>
                 <FormField>
                   <TextInput
@@ -59,16 +94,19 @@ export default class Accounts extends Component {
                     showOptReqLabel={false}
                     labelText="Preferred email address for Reservation Notifications"
                     id="alt_email"
+                    value={this.state.alt_email}
+                    onChange={this.handleAltEmail}
                   />
                 </FormField>
                 <FormField>
-                  <Select id="school_id" labelText="Your School" name="color" showLabel showOptReqLabel={false} >
+                  <Select id="school_id" labelText="Your School" value='1645' showLabel showOptReqLabel={false} onChange={this.handleSchool}>
                     {this.Schools()}
                   </Select>
                 </FormField>
-
-                <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Update Account Information </Button>
+                <Button buttonType={ButtonTypes.Callout} className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
               </Form>
+              {<br/>}
+              <Heading level={HeadingLevels.Three} text='Your Orders' />
             </>
           }
           contentSidebar={<></>}
