@@ -29,7 +29,7 @@ export default class Navbar extends Component {
 showAccountSigninLink() {
     if (this.state.user_signed_in) {
       return <Link type={LinkTypes.Action}>
-        <ReactRouterLink to="/account" className="nav-link-colors ">Account</ReactRouterLink>
+        <ReactRouterLink to="/account_details" className="nav-link-colors ">Account</ReactRouterLink>
       </Link>
     } else {
       return <Link type={LinkTypes.Action}>

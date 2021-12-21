@@ -54,7 +54,6 @@ MyLibraryNYC::Application.routes.draw do
   # match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
 
   match 'settings' => 'settings#index', via: [:get, :patch, :post]
-
   match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post]
   match '/news_letter/index' => 'news_letter#index', via: [:get, :post]
 
@@ -66,6 +65,9 @@ MyLibraryNYC::Application.routes.draw do
 
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
+
+  match '/account_details' => 'settings#acccount_details', via: [:get, :post]
+
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
