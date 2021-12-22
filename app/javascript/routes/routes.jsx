@@ -11,6 +11,7 @@ import Banner from "../components/Banner";
 import ParticipatingSchools from "../components/ParticipatingSchools";
 import AppBreadcrumbs from "../components/AppBreadcrumbs";
 import SignIn from "../components/SignIn";
+import SignUp from "../components/SignUp";
 import CalendarOfEvents from "../components/CalendarOfEvents";
 import SearchTeacherSets from "../components/SearchTeacherSets";
 import Accounts from "../components/Accounts";
@@ -51,10 +52,12 @@ export default class Routes extends React.Component {
                 <Route path="/faq" component={Faqs} />
                 <Route path="/contacts" component={Contacts} />
                 <Route path="/participating-schools" component={ParticipatingSchools}  />
-                <Route path="/users/start" component={SignIn} />
+                <Route path="/signin" component={SignIn} userSignedIn={this.state.userSignedIn} />
+                <Route path="/signup" component={SignUp} />
                 <Route path="/teacher_set_data" name="Teacher Sets" component={SearchTeacherSets} />
                 <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
-                <Route path="/account" component={Accounts} />
+                <Route path="/account_details" component={Accounts} />
+                <Route path="/signup" component={SignUp} />
                 <Route
                   path='/teacher_set_details/:id'
                   render={routeProps => (
@@ -67,6 +70,7 @@ export default class Routes extends React.Component {
                     <TeacherSetOrder {...routeProps} holddetails={this.state.hold} teachersetdetails={this.state.teacher_set} statusLabel={this.state.status_label} />
                   )}
                 />
+
                 <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
                 <Route path="/book_details/:id" component={TeacherSetBooks} />
               </Switch>

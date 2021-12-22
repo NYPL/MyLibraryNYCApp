@@ -2,6 +2,12 @@
 
 class SettingsController < ApplicationController
 
+  def signin
+  end
+
+  def signup
+  end
+
   def index
     unless user_signed_in?
       flash[:error] = "You must be logged in to access this page"
@@ -42,6 +48,7 @@ class SettingsController < ApplicationController
 
 
   def acccount_details
+    @user = User.last
   end
 
 end

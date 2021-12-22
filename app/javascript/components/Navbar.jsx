@@ -33,7 +33,7 @@ showAccountSigninLink() {
       </Link>
     } else {
       return <Link type={LinkTypes.Action}>
-        <ReactRouterLink to="/users/start" className="nav-link-colors ">Sign In</ReactRouterLink>
+        <ReactRouterLink to="/signin" className="nav-link-colors ">Sign In</ReactRouterLink>
       </Link>
     }
 }

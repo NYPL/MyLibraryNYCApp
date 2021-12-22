@@ -19,7 +19,6 @@ export default class Accounts extends Component {
 
   componentDidMount() {
     axios.get('/account').then(res => {
-      console.log(res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start")
       if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
         window.location = res.request.responseURL;
         return false;
@@ -41,7 +40,7 @@ export default class Accounts extends Component {
     event.preventDefault();
     console.log(event.target.value + "eveveveve")
     axios.put('/users', {
-        user: { alt_email: this.state.alt_email, school_id: this.state.school_id }
+        user: { alt_email: this.state.alt_email, school_id: '1234' }
      }).then(res => {
         console.log(res)
       })
@@ -87,12 +86,12 @@ export default class Accounts extends Component {
           contentPrimary={
             <>
               <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} />              
-              <Form onSubmit={this.handleSubmit}>
+              <Form onSubmit={this.handleSubmit} method="put">
                 <FormField>
                   <TextInput
                     isRequired
                     showOptReqLabel={false}
-                    labelText="Preferred email address for Reservation Notifications"
+                    labelText="Your DOE Email Address"
                     id="alt_email"
                     value={this.state.alt_email}
                     onChange={this.handleAltEmail}

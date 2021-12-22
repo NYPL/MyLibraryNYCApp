@@ -8,6 +8,14 @@ import {
   TemplateAppContainer, Icon, Notification, Card, NotificationTypes,
   CardHeading, CardContent, CardLayouts, HeadingLevels, Text
 } from '@nypl/design-system-react-components';
+
+import {
+  BrowserRouter as Router,
+  Link as ReactRouterLink,
+} from "react-router-dom";
+
+import { Link, LinkTypes } from "@nypl/design-system-react-components";
+
 import questionCircle from '../images/fa-question-circle.svg'
 
 
@@ -15,8 +23,9 @@ export default class SignIn extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { email: "", invali_email_msg: "", error_display: "none" };
+    this.state = { email: "", invali_email_msg: "", error_display: "none", user_signed_in: this.props.userSignedIn };
   }
+
 
   handleSearchKeyword = event => {    
     this.setState({
@@ -83,7 +92,13 @@ export default class SignIn extends Component {
               </div>
             </HelperErrorText>
             <Button buttonType={ButtonTypes.Primary} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
-            <div className="sign-up-link"><Text noSpace displaySize="caption">Not Registered? Please Sign Up </Text></div>
+            <div className="sign-up-link">
+              <Text noSpace displaySize="caption">Not Registered ? Please 
+                <Link type={LinkTypes.Action}>
+                  <ReactRouterLink to="/signup"> Sign Up</ReactRouterLink>
+                </Link>
+              </Text>
+            </div>
           </>
         }
         contentSidebar={<></>}

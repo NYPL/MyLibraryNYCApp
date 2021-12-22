@@ -28,6 +28,11 @@ class SchoolsController < ApplicationController
 
   def participating_schools_data
   end
+
+
+  def active_schools
+    render json: { activeSchools: School.active_schools_data.to_h }
+  end
   
   def create
     School.create(school_params)

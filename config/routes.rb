@@ -34,7 +34,6 @@ MyLibraryNYC::Application.routes.draw do
   match 'holds/:id/cancel' => 'holds#holds_cancel_details', via: [:get, :post]
   match 'holds/:id/cancel_details' => 'holds#cancel_details', via: [:get, :post]
 
-
   resources :holds
 
   # The priority is based upon order of creation:
@@ -67,6 +66,11 @@ MyLibraryNYC::Application.routes.draw do
   get 'exceptions' => 'exceptions#render_error', :as => :render_error
 
   match '/account_details' => 'settings#acccount_details', via: [:get, :post]
+  match '/signin' => 'settings#signin', via: [:get, :post]
+  match '/signup' => 'settings#signup', via: [:get, :post]
+  match '/active_schools' => 'schools#active_schools', via: [:get]
+
+
 
   # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
 
