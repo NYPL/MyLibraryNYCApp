@@ -68,7 +68,7 @@ MyLibraryNYC::Application.routes.draw do
   match '/account_details' => 'settings#acccount_details', via: [:get, :post]
   match '/signin' => 'settings#signin', via: [:get, :post]
   match '/signup' => 'settings#signup', via: [:get, :post]
-  match '/active_schools' => 'schools#active_schools', via: [:get]
+  match '/sign_up_details' => 'settings#sign_up_details', via: [:get]
 
 
 

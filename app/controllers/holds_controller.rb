@@ -82,9 +82,12 @@ class HoldsController < ApplicationController
 
       quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
       @hold.quantity = quantity.to_i
-      # respond_to do |format|
       if @hold.save
         teacher_set = @hold.teacher_set
+
+        LogWrapper.log('INFO', {message: 'Teacher-set hold is created', method: __method__, 
+                        teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
+        
        
         # Update teacher-set availability in DB
         teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
@@ -102,7 +105,6 @@ class HoldsController < ApplicationController
         format.html { render action: 'new' }
         format.json { render json: @hold.errors, status: :unprocessable_entity }
       end
-      #end
     rescue => exception
       error_message(exception)
     end
@@ -129,13 +131,13 @@ class HoldsController < ApplicationController
       if c[:status] == 'cancelled'
         teacher_set = @hold.teacher_set
         
+        LogWrapper.log('INFO', {message: 'Teacher-set hold is cancelled', method: __method__, 
+                                teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
         # Update teacher-set availability in DB
         teacher_set.update_teacher_set_availability_in_db('cancelled', nil, current_user, @hold.id)
 
         # Update teacher-set availability in elastic search document
         teacher_set.update_teacher_set_availability_in_elastic_search
-
-        LogWrapper.log('DEBUG', {'message' => 'cancelling hold', 'method' => 'app/controllers/holds_controller.rb.update'})
         @hold.cancel! c[:comment]
       end
     end

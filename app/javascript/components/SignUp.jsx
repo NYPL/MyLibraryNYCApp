@@ -21,7 +21,7 @@ export default class SignUp extends Component {
     console.log(event.target.value + "eveveveve")
     axios.post('/users', {
         user: { email: this.state.email, alt_email: this.state.alt_email, first_name: this.state.first_name,
-                last_name: this.state.last_name, pin: this.state.pin, school_id: '1234' }
+                last_name: this.state.last_name, pin: this.state.pin, school_id: '1234', email_masks: '' }
      }).then(res => {
         console.log(res)
       })
@@ -31,41 +31,40 @@ export default class SignUp extends Component {
   }
 
   componentDidMount() {
-    axios.get('/active_schools').then(res => {
-      this.setState({ active_schools: res.data.activeSchools})
+    axios.get('/sign_up_details').then(res => {
+      this.setState( { active_schools: res.data.activeSchools, email_masks: res.data.emailMasks } )
+
     }).catch(function (error) {
        console.log(error)
     })
   }
 
+  validateEmailMasks() {
+    console.log(this.state.email_masks)
+  }
+
   handleEmail = event => {
-    console.log(event.target.value + ' email')
-    this.setState ({ email: event.target.value})
+    this.setState ({ email: event.target.value })
   }
 
   handleAltEmail = event => {
-    console.log(event.target.value + 'alt email')
-    this.setState ({ alt_email: event.target.value})
+    this.setState ({ alt_email: event.target.value })
   }
 
   handleFirstName = event => {
-    console.log(event.target.value + 'first_name')
-    this.setState ({ first_name: event.target.value})
+    this.setState ({ first_name: event.target.value })
   }
 
   handleLastName = event => {
-    console.log(event.target.value + 'last_name')
-    this.setState ({ last_name: event.target.value})
+    this.setState ({ last_name: event.target.value })
   }
 
   handleSchool = event => {
-    console.log(event.target.value + 'school_id')
-    this.setState ({ school_id: event.target.value})
+    this.setState ({ school_id: event.target.value })
   }
 
   handlePin = event => {
-    console.log(event.target.value + 'pin')
-    this.setState ({ pin: event.target.value})
+    this.setState ({ pin: event.target.value })
   }
 
 

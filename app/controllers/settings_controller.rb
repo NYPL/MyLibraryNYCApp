@@ -51,4 +51,10 @@ class SettingsController < ApplicationController
     @user = User.last
   end
 
+
+  def sign_up_details
+    render json: { activeSchools: School.active_schools_data.to_h, 
+                   emailMasks: AllowedUserEmailMasks.where(active:true).pluck(:email_pattern) }
+  end
+
 end
