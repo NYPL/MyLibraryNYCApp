@@ -12,39 +12,99 @@ export default class SignUp extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  pin: "", active_schools: ""}
+    this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  lastNameIsValid: false}
   }
 
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log(event.target.value + "eveveveve")
-    axios.post('/users', {
-        user: { email: this.state.email, alt_email: this.state.alt_email, first_name: this.state.first_name,
-                last_name: this.state.last_name, pin: this.state.pin, school_id: '1234', email_masks: '' }
-     }).then(res => {
-        console.log(res)
+    if (this.handleValidation()) {
+
+    } else {
+      console.log(event.target.value + "eveveveve")
+      axios.post('/users', {
+          user: { email: this.state.email, alt_email: this.state.alt_email, first_name: this.state.first_name,
+                  last_name: this.state.last_name, pin: this.state.pin, school_id: '966', allowed_email_patterns: '', error_email_msg: '', is_valid_email: '' }
+       }).then(res => {
+          // if (res.data.errors) !== null {
+          //   console.log(res.data.errors + ' no errors')
+          // } else {
+          //   console.log(res.data.errors["email"] + " ppppppp")
+          // }
+
+        })
+        .catch(function (error) {
+         console.log(error)
       })
-      .catch(function (error) {
-       console.log(error)
-    })
+    }
+    
   }
 
-  componentDidMount() {
-    axios.get('/sign_up_details').then(res => {
-      this.setState( { active_schools: res.data.activeSchools, email_masks: res.data.emailMasks } )
-
-    }).catch(function (error) {
-       console.log(error)
-    })
+  validateEmailDomain(email) {
+    let domain = email.split('@')
+    console.log(domain + " ddddd")
+    let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
+    console.log(email_domain_is_allowed + "  valid ddddd")
+    if (!email_domain_is_allowed) {
+      this.state.error_email_msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
+      this.state.is_valid_email = true
+    } else {
+      this.state.error_email_msg = ""
+      this.state.is_valid_email = false
+    }
   }
 
-  validateEmailMasks() {
-    console.log(this.state.email_masks)
+  handleValidation() {
+
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    console.log(fields["first_name"])
+
+
+    if (!fields["first_name"]) {
+      this.setState({firstNameIsValid: true })
+      errors["first_name"] = "Can't be empty";
+      this.setState({ errors: errors });
+    }
+
+
+    if (fields["first_name"] && typeof fields["first_name"] == "string") {
+      if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
+        this.setState({firstNameIsValid: true })
+        errors["first_name"] = "First name is in-valid";
+        this.setState({ errors: errors });
+      }
+    }
+
+
+    //console.log(typeof fields["last_name"] + " CANT BE BLANK")
+
+    // if (typeof fields["last_name"] !== "string") {
+    //   this.setState({lastNameIsValid: true })
+    //   errors["last_name"] = "Can't be empty";
+    //   this.setState({ errors: errors });
+    // }
+
+    //console.log(typeof fields["last_name"] !== "string" + "   ppppppppp")
+
+
+    // if (typeof fields["last_name"] !== "string") {
+    //   if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
+    //     this.setState({lastNameIsValid: true })
+    //     errors["last_name"] = "Last name is in-valid";
+    //     this.setState({ errors: errors });
+    //   }
+    // }
+
+
+    return formIsValid;
   }
 
   handleEmail = event => {
     this.setState ({ email: event.target.value })
+    this.validateEmailDomain(event.target.value)
   }
 
   handleAltEmail = event => {
@@ -53,6 +113,7 @@ export default class SignUp extends Component {
 
   handleFirstName = event => {
     this.setState ({ first_name: event.target.value })
+
   }
 
   handleLastName = event => {
@@ -77,7 +138,20 @@ export default class SignUp extends Component {
   }
 
 
+  handleChange(field, e) {
+    this.setState({firstNameIsValid: false })
+    let fields = this.state.fields;
+    fields[field] = e.target.value;
+
+    this.setState({ fields });
+    this.handleValidation()
+  }
+
+
   render() {
+    let error_email_msg = this.state.error_email_msg
+    let is_valid_email = this.state.is_valid_email
+
     return (
       <DSProvider>
         <TemplateAppContainer
@@ -92,36 +166,33 @@ export default class SignUp extends Component {
                     labelText="Your DOE Email Address"
                     value={this.state.email}
                     onChange={this.handleEmail}
+                    invalidText={error_email_msg}
+                    isInvalid={is_valid_email}
                     helperText="Email address must end with @schools.nyc.gov or a participating school domain."
                   />
                 </FormField>
 
                 <FormField>
                   <TextInput
-                    isRequired
                     showOptReqLabel={true}
-                    labelText="Your DOE Email Address"
+                    labelText="Alternate email address"
                     value={this.state.alt_email}
                     onChange={this.handleAltEmail}
-                    helperText="Email address must end with @schools.nyc.gov or a participating school domain."
                   />
+
                 </FormField>
 
                 <FormField>
                   <TextInput showOptReqLabel={false}
                     labelText="First Name"
-                    value={this.state.first_name}
-                    onChange={this.handleFirstName}
+                    value={this.state.fields["first_name"]}
+                    invalidText={this.state.errors["first_name"]}
+                    isInvalid={this.state.firstNameIsValid}
+                    onChange={this.handleChange.bind(this, "first_name")}
                   />
                 </FormField>
 
-                <FormField>
-                  <TextInput showOptReqLabel={false}
-                    labelText="Last Name"
-                    value={this.state.last_name}
-                    onChange={this.handleLastName}
-                  />
-                </FormField>
+              
 
                 <FormField>
                   <Select id="school_id" labelText="Your School" value='1645' showLabel showOptReqLabel={false} onChange={this.handleSchool}>
@@ -135,7 +206,7 @@ export default class SignUp extends Component {
                     showOptReqLabel={true}
                     labelText="Pin"
                     value={this.state.pin}
-                    onChange={this.handlePin}
+                    onChange={this.handleChange.bind(this, "pin")}
                     helperText="Your PIN serves as the password for your account. Make sure it is a number you will remember. Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
                   />
                 </FormField>
