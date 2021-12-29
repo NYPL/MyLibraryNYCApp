@@ -6,7 +6,7 @@ import {
   Button, ButtonTypes, SearchBar, Select, TextInput, TextInputTypes, HelperErrorText, DSProvider, 
   TemplateAppContainer, HeadingLevels, Text, FormField, Form
 } from '@nypl/design-system-react-components';
-
+import validator from 'validator'
 
 export default class SignUp extends Component {
 
@@ -51,21 +51,30 @@ export default class SignUp extends Component {
   }
 
   validateEmailDomain(email) {
-    if (typeof email !== undefined) {
-      let domain = email.split('@')
-      let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
-      if (!email_domain_is_allowed) {
-        let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
-        // this.state.error_email_msg = msg
-        this.state.emailIsvalid = true
-        this.state.errors['email'] = msg
-        this.setState({emailIsvalid: true })
-      } else {
-        // this.state.error_email_msg = ""
-        this.state.emailIsvalid = false
-        this.state.errors['email'] = ""
-        this.setState({emailIsvalid: false })
-      }
+    let domain = email.split('@')
+    let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
+    if (!email_domain_is_allowed) {
+      let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
+      this.state.emailIsvalid = true
+      this.state.errors['email'] = msg
+      this.setState({emailIsvalid: true })
+    } else {
+      this.state.emailIsvalid = false
+      this.state.errors['email'] = ""
+      this.setState({emailIsvalid: false })
+    }
+  }
+
+  validateAltEmailDomain(alt_email) {
+    if (!validator.isEmail(alt_email)) {
+      let msg = 'Enter a valid alternate email'
+      this.state.altEmailIsvalid = true
+      this.state.errors['alt_email'] = msg
+      this.setState({altEmailIsvalid: true })
+    } else {
+      this.state.altEmailIsvalid = false
+      this.state.errors['email'] = ""
+      this.setState({altEmailIsvalid: false })
     }
   }
 
@@ -134,16 +143,23 @@ export default class SignUp extends Component {
     let fields = this.state.fields;
     fields[field] = e.target.value
     this.setState({ fields });
+
+    if (!this.state.fields["email"]) {
+      this.setState({emailIsvalid: true })
+      this.state.errors['email'] = "Can't be empty"
+    }
+    
     this.validateEmailDomain(e.target.value)
   }
 
   handleAltEmail(field, e) {
-    this.setState ({ altEmailIsvalid: false, alt_email: event.target.value })
+    this.setState ({ altEmailIsvalid: false, alt_email: e.target.value })
     let fields = this.state.fields;
     fields[field] = e.target.value
     this.setState({ fields });
     this.validateAltEmailDomain(e.target.value)
   }
+
 
   handleFirstName(field, e) {
     this.setState({ firstNameIsValid: false, first_name: e.target.value})
@@ -246,11 +262,13 @@ export default class SignUp extends Component {
     let last_name_invalid = this.state.lastNameIsValid
     let pin_is_invalid = this.state.pinIsValid
     let school_is_invalid = this.state.schoolIsValid
+    let alt_email_is_invalid = this.state.altEmailIsvalid
 
     let last_name_error_msg = this.state.errors["last_name"]
     let first_name_error_msg = this.state.errors["first_name"]
     let pin_error_msg = this.state.errors["pin"]
     let school_error_msg = this.state.errors["school_id"]
+    let alt_email_error_msg = this.state.errors["alt_email"]
 
     return (
       <DSProvider>
@@ -276,8 +294,10 @@ export default class SignUp extends Component {
                   <TextInput
                     showOptReqLabel={true}
                     labelText="Alternate email address"
-                    value={this.state.alt_email}
-                    onChange={this.handleAltEmail.bind(this, "email")}
+                    value={this.state.fields['alt_email']}
+                    invalidText={alt_email_error_msg}
+                    isInvalid={alt_email_is_invalid}
+                    onChange={this.handleAltEmail.bind(this, 'alt_email')}
                   />
 
                 </FormField>
