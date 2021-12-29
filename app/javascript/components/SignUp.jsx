@@ -29,7 +29,6 @@ export default class SignUp extends Component {
     if (this.handleValidation()) {
 
     } else {
-      console.log(event.target.value + "eveveveve")
       axios.post('/users', {
           user: { email: this.state.email, alt_email: this.state.alt_email, first_name: this.state.first_name,
                   last_name: this.state.last_name, pin: this.state.pin, school_id: '966', allowed_email_patterns: '', error_email_msg: '', is_valid_email: '' }
@@ -50,9 +49,7 @@ export default class SignUp extends Component {
 
   validateEmailDomain(email) {
     let domain = email.split('@')
-    console.log(domain + " ddddd")
     let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
-    console.log(email_domain_is_allowed + "  valid ddddd")
     if (!email_domain_is_allowed) {
       this.state.error_email_msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
       this.state.is_valid_email = true
@@ -63,17 +60,14 @@ export default class SignUp extends Component {
   }
 
   handleValidation() {
-
     let fields = this.state.fields;
     let errors = {};
-    let formIsValid = true;
 
     if (!fields["first_name"]) {
       this.setState({firstNameIsValid: true })
       errors["first_name"] = "Can't be empty";
       this.setState({ errors: errors });
     }
-
 
     if (fields["first_name"] && typeof fields["first_name"] == "string") {
       if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
@@ -83,13 +77,11 @@ export default class SignUp extends Component {
       }
     }
 
-
     if (!fields["last_name"]) {
       this.setState({lastNameIsValid: true })
       errors["last_name"] = "Can't be empty";
       this.setState({ errors: errors });
     }
-
 
     if (fields["last_name"] && typeof fields["last_name"] == "string") {
       if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
@@ -105,16 +97,18 @@ export default class SignUp extends Component {
       this.setState({ errors: errors });
     }
 
-
     if (fields["pin"] && typeof fields["pin"] == "string") {
       if (!fields["pin"].match(/^[a-zA-Z]+$/)) {
-        this.setState({lastNameIsValid: true })
+        this.setState({pinIsValid: true })
         errors["pin"] = "Last name is in-valid";
         this.setState({ errors: errors });
       }
     }
 
-    return formIsValid;
+    console.log(this.state.firstNameIsValid + "    First Name")
+    console.log(this.state.lastNameIsValid + "    Last Name")
+    console.log(this.state.pinIsValid + "    Pin Name")
+    //return formIsValid;
   }
 
   handleEmail = event => {
@@ -127,73 +121,63 @@ export default class SignUp extends Component {
   }
 
   handleFirstName(field, e) {
-    this.setState({ firstNameIsValid: false})
+    this.setState({ firstNameIsValid: false, first_name: e.target.value})
+
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
-    let errors = {}
 
     if (!this.state.fields["first_name"]) {
       this.setState({firstNameIsValid: true })
-      errors['first_name'] = "Can't be empty"
-      this.setState({ errors: errors });
+      this.state.errors['first_name'] = "Can't be empty"
     }
 
     if (this.state.fields["first_name"] && typeof this.state.fields["first_name"] == "string") {
       if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
         this.setState({firstNameIsValid: true })
-        errors["first_name"] = "First name is in-valid";
-        this.setState({ errors: errors });
+        this.state.errors['first_name'] = "First name is in-valid";
       }
     }
   }
 
   handleLastName(field, e) {
-    this.setState({ lastNameIsValid: false})
+    this.setState({ lastNameIsValid: false, last_name: e.target.value})
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
-    let errors = {}
 
     if (!this.state.fields["last_name"]) {
       this.setState({lastNameIsValid: true })
-      errors['last_name'] = "Can't be empty"
-      this.setState({ errors: errors });
+      this.state.errors['last_name'] = "Can't be empty"
     }
 
     if (this.state.fields["last_name"] && typeof this.state.fields["last_name"] == "string") {
       if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
         this.setState({lastNameIsValid: true })
-        errors["last_name"] = "Last name is in-valid";
-        this.setState({ errors: errors });
+        this.state.errors['last_name'] = "Last name is in-valid";
       }
     }
   }
 
   handlePin(field, e) {
-    this.setState({ pinIsValid: false})
+    this.setState({ pinIsValid: false, pin: e.target.value})
 
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
-    let errors = {}
 
     if (!this.state.fields["pin"]) {
       this.setState({pinIsValid: true })
-      errors['pin'] = "Can't be empty"
-      this.setState({ errors: errors });
+      this.state.errors['pin'] = "Can't be empty"
     }
-
 
     if (this.state.fields["pin"] && !(/^[0-9\b]+$/).test(fields["pin"])) {
       this.setState({pinIsValid: true })
-      errors["pin"] = "PIN is in-valid. It may only contain numbers";
-      this.setState({ errors: errors });
+      this.state.errors['pin'] = "PIN is in-valid. It may only contain numbers";
     } else if (this.state.fields["pin"] && typeof this.state.fields["pin"] == "string") {
       if (fields["pin"].length < 4  || fields["pin"].length > 32) {
         this.setState({pinIsValid: true })
-        errors["pin"] = "Pin must be 4 to 32 characters";
-        this.setState({ errors: errors });
+        this.state.errors['pin'] = "Pin must be 4 to 32 characters";
       }
     }
   }
@@ -214,11 +198,8 @@ export default class SignUp extends Component {
 
   handleChange(field, e) {
     this.setState({ firstNameIsValid: false })
-    
-
     let fields = this.state.fields;
     fields[field] = e.target.value;
-
     this.setState({ fields });
     this.handleValidation()
   }
@@ -227,6 +208,12 @@ export default class SignUp extends Component {
   render() {
     let error_email_msg = this.state.error_email_msg
     let is_valid_email = this.state.is_valid_email
+    let first_name_invalid = this.state.firstNameIsValid
+    let last_name_invalid = this.state.lastNameIsValid
+    let pin_is_invalid = this.state.pinIsValid
+    let last_name_errors = this.state.errors["last_name"]
+    let first_name_errors = this.state.errors["first_name"]
+    let pin_errors = this.state.errors["pin"]
 
     return (
       <DSProvider>
@@ -262,8 +249,8 @@ export default class SignUp extends Component {
                   <TextInput showOptReqLabel={false}
                     labelText="First Name"
                     value={this.state.fields["first_name"]}
-                    invalidText={this.state.errors["first_name"]}
-                    isInvalid={this.state.firstNameIsValid}
+                    invalidText={first_name_errors}
+                    isInvalid={first_name_invalid}
                     onChange={this.handleFirstName.bind(this, "first_name")}
                   />
                 </FormField>
@@ -272,8 +259,8 @@ export default class SignUp extends Component {
                   <TextInput showOptReqLabel={false}
                     labelText="Last Name"
                     value={this.state.fields["last_name"]}
-                    invalidText={this.state.errors["last_name"]}
-                    isInvalid={this.state.lastNameIsValid}
+                    invalidText={last_name_errors}
+                    isInvalid={last_name_invalid}
                     onChange={this.handleLastName.bind(this, 'last_name')}
                   />
                 </FormField>
@@ -290,8 +277,8 @@ export default class SignUp extends Component {
                     showOptReqLabel={true}
                     labelText="Pin"
                     value={this.state.fields["pin"]}
-                    invalidText={this.state.errors["pin"]}
-                    isInvalid={this.state.pinIsValid}
+                    invalidText={pin_errors}
+                    isInvalid={pin_is_invalid}
                     onChange={this.handlePin.bind(this, 'pin')}
                     helperText="Your PIN serves as the password for your account. Make sure it is a number you will remember. Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
                   />
