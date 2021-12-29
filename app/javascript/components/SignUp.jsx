@@ -16,6 +16,14 @@ export default class SignUp extends Component {
   }
 
 
+  componentDidMount() {
+    axios.get('/sign_up_details').then(res => {
+      this.setState( { active_schools: res.data.activeSchools, allowed_email_patterns: res.data.emailMasks } )
+    }).catch(function (error) {
+       console.log(error)
+    })
+  }
+
   handleSubmit = event => {
     event.preventDefault();
     if (this.handleValidation()) {
@@ -91,6 +99,20 @@ export default class SignUp extends Component {
       }
     }
 
+    if (!fields["pin"]) {
+      this.setState({pinIsValid: true })
+      errors["pin"] = "Can't be empty";
+      this.setState({ errors: errors });
+    }
+
+
+    if (fields["pin"] && typeof fields["pin"] == "string") {
+      if (!fields["pin"].match(/^[a-zA-Z]+$/)) {
+        this.setState({lastNameIsValid: true })
+        errors["pin"] = "Last name is in-valid";
+        this.setState({ errors: errors });
+      }
+    }
 
     return formIsValid;
   }
@@ -150,6 +172,7 @@ export default class SignUp extends Component {
 
   handlePin(field, e) {
     this.setState({ pinIsValid: false})
+
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
@@ -161,10 +184,15 @@ export default class SignUp extends Component {
       this.setState({ errors: errors });
     }
 
-    if (this.state.fields["pin"] && typeof this.state.fields["pin"] == "string") {
-      if (!fields["pin"].match(/^[a-zA-Z]+$/)) {
+
+    if (this.state.fields["pin"] && !(/^[0-9\b]+$/).test(fields["pin"])) {
+      this.setState({pinIsValid: true })
+      errors["pin"] = "PIN is in-valid. It may only contain numbers";
+      this.setState({ errors: errors });
+    } else if (this.state.fields["pin"] && typeof this.state.fields["pin"] == "string") {
+      if (fields["pin"].length < 4  || fields["pin"].length > 32) {
         this.setState({pinIsValid: true })
-        errors["pin"] = "Pin is in-valid";
+        errors["pin"] = "Pin must be 4 to 32 characters";
         this.setState({ errors: errors });
       }
     }
@@ -172,10 +200,6 @@ export default class SignUp extends Component {
 
   handleSchool = event => {
     this.setState ({ school_id: event.target.value })
-  }
-
-  handlePin = event => {
-    this.setState ({ pin: event.target.value })
   }
 
 
@@ -250,7 +274,7 @@ export default class SignUp extends Component {
                     value={this.state.fields["last_name"]}
                     invalidText={this.state.errors["last_name"]}
                     isInvalid={this.state.lastNameIsValid}
-                    onChange={this.handleLastName.bind(this, "last_name")}
+                    onChange={this.handleLastName.bind(this, 'last_name')}
                   />
                 </FormField>
 
@@ -265,8 +289,10 @@ export default class SignUp extends Component {
                     isRequired
                     showOptReqLabel={true}
                     labelText="Pin"
-                    value={this.state.pin}
-                    onChange={this.handleChange.bind(this, "pin")}
+                    value={this.state.fields["pin"]}
+                    invalidText={this.state.errors["pin"]}
+                    isInvalid={this.state.pinIsValid}
+                    onChange={this.handlePin.bind(this, 'pin')}
                     helperText="Your PIN serves as the password for your account. Make sure it is a number you will remember. Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
                   />
                 </FormField>
