@@ -12,7 +12,7 @@ export default class SignUp extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  lastNameIsValid: false}
+    this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  lastNameIsValid: false, pinIsValid: false}
   }
 
 
@@ -143,6 +143,28 @@ export default class SignUp extends Component {
       if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
         this.setState({lastNameIsValid: true })
         errors["last_name"] = "Last name is in-valid";
+        this.setState({ errors: errors });
+      }
+    }
+  }
+
+  handlePin(field, e) {
+    this.setState({ pinIsValid: false})
+    let fields = this.state.fields;
+     fields[field] = e.target.value
+    this.setState({ fields });
+    let errors = {}
+
+    if (!this.state.fields["pin"]) {
+      this.setState({pinIsValid: true })
+      errors['pin'] = "Can't be empty"
+      this.setState({ errors: errors });
+    }
+
+    if (this.state.fields["pin"] && typeof this.state.fields["pin"] == "string") {
+      if (!fields["pin"].match(/^[a-zA-Z]+$/)) {
+        this.setState({pinIsValid: true })
+        errors["pin"] = "Pin is in-valid";
         this.setState({ errors: errors });
       }
     }
