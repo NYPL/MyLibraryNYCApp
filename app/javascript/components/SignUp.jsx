@@ -55,11 +55,9 @@ export default class SignUp extends Component {
     let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
     if (!email_domain_is_allowed) {
       let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
-      this.state.emailIsvalid = true
       this.state.errors['email'] = msg
       this.setState({emailIsvalid: true })
     } else {
-      this.state.emailIsvalid = false
       this.state.errors['email'] = ""
       this.setState({emailIsvalid: false })
     }
@@ -68,11 +66,9 @@ export default class SignUp extends Component {
   validateAltEmailDomain(alt_email) {
     if (!validator.isEmail(alt_email)) {
       let msg = 'Enter a valid alternate email'
-      this.state.altEmailIsvalid = true
       this.state.errors['alt_email'] = msg
       this.setState({altEmailIsvalid: true })
     } else {
-      this.state.altEmailIsvalid = false
       this.state.errors['alt_email'] = ""
       this.setState({altEmailIsvalid: false })
     }
