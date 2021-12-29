@@ -60,9 +60,6 @@ export default class SignUp extends Component {
     let errors = {};
     let formIsValid = true;
 
-    console.log(fields["first_name"])
-
-
     if (!fields["first_name"]) {
       this.setState({firstNameIsValid: true })
       errors["first_name"] = "Can't be empty";
@@ -79,24 +76,20 @@ export default class SignUp extends Component {
     }
 
 
-    //console.log(typeof fields["last_name"] + " CANT BE BLANK")
-
-    // if (typeof fields["last_name"] !== "string") {
-    //   this.setState({lastNameIsValid: true })
-    //   errors["last_name"] = "Can't be empty";
-    //   this.setState({ errors: errors });
-    // }
-
-    //console.log(typeof fields["last_name"] !== "string" + "   ppppppppp")
+    if (!fields["last_name"]) {
+      this.setState({lastNameIsValid: true })
+      errors["last_name"] = "Can't be empty";
+      this.setState({ errors: errors });
+    }
 
 
-    // if (typeof fields["last_name"] !== "string") {
-    //   if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
-    //     this.setState({lastNameIsValid: true })
-    //     errors["last_name"] = "Last name is in-valid";
-    //     this.setState({ errors: errors });
-    //   }
-    // }
+    if (fields["last_name"] && typeof fields["last_name"] == "string") {
+      if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
+        this.setState({lastNameIsValid: true })
+        errors["last_name"] = "Last name is in-valid";
+        this.setState({ errors: errors });
+      }
+    }
 
 
     return formIsValid;
@@ -111,13 +104,48 @@ export default class SignUp extends Component {
     this.setState ({ alt_email: event.target.value })
   }
 
-  handleFirstName = event => {
-    this.setState ({ first_name: event.target.value })
+  handleFirstName(field, e) {
+    this.setState({ firstNameIsValid: false})
+    let fields = this.state.fields;
+     fields[field] = e.target.value
+    this.setState({ fields });
+    let errors = {}
 
+    if (!this.state.fields["first_name"]) {
+      this.setState({firstNameIsValid: true })
+      errors['first_name'] = "Can't be empty"
+      this.setState({ errors: errors });
+    }
+
+    if (this.state.fields["first_name"] && typeof this.state.fields["first_name"] == "string") {
+      if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
+        this.setState({firstNameIsValid: true })
+        errors["first_name"] = "First name is in-valid";
+        this.setState({ errors: errors });
+      }
+    }
   }
 
-  handleLastName = event => {
-    this.setState ({ last_name: event.target.value })
+  handleLastName(field, e) {
+    this.setState({ lastNameIsValid: false})
+    let fields = this.state.fields;
+     fields[field] = e.target.value
+    this.setState({ fields });
+    let errors = {}
+
+    if (!this.state.fields["last_name"]) {
+      this.setState({lastNameIsValid: true })
+      errors['last_name'] = "Can't be empty"
+      this.setState({ errors: errors });
+    }
+
+    if (this.state.fields["last_name"] && typeof this.state.fields["last_name"] == "string") {
+      if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
+        this.setState({lastNameIsValid: true })
+        errors["last_name"] = "Last name is in-valid";
+        this.setState({ errors: errors });
+      }
+    }
   }
 
   handleSchool = event => {
@@ -139,7 +167,9 @@ export default class SignUp extends Component {
 
 
   handleChange(field, e) {
-    this.setState({firstNameIsValid: false })
+    this.setState({ firstNameIsValid: false })
+    
+
     let fields = this.state.fields;
     fields[field] = e.target.value;
 
@@ -188,11 +218,19 @@ export default class SignUp extends Component {
                     value={this.state.fields["first_name"]}
                     invalidText={this.state.errors["first_name"]}
                     isInvalid={this.state.firstNameIsValid}
-                    onChange={this.handleChange.bind(this, "first_name")}
+                    onChange={this.handleFirstName.bind(this, "first_name")}
                   />
                 </FormField>
 
-              
+                <FormField>
+                  <TextInput showOptReqLabel={false}
+                    labelText="Last Name"
+                    value={this.state.fields["last_name"]}
+                    invalidText={this.state.errors["last_name"]}
+                    isInvalid={this.state.lastNameIsValid}
+                    onChange={this.handleLastName.bind(this, "last_name")}
+                  />
+                </FormField>
 
                 <FormField>
                   <Select id="school_id" labelText="Your School" value='1645' showLabel showOptReqLabel={false} onChange={this.handleSchool}>
