@@ -12,7 +12,9 @@ export default class SignUp extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  lastNameIsValid: false, pinIsValid: false}
+    this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
+                   pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
+                   lastNameIsValid: false, pinIsValid: false, schoolIsValid: false}
   }
 
 
@@ -31,7 +33,7 @@ export default class SignUp extends Component {
     } else {
       axios.post('/users', {
           user: { email: this.state.email, alt_email: this.state.alt_email, first_name: this.state.first_name,
-                  last_name: this.state.last_name, pin: this.state.pin, school_id: '966', allowed_email_patterns: '', error_email_msg: '', is_valid_email: '' }
+                  last_name: this.state.last_name, pin: this.state.pin, school_id: '', allowed_email_patterns: '', error_email_msg: '', is_valid_email: '' }
        }).then(res => {
           // if (res.data.errors) !== null {
           //   console.log(res.data.errors + ' no errors')
@@ -61,54 +63,47 @@ export default class SignUp extends Component {
 
   handleValidation() {
     let fields = this.state.fields;
-    let errors = {};
 
     if (!fields["first_name"]) {
       this.setState({firstNameIsValid: true })
-      errors["first_name"] = "Can't be empty";
-      this.setState({ errors: errors });
+      this.state.errors['first_name'] = "Can't be empty";
     }
 
     if (fields["first_name"] && typeof fields["first_name"] == "string") {
       if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
         this.setState({firstNameIsValid: true })
-        errors["first_name"] = "First name is in-valid";
-        this.setState({ errors: errors });
+        this.state.errors['first_name'] = "First name is in-valid";
       }
     }
 
     if (!fields["last_name"]) {
       this.setState({lastNameIsValid: true })
-      errors["last_name"] = "Can't be empty";
-      this.setState({ errors: errors });
+      this.state.errors['last_name'] = "Can't be empty";
     }
 
     if (fields["last_name"] && typeof fields["last_name"] == "string") {
       if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
         this.setState({lastNameIsValid: true })
-        errors["last_name"] = "Last name is in-valid";
-        this.setState({ errors: errors });
+        this.state.errors['last_name'] = "Last name is in-valid";
       }
     }
 
     if (!fields["pin"]) {
       this.setState({pinIsValid: true })
-      errors["pin"] = "Can't be empty";
-      this.setState({ errors: errors });
+      this.state.errors['pin'] = "Can't be empty";
     }
 
     if (fields["pin"] && typeof fields["pin"] == "string") {
       if (!fields["pin"].match(/^[a-zA-Z]+$/)) {
         this.setState({pinIsValid: true })
-        errors["pin"] = "Last name is in-valid";
-        this.setState({ errors: errors });
+        this.state.errors['pin'] = "PIN is in-valid";
       }
     }
 
-    console.log(this.state.firstNameIsValid + "    First Name")
-    console.log(this.state.lastNameIsValid + "    Last Name")
-    console.log(this.state.pinIsValid + "    Pin Name")
-    //return formIsValid;
+    if (!fields["school_id"]) {
+      this.setState({schoolIsValid: true })
+      this.state.errors['school_id'] = "Please select school"
+    }
   }
 
   handleEmail = event => {
@@ -182,8 +177,16 @@ export default class SignUp extends Component {
     }
   }
 
-  handleSchool = event => {
-    this.setState ({ school_id: event.target.value })
+  handleSchool(field, e) {
+    this.setState({ schoolIsValid: false, school_id: e.target.value })
+    let fields = this.state.fields;
+     fields[field] = e.target.value
+    this.setState({ fields });
+
+    if (!this.state.fields["school_id"]) {
+      this.setState({schoolIsValid: true })
+      this.state.errors['school_id'] = "Please select school"
+    }
   }
 
 
@@ -208,12 +211,16 @@ export default class SignUp extends Component {
   render() {
     let error_email_msg = this.state.error_email_msg
     let is_valid_email = this.state.is_valid_email
+
     let first_name_invalid = this.state.firstNameIsValid
     let last_name_invalid = this.state.lastNameIsValid
     let pin_is_invalid = this.state.pinIsValid
-    let last_name_errors = this.state.errors["last_name"]
-    let first_name_errors = this.state.errors["first_name"]
-    let pin_errors = this.state.errors["pin"]
+    let school_is_invalid = this.state.schoolIsValid
+
+    let last_name_error_msg = this.state.errors["last_name"]
+    let first_name_error_msg = this.state.errors["first_name"]
+    let pin_error_msg = this.state.errors["pin"]
+    let school_error_msg = this.state.errors["school_id"]
 
     return (
       <DSProvider>
@@ -249,7 +256,7 @@ export default class SignUp extends Component {
                   <TextInput showOptReqLabel={false}
                     labelText="First Name"
                     value={this.state.fields["first_name"]}
-                    invalidText={first_name_errors}
+                    invalidText={first_name_error_msg}
                     isInvalid={first_name_invalid}
                     onChange={this.handleFirstName.bind(this, "first_name")}
                   />
@@ -259,14 +266,21 @@ export default class SignUp extends Component {
                   <TextInput showOptReqLabel={false}
                     labelText="Last Name"
                     value={this.state.fields["last_name"]}
-                    invalidText={last_name_errors}
+                    invalidText={last_name_error_msg}
                     isInvalid={last_name_invalid}
                     onChange={this.handleLastName.bind(this, 'last_name')}
                   />
                 </FormField>
 
                 <FormField>
-                  <Select id="school_id" labelText="Your School" value='1645' showLabel showOptReqLabel={false} onChange={this.handleSchool}>
+                  <Select id="school_id" 
+                    labelText="Your School" 
+                    value='' 
+                    showLabel 
+                    showOptReqLabel={false}
+                    invalidText={school_error_msg}
+                    isInvalid={school_is_invalid}
+                    onChange={this.handleSchool.bind(this, 'school_id')}>
                     {this.Schools()}
                   </Select>
                 </FormField>
@@ -277,7 +291,7 @@ export default class SignUp extends Component {
                     showOptReqLabel={true}
                     labelText="Pin"
                     value={this.state.fields["pin"]}
-                    invalidText={pin_errors}
+                    invalidText={pin_error_msg}
                     isInvalid={pin_is_invalid}
                     onChange={this.handlePin.bind(this, 'pin')}
                     helperText="Your PIN serves as the password for your account. Make sure it is a number you will remember. Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
