@@ -14,7 +14,8 @@ export default class SignUp extends Component {
     super(props);
     this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
                    pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
-                   lastNameIsValid: false, pinIsValid: false, schoolIsValid: false}
+                   lastNameIsValid: false, pinIsValid: false, schoolIsValid: false, emailIsvalid: false,
+                   altEmailIsvalid: false }
   }
 
 
@@ -29,8 +30,6 @@ export default class SignUp extends Component {
   handleSubmit = event => {
     event.preventDefault();
     if (this.handleValidation()) {
-
-    } else {
       axios.post('/users', {
           user: { email: this.state.email, alt_email: this.state.alt_email, first_name: this.state.first_name,
                   last_name: this.state.last_name, pin: this.state.pin, school_id: '', allowed_email_patterns: '', error_email_msg: '', is_valid_email: '' }
@@ -45,32 +44,50 @@ export default class SignUp extends Component {
         .catch(function (error) {
          console.log(error)
       })
+    } else {
+      
     }
     
   }
 
   validateEmailDomain(email) {
-    let domain = email.split('@')
-    let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
-    if (!email_domain_is_allowed) {
-      this.state.error_email_msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
-      this.state.is_valid_email = true
-    } else {
-      this.state.error_email_msg = ""
-      this.state.is_valid_email = false
+    if (typeof email !== undefined) {
+      let domain = email.split('@')
+      let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
+      if (!email_domain_is_allowed) {
+        let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
+        // this.state.error_email_msg = msg
+        this.state.emailIsvalid = true
+        this.state.errors['email'] = msg
+        this.setState({emailIsvalid: true })
+      } else {
+        // this.state.error_email_msg = ""
+        this.state.emailIsvalid = false
+        this.state.errors['email'] = ""
+        this.setState({emailIsvalid: false })
+      }
     }
   }
 
   handleValidation() {
     let fields = this.state.fields;
+    let formIsValid = true;
+
+    if (!fields["email"]) {
+      formIsValid = false;
+      this.setState({emailIsvalid: true })
+      this.state.errors['email'] = "Can't be empty";
+    }
 
     if (!fields["first_name"]) {
+      formIsValid = false;
       this.setState({firstNameIsValid: true })
       this.state.errors['first_name'] = "Can't be empty";
     }
 
     if (fields["first_name"] && typeof fields["first_name"] == "string") {
       if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
+        formIsValid = false;
         this.setState({firstNameIsValid: true })
         this.state.errors['first_name'] = "First name is in-valid";
       }
@@ -78,23 +95,27 @@ export default class SignUp extends Component {
 
     if (!fields["last_name"]) {
       this.setState({lastNameIsValid: true })
+      formIsValid = false;
       this.state.errors['last_name'] = "Can't be empty";
     }
 
     if (fields["last_name"] && typeof fields["last_name"] == "string") {
       if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
+        formIsValid = false;
         this.setState({lastNameIsValid: true })
         this.state.errors['last_name'] = "Last name is in-valid";
       }
     }
 
     if (!fields["pin"]) {
+      formIsValid = false;
       this.setState({pinIsValid: true })
       this.state.errors['pin'] = "Can't be empty";
     }
 
     if (fields["pin"] && typeof fields["pin"] == "string") {
       if (!fields["pin"].match(/^[a-zA-Z]+$/)) {
+        formIsValid = false;
         this.setState({pinIsValid: true })
         this.state.errors['pin'] = "PIN is in-valid";
       }
@@ -102,17 +123,26 @@ export default class SignUp extends Component {
 
     if (!fields["school_id"]) {
       this.setState({schoolIsValid: true })
+      formIsValid = false;
       this.state.errors['school_id'] = "Please select school"
     }
+    return formIsValid;
   }
 
-  handleEmail = event => {
-    this.setState ({ email: event.target.value })
-    this.validateEmailDomain(event.target.value)
+  handleEmail(field, e) {
+    this.setState({ emailIsvalid: false, email: e.target.value})
+    let fields = this.state.fields;
+    fields[field] = e.target.value
+    this.setState({ fields });
+    this.validateEmailDomain(e.target.value)
   }
 
-  handleAltEmail = event => {
-    this.setState ({ alt_email: event.target.value })
+  handleAltEmail(field, e) {
+    this.setState ({ altEmailIsvalid: false, alt_email: event.target.value })
+    let fields = this.state.fields;
+    fields[field] = e.target.value
+    this.setState({ fields });
+    this.validateAltEmailDomain(e.target.value)
   }
 
   handleFirstName(field, e) {
@@ -209,8 +239,8 @@ export default class SignUp extends Component {
 
 
   render() {
-    let error_email_msg = this.state.error_email_msg
-    let is_valid_email = this.state.is_valid_email
+    let error_email_msg = this.state.errors["email"]
+    let email_is_invalid = this.state.emailIsvalid
 
     let first_name_invalid = this.state.firstNameIsValid
     let last_name_invalid = this.state.lastNameIsValid
@@ -234,10 +264,10 @@ export default class SignUp extends Component {
                     isRequired
                     showOptReqLabel={true}
                     labelText="Your DOE Email Address"
-                    value={this.state.email}
-                    onChange={this.handleEmail}
+                    value={this.state.fields["email"]}
+                    onChange={this.handleEmail.bind(this, "email")}
                     invalidText={error_email_msg}
-                    isInvalid={is_valid_email}
+                    isInvalid={email_is_invalid}
                     helperText="Email address must end with @schools.nyc.gov or a participating school domain."
                   />
                 </FormField>
@@ -247,7 +277,7 @@ export default class SignUp extends Component {
                     showOptReqLabel={true}
                     labelText="Alternate email address"
                     value={this.state.alt_email}
-                    onChange={this.handleAltEmail}
+                    onChange={this.handleAltEmail.bind(this, "email")}
                   />
 
                 </FormField>
