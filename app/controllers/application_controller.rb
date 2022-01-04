@@ -57,9 +57,9 @@ class ApplicationController < ActionController::Base
     # be careful -- after first access stored_location_for clears to a nil, so read it once
     # and store it in a local var before printing out or any other access
     redirect_url = stored_location_for(:user)
-    # unless redirect_url.present?
-    #   redirect_url = app_url
-    # end
+    unless redirect_url.present?
+      redirect_url = '/teacher_set_data'
+    end
 
     # Redirect to admin dashboard if this is an admin login
     # Commenting this out due to inconsistency when demo-ing with account that are admins
@@ -144,7 +144,9 @@ class ApplicationController < ActionController::Base
     if originating_location.present?
       # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
       if params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
-        originating_location = "teacher_set_details/#{params["id"]}"
+        originating_location = "/teacher_set_details/#{params["id"]}"
+      else
+        originating_location = "/teacher_set_data"
       end
     end
 

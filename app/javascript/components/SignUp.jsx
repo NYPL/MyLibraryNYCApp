@@ -30,15 +30,19 @@ export default class SignUp extends Component {
   handleSubmit = event => {
     event.preventDefault();
     if (this.handleValidation()) {
+      
       axios.post('/users', {
-          user: { email: this.state.email, alt_email: this.state.alt_email, first_name: this.state.first_name,
-                  last_name: this.state.last_name, pin: this.state.pin, school_id: '', allowed_email_patterns: '', error_email_msg: '', is_valid_email: '' }
+          user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
+                  last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: '1036' }
        }).then(res => {
+
           // if (res.data.errors) !== null {
           //   console.log(res.data.errors + ' no errors')
           // } else {
-          //   console.log(res.data.errors["email"] + " ppppppp")
-          // }
+            console.log(res.request.responseURL + "olololo")
+            window.location = res.request.responseURL;
+            return false;
+          //}
 
         })
         .catch(function (error) {
@@ -119,19 +123,22 @@ export default class SignUp extends Component {
     }
 
     if (fields["pin"] && typeof fields["pin"] == "string") {
-      if (!fields["pin"].match(/^[a-zA-Z]+$/)) {
+      if (!fields["pin"] && !(/^[0-9\b]+$/).test(fields["pin"])) {
         formIsValid = false;
         this.setState({pinIsValid: true })
         this.state.errors['pin'] = "PIN is in-valid";
       }
     }
 
-    if (!fields["school_id"]) {
-      this.setState({schoolIsValid: true })
-      formIsValid = false;
-      this.state.errors['school_id'] = "Please select school"
-    }
+    // if (!fields["school_id"]) {
+    //   this.setState({schoolIsValid: true })
+    //   formIsValid = false;
+    //   this.state.errors['school_id'] = "Please select school"
+    // }
     this.showNotifications()
+
+    console.log(Object.entries(this.state.errors) + "   errros")
+    console.log(formIsValid + "   formIsValid")
     return formIsValid;
   }
 
@@ -239,7 +246,7 @@ export default class SignUp extends Component {
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
-
+    this.state.fields["school_id"] = '1036'
     if (!this.state.fields["school_id"]) {
       this.setState({schoolIsValid: true })
       this.state.errors['school_id'] = "Please select school"
@@ -270,13 +277,39 @@ export default class SignUp extends Component {
 
   showNotifications() {
     if (Object.entries(this.state.errors).length > 0) {
-      return 'display_block'
+      return 'display_block signUpErrors'
     } else {
-      return 'display_none'
+      return 'display_none signUpErrors'
     }
   }
 
+
+  showErrors() {
+    return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["pin"] ? 'block' : 'none'
+  }
+
+  showEmailError() {
+    return this.state.errors["email"]? 'block' : 'none'
+  }
+
+  showAltEmailError() {
+    return this.state.errors["alt_email"]? 'block' : 'none'
+  }
+
+  showFirstNamerror() {
+    return this.state.errors["first_name"]? 'block' : 'none'
+  }
+
+  showLastNamerror() {
+    return this.state.errors["last_name"]? 'block' : 'none'
+  }
+
+  showPinError() {
+    return this.state.errors["pin"]? 'block' : 'none'
+  }
+
   render() {
+
     let error_email_msg = this.state.errors["email"]
     let email_is_invalid = this.state.emailIsvalid
 
@@ -293,6 +326,8 @@ export default class SignUp extends Component {
     let alt_email_error_msg = this.state.errors["alt_email"]
 
     let error_msgs = this.state.errors
+
+    let email = error_msgs["email"] ? 'display' : 'none'
   
 
     return (
@@ -301,17 +336,19 @@ export default class SignUp extends Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-
-              <Notification className={this.showNotifications()} noMargin notificationType={NotificationTypes.Announcement} 
-                notificationContent={
-                  <Text noSpace displaySize="mini">
-                    {error_msgs["email"]} {<br/>}
-                    {error_msgs["alt_email"]} {<br/>}
-                    {error_msgs["first_name"]} {<br/>}
-                    {error_msgs["last_name"]} {<br/>}
-                    {error_msgs["pin"]} {<br/>}
-                  </Text>} 
-              />
+              <div style={{ display: this.showErrors() }}>
+                <Notification className={this.showNotifications()} noMargin notificationType={NotificationTypes.Announcement} 
+                  notificationContent={
+                    <Text noSpace displaySize="mini" className="signUpErrors">
+                      <div style={{ display: this.showEmailError() }}> {error_msgs["email"]} {<br/>} </div>
+                      <div style={{ display: this.showAltEmailError() }}> {error_msgs["alt_email"]} {<br/>} </div>
+                      <div style={{ display: this.showFirstNamerror() }}> {error_msgs["first_name"]} {<br/>} </div>
+                      <div style={{ display: this.showLastNamerror() }}> {error_msgs["last_name"]} {<br/>} </div>
+                      <div style={{ display: this.showPinError() }}> {error_msgs["pin"]} {<br/>} </div>
+                    </Text>
+                  } 
+                />
+              </div>
 
               <Form>
                 <FormField>
@@ -362,7 +399,7 @@ export default class SignUp extends Component {
                 <FormField>
                   <Select id="school_id" 
                     labelText="Your School" 
-                    value='' 
+                    value='1036' 
                     showLabel 
                     showOptReqLabel={false}
                     invalidText={school_error_msg}
