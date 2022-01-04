@@ -33,7 +33,7 @@ export default class SignUp extends Component {
       
       axios.post('/users', {
           user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
-                  last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: '1036' }
+                  last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: '' }
        }).then(res => {
 
           // if (res.data.errors) !== null {
@@ -246,7 +246,7 @@ export default class SignUp extends Component {
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
-    this.state.fields["school_id"] = '1036'
+    this.state.fields["school_id"] = ''
     if (!this.state.fields["school_id"]) {
       this.setState({schoolIsValid: true })
       this.state.errors['school_id'] = "Please select school"
@@ -349,7 +349,6 @@ export default class SignUp extends Component {
                   } 
                 />
               </div>
-
               <Form>
                 <FormField>
                   <TextInput
@@ -378,6 +377,8 @@ export default class SignUp extends Component {
 
                 <FormField>
                   <TextInput showOptReqLabel={false}
+                    isRequired
+                    showOptReqLabel={true}
                     labelText="First Name"
                     value={this.state.fields["first_name"]}
                     invalidText={first_name_error_msg}
@@ -388,6 +389,8 @@ export default class SignUp extends Component {
 
                 <FormField>
                   <TextInput showOptReqLabel={false}
+                    isRequired
+                    showOptReqLabel={true}
                     labelText="Last Name"
                     value={this.state.fields["last_name"]}
                     invalidText={last_name_error_msg}
@@ -399,9 +402,10 @@ export default class SignUp extends Component {
                 <FormField>
                   <Select id="school_id" 
                     labelText="Your School" 
-                    value='1036' 
-                    showLabel 
-                    showOptReqLabel={false}
+                    value='' 
+                    showLabel
+                    isRequired
+                    showOptReqLabel={true}
                     invalidText={school_error_msg}
                     isInvalid={school_is_invalid}
                     onChange={this.handleSchool.bind(this, 'school_id')}>

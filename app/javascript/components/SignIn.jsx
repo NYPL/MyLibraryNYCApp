@@ -8,6 +8,7 @@ import {
   TemplateAppContainer, Icon, Notification, Card, NotificationTypes,
   CardHeading, CardContent, CardLayouts, HeadingLevels, Text
 } from '@nypl/design-system-react-components';
+import validator from 'validator'
 
 import {
   BrowserRouter as Router,
@@ -38,13 +39,10 @@ export default class SignIn extends Component {
       email: event.target.value
     })
 
-    const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-    if(regex.test(this.state.email) == false) {
+    if (!validator.isEmail(event.target.value)) {
       this.state.error_display = "block"
       this.state.invali_email_msg = "Please enter a valid email address"
-    }
-    else {
+    }else {
       this.state.error_display = "none"
     }
   }
@@ -55,6 +53,7 @@ export default class SignIn extends Component {
     axios.post('/login', {
         email: this.state.email
      }).then(res => {
+
         if (res.data.logged_in) {
           window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ':3000/' + res.data.user_return_to
           return false;
