@@ -337,7 +337,7 @@ export default class SignUp extends Component {
           contentPrimary={
             <>
               <div style={{ display: this.showErrors() }}>
-                <Notification className={this.showNotifications()} noMargin notificationType={NotificationTypes.Announcement} 
+                <Notification className={this.showNotifications()} noMargin notificationType={NotificationTypes.Warning} 
                   notificationContent={
                     <Text noSpace displaySize="mini" className="signUpErrors">
                       <div style={{ display: this.showEmailError() }}> {error_msgs["email"]} {<br/>} </div>
