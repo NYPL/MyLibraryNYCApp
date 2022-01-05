@@ -22,9 +22,11 @@ ActiveAdmin.register HoldChange do
       # Update teacher-set available copies while cancel or closed the hold.
       if [CANCELLED, CLOSED].include?(params[:hold_change]['status'])
         hold = Hold.find(params[:hold_change]['hold_id'])
-        ts = TeacherSet.find(hold.teacher_set_id)
-        hold.teacher_set.available_copies = hold.teacher_set.available_copies.to_i + ts.holds_count_for_user(current_user, hold.id).to_i
-        hold.teacher_set.save!
+        teacher_set = TeacherSet.where(id: hold.teacher_set_id).first
+        if teacher_set.present?
+          hold.teacher_set.available_copies = hold.teacher_set.available_copies.to_i + teacher_set.holds_count_for_user(current_user, hold.id).to_i
+          hold.teacher_set.save!
+        end
       end
       create!
     end
