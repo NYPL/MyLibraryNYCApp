@@ -14,8 +14,8 @@ export default class SignUp extends Component {
     super(props);
     this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
                    pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
-                   lastNameIsValid: false, pinIsValid: false, schoolIsValid: false, emailIsvalid: false,
-                   altEmailIsvalid: false }
+                   lastNameIsValid: false, pinIsValid: false, schoolIsValid: false, emailIsInvalid: false,
+                   altEmailIsvalid: false, messages: {} }
   }
 
 
@@ -57,18 +57,39 @@ export default class SignUp extends Component {
   validateEmailDomain(email) {
     let domain = email.split('@')
     let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
+
     if (!email_domain_is_allowed) {
       let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
+      console.log("in valid email")
       this.state.errors['email'] = msg
-      this.setState({emailIsvalid: true })
-    } else {
-      this.state.errors['email'] = ""
-      this.setState({emailIsvalid: false })
-    }
+      this.setState({emailIsInvalid: true })
+    } 
+
+    // else {
+    //   console.log("valid email")
+    //   this.state.errors['email'] = ""
+    //   this.setState({emailIsInvalid: false })
+    // }
+
+      
+      axios.get('/check_email', { params: { email: email } }).then(res => {
+        let msg = ""
+        console.log( res.data.statusCode == 200 + " 2220000")
+        if (res.data.statusCode == 200 || res.data.statusCode == 409) {
+          this.state.errors['email'] = "We've confirmed that you don't already have a MyLibraryNYC account."
+        } else if (res.data.statusCode == 404) {
+          this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
+        }
+        this.setState({emailIsInvalid: true })
+        
+      }).catch(function (error) {
+         console.log(error)
+      })
+    
   }
 
   validateAltEmailDomain(alt_email) {
-    if (!validator.isEmail(alt_email)) {
+    if (alt_email && !validator.isEmail(alt_email)) {
       let msg = 'Enter a valid alternate email'
       this.state.errors['alt_email'] = msg
       this.setState({altEmailIsvalid: true })
@@ -84,7 +105,7 @@ export default class SignUp extends Component {
 
     if (!fields["email"]) {
       formIsValid = false;
-      this.setState({emailIsvalid: true })
+      this.setState({emailIsInvalid: true })
       this.state.errors['email'] = "Email can't be empty";
     }
 
@@ -143,7 +164,7 @@ export default class SignUp extends Component {
   }
 
   handleEmail(field, e) {
-    this.setState({ emailIsvalid: false })
+    this.setState({ emailIsInvalid: false })
     this.state.errors['email'] = ""
 
     let fields = this.state.fields;
@@ -151,7 +172,7 @@ export default class SignUp extends Component {
     this.setState({ fields });
 
     if (!this.state.fields["email"]) {
-      this.setState({emailIsvalid: true })
+      this.setState({emailIsInvalid: true })
       this.state.errors['email'] = "Email can't be empty"
     }
     this.validateEmailDomain(e.target.value)
@@ -311,7 +332,7 @@ export default class SignUp extends Component {
   render() {
 
     let error_email_msg = this.state.errors["email"]
-    let email_is_invalid = this.state.emailIsvalid
+    let email_is_invalid = this.state.emailIsInvalid
 
     let first_name_invalid = this.state.firstNameIsValid
     let last_name_invalid = this.state.lastNameIsValid

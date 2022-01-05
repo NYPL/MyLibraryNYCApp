@@ -12,6 +12,7 @@ import ParticipatingSchools from "../components/ParticipatingSchools";
 import AppBreadcrumbs from "../components/AppBreadcrumbs";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
+import SignOut from "../components/SignOut";
 import CalendarOfEvents from "../components/CalendarOfEvents";
 import SearchTeacherSets from "../components/SearchTeacherSets";
 import Accounts from "../components/Accounts";
@@ -54,10 +55,10 @@ export default class Routes extends React.Component {
                 <Route path="/participating-schools" component={ParticipatingSchools}  />
                 <Route path="/signin" component={SignIn} userSignedIn={this.state.userSignedIn} />
                 <Route path="/signup" component={SignUp} />
+                <Route path="/signout" component={SignOut} />
                 <Route path="/teacher_set_data" name="Teacher Sets" component={SearchTeacherSets} />
                 <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
                 <Route path="/account_details" component={Accounts} />
-                <Route path="/signup" component={SignUp} />
                 <Route
                   path='/teacher_set_details/:id'
                   render={routeProps => (

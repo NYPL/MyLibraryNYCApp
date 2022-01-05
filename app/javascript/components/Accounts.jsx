@@ -4,9 +4,13 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, ButtonTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels
+  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes
 } from '@nypl/design-system-react-components';
 
+import {
+  BrowserRouter as Router,
+  Link as ReactRouterLink,
+} from "react-router-dom";
 
 
 export default class Accounts extends Component {
@@ -85,7 +89,12 @@ export default class Accounts extends Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} />              
+              <div style={{display: 'flex'}}>
+                <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} /> 
+                <Link type={LinkTypes.Action}>
+                  <ReactRouterLink to="/signout"> (Sign Out)</ReactRouterLink>
+                </Link>
+              </div>          
               <Form onSubmit={this.handleSubmit} method="put">
                 <FormField>
                   <TextInput
