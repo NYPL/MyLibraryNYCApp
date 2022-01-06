@@ -29,11 +29,11 @@ componentDidMount() {
 render() {
   return (
     <div className="calendarButton">
-      <Button className="calendar_button" buttonType={ButtonTypes.Primary}>
+      <Button className="calendar_button" buttonType={ButtonTypes.NoBrand}>
         <Link className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/home/calendar_event/" + this.state.mln_calendar_file_name } > Calendar of Events </Link>
       </Button>
 
-      <Button className="calendar_button" buttonType={ButtonTypes.Primary}> 
+      <Button className="calendar_button" buttonType={ButtonTypes.NoBrand}> 
         <Link className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/assets/2018_2019_School_Outreach_Menu_of_Services.pdf" } > Menu of Services </Link>
       </Button>
     </div>

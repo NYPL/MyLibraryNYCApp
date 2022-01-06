@@ -63,28 +63,27 @@ export default class SignUp extends Component {
       console.log("in valid email")
       this.state.errors['email'] = msg
       this.setState({emailIsInvalid: true })
-    } 
-
-    // else {
-    //   console.log("valid email")
-    //   this.state.errors['email'] = ""
-    //   this.setState({emailIsInvalid: false })
-    // }
+    }
+    else {
+      console.log("valid email")
+      this.state.errors['email'] = ""
+      this.setState({emailIsInvalid: false })
+    }
 
       
-      axios.get('/check_email', { params: { email: email } }).then(res => {
-        let msg = ""
-        console.log( res.data.statusCode == 200 + " 2220000")
-        if (res.data.statusCode == 200 || res.data.statusCode == 409) {
-          this.state.errors['email'] = "We've confirmed that you don't already have a MyLibraryNYC account."
-        } else if (res.data.statusCode == 404) {
-          this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
-        }
-        this.setState({emailIsInvalid: true })
+      // axios.get('/check_email', { params: { email: email } }).then(res => {
+      //   let msg = ""
+      //   console.log( res.data.statusCode == 200 + " 2220000")
+      //   if (res.data.statusCode == 200 || res.data.statusCode == 409) {
+      //     this.state.errors['email'] = "We've confirmed that you don't already have a MyLibraryNYC account."
+      //   } else if (res.data.statusCode == 404) {
+      //     this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
+      //   }
+      //   this.setState({emailIsInvalid: true })
         
-      }).catch(function (error) {
-         console.log(error)
-      })
+      // }).catch(function (error) {
+      //    console.log(error)
+      // })
     
   }
 
