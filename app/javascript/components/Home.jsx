@@ -192,10 +192,8 @@ export default class Home extends Component {
                   <AccessDigitalResources />
                 </div>
               }
-
           contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
           sidebar="right"
-
           footer={<div><NewsLetter /></div>}
           
         />

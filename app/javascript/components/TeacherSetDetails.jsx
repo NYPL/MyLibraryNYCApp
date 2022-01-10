@@ -18,10 +18,11 @@ import {
   MDXCreateElement,
   Heading,
   Image,
-  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField
+  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, ImageRatios, ImageSizes, SimpleGrid
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
+import mlnImage from '../images/mln.svg'
 
 
 
@@ -55,23 +56,17 @@ export default class TeacherSetDetails extends React.Component {
 
 
   handleQuantity = event => {
-    console.log("okokokokoko")
     this.setState({
       quantity: event.target.value
     })
   }
 
   handleSubmit = event => {
-    console.log("order submit")
     event.preventDefault();
-
     axios.post('/holds', {
         teacher_set_id: this.props.match.params.id
      }).then(res => {
       
-        console.log(res.request.responseURL + " plpl")
-        console.log(process.env.MLN_INFO_SITE_HOSTNAME + " oookok")
-
         if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
           window.location = res.request.responseURL;
           return false;
@@ -111,13 +106,21 @@ export default class TeacherSetDetails extends React.Component {
 
   TeacherSetBooks() {
     return this.state.books.map((data, i) => {
-      return <div>
-        <ReactRouterLink to={"/book_details/" + data.id} >
-          <Image imageSize="small" src={data.cover_uri} />
+      return <ReactRouterLink to={"/book_details/" + data.id} >
+          {this.BookImage(data)}
         </ReactRouterLink>
-      </div>      
     })
   }
+
+
+  BookImage(data) {
+    if (data.cover_uri) {
+      return <Image src={data.cover_uri} imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.Default}  />
+    } else {
+      return <Image src={mlnImage} imageSize={ImageSizes.Default} />
+    }
+  }
+
 
   TeacherSetNotesContent() {
     return this.state.teacher_set_notes.map((note, i) => {
@@ -187,7 +190,7 @@ export default class TeacherSetDetails extends React.Component {
                 <Heading id="heading2" level={2} text="What is in the box" />
                 <div> { this.TeacherSetDescription() } </div>{<br/>}
                 <div> { this.BooksCount() } </div>
-                <div className="bookImage"> { this.TeacherSetBooks() } </div>
+                <SimpleGrid columns={5} gap="xxs"> { this.TeacherSetBooks() } </SimpleGrid>
               </div>
 
               <div className="tsDetails">

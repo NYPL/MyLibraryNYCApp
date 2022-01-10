@@ -112,10 +112,9 @@ export default class SearchTeacherSets extends Component {
     return this.state.teacher_sets.map((ts, i) => {
       return <div className="teacherSetResults">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
- 
-          <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.square} imageSize={ImageSizes.Small}>
+          <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
             <CardHeading level={HeadingLevels.Three} id="row2-heading1">
-              <ReactRouterLink to={"/teacher_set_details/" + ts.id} className="removelink">
+              <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
                 {ts.title}
               </ReactRouterLink>
             </CardHeading>
