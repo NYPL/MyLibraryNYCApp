@@ -17,9 +17,10 @@ import {
   MDXCreateElement,
   Heading,
   Image,
-  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField
+  List, Link, LinkTypes, DSProvider, TemplateAppContainer, HorizontalRule, Text, Form, FormRow, FormField, Icon, ImageSizes, HeadingLevels, ImageRatios
 } from '@nypl/design-system-react-components';
-
+import mlnImage from '../images/mln.svg'
+import bookImage from '../images/book.png'
 import TeacherSetOrder from "./TeacherSetOrder";
 
 export default class TeacherSetBooks extends React.Component {
@@ -32,7 +33,7 @@ export default class TeacherSetBooks extends React.Component {
   componentDidMount() {
     axios.get('/books/'+ this.props.match.params.id)
       .then(res => {
-        this.setState({  
+        this.setState({
           book: res.data.book, teacher_sets: res.data.teacher_sets, 
         });
       })
@@ -52,6 +53,63 @@ export default class TeacherSetBooks extends React.Component {
     })
   }
 
+  IsBookTitlePresent() {
+    return (this.state.book["title"] == null) ? false : true
+  }
+
+  IsBookSubTitlePresent() {
+    return (this.state.book["sub_title"] == null) ? false : true
+  }
+
+  IsBookDescriptionPresent() {
+    return (this.state.book["description"] == null) ? false : true
+  }
+
+  IsBookStatementOfResponsibilityPresent() {
+    return (this.state.book["statement_of_responsibility"] == null) ? false : true
+  }
+
+  IsBookNotesPresent(){
+    return (this.state.book["notes"] == null) ? false : true
+  }
+
+  BookCoverUri() {
+    return <div>
+      book.cover_uri
+    </div>
+  }
+
+
+  BookImage(book) {
+    if (book.cover_uri) {
+      return book.cover_uri
+    } else {
+      return mlnImage
+    }
+  }
+
+
+  TeacherSetDetails() {
+    if (this.state.teacher_sets) {
+      return this.state.teacher_sets.map((ts, i) => {
+        return <div> {<br/>}
+            <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
+              <CardHeading level={HeadingLevels.Three} id="row2-heading1">
+                <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
+                  {ts.title}
+                </ReactRouterLink>
+              </CardHeading>
+
+              
+              <CardContent> {ts.suitabilities_string} </CardContent>
+              <CardContent> {ts.availability} </CardContent>
+              <CardContent> {ts.description} </CardContent>
+            </Card>
+            <HorizontalRule align="left" height="3px" width="856px" />
+        </div>
+      })
+    }
+  }
 
   render() {
     let book = this.state.book;
@@ -63,65 +121,87 @@ export default class TeacherSetBooks extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <Image imageSize="medium" src={book.cover_uri} />
+              <Card layout={CardLayouts.Row}  imageComponent={<div className=""><Image className="bookPageImage" src={this.BookImage(book)} alt="Alt text" imageAspectRatio={ImageRatios.threeByFour} imageSize={ImageSizes.Default} /></div>} >
 
-              <div>
-                <h2>{book.title}</h2>
-                <h3>{book.sub_title}</h3>
-                <h4>{book.statement_of_responsibility}</h4>
-                <p>{book.description}</p>
-              </div>
+                 { this.IsBookTitlePresent() ? (
+                  <CardHeading level={HeadingLevels.Three}>
+                    {this.state.book.title}
+                  </CardHeading>
+                ) : (<></>) }
+
+                 { this.IsBookSubTitlePresent() ? (
+                  <CardHeading level={HeadingLevels.Four}>
+                    {this.state.book.sub_title}
+                  </CardHeading>
+                ) : (<></>) }
+
+                { this.IsBookStatementOfResponsibilityPresent() ? (
+                  <CardContent level={HeadingLevels.Three}>
+                    {this.state.book.statement_of_responsibility}{<br/>}
+                  </CardContent>
+                ) : (<></>) }
+
+                { this.IsBookDescriptionPresent() ? (
+                  <CardContent>
+                    {this.state.book.description}{<br/>}
+                  </CardContent>
+                ) : (<></>) }
+              </Card>
+              {<br/>}{<br/>}
 
               <List type="dl">
-                <dt className="font-weight-500 orderDetails">
-                  Publication Date
-                </dt>
-                <dd className="orderDetails">
-                  {book.publication_date}
-                </dd>
+                { book.publication_date ? (<>
+                  <dt className="font-weight-500 orderDetails">
+                    Publication Date
+                  </dt> 
+                  <dd className="orderDetails">
+                    {book.publication_date}
+                  </dd> </>) : (<></>) }
 
-                <dt className="font-weight-500 orderDetails">
-                  Call Number
-                </dt>
-                <dd className="orderDetails">
-                  {book.call_number}
-                </dd>
+                { book.call_number ? (<>
+                  <dt className="font-weight-500 orderDetails">
+                    Call Number
+                  </dt> 
+                  <dd className="orderDetails">
+                    {book.call_number}
+                  </dd> </>) : (<></>) }
 
-                <dt className="font-weight-500 orderDetails">
-                  Physical Description
-                </dt>
-                <dd className="orderDetails">
-                  {book.physical_description}
-                </dd>
+                { book.physical_description ? (<>
+                  <dt className="font-weight-500 orderDetails">
+                    Physical Description
+                  </dt> <dd className="orderDetails">
+                    {book.physical_description}
+                  </dd></>) : (<></>) }
 
-                <dt className="font-weight-500 orderDetails">
-                  Primary Language
-                </dt>
-                <dd className="orderDetails">
-                  {book.primary_language}
-                </dd>
+                { book.primary_language ? (<>
+                  <dt className="font-weight-500 orderDetails">
+                    Primary Language
+                  </dt> <dd className="orderDetails">
+                    {book.primary_language}
+                  </dd></>) : (<></>) }
 
-                <dt className="font-weight-500 orderDetails">
-                  ISBN
-                </dt>
-                <dd className="orderDetails">
-                  {book.isbn}
-                </dd>
+                { book.notes ? (<>
+                  <dt className="font-weight-500 orderDetails">
+                    ISBN
+                  </dt> <dd className="orderDetails">
+                    {book.isbn}
+                  </dd></>) : (<></>) }
 
-                <dt className="font-weight-500 orderDetails">
-                  Notes
-                </dt>
-                <dd className="orderDetails">
-                  {book.notes}
-                </dd>
-              </List>
-              <a target='_blank' href={book.details_url}>View in catalog</a>
+                { book.notes ? (<>
+                  <dt className="font-weight-500 orderDetails">
+                    Notes
+                  </dt> <dd className="orderDetails">
+                    {book.notes}
+                  </dd></>) : (<></>) }
+                  <dt className="font-weight-500 orderDetails">
+                    <a target='_blank' href={book.details_url}>View in catalog</a>{<br/>}
+                  </dt>
+              </List>{<br/>}
 
-              <h3>Appears in These Sets:</h3>
-
+              <Heading level={HeadingLevels.Three}>Appears in These Sets:</Heading>
+              {this.TeacherSetDetails()}
             </>
           }
-
           contentSidebar={<></>}
           sidebar="right"
         />
