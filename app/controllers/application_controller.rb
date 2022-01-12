@@ -144,7 +144,7 @@ class ApplicationController < ActionController::Base
     if originating_location.present?
       # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
       if params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
-        originating_location = "/teacher_set_details/#{params["id"]}"
+        originating_location = "teacher_set_details/#{params["id"]}"
       else
         originating_location = "/teacher_set_data"
       end
