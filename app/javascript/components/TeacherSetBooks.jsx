@@ -92,7 +92,7 @@ export default class TeacherSetBooks extends React.Component {
   TeacherSetDetails() {
     if (this.state.teacher_sets) {
       return this.state.teacher_sets.map((ts, i) => {
-        return <div> {<br/>}
+        return <div>
           <div className="bookPageTSBorder">
             <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
               <CardHeading level={HeadingLevels.Three} id="row2-heading1">
@@ -199,7 +199,7 @@ export default class TeacherSetBooks extends React.Component {
                   </dt>
               </List>{<br/>}
 
-              <Heading level={HeadingLevels.Three}>Appears in These Sets:</Heading>
+              <Heading level={HeadingLevels.Three}>Appears in These Sets</Heading>
               {this.TeacherSetDetails()}
             </>
           }

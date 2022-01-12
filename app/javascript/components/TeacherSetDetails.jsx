@@ -189,12 +189,12 @@ export default class TeacherSetDetails extends React.Component {
               <div>
                 <Heading id="heading2" level={2} text="What is in the box" />
                 <div> { this.TeacherSetDescription() } </div>{<br/>}
-                <div> { this.BooksCount() } </div>
+                <div> { this.BooksCount() } </div> {<br/>}
                 <SimpleGrid columns={5} gap="xxs"> { this.TeacherSetBooks() } </SimpleGrid>
-              </div>
+              </div>{<br/>}
 
               <div className="tsDetails">
-                <List type="dl">
+                <List type="dl" className="listType">
                   <dt className="font-weight-500 orderDetails">
                     Suggested Grade Range [New]
                   </dt>
