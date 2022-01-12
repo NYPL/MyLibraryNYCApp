@@ -64,7 +64,7 @@ export default class TeacherSetDetails extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     axios.post('/holds', {
-        teacher_set_id: this.props.match.params.id
+        teacher_set_id: this.props.match.params.id, query_params: {quantity: this.state.quantity}
      }).then(res => {
       
         if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
@@ -80,11 +80,6 @@ export default class TeacherSetDetails extends React.Component {
     })
   }
 
-
-  onFieldChange(e) {
-    const newFieldVal = e.target.value;
-    this.setState({ quantity: newFieldVal });
-  }
 
   TeacherSetTitle() {
     return <div>{this.state.teacher_set["title"]}</div>
@@ -128,10 +123,6 @@ export default class TeacherSetDetails extends React.Component {
     })
   }
 
-  ViewCatalogLink() {
-    return 
-  }
-
   render() {
     let allowed_quantities = this.state.allowed_quantities.map((item, i) => {
       return (
@@ -156,35 +147,34 @@ export default class TeacherSetDetails extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
+              <div className="content-top card_details">
+                <Card layout="row" border className="order-list">
+                  <CardHeading level={3} className="ts-details">
+                   { this.TeacherSetTitle() }
+                  </CardHeading>
 
-                <div className="content-top card_details">
-                  <Card layout="row" border className="order-list">
-                    <CardHeading level={3} className="ts-details">
-                     { this.TeacherSetTitle() }
-                    </CardHeading>
+                  <CardHeading level={4} className="ts-details">
+                   { this.AvailableCopies() }
+                  </CardHeading>
 
-                    <CardHeading level={4} className="ts-details">
-                     { this.AvailableCopies() }
-                    </CardHeading>
+                  <CardContent>
+                     <Text isItalic>Note : Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at help@mylibrarynyc.org</Text>
+                  </CardContent>
 
-                    <CardContent>
-                       <Text isItalic>Note : Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at help@mylibrarynyc.org</Text>
-                    </CardContent>
+                  <CardContent level={5}>
 
-                    <CardContent level={5}>
-
-                      <Form onSubmit={this.handleSubmit} className="order_select">
-                        <FormRow >
-                          <Select labelText="What is your favorite color?" showLabel={false} onChange={this.handleQuantity} value="" >
-                            {allowed_quantities}
-                          </Select>
-                          <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
-                        </FormRow>
-                      </Form>
-                      
-                    </CardContent>
-                  </Card>
-                </div>{<br/>}
+                    <Form onSubmit={this.handleSubmit} className="order_select">
+                      <FormRow >
+                        <Select showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+                          {allowed_quantities}
+                        </Select>
+                        <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
+                      </FormRow>
+                    </Form>
+                    
+                  </CardContent>
+                </Card>
+              </div>{<br/>}
 
               <div>
                 <Heading id="heading2" level={2} text="What is in the box" />
