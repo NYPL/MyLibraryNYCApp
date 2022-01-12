@@ -809,7 +809,16 @@ ul.list li:before {
 }
 
 .bookPageImage {
-  padding: 25px;
+  padding: 50px;
   background: #CCC;
   border-radius: 6px;
+}
+
+.bookPageTSBorder {
+  border: 1px solid #D8D8D8;
+  padding: 15px;
+}
+
+.listType {
+  border-bottom: 0px solid !important;
 }

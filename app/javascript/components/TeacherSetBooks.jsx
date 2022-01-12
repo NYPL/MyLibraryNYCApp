@@ -93,6 +93,7 @@ export default class TeacherSetBooks extends React.Component {
     if (this.state.teacher_sets) {
       return this.state.teacher_sets.map((ts, i) => {
         return <div> {<br/>}
+          <div className="bookPageTSBorder">
             <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
               <CardHeading level={HeadingLevels.Three} id="row2-heading1">
                 <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
@@ -105,7 +106,7 @@ export default class TeacherSetBooks extends React.Component {
               <CardContent> {ts.availability} </CardContent>
               <CardContent> {ts.description} </CardContent>
             </Card>
-            <HorizontalRule align="left" height="3px" width="856px" />
+          </div>
         </div>
       })
     }
@@ -121,7 +122,7 @@ export default class TeacherSetBooks extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <Card layout={CardLayouts.Row}  imageComponent={<div className=""><Image className="bookPageImage" src={this.BookImage(book)} alt="Alt text" imageAspectRatio={ImageRatios.threeByFour} imageSize={ImageSizes.Default} /></div>} >
+              <Card layout={CardLayouts.Row}  imageComponent={<div className=""><Image styles={{ padding: "10px", color: "#CCC" }} src={this.BookImage(book)} alt="Alt text" imageAspectRatio={ImageRatios.threeByFour} imageSize={ImageSizes.Default} additionalStyles={{background: "#CCC", padding: "10px"}}/></div>} >
 
                  { this.IsBookTitlePresent() ? (
                   <CardHeading level={HeadingLevels.Three}>
@@ -149,7 +150,7 @@ export default class TeacherSetBooks extends React.Component {
               </Card>
               {<br/>}{<br/>}
 
-              <List type="dl">
+              <List type="dl" className="listType">
                 { book.publication_date ? (<>
                   <dt className="font-weight-500 orderDetails">
                     Publication Date
