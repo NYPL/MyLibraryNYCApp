@@ -122,7 +122,7 @@ export default class TeacherSetBooks extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <Card layout={CardLayouts.Row}  imageComponent={<div className=""><Image styles={{ padding: "10px", color: "#CCC" }} src={this.BookImage(book)} alt="Alt text" imageAspectRatio={ImageRatios.threeByFour} imageSize={ImageSizes.Default} additionalStyles={{background: "#CCC", padding: "10px"}}/></div>} >
+              <Card layout={CardLayouts.Row}  imageComponent={<Image src={this.BookImage(book)} alt="Alt text" imageAspectRatio={ImageRatios.threeByFour} imageSize={ImageSizes.Small} additionalStyles={{background: "#F2F2F0", padding: "1px", position: "initial"}}/>} >
 
                  { this.IsBookTitlePresent() ? (
                   <CardHeading level={HeadingLevels.Three}>
