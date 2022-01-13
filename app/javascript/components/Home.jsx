@@ -72,10 +72,6 @@ export default class Home extends Component {
      }).then(res => {
         this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
                         ts_total_count: res.data.total_count });
-
-        console.log(this.state.facets);
-
-
         if (res.data.total_count > 20) {
           this.state.pagination = 'block';
         } else {
@@ -89,9 +85,6 @@ export default class Home extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-
-    console.log(event.target.value + " kskkkkk")
-
     if (this.state.keyword !== null) {
       this.props.history.push("/teacher_set_data"+ "?keyword=" + this.state.keyword)
     } else {
@@ -100,22 +93,14 @@ export default class Home extends Component {
     this.getTeacherSets()
   }
 
-
-  
   handleSearchKeyword = event => {
-
-    //console.log(event + "  ololololo")
-    // this.setState({ 
-    //   keyword: event.target.value
-    // })
+    this.setState({ 
+      keyword: event.target.value
+    })
   }
-
-
-
 
   onPageChange = (page) => {
     this.state.setComputedCurrentPage = page;
-
     axios.get('/teacher_sets', {
         params: {
           keyword: this.state.keyword,
@@ -127,7 +112,6 @@ export default class Home extends Component {
       .catch(function (error) {
        console.log(error)
     })
-
   };
 
   TeacherSetDetails() {
@@ -180,7 +164,7 @@ export default class Home extends Component {
                 <div>
                   <HorizontalRule align="left" height="3px" width="856px" />
                   <div className="medium_font">Search For Teacher Sets</div>
-                  <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword()}} />{<br/>}
+                  <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", name: "textInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
                   <HorizontalRule align="left" height="3px" width="856px" />
                   <div className="medium_font"> Professional Development & Exclusive Programs</div>
                   <div className="plain_text">MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State's 

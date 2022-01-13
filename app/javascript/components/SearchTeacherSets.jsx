@@ -48,7 +48,6 @@ export default class SearchTeacherSets extends Component {
 
 
   getTeacherSets() {
-    console.log(this.state.keyword + "plplpl")
     axios.get('/teacher_sets', {
         params: {
           keyword: this.state.keyword
@@ -70,7 +69,6 @@ export default class SearchTeacherSets extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-
     if (this.state.keyword !== null) {
       this.props.history.push("/teacher_set_data"+ "?keyword=" + this.state.keyword)
     }
@@ -157,7 +155,8 @@ export default class SearchTeacherSets extends Component {
                   labelText: "Search Teacher set",
                   name: "textInputName",
                   onChange: this.handleSearchKeyword,
-                  placeholder: "Search Teacher set"
+                  placeholder: "Search Teacher set",
+                  value: this.state.keyword
                 }}
               />
               {<br/>}
