@@ -332,21 +332,17 @@ export default class SignUp extends Component {
 
     let error_email_msg = this.state.errors["email"]
     let email_is_invalid = this.state.emailIsInvalid
-
     let first_name_invalid = this.state.firstNameIsValid
     let last_name_invalid = this.state.lastNameIsValid
     let pin_is_invalid = this.state.pinIsValid
     let school_is_invalid = this.state.schoolIsValid
     let alt_email_is_invalid = this.state.altEmailIsvalid
-
     let last_name_error_msg = this.state.errors["last_name"]
     let first_name_error_msg = this.state.errors["first_name"]
     let pin_error_msg = this.state.errors["pin"]
     let school_error_msg = this.state.errors["school_id"]
     let alt_email_error_msg = this.state.errors["alt_email"]
-
     let error_msgs = this.state.errors
-
     let email = error_msgs["email"] ? 'display' : 'none'
   
 

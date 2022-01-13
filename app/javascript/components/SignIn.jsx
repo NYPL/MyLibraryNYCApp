@@ -9,16 +9,8 @@ import {
   CardHeading, CardContent, CardLayouts, HeadingLevels, Text
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
-
-import {
-  BrowserRouter as Router,
-  Link as ReactRouterLink,
-} from "react-router-dom";
-
+import { BrowserRouter as Router, Link as ReactRouterLink } from "react-router-dom";
 import { Link, LinkTypes } from "@nypl/design-system-react-components";
-
-import questionCircle from '../images/fa-question-circle.svg'
-
 
 export default class SignIn extends Component {
 
@@ -26,7 +18,6 @@ export default class SignIn extends Component {
     super(props);
     this.state = { email: "", invali_email_msg: "", error_display: "none", user_signed_in: this.props.userSignedIn };
   }
-
 
   handleSearchKeyword = event => {    
     this.setState({
