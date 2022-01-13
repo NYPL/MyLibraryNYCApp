@@ -33,7 +33,7 @@ export default class SignUp extends Component {
       
       axios.post('/users', {
           user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
-                  last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: '' }
+                  last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: this.state.fields["school_id"] }
        }).then(res => {
 
           // if (res.data.errors) !== null {
@@ -150,11 +150,11 @@ export default class SignUp extends Component {
       }
     }
 
-    // if (!fields["school_id"]) {
-    //   this.setState({schoolIsValid: true })
-    //   formIsValid = false;
-    //   this.state.errors['school_id'] = "Please select school"
-    // }
+    if (!fields["school_id"]) {
+      this.setState({schoolIsValid: true })
+      formIsValid = false;
+      this.state.errors['school_id'] = "Please select school"
+    }
     this.showNotifications()
 
     console.log(Object.entries(this.state.errors) + "   errros")
@@ -328,6 +328,10 @@ export default class SignUp extends Component {
     return this.state.errors["pin"]? 'block' : 'none'
   }
 
+  showSchoolError() {
+    return this.state.errors["school_id"]? 'block' : 'none'
+  }
+
   render() {
 
     let error_email_msg = this.state.errors["email"]
@@ -361,6 +365,7 @@ export default class SignUp extends Component {
                       <div style={{ display: this.showFirstNamerror() }}> {error_msgs["first_name"]} {<br/>} </div>
                       <div style={{ display: this.showLastNamerror() }}> {error_msgs["last_name"]} {<br/>} </div>
                       <div style={{ display: this.showPinError() }}> {error_msgs["pin"]} {<br/>} </div>
+                      <div style={{ display: this.showSchoolError() }}> {error_msgs["school_id"]} {<br/>} </div>
                     </Text>
                   } 
                 />
