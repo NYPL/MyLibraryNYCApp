@@ -67,7 +67,7 @@ export default class TeacherSetOrder extends React.Component {
                       Reason For cancelling (optional)
                     </Label>
                     <TextInput id="cancel-order-button" value={this.state.comment} showLabel showOptReqLabel type="text" onChange={this.handleCancelComment}/>
-                    <Button className="button-color cancel-button" buttonType="primary" onClick={this.handleSubmit}> Cancel My Order </Button>
+                    <Button className="cancel-button" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Cancel My Order </Button>
                   </div>
 
                   <div className="content-secondary content-secondary--with-sidebar-right"></div>

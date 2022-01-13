@@ -63,7 +63,7 @@ export default class TeacherSetOrder extends React.Component {
 
   OrderDetails() {
     return <div className="tsOrderDetails">
-      <List id="nypl-list2" title="" type="dl">
+      <List id="nypl-list2" className="listType" title="" type="dl">
         <dt className="orderDetails font-weight-500">
           Quantity
         </dt>
@@ -90,9 +90,10 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   CancelButton() {
-    return <div id="order-cancel-button" style={{ display: this.showCancelButton() }}>
-      <Link className="button-color" type={ButtonTypes.NoBrand} href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
-    </div>
+    return <div style={{ display: this.showCancelButton() }}> <Button className="cancel-button" buttonType={ButtonTypes.NoBrand}>
+        <Link style={{ color: "#FFFFFF" }} className="href_link" href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
+      </Button>
+      </div>
   }
 
   render() {
@@ -102,7 +103,6 @@ export default class TeacherSetOrder extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-
               <div>
                 <Card border className="orderPage">
                   <CardHeading className="order_message">
