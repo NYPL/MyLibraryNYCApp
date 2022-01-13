@@ -31,7 +31,7 @@ export default class TeacherSetDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = { ts_details: {}, allowed_quantities: [], teacher_set: "", active_hold: "", books: [], value: "",
-                   quantity: "", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true };
+                   quantity: "1", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true };
   }
 
 
