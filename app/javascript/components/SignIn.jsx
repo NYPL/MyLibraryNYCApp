@@ -67,7 +67,7 @@ export default class SignIn extends Component {
           <>
             <Collapsible trigger={<><Text noSpace displaySize="caption">Your DOE Email Address <Icon align="left" color="ui.black" iconRotation="rotate0" name="action_help_default" size="small" /></Text></>}>
               <div className="signInEmailAlert">
-                <Notification noMargin notificationType={NotificationTypes.Announcement} 
+                <Notification noMargin notificationType={NotificationTypes.Announcement} showIcon={false}
                 notificationContent={
                   <Text noSpace displaySize="mini">Your DOE email address will look like jsmith@schools.nyc.gov, 
                     consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.

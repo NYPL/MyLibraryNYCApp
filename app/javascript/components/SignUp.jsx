@@ -266,7 +266,7 @@ export default class SignUp extends Component {
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
-    this.state.fields["school_id"] = ''
+
     if (!this.state.fields["school_id"]) {
       this.setState({schoolIsValid: true })
       this.state.errors['school_id'] = "Please select school"
@@ -353,7 +353,7 @@ export default class SignUp extends Component {
           contentPrimary={
             <>
               <div style={{ display: this.showErrors() }}>
-                <Notification className={this.showNotifications()} noMargin notificationType={NotificationTypes.Warning} 
+                <Notification className={this.showNotifications()} notificationType={NotificationTypes.Warning}
                   notificationContent={
                     <Text noSpace displaySize="mini" className="signUpErrors">
                       <div style={{ display: this.showEmailError() }}> {error_msgs["email"]} {<br/>} </div>
@@ -418,7 +418,7 @@ export default class SignUp extends Component {
                 <FormField>
                   <Select id="school_id" 
                     labelText="Your School" 
-                    value='' 
+                    value={this.state.fields["school_id"]}
                     showLabel
                     isRequired
                     showOptReqLabel={true}
