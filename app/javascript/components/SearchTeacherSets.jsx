@@ -20,7 +20,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -128,13 +128,20 @@ export default class SearchTeacherSets extends Component {
     })
   }
 
+  displayFilterFacets = event => {
+   console.log(event)
+
+  }
+
   TeacherSetFacets() {
     return this.state.facets.map((ts, i) => {
       return <div className="nypl-ds">{<br/>}
-      <div> { ts.label } </div>
-        { ts.items.map((item, index) =>
-          <div> <Checkbox id="test_id" labelText={item["label"]} showLabel />  </div>
-        )}
+         { ts.label }
+          { ts.items.map((item, index) =>
+          <CheckboxGroup defaultValue={[]} isRequired  layout="column" name="checkbox-story" onChange={this.displayFilterFacets} optReqFlag={false} >
+            <Checkbox id={index + 'id'} labelText={item["label"]} value={item["label"]} />
+          </CheckboxGroup>
+          )}
       </div>
     })
   }
