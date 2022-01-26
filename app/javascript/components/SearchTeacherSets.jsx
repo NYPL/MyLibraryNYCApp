@@ -38,7 +38,9 @@ export default class SearchTeacherSets extends Component {
     super(props);
     this.state = { teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
-                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets
+                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {} };
+  }
+
   componentDidMount() {
     if (this.state.keyword !== "" ) {
       this.getTeacherSets()
@@ -169,6 +171,8 @@ export default class SearchTeacherSets extends Component {
     })
   }
 
+
+
   TeacherSetSlider() {
     return <>
     </>
@@ -216,3 +220,4 @@ export default class SearchTeacherSets extends Component {
 SearchTeacherSets.defaultProps = {
   keyword: null
 };
+
