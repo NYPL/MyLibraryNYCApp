@@ -8,6 +8,9 @@ class SettingsController < ApplicationController
   def signup
   end
 
+  def signout
+  end
+
   def index
     unless user_signed_in?
       flash[:error] = "You must be logged in to access this page"

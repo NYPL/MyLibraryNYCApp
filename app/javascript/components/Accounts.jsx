@@ -42,7 +42,6 @@ export default class Accounts extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log(event.target.value + "eveveveve")
     axios.put('/users', {
         user: { alt_email: this.state.alt_email, school_id: '1234' }
      }).then(res => {
@@ -80,6 +79,25 @@ export default class Accounts extends Component {
     </List>
   }
 
+  signOut() {
+    const formData = {
+      email: 'consultdg@nypl.org'
+    };
+    axios.delete('/logout', formData)
+      .then(res => {
+        console.log(res.data)
+        if (res.data.status == 200 && res.data.logged_out == true) {
+          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000";
+          return false;
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+    })    
+  }
+
+
+
   render() {
     let user_name = this.state.current_user.first_name
 
@@ -91,9 +109,8 @@ export default class Accounts extends Component {
             <>
               <div style={{display: 'flex'}}>
                 <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} /> 
-                <Link type={LinkTypes.Action}>
-                  <ReactRouterLink to="/signout"> (Sign Out)</ReactRouterLink>
-                </Link>
+               
+                <Button onClick={this.signOut}>(Sign Out)</Button>
               </div>          
               <Form onSubmit={this.handleSubmit} method="put">
                 <FormField>
