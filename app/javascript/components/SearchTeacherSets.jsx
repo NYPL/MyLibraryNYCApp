@@ -71,6 +71,7 @@ export default class SearchTeacherSets extends Component {
   handleSearchKeyword = event => {
     if (event.target.value == "") {
       delete this.state.keyword;
+      delete this.state.selected_facets;
       this.props.history.push("/teacher_set_data");
       this.getTeacherSets(Object.assign({ keyword: this.state.keyword}, this.state.selected_facets));
     } else {
@@ -140,6 +141,11 @@ export default class SearchTeacherSets extends Component {
   };
 
   TeacherSetFacets() {
+
+    if (this.state.teacher_sets && this.state.teacher_sets.length <= 0) {
+      return <Heading id="heading5" level={5} text="No Results Found" />
+    }
+
     return this.state.facets.map((ts, i) => {
       return <div className="teachersetFacetsBorder">
           <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
@@ -148,7 +154,7 @@ export default class SearchTeacherSets extends Component {
               <Checkbox labelText={item["label"] + " " + item["count"]} value={item["value"].toString()} />
             ) }{<br/>}
           </CheckboxGroup>
-      </div>
+        </div>
     })
   }
 
