@@ -38,56 +38,48 @@ export default class SearchTeacherSets extends Component {
     super(props);
     this.state = { teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
-                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {} };
+                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {} };
   }
 
   componentDidMount() {
-    if (this.state.keyword !== "" ) {
-      this.getTeacherSets()
-    }
+    const params = Object.assign({ keyword: this.state.keyword}, this.state.selected_facets)
+    this.getTeacherSets(params)
   }
 
-  getTeacherSets() {
-    axios.get('/teacher_sets', { params: { keyword: this.state.keyword, params: this.state.selected_facets } }).then(res => {
+  getTeacherSets(params) {
+    axios.get('/teacher_sets', {params: params}).then(res => {
+      this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
+                      ts_total_count: res.data.total_count });
 
-    //axios.get('/teacher_sets', { keyword: this.state.keyword, params: this.state.selected_facets } ).then(res => {
-        this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
-                        ts_total_count: res.data.total_count });
-
-        if (res.data.total_count > 20) {
-          this.state.pagination = 'block';
-        } else {
-          this.state.pagination = 'none';
-        }
-      })
-      .catch(function (error) {
-       console.log(error)
+      if (res.data.total_count > 20) {
+        this.state.pagination = 'block';
+      } else {
+        this.state.pagination = 'none';
+      }
+    })
+    .catch(function (error) {
+     console.log(error)
     })
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state.keyword)
-    console.log("plpp")
-    if (this.state.keyword !== null) {
-      this.props.history.push("/teacher_set_data"+ "?keyword=" + this.state.keyword + "&" + qs.stringify(this.state.selected_facets))
-    }
-    this.getTeacherSets()
+    const params = Object.assign({ keyword: this.state.keyword}, this.state.selected_facets)
+    this.getTeacherSets(params)
   }
 
   handleSearchKeyword = event => {
     if (event.target.value == "") {
       delete this.state.keyword;
       this.props.history.push("/teacher_set_data");
-      this.getTeacherSets();
+      this.getTeacherSets(Object.assign({ keyword: this.state.keyword}, this.state.selected_facets));
     } else {
-      this.setState({  keyword: event.target.value })
+      this.setState({ keyword: event.target.value })
     }
   }
 
   onPageChange = (page) => {
     this.state.setComputedCurrentPage = page;
-
     axios.get('/teacher_sets', {
         params: {
           keyword: this.state.keyword,
@@ -137,25 +129,14 @@ export default class SearchTeacherSets extends Component {
       this.state.selected_facets[field] = event
     }
     this.state.selected_facets
-    console.log(this.state.selected_facets)
+
     if (this.state.keyword !== null) {
-      this.props.history.push("/teacher_set_data"+ "?keyword=" + this.state.keyword + "&" + qs.stringify(this.state.selected_facets) )
+      this.state.params = Object.assign({ keyword: this.state.keyword}, this.state.selected_facets)
     } else {
-      this.props.history.push("/teacher_set_data?"+ qs.stringify(this.state.selected_facets) )
+      this.state.params = this.state.selected_facets
     }
-    
-    axios.get('/teacher_sets', { keyword: this.state.keyword, params: this.state.selected_facets } ).then(res => {
-      this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
-                      ts_total_count: res.data.total_count });
-        if (res.data.total_count > 20) {
-          this.state.pagination = 'block';
-        } else {
-          this.state.pagination = 'none';
-        }
-      })
-      .catch(function (error) {
-       console.log(error)
-    })
+
+    this.getTeacherSets(this.state.params)
   };
 
   TeacherSetFacets() {
@@ -164,14 +145,12 @@ export default class SearchTeacherSets extends Component {
           <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
           <CheckboxGroup id={"id"+ i} defaultValue={[]} isRequired  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} optReqFlag={false} >
             { ts.items.map((item, index) =>
-              <Checkbox labelText={item["label"] + " " + item["count"]} value={item["value"]} />
+              <Checkbox labelText={item["label"] + " " + item["count"]} value={item["value"].toString()} />
             ) }{<br/>}
           </CheckboxGroup>
       </div>
     })
   }
-
-
 
   TeacherSetSlider() {
     return <>

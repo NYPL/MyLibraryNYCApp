@@ -100,8 +100,6 @@ export default class TeacherSetBooks extends React.Component {
                   {ts.title}
                 </ReactRouterLink>
               </CardHeading>
-
-              
               <CardContent> {ts.suitabilities_string} </CardContent>
               <CardContent> {ts.availability} </CardContent>
               <CardContent> {ts.description} </CardContent>
