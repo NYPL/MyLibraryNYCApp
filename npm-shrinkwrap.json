@@ -2251,9 +2251,9 @@
       }
     },
     "@nypl/design-system-react-components": {
-      "version": "0.25.8",
-      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-0.25.8.tgz",
-      "integrity": "sha512-MZk+xkFk6vmETB6r8SQyqf2t5tjbt12y4mllUHCMcntmz2dfMJdNHNsfopWCGHjHUUeALiD0Ozd0cfm1+A51+A==",
+      "version": "0.25.9",
+      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-0.25.9.tgz",
+      "integrity": "sha512-PAOTEterHNBaMo085nOKFMLpfcqwC88p6voVNY+HhXP9c5GIel+r+hR63eMLiuRJIgh7vNBuKLxZr3m+eufPaw==",
       "requires": {
         "@chakra-ui/react": "1.7.1",
         "@chakra-ui/system": "1.8.1",
