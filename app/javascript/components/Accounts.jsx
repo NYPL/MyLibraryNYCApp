@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, ButtonTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes
+  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes, Table
 } from '@nypl/design-system-react-components';
 
 import {
@@ -31,7 +31,7 @@ export default class Accounts extends Component {
         let account_details = res.data.accountdetails
         this.setState({ contact_email: account_details.contact_email, school: account_details.school, email: account_details.email,
         alt_email: account_details.alt_email, schools: account_details.schools, current_user: account_details.current_user,
-        holds: account_details.holds })
+        holds: account_details.holds, school_id: account_details.school.id })
       }
     }).catch(function (error) {
         console.log("cancel order fail")
@@ -43,7 +43,7 @@ export default class Accounts extends Component {
   handleSubmit = event => {
     event.preventDefault();
     axios.put('/users', {
-        user: { alt_email: this.state.alt_email, school_id: '1234' }
+        user: { alt_email: this.state.alt_email, school_id: this.state.school_id }
      }).then(res => {
         console.log(res)
       })
@@ -124,7 +124,7 @@ export default class Accounts extends Component {
                   />
                 </FormField>
                 <FormField>
-                  <Select id="school_id" labelText="Your School" value='1645' showLabel showOptReqLabel={false} onChange={this.handleSchool}>
+                  <Select labelText="Your School" value={this.state.school_id} showLabel showOptReqLabel={false} onChange={this.handleSchool}>
                     {this.Schools()}
                   </Select>
                 </FormField>
