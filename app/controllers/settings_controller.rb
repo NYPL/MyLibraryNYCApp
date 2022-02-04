@@ -44,7 +44,7 @@ class SettingsController < ApplicationController
       #If school is inactive for current user still need to show in school drop down.
       @schools << @school.name_id unless @school.active
       resp = {:id => current_user.id, current_user: current_user, :contact_email => @contact_email, :school => @school, :email => @email, :alt_email => @alt_email, :schools => @schools.to_h,
-              :holds => @holds.as_json }
+              :holds => @holds.as_json, :current_password => User.default_password.to_s }
     end
     render json: { accountdetails: resp }
   end

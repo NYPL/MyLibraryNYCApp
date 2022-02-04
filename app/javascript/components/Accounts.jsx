@@ -17,7 +17,7 @@ export default class Accounts extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: ""}
+    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: ""}
   }
 
 
@@ -31,7 +31,7 @@ export default class Accounts extends Component {
         let account_details = res.data.accountdetails
         this.setState({ contact_email: account_details.contact_email, school: account_details.school, email: account_details.email,
         alt_email: account_details.alt_email, schools: account_details.schools, current_user: account_details.current_user,
-        holds: account_details.holds, school_id: account_details.school.id })
+        holds: account_details.holds, school_id: account_details.school.id, password: account_details.current_password })
       }
     }).catch(function (error) {
         console.log("cancel order fail")
@@ -43,9 +43,11 @@ export default class Accounts extends Component {
   handleSubmit = event => {
     event.preventDefault();
     axios.put('/users', {
-        user: { alt_email: this.state.alt_email, school_id: this.state.school_id }
+        user: { alt_email: this.state.alt_email, school_id: this.state.school_id, current_password: this.state.password }
+
      }).then(res => {
-        console.log(res)
+        console.log(res.request.responseURL == '/account')
+
       })
       .catch(function (error) {
        console.log(error)
