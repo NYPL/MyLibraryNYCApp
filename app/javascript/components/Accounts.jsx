@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, ButtonTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes, Table
+  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes, Table, Notification, NotificationTypes
 } from '@nypl/design-system-react-components';
 
 import {
@@ -17,9 +17,8 @@ export default class Accounts extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: ""}
+    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: "", message: ""}
   }
-
 
   componentDidMount() {
     axios.get('/account').then(res => {
@@ -39,15 +38,15 @@ export default class Accounts extends Component {
     })
   }
 
-
   handleSubmit = event => {
     event.preventDefault();
     axios.put('/users', {
         user: { alt_email: this.state.alt_email, school_id: this.state.school_id, current_password: this.state.password }
 
      }).then(res => {
-        console.log(res.request.responseURL == '/account')
-
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/account") {
+          this.setState ({ message: "You updated your account successfully."})
+        }
       })
       .catch(function (error) {
        console.log(error)
@@ -58,11 +57,9 @@ export default class Accounts extends Component {
     this.setState ({ alt_email: event.target.value})
   }
 
-
   handleSchool = event => {
     this.setState ({ school_id: event.target.value })
   }
-
 
   Schools() {
     return Object.entries(this.state.schools).map((school, i) => {
@@ -72,7 +69,6 @@ export default class Accounts extends Component {
     }, this);
   }
   
-
   HoldsDetails() {
     return <List noStyling>
       {this.state.holds.map((hold, index) =>
@@ -87,7 +83,6 @@ export default class Accounts extends Component {
     };
     axios.delete('/logout', formData)
       .then(res => {
-        console.log(res.data)
         if (res.data.status == 200 && res.data.logged_out == true) {
           window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000";
           return false;
@@ -98,9 +93,19 @@ export default class Accounts extends Component {
     })    
   }
 
+  AccountUpdatedMessage() {
+    if (this.state.message !== "") {
+      return <Notification
+        notificationContent={this.state.message}
+        notificationType={NotificationTypes.Announcement}
+        showIcon
+      />
+    }
+  }
 
 
   render() {
+
     let user_name = this.state.current_user.first_name
 
     return (
@@ -109,6 +114,7 @@ export default class Accounts extends Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
+              {this.AccountUpdatedMessage()}
               <div style={{display: 'flex'}}>
                 <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} /> 
                

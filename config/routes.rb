@@ -52,7 +52,7 @@ MyLibraryNYC::Application.routes.draw do
   # match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
 
   match 'settings' => 'settings#index', via: [:get, :patch, :post]
-  match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post]
+  match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post, :put]
   match '/news_letter/index' => 'news_letter#index', via: [:get, :post]
 
   match '/home/get_mln_file_name' => 'home#get_mln_file_name', via: [:get]
