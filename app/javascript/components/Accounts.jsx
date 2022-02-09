@@ -197,8 +197,10 @@ export default class Accounts extends Component {
             <>
               { this.AccountUpdatedMessage() }
               <div style={{display: 'flex'}}>
-                <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} /> 
-              </div>          
+                <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} />
+                <Button onClick={this.signOut}>(Sign Out)</Button> 
+              </div>
+
               <Form onSubmit={this.handleSubmit} method="put">
                 <FormField>
                   <TextInput

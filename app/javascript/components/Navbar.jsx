@@ -5,7 +5,7 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-import { Link, LinkTypes, Icon } from "@nypl/design-system-react-components";
+import { Link, LinkTypes, Icon, List } from "@nypl/design-system-react-components";
 import mlnLogoRed from '../images/MLN_Logo_red.png'
 //import AccountDetailsSubMenu from "./AccountDetailsSubMenu";
 
@@ -29,13 +29,9 @@ export default class Navbar extends Component {
 
 showAccountSigninLink() {
     if (this.state.user_signed_in) {
-      return <Link type={LinkTypes.Action}>
-        <ReactRouterLink to="/account_details" className="nav-link-colors ">Account</ReactRouterLink>
-      </Link>
+      return <ReactRouterLink to="/account_details" className="nav-link-colors ">Account</ReactRouterLink>
     } else {
-      return <Link type={LinkTypes.Action}>
-        <ReactRouterLink to="/signin" className="nav-link-colors ">Sign In</ReactRouterLink>
-      </Link>
+      return <ReactRouterLink to="/signin" className="nav-link-colors ">Sign In</ReactRouterLink>
     }
 
 }
@@ -48,39 +44,19 @@ render() {
         <div className="header-logo"><img border="0" src={mlnLogoRed}/></div>
       </ReactRouterLink>
     
-      <nav className="header-buttons" style={styles.headerNav}>
-        <ul className="float-right">
-          <li>
-            <Link type={LinkTypes.Action}>
-              <ReactRouterLink to="/teacher_set_data" className="nav-link-colors ">Search Teacher Sets</ReactRouterLink>
-            </Link>
-          </li>
+      <List type="ul" inline noStyling className="header-buttons" className="float-right">
 
-          <li>
-            <Link type={LinkTypes.Action}>
-              <ReactRouterLink to="/contacts" className="nav-link-colors ">Contacts</ReactRouterLink>
-            </Link>
-          </li>
-          
+        <ReactRouterLink to="/teacher_set_data" className="nav-link-colors ">Search Teacher Sets</ReactRouterLink>
 
-          <li>
-            <Link type={LinkTypes.Action}>
-              <ReactRouterLink to="/faq" className="nav-link-colors ">FAQs</ReactRouterLink>
-            </Link>
-          </li>
+        <ReactRouterLink to="/contacts" className="nav-link-colors ">Contacts</ReactRouterLink>
 
+        <ReactRouterLink to="/faq" className="nav-link-colors ">FAQs</ReactRouterLink>
 
-          <li>
-            <Link type={LinkTypes.Action}>
-              <ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink>
-            </Link>
-          </li>
+        <ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink>
 
-          <li>
-              {this.showAccountSigninLink()}
-          </li>
-        </ul>
-      </nav>
+        {this.showAccountSigninLink()}
+
+      </List>
     </div>
   );
   }
