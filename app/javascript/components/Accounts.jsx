@@ -1,7 +1,8 @@
 import React, { Component, useState } from 'react';
-
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
+
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, ButtonTypes, Label, FormField, 
   DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes, Table, Notification, NotificationTypes
@@ -17,7 +18,7 @@ export default class Accounts extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: "", message: ""}
+    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: "", message: "", cancel_message: "", cancel_button_display: "block"}
   }
 
   componentDidMount() {
@@ -70,11 +71,76 @@ export default class Accounts extends Component {
   }
   
   HoldsDetails() {
-    return <List noStyling>
-      {this.state.holds.map((hold, index) =>
-        <div>hold.created_at</div>
-      )}
-    </List>
+    if (this.state.holds) {
+      return this.state.holds.map((hold, index) => (
+           [ hold["created_at"], hold["quantity"], hold["title"], this.statusLabel(hold), this.cancelButton(hold, index) ]
+          )
+        )
+    }
+  }
+
+  statusLabel(hold) {
+    return hold["status_label"]
+  }
+
+  cancelButton(hold, index) {
+    if (hold["status"] == "new") {
+      return <div> <div style={{display: "flex"}} id={index}> {this.orderCancelConfirmation(hold["access_key"], index)} </div> </div>
+    } else {
+      return null;
+    }
+  }
+
+  cancelOrder(value, access_key, cancel_button_index) {
+    this.state.cancel_message = ""
+    axios.put('/holds/'+ access_key, { hold_change: { status: 'cancelled' } 
+     }).then(res => {
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
+          window.location = res.request.responseURL;
+          return false;
+        } else {
+          if (res.data.hold.status == "cancelled") {
+            this.setState({cancel_button_display: 'none'})
+            this.state.cancel_message = "Successfully Cancelled"
+
+            let updatedHolds = this.state.holds.map( (obj, index) => {
+             if(index === cancel_button_index) {
+               return Object.assign({}, obj, {
+                 status: "cancelled", status_label: "Cancelled"
+               });
+             }
+             return obj;
+          });
+          console.log(updatedHolds)
+          this.setState({
+            holds : updatedHolds
+          });
+
+            // if (this.state.holds) {
+            //   return this.state.holds.map((hold, index) => (
+            //       [ hold["created_at"], hold["quantity"], hold["title"], this.statusLabel(hold), this.cancelButton(hold, index) ]
+            //     )
+            //   )
+            // }
+          }
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+    })
+  }
+
+
+  orderCancelConfirmation(access_key, index) {
+    return <div id={"cancel_"+ access_key}><Button className="accountCancelOrder" buttonType={ButtonTypes.Secondary}        
+        onClick={(e) => {
+          const confirmBox = window.confirm(
+            "Are you sure to cancel this order?"
+          )
+          if (confirmBox === true) {
+            this.cancelOrder(e.target.value, access_key, index)
+          }
+        }}> Cancel </Button></div>
   }
 
   signOut() {
@@ -104,8 +170,23 @@ export default class Accounts extends Component {
   }
 
 
-  render() {
+  OrderDetails() {
+   return <Table
+    columnHeaders={[
+      'Order Placed',
+      'Quantity',
+      'Title',
+      'Status',
+      ''
+    ]}
+    showRowDividers={true}
+    columnHeadersBackgroundColor="#F5F5F5"
+    columnHeadersTextColor="\"
+    tableData={this.HoldsDetails()}
+  />
+  }
 
+  render() {
     let user_name = this.state.current_user.first_name
 
     return (
@@ -114,11 +195,9 @@ export default class Accounts extends Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              {this.AccountUpdatedMessage()}
+              { this.AccountUpdatedMessage() }
               <div style={{display: 'flex'}}>
                 <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} /> 
-               
-                <Button onClick={this.signOut}>(Sign Out)</Button>
               </div>          
               <Form onSubmit={this.handleSubmit} method="put">
                 <FormField>
@@ -136,14 +215,16 @@ export default class Accounts extends Component {
                     {this.Schools()}
                   </Select>
                 </FormField>
-                <Button buttonType={ButtonTypes.Callout} className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
+                <Button buttonType={ButtonTypes.NoBrand} className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
               </Form>
               {<br/>}
               <Heading level={HeadingLevels.Three} text='Your Orders' />
+              {this.OrderDetails()}
             </>
           }
           contentSidebar={<></>}
           sidebar="right"
+
         />
       </DSProvider>
     )

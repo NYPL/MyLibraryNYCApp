@@ -21,10 +21,10 @@ class Hold < ActiveRecord::Base
   after_create :do_after_create
 
   STATUS_LABEL = {
-    'new' => 'Order placed and awaiting review',
+    'new' => 'Awaiting Review',
     'pending' => 'Order processed and awaiting next available set',
-    'closed' => 'Order fulfilled; awaiting shipment',
-    'cancelled' => 'You\'ve cancelled this order'
+    'closed' => 'Fulfilled',
+    'cancelled' => 'Cancelled'
   }
 
   def status_label

@@ -7,6 +7,7 @@ import {
 
 import { Link, LinkTypes, Icon } from "@nypl/design-system-react-components";
 import mlnLogoRed from '../images/MLN_Logo_red.png'
+//import AccountDetailsSubMenu from "./AccountDetailsSubMenu";
 
 
 const styles = {
@@ -36,6 +37,7 @@ showAccountSigninLink() {
         <ReactRouterLink to="/signin" className="nav-link-colors ">Sign In</ReactRouterLink>
       </Link>
     }
+
 }
 
 render() {
@@ -48,11 +50,6 @@ render() {
     
       <nav className="header-buttons" style={styles.headerNav}>
         <ul className="float-right">
-          <li>           
-            {this.showAccountSigninLink()}
-          </li>
-
-          
           <li>
             <Link type={LinkTypes.Action}>
               <ReactRouterLink to="/teacher_set_data" className="nav-link-colors ">Search Teacher Sets</ReactRouterLink>
@@ -77,6 +74,10 @@ render() {
             <Link type={LinkTypes.Action}>
               <ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink>
             </Link>
+          </li>
+
+          <li>
+              {this.showAccountSigninLink()}
           </li>
         </ul>
       </nav>
