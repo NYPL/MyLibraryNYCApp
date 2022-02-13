@@ -55,7 +55,6 @@ render() {
         <ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink>
 
         {this.showAccountSigninLink()}
-
       </List>
     </div>
   );

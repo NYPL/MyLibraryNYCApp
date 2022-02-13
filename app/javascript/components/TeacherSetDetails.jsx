@@ -18,7 +18,7 @@ import {
   MDXCreateElement,
   Heading,
   Image,
-  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, ImageRatios, ImageSizes, SimpleGrid
+  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, ImageRatios, ImageSizes, SimpleGrid, ButtonGroup
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -162,16 +162,16 @@ export default class TeacherSetDetails extends React.Component {
                   </CardContent>
 
                   <CardContent level={5}>
-
                     <Form onSubmit={this.handleSubmit} className="order_select">
-                      <FormRow >
-                        <Select showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
-                          {allowed_quantities}
-                        </Select>
-                        <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
-                      </FormRow>
+                      <FormField>
+                        <ButtonGroup>
+                          <Select showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+                            {allowed_quantities}
+                          </Select>
+                          <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
+                        </ButtonGroup>
+                      </FormField>
                     </Form>
-                    
                   </CardContent>
                 </Card>
               </div>{<br/>}

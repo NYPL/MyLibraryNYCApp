@@ -59,20 +59,12 @@ export default class TeacherSetOrder extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <div className="layout-container nypl-ds">
-                <main className="main main--with-sidebar nypl-ds">
-                  <div className="content-primary content-primary--with-sidebar-right main-content">
-                    <div className="cancel-header" >Please Confirm, Are you sure you want to cancle this order for </div>{<br/>}
-                    <Label htmlFor="inputID-attrs" id={"label"} className="cancel-button-label">
-                      Reason For cancelling (optional)
-                    </Label>
-                    <TextInput id="cancel-order-button" value={this.state.comment} showLabel showOptReqLabel type="text" onChange={this.handleCancelComment}/>
-                    <Button className="cancel-button" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Cancel My Order </Button>
-                  </div>
-
-                  <div className="content-secondary content-secondary--with-sidebar-right"></div>
-                </main>
-              </div>
+              <div className="cancel-header" >Please Confirm, Are you sure you want to cancle this order for </div>{<br/>}
+              <Label htmlFor="inputID-attrs" id={"label"} className="cancel-button-label">
+                Reason For cancelling (optional)
+              </Label>
+              <TextInput id="cancel-order-button" value={this.state.comment} showLabel showOptReqLabel type="text" onChange={this.handleCancelComment}/>
+              <Button className="cancel-button" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Cancel My Order </Button>
             </>
           }
           contentSidebar={<></>}

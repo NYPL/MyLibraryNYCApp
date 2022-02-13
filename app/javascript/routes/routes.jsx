@@ -40,14 +40,10 @@ export default class Routes extends React.Component {
   render() {
     return (
       <DSProvider>
-        <TemplateAppContainer
-        contentPrimary={
           <Router>
-            <div className="layout-container nypl-ds">
-              <header className="header">
-                <Banner />
-                <Header userSignedIn={this.state.userSignedIn}/>
-              </header>
+            <div>
+              <Banner />
+              <Header userSignedIn={this.state.userSignedIn}/>
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/faq" component={Faqs} />
@@ -75,13 +71,9 @@ export default class Routes extends React.Component {
                 <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
                 <Route path="/book_details/:id" component={TeacherSetBooks} />
               </Switch>
+              <footer className="footer"> <Footer /></footer>
             </div>
           </Router>
-        }
-
-        footer={<footer className="footer"> <Footer /></footer>}
-
-        />
       </DSProvider>
     )
   }

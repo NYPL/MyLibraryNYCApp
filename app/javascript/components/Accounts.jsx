@@ -1,11 +1,10 @@
 import React, { Component, useState } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, ButtonTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes, Table, Notification, NotificationTypes
+  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes, Table, Notification, NotificationTypes, Pagination, Icon
 } from '@nypl/design-system-react-components';
 
 import {
@@ -18,11 +17,11 @@ export default class Accounts extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: "", message: "", cancel_message: "", cancel_button_display: "block"}
+    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: "", message: "", cancel_message: "", cancel_button_display: "block", setComputedCurrentPage: 1, total_pages: ""}
   }
 
   componentDidMount() {
-    axios.get('/account').then(res => {
+    axios.get('/account', { params: { page: this.state.setComputedCurrentPage } } ).then(res => {
       if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
         window.location = res.request.responseURL;
         return false;
@@ -31,7 +30,7 @@ export default class Accounts extends Component {
         let account_details = res.data.accountdetails
         this.setState({ contact_email: account_details.contact_email, school: account_details.school, email: account_details.email,
         alt_email: account_details.alt_email, schools: account_details.schools, current_user: account_details.current_user,
-        holds: account_details.holds, school_id: account_details.school.id, password: account_details.current_password })
+        holds: account_details.holds, school_id: account_details.school.id, password: account_details.current_password, total_pages: account_details.total_pages })
       }
     }).catch(function (error) {
         console.log("cancel order fail")
@@ -111,7 +110,6 @@ export default class Accounts extends Component {
              }
              return obj;
           });
-          console.log(updatedHolds)
           this.setState({
             holds : updatedHolds
           });
@@ -140,14 +138,11 @@ export default class Accounts extends Component {
           if (confirmBox === true) {
             this.cancelOrder(e.target.value, access_key, index)
           }
-        }}> Cancel </Button></div>
+        }}> Cancel Order </Button></div>
   }
 
   signOut() {
-    const formData = {
-      email: 'consultdg@nypl.org'
-    };
-    axios.delete('/logout', formData)
+    axios.delete('/logout')
       .then(res => {
         if (res.data.status == 200 && res.data.logged_out == true) {
           window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000";
@@ -161,41 +156,69 @@ export default class Accounts extends Component {
 
   AccountUpdatedMessage() {
     if (this.state.message !== "") {
-      return <Notification
-        notificationContent={this.state.message}
+      return <Notification className="accountNotificationMsg"
+        dismissible
+        showIcon={false}
         notificationType={NotificationTypes.Announcement}
-        showIcon
+        notificationContent={<><Icon align="none" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="small"/>{this.state.message}</>}
       />
     }
   }
 
-
   OrderDetails() {
-   return <Table
-    columnHeaders={[
-      'Order Placed',
-      'Quantity',
-      'Title',
-      'Status',
-      ''
-    ]}
-    showRowDividers={true}
-    columnHeadersBackgroundColor="#F5F5F5"
-    columnHeadersTextColor="\"
-    tableData={this.HoldsDetails()}
-  />
+    return <>
+      <Heading level={HeadingLevels.Three} text='Your Orders' />
+      <Table
+        columnHeaders={[
+          'Order Placed',
+          'Quantity',
+          'Title',
+          'Status',
+          ''
+        ]}
+        showRowDividers={true}
+        columnHeadersBackgroundColor="#F5F5F5"
+        columnHeadersTextColor="\"
+        tableData={this.HoldsDetails()}
+      />
+    </>
   }
+
+  displayOrders() {
+    if (this.state.holds.length > 0) {
+      return this.OrderDetails()
+     } else {
+      return "No orders yet"
+     }
+  }
+
+  onPageChange = (page) => {
+    this.state.setComputedCurrentPage = page;
+    axios.get('/account', { params: { page: page } }).then(res => {
+      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
+        window.location = res.request.responseURL;
+        return false;
+      }
+      else {
+        let account_details = res.data.accountdetails
+        this.setState({ contact_email: account_details.contact_email, school: account_details.school, email: account_details.email,
+        alt_email: account_details.alt_email, schools: account_details.schools, current_user: account_details.current_user,
+        holds: account_details.holds, school_id: account_details.school.id, password: account_details.current_password })
+      }
+    }).catch(function (error) {
+        console.log("cancel order fail")
+        console.log(error)
+    })
+  };
 
   render() {
     let user_name = this.state.current_user.first_name
 
     return (
-      <DSProvider>
       <TemplateAppContainer
-          breakout={<AppBreadcrumbs />}
+          breakout={<><AppBreadcrumbs />{ this.AccountUpdatedMessage() }</>}
           contentPrimary={
             <>
-              { this.AccountUpdatedMessage() }
               <div style={{display: 'flex'}}>
                 <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} />
                 <Button onClick={this.signOut}>(Sign Out)</Button> 
@@ -220,15 +243,14 @@ export default class Accounts extends Component {
                 <Button buttonType={ButtonTypes.NoBrand} className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
               </Form>
               {<br/>}
-              <Heading level={HeadingLevels.Three} text='Your Orders' />
-              {this.OrderDetails()}
+              {this.displayOrders()}
+              {<br/>}
+              <Pagination className="accocuntOrderPagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
             </>
           }
           contentSidebar={<></>}
           sidebar="right"
-
         />
-      </DSProvider>
     )
   }
 }

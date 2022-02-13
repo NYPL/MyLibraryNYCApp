@@ -17,12 +17,10 @@ export default class Header extends Component {
 
   render() {
     return (
-    	<div className="content-header">
-    		<div className="header-wrapper">
-  	    	<Navbar userSignedIn={this.state.user_signed_in} />
-  	    	<MobileHeader />
-  	    </div>
-      </div>
+      <>
+        <Navbar userSignedIn={this.state.user_signed_in} />
+        <MobileHeader />
+      </>
     )
   }
 }

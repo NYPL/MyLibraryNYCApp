@@ -28,20 +28,15 @@ export default class AppBreadcrumbs extends Component {
   render() {
     return (
       <>
-        <>
-          <Breadcrumbs breadcrumbsData={ [
-            { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
-            { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(window.location.pathname.split(/\/|\?|&|=|\./g)[1]) } 
-           ] } 
-            colorVariant="booksAndMore"
-          />
-
-          <Hero heroType="tertiary"
-                backgroundColor="var(--nypl-colors-brand-primary)"
-                heading={<Heading level={HeadingLevels.One} id="books-hero" text={BreadcrumbsDataValue(window.location.pathname.split(/\/|\?|&|=|\./g)[1])} />} />
-
-        </>
-
+        <Breadcrumbs breadcrumbsData={ [
+          { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+          { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(window.location.pathname.split(/\/|\?|&|=|\./g)[1]) } 
+         ] } 
+          colorVariant="booksAndMore"
+        />
+        <Hero heroType="tertiary"
+              backgroundColor="var(--nypl-colors-brand-primary)"
+              heading={<Heading level={HeadingLevels.One} id="books-hero" text={BreadcrumbsDataValue(window.location.pathname.split(/\/|\?|&|=|\./g)[1])} />} />
       </>
     )
   }

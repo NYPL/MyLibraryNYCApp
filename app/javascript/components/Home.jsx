@@ -139,7 +139,7 @@ export default class Home extends Component {
 
   TeacherSetFacets() {
     return this.state.facets.map((ts, i) => {
-      return <div className="nypl-ds">{<br/>}
+      return <div>{<br/>}
 
       <div> { ts.label } </div>
         { ts.items.map((item, index) =>
