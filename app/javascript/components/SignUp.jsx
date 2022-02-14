@@ -156,9 +156,6 @@ export default class SignUp extends Component {
       this.state.errors['school_id'] = "Please select school"
     }
     this.showNotifications()
-
-    console.log(Object.entries(this.state.errors) + "   errros")
-    console.log(formIsValid + "   formIsValid")
     return formIsValid;
   }
 

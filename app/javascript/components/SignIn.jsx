@@ -6,7 +6,7 @@ import Collapsible from 'react-collapsible';
 import {
   Button, ButtonTypes, SearchBar, Select, TextInput, TextInputTypes, HelperErrorText, DSProvider, 
   TemplateAppContainer, Icon, Notification, Card, NotificationTypes,
-  CardHeading, CardContent, CardLayouts, HeadingLevels, Text
+  CardHeading, CardContent, CardLayouts, HeadingLevels, Text, Form, FormField, FormRow
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 import { BrowserRouter as Router, Link as ReactRouterLink } from "react-router-dom";
@@ -38,13 +38,27 @@ export default class SignIn extends Component {
     }
   }
 
+  handleValidation() {
+    if (this.state.email == "") {
+      this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
+      console.log("ooooooooo")
+      return false;
+    }
+  }
+
   // # need  to modify below code
   handleSubmit = event => {
-    event.preventDefault()
+    event.preventDefault();
+    console.log(this.state.email == "")
+    if (this.state.email == "") {
+      this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
+      console.log("ooooooooo")
+      return false;
+    }
+
     axios.post('/login', {
         email: this.state.email
      }).then(res => {
-
         if (res.data.logged_in) {
           window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ':3000/' + res.data.user_return_to
           return false;
@@ -55,6 +69,7 @@ export default class SignIn extends Component {
       .catch(function (error) {
        console.log(error)
     })
+    
   }
 
   render() {
@@ -66,26 +81,33 @@ export default class SignIn extends Component {
         contentPrimary={
           <>
             <Collapsible trigger={<><Text noSpace displaySize="caption">Your DOE Email Address <Icon align="left" color="ui.black" iconRotation="rotate0" name="action_help_default" size="small" /></Text></>}>
-              <div className="signInEmailAlert">
-                <Notification noMargin notificationType={NotificationTypes.Announcement} showIcon={false}
-                notificationContent={
-                  <Text noSpace displaySize="mini">Your DOE email address will look like jsmith@schools.nyc.gov, 
-                    consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
-                  </Text>} />
-              </div>
+              <Notification className="signInEmailAlert" noMargin notificationType={NotificationTypes.Announcement} showIcon={false}
+              notificationContent={
+                <Text noSpace displaySize="mini">Your DOE email address will look like jsmith@schools.nyc.gov, 
+                  consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
+                </Text>} />
             </Collapsible> 
             
-            <TextInput className="signInEmail" type={TextInputTypes.email} onChange={this.handleEmail} required />
-            <HelperErrorText isInvalid>
-              <div style={{ display: this.state.error_display }}>
-                {this.state.invali_email_msg}
-              </div>
-            </HelperErrorText>
-            <Button buttonType={ButtonTypes.Primary} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
+            <Form>
+              <FormRow>
+                <FormField>
+                  <TextInput className="signInEmail" type={TextInputTypes.email} onChange={this.handleEmail} required />
+                  <div style={{ display: this.state.error_display }}>
+                    <HelperErrorText
+                      ariaAtomic
+                      ariaLive="polite"
+                      isInvalid
+                      text={this.state.invali_email_msg}
+                    />
+                  </div>
+                  <Button buttonType={ButtonTypes.Primary} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
+                </FormField>
+              </FormRow>
+            </Form>
             <div className="sign-up-link">
               <Text noSpace displaySize="caption">Not Registered ? Please 
                 <Link type={LinkTypes.Action}>
-                  <ReactRouterLink to="/signup"> Sign Up</ReactRouterLink>
+                  <ReactRouterLink to="/signup">Sign Up</ReactRouterLink>
                 </Link>
               </Text>
             </div>

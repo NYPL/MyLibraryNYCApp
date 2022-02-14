@@ -14,7 +14,7 @@ import {
   IconNames,
   HelperErrorText,
   LibraryExample,
-  Heading
+  Heading, TextInput, TextInputTypes, Form
 } from '@nypl/design-system-react-components';
 
 
@@ -71,13 +71,16 @@ export default class NewsLetter extends Component {
 
           <div style={{ display: this.state.display_block }}>
             <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
-            <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", placeholder: "Enter your email" }} />{<br/>}
-
-            <HelperErrorText id="error-helperText" isError={true}>
+              <TextInput type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required />
               <div style={{ display: this.state.isError }}>
-                {this.state.message}
+                <HelperErrorText
+                  ariaAtomic
+                  ariaLive="polite"
+                  isInvalid
+                  text={this.state.message}
+                />
               </div>
-            </HelperErrorText>
+              <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
           </div>
           
           <div style={{ display: this.state.display_none }}>
@@ -86,7 +89,6 @@ export default class NewsLetter extends Component {
             </div>
             Check your email to learn about teacher sets, best practices & exclusive events.
           </div>
-
         </div>
       </div>
     )

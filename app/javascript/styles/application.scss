@@ -722,7 +722,8 @@ ul.list li:before {
 }
 
 .signInEmailAlert {
-  margin-top: 0.5em;
+  margin-top: 0.5em !important;
+  background-color: #F5F5F5 !important;
 }
 
 .sign-up-link {
