@@ -17,7 +17,7 @@ export default class Accounts extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {contact_email: "", current_user: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: "", message: "", cancel_message: "", cancel_button_display: "block", setComputedCurrentPage: 1, total_pages: ""}
+    this.state = {contact_email: "", current_user: "", teacher_set: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: "", message: "", cancel_message: "", cancel_button_display: "block", setComputedCurrentPage: 1, total_pages: ""}
   }
 
   componentDidMount() {
@@ -84,7 +84,7 @@ export default class Accounts extends Component {
 
   cancelButton(hold, index) {
     if (hold["status"] == "new") {
-      return <div> <div style={{display: "flex"}} id={index}> {this.orderCancelConfirmation(hold["access_key"], index)} </div> </div>
+      return <div> <div style={{display: "flex"}} id={index}> {this.orderCancelConfirmation(hold, index)} </div> </div>
     } else {
       return null;
     }
@@ -129,14 +129,14 @@ export default class Accounts extends Component {
   }
 
 
-  orderCancelConfirmation(access_key, index) {
-    return <div id={"cancel_"+ access_key}><Button className="accountCancelOrder" buttonType={ButtonTypes.Secondary}        
+  orderCancelConfirmation(hold, index) {
+    return <div id={"cancel_"+ hold["access_key"]}><Button className="accountCancelOrder" buttonType={ButtonTypes.Secondary}        
         onClick={(e) => {
           const confirmBox = window.confirm(
-            "Are you sure to cancel this order?"
+            "Are you sure you want to cancel this order for " + hold["title"]
           )
           if (confirmBox === true) {
-            this.cancelOrder(e.target.value, access_key, index)
+            this.cancelOrder(e.target.value, hold["access_key"], index)
           }
         }}> Cancel Order </Button></div>
   }
@@ -157,7 +157,6 @@ export default class Accounts extends Component {
   AccountUpdatedMessage() {
     if (this.state.message !== "") {
       return <Notification className="accountNotificationMsg"
-        dismissible
         showIcon={false}
         notificationType={NotificationTypes.Announcement}
         notificationContent={<><Icon align="none" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="small"/>{this.state.message}</>}

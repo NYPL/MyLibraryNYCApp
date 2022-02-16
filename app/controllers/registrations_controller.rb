@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
-class RegistrationsController < Devise::RegistrationsController
-  before_action :configure_permitted_parameters
+class RegistrationsController < ApplicationController
+  # before_action :configure_permitted_parameters
 
   include Exceptions
   include LogWrapper
@@ -12,44 +12,47 @@ class RegistrationsController < Devise::RegistrationsController
   # The purpose for overriding the method was to add rescuing if the request to the microservice timed out.
   # In addition, overriding the method allows us to validate the incoming data from the form, send the data
   # to the microservice, and create a record on MyLibraryNYC depending on if the microservice is working properly.
-  # def create
-  #   build_resource(sign_up_params)
-  #   if resource.valid?
-  #     begin
-  #       resource.send_request_to_patron_creator_service
-  #       resource.save
-  #       if params['news_letter_email'].present?
-  #         # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
-  #         email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
-  #         NewsLetterController.new.send_news_letter_confirmation_email(email)
-  #       end
-  #       yield resource if block_given?
-  #       if resource.persisted?
-  #         if resource.active_for_authentication?
-  #           set_flash_message :notice, :signed_up if is_flashing_format?
-  #           sign_up(resource_name, resource)
-  #           respond_with resource, location: after_sign_up_path_for(resource)
-  #         else
-  #           set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
-  #           expire_data_after_sign_in!
-  #           respond_with resource, location: after_inactive_sign_up_path_for(resource)
-  #         end
-  #       else
-  #         clean_up_passwords resource
-  #         set_minimum_password_length
-  #         respond_with resource
-  #       end
-  #     rescue Net::ReadTimeout
-  #       set_flash_message :notice, :time_out if is_flashing_format?
-  #       render :template => '/devise/registrations/new'
-  #     end
-  #   else
-  #     render :template => '/devise/registrations/new', :locals => { :error_msg_hash => error_msg_hash }
-  #   end
-  # rescue Exceptions::InvalidResponse
-  #   set_flash_message :registration_error, :invalid_response if is_flashing_format?
-  #   render :template => '/devise/registrations/new'
-  # end
+  def create
+    build_resource(sign_up_params)
+    if resource.valid?
+      begin
+        resource.send_request_to_patron_creator_service
+        resource.save
+        binding.pry
+        if user_params['news_letter_email'].present?
+
+          # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
+          email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
+          NewsLetterController.new.send_news_letter_confirmation_email(email)
+        end
+        yield resource if block_given?
+        if resource.persisted?
+          if resource.active_for_authentication?
+            set_flash_message :notice, :signed_up if is_flashing_format?
+            sign_up(resource_name, resource)
+            respond_with resource, location: after_sign_up_path_for(resource)
+          else
+            set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
+            expire_data_after_sign_in!
+            respond_with resource, location: after_inactive_sign_up_path_for(resource)
+          end
+        else
+          clean_up_passwords resource
+          set_minimum_password_length
+          respond_with resource
+        end
+      rescue Net::ReadTimeout
+        #set_flash_message :notice, :time_out if is_flashing_format?
+        #render :template => '/devise/registrations/new'
+      end
+    else
+      render json: { errors: error_msg_hash.as_json }
+      #render :template => '/devise/registrations/new', :locals => { :error_msg_hash => error_msg_hash }
+    end
+  rescue Exceptions::InvalidResponse
+    #set_flash_message :registration_error, :invalid_response if is_flashing_format?
+    #render :template => '/devise/registrations/new'
+  end
 
 
   # PUT /resource
@@ -60,7 +63,6 @@ class RegistrationsController < Devise::RegistrationsController
     current_user.alt_email = user_params["alt_email"] if user_params["alt_email"].present? 
     current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
     current_user.save!
-
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
     resource_updated = update_resource(resource, account_update_params)
@@ -68,7 +70,6 @@ class RegistrationsController < Devise::RegistrationsController
     if resource_updated
       set_flash_message_for_update(resource, prev_unconfirmed_email)
       bypass_sign_in resource, scope: resource_name if sign_in_after_change_password?
-
       respond_with resource, location: after_update_path_for(resource)
     else
       clean_up_passwords resource
@@ -78,20 +79,22 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
 
-    def new
-      @user = User.new
-    end
-    
-    def create
-      @user = User.new(user_params)
-      if @user.save
-      # stores saved user id in a session
-        session[:user_id] = @user.id
-        redirect_to root_path, notice: 'Successfully created account'
-      else
-        render :new
-      end
-    end
+  def new
+    @user = User.new
+  end
+  
+
+  # def create
+  #   binding.pry
+  #   @user = User.new(user_params)
+  #   if @user.save
+  #   # stores saved user id in a session
+  #     session[:user_id] = @user.id
+  #     redirect_to root_path, notice: 'Successfully created account'
+  #   else
+  #     render :new
+  #   end
+  # end
 
 
   def after_update_path_for(resource)
@@ -129,13 +132,13 @@ class RegistrationsController < Devise::RegistrationsController
 
 
   def user_params
-    params.require(:registration)["user"].permit(:alt_email, :school_id, :email)
+    params.require(:registration)["user"].permit(:alt_email, :school_id, :email, :news_letter_email)
   end
 
 
   # Configure permitted parameters for devise
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :alt_email, :school_id, :pin])
+   devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :alt_email, :school_id, :pin])
   end
 end
 

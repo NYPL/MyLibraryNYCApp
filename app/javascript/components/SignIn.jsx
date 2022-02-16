@@ -16,7 +16,7 @@ export default class SignIn extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { email: "", invali_email_msg: "", error_display: "none", user_signed_in: this.props.userSignedIn };
+    this.state = { email: "", invali_email_msg: "", user_signed_in: this.props.userSignedIn, isInvalid: false };
   }
 
   handleSearchKeyword = event => {    
@@ -31,16 +31,17 @@ export default class SignIn extends Component {
     })
 
     if (!validator.isEmail(event.target.value)) {
-      this.state.error_display = "block"
+      this.state.isInvalid = true
       this.state.invali_email_msg = "Please enter a valid email address"
+
     }else {
-      this.state.error_display = "none"
+      this.state.isInvalid = false
     }
   }
 
   handleValidation() {
     if (this.state.email == "") {
-      this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
+      this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
       console.log("ooooooooo")
       return false;
     }
@@ -51,7 +52,7 @@ export default class SignIn extends Component {
     event.preventDefault();
     console.log(this.state.email == "")
     if (this.state.email == "") {
-      this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
+      this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
       console.log("ooooooooo")
       return false;
     }
@@ -63,7 +64,7 @@ export default class SignIn extends Component {
           window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ':3000/' + res.data.user_return_to
           return false;
         } else {
-          this.setState({error_display: "block", invali_email_msg: "Please enter a valid email address"});
+          this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
         }
       })
       .catch(function (error) {
@@ -91,21 +92,14 @@ export default class SignIn extends Component {
             <Form>
               <FormRow>
                 <FormField>
-                  <TextInput className="signInEmail" type={TextInputTypes.email} onChange={this.handleEmail} required />
-                  <div style={{ display: this.state.error_display }}>
-                    <HelperErrorText
-                      ariaAtomic
-                      ariaLive="polite"
-                      isInvalid
-                      text={this.state.invali_email_msg}
-                    />
-                  </div>
-                  <Button buttonType={ButtonTypes.Primary} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
+                  <TextInput className="signInEmail" type={TextInputTypes.email} onChange={this.handleEmail} required invalidText={this.state.invali_email_msg} isInvalid={this.state.isInvalid} />
+                  <Button buttonType={ButtonTypes.NoBrand} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
                 </FormField>
               </FormRow>
             </Form>
             <div className="sign-up-link">
-              <Text noSpace displaySize="caption">Not Registered ? Please 
+              <Text noSpace displaySize="caption">Not Registered ? Please
+                <span> </span>
                 <Link type={LinkTypes.Action}>
                   <ReactRouterLink to="/signup">Sign Up</ReactRouterLink>
                 </Link>

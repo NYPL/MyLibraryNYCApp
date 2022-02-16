@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
   Button, ButtonTypes, SearchBar, Select, TextInput, TextInputTypes, HelperErrorText, DSProvider, 
-  TemplateAppContainer, HeadingLevels, Text, FormField, Form, Notification, NotificationTypes
+  TemplateAppContainer, HeadingLevels, Text, FormField, Form, Notification, NotificationTypes, Checkbox, CheckboxGroup
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 
@@ -15,11 +15,13 @@ export default class SignUp extends Component {
     this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
                    pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
                    lastNameIsValid: false, pinIsValid: false, schoolIsValid: false, emailIsInvalid: false,
-                   altEmailIsvalid: false, messages: {} }
+                   altEmailIsvalid: false, messages: {}, news_letter_error: "", show_news_letter_error: false, isCheckedVal: false, signUpmsg: "", isDisabled: false}
+    this.verifyNewsLetterEmailInSignUpPage = this.verifyNewsLetterEmailInSignUpPage.bind(this)
   }
 
 
   componentDidMount() {
+
     axios.get('/sign_up_details').then(res => {
       this.setState( { active_schools: res.data.activeSchools, allowed_email_patterns: res.data.emailMasks } )
     }).catch(function (error) {
@@ -33,17 +35,19 @@ export default class SignUp extends Component {
       
       axios.post('/users', {
           user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
-                  last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: this.state.fields["school_id"] }
+                  last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: this.state.fields["school_id"], news_letter_email: this.state.fields["alt_email"] || this.state.fields["email"] }
        }).then(res => {
-
-          // if (res.data.errors) !== null {
-          //   console.log(res.data.errors + ' no errors')
-          // } else {
-            console.log(res.request.responseURL + "olololo")
+          if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data") {
+            this.setState({ signUpmsg: "Welcome! You have signed up successfully." })
             window.location = res.request.responseURL;
             return false;
-          //}
+          }
 
+          // if (res.request.responseURL == "/teacher_set_data") {
+          //   this.setState({ signUpmsg: "Welcome! You have signed up successfully." })
+          //   window.location = res.request.responseURL;
+          //   return false;
+          // }
         })
         .catch(function (error) {
          console.log(error)
@@ -60,14 +64,12 @@ export default class SignUp extends Component {
 
     if (!email_domain_is_allowed) {
       let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
-      console.log("in valid email")
       this.state.errors['email'] = msg
-      this.setState({emailIsInvalid: true })
+      this.setState({emailIsInvalid: true, isDisabled: true })
     }
     else {
-      console.log("valid email")
       this.state.errors['email'] = ""
-      this.setState({emailIsInvalid: false })
+      this.setState({news_letter_error: "", show_news_letter_error: false, emailIsInvalid: false, isDisabled: false  })
     }
 
       
@@ -91,10 +93,11 @@ export default class SignUp extends Component {
     if (alt_email && !validator.isEmail(alt_email)) {
       let msg = 'Enter a valid alternate email'
       this.state.errors['alt_email'] = msg
-      this.setState({altEmailIsvalid: true })
+      console.log("is checked value false")
+      this.setState({altEmailIsvalid: true, isDisabled: true, isCheckedVal: false })
     } else {
       this.state.errors['alt_email'] = ""
-      this.setState({altEmailIsvalid: false })
+      this.setState({ altEmailIsvalid: false, isDisabled: false, isCheckedVal: false, news_letter_error: "", show_news_letter_error: false })
     }
   }
 
@@ -104,26 +107,26 @@ export default class SignUp extends Component {
 
     if (!fields["email"]) {
       formIsValid = false;
-      this.setState({emailIsInvalid: true })
+      this.setState({emailIsInvalid: true, isDisabled: true })
       this.state.errors['email'] = "Email can't be empty";
     }
 
     if (!fields["first_name"]) {
       formIsValid = false;
-      this.setState({firstNameIsValid: true })
+      this.setState({firstNameIsValid: true, isDisabled: true })
       this.state.errors['first_name'] = "First name can't be empty";
     }
 
     if (fields["first_name"] && typeof fields["first_name"] == "string") {
       if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
         formIsValid = false;
-        this.setState({firstNameIsValid: true })
+        this.setState({firstNameIsValid: true, isDisabled: true })
         this.state.errors['first_name'] = "First name is in-valid";
       }
     }
 
     if (!fields["last_name"]) {
-      this.setState({lastNameIsValid: true })
+      this.setState({lastNameIsValid: true, isDisabled: true })
       formIsValid = false;
       this.state.errors['last_name'] = "Last name can't be empty";
     }
@@ -131,27 +134,27 @@ export default class SignUp extends Component {
     if (fields["last_name"] && typeof fields["last_name"] == "string") {
       if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
         formIsValid = false;
-        this.setState({lastNameIsValid: true })
+        this.setState({lastNameIsValid: true, isDisabled: true })
         this.state.errors['last_name'] = "Last name is in-valid";
       }
     }
 
     if (!fields["pin"]) {
       formIsValid = false;
-      this.setState({pinIsValid: true })
+      this.setState({pinIsValid: true, isDisabled: true })
       this.state.errors['pin'] = "PIN can't be empty";
     }
 
     if (fields["pin"] && typeof fields["pin"] == "string") {
       if (!fields["pin"] && !(/^[0-9\b]+$/).test(fields["pin"])) {
         formIsValid = false;
-        this.setState({pinIsValid: true })
+        this.setState({pinIsValid: true, isDisabled: true })
         this.state.errors['pin'] = "PIN is in-valid";
       }
     }
 
     if (!fields["school_id"]) {
-      this.setState({schoolIsValid: true })
+      this.setState({schoolIsValid: true, isDisabled: true })
       formIsValid = false;
       this.state.errors['school_id'] = "Please select school"
     }
@@ -160,7 +163,7 @@ export default class SignUp extends Component {
   }
 
   handleEmail(field, e) {
-    this.setState({ emailIsInvalid: false })
+    this.setState({ emailIsInvalid: false, isDisabled: false })
     this.state.errors['email'] = ""
 
     let fields = this.state.fields;
@@ -168,7 +171,7 @@ export default class SignUp extends Component {
     this.setState({ fields });
 
     if (!this.state.fields["email"]) {
-      this.setState({emailIsInvalid: true })
+      this.setState({emailIsInvalid: true, isDisabled: true })
       this.state.errors['email'] = "Email can't be empty"
     }
     this.validateEmailDomain(e.target.value)
@@ -188,7 +191,7 @@ export default class SignUp extends Component {
 
 
   handleFirstName(field, e) {
-    this.setState({ firstNameIsValid: false})
+    this.setState({ firstNameIsValid: false, isDisabled: false})
     this.state.errors['first_name'] = ""
 
     let fields = this.state.fields;
@@ -196,13 +199,13 @@ export default class SignUp extends Component {
     this.setState({ fields });
 
     if (!this.state.fields["first_name"]) {
-      this.setState({firstNameIsValid: true })
+      this.setState({firstNameIsValid: true, isDisabled: true })
       this.state.errors['first_name'] = "First name can't be empty"
     }
 
     if (this.state.fields["first_name"] && typeof this.state.fields["first_name"] == "string") {
       if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
-        this.setState({firstNameIsValid: true })
+        this.setState({firstNameIsValid: true, isDisabled: true })
         this.state.errors['first_name'] = "First name is in-valid";
       }
     }
@@ -210,7 +213,7 @@ export default class SignUp extends Component {
   }
 
   handleLastName(field, e) {
-    this.setState({ lastNameIsValid: false})
+    this.setState({ lastNameIsValid: false, isDisabled: false})
     this.state.errors['last_name'] = ""
 
     let fields = this.state.fields;
@@ -218,13 +221,13 @@ export default class SignUp extends Component {
     this.setState({ fields });
 
     if (!this.state.fields["last_name"]) {
-      this.setState({lastNameIsValid: true })
+      this.setState({lastNameIsValid: true, isDisabled: true })
       this.state.errors['last_name'] = "Last name can't be empty"
     } 
 
     if (this.state.fields["last_name"] && typeof this.state.fields["last_name"] == "string") {
       if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
-        this.setState({lastNameIsValid: true })
+        this.setState({lastNameIsValid: true, isDisabled: true })
         this.state.errors['last_name'] = "Last name is in-valid";
       }
     }
@@ -232,7 +235,7 @@ export default class SignUp extends Component {
   }
 
   handlePin(field, e) {
-    this.setState({ pinIsValid: false})
+    this.setState({ pinIsValid: false, isDisabled: false})
     this.state.errors['pin'] = ""
 
     let fields = this.state.fields;
@@ -240,16 +243,16 @@ export default class SignUp extends Component {
     this.setState({ fields });
 
     if (!this.state.fields["pin"]) {
-      this.setState({pinIsValid: true })
+      this.setState({pinIsValid: true, isDisabled: true })
       this.state.errors['pin'] = "PIN can't be empty"
     }
 
     if (this.state.fields["pin"] && !(/^[0-9\b]+$/).test(fields["pin"])) {
-      this.setState({pinIsValid: true })
+      this.setState({pinIsValid: true, isDisabled: true })
       this.state.errors['pin'] = "PIN is in-valid. It may only contain numbers";
     } else if (this.state.fields["pin"] && typeof this.state.fields["pin"] == "string") {
       if (fields["pin"].length < 4  || fields["pin"].length > 32) {
-        this.setState({pinIsValid: true })
+        this.setState({pinIsValid: true, isDisabled: true })
         this.state.errors['pin'] = "Pin must be 4 to 32 characters";
       }
     }
@@ -257,7 +260,7 @@ export default class SignUp extends Component {
   }
 
   handleSchool(field, e) {
-    this.setState({ schoolIsValid: false })
+    this.setState({ schoolIsValid: false, isDisabled: false })
     this.state.errors['school_id'] = ""
 
     let fields = this.state.fields;
@@ -265,7 +268,7 @@ export default class SignUp extends Component {
     this.setState({ fields });
 
     if (!this.state.fields["school_id"]) {
-      this.setState({schoolIsValid: true })
+      this.setState({schoolIsValid: true, isDisabled: true })
       this.state.errors['school_id'] = "Please select school"
     }
     this.showNotifications()
@@ -285,7 +288,7 @@ export default class SignUp extends Component {
 
 
   handleChange(field, e) {
-    this.setState({ firstNameIsValid: false })
+    this.setState({ firstNameIsValid: false})
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
@@ -329,8 +332,37 @@ export default class SignUp extends Component {
     return this.state.errors["school_id"]? 'block' : 'none'
   }
 
-  render() {
+  verifyNewsLetterEmailInSignUpPage(event) {
+     this.setState({isCheckedVal: false})
 
+    console.log(event)
+    // If alternate email is present in sign-up page take alternate-email to send news-letters other-wise DOE email.
+    const  news_letter_email = this.state.fields["alt_email"] || this.state.fields["email"]
+
+    if (event.target.value == 1 && news_letter_email == undefined) {
+      this.setState({news_letter_error: "Please enter a valid email address", show_news_letter_error: true, isDisabled: true, isCheckedVal: false })
+    } else {
+      this.setState({news_letter_error: "", show_news_letter_error: false, isDisabled: false })
+    }
+
+    if (news_letter_email !== undefined) {
+      axios.post('/news_letter/validate_news_letter_email_from_user_sign_up_page',  { email: news_letter_email }).then(res => {
+        
+        if (event.target.value == 1 && res.data["error"] !== undefined) {
+          this.setState({news_letter_error: res.data["error"], show_news_letter_error: true, isDisabled: true, isCheckedVal: false })
+        } else if (event.target.value == 1 && res.data["success"] !== undefined) {
+          console.log("success")
+          this.setState({news_letter_error: "", show_news_letter_error: false, isDisabled: false, isCheckedVal: true })
+        }
+
+      })
+        .catch(function (error) {
+         console.log(error)
+      })
+    }
+  }
+
+  render() {
     let error_email_msg = this.state.errors["email"]
     let email_is_invalid = this.state.emailIsInvalid
     let first_name_invalid = this.state.firstNameIsValid
@@ -343,6 +375,7 @@ export default class SignUp extends Component {
     let pin_error_msg = this.state.errors["pin"]
     let school_error_msg = this.state.errors["school_id"]
     let alt_email_error_msg = this.state.errors["alt_email"]
+
     let error_msgs = this.state.errors
     let email = error_msgs["email"] ? 'display' : 'none'
   
@@ -356,7 +389,7 @@ export default class SignUp extends Component {
               <div style={{ display: this.showErrors() }}>
                 <Notification className={this.showNotifications()} notificationType={NotificationTypes.Warning}
                   notificationContent={
-                    <Text noSpace displaySize="mini" className="signUpErrors">
+                    <Text noSpace className="signUpErrors">
                       <div style={{ display: this.showEmailError() }}> {error_msgs["email"]} {<br/>} </div>
                       <div style={{ display: this.showAltEmailError() }}> {error_msgs["alt_email"]} {<br/>} </div>
                       <div style={{ display: this.showFirstNamerror() }}> {error_msgs["first_name"]} {<br/>} </div>
@@ -443,8 +476,23 @@ export default class SignUp extends Component {
                     helperText="Your PIN serves as the password for your account. Make sure it is a number you will remember. Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
                   />
                 </FormField>
-
-                <Button onClick={this.handleSubmit} buttonType={ButtonTypes.Callout} className="accountButton"> Sign Up </Button>
+                <FormField>
+                  <Checkbox
+                    id="checkbox_id"
+                    invalidText={this.state.news_letter_error}
+                    isInvalid={this.state.show_news_letter_error}
+                    labelText="Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)"
+                    isChecked={this.state.isCheckedVal}
+                    name="test_name"
+                    onChange={this.verifyNewsLetterEmailInSignUpPage}
+                    showHelperInvalidText
+                    showLabel
+                    value="1"
+                  />
+                </FormField>
+                <FormField>
+                  <Button onClick={this.handleSubmit} buttonType={ButtonTypes.Callout} className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
+                </FormField>
               </Form>
             </>
           }
@@ -452,6 +500,8 @@ export default class SignUp extends Component {
           sidebar="right"
         />
       </DSProvider>
+
+
     )
   }
 }

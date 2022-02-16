@@ -44,12 +44,12 @@ class SettingsController < ApplicationController
       offset = params[:page].present? ? params[:page].to_i - 1 : 0
       request_offset = per_page.to_i * offset.to_i
 
-      @holds = current_user.holds.limit(per_page).offset(request_offset)
+      @holds = current_user.holds.order("created_at DESC").limit(per_page).offset(request_offset)
 
       #If school is inactive for current user still need to show in school drop down.
       @schools << @school.name_id unless @school.active
       resp = {:id => current_user.id, current_user: current_user, :contact_email => @contact_email, :school => @school, :email => @email, :alt_email => @alt_email, :schools => @schools.to_h, :total_pages => (current_user.holds.length/per_page.to_f).ceil,
-              :holds => @holds.map { |i| [created_at: i["created_at"].strftime("%b %-d, %Y"), quantity: i["quantity"], access_key: i["access_key"], title: i.teacher_set.title, status_label: i.status_label, status: i.status] if i.teacher_set.present? }.compact.flatten, :current_password => User.default_password.to_s }
+              :holds => @holds.map { |i| [created_at: i["created_at"].strftime("%b %-d, %Y"), quantity: i["quantity"], access_key: i["access_key"], title: i.teacher_set.title, status_label: i.status_label, status: i.status] if i.teacher_set.present? }.compact.flatten, :current_password => User.default_password.to_s}
     end
     render json: { accountdetails: resp }
   end

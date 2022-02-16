@@ -14,7 +14,7 @@ import {
   IconNames,
   HelperErrorText,
   LibraryExample,
-  Heading, TextInput, TextInputTypes, Form
+  Heading, TextInput, TextInputTypes, Form, FormField, FormRow, SimpleGrid, ButtonGroup
 } from '@nypl/design-system-react-components';
 
 
@@ -68,20 +68,23 @@ export default class NewsLetter extends Component {
     return (
       <div className="newsLetter">
         <div className="newsLetterBox">
-
-          <div style={{ display: this.state.display_block }}>
-            <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
-              <TextInput type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required />
-              <div style={{ display: this.state.isError }}>
-                <HelperErrorText
-                  ariaAtomic
-                  ariaLive="polite"
-                  isInvalid
-                  text={this.state.message}
-                />
-              </div>
-              <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
-          </div>
+        <SimpleGrid columns={1}>
+          <Form spacing="s">
+            <div style={{ display: this.state.display_block }}>
+              <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
+                <ButtonGroup>
+                  <FormRow>
+                    <FormField>
+                      <TextInput type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} />
+                    </FormField>
+                    <FormField>
+                      <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
+                    </FormField>
+                  </FormRow>
+                </ButtonGroup>
+            </div>
+          </Form>
+        </SimpleGrid>
           
           <div style={{ display: this.state.display_none }}>
             <div className="NewsLetterHeaderStyles">

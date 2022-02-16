@@ -658,9 +658,7 @@ ul.list li:before {
 }
 
 .signInButton {
-  background: #D23B42 !important;
   width: 25%;
-  margin-top: 2%;
 }
 
 .orderDetails {
@@ -842,7 +840,7 @@ I like to work on stuff that's good looking so I remixed a cool simple menu by M
 
 /*$color-blue: #00aeef;
 $color-blue-dark: #0d2035;
-$submenu-width: 180px;
+180px: 180px;
 
 
 html {
@@ -912,7 +910,7 @@ nav {
   text-transform: none;
   display: none;
   position: absolute;
-  width: $submenu-width;
+  width: 180px;
   background-color: $color-blue;
 }
     
@@ -921,6 +919,10 @@ nav {
     background: rgba(#000, 0.1);
   }
 }*/
+
+$color-blue: #00aeef;
+$color-blue-dark: #0d2035;
+$submenu-width: 229px;
 
 .orderStatusMessage {
   display: flex;
@@ -937,4 +939,51 @@ nav {
 
 .accocuntOrderPagination {
   justify-content: center;
+}
+
+.nav__submenu {
+  display: none;
+}
+
+.nav__menu-item:hover {
+  .nav__submenu {
+    display: block;
+  }
+}
+
+
+.nav__menu {
+  line-height: 45px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+  
+.nav__menu-item {
+  display: inline-block;
+  position: relative;
+
+  &:hover {
+    background-color: #FFFFFF;
+    .nav__submenu {
+      display: block;
+    }
+  }
+}
+    
+.nav__submenu {
+  font-weight: 300;
+  text-transform: none;
+  display: none;
+  position: absolute;
+  width: $submenu-width;
+  background: #FFFFFF;
+  z-index: 1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+}
+    
+.nav__submenu-item {
+  &:hover {
+    background: hsba(0, 0%, 0%, 0.25)
+  }
 }
