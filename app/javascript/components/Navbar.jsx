@@ -4,7 +4,8 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-import { Link, LinkTypes, Icon, List, ListTypes, Button, ButtonTypes} from "@nypl/design-system-react-components";
+import axios from 'axios';
+import { Link, LinkTypes, Icon, List, ListTypes, Button, ButtonTypes, Box} from "@nypl/design-system-react-components";
 import mlnLogoRed from '../images/MLN_Logo_red.png'
 
 
@@ -25,29 +26,47 @@ class AccountDetailsSubMenu extends Component {
 
   signInAccountLinks() {
     if (!this.state.user_signed_in) {
-      return <ReactRouterLink to="/signin"> <Button buttonType={ButtonTypes.NoBrand}>Sign In</Button> </ReactRouterLink>
+      return <li className="nav__submenu-item"> <ReactRouterLink to="/signin"> <Button className="signin_nav_button" buttonType={ButtonTypes.NoBrand}>Sign In</Button> </ReactRouterLink> </li>
     }
+  }
+
+  signOut() {
+    axios.delete('/logout')
+      .then(res => {
+        if (res.data.status == 200 && res.data.logged_out == true) {
+          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000";
+          return false;
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+    })    
   }
 
   AccountOrderLink() {
     if (this.state.user_signed_in) {
-      return <ReactRouterLink to="/account_details">My Account & Orders</ReactRouterLink>
+      return <>
+      <li className="nav__submenu-item">
+          <ReactRouterLink className="nav-link-colors" to="/account_details">My Account & Orders</ReactRouterLink>
+      </li>
+        <li className="nav__submenu-item"><ReactRouterLink className="nav-link-colors" onClick={this.signOut}>Sign Out</ReactRouterLink></li>
+      </>
     } else {
-      return <ReactRouterLink to="/signin">My Account & Orders</ReactRouterLink>
+      return <>
+      <li className="nav__submenu-item" ><ReactRouterLink className="nav-link-colors" to="/signin">My Account & Orders</ReactRouterLink></li>
+      <li className="nav__submenu-item"><ReactRouterLink className="nav-link-colors" to="/signup">Not Registered ? Please Sign Up</ReactRouterLink></li>
+      </>
     }
   }
 
   render() {
     return (
-      <List type={ListTypes.Ordered} inline={false} noStyling={false} className="nav__submenu">
-        <li className="nav__submenu-item">
+      <Box>
+        <List type={ListTypes.Ordered} inline={false} noStyling={false} className="nav__submenu">
           {this.signInAccountLinks()}
-        </li>
-        <li className="nav__submenu-item">
           {this.AccountOrderLink()}
-        </li>
-        <li className="nav__submenu-item"><ReactRouterLink to="/signup">Not Registered ? Please Sign Up</ReactRouterLink></li>
-      </List>
+        </List>
+      </Box>
     )
   }
 }
@@ -89,15 +108,15 @@ render() {
     
       <List type="ul" inline noStyling className="header-buttons" className="float-right">
 
-        <li><ReactRouterLink to="/teacher_set_data" className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
+        <li className="nav-links"><ReactRouterLink to="/teacher_set_data" className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 
-        <li><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
+        <li className="nav-links"><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
 
-        <li><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
+        <li className="nav-links"><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
 
-        <li><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
+        <li className="nav-links"><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
 
-        <li className="nav__menu-item">
+        <li className="nav__menu-item nav-links">
           {this.showAccountSigninLink()}
           { this.state.showAboutMenu && <AccountDetailsSubMenu userSignedIn={this.state.user_signed_in}/> }
         </li>

@@ -141,19 +141,6 @@ export default class Accounts extends Component {
         }}> Cancel Order </Button></div>
   }
 
-  signOut() {
-    axios.delete('/logout')
-      .then(res => {
-        if (res.data.status == 200 && res.data.logged_out == true) {
-          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000";
-          return false;
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-    })    
-  }
-
   AccountUpdatedMessage() {
     if (this.state.message !== "") {
       return <Notification className="accountNotificationMsg"
@@ -220,7 +207,6 @@ export default class Accounts extends Component {
             <>
               <div style={{display: 'flex'}}>
                 <Heading id="heading-three" level={HeadingLevels.Three} text={'Hello, ' + user_name} />
-                <Button onClick={this.signOut}>(Sign Out)</Button> 
               </div>
 
               <Form onSubmit={this.handleSubmit} method="put">

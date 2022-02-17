@@ -203,26 +203,11 @@ body {
 
 .nav-link-colors {
   color: #000000 !important;
-  margin-left: 1em;
 }
 
-
-/*.breadcrumb-title-details {
-  height: 77px;
-  width: 100%;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  background: #D23B42;
-  font-weight: 300;
-  letter-spacing: 0px;
-  line-height: 40px;
-  font-style: normal;
-  color: #FFFFFF;
-  font-size: 36px;
-  padding: 15px 140px;
-}*/
-
+.nav-links {
+  margin-left: 0.5em;
+}
 
 .appFooter {
   height: 165px;
@@ -946,17 +931,13 @@ $submenu-width: 229px;
 }
 
 .nav__menu-item:hover {
+  left:  auto;
+  right: 4px;
   .nav__submenu {
     display: block;
   }
 }
 
-
-.nav__menu {
-  line-height: 45px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
   
 .nav__menu-item {
   display: inline-block;
@@ -975,15 +956,23 @@ $submenu-width: 229px;
   text-transform: none;
   display: none;
   position: absolute;
-  width: $submenu-width;
+  min-width: $submenu-width;
   background: #FFFFFF;
   z-index: 1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
+  left: -160px;
 }
     
 .nav__submenu-item {
+  margin-bottom: 20px;
+  margin-top: 20px;
+  padding-right: 20px;
   &:hover {
     background: hsba(0, 0%, 0%, 0.25)
   }
+}
+
+.signin_nav_button {
+  width:  100%;
 }
