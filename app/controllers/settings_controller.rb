@@ -12,7 +12,7 @@ class SettingsController < ApplicationController
   end
 
   def index
-    unless user_signed_in?
+    unless logged_in?
       flash[:error] = "You must be logged in to access this page"
 
       # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
@@ -33,10 +33,9 @@ class SettingsController < ApplicationController
     resp = {}
     #Active schools from school table.
     @schools = School.active_schools_data
-
     if current_user.present?
       @email = current_user.email
-      @alt_email = current_user.alt_email
+      @alt_email = current_user.alt_email || current_user.email
       @contact_email = current_user.contact_email
       @school = current_user.school
       per_page = 15

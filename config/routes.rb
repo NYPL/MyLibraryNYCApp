@@ -5,15 +5,15 @@ MyLibraryNYC::Application.routes.draw do
   get 'hello_world', to: 'hello_world#index'
   get 'teacher_set_data', to: 'teacher_sets#teacher_set_data'
 
-  devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
+  #devise_for :users, :path => "users", :path_names => { :sign_in => 'start', :sign_out => 'signout', :sign_up => 'signup' }, :controllers => { :registrations => :registrations, :sessions => :sessions }
 
-  devise_scope :user do
-    get 'timeout_check' => 'sessions#timeout_check'
-    get 'timeout' => 'sessions#timeout'
-    get '/logged_in', to: 'sessions#is_logged_in?'
-    post '/login', to: 'sessions#create'
-    delete '/logout', to: 'sessions#delete'
-  end
+  resources :registrations, only: [:create, :update, :put, :patch, :post]
+
+  get 'timeout_check' => 'sessions#timeout_check'
+  get 'timeout' => 'sessions#timeout'
+  get '/logged_in', to: 'sessions#is_logged_in?'
+  post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#delete'
 
 
   get 'extend_session_iframe' => 'home#extend_session_iframe'

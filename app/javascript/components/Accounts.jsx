@@ -22,7 +22,7 @@ export default class Accounts extends Component {
 
   componentDidMount() {
     axios.get('/account', { params: { page: this.state.setComputedCurrentPage } } ).then(res => {
-      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
+      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
         window.location = res.request.responseURL;
         return false;
       }
@@ -40,12 +40,11 @@ export default class Accounts extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    axios.put('/users', {
+    axios.put('/registrations/'+ this.state.current_user.id , {
         user: { alt_email: this.state.alt_email, school_id: this.state.school_id, current_password: this.state.password }
-
      }).then(res => {
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/account") {
-          this.setState ({ message: "You updated your account successfully."})
+        if (res.data.status == "updated") {
+          this.setState ({ message: res.data.message })
         }
       })
       .catch(function (error) {
@@ -94,7 +93,7 @@ export default class Accounts extends Component {
     this.state.cancel_message = ""
     axios.put('/holds/'+ access_key, { hold_change: { status: 'cancelled' } 
      }).then(res => {
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/users/start") {
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {
@@ -181,7 +180,7 @@ export default class Accounts extends Component {
   onPageChange = (page) => {
     this.state.setComputedCurrentPage = page;
     axios.get('/account', { params: { page: page } }).then(res => {
-      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/users/start") {
+      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
         window.location = res.request.responseURL;
         return false;
       }

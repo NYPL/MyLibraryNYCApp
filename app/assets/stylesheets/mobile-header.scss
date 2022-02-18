@@ -277,7 +277,7 @@
       display: block;
       max-width: 1312px;
       margin: 0px 20px;
-      min-height: 110px;
+      min-height: 90px;
     }
 
     @include min-screen($breakpoint-xl) {
@@ -306,8 +306,8 @@
     @include min-screen(1025px) {
       max-width: 260px;
       position: relative;
-      left: 27px;
-      top: 40px;
+      left: 95px;
+      top: 25px;
     }
 
     @include min-screen(1024px) {

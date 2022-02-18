@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class SessionsController < Devise::SessionsController
+class SessionsController < ApplicationController
 
   def create
     @user = User.find_by(email: session_params[:email])
     if @user
-      sign_in :user, @user, bypass: true
+     # sign_in :user, @user, bypass: true
       login!
       render json: {
         logged_in: true,

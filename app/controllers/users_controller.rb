@@ -3,7 +3,7 @@
 class UsersController < ApplicationController
 
   def settings
-    if user_signed_in?
+    if logged_in?
       redirect_to "/users/edit"
     else
       flash[:error] = "You must be logged in to access this page"

@@ -77,18 +77,20 @@ class ApplicationController < ActionController::Base
   # Is called by functionality that needs to make sure the user is authenticated,
   # s.a. making a teacher set order.  Takes the user to a login page.
   def require_login
-    unless user_signed_in?
+    unless logged_in?
       flash[:error] = "Please sign in to complete your order!"
       respond_to do |format|
         format.html {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = request.original_url
-          redirect_to new_user_session_path
+          #render json: {:redirect_to => new_user_session_path}
+          redirect_to "/signin"
         }
         format.json {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = "#{app_url}##{request.fullpath}".gsub! '.json', ''
-          render json: {:redirect_to => new_user_session_path}
+          #render json: {:redirect_to => new_user_session_path}
+          render json: {:redirect_to => "/signin"}
         }
       end
     end

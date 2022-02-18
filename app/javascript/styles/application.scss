@@ -203,10 +203,13 @@ body {
 
 .nav-link-colors {
   color: #000000 !important;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 125%;
 }
 
 .nav-links {
-  margin-left: 0.5em;
+  margin-left: 1.2em;
 }
 
 .appFooter {
@@ -931,8 +934,6 @@ $submenu-width: 229px;
 }
 
 .nav__menu-item:hover {
-  left:  auto;
-  right: 4px;
   .nav__submenu {
     display: block;
   }
@@ -965,8 +966,8 @@ $submenu-width: 229px;
 }
     
 .nav__submenu-item {
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 25px;
+  margin-top: 18px !important;
   padding-right: 20px;
   &:hover {
     background: hsba(0, 0%, 0%, 0.25)

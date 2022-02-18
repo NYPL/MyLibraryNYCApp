@@ -33,21 +33,23 @@ export default class SignUp extends Component {
     event.preventDefault();
     if (this.handleValidation()) {
       
-      axios.post('/users', {
+      axios.post('/registrations', {
           user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
                   last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: this.state.fields["school_id"], news_letter_email: this.state.fields["alt_email"] || this.state.fields["email"] }
        }).then(res => {
-          if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data") {
-            this.setState({ signUpmsg: "Welcome! You have signed up successfully." })
-            window.location = res.request.responseURL;
-            return false;
-          }
 
-          // if (res.request.responseURL == "/teacher_set_data") {
+          console.log(res.data)
+          // if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data") {
           //   this.setState({ signUpmsg: "Welcome! You have signed up successfully." })
-          //   window.location = res.request.responseURL;
+          //   window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data";
           //   return false;
           // }
+
+          if (res.data.status == "created") {
+            this.setState({ signUpmsg: res.data.message })
+            window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data";
+            return false;
+          }
         })
         .catch(function (error) {
          console.log(error)

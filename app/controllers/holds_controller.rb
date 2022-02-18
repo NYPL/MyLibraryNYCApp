@@ -160,8 +160,8 @@ class HoldsController < ApplicationController
 
   def check_ownership
     @hold = Hold.find_by_access_key(params[:id])
-
-    if not user_signed_in?
+    # user_signed_in?
+    if not logged_in?
       require_login
 
     elsif @hold.user != current_user
