@@ -7,11 +7,7 @@ import CalendarOfEvents from "./CalendarOfEvents";
 import NewsLetter from "./NewsLetter";
 import heroCampaignBg from '../images/hero_campaign_bg.jpg'
 import heroCampaignLeft from '../images/hero_campaign_left.jpg'
-
-
 import ReactOnRails from 'react-on-rails';
-
-
 import axios from 'axios';
 import {
   Hero,
@@ -33,7 +29,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, HeroTypes, VStack, HeadingLevels
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, HeroTypes, VStack, HeadingLevels, NotificationTypes, Notification
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -51,7 +47,7 @@ export default class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
+    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
                    computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword') };
   }
@@ -148,17 +144,26 @@ export default class Home extends Component {
       </div>
     })
   }
+
+  SignedUpMessage() {
+    if (!this.state.userSignedIn) {
+      return <Notification className="signOutMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
+      Signed out successfully.</>} />
+    }
+  }
+
+
   render() {
     return (
       <DSProvider>
         <TemplateAppContainer
-          breakout={
+          breakout={<>{this.SignedUpMessage()}
                     <Hero heroType={HeroTypes.Campaign} 
                           heading={<Heading level={HeadingLevels.One} 
                           id="campaign-hero" text="Welcome To MyLibrary NYC" />} 
                           subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
                           backgroundImageSrc={heroCampaignBg} 
-                          image={<Image alt="Image example" blockName="hero" src={heroCampaignLeft}/>} />}
+                          image={<Image alt="Image example" blockName="hero" src={heroCampaignLeft}/>} /></>}
           
           contentPrimary={
                 <div>

@@ -21,7 +21,6 @@ export default class SignUp extends Component {
 
 
   componentDidMount() {
-
     axios.get('/sign_up_details').then(res => {
       this.setState( { active_schools: res.data.activeSchools, allowed_email_patterns: res.data.emailMasks } )
     }).catch(function (error) {
@@ -29,26 +28,39 @@ export default class SignUp extends Component {
     })
   }
 
+
   handleSubmit = event => {
     event.preventDefault();
     if (this.handleValidation()) {
-      
       axios.post('/registrations', {
           user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
                   last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: this.state.fields["school_id"], news_letter_email: this.state.fields["alt_email"] || this.state.fields["email"] }
        }).then(res => {
-
-          console.log(res.data)
-          // if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data") {
-          //   this.setState({ signUpmsg: "Welcome! You have signed up successfully." })
-          //   window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data";
-          //   return false;
-          // }
-          
           if (res.data.status == "created") {
             this.setState({ signUpmsg: res.data.message })
             window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data";
             return false;
+          } else {
+            if (res.data.message.alt_email.length > 0) {
+              this.state.errors['alt_email'] = res.data.message.alt_email[0]
+              this.setState({altEmailIsvalid: true, isDisabled: true })
+            }
+            if (res.data.message.email.length > 0) {
+              this.state.errors["email"] = res.data.message.email[0]
+              this.setState({emailIsInvalid: true, isDisabled: true })
+            }
+            if (res.data.message.first_name.length > 0) {
+              this.state.errors["first_name"] = res.data.message.email[0]
+              this.setState({firstNameIsValid: true, isDisabled: true })
+            }
+            if (res.data.message.last_name.length > 0) {
+              this.state.errors["email"] = res.data.message.email[0]
+              this.setState({lastNameIsValid: true, isDisabled: true })
+            }
+            if (res.data.message.pin.length > 0) {
+              this.state.errors["school_id"] = res.data.message.email[0]
+              this.setState({schoolIsValid: true, isDisabled: true })
+            }
           }
         })
         .catch(function (error) {
@@ -74,20 +86,14 @@ export default class SignUp extends Component {
       this.setState({news_letter_error: "", show_news_letter_error: false, emailIsInvalid: false, isDisabled: false  })
     }
 
-      
-      // axios.get('/check_email', { params: { email: email } }).then(res => {
-      //   let msg = ""
-      //   console.log( res.data.statusCode == 200 + " 2220000")
-      //   if (res.data.statusCode == 200 || res.data.statusCode == 409) {
-      //     this.state.errors['email'] = "We've confirmed that you don't already have a MyLibraryNYC account."
-      //   } else if (res.data.statusCode == 404) {
-      //     this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
-      //   }
-      //   this.setState({emailIsInvalid: true })
-        
-      // }).catch(function (error) {
-      //    console.log(error)
-      // })
+    axios.get('/check_email', { params: { email: email } }).then(res => {
+      if (res.data.statusCode == 404) {
+        this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
+        this.setState({emailIsInvalid: true, isDisabled: true })
+      }      
+    }).catch(function (error) {
+       console.log(error)
+    })
     
   }
 
@@ -95,7 +101,6 @@ export default class SignUp extends Component {
     if (alt_email && !validator.isEmail(alt_email)) {
       let msg = 'Enter a valid alternate email'
       this.state.errors['alt_email'] = msg
-      console.log("is checked value false")
       this.setState({altEmailIsvalid: true, isDisabled: true, isCheckedVal: false })
     } else {
       this.state.errors['alt_email'] = ""
@@ -363,6 +368,8 @@ export default class SignUp extends Component {
       })
     }
   }
+
+
 
   render() {
     let error_email_msg = this.state.errors["email"]
