@@ -22,7 +22,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup, Notification, NotificationTypes
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -36,7 +36,7 @@ export default class SearchTeacherSets extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
+    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
                    computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {} };
   }
@@ -105,8 +105,6 @@ export default class SearchTeacherSets extends Component {
                 {ts.title}
               </ReactRouterLink>
             </CardHeading>
-
-            
             <CardContent> {ts.suitabilities_string} </CardContent>
             <CardContent> {ts.availability} </CardContent>
             <CardContent> {ts.description} </CardContent>
@@ -158,6 +156,13 @@ export default class SearchTeacherSets extends Component {
     })
   }
 
+  SignedInMessage() {
+    if (this.state.userSignedIn) {
+      return <Notification className="signUpMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
+      Signed in successfully</>} />
+    }
+  }
+
   TeacherSetSlider() {
     return <>
     </>
@@ -169,6 +174,7 @@ export default class SearchTeacherSets extends Component {
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentTop={<>
+              {this.SignedInMessage()}
               <SearchBar onSubmit={this.handleSubmit} className="teachersetSearchBar" 
                 textInputProps={{
                   labelText: "Search Teacher set",

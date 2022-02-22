@@ -45,14 +45,24 @@ export default class Routes extends React.Component {
               <Banner />
               <Header userSignedIn={this.state.userSignedIn}/>
               <Switch>
-                <Route exact path="/" component={Home} />
+                <Route exact path="/" component={Home} userSignedIn={this.state.userSignedIn} />
                 <Route path="/faq" component={Faqs} />
                 <Route path="/contacts" component={Contacts} />
                 <Route path="/participating-schools" component={ParticipatingSchools}  />
-                <Route path="/signin" component={SignIn} userSignedIn={this.state.userSignedIn} />
+                <Route
+                  path='/signin'
+                  render={routeProps => (
+                    <SignIn {...routeProps} component={SignIn} userSignedIn={this.props.userSignedIn} />
+                  )}
+                />
                 <Route path="/signup" component={SignUp} />
-                <Route path="/signout" component={SignOut} />
-                <Route path="/teacher_set_data" name="Teacher Sets" component={SearchTeacherSets} />
+                <Route path="/signout" component={SignOut} />                
+                <Route
+                  path='/teacher_set_data'
+                  render={routeProps => (
+                    <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={this.props.userSignedIn} />
+                  )}
+                />
                 <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
                 <Route path="/account_details" component={Accounts} />
                 <Route

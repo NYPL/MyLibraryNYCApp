@@ -44,7 +44,7 @@ export default class SignUp extends Component {
           //   window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data";
           //   return false;
           // }
-
+          
           if (res.data.status == "created") {
             this.setState({ signUpmsg: res.data.message })
             window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/teacher_set_data";
@@ -299,9 +299,9 @@ export default class SignUp extends Component {
 
   showNotifications() {
     if (Object.entries(this.state.errors).length > 0) {
-      return 'display_block signUpErrors'
+      return 'display_block signUpMessage'
     } else {
-      return 'display_none signUpErrors'
+      return 'display_none signUpMessage'
     }
   }
 
@@ -391,7 +391,7 @@ export default class SignUp extends Component {
               <div style={{ display: this.showErrors() }}>
                 <Notification className={this.showNotifications()} notificationType={NotificationTypes.Warning}
                   notificationContent={
-                    <Text noSpace className="signUpErrors">
+                    <Text noSpace className="signUpMessage">
                       <div style={{ display: this.showEmailError() }}> {error_msgs["email"]} {<br/>} </div>
                       <div style={{ display: this.showAltEmailError() }}> {error_msgs["alt_email"]} {<br/>} </div>
                       <div style={{ display: this.showFirstNamerror() }}> {error_msgs["first_name"]} {<br/>} </div>
