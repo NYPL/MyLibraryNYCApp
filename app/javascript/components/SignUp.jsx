@@ -87,7 +87,7 @@ export default class SignUp extends Component {
     }
 
     axios.get('/check_email', { params: { email: email } }).then(res => {
-      if (res.data.statusCode == 404) {
+      if (res.data.statusCode !== 404) {
         this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
         this.setState({emailIsInvalid: true, isDisabled: true })
       }      
@@ -283,9 +283,7 @@ export default class SignUp extends Component {
 
 
   Schools() {
-
     let schools = Object.entries(Object.assign({"-- Select A School -- ": ""}, this.state.active_schools))
-
     return schools.map((school, i) => {
       return (
         <option key={school[1]} value={school[1]}>{school[0]}</option>

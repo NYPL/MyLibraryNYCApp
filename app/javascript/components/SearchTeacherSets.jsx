@@ -36,9 +36,9 @@ export default class SearchTeacherSets extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
+    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: 0, error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
-                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {} };
+                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {} };
   }
 
   componentDidMount() {
@@ -51,7 +51,7 @@ export default class SearchTeacherSets extends Component {
       this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
                       ts_total_count: res.data.total_count });
 
-      if (res.data.total_count > 20) {
+      if (res.data.teacher_sets.length > 0 && res.data.total_count > 20 ) {
         this.state.pagination = 'block';
       } else {
         this.state.pagination = 'none';
