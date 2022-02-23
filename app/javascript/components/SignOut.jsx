@@ -15,23 +15,6 @@ export default class SignOut extends Component {
     this.state = { logged_out: ""  }
   }
 
-
-  componentDidMount() {
-    axios.post('/users/signout', {
-        email: 'consultdg@nypl.org'
-     })
-      .then(res => {
-        this.setState({ logged_out: res.data.logged_out });
-        if (res.data.logged_out) {
-          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ':3000/'
-          return false;
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-    })    
-  }
-
   signOutMessage() {
     if (this.state.logged_out) {
       return "Signed out successfully"
@@ -49,5 +32,4 @@ export default class SignOut extends Component {
         </DSProvider>
     )
   }
-
 }

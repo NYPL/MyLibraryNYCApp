@@ -340,7 +340,6 @@ export default class SignUp extends Component {
   verifyNewsLetterEmailInSignUpPage(event) {
      this.setState({isCheckedVal: false})
 
-    console.log(event)
     // If alternate email is present in sign-up page take alternate-email to send news-letters other-wise DOE email.
     const  news_letter_email = this.state.fields["alt_email"] || this.state.fields["email"]
 
@@ -356,7 +355,6 @@ export default class SignUp extends Component {
         if (event.target.value == 1 && res.data["error"] !== undefined) {
           this.setState({news_letter_error: res.data["error"], show_news_letter_error: true, isDisabled: true, isCheckedVal: false })
         } else if (event.target.value == 1 && res.data["success"] !== undefined) {
-          console.log("success")
           this.setState({news_letter_error: "", show_news_letter_error: false, isDisabled: false, isCheckedVal: true })
         }
 
@@ -390,10 +388,8 @@ export default class SignUp extends Component {
     return (
       <DSProvider>
         <TemplateAppContainer
-          breakout={<AppBreadcrumbs />}
-          contentPrimary={
-            <>
-              <div style={{ display: this.showErrors() }}>
+          breakout={<><AppBreadcrumbs />
+            <div style={{ display: this.showErrors() }}>
                 <Notification className={this.showNotifications()} notificationType={NotificationTypes.Warning}
                   notificationContent={
                     <Text noSpace className="signUpMessage">
@@ -407,6 +403,9 @@ export default class SignUp extends Component {
                   } 
                 />
               </div>
+            </>}
+          contentPrimary={
+            <>
               <Form>
                 <FormField>
                   <TextInput
