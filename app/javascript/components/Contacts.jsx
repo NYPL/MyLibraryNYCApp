@@ -3,11 +3,10 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 const Contacts = (props) => {
   return (
-      <DSProvider>
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
-            <div className="navbarPages">
+            <>
               <div className="contacts_page_text">
                 Have a question about library cards, your account, or {<br/>}
                 library staff visiting your school for professional development?
@@ -42,12 +41,11 @@ const Contacts = (props) => {
                 Call me <a className="contact_email" href="http://nycdoe.libguides.com/home">DOE Office of Library Services</a> at 917-521-3734.
 
               </div>
-            </div>
+            </>
           }
           contentSidebar={<></>}
           sidebar="right"          
         />
-      </DSProvider>
   )
 }
 

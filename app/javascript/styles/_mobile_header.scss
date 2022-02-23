@@ -277,11 +277,11 @@
     }
 
     @include min-screen($breakpoint-xl) {
-     /* margin: 0px auto;*/
+      margin: 0px auto;
     }
 
     @include min-screen($breakpoint-large) {
-      /*margin: 0px auto;*/
+      margin: 0px auto;
     }
   }
 

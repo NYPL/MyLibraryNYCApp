@@ -50,18 +50,14 @@ export default class Faqs extends Component {
 
   render() {
     return (
-      <DSProvider>
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
-            <div className="navbarPages">
-              <Accordion contentData={this.FrequentlyAskedQuestions()} />
-            </div>
+            <Accordion contentData={this.FrequentlyAskedQuestions()} />
           }
           contentSidebar={<></>}
           sidebar="right" 
         />
-      </DSProvider>
     )
   }
 }

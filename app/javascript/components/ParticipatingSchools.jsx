@@ -68,39 +68,35 @@ export default class ParticipatingSchools extends Component {
 
   render() {
     return (
-      <>
-        <DSProvider>
-          <TemplateAppContainer
-            breakout={<AppBreadcrumbs />}
-            contentPrimary={
-              <div className="navbarPages">
-              <div className="bold">Does your school participate in MyLibraryNYC?</div>
-              <div className="schoolList">Find your school using the following links:</div>
-              {this.AnchorTags()}
-              <div className="  ">or type the name of your school in the box below</div>{<br/>}
-                <TextInput
-                  attributes={{
-                    'aria-describedby': 'Choose wisely.',
-                    'aria-label': 'Enter school name',
-                    maxLength: 10,
-                    pattern: '[a-z0-9]',
-                    tabIndex: 0
-                  }}
-                  onChange={this.handleChange}
-                  id="search_participating_school"
-                  labelText="Enter school name"
-                  placeholder="Enter school name"
-                  type="text"
-                  showLabel={false}
-                />
-              {this.Schools()}
-            </div>
-            }
-            contentSidebar={<></>}
-            sidebar="right" 
-          />
-        </DSProvider>
-      </>
+        <TemplateAppContainer
+          breakout={<AppBreadcrumbs />}
+          contentPrimary={
+            <>
+            <div className="bold">Does your school participate in MyLibraryNYC?</div>
+            <div className="schoolList">Find your school using the following links:</div>
+            {this.AnchorTags()}
+            <div className="  ">or type the name of your school in the box below</div>{<br/>}
+              <TextInput
+                attributes={{
+                  'aria-describedby': 'Choose wisely.',
+                  'aria-label': 'Enter school name',
+                  maxLength: 10,
+                  pattern: '[a-z0-9]',
+                  tabIndex: 0
+                }}
+                onChange={this.handleChange}
+                id="search_participating_school"
+                labelText="Enter school name"
+                placeholder="Enter school name"
+                type="text"
+                showLabel={false}
+              />
+            {this.Schools()}
+          </>
+          }
+          contentSidebar={<></>}
+          sidebar="right" 
+        />
     )
   }
 }
