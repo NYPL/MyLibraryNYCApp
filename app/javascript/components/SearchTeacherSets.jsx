@@ -37,7 +37,7 @@ export default class SearchTeacherSets extends Component {
   constructor(props) {
     super(props);
     this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: 0, error_msg: {}, email: "", 
-                   display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
+                   display_block: "block", display_none: "none", setComputedCurrentPage: 1, total_pages: 0,
                    computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {} };
   }
 
@@ -48,13 +48,15 @@ export default class SearchTeacherSets extends Component {
 
   getTeacherSets(params) {
     axios.get('/teacher_sets', {params: params}).then(res => {
-      this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
-                      ts_total_count: res.data.total_count });
+      this.setState({ teacher_sets: res.data.teacher_sets, facets: res.data.facets,
+                      ts_total_count: res.data.total_count, total_pages: res.data.total_pages });
+
+      console.log(res.data.teacher_sets.length > 0 && res.data.total_count > 20 )
 
       if (res.data.teacher_sets.length > 0 && res.data.total_count > 20 ) {
-        this.state.pagination = 'block';
+        this.setState({ pagination: 'block' })
       } else {
-        this.state.pagination = 'none';
+        this.setState({ pagination: 'none' })
       }
     })
     .catch(function (error) {
@@ -194,7 +196,7 @@ export default class SearchTeacherSets extends Component {
               <>
                 <div>{this.TeacherSetDetails()}</div>
                 <div style={{ display: this.state.pagination }}>
-                  <Pagination currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.ts_total_count} />
+                  <Pagination className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
                 </div>
               </>
             }
