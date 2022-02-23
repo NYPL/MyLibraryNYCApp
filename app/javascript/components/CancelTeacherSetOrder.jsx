@@ -40,7 +40,7 @@ export default class TeacherSetOrder extends React.Component {
     axios.put('/holds/'+ this.state.access_key, { hold_change: { status: 'cancelled', comment: this.state.comment } 
      }).then(res => {
         console.log(res.request.responseURL)
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {

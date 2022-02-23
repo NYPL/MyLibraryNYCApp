@@ -61,7 +61,7 @@ export default class SignIn extends Component {
         email: this.state.email
      }).then(res => {
         if (res.data.logged_in) {
-          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ':3000/' + res.data.user_return_to
+          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + '/' + res.data.user_return_to
           return false;
         } else {
           this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});

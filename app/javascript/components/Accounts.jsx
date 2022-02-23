@@ -22,7 +22,7 @@ export default class Accounts extends Component {
 
   componentDidMount() {
     axios.get('/account', { params: { page: this.state.setComputedCurrentPage } } ).then(res => {
-      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
+      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
         return false;
       }
@@ -180,7 +180,7 @@ export default class Accounts extends Component {
   onPageChange = (page) => {
     this.state.setComputedCurrentPage = page;
     axios.get('/account', { params: { page: page } }).then(res => {
-      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
+      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
         return false;
       }

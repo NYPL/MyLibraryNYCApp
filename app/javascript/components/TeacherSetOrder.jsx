@@ -30,7 +30,7 @@ export default class TeacherSetOrder extends React.Component {
         .then((res) => {
           const { data } = res;
           // This fix depending on the nypl design  system.
-          if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
+          if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
             window.location = res.request.responseURL;
             return false;
           } else {

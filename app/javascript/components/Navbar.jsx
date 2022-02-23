@@ -34,7 +34,7 @@ class AccountDetailsSubMenu extends Component {
     axios.delete('/logout')
       .then(res => {
         if (res.data.status == 200 && res.data.logged_out == true) {
-          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000";
+          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME;
           return false;
         }
       })

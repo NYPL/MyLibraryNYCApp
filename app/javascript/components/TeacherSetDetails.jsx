@@ -67,7 +67,7 @@ export default class TeacherSetDetails extends React.Component {
         teacher_set_id: this.props.match.params.id, query_params: {quantity: this.state.quantity}
      }).then(res => {
 
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {
