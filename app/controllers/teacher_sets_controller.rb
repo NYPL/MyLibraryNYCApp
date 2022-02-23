@@ -24,6 +24,7 @@ class TeacherSetsController < ApplicationController
                               'method' => 'app/controllers/teacher_sets_controller.rb.index'})
       @teacher_sets = TeacherSet.for_query params
       @facets = TeacherSet.facets_for_query @teacher_sets
+      total_count =  @teacher_sets.length
     end
     # Determine what facets are selected based on query string
     @facets.each do |f|
@@ -35,10 +36,14 @@ class TeacherSetsController < ApplicationController
 
     @facets = teacher_set_facets(params)
     # Attach custom :q param to each facet with query params to be applied to that link
+
+    per_page = 20;
+    total_pages = (total_count/per_page.to_f).ceil
+
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count }
+      render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count, total_pages: total_pages}
     else
-      render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count }, serializer: SearchSerializer, include_books: false, include_contents: false
+      render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count, total_pages: total_pages}, serializer: SearchSerializer, include_books: false, include_contents: false
     end
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
