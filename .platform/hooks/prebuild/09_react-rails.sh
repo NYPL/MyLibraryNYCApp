@@ -4,7 +4,9 @@ set -e
 
 # Install Node.js
 echo "Installing Node.js"
-/user/bin/wget https://rpm.nodesource.com/setup_14.x | /usr/bin/bash -
+/user/bin/wget https://rpm.nodesource.com/setup_14.x
+chmod 755 setup_14.x
+./setup_14.x
 /usr/bin/yum -y install nodejs
 
 # Install Yarn
