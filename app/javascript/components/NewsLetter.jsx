@@ -22,16 +22,15 @@ export default class NewsLetter extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {message: "", error_msg: {}, email: "", display_block: "block", display_none: "none",  isError: "none", buttondisabled: false};
+    this.state = {message: "", error_msg: {}, email: "", display_block: "block", display_none: "none", buttondisabled: false, isInvalid: false};
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
   handleNewsLetterEmail = event => {
-    this.state.isError = 'none'
-    
+    console.log(event.target.value)
     this.setState({
-      email: event.target.value
+      email: event.target.value, isInvalid: false
     })
   }
 
@@ -39,7 +38,6 @@ export default class NewsLetter extends Component {
     event.preventDefault()
     this.setState({
       buttondisabled: true,
-      buttonColor: '#CCC'
     })
 
      axios.get('/news_letter/index', {
@@ -48,19 +46,17 @@ export default class NewsLetter extends Component {
         }
      })
       .then(res => {
+          this.state.message = res.data.message;
+
           if (res.data.status == "success") {
-            this.state.display_none = 'block'
-            this.state.display_block = 'none' 
+            this.setState({display_none: 'block', display_block: 'none', isInvalid: false})
           } else {
-            this.state.buttondisabled = false
-            this.state.isError = 'block'
+            this.setState({display_none: 'none', display_block: 'block', isInvalid: true})
           }
-          this.setState({ message: res.data.message });
       })
       .catch(function (error) {
        console.log(error)
     })
-    
   }
 
 
@@ -73,7 +69,7 @@ export default class NewsLetter extends Component {
             <Form spacing={GridGaps.Small}>
               <FormRow>
                 <FormField>
-                  <TextInput type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} />
+                  <TextInput type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
                   <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
                 </FormField>
               </FormRow>

@@ -19,43 +19,32 @@ export default class SignIn extends Component {
     this.state = { email: "", invali_email_msg: "", user_signed_in: this.props.userSignedIn, isInvalid: false };
   }
 
-  handleSearchKeyword = event => {    
-    this.setState({
-      email: event.target.value
-    })
-  }
 
   handleEmail = event => {
     this.setState({
-      email: event.target.value
+      email: event.target.value, isInvalid: false
     })
-
-    if (!validator.isEmail(event.target.value)) {
-      this.state.isInvalid = true
-      this.state.invali_email_msg = "Please enter a valid email address"
-
-    }else {
-      this.state.isInvalid = false
-    }
   }
 
   handleValidation() {
     if (this.state.email == "") {
       this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
-      console.log("ooooooooo")
       return false;
     }
   }
 
-  // # need  to modify below code
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state.email == "")
     if (this.state.email == "") {
       this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
-      console.log("ooooooooo")
       return false;
     }
+
+    if (!validator.isEmail(this.state.email)) {
+      this.setState({isInvalid: true, invali_email_msg: "Please enssster a valid email address"});
+      return false;
+    }
+
 
     axios.post('/login', {
         email: this.state.email
@@ -70,12 +59,10 @@ export default class SignIn extends Component {
       .catch(function (error) {
        console.log(error)
     })
-    
   }
 
   render() {
     return (
-      <DSProvider>
       <TemplateAppContainer
         breakout={<AppBreadcrumbs />}
 
@@ -110,7 +97,6 @@ export default class SignIn extends Component {
         contentSidebar={<></>}
         sidebar="right"
       />
-      </DSProvider>
     )
   }
 }

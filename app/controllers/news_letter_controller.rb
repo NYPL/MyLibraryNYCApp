@@ -20,7 +20,6 @@ class NewsLetterController < ApplicationController
     email_already_in_google_sheets?(emails_arr, email)
     # After input validations, send news-letter confirmation email to news-letter subscriber.
     send_news_letter_confirmation_email(email)
-
     render json: { status: "success", message: "Thank you for sign up for MyLibraryNYC Newsletter!" }
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
