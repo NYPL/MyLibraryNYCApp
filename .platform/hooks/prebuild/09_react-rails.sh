@@ -4,7 +4,7 @@ set -e
 
 # Install Node.js
 echo "Installing Node.js"
-/usr/bin/yum-config-manager --enable epel
+/user/bin/wget https://rpm.nodesource.com/setup_14.x | /usr/bin/bash -
 /usr/bin/yum -y install nodejs
 
 # Install Yarn
