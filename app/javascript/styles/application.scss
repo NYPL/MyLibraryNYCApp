@@ -977,7 +977,8 @@ $submenu-width: 229px;
   margin-top: 18px !important;
   padding-right: 20px;
   &:hover {
-    background: hsba(0, 0%, 0%, 0.25)
+    background: hsba(0, 0%, 0%, 0.25);
+    text-decoration: underline;
   }
 }
 
