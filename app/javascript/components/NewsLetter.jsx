@@ -14,7 +14,7 @@ import {
   IconNames,
   HelperErrorText,
   LibraryExample,
-  Heading, TextInput, TextInputTypes, Form, FormField, FormRow, SimpleGrid, ButtonGroup
+  Heading, TextInput, TextInputTypes, Form, FormField, FormRow, SimpleGrid, ButtonGroup, GridGaps
 } from '@nypl/design-system-react-components';
 
 
@@ -68,23 +68,17 @@ export default class NewsLetter extends Component {
     return (
       <div className="newsLetter">
         <div className="newsLetterBox">
-        <SimpleGrid columns={1}>
-          <Form spacing="s">
-            <div style={{ display: this.state.display_block }}>
-              <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
-                <ButtonGroup>
-                  <FormRow>
-                    <FormField>
-                      <TextInput type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} />
-                    </FormField>
-                    <FormField>
-                      <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
-                    </FormField>
-                  </FormRow>
-                </ButtonGroup>
-            </div>
-          </Form>
-        </SimpleGrid>
+          <div style={{ display: this.state.display_block }}>
+            <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
+            <Form spacing={GridGaps.Small}>
+              <FormRow>
+                <FormField>
+                  <TextInput type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} />
+                  <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
+                </FormField>
+              </FormRow>
+            </Form>
+          </div>
           
           <div style={{ display: this.state.display_none }}>
             <div className="NewsLetterHeaderStyles">
