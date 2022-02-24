@@ -172,7 +172,6 @@ export default class SearchTeacherSets extends Component {
 
   render() {
     return (
-      <DSProvider>
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentTop={<>
@@ -205,7 +204,6 @@ export default class SearchTeacherSets extends Component {
           </>}
           sidebar="left" 
         />
-      </DSProvider>
     )
   }
 }
