@@ -183,7 +183,7 @@ export default class SearchTeacherSets extends Component {
     return <Slider
     id="teacher-set_slider-range-id"
     isRangeSlider
-    labelText={"Grades Range " + this.state.grade_begin + " to " + this.state.grade_end}
+    labelText={"Grades Range   " + this.state.grade_begin + " To " + this.state.grade_end}
     max={12}
     min={-1}
     onChange={this.getGrades}
@@ -226,7 +226,7 @@ export default class SearchTeacherSets extends Component {
               </>
             }
           contentSidebar={<>
-              {this.TeacherSetGradesSlider()}
+              {this.TeacherSetGradesSlider()}{<br/>}
               {this.TeacherSetFacets()}
           </>}
           sidebar="left" 
