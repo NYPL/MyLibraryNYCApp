@@ -22,7 +22,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup, Notification, NotificationTypes
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup, Notification, NotificationTypes, Flex, Spacer, Text, TextDisplaySizes, Box, Toggle, HeadingDisplaySizes, ToggleSizes
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -161,14 +161,19 @@ export default class SearchTeacherSets extends Component {
     }
 
     return this.state.facets.map((ts, i) => {
-      return <div className="teachersetFacetsBorder">
+      return <>
           <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
-          <CheckboxGroup id={"id"+ i} defaultValue={[]} isRequired  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} optReqFlag={false} >
-            { ts.items.map((item, index) =>
-              <Checkbox labelText={item["label"] + " " + item["count"]} value={item["value"].toString()} />
-            ) }{<br/>}
-          </CheckboxGroup>
-        </div>
+            <CheckboxGroup id={"id"+ i} defaultValue={[]} isRequired  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} optReqFlag={false} >
+              { ts.items.map((item, index) =>
+                <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
+                  <Checkbox labelText={item["label"]} value={item["value"].toString()} />
+                  <Spacer />
+                  <Text displaySize={TextDisplaySizes.Caption}>{item["count"]}</Text>
+                </Flex>
+              ) }{<br/>}
+            </CheckboxGroup>
+            
+        </>
     })
   }
 
@@ -180,20 +185,30 @@ export default class SearchTeacherSets extends Component {
   }
 
   TeacherSetGradesSlider() {
-    return <Slider
-    id="teacher-set_slider-range-id"
-    isRangeSlider
-    labelText={"Grades Range   " + this.state.grade_begin + " To " + this.state.grade_end}
-    max={12}
-    min={-1}
-    onChange={this.getGrades}
-    optReqFlag={false}
-    showBoxes={false}
-    showHelperInvalidText
-    showLabel
-    showValues={false}
-    step={1}
-    />
+    return <>
+      <Slider
+        id="teacher-set_slider-range-id"
+        isRangeSlider
+        labelText={"Grades Range   " + this.state.grade_begin + " To " + this.state.grade_end}
+        max={12}
+        min={-1}
+        defaultValue={[-1, 12]}
+        onChange={this.getGrades}
+        optReqFlag={false}
+        showBoxes={false}
+        showHelperInvalidText
+        showLabel
+        showValues={false}
+        step={1}
+      />
+     {/* <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
+        <Text displaySize={TextDisplaySizes.Caption}>
+          {this.state.grade_begin}
+        </Text>
+        <Spacer />
+        <Text displaySize={TextDisplaySizes.Caption}>{this.state.grade_end}</Text>
+      </Flex>*/}
+    </>
   }
 
   render() {
@@ -212,9 +227,34 @@ export default class SearchTeacherSets extends Component {
                 }}
               />
               {<br/>}
-              <Heading id="heading2" level={2} text="Seach and Find Teacher Sets" />
-              <Heading id="heading5" level={5} text="Check Out Newly Arrived Teacher Sets" />
-              <HorizontalRule align="left" height="3px" width="856px" className="teacherSetHorizontal"/>
+              <Heading id="search_and_find_teacher_sets" displaySize={HeadingDisplaySizes.Primary} level={HeadingLevels.Two} text="Search and Find Teacher Sets" additionalStyles={{ pt: "var(--nypl-space-m)" }} />
+              <HorizontalRule className="teacherSetHorizontal" />
+              <Flex>
+                <Heading level={HeadingLevels.Three}>
+                  Check Out Newly Arrived Teacher Sets
+                </Heading>
+                <Spacer />
+                <label
+                  htmlFor="sort-by-select"
+                  style={{
+                    display: "inline-block",
+                    marginRight: "var(--nypl-space-s)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Sort By
+                </label>
+                <Select
+                  id="sort-by-select"
+                  name="sortBy"
+                  labelText="Sort By"
+                  showLabel={false}
+                  showOptReqLabel={false}
+                >
+                  <option value="option">Option 1</option>
+                  <option value="option">Option 2</option>
+                </Select>
+              </Flex>              
             </>
           }
           contentPrimary={
@@ -225,10 +265,11 @@ export default class SearchTeacherSets extends Component {
                 </div>
               </>
             }
-          contentSidebar={<>
+          contentSidebar={<Box bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
+              <Heading displaySize={HeadingDisplaySizes.Tertiary} level={HeadingLevels.Three} > Refine Results </Heading>
               {this.TeacherSetGradesSlider()}{<br/>}
               {this.TeacherSetFacets()}
-          </>}
+          </Box>}
           sidebar="left" 
         />
     )
