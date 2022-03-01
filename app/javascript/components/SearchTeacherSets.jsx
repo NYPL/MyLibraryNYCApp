@@ -38,13 +38,15 @@ export default class SearchTeacherSets extends Component {
     super(props);
     this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: 0, error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, total_pages: 0,
-                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {} };
+                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {}, grade_begin: "Pre-K", grade_end: 12 };
   }
 
   componentDidMount() {
-    const params = Object.assign({ keyword: this.state.keyword}, this.state.selected_facets)
+    const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end }, this.state.selected_facets)
     this.getTeacherSets(params)
   }
+
+
 
   getTeacherSets(params) {
     axios.get('/teacher_sets', {params: params}).then(res => {
@@ -64,9 +66,21 @@ export default class SearchTeacherSets extends Component {
     })
   }
 
+
+
+  getGrades = grades => {
+    const [grade_begin_val, grade_end_val] = grades;
+    const grade_begin =  grade_begin_val == -1? 'Pre-K' :  grade_begin_val == 0 ? 'K' :  grade_begin_val;
+    const grade_end = grade_end_val == -1? 'Pre-K' :  grade_end_val == 0 ? 'K' :  grade_end_val;
+
+    this.setState({ grade_begin: grade_begin, grade_end: grade_end })
+    this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: grade_begin, grade_end: grade_end}, this.state.selected_facets)
+    this.getTeacherSets(this.state.params)
+  };
+
   handleSubmit = event => {
     event.preventDefault();
-    const params = Object.assign({ keyword: this.state.keyword}, this.state.selected_facets)
+    const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end}, this.state.selected_facets)
     this.getTeacherSets(params)
   }
 
@@ -75,9 +89,9 @@ export default class SearchTeacherSets extends Component {
       delete this.state.keyword;
       delete this.state.selected_facets;
       this.props.history.push("/teacher_set_data");
-      this.getTeacherSets(Object.assign({ keyword: this.state.keyword}, this.state.selected_facets));
+      this.getTeacherSets(Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end}, this.state.selected_facets));
     } else {
-      this.setState({ keyword: event.target.value })
+      this.setState({ keyword: event.target.value, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end })
     }
   }
 
@@ -132,9 +146,9 @@ export default class SearchTeacherSets extends Component {
     this.state.selected_facets
 
     if (this.state.keyword !== null) {
-      this.state.params = Object.assign({ keyword: this.state.keyword}, this.state.selected_facets)
+      this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end}, this.state.selected_facets)
     } else {
-      this.state.params = this.state.selected_facets
+      this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end}, this.state.selected_facets)
     }
 
     this.getTeacherSets(this.state.params)
@@ -165,9 +179,21 @@ export default class SearchTeacherSets extends Component {
     }
   }
 
-  TeacherSetSlider() {
-    return <>
-    </>
+  TeacherSetGradesSlider() {
+    return <Slider
+    id="teacher-set_slider-range-id"
+    isRangeSlider
+    labelText={"Grades Range " + this.state.grade_begin + " to " + this.state.grade_end}
+    max={12}
+    min={-1}
+    onChange={this.getGrades}
+    optReqFlag={false}
+    showBoxes={false}
+    showHelperInvalidText
+    showLabel
+    showValues={false}
+    step={1}
+    />
   }
 
   render() {
@@ -200,6 +226,7 @@ export default class SearchTeacherSets extends Component {
               </>
             }
           contentSidebar={<>
+              {this.TeacherSetGradesSlider()}
               {this.TeacherSetFacets()}
           </>}
           sidebar="left" 
