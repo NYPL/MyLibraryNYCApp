@@ -55,7 +55,9 @@ class SettingsController < ApplicationController
 
 
   def acccount_details
-    @user = User.last
+    unless logged_in?
+      redirect_to "/signin"
+    end
   end
 
 
