@@ -94,7 +94,6 @@ export default class SignUp extends Component {
     }).catch(function (error) {
        console.log(error)
     })
-    
   }
 
   validateAltEmailDomain(alt_email) {
@@ -351,13 +350,11 @@ export default class SignUp extends Component {
 
     if (news_letter_email !== undefined) {
       axios.post('/news_letter/validate_news_letter_email_from_user_sign_up_page',  { email: news_letter_email }).then(res => {
-        
         if (event.target.value == 1 && res.data["error"] !== undefined) {
           this.setState({news_letter_error: res.data["error"], show_news_letter_error: true, isDisabled: true, isCheckedVal: false })
         } else if (event.target.value == 1 && res.data["success"] !== undefined) {
           this.setState({news_letter_error: "", show_news_letter_error: false, isDisabled: false, isCheckedVal: true })
         }
-
       })
         .catch(function (error) {
          console.log(error)
