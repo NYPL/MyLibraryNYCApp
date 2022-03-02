@@ -56,10 +56,6 @@ export default class SearchTeacherSetsBox extends Component {
      }).then(res => {
         this.setState({ teacher_sets: res.data.teacher_sets,  facets: res.data.facets,
                         ts_total_count: res.data.total_count });
-
-        console.log(this.state.facets);
-
-
         if (res.data.total_count > 20) {
           this.state.pagination = 'block';
         } else {
@@ -71,17 +67,14 @@ export default class SearchTeacherSetsBox extends Component {
     })
   }
 
-
   handleSubmit = event => {
     event.preventDefault();
 
     if (this.state.keyword !== null) {
-      console.log(this.props.history)
       this.props.history.push("/teacher_set_data"+ "?keyword=" + this.state.keyword)
     }
-    this.getTeacherSets()
+    this.getTeacherSets();
   }
-
 
   handleSearchKeyword = event => {
     this.setState({

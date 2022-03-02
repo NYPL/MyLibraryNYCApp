@@ -76,9 +76,7 @@ export default class TeacherSetOrder extends React.Component {
         </dt>
         <dd className="orderDetails">
           {this.state.hold["status"]}
-          {/*{console.log(Object.entries(this.state.status_label))}*/}
         </dd>
-
         <dt className="orderDetails font-weight-500">
           Placed
         </dt>

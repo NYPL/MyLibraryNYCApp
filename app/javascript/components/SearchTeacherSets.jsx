@@ -52,9 +52,6 @@ export default class SearchTeacherSets extends Component {
     axios.get('/teacher_sets', {params: params}).then(res => {
       this.setState({ teacher_sets: res.data.teacher_sets, facets: res.data.facets,
                       ts_total_count: res.data.total_count, total_pages: res.data.total_pages });
-
-      console.log(res.data.teacher_sets.length > 0 && res.data.total_count > 20 )
-
       if (res.data.teacher_sets.length > 0 && res.data.total_count > 20 ) {
         this.setState({ pagination: 'block' })
       } else {

@@ -28,7 +28,6 @@ export default class NewsLetter extends Component {
 
 
   handleNewsLetterEmail = event => {
-    console.log(event.target.value)
     this.setState({
       email: event.target.value, isInvalid: false
     })

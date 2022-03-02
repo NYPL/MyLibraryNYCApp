@@ -1,7 +1,6 @@
 import React from "react";
 
 const BreadcrumbsList = (levelString) => {
-	console.log(levelString)
   switch (levelString) {
     case 'participating-schools':
       return 'Participating schools';

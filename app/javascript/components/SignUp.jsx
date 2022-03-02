@@ -337,8 +337,9 @@ export default class SignUp extends Component {
   }
 
   verifyNewsLetterEmailInSignUpPage(event) {
-     this.setState({isCheckedVal: false})
-
+    const initial_check = this.state.isCheckedVal;
+    this.setState({isCheckedVal: !initial_check})
+    
     // If alternate email is present in sign-up page take alternate-email to send news-letters other-wise DOE email.
     const  news_letter_email = this.state.fields["alt_email"] || this.state.fields["email"]
 
@@ -351,9 +352,9 @@ export default class SignUp extends Component {
     if (news_letter_email !== undefined) {
       axios.post('/news_letter/validate_news_letter_email_from_user_sign_up_page',  { email: news_letter_email }).then(res => {
         if (event.target.value == 1 && res.data["error"] !== undefined) {
-          this.setState({news_letter_error: res.data["error"], show_news_letter_error: true, isDisabled: true, isCheckedVal: false })
+          this.setState({news_letter_error: res.data["error"], show_news_letter_error: true, isCheckedVal: false })
         } else if (event.target.value == 1 && res.data["success"] !== undefined) {
-          this.setState({news_letter_error: "", show_news_letter_error: false, isDisabled: false, isCheckedVal: true })
+          this.setState({news_letter_error: "", show_news_letter_error: false, isDisabled: false, isCheckedVal: !initial_check })
         }
       })
         .catch(function (error) {
@@ -361,8 +362,6 @@ export default class SignUp extends Component {
       })
     }
   }
-
-
 
   render() {
     let error_email_msg = this.state.errors["email"]
@@ -479,20 +478,20 @@ export default class SignUp extends Component {
                     helperText="Your PIN serves as the password for your account. Make sure it is a number you will remember. Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
                   />
                 </FormField>
-                <FormField>
+                
                   <Checkbox
-                    id="checkbox_id"
+                    id="news_letter_checkbox_id"
                     invalidText={this.state.news_letter_error}
                     isInvalid={this.state.show_news_letter_error}
                     labelText="Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)"
                     isChecked={this.state.isCheckedVal}
-                    name="test_name"
+                    name="sign_up_page"
                     onChange={this.verifyNewsLetterEmailInSignUpPage}
                     showHelperInvalidText
                     showLabel
                     value="1"
                   />
-                </FormField>
+                
                 <FormField>
                   <Button onClick={this.handleSubmit} buttonType={ButtonTypes.Callout} className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
                 </FormField>
