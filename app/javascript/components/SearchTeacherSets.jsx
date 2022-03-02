@@ -38,7 +38,7 @@ export default class SearchTeacherSets extends Component {
     super(props);
     this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: 0, error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, total_pages: 0,
-                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {}, grade_begin: "Pre-K", grade_end: 12 };
+                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {}, grade_begin: -1, grade_end: 12 };
   }
 
   componentDidMount() {
@@ -66,15 +66,13 @@ export default class SearchTeacherSets extends Component {
     })
   }
 
-
-
   getGrades = grades => {
     const [grade_begin_val, grade_end_val] = grades;
     const grade_begin =  grade_begin_val == -1? 'Pre-K' :  grade_begin_val == 0 ? 'K' :  grade_begin_val;
     const grade_end = grade_end_val == -1? 'Pre-K' :  grade_end_val == 0 ? 'K' :  grade_end_val;
 
     this.setState({ grade_begin: grade_begin, grade_end: grade_end })
-    this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: grade_begin, grade_end: grade_end}, this.state.selected_facets)
+    this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: grade_begin_val, grade_end: grade_end_val}, this.state.selected_facets)
     this.getTeacherSets(this.state.params)
   };
 
@@ -185,14 +183,14 @@ export default class SearchTeacherSets extends Component {
   }
 
   TeacherSetGradesSlider() {
+    const grade_begin = this.state.grade_begin == -1? 'Pre-K' :  this.state.grade_begin
     return <>
       <Slider
         id="teacher-set_slider-range-id"
         isRangeSlider
-        labelText={"Grades Range   " + this.state.grade_begin + " To " + this.state.grade_end}
+        labelText={"Grades Range   " + grade_begin + " To " + this.state.grade_end}
         max={12}
         min={-1}
-        defaultValue={[-1, 12]}
         onChange={this.getGrades}
         optReqFlag={false}
         showBoxes={false}
