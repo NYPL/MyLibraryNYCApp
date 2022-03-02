@@ -382,7 +382,6 @@ export default class SignUp extends Component {
   
 
     return (
-      <DSProvider>
         <TemplateAppContainer
           breakout={<><AppBreadcrumbs />
             <div style={{ display: this.showErrors() }}>
@@ -501,9 +500,6 @@ export default class SignUp extends Component {
           contentSidebar={<></>}
           sidebar="right"
         />
-      </DSProvider>
-
-
     )
   }
 }
