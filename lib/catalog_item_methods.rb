@@ -34,13 +34,13 @@ module CatalogItemMethods
       unless grade_begin.nil?
         g_begin = grade_begin
         if grade_end.nil?
-          grade_begin = grade_val(g_begin)
+          grade_begin = g_begin == TeacherSet::PRE_K_VAL ? 'Pre-K' : g_begin == TeacherSet::K_VAL ? 'K' : g_begin
           ret << "Grade #{grade_begin}+"
         else
           g_end = grade_end
-          grade_begin = grade_val(g_begin)
-          grade_end = grade_val(g_end)
-          ret << "Grades #{grade_begin} to #{grade_end}"
+          grade_begin = g_begin == TeacherSet::PRE_K_VAL ? 'Pre-K' : g_begin == TeacherSet::K_VAL ? 'K' : g_begin
+          grade_end = g_end == TeacherSet::PRE_K_VAL ? 'Pre-K' : g_end == TeacherSet::K_VAL ? 'K' : g_end
+          ret << "Grades #{grade_begin}  to  #{grade_end}"
         end
       end
       unless lexile_begin.nil? or true # removing lexiles
