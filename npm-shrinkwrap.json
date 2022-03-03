@@ -1983,9 +1983,9 @@
       },
       "dependencies": {
         "csstype": {
-          "version": "3.0.10",
-          "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.0.10.tgz",
-          "integrity": "sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA=="
+          "version": "3.0.11",
+          "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.0.11.tgz",
+          "integrity": "sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw=="
         }
       }
     },
@@ -2290,9 +2290,9 @@
       }
     },
     "@nypl/design-system-react-components": {
-      "version": "0.25.10",
-      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-0.25.10.tgz",
-      "integrity": "sha512-9rp0Bs0tN3kZULCERWImlJVRfn+zHRWo7VIgakTW4KMSYNcbEkskXIXe4NredneeI3b/0AfgpZv35M0KtU4edA==",
+      "version": "0.25.11",
+      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-0.25.11.tgz",
+      "integrity": "sha512-cuvWbbjwpmXYYAyC5OoNKcICAjNyG5SD0fS8OgQ2M2ivQxMQZ9gmzhmA5AohRtXcWx6NjpZSSWo88uQbcJNUTw==",
       "requires": {
         "@chakra-ui/react": ">=1.7.1",
         "@chakra-ui/system": ">=1.8.1",
