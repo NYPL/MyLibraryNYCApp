@@ -124,13 +124,13 @@ render() {
     
       <List type="ul" inline noStyling className="header-buttons" className="float-right">
 
-        <li className="nav-links"><ReactRouterLink to="/teacher_set_data" className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
+        <li><ReactRouterLink to="/teacher_set_data" className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 
-        <li className="nav-links"><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
+        <li><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
 
-        <li className="nav-links"><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
+        <li><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
 
-        <li className="nav-links"><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
+        <li><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
 
         <li className="nav__menu-item nav-links">
           {this.showAccountSigninLink()}
