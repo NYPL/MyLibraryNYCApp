@@ -414,7 +414,6 @@ export default class SignUp extends Component {
                     helperText="Email address must end with @schools.nyc.gov or a participating school domain."
                   />
                 </FormField>
-
                 <FormField>
                   <TextInput
                     showOptReqLabel={true}
@@ -426,7 +425,6 @@ export default class SignUp extends Component {
                   />
 
                 </FormField>
-
                 <FormField>
                   <TextInput showOptReqLabel={false}
                     isRequired
@@ -438,7 +436,6 @@ export default class SignUp extends Component {
                     onChange={this.handleFirstName.bind(this, "first_name")}
                   />
                 </FormField>
-
                 <FormField>
                   <TextInput showOptReqLabel={false}
                     isRequired
@@ -450,7 +447,6 @@ export default class SignUp extends Component {
                     onChange={this.handleLastName.bind(this, 'last_name')}
                   />
                 </FormField>
-
                 <FormField>
                   <Select id="school_id" 
                     labelText="Your School" 
@@ -464,7 +460,6 @@ export default class SignUp extends Component {
                     {this.Schools()}
                   </Select>
                 </FormField>
-
                 <FormField>
                   <TextInput 
                     isRequired
