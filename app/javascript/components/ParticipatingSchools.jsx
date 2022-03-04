@@ -12,7 +12,7 @@ export default class ParticipatingSchools extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { schools: [], search_school: "", anchor_tags: []};
+    this.state = { schools: [], search_school: "", anchor_tags: [], school_not_found: "", isInvalid: false};
     this.handleChange = this.handleChange.bind(this);
 
   }
@@ -50,6 +50,9 @@ export default class ParticipatingSchools extends Component {
       );
 
       if(filteredSchools.length > 0) {
+        this.state.school_not_found = ""
+        this.state.isInvalid = false;
+
         return <List noStyling>
           <li key={i} className="schoolList alphabet_anchor">
             <a className="alphabet_anchor_padding" name={data['alphabet_anchor']}>{data['alphabet_anchor']}</a>
@@ -58,6 +61,9 @@ export default class ParticipatingSchools extends Component {
             <li key={index}>{school}<br/></li>
           )}
         </List>
+      } else {
+          this.state.school_not_found = "Did not match any schools"
+          this.state.isInvalid = true;
       }
     })
   }
@@ -88,7 +94,8 @@ export default class ParticipatingSchools extends Component {
                 id="search_participating_school"
                 labelText="Enter school name"
                 placeholder="Enter school name"
-                type="text"
+                invalidText={this.state.school_not_found}
+                isInvalid={this.state.isInvalid}
                 showLabel={false}
               />
             {this.Schools()}
