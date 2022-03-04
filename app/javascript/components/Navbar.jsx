@@ -132,7 +132,7 @@ render() {
 
         <li><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
 
-        <li className="nav__menu-item nav-links">
+        <li className="nav__menu-item">
           {this.showAccountSigninLink()}
           { this.state.showAboutMenu && <AccountDetailsSubMenu userSignedIn={this.state.user_signed_in}/> }
         </li>
