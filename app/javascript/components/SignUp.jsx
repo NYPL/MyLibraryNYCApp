@@ -487,7 +487,7 @@ export default class SignUp extends Component {
                   />
                 
                 <FormField>
-                  <Button onClick={this.handleSubmit} buttonType={ButtonTypes.Callout} className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
+                  <Button onClick={this.handleSubmit} buttonType={ButtonTypes.NoBrand} className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
                 </FormField>
               </Form>
             </>
