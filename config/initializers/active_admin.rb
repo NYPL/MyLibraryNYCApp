@@ -68,7 +68,7 @@ ActiveAdmin.setup do |config|
   # This setting changes the method which Active Admin calls
   # to return the currently logged in user.
   config.current_user_method = :current_admin_user
-
+  config.use_webpacker = true
 
   # == Logging Out
   #
@@ -141,7 +141,7 @@ ActiveAdmin.setup do |config|
   #   config.register_stylesheet 'my_print_stylesheet.css', :media => :print
   #
   # To load a javascript file:
-  config.register_javascript 'active_admin_custom.js'
+  # config.register_javascript 'active_admin_custom.js'
 
 
   # == CSV options
