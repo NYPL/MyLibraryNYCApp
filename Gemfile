@@ -70,6 +70,7 @@ gem 'execjs'
 gem 'therubyracer', :platforms => :ruby
 gem 'bcrypt', '~> 3.1.7'
 gem 'puma', '~> 5.5'
+gem 'activeadmin_addons', '~> 1.9'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'

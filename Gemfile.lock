@@ -48,6 +48,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_material (1.5.2)
     active_model_serializers (0.8.4)
       activemodel (>= 3.0)
     activeadmin (2.9.0)
@@ -59,6 +60,13 @@ GEM
       kaminari (~> 1.0, >= 1.2.1)
       railties (>= 5.2, < 6.2)
       ransack (~> 2.1, >= 2.1.1)
+    activeadmin_addons (1.9.0)
+      active_material
+      railties
+      require_all
+      sassc
+      sassc-rails
+      xdan-datetimepicker-rails (~> 2.5.1)
     activeadmin_reorderable (0.1.2)
     activejob (6.1.4.1)
       activesupport (= 6.1.4.1)
@@ -1429,6 +1437,7 @@ GEM
       uber (< 0.2.0)
     request_store (1.5.0)
       rack (>= 1.4)
+    require_all (3.0.0)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -1522,6 +1531,9 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     will_paginate (3.3.0)
+    xdan-datetimepicker-rails (2.5.4)
+      jquery-rails
+      rails (>= 3.2.16)
     yaml_db (0.7.0)
       rails (>= 3.0)
       rake (>= 0.8.7)
@@ -1537,6 +1549,7 @@ DEPENDENCIES
   actionview (= 6.1.4.1)
   active_model_serializers (~> 0.8.1)
   activeadmin (~> 2.9)
+  activeadmin_addons (~> 1.9)
   activeadmin_reorderable
   activejob (= 6.1.4.1)
   activemodel (= 6.1.4.1)

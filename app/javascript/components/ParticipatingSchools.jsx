@@ -41,6 +41,9 @@ export default class ParticipatingSchools extends Component {
   }
 
   Schools() {
+    this.state.school_not_found = ""
+    this.state.isInvalid = false;
+
     return this.state.schools.map((data, i) => {
       let filteredSchools = data['school_names'].filter (
         (school) => {
@@ -50,9 +53,6 @@ export default class ParticipatingSchools extends Component {
       );
 
       if(filteredSchools.length > 0) {
-        this.state.school_not_found = ""
-        this.state.isInvalid = false;
-
         return <List noStyling>
           <li key={i} className="schoolList alphabet_anchor">
             <a className="alphabet_anchor_padding" name={data['alphabet_anchor']}>{data['alphabet_anchor']}</a>
@@ -62,8 +62,8 @@ export default class ParticipatingSchools extends Component {
           )}
         </List>
       } else {
-          this.state.school_not_found = "Did not match any schools"
-          this.state.isInvalid = true;
+        this.state.school_not_found = "Did not match any schools"
+        this.state.isInvalid = true;
       }
     })
   }

@@ -5,6 +5,7 @@ ActiveAdmin.register Faq do
   config.sort_order = 'position_asc'
   permit_params :questions, :answers, :id
 
+
   controller do
     def create
       PaperTrail.enabled = false
@@ -69,6 +70,12 @@ ActiveAdmin.register Faq do
         faq_with_version.answer
       end
     end
+
+    reorderable_table_for faq do
+      column :question
+      column :answer
+    end
+    
   end
 
   controller do
