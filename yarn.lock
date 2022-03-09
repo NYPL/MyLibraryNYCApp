@@ -2361,6 +2361,18 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
   integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
+"@rails/activestorage@^7.0.2-3":
+  version "7.0.2-3"
+  resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-7.0.2-3.tgz#20b5a9b781ffe194eb28aeef2b60ec72cecd1fc1"
+  integrity sha512-yqQj9HeEHWjPLTOjhF+VGys9dAgLPl9P3UVcZuK/TqfPvTloaY0N2mJWex8EI2Mq9BODO5wcFzLBMsIDcWgy2Q==
+  dependencies:
+    spark-md5 "^3.0.1"
+
+"@rails/ujs@^7.0.2-3":
+  version "7.0.2-3"
+  resolved "https://registry.yarnpkg.com/@rails/ujs/-/ujs-7.0.2-3.tgz#282781a997377d3a8f77c636dc86fa32fc2a82a8"
+  integrity sha512-PUGhE4lzFAbfsBcB/NWQu7VNOy2fYUmzQ9PsnZ/G/v0xviU1nadbLp1Y9KMJVxHWwHEwJKDk0+rNuttSWB1wIQ==
+
 "@rails/webpacker@5.4.0":
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-5.4.0.tgz#2c64a9ea7e85d2a33e50e86319fe6751df0c47e8"
@@ -8888,7 +8900,7 @@ jquery-ujs@^1.2.2:
   resolved "https://registry.yarnpkg.com/jquery-ujs/-/jquery-ujs-1.2.3.tgz#dcac6026ab7268e5ee41faf9d31c997cd4ddd603"
   integrity sha512-59wvfx5vcCTHMeQT1/OwFiAj+UffLIwjRIoXdpO7Z7BCFGepzq9T9oLVeoItjTqjoXfUrHJvV7QU6pUR+UzOoA==
 
-"jquery@>= 1.7.2", "jquery@>=1.8.0 <4.0.0", jquery@^3.4.1:
+"jquery@>= 1.7.2", "jquery@>=1.8.0 <4.0.0", jquery@^3.4.1, jquery@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
   integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
@@ -14257,6 +14269,11 @@ source-map@~0.7.2:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
+spark-md5@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/spark-md5/-/spark-md5-3.0.2.tgz#7952c4a30784347abcee73268e473b9c0167e3fc"
+  integrity sha512-wcFzz9cDfbuqe0FZzfi2or1sgyIrsDwmPwfZC4hiNidPdPINjeUwNfv5kldczoEAcjl9Y1L3SM7Uz2PUEQzxQw==
+
 spawn-command@^0.0.2-1:
   version "0.0.2-1"
   resolved "https://registry.yarnpkg.com/spawn-command/-/spawn-command-0.0.2-1.tgz#62f5e9466981c1b796dc5929937e11c9c6921bd0"
@@ -15103,6 +15120,11 @@ tunnel-agent@^0.6.0:
   integrity sha1-J6XeoGs2sEoKmWZ3SykIaPD8QP0=
   dependencies:
     safe-buffer "^5.0.1"
+
+turbolinks@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/turbolinks/-/turbolinks-5.2.0.tgz#e6877a55ea5c1cb3bb225f0a4ae303d6d32ff77c"
+  integrity sha512-pMiez3tyBo6uRHFNNZoYMmrES/IaGgMhQQM+VFF36keryjb5ms0XkVpmKHkfW/4Vy96qiGW3K9bz0tF5sK9bBw==
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
