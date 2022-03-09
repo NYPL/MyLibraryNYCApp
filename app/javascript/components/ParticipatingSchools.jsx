@@ -61,9 +61,6 @@ export default class ParticipatingSchools extends Component {
             <li key={index}>{school}<br/></li>
           )}
         </List>
-      } else {
-        this.state.school_not_found = "Did not match any schools"
-        this.state.isInvalid = true;
       }
     })
   }
