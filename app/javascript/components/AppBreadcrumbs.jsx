@@ -28,7 +28,7 @@ export default class AppBreadcrumbs extends Component {
   render() {
     return (
       <>
-        <Breadcrumbs breadcrumbsData={ [
+        <Breadcrumbs id="mln-app-breadcrumbs-id" breadcrumbsData={ [
           { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
           { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(window.location.pathname.split(/\/|\?|&|=|\./g)[1]) } 
          ] } 

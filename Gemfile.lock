@@ -1504,6 +1504,9 @@ GEM
       launchy (~> 2.1)
       pusher-client (~> 0.4)
       typhoeus (~> 0.6, >= 0.6.8)
+    turbolinks (5.2.1)
+      turbolinks-source (~> 5.2)
+    turbolinks-source (5.2.0)
     typhoeus (0.8.0)
       ethon (>= 0.8.0)
     tzinfo (2.0.4)
@@ -1606,6 +1609,7 @@ DEPENDENCIES
   therubyracer
   thread_safe (~> 0.3.6)
   travis
+  turbolinks (~> 5.2.0)
   uglifier (>= 1.0.3)
   webmock
   webpacker (~> 5)

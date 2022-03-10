@@ -7,8 +7,6 @@ import {
 
 import { Link, LinkTypes } from "@nypl/design-system-react-components";
 
-
-
 export default class HaveQuestions extends Component {
 	
 	constructor(props) {
@@ -18,16 +16,16 @@ export default class HaveQuestions extends Component {
 	render() {
     return (
       <>
-      	<div className="have_questions"> Have Questions? </div>
-      	<div className="have_questions_links">
+      	<div id="have-questions-id" className="have_questions">Have Questions?</div>
+      	<div id="have-questions-links-id" className="have_questions_links">
 	      	Visit Our
-	      	<Link type={LinkTypes.Action} target="_blank">
+	      	<Link id="home-faq-link-id" type={LinkTypes.Action} target="_blank">
 	          <ReactRouterLink to="/faq"  target="_blank" className="home_page_left">Faq Page</ReactRouterLink>
 	        </Link>
 	        {<br/>}
 	        Or Get in
-	        <Link type={LinkTypes.Action}>
-	          <ReactRouterLink to="/contacts" target="_blank" className="home_page_left">Touch With Us</ReactRouterLink>
+	        <Link id="home-contact-link-id" type={LinkTypes.Action}>
+	          <ReactRouterLink to="/contacts" target="_blank" className="home_page_left">Contact Us</ReactRouterLink>
 	        </Link>
 	      </div>
       </>

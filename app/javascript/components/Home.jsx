@@ -29,7 +29,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, HeroTypes, VStack, HeadingLevels, NotificationTypes, Notification
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, HeroTypes, VStack, HeadingLevels, NotificationTypes, Notification, Text
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -43,22 +43,17 @@ const styles = {
 }
 
 
-export default class Home extends Component {
+export default class Home extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
-                   display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
-                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword') };
-  }
-
+  state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
+                 display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
+                 computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword') };
 
   componentDidMount() {
     if (this.state.keyword !== "" ) {
       this.getTeacherSets()
     }
   }
-
 
   getTeacherSets() {
     axios.get('/teacher_sets', {
@@ -126,12 +121,11 @@ export default class Home extends Component {
             <CardContent> {ts.availability} </CardContent>
             <CardContent> {ts.description} </CardContent>
           </Card>
-          <HorizontalRule align="left" height="3px" width="856px" />
+          <HorizontalRule align="left" height="3px" />
         </div>
         </div>
     })
   }
-
 
   TeacherSetFacets() {
     return this.state.facets.map((ts, i) => {
@@ -147,46 +141,43 @@ export default class Home extends Component {
 
   SignedUpMessage() {
     if (!this.state.userSignedIn) {
-      return <Notification className="signOutMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
+      return <Notification ariaLabel="SignOut Notification label" id="sign-out-notification-id" className="signOutMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
       Signed out successfully.</>} />
     }
   }
 
-
   render() {
     return (
-      <DSProvider>
         <TemplateAppContainer
           breakout={<>{this.SignedUpMessage()}
                     <Hero heroType={HeroTypes.Campaign} 
                           heading={<Heading level={HeadingLevels.One} 
-                          id="campaign-hero" text="Welcome To MyLibrary NYC" />} 
+                          id="mln-campaign-hero" text="Welcome To MyLibrary NYC" />} 
                           subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
                           backgroundImageSrc={heroCampaignBg} 
                           image={<Image alt="Image example" blockName="hero" src={heroCampaignLeft}/>} /></>}
           
           contentPrimary={
-                <div>
-                  <HorizontalRule align="left" height="3px" width="856px" />
-                  <div className="medium_font">Search For Teacher Sets</div>
-                  <SearchBar onSubmit={this.handleSubmit} textInputProps={{ labelText: "Item Search", name: "textInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
-                  <HorizontalRule align="left" height="3px" width="856px" />
-                  <div className="medium_font"> Professional Development & Exclusive Programs</div>
-                  <div className="plain_text">MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State's 
+                <>
+                  <HorizontalRule id="home-horizonta-id-1" align="left" height="3px" />
+                  <Heading level={HeadingLevels.Three}>Search For Teacher Sets</Heading>
+                  <SearchBar id="home-page-teacher-set-search-id" labelText="home-page-teacher-set-search-label" onSubmit={this.handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
+                  <HorizontalRule id="home-horizontal-id-2" align="left" height="3px" />
+                  <Heading id="professional-heading-id" level={HeadingLevels.Three}>Professional Development & Exclusive Programs</Heading>
+                  <Text displaySize="default">
+                    MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State's 
                     Learning Standards to encourage reading and learning. From author talks to school programs, participating 
                     MyLibraryNYC schools can access a range of exciting programming.
-                  </div>
+                  </Text>
                   <CalendarOfEvents />
-                  <HorizontalRule align="left" height="3px" width="856px" />
+                  <HorizontalRule id="home-horizontal-id-3" align="left" height="3px" />
                   <AccessDigitalResources />
-                </div>
+                </>
               }
           contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
           sidebar="right"
           footer={<div><NewsLetter /></div>}
-          
         />
-      </DSProvider>
     )
   }
 }
