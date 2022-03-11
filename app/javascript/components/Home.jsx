@@ -141,7 +141,7 @@ export default class Home extends React.Component {
 
   SignedUpMessage() {
     if (!this.state.userSignedIn) {
-      return <Notification ariaLabel="SignOut Notification" id="sign-out-notification-id" className="signOutMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
+      return <Notification ariaLabel="SignOut Notification" id="sign-out-notification" className="signOutMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
       Signed out successfully.</>} />
     }
   }
@@ -152,25 +152,25 @@ export default class Home extends React.Component {
           breakout={<>{this.SignedUpMessage()}
                     <Hero heroType={HeroTypes.Campaign} 
                           heading={<Heading level={HeadingLevels.One} 
-                          id="mln-campaign-hero-id" text="Welcome To MyLibrary NYC" />} 
+                          id="mln-campaign-hero" text="Welcome To MyLibrary NYC" />} 
                           subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
                           backgroundImageSrc={heroCampaignBg} 
-                          image={<Image id="mln-hero-image-id" alt="Mln hero image" blockName="hero" src={heroCampaignLeft}/>} /></>}
+                          image={<Image id="mln-hero-image" alt="Mln hero image" blockName="hero" src={heroCampaignLeft}/>} /></>}
           
           contentPrimary={
                 <>
-                  <HorizontalRule id="home-horizonta-id-1" align="left" height="3px" />
+                  <HorizontalRule id="home-horizonta-1" align="left" height="3px" />
                   <Heading level={HeadingLevels.Three}>Search For Teacher Sets</Heading>
-                  <SearchBar id="home-page-teacher-set-search-id" labelText="home-page-teacher-set-search-label" onSubmit={this.handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
-                  <HorizontalRule id="home-horizontal-id-2" align="left" height="3px" />
-                  <Heading id="professional-heading-id" level={HeadingLevels.Three}>Professional Development & Exclusive Programs</Heading>
+                  <SearchBar id="home-page-teacher-set-search" labelText="home-page-teacher-set-search-label" onSubmit={this.handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
+                  <HorizontalRule id="home-horizontal-2" align="left" height="3px" />
+                  <Heading id="professional-heading" level={HeadingLevels.Three}>Professional Development & Exclusive Programs</Heading>
                   <Text displaySize="default">
                     MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State's 
                     Learning Standards to encourage reading and learning. From author talks to school programs, participating 
                     MyLibraryNYC schools can access a range of exciting programming.
                   </Text>
                   <CalendarOfEvents />
-                  <HorizontalRule id="home-horizontal-id-3" align="left" height="3px" />
+                  <HorizontalRule id="home-horizontal-3" align="left" height="3px" />
                   <AccessDigitalResources />
                 </>
               }

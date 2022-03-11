@@ -54,11 +54,11 @@ export default class ParticipatingSchools extends Component {
 
       if(filteredSchools.length > 0) {
         return <List noStyling>
-          <li key={i} className="schoolList alphabet_anchor">
-            <a className="alphabet_anchor_padding" name={data['alphabet_anchor']}>{data['alphabet_anchor']}</a>
+          <li id={"ps-list-" + i} key={i} className="schoolList alphabet_anchor">
+            <a id={"ps-alphabet-anchor-" + i}className="alphabet_anchor_padding" name={data['alphabet_anchor']}>{data['alphabet_anchor']}</a>
           </li>
           {filteredSchools.map((school, index) =>
-            <li key={index}>{school}<br/></li>
+            <li id={"ps-alphabet-anchor-" + index} key={index}>{school}<br/></li>
           )}
         </List>
       }
@@ -75,10 +75,10 @@ export default class ParticipatingSchools extends Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-            <Text displaySize="default" isBold>Does your school participate in MyLibraryNYC?</Text>
-            <Text displaySize="default" id="find-school-name-text-id" className="schoolList">Find your school using the following links:</Text>
+            <Text displaySize="default" id="your-school-participate-in-mln-text" isBold>Does your school participate in MyLibraryNYC?</Text>
+            <Text displaySize="default" id="find-school-name-text" className="schoolList">Find your school using the following links:</Text>
             {this.AnchorTags()}
-            <Text displaySize="default" id="enter-school-name-text-id">or type the name of your school in the box below</Text>{<br/>}
+            <Text displaySize="default" id="enter-school-name-text">or type the name of your school in the box below</Text>{<br/>}
               <TextInput
                 attributes={{
                   'aria-describedby': 'Choose wisely.',
@@ -88,7 +88,7 @@ export default class ParticipatingSchools extends Component {
                   tabIndex: 0
                 }}
                 onChange={this.handleChange}
-                id="participating-school-id"
+                id="participating-school"
                 labelText="Enter school name"
                 placeholder="Enter school name"
                 invalidText={this.state.school_not_found}

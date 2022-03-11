@@ -64,18 +64,18 @@ export default class NewsLetter extends Component {
       <div className="newsLetter newsLetterBox">
         <div style={{ display: this.state.display_block }}>
           <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
-          <Form id="news-letter-form-id" spacing={GridGaps.Small}>
+          <Form id="news-letter-form" spacing={GridGaps.Small}>
             <FormRow>
               <FormField>
-                <TextInput id="news-letter-input-id" type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
-                <Button id="news-letter-button-id" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
+                <TextInput id="news-letter-text-input" type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
+                <Button id="news-letter-button" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
               </FormField>
             </FormRow>
           </Form>
         </div>
         
         <div style={{ display: this.state.display_none }}>
-          <div id="news-letter-success-msg-id" className="NewsLetterHeaderStyles">
+          <div id="news-letter-success-msg" className="NewsLetterHeaderStyles">
             Thank you for signing up to the MyLibraryNYC Newsletter!
           </div>
           Check your email to learn about teacher sets, best practices & exclusive events.

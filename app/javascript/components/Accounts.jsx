@@ -142,7 +142,7 @@ export default class Accounts extends Component {
 
   AccountUpdatedMessage() {
     if (this.state.message !== "") {
-      return <Notification ariaLabel="Account Notification" id="account-details-notification-id" className="accountNotificationMsg"
+      return <Notification ariaLabel="Account Notification" id="account-details-notification" className="accountNotificationMsg"
         showIcon={false}
         notificationType={NotificationTypes.Announcement}
         notificationContent={<><Icon align="none" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="small"/>{this.state.message}</>}
@@ -152,7 +152,7 @@ export default class Accounts extends Component {
 
   OrderDetails() {
     return <>
-      <Heading id="your-orders-text-id" level={HeadingLevels.Three} text='Your Orders' />
+      <Heading id="your-orders-text" level={HeadingLevels.Three} text='Your Orders' />
       <Table
         columnHeaders={[
           'Order Placed',
@@ -206,31 +206,31 @@ export default class Accounts extends Component {
           contentPrimary={
             <>
               <div style={{display: 'flex'}}>
-                <Heading id="account-user-name-id" level={HeadingLevels.Three} text={'Hello, ' + user_name} />
+                <Heading id="account-user-name" level={HeadingLevels.Three} text={'Hello, ' + user_name} />
               </div>
 
-              <Form id="account-details-form-id" onSubmit={this.handleSubmit} method="put">
+              <Form id="account-details-form" onSubmit={this.handleSubmit} method="put">
                 <FormField>
                   <TextInput
                     isRequired
                     showOptReqLabel={false}
                     labelText="Your DOE Email Address"
-                    id="account-details-input-id"
+                    id="account-details-input"
                     value={this.state.alt_email}
                     onChange={this.handleAltEmail}
                   />
                 </FormField>
                 <FormField>
-                  <Select id="ad-select-schools-id" labelText="Your School" value={this.state.school_id} showLabel showOptReqLabel={false} onChange={this.handleSchool}>
+                  <Select id="ad-select-schools" labelText="Your School" value={this.state.school_id} showLabel showOptReqLabel={false} onChange={this.handleSchool}>
                     {this.Schools()}
                   </Select>
                 </FormField>
-                <Button id="ad-button-id" buttonType={ButtonTypes.NoBrand} className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
+                <Button id="ad-submit-button" buttonType={ButtonTypes.NoBrand} className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
               </Form>
               {<br/>}
               {this.displayOrders()}
               {<br/>}
-              <Pagination id="ad-pagination-id"className="accocuntOrderPagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
+              <Pagination id="ad-pagination"className="accocuntOrderPagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
             </>
           }
         contentSidebar={<></>}

@@ -53,7 +53,7 @@ export default class Faqs extends Component {
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
-            <Accordion id="faq-id" contentData={this.FrequentlyAskedQuestions()} />
+            <Accordion id="faqs-page" contentData={this.FrequentlyAskedQuestions()} />
           }
           contentSidebar={<></>}
           sidebar="right" 

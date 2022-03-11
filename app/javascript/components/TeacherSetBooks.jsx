@@ -93,16 +93,16 @@ export default class TeacherSetBooks extends React.Component {
     if (this.state.teacher_sets) {
       return this.state.teacher_sets.map((ts, i) => {
         return <div>
-          <div className="bookPageTSBorder">
-            <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
-              <CardHeading level={HeadingLevels.Three} id="row2-heading1">
+          <div id="book-page-details" className="bookPageTSBorder">
+            <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Book Details" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
+              <CardHeading level={HeadingLevels.Three} id="ts-book-title">
                 <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
                   {ts.title}
                 </ReactRouterLink>
               </CardHeading>
-              <CardContent> {ts.suitabilities_string} </CardContent>
-              <CardContent> {ts.availability} </CardContent>
-              <CardContent> {ts.description} </CardContent>
+              <CardContent id="book-page-ts-suitabilities"> {ts.suitabilities_string} </CardContent>
+              <CardContent id="book-page-ts-availability"> {ts.availability} </CardContent>
+              <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
             </Card>
           </div>
         </div>
@@ -115,7 +115,6 @@ export default class TeacherSetBooks extends React.Component {
     let teacher_sets = this.state.teacher_sets
 
     return (
-      <DSProvider>
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
@@ -204,7 +203,6 @@ export default class TeacherSetBooks extends React.Component {
           contentSidebar={<></>}
           sidebar="right"
         />
-      </DSProvider>
     )
   }
 }

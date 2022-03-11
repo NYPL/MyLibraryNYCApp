@@ -30,7 +30,7 @@ export default class AppBreadcrumbs extends Component {
 
     return (
       <>
-        <Breadcrumbs id={"mln-breadcrumbs-"+location_path+"-id"} breadcrumbsData={ [
+        <Breadcrumbs id={"mln-breadcrumbs-"+location_path} breadcrumbsData={ [
           { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
           { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(location_path) } 
          ] } 
@@ -38,7 +38,7 @@ export default class AppBreadcrumbs extends Component {
         />
         <Hero heroType="tertiary"
               backgroundColor="var(--nypl-colors-brand-primary)"
-              heading={<Heading level={HeadingLevels.One} id={"hero-"+location_path+"-id"} text={BreadcrumbsDataValue(location_path)} />} />
+              heading={<Heading level={HeadingLevels.One} id={"hero-"+location_path} text={BreadcrumbsDataValue(location_path)} />} />
       </>
     )
   }

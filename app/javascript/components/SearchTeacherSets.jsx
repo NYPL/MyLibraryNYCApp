@@ -108,17 +108,17 @@ export default class SearchTeacherSets extends Component {
 
   TeacherSetDetails() {
     return this.state.teacher_sets.map((ts, i) => {
-      return <div className="teacherSetResults" id="teacher-set-results-id">
+      return <div className="teacherSetResults" id="teacher-set-results">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
-          <Card id="ts-details-id" layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
-            <CardHeading level={HeadingLevels.Three} id="ts-order-details-id">
+          <Card id="ts-details" layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
+            <CardHeading level={HeadingLevels.Three} id="ts-order-details">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id}>{ts.title}</ReactRouterLink>
             </CardHeading>
-            <CardContent id="ts-suitabilities-id">{ts.suitabilities_string}</CardContent>
-            <CardContent id="ts-availability-id">{ts.availability}</CardContent>
-            <CardContent id="ts-description-id">{ts.description}</CardContent>
+            <CardContent id="ts-suitabilities">{ts.suitabilities_string}</CardContent>
+            <CardContent id="ts-availability">{ts.availability}</CardContent>
+            <CardContent id="ts-description">{ts.description}</CardContent>
           </Card>
-          <HorizontalRule id="ts-horizontal-rule-id" align="left" height="3px" />
+          <HorizontalRule id="ts-horizontal-rule" align="left" height="3px" />
         </div>
       </div>
     })
@@ -156,12 +156,12 @@ export default class SearchTeacherSets extends Component {
     return this.state.facets.map((ts, i) => {
       return <>
           <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
-          <CheckboxGroup id={"ts-checkbox-group-id"} defaultValue={[]} isRequired  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} optReqFlag={false} >
+          <CheckboxGroup id={"ts-checkbox-group"} defaultValue={[]} isRequired  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} optReqFlag={false} >
             { ts.items.map((item, index) =>
               <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
-                <Checkbox id={"ts-checkbox-"+ index + "-id"} labelText={item["label"]} value={item["value"].toString()} />
+                <Checkbox id={"ts-checkbox-"+ index} labelText={item["label"]} value={item["value"].toString()} />
                 <Spacer />
-                <Text id={"ts-count-"+ index + "-id"} displaySize={TextDisplaySizes.Caption}>{item["count"]}</Text>
+                <Text id={"ts-count-"+ index} displaySize={TextDisplaySizes.Caption}>{item["count"]}</Text>
               </Flex>
             ) }{<br/>}
           </CheckboxGroup>
@@ -171,7 +171,7 @@ export default class SearchTeacherSets extends Component {
 
   SignedInMessage() {
     if (this.state.userSignedIn) {
-      return <Notification ariaLabel="SignIn Notification" id="sign-in-notification-id" className="signUpMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
+      return <Notification ariaLabel="SignIn Notification" id="sign-in-notification" className="signUpMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
       Signed in successfully</>} />
     }
   }
@@ -180,7 +180,7 @@ export default class SearchTeacherSets extends Component {
     const grade_begin = this.state.grade_begin == -1? 'Pre-K' :  this.state.grade_begin
     return <>
       <Slider
-        id="ts_slider-range-id"
+        id="ts_slider-range"
         isRangeSlider
         labelText={"Grades Range   " + grade_begin + " To " + this.state.grade_end}
         max={12}
@@ -209,9 +209,9 @@ export default class SearchTeacherSets extends Component {
           breakout={<AppBreadcrumbs />}
           contentTop={<>
               {this.SignedInMessage()}
-              <SearchBar id="ts-search-id" labelText="Teacher-Set SearchBar" onSubmit={this.handleSubmit} className="teachersetSearchBar" 
+              <SearchBar id="ts-search" labelText="Teacher-Set SearchBar" onSubmit={this.handleSubmit} className="teachersetSearchBar" 
                 textInputProps={{
-                  id: "ts-id",
+                  id: "ts-input",
                   labelText: "Search Teacher set",
                   name: "TeacherSetInputName",
                   onChange: this.handleSearchKeyword,
@@ -220,10 +220,10 @@ export default class SearchTeacherSets extends Component {
                 }}
               />
               {<br/>}
-              <Heading id="search-and-find-teacher-sets-header-id" displaySize={HeadingDisplaySizes.Primary} level={HeadingLevels.Two} text="Search and Find Teacher Sets" additionalStyles={{ pt: "var(--nypl-space-m)" }} />
-              <HorizontalRule id="ts-horizontal-rule-id" className="teacherSetHorizontal" />
+              <Heading id="search-and-find-teacher-sets-header" displaySize={HeadingDisplaySizes.Primary} level={HeadingLevels.Two} text="Search and Find Teacher Sets" additionalStyles={{ pt: "var(--nypl-space-m)" }} />
+              <HorizontalRule id="ts-horizontal-rule" className="teacherSetHorizontal" />
               <Flex>
-                <Heading id="check-out-ts-id" level={HeadingLevels.Three}>
+                <Heading id="check-out-teacher-sets" level={HeadingLevels.Three}>
                   Check Out Newly Arrived Teacher Sets
                 </Heading>
                 <Spacer />
@@ -259,7 +259,7 @@ export default class SearchTeacherSets extends Component {
                     <Button buttonType={ButtonTypes.Link}
                       onClick={() =>
                         window.scrollTo({
-                          top: 350,
+                          top: 100,
                           behavior: "smooth",
                         })
                       }
@@ -270,12 +270,12 @@ export default class SearchTeacherSets extends Component {
                   <Spacer />
 
                   <div style={{ display: this.state.pagination }}>
-                    <Pagination id="ts-pagination-id" className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
+                    <Pagination id="ts-pagination" className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
                   </div>
                 </Flex>
               </>
             }
-          contentSidebar={<Box id="ts-all-facets-id" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
+          contentSidebar={<Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
               <Heading displaySize={HeadingDisplaySizes.Tertiary} level={HeadingLevels.Three} > Refine Results </Heading>
               {this.TeacherSetGradesSlider()}{<br/>}
               {this.TeacherSetFacets()}

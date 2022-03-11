@@ -76,18 +76,18 @@ export default class SignIn extends Component {
                 </Text>} />
             </Collapsible> 
             
-            <Form id="sign-in-form-id">
+            <Form id="sign-in-form">
               <FormRow>
                 <FormField>
-                  <TextInput id="sign-in-text-input-id" className="signInEmail" type={TextInputTypes.email} onChange={this.handleEmail} required invalidText={this.state.invali_email_msg} isInvalid={this.state.isInvalid} />
-                  <Button id="sign-in-button-id" buttonType={ButtonTypes.NoBrand} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
+                  <TextInput id="sign-in-text-input" className="signInEmail" type={TextInputTypes.email} onChange={this.handleEmail} required invalidText={this.state.invali_email_msg} isInvalid={this.state.isInvalid} />
+                  <Button id="sign-in-button" buttonType={ButtonTypes.NoBrand} className="signInButton" onClick={this.handleSubmit}>Sign In</Button>
                 </FormField>
               </FormRow>
             </Form>
             <div className="sign-up-link">
-              <Text id="not-registered-text-id" noSpace displaySize="caption">Not Registered ? Please
+              <Text id="not-registered-text" noSpace displaySize="caption">Not Registered ? Please
                 <span> </span>
-                <Link id="sign-up-link-id" type={LinkTypes.Action}>
+                <Link id="sign-up-link" type={LinkTypes.Action}>
                   <ReactRouterLink to="/signup">Sign Up</ReactRouterLink>
                 </Link>
               </Text>
