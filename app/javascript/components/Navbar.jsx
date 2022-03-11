@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import axios from 'axios';
-import { Link, LinkTypes, Icon, List, ListTypes, Button, ButtonTypes, Box} from "@nypl/design-system-react-components";
+import { Link, LinkTypes, Icon, List, ListTypes, Button, ButtonTypes, Box, Image, ImageSizes, ImageRatios} from "@nypl/design-system-react-components";
 import mlnLogoRed from '../images/MLN_Logo_red.png'
 
 
@@ -114,7 +114,9 @@ export default class Navbar extends Component {
     return (
       <div id="mln-navbar-id" className="header-topWrapper">
         <ReactRouterLink to="/">
-          <div className="header-logo"><img border="0" src={mlnLogoRed}/></div>
+          <div id="mln-header-logo" className="header-logo">
+            <Image id="mln-header-logo" className="header-logo" alt="Alt text" imageSize={ImageSizes.Small} src={mlnLogoRed} />
+          </div>
         </ReactRouterLink>
       
         <List id="mln-navbar-list" type="ul" inline noStyling className="header-buttons" className="float-right">

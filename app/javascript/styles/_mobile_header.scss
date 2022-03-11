@@ -300,15 +300,13 @@
     }
 
     @include min-screen(1025px) {
-      max-width: 260px;
+      max-width: 14em;
       position: relative;
-      left: 27px;
       top: 40px;
     }
 
     @include min-screen(1024px) {
-      max-width: 260px;
-      left: 27px;
+      max-width: 14em;
       top: 40px;
     }
 
