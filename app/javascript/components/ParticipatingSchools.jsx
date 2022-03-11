@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
-  Input, TextInput, List, DSProvider, TemplateAppContainer
+  Input, TextInput, List, DSProvider, TemplateAppContainer, Text
 } from '@nypl/design-system-react-components';
 
 
@@ -75,10 +75,10 @@ export default class ParticipatingSchools extends Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-            <div className="bold">Does your school participate in MyLibraryNYC?</div>
-            <div className="schoolList">Find your school using the following links:</div>
+            <Text displaySize="default" isBold>Does your school participate in MyLibraryNYC?</Text>
+            <Text displaySize="default" id="find-school-name-text-id" className="schoolList">Find your school using the following links:</Text>
             {this.AnchorTags()}
-            <div className="  ">or type the name of your school in the box below</div>{<br/>}
+            <Text displaySize="default" id="enter-school-name-text-id">or type the name of your school in the box below</Text>{<br/>}
               <TextInput
                 attributes={{
                   'aria-describedby': 'Choose wisely.',
@@ -88,7 +88,7 @@ export default class ParticipatingSchools extends Component {
                   tabIndex: 0
                 }}
                 onChange={this.handleChange}
-                id="search_participating_school"
+                id="participating-school-id"
                 labelText="Enter school name"
                 placeholder="Enter school name"
                 invalidText={this.state.school_not_found}
