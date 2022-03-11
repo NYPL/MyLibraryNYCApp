@@ -253,9 +253,26 @@ export default class SearchTeacherSets extends Component {
           contentPrimary={
               <>
                 <div>{this.TeacherSetDetails()}</div>
-                <div style={{ display: this.state.pagination }}>
-                  <Pagination id="ts-pagination-id" className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
-                </div>
+            
+                <Flex alignItems="baseline">
+                  <Box className="href_link">
+                    <Button buttonType={ButtonTypes.Link}
+                      onClick={() =>
+                        window.scrollTo({
+                          top: 350,
+                          behavior: "smooth",
+                        })
+                      }
+                    >
+                      Back to Top
+                    </Button>
+                  </Box>
+                  <Spacer />
+
+                  <div style={{ display: this.state.pagination }}>
+                    <Pagination id="ts-pagination-id" className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
+                  </div>
+                </Flex>
               </>
             }
           contentSidebar={<Box id="ts-all-facets-id" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
