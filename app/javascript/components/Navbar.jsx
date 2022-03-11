@@ -121,15 +121,15 @@ export default class Navbar extends Component {
       
         <List id="mln-navbar-list" type="ul" inline noStyling className="header-buttons" className="float-right">
 
-          <li><ReactRouterLink to="/teacher_set_data" className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
+          <li id="mln-navbar-ts-link-id"><ReactRouterLink to="/teacher_set_data" className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 
-          <li><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
+          <li id="mln-navbar-contacts-link-id"><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
 
-          <li><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
+          <li id="mln-navbar-faq-link-id"><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
 
-          <li><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
+          <li id="mln-navbar-ps-link-id"><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
 
-          <li className="nav__menu-item">
+          <li id="mln-navbar-ad-link-id" className="nav__menu-item">
             {this.showAccountSigninLink()}
             { this.state.showAboutMenu && <AccountDetailsSubMenu userSignedIn={this.state.user_signed_in}/> }
           </li>

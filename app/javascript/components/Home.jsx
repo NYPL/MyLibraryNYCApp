@@ -141,7 +141,7 @@ export default class Home extends React.Component {
 
   SignedUpMessage() {
     if (!this.state.userSignedIn) {
-      return <Notification ariaLabel="SignOut Notification label" id="sign-out-notification-id" className="signOutMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
+      return <Notification ariaLabel="SignOut Notification" id="sign-out-notification-id" className="signOutMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
       Signed out successfully.</>} />
     }
   }
@@ -152,10 +152,10 @@ export default class Home extends React.Component {
           breakout={<>{this.SignedUpMessage()}
                     <Hero heroType={HeroTypes.Campaign} 
                           heading={<Heading level={HeadingLevels.One} 
-                          id="mln-campaign-hero" text="Welcome To MyLibrary NYC" />} 
+                          id="mln-campaign-hero-id" text="Welcome To MyLibrary NYC" />} 
                           subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
                           backgroundImageSrc={heroCampaignBg} 
-                          image={<Image alt="Image example" blockName="hero" src={heroCampaignLeft}/>} /></>}
+                          image={<Image id="mln-hero-image-id" alt="Mln hero image" blockName="hero" src={heroCampaignLeft}/>} /></>}
           
           contentPrimary={
                 <>
