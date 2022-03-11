@@ -385,9 +385,9 @@ export default class SignUp extends Component {
         <TemplateAppContainer
           breakout={<><AppBreadcrumbs />
             <div style={{ display: this.showErrors() }}>
-                <Notification className={this.showNotifications()} notificationType={NotificationTypes.Warning}
+                <Notification ariaLabel="Signup Error Notifications" id="sign-up-error-notifications-id" className={this.showNotifications()} notificationType={NotificationTypes.Warning}
                   notificationContent={
-                    <Text noSpace className="signUpMessage">
+                    <Text id="sign-up-error-notifications-text-id" noSpace className="signUpMessage">
                       <div style={{ display: this.showEmailError() }}> {error_msgs["email"]} {<br/>} </div>
                       <div style={{ display: this.showAltEmailError() }}> {error_msgs["alt_email"]} {<br/>} </div>
                       <div style={{ display: this.showFirstNamerror() }}> {error_msgs["first_name"]} {<br/>} </div>
@@ -403,7 +403,7 @@ export default class SignUp extends Component {
             <>
               <Form>
                 <FormField>
-                  <TextInput
+                  <TextInput id="sign-up-email-id"
                     isRequired
                     showOptReqLabel={true}
                     labelText="Your DOE Email Address"
@@ -415,7 +415,7 @@ export default class SignUp extends Component {
                   />
                 </FormField>
                 <FormField>
-                  <TextInput
+                  <TextInput id="sign-up-alt-email-id"
                     showOptReqLabel={true}
                     labelText="Alternate email address"
                     value={this.state.fields['alt_email']}
@@ -426,7 +426,8 @@ export default class SignUp extends Component {
 
                 </FormField>
                 <FormField>
-                  <TextInput showOptReqLabel={false}
+                  <TextInput id="sign-up-first-name-id"
+                    showOptReqLabel={false}
                     isRequired
                     showOptReqLabel={true}
                     labelText="First Name"
@@ -437,7 +438,8 @@ export default class SignUp extends Component {
                   />
                 </FormField>
                 <FormField>
-                  <TextInput showOptReqLabel={false}
+                  <TextInput id="sign-up-last-name-id"
+                    showOptReqLabel={false}
                     isRequired
                     showOptReqLabel={true}
                     labelText="Last Name"
@@ -448,7 +450,7 @@ export default class SignUp extends Component {
                   />
                 </FormField>
                 <FormField>
-                  <Select id="school_id" 
+                  <Select id="sign-up-select-schools-id" 
                     labelText="Your School" 
                     value={this.state.fields["school_id"]}
                     showLabel
@@ -461,7 +463,8 @@ export default class SignUp extends Component {
                   </Select>
                 </FormField>
                 <FormField>
-                  <TextInput 
+                  <TextInput
+                    id="sign-up-pin-id"
                     isRequired
                     showOptReqLabel={true}
                     labelText="Pin"
@@ -474,7 +477,7 @@ export default class SignUp extends Component {
                 </FormField>
                 
                   <Checkbox
-                    id="news_letter_checkbox_id"
+                    id="news-letter-checkbox-id"
                     invalidText={this.state.news_letter_error}
                     isInvalid={this.state.show_news_letter_error}
                     labelText="Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)"
