@@ -13,7 +13,7 @@ export default class AccessDigitalResources extends Component {
   render() {
     return (
       <>
-        <Heading level={HeadingLevels.Three}>Access Digital Resources</Heading>
+        <Heading id="access-digital-resources-header-text" level={HeadingLevels.Three}>Access Digital Resources</Heading>
         <Accordion id="access-digital-resources" contentData={ [
             {
               label: "Databases",
