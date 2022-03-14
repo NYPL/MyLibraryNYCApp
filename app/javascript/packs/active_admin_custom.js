@@ -1,5 +1,4 @@
 function activateSchool(schoolId, activate) {
-  console.log(schoolId)
   if (activate == true){
     $('#activate-school-' + schoolId + '-container').hide();
     $('#inactivate-school-' + schoolId + '-container').show();
@@ -11,7 +10,6 @@ function activateSchool(schoolId, activate) {
 
 
 function makeAvailableTeacherSet(teacherSetId, make_available) {
-  console.log(teacherSetId)
   if (make_available == true){
     $('#make-available-teacher-set-' + teacherSetId + '-container').hide();
     $('#make-unavailable-teacher-set-' + teacherSetId + '-container').show();
