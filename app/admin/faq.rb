@@ -43,40 +43,13 @@ ActiveAdmin.register Faq do
     f.actions
   end
   
-  show question: 
-    proc {
-      faq = Faq.includes(versions: :item).find(params[:id])
-      faq_version = faq.versions[(params[:version].to_i - 1).to_i].reify
-      # if there's a bug with turning the paper trail into an object (with reify) then display the faq instead of a faq version
-      faq_version = (faq_version || faq)
-      faq_version.question
-    } do |faq|
-
-    return if params[:version] == '0'
-
-    # choose which version's data to display
-    if params[:version]
-      faq_with_versions = faq.includes(versions: :item).find(params[:id])
-      faq_with_version = faq_with_versions.versions[(params[:version].to_i - 1).to_i].reify
-    else
-      faq_with_version = faq
-    end
-
+  show do |faq|
     attributes_table do
-      row 'Question' do 
-        faq_with_version.question
-      end
-      row 'Answer' do 
-        faq_with_version.answer
-      end
+      row :question
+      row :answer
     end
-
-    reorderable_table_for faq do
-      column :question
-      column :answer
-    end
-    
   end
+  
 
   controller do
     # Setting up Strong Parameters
