@@ -5,7 +5,8 @@ import axios from 'axios';
 import qs from 'qs';
 
 import {
-  Button,
+  Button, 
+  ButtonGroup,
   ButtonTypes,
   SearchBar,
   Select,
@@ -22,7 +23,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup, Notification, NotificationTypes, Flex, Spacer, Text, TextDisplaySizes, Box, Toggle, HeadingDisplaySizes, ToggleSizes
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup, Notification, NotificationTypes, Flex, Spacer, Text, TextDisplaySizes, Box, Toggle, HeadingDisplaySizes, ToggleSizes, IconRotationTypes, IconSizes, IconAlign
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -255,8 +256,8 @@ export default class SearchTeacherSets extends Component {
                 <div>{this.TeacherSetDetails()}</div>
             
                 <Flex alignItems="baseline">
-                  <Box className="href_link">
-                    <Button buttonType={ButtonTypes.Link}
+                  <ButtonGroup>
+                    <Button id="teacher-sets-scroll-to-top" buttonType={ButtonTypes.Secondary} 
                       onClick={() =>
                         window.scrollTo({
                           top: 100,
@@ -265,8 +266,9 @@ export default class SearchTeacherSets extends Component {
                       }
                     >
                       Back to Top
+                      <Icon name={IconNames.Arrow} iconRotation={IconRotationTypes.Rotate180} size={IconSizes.Small} className="right" align={IconAlign.Right} />
                     </Button>
-                  </Box>
+                  </ButtonGroup>
                   <Spacer />
 
                   <div style={{ display: this.state.pagination }}>
