@@ -53,7 +53,7 @@ export default class ParticipatingSchools extends Component {
       );
 
       if(filteredSchools.length > 0) {
-        return <List noStyling>
+        return <List id="participating-schools-list" noStyling>
           <li id={"ps-list-" + i} key={i} className="schoolList alphabet_anchor">
             <a id={"ps-alphabet-anchor-" + i}className="alphabet_anchor_padding" name={data['alphabet_anchor']}>{data['alphabet_anchor']}</a>
           </li>
