@@ -254,27 +254,27 @@ export default class SearchTeacherSets extends Component {
           contentPrimary={
               <>
                 <div>{this.TeacherSetDetails()}</div>
-            
-                <Flex alignItems="baseline">
-                  <ButtonGroup>
-                    <Button id="teacher-sets-scroll-to-top" buttonType={ButtonTypes.Secondary} 
-                      onClick={() =>
-                        window.scrollTo({
-                          top: 100,
-                          behavior: "smooth",
-                        })
-                      }
-                    >
-                      Back to Top
-                      <Icon name={IconNames.Arrow} iconRotation={IconRotationTypes.Rotate180} size={IconSizes.Small} className="right" align={IconAlign.Right} />
-                    </Button>
-                  </ButtonGroup>
-                  <Spacer />
-
-                  <div style={{ display: this.state.pagination }}>
-                    <Pagination id="ts-pagination" className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
-                  </div>
-                </Flex>
+                <div style={{ display: this.state.pagination }} >
+                  <Flex alignItems="baseline">
+                    <ButtonGroup>
+                      <Button id="teacher-sets-scroll-to-top" buttonType={ButtonTypes.Secondary} 
+                        onClick={() =>
+                          window.scrollTo({
+                            top: 100,
+                            behavior: "smooth",
+                          })
+                        }
+                      >
+                        Back to Top
+                        <Icon name={IconNames.Arrow} iconRotation={IconRotationTypes.Rotate180} size={IconSizes.Small} className="right" align={IconAlign.Right} />
+                      </Button>
+                    </ButtonGroup>
+                    <Spacer />
+                    <div>
+                      <Pagination id="ts-pagination" className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
+                    </div>
+                  </Flex>
+                </div>
               </>
             }
           contentSidebar={<Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
