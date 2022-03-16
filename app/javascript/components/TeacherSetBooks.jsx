@@ -83,9 +83,9 @@ export default class TeacherSetBooks extends React.Component {
     if (this.state.teacher_sets) {
       return this.state.teacher_sets.map((ts, i) => {
         return <div>
-          <div id="book-page-details" className="bookPageTSBorder">
-            <Card layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Book Details" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
-              <CardHeading level={HeadingLevels.Three} id="ts-book-title">
+          <div id="book-page-ts-details" className="bookPageTSBorder">
+            <Card id="book-page-ts-card-details" layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Book Details" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
+              <CardHeading level={HeadingLevels.Three} id="book-page-ts-title">
                 <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
                   {ts.title}
                 </ReactRouterLink>
@@ -109,84 +109,88 @@ export default class TeacherSetBooks extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <Card layout={CardLayouts.Row}  imageComponent={<Image src={this.BookImage(book)} alt="Alt text" imageAspectRatio={ImageRatios.threeByFour} imageSize={ImageSizes.Small} additionalStyles={{background: "#F2F2F0", padding: "1px", position: "initial"}}/>} >
+              <Card id="book-page-card-details" layout={CardLayouts.Row}  imageComponent={<Image id="book-page-image" src={this.BookImage(book)} alt="Alt text" imageAspectRatio={ImageRatios.threeByFour} imageSize={ImageSizes.Small} additionalStyles={{background: "#F2F2F0", padding: "1px", position: "initial"}}/>} >
 
                  { this.IsBookTitlePresent() ? (
-                  <CardHeading level={HeadingLevels.Three}>
+                  <CardHeading id="book-page-title" level={HeadingLevels.Three}>
                     {this.state.book.title}
                   </CardHeading>
                 ) : (<></>) }
 
                  { this.IsBookSubTitlePresent() ? (
-                  <CardHeading level={HeadingLevels.Four}>
+                  <CardHeading id="book-page-sub_title" level={HeadingLevels.Four}>
                     {this.state.book.sub_title}
                   </CardHeading>
                 ) : (<></>) }
 
                 { this.IsBookStatementOfResponsibilityPresent() ? (
-                  <CardContent level={HeadingLevels.Three}>
+                  <CardContent id="book-page-statement_of_responsibility" level={HeadingLevels.Three}>
                     {this.state.book.statement_of_responsibility}{<br/>}
                   </CardContent>
                 ) : (<></>) }
 
                 { this.IsBookDescriptionPresent() ? (
-                  <CardContent>
+                  <CardContent id="book-page-desc">
                     {this.state.book.description}{<br/>}
                   </CardContent>
                 ) : (<></>) }
               </Card>
               {<br/>}{<br/>}
 
-              <List type="dl" className="listType">
+              <List id="book-page-list-details" type="dl" className="listType">
                 { book.publication_date ? (<>
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="book-page-publication-date-text" className="font-weight-500 orderDetails">
                     Publication Date
                   </dt> 
-                  <dd className="orderDetails">
+                  <dd id="book-page-publication-date" className="orderDetails">
                     {book.publication_date}
                   </dd> </>) : (<></>) }
 
                 { book.call_number ? (<>
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="book-page-call-number-text" className="font-weight-500 orderDetails">
                     Call Number
                   </dt> 
-                  <dd className="orderDetails">
+                  <dd id="book-page-call-number" className="orderDetails">
                     {book.call_number}
                   </dd> </>) : (<></>) }
 
                 { book.physical_description ? (<>
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="book-page-physical-desc-text" className="font-weight-500 orderDetails">
                     Physical Description
-                  </dt> <dd className="orderDetails">
+                  </dt> 
+                  <dd id="book-page-physical-desc" className="orderDetails">
                     {book.physical_description}
                   </dd></>) : (<></>) }
 
                 { book.primary_language ? (<>
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="book-page-primary-language-text" className="font-weight-500 orderDetails">
                     Primary Language
-                  </dt> <dd className="orderDetails">
+                  </dt> 
+                  <dd id="book-page-primary-language" className="orderDetails">
                     {book.primary_language}
                   </dd></>) : (<></>) }
 
                 { book.notes ? (<>
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="book-page-isbn-text" className="font-weight-500 orderDetails">
                     ISBN
-                  </dt> <dd className="orderDetails">
+                  </dt> 
+                  <dd id="book-page-isbn" className="orderDetails">
                     {book.isbn}
                   </dd></>) : (<></>) }
 
                 { book.notes ? (<>
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="book-page-notes-text" className="font-weight-500 orderDetails">
                     Notes
-                  </dt> <dd className="orderDetails">
+                  </dt> 
+                  <dd id="book-page-notes" className="orderDetails">
                     {book.notes}
                   </dd></>) : (<></>) }
-                  <dt className="font-weight-500 orderDetails">
-                    <a target='_blank' href={book.details_url}>View in catalog</a>{<br/>}
+                  <dt id="book-page-catalog" className="font-weight-500 orderDetails">
+                    <a id="book-page-catalog-link" target='_blank' href={book.details_url}>View in catalog</a>{<br/>}
                   </dt>
               </List>{<br/>}
 
-              <Heading level={HeadingLevels.Three}>Appears in These Sets</Heading>
+              <Heading id="appears-in-ts-text" level={HeadingLevels.Three}>Appears in These Sets</Heading>
               {this.TeacherSetDetails()}
             </>
           }

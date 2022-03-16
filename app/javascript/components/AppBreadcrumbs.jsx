@@ -63,6 +63,8 @@ const BreadcrumbsDataValue = (levelString) => {
       return 'Cancel Order';
     case 'account_details':
       return 'Account Details';
+    case 'book_details':
+      return 'Book Details';
     default:
       return levelString;
   }

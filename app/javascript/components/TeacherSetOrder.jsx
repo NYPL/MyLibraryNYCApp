@@ -96,43 +96,39 @@ export default class TeacherSetOrder extends React.Component {
 
   render() {
     return (
-      <DSProvider>
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <div>
-                <Card border className="orderPage">
-                  <CardHeading className="order_message">
-                    <Icon align="left" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="medium" />
-                    { this.OrderMessage() }
-                  </CardHeading>
+              <Card id="ts-order-card-details" border className="orderPage">
+                <CardHeading id="ts-order-msg" className="order_message">
+                  <Icon id="ts-order-msg-icon" align="left" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="medium" />
+                  { this.OrderMessage() }
+                </CardHeading>
 
-                  <CardHeading className="order_page_title">
-                    { this.TeacherSetTitle() }
-                  </CardHeading>
+                <CardHeading id="ts-order-title" className="order_page_title">
+                  { this.TeacherSetTitle() }
+                </CardHeading>
 
-                  <CardContent className="order_page_desc">
-                    { this.TeacherSetDescription() }
-                  </CardContent>
+                <CardContent id="ts-order-desc" className="order_page_desc">
+                  { this.TeacherSetDescription() }
+                </CardContent>
 
-                  <CardContent className="">
-                    { this.OrderDetails() }
-                  </CardContent>
-                  
-                  <CardContent>
-                    { this.CancelButton() }
-                  </CardContent>
+                <CardContent id="ts-order-page-details">
+                  { this.OrderDetails() }
+                </CardContent>
+                
+                <CardContent id="ts-order-cancel-button">
+                  { this.CancelButton() }
+                </CardContent>
 
-                  {<br/>}
-                  <a href="/teacher_set_data">Go To Search Teacher Sets Page</a>
-                </Card>
-              </div>
+                {<br/>}
+                <a id="ts-details-link-page" href="/teacher_set_data">Go To Search Teacher Sets Page</a>
+              </Card>
             </>
           }
         contentSidebar={<></>}
         sidebar="right"
       />
-    </DSProvider>
   )}
 }
