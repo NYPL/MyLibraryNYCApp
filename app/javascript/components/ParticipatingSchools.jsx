@@ -53,12 +53,12 @@ export default class ParticipatingSchools extends Component {
       );
 
       if(filteredSchools.length > 0) {
-        return <List id="participating-schools-list" noStyling>
-          <li id={"ps-list-" + i} key={i} className="schoolList alphabet_anchor">
-            <a id={"ps-alphabet-anchor-" + i}className="alphabet_anchor_padding" name={data['alphabet_anchor']}>{data['alphabet_anchor']}</a>
+        return <List id={"participating-schools-list-" + data['alphabet_anchor']} noStyling>
+          <li id={"ps-school-name-" + data['alphabet_anchor']} key={i} className="schoolList alphabet_anchor">
+            <a id={"ps-school-name-link-" + data['alphabet_anchor']}className="alphabet_anchor_padding" name={data['alphabet_anchor']}>{data['alphabet_anchor']}</a>
           </li>
           {filteredSchools.map((school, index) =>
-            <li id={"ps-alphabet-anchor-" + index} key={index}>{school}<br/></li>
+            <li id={"ps-school-name-" + data['alphabet_anchor'] + '-' + index} key={index}>{school}<br/></li>
           )}
         </List>
       }
