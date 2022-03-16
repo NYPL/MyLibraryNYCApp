@@ -101,7 +101,7 @@ export default class TeacherSetDetails extends React.Component {
 
   TeacherSetBooks() {
     return this.state.books.map((data, i) => {
-      return <ReactRouterLink to={"/book_details/" + data.id} >
+      return <ReactRouterLink id={"ts-books-" + i} to={"/book_details/" + data.id} >
           {this.BookImage(data)}
         </ReactRouterLink>
     })
@@ -110,23 +110,23 @@ export default class TeacherSetDetails extends React.Component {
 
   BookImage(data) {
     if (data.cover_uri) {
-      return <Image src={data.cover_uri} imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.Default}  />
+      return <Image id={"ts-books-" + data.id} src={data.cover_uri} imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.Default}  />
     } else {
-      return <Image src={mlnImage} imageSize={ImageSizes.Default} />
+      return <Image id={"ts-books-" + data.id} src={mlnImage} imageSize={ImageSizes.Default} />
     }
   }
 
 
   TeacherSetNotesContent() {
     return this.state.teacher_set_notes.map((note, i) => {
-      return <div>{note.content}</div> 
+      return <div id={"ts-notes-content-" + i}>{note.content}</div> 
     })
   }
 
   render() {
     let allowed_quantities = this.state.allowed_quantities.map((item, i) => {
       return (
-        <option key={i} value={item}>{item}</option>
+        <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
       )
     }, this);
 
@@ -148,27 +148,27 @@ export default class TeacherSetDetails extends React.Component {
           contentPrimary={
             <>
               <div className="content-top card_details">
-                <Card layout="row" border className="order-list">
-                  <CardHeading level={3} className="ts-details">
+                <Card id="ts-card-details" layout="row" border className="order-list">
+                  <CardHeading id="ts-card-title" level={3} className="ts-details">
                    { this.TeacherSetTitle() }
                   </CardHeading>
 
-                  <CardHeading level={4} className="ts-details">
+                  <CardHeading  id="ts-card-available-copies" level={4} className="ts-details">
                    { this.AvailableCopies() }
                   </CardHeading>
 
-                  <CardContent>
+                  <CardContent id="ts-card-desc">
                      <Text isItalic>Note : Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at help@mylibrarynyc.org</Text>
                   </CardContent>
 
-                  <CardContent level={5}>
-                    <Form onSubmit={this.handleSubmit} className="order_select">
-                      <FormField>
+                  <CardContent level={5} id="ts-allowed-quantity-details-form">
+                    <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
+                      <FormField id="ts-order-field">
                         <ButtonGroup>
-                          <Select showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+                          <Select id="ts-order-allowed_quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
                             {allowed_quantities}
                           </Select>
-                          <Button buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
+                          <Button id="ts-order-submit" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
                         </ButtonGroup>
                       </FormField>
                     </Form>
@@ -177,59 +177,59 @@ export default class TeacherSetDetails extends React.Component {
               </div>{<br/>}
 
               <div>
-                <Heading id="heading2" level={2} text="What is in the box" />
-                <div> { this.TeacherSetDescription() } </div>{<br/>}
-                <div> { this.BooksCount() } </div> {<br/>}
-                <SimpleGrid columns={5} gap="xxs"> { this.TeacherSetBooks() } </SimpleGrid>
+                <Heading id="ts-header-desc-text" level={2} text="What is in the box" />
+                <div id="ts-page-desc"> { this.TeacherSetDescription() } </div>{<br/>}
+                <div id="ts-page-books-count"> { this.BooksCount() } </div> {<br/>}
+                <SimpleGrid id="ts-page-books-panel" columns={5} gap="xxs"> { this.TeacherSetBooks() } </SimpleGrid>
               </div>{<br/>}
 
               <div className="tsDetails">
-                <List type="dl" className="listType">
-                  <dt className="font-weight-500 orderDetails">
+                <List id="ts-list-details" type="dl" className="listType">
+                  <dt id="ts-suggested-grade-range-text" className="font-weight-500 orderDetails">
                     Suggested Grade Range [New]
                   </dt>
-                  <dd className="orderDetails">
+                  <dd id="ts-page-suitabilities" className="orderDetails">
                     {suitabilities_string}
                   </dd>
 
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="ts-page-primary-language-text" className="font-weight-500 orderDetails">
                     Primary Language
                   </dt>
-                  <dd className="orderDetails">
+                  <dd id="ts-page-primary-language" className="orderDetails">
                     {primary_language}
                   </dd>
 
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="ts-page-set-type-text" className="font-weight-500 orderDetails">
                     Type
                   </dt>
-                  <dd className="orderDetails">
+                  <dd id="ts-page-set-type" className="orderDetails">
                     {set_type}
                   </dd>
 
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="ts-page-physical-desc-text" className="font-weight-500 orderDetails">
                     Physical Description
                   </dt>
-                  <dd className="orderDetails">
+                  <dd id="ts-page-physical-desc" className="orderDetails">
                     {physical_description}
                   </dd>
 
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="ts-page-notes-content-text" className="font-weight-500 orderDetails">
                     Notes
                   </dt>
-                  <dd className="orderDetails">
+                  <dd id="ts-page-notes-content" className="orderDetails">
                     {this.TeacherSetNotesContent()}
                   </dd>
 
-                  <dt className="font-weight-500 orderDetails">
+                  <dt id="ts-page-call-number-text" className="font-weight-500 orderDetails">
                     Call Number
                   </dt>
-                  <dd className="orderDetails">
+                  <dd id="ts-page-call-number" className="orderDetails">
                     {call_number}
                   </dd>
                 </List>
               </div>
 
-              <a target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>           
+              <a id="ts-page-details_url" target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>           
             </>
           }
           contentSidebar={<></>}

@@ -43,16 +43,6 @@ export default class TeacherSetBooks extends React.Component {
   }
 
 
-  TeacherSets() {
-    return this.state.teacher_sets.map((data, i) => {
-      return <div>
-        <ReactRouterLink to={"/book_details/" + data.id} >
-          <Image imageSize="small" src={data.cover_uri} />
-        </ReactRouterLink>
-      </div>      
-    })
-  }
-
   IsBookTitlePresent() {
     return (this.state.book["title"] == null) ? false : true
   }
