@@ -266,7 +266,7 @@ export default class SearchTeacherSets extends Component {
                         }
                       >
                         Back to Top
-                        <Icon name={IconNames.Arrow} iconRotation={IconRotationTypes.Rotate180} size={IconSizes.Small} className="right" align={IconAlign.Right} />
+                        <Icon name={IconNames.Arrow} iconRotation={IconRotationTypes.Rotate180} size={IconSizes.Small} className="backToTopIcon" align={IconAlign.Right} />
                       </Button>
                     </ButtonGroup>
                     <Spacer />
