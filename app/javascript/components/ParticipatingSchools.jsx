@@ -83,7 +83,6 @@ export default class ParticipatingSchools extends Component {
                 attributes={{
                   'aria-describedby': 'Choose wisely.',
                   'aria-label': 'Enter school name',
-                  maxLength: 10,
                   pattern: '[a-z0-9]',
                   tabIndex: 0
                 }}
