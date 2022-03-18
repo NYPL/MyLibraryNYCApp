@@ -477,8 +477,10 @@ export default class SignUp extends Component {
                   />
                 </FormField>
                 
+                <div>
                   <Checkbox
                     id="news-letter-checkbox"
+                    helperText="This is the helper text!"
                     invalidText={this.state.news_letter_error}
                     isInvalid={this.state.show_news_letter_error}
                     labelText="Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)"
@@ -489,7 +491,7 @@ export default class SignUp extends Component {
                     showLabel
                     value="1"
                   />
-                
+                </div>
                 <FormField>
                   <Button onClick={this.handleSubmit} buttonType={ButtonTypes.NoBrand} className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
                 </FormField>

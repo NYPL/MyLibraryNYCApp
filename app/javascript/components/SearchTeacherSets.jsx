@@ -23,7 +23,7 @@ import {
   CardHeading, 
   CardContent,
   CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup, Notification, NotificationTypes, Flex, Spacer, Text, TextDisplaySizes, Box, Toggle, HeadingDisplaySizes, ToggleSizes, IconRotationTypes, IconSizes, IconAlign
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup, CheckboxGroupLayoutTypes, Notification, NotificationTypes, Flex, Spacer, Text, TextDisplaySizes, Box, Toggle, HeadingDisplaySizes, ToggleSizes, IconRotationTypes, IconSizes, IconAlign
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'

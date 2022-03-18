@@ -2290,9 +2290,9 @@
       }
     },
     "@nypl/design-system-react-components": {
-      "version": "0.25.11",
-      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-0.25.11.tgz",
-      "integrity": "sha512-cuvWbbjwpmXYYAyC5OoNKcICAjNyG5SD0fS8OgQ2M2ivQxMQZ9gmzhmA5AohRtXcWx6NjpZSSWo88uQbcJNUTw==",
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-0.25.12.tgz",
+      "integrity": "sha512-BYSugQ4iUeYTsiDgCFXZ0Nm1w41XH1Kivl5plVq8dEPQeK/yukyKyzeKq+Lsp9qv8a3AJrfe0popZqTEIigRCQ==",
       "requires": {
         "@chakra-ui/react": ">=1.7.1",
         "@chakra-ui/system": ">=1.8.1",
@@ -2319,9 +2319,9 @@
       "integrity": "sha512-5grNReXumLM1+zj5lnZJx5h8KEk1Aa2/tyogTiLAhB06RrpaH83WbINhzL1eJeMbz4h/NFWrj8SUIoqLPHM9tA=="
     },
     "@popperjs/core": {
-      "version": "2.11.2",
-      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.2.tgz",
-      "integrity": "sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA=="
+      "version": "2.11.4",
+      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.4.tgz",
+      "integrity": "sha512-q/ytXxO5NKvyT37pmisQAItCFqA7FD/vNb8dgaJy3/630Fsc+Mz9/9f2SziBoIZ30TJooXyTwZmhi1zjXmObYg=="
     },
     "@rails/webpacker": {
       "version": "5.4.0",
@@ -2592,9 +2592,9 @@
       "integrity": "sha512-cxWFQVseBm6O9Gbw1IWb8r6OS4OhSt3hPZLkFApLjM8TEXROBuQGLAH2i2gZpcXdLBIrpXuTDhH7Vbm1iXmNGA=="
     },
     "@types/lodash": {
-      "version": "4.14.179",
-      "resolved": "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.179.tgz",
-      "integrity": "sha512-uwc1x90yCKqGcIOAT6DwOSuxnrAbpkdPsUOZtwrXb4D/6wZs+6qG7QnIawDuZWg0sWpxl+ltIKCaLoMlna678w=="
+      "version": "4.14.180",
+      "resolved": "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.180.tgz",
+      "integrity": "sha512-XOKXa1KIxtNXgASAnwj7cnttJxS4fksBRywK/9LzRV5YxrF80BXZIGeQSuoESQ/VkUj30Ae0+YcuHc15wJCB2g=="
     },
     "@types/lodash.mergewith": {
       "version": "4.6.6",
