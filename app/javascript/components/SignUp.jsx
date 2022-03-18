@@ -473,7 +473,7 @@ export default class SignUp extends Component {
                     isInvalid={password_is_invalid}
                     onChange={this.handlePassword.bind(this, 'password')}
                     type={TextInputTypes.password}
-                    helperText="Your PIN serves as the password for your account. Make sure it is a number you will remember. Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
+                    helperText="Your Password must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
                   />
                 </FormField>
                 
