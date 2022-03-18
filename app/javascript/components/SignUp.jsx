@@ -14,7 +14,7 @@ export default class SignUp extends Component {
     super(props);
     this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
                    pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
-                   lastNameIsValid: false, pinIsValid: false, schoolIsValid: false, emailIsInvalid: false,
+                   lastNameIsValid: false, passwordIsValid: false, schoolIsValid: false, emailIsInvalid: false,
                    altEmailIsvalid: false, messages: {}, news_letter_error: "", show_news_letter_error: false, isCheckedVal: false, signUpmsg: "", isDisabled: false}
     this.verifyNewsLetterEmailInSignUpPage = this.verifyNewsLetterEmailInSignUpPage.bind(this)
   }
@@ -34,7 +34,7 @@ export default class SignUp extends Component {
     if (this.handleValidation()) {
       axios.post('/registrations', {
           user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
-                  last_name: this.state.fields["last_name"], pin: this.state.fields["pin"], school_id: this.state.fields["school_id"], news_letter_email: this.state.fields["alt_email"] || this.state.fields["email"] }
+                  last_name: this.state.fields["last_name"], password: this.state.fields["password"], school_id: this.state.fields["school_id"], news_letter_email: this.state.fields["alt_email"] || this.state.fields["email"] }
        }).then(res => {
           if (res.data.status == "created") {
             this.setState({ signUpmsg: res.data.message })
@@ -57,7 +57,7 @@ export default class SignUp extends Component {
               this.state.errors["email"] = res.data.message.email[0]
               this.setState({lastNameIsValid: true, isDisabled: true })
             }
-            if (res.data.message.pin.length > 0) {
+            if (res.data.message.password.length > 0) {
               this.state.errors["school_id"] = res.data.message.email[0]
               this.setState({schoolIsValid: true, isDisabled: true })
             }
@@ -145,17 +145,17 @@ export default class SignUp extends Component {
       }
     }
 
-    if (!fields["pin"]) {
+    if (!fields["password"]) {
       formIsValid = false;
-      this.setState({pinIsValid: true, isDisabled: true })
-      this.state.errors['pin'] = "PIN can't be empty";
+      this.setState({passwordIsValid: true, isDisabled: true })
+      this.state.errors['password'] = "Password can't be empty";
     }
 
-    if (fields["pin"] && typeof fields["pin"] == "string") {
-      if (!fields["pin"] && !(/^[0-9\b]+$/).test(fields["pin"])) {
+    if (fields["password"] && typeof fields["password"] == "string") {
+      if (!fields["password"] && !(/^[0-9\b]+$/).test(fields["password"])) {
         formIsValid = false;
-        this.setState({pinIsValid: true, isDisabled: true })
-        this.state.errors['pin'] = "PIN is in-valid";
+        this.setState({passwordIsValid: true, isDisabled: true })
+        this.state.errors['password'] = "Password is in-valid";
       }
     }
 
@@ -240,26 +240,26 @@ export default class SignUp extends Component {
     this.showNotifications()
   }
 
-  handlePin(field, e) {
-    this.setState({ pinIsValid: false, isDisabled: false})
-    this.state.errors['pin'] = ""
+  handlePassword(field, e) {
+    this.setState({ passwordIsValid: false, isDisabled: false})
+    this.state.errors['password'] = ""
 
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
 
-    if (!this.state.fields["pin"]) {
-      this.setState({pinIsValid: true, isDisabled: true })
-      this.state.errors['pin'] = "PIN can't be empty"
+    if (!this.state.fields["password"]) {
+      this.setState({passwordIsValid: true, isDisabled: true })
+      this.state.errors['password'] = "Password can't be empty"
     }
 
-    if (this.state.fields["pin"] && !(/^[0-9\b]+$/).test(fields["pin"])) {
-      this.setState({pinIsValid: true, isDisabled: true })
-      this.state.errors['pin'] = "PIN is in-valid. It may only contain numbers";
-    } else if (this.state.fields["pin"] && typeof this.state.fields["pin"] == "string") {
-      if (fields["pin"].length < 4  || fields["pin"].length > 32) {
-        this.setState({pinIsValid: true, isDisabled: true })
-        this.state.errors['pin'] = "Pin must be 4 to 32 characters";
+    if (this.state.fields["password"] && !(/^[0-9\b]+$/).test(fields["password"])) {
+      this.setState({passwordIsValid: true, isDisabled: true })
+      this.state.errors['password'] = "Password is in-valid. It may only contain numbers";
+    } else if (this.state.fields["password"] && typeof this.state.fields["password"] == "string") {
+      if (fields["password"].length < 4  || fields["password"].length > 32) {
+        this.setState({passwordIsValid: true, isDisabled: true })
+        this.state.errors['password'] = "Password must be 4 to 32 characters";
       }
     }
     this.showNotifications()
@@ -309,7 +309,7 @@ export default class SignUp extends Component {
 
 
   showErrors() {
-    return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["pin"] ? 'block' : 'none'
+    return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] ? 'block' : 'none'
   }
 
   showEmailError() {
@@ -328,8 +328,8 @@ export default class SignUp extends Component {
     return this.state.errors["last_name"]? 'block' : 'none'
   }
 
-  showPinError() {
-    return this.state.errors["pin"]? 'block' : 'none'
+  showPasswordError() {
+    return this.state.errors["password"]? 'block' : 'none'
   }
 
   showSchoolError() {
@@ -368,12 +368,12 @@ export default class SignUp extends Component {
     let email_is_invalid = this.state.emailIsInvalid
     let first_name_invalid = this.state.firstNameIsValid
     let last_name_invalid = this.state.lastNameIsValid
-    let pin_is_invalid = this.state.pinIsValid
+    let password_is_invalid = this.state.passwordIsValid
     let school_is_invalid = this.state.schoolIsValid
     let alt_email_is_invalid = this.state.altEmailIsvalid
     let last_name_error_msg = this.state.errors["last_name"]
     let first_name_error_msg = this.state.errors["first_name"]
-    let pin_error_msg = this.state.errors["pin"]
+    let password_error_msg = this.state.errors["password"]
     let school_error_msg = this.state.errors["school_id"]
     let alt_email_error_msg = this.state.errors["alt_email"]
 
@@ -392,7 +392,7 @@ export default class SignUp extends Component {
                       <div style={{ display: this.showAltEmailError() }}> {error_msgs["alt_email"]} {<br/>} </div>
                       <div style={{ display: this.showFirstNamerror() }}> {error_msgs["first_name"]} {<br/>} </div>
                       <div style={{ display: this.showLastNamerror() }}> {error_msgs["last_name"]} {<br/>} </div>
-                      <div style={{ display: this.showPinError() }}> {error_msgs["pin"]} {<br/>} </div>
+                      <div style={{ display: this.showPasswordError() }}> {error_msgs["password"]} {<br/>} </div>
                       <div style={{ display: this.showSchoolError() }}> {error_msgs["school_id"]} {<br/>} </div>
                     </Text>
                   } 
@@ -464,14 +464,15 @@ export default class SignUp extends Component {
                 </FormField>
                 <FormField>
                   <TextInput
-                    id="sign-up-pin"
+                    id="sign-up-password"
                     isRequired
                     showOptReqLabel={true}
-                    labelText="Pin"
-                    value={this.state.fields["pin"]}
-                    invalidText={pin_error_msg}
-                    isInvalid={pin_is_invalid}
-                    onChange={this.handlePin.bind(this, 'pin')}
+                    labelText="Password"
+                    value={this.state.fields["password"]}
+                    invalidText={password_error_msg}
+                    isInvalid={password_is_invalid}
+                    onChange={this.handlePassword.bind(this, 'password')}
+                    type={TextInputTypes.password}
                     helperText="Your PIN serves as the password for your account. Make sure it is a number you will remember. Your PIN must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
                   />
                 </FormField>
