@@ -29,8 +29,8 @@ class RegistrationsController <  ApplicationController
 
   def create
     user = User.new(user_params)
-    patron_service = user.send_request_to_patron_creator_service
     begin
+      patron_service = user.send_request_to_patron_creator_service
       if user.valid?
         if patron_service
           user.save!
@@ -46,10 +46,10 @@ class RegistrationsController <  ApplicationController
           render json: { status: 500 }
         end
       else
-        render json: { message: error_msg_hash(user) }
+        render json: { status: 500,  message: error_msg_hash(user) }
       end
-    rescue StandardError => e
-      # Need to handle error messages
+    rescue Exceptions::InvalidResponse, StandardError => e
+      render json: { status: 500, message: {error: [e.message]} }
     end
   end
 
@@ -84,7 +84,7 @@ class RegistrationsController <  ApplicationController
   private
   
   def user_params
-    params.require(:registration)["user"].permit(:alt_email, :school_id, :email, :first_name, :last_name, :pin)
+    params.require(:registration)["user"].permit(:alt_email, :school_id, :email, :first_name, :last_name, :password)
   end
 
 end

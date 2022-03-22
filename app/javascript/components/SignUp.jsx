@@ -13,9 +13,9 @@ export default class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
-                   pin: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
+                   password: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
                    lastNameIsValid: false, passwordIsValid: false, schoolIsValid: false, emailIsInvalid: false,
-                   altEmailIsvalid: false, messages: {}, news_letter_error: "", show_news_letter_error: false, isCheckedVal: false, signUpmsg: "", isDisabled: false}
+                   altEmailIsvalid: false, messages: {}, news_letter_error: "", show_news_letter_error: false, isCheckedVal: false, signUpmsg: "", isDisabled: false, serverError: "", serverErrorIsValid: false}
     this.verifyNewsLetterEmailInSignUpPage = this.verifyNewsLetterEmailInSignUpPage.bind(this)
   }
 
@@ -41,26 +41,35 @@ export default class SignUp extends Component {
             window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/teacher_set_data";
             return false;
           } else {
-            if (res.data.message.alt_email.length > 0) {
+            if (res.data.message.alt_email && res.data.message.alt_email.length > 0) {
               this.state.errors['alt_email'] = res.data.message.alt_email[0]
               this.setState({altEmailIsvalid: true, isDisabled: true })
             }
-            if (res.data.message.email.length > 0) {
+            if (res.data.message.email && res.data.message.email.length > 0) {
               this.state.errors["email"] = res.data.message.email[0]
               this.setState({emailIsInvalid: true, isDisabled: true })
             }
-            if (res.data.message.first_name.length > 0) {
-              this.state.errors["first_name"] = res.data.message.email[0]
+            if (res.data.message.first_name && res.data.message.first_name.length > 0) {
+              this.state.errors["first_name"] = res.data.message.first_name[0]
               this.setState({firstNameIsValid: true, isDisabled: true })
             }
-            if (res.data.message.last_name.length > 0) {
-              this.state.errors["email"] = res.data.message.email[0]
+            if (res.data.message.last_name && res.data.message.last_name.length > 0) {
+              this.state.errors["email"] = res.data.message.last_name[0]
               this.setState({lastNameIsValid: true, isDisabled: true })
             }
-            if (res.data.message.password.length > 0) {
-              this.state.errors["school_id"] = res.data.message.email[0]
+            if (res.data.message.school_id && res.data.message.school_id.length > 0) {
+              this.state.errors["school_id"] = res.data.message.school_id[0]
               this.setState({schoolIsValid: true, isDisabled: true })
             }
+            if (res.data.message.password && res.data.message.password.length > 0) {
+              this.state.errors["password"] = res.data.message.password[0]
+              this.setState({passwordIsValid: true, isDisabled: true })
+            }
+            if (res.data.message.error && res.data.message.error.length > 0) {
+              this.state.errors["serverError"] = res.data.message.error[0]
+              this.setState({serverErrorIsValid: true, isDisabled: true })
+            }
+
           }
         })
         .catch(function (error) {
@@ -151,8 +160,9 @@ export default class SignUp extends Component {
       this.state.errors['password'] = "Password can't be empty";
     }
 
-    if (fields["password"] && typeof fields["password"] == "string") {
-      if (!fields["password"] && !(/^[0-9\b]+$/).test(fields["password"])) {
+
+    if (fields["password"] && typeof fields["password"] == "string" ) {
+      if (!fields["password"] && !this.isStrongPassword(fields["password"])) {
         formIsValid = false;
         this.setState({passwordIsValid: true, isDisabled: true })
         this.state.errors['password'] = "Password is in-valid";
@@ -253,16 +263,25 @@ export default class SignUp extends Component {
       this.state.errors['password'] = "Password can't be empty"
     }
 
-    if (this.state.fields["password"] && !(/^[0-9\b]+$/).test(fields["password"])) {
+    let password = this.state.fields["password"]
+
+    if (!this.isStrongPassword(password)) {
       this.setState({passwordIsValid: true, isDisabled: true })
-      this.state.errors['password'] = "Password is in-valid. It may only contain numbers";
-    } else if (this.state.fields["password"] && typeof this.state.fields["password"] == "string") {
-      if (fields["password"].length < 4  || fields["password"].length > 32) {
-        this.setState({passwordIsValid: true, isDisabled: true })
-        this.state.errors['password'] = "Password must be 4 to 32 characters";
-      }
+      this.state.errors['password'] = "Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, and have at least one special character except period (.)"
     }
     this.showNotifications()
+  }
+
+
+  handlePasswordvas(field, value) {
+    if (validator.isStrongPassword(value, {
+      minLength: 8, minLowercase: 1, maxLength: 32,
+      minUppercase: 1, minNumbers: 1, minSymbols: 1
+    })) {
+      console.log('Is Strong Password')
+    } else {
+      console.log('Is Not Strong Password')
+    }
   }
 
   handleSchool(field, e) {
@@ -309,7 +328,7 @@ export default class SignUp extends Component {
 
 
   showErrors() {
-    return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] ? 'block' : 'none'
+    return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] || this.state.errors["serverError"] ? 'block' : 'none'
   }
 
   showEmailError() {
@@ -334,6 +353,10 @@ export default class SignUp extends Component {
 
   showSchoolError() {
     return this.state.errors["school_id"]? 'block' : 'none'
+  }
+
+  showServerError() {
+    return this.state.errors["serverError"]? 'block' : 'none'
   }
 
   verifyNewsLetterEmailInSignUpPage(event) {
@@ -363,6 +386,18 @@ export default class SignUp extends Component {
     }
   }
 
+
+  isStrongPassword(password) {
+    if (password && (password.match(/[a-z]/g) && password.match(
+                    /[A-Z]/g) && password.match(
+                    /[0-9]/g) && password.match(
+                    /[^a-zA-Z.\d]/g) && password.length >= 8)) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   render() {
     let error_email_msg = this.state.errors["email"]
     let email_is_invalid = this.state.emailIsInvalid
@@ -371,16 +406,18 @@ export default class SignUp extends Component {
     let password_is_invalid = this.state.passwordIsValid
     let school_is_invalid = this.state.schoolIsValid
     let alt_email_is_invalid = this.state.altEmailIsvalid
+    let server_error_invalid = this.state.schoolIsValid
+
     let last_name_error_msg = this.state.errors["last_name"]
     let first_name_error_msg = this.state.errors["first_name"]
     let password_error_msg = this.state.errors["password"]
     let school_error_msg = this.state.errors["school_id"]
     let alt_email_error_msg = this.state.errors["alt_email"]
+    let server_error = this.state.errors["serverError"]
 
     let error_msgs = this.state.errors
     let email = error_msgs["email"] ? 'display' : 'none'
   
-
     return (
         <TemplateAppContainer
           breakout={<><AppBreadcrumbs />
@@ -394,6 +431,7 @@ export default class SignUp extends Component {
                       <div style={{ display: this.showLastNamerror() }}> {error_msgs["last_name"]} {<br/>} </div>
                       <div style={{ display: this.showPasswordError() }}> {error_msgs["password"]} {<br/>} </div>
                       <div style={{ display: this.showSchoolError() }}> {error_msgs["school_id"]} {<br/>} </div>
+                      <div style={{ display: this.showServerError() }}> {error_msgs["serverError"]} {<br/>} </div>
                     </Text>
                   } 
                 />
@@ -473,7 +511,7 @@ export default class SignUp extends Component {
                     isInvalid={password_is_invalid}
                     onChange={this.handlePassword.bind(this, 'password')}
                     type={TextInputTypes.password}
-                    helperText="Your Password must be 4 digits. It cannot contain a digit that is repeated 3 or more times (0001, 5555) and cannot be a pair of repeated digits (1212, 6363)."
+                    helperText="We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.). Example: MyLib1731@"
                   />
                 </FormField>
                 

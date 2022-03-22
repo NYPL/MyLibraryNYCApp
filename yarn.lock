@@ -2330,10 +2330,10 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@nypl/design-system-react-components@0.25.11":
-  version "0.25.11"
-  resolved "https://registry.yarnpkg.com/@nypl/design-system-react-components/-/design-system-react-components-0.25.11.tgz#5c68175b508cded05a829fb4119c8c8b94d16537"
-  integrity sha512-cuvWbbjwpmXYYAyC5OoNKcICAjNyG5SD0fS8OgQ2M2ivQxMQZ9gmzhmA5AohRtXcWx6NjpZSSWo88uQbcJNUTw==
+"@nypl/design-system-react-components@^0.25.12":
+  version "0.25.12"
+  resolved "https://registry.yarnpkg.com/@nypl/design-system-react-components/-/design-system-react-components-0.25.12.tgz#4125ea8b00f64e0bc4e64c9802b7831f5d335dbe"
+  integrity sha512-BYSugQ4iUeYTsiDgCFXZ0Nm1w41XH1Kivl5plVq8dEPQeK/yukyKyzeKq+Lsp9qv8a3AJrfe0popZqTEIigRCQ==
   dependencies:
     "@chakra-ui/react" ">=1.7.1"
     "@chakra-ui/system" ">=1.8.1"
