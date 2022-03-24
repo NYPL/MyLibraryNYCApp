@@ -37,7 +37,9 @@ class SessionsController < ApplicationController
     logout!
     render json: {
       status: 200,
-      logged_out: true
+      logged_out: true,
+      root_path: root_path,
+      sign_out_msg: "Signed out successfully"
     }
   end
 

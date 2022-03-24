@@ -23,18 +23,29 @@ import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks";
 import { render } from "react-dom";
 import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
+import AccountDetailsSubMenu from "../components/AccountDetailsSubMenu";
+
 
 
 export default class Routes extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn}
+    console.log(this.props.userSignedIn)
+    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signin_signout_msgs: ""}
     this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
+    this.handleSignInSignOutMsgs = this.handleSignInSignOutMsgs.bind(this);
   }
 
   handleTeacherSetOrderedData(hold, teacher_set, status_label) {
     this.setState({ hold: hold, teacher_set: teacher_set, status_label: status_label })
+  }
+
+  handleSignInSignOutMsgs(signin_signout_msgs, userSignedIn) {
+    //if (signin_signout_msgs !== "") {
+      this.state.signin_signout_msgs = signin_signout_msgs
+      this.state.userSignedIn = userSignedIn
+    //}
   }
 
   render() {
@@ -43,11 +54,11 @@ export default class Routes extends React.Component {
           <Router>
             <div>
               <Banner />
-              <Header userSignedIn={this.state.userSignedIn}/>
+              <Header userSignedIn={this.state.userSignedIn} handleSignInSignOutMsgs={this.handleSignInSignOutMsgs}/>
               <Switch>
                 <Route exact path='/'
                   render={routeProps => (
-                    <Home {...routeProps} component={Home} userSignedIn={this.props.userSignedIn} />
+                    <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} signin_signout_msgs={this.state.signin_signout_msgs} />
                   )}
                 />
                 <Route path="/faq" component={Faqs} />
@@ -56,7 +67,7 @@ export default class Routes extends React.Component {
                 <Route
                   path='/signin'
                   render={routeProps => (
-                    <SignIn {...routeProps} component={SignIn} userSignedIn={this.props.userSignedIn} />
+                    <SignIn {...routeProps} component={SignIn} userSignedIn={this.state.userSignedIn} />
                   )}
                 />
                 <Route path="/signup" component={SignUp} />
@@ -64,7 +75,7 @@ export default class Routes extends React.Component {
                 <Route
                   path='/teacher_set_data'
                   render={routeProps => (
-                    <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={this.props.userSignedIn} />
+                    <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={this.state.userSignedIn}/>
                   )}
                 />
                 <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />

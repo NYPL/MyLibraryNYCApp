@@ -35,11 +35,13 @@ import {
 
 export default class SearchTeacherSets extends Component {
 
+
+
   constructor(props) {
     super(props);
     this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: 0, error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, total_pages: 0,
-                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {}, grade_begin: -1, grade_end: 12 };
+                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {}, grade_begin: -1, grade_end: 12, sort_by_options: ['Title: A-Z', 'Title: Z-A', 'Date Added: Newest first'], ts_sort_by_id: "" };
   }
 
   componentDidMount() {
@@ -204,7 +206,23 @@ export default class SearchTeacherSets extends Component {
     </>
   }
 
+  sortByTeacherSets() {
+    // this.setState({
+    //   ts_sort_by_id: event.target.value
+    // })
+    
+    // const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, ts_sort_by_id: event.target.value}, this.state.selected_facets)
+    // this.getTeacherSets(params)
+  }
+
+
   render() {
+    let sort_by_options = this.state.sort_by_options.map((ts_sort, i) => {
+      return (
+        <option id={"ts-sort-by-options-" + i} key={i} value={ts_sort}>{ts_sort}</option>
+      )
+    }, this);
+
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -244,9 +262,9 @@ export default class SearchTeacherSets extends Component {
                   labelText="Sort By"
                   showLabel={false}
                   showOptReqLabel={false}
+                  onChange={this.sortByTeacherSets}
                 >
-                  <option value="option">Option 1</option>
-                  <option value="option">Option 2</option>
+                  {sort_by_options}
                 </Select>
               </Flex>              
             </>

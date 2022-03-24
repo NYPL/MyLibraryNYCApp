@@ -45,9 +45,12 @@ const styles = {
 
 export default class Home extends React.Component {
 
-  state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
-                 display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
-                 computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword') };
+  constructor(props) {
+    super(props);
+    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
+                   display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
+                   computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword') };
+  }
 
   componentDidMount() {
     if (this.state.keyword !== "" ) {
@@ -105,44 +108,9 @@ export default class Home extends React.Component {
     })
   };
 
-  TeacherSetDetails() {
-    return this.state.teacher_sets.map((ts, i) => {
-      return <div className="teacherSetResults">
-        <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
-
-          <Card className="" layout={CardLayouts.Horizontal} center imageSrc={bookImage} imageAlt="Alt text">
-            <CardHeading level={3} id="heading1">
-              <ReactRouterLink to={"/teacher_set_details/" + ts.id} className="removelink">
-                {ts.title}
-              </ReactRouterLink>
-            </CardHeading>
-            
-            <CardContent> {ts.suitabilities_string} </CardContent>
-            <CardContent> {ts.availability} </CardContent>
-            <CardContent> {ts.description} </CardContent>
-          </Card>
-          <HorizontalRule align="left" height="3px" />
-        </div>
-        </div>
-    })
-  }
-
-  TeacherSetFacets() {
-    return this.state.facets.map((ts, i) => {
-      return <div>{<br/>}
-
-      <div> { ts.label } </div>
-        { ts.items.map((item, index) =>
-          <div> <Checkbox id="test_id" labelText={item["label"]} showLabel />  </div>
-        )}
-      </div>
-    })
-  }
-
   SignedUpMessage() {
-    if (!this.state.userSignedIn) {
-      return <Notification ariaLabel="SignOut Notification" id="sign-out-notification" className="signOutMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
-      Signed out successfully.</>} />
+    if (!this.props.userSignedIn && this.props.signin_signout_msgs !== "") {
+      return <Notification ariaLabel="SignOut Notification" id="sign-out-notification" className="signOutMessage" notificationType={NotificationTypes.Announcement} notificationContent={this.props.signin_signout_msgs} />
     }
   }
 
