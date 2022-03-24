@@ -31,19 +31,18 @@ export default class Routes extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(this.props.userSignedIn)
-    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signin_signout_msgs: ""}
+    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: ""}
     this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
-    this.handleSignInSignOutMsgs = this.handleSignInSignOutMsgs.bind(this);
+    this.handleSignOutMsg = this.handleSignOutMsg.bind(this);
   }
 
   handleTeacherSetOrderedData(hold, teacher_set, status_label) {
     this.setState({ hold: hold, teacher_set: teacher_set, status_label: status_label })
   }
 
-  handleSignInSignOutMsgs(signin_signout_msgs, userSignedIn) {
+  handleSignOutMsg(signoutMsg, userSignedIn) {
     //if (signin_signout_msgs !== "") {
-      this.state.signin_signout_msgs = signin_signout_msgs
+      this.state.signout_msg = signoutMsg
       this.state.userSignedIn = userSignedIn
     //}
   }
@@ -54,12 +53,12 @@ export default class Routes extends React.Component {
           <Router>
             <div>
               <Banner />
-              <Header userSignedIn={this.state.userSignedIn} handleSignInSignOutMsgs={this.handleSignInSignOutMsgs}/>
+              <Header userSignedIn={this.state.userSignedIn} handleSignOutMsg={this.handleSignOutMsg}/>
               <Switch>
                 <Route exact path='/'
-                  render={routeProps => (
-                    <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} signin_signout_msgs={this.state.signin_signout_msgs} />
-                  )}
+                  render={ routeProps => (
+                    <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} signoutMsg={this.state.signout_msg} />
+                  ) }
                 />
                 <Route path="/faq" component={Faqs} />
                 <Route path="/contacts" component={Contacts} />

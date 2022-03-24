@@ -20,7 +20,6 @@ class AccountDetailsSubMenu extends React.Component {
     this.handleLeave = this.handleLeave.bind(this);
   }
 
-
   redirectToHome = () => {
    const { history } = this.props;
    if(history) history.push({ pathname: '/', state: { userSignedIn: false } });
@@ -31,7 +30,6 @@ class AccountDetailsSubMenu extends React.Component {
       return <li className="nav__submenu-item"> <ReactRouterLink to="/signin"> <Button className="signin_nav_button" buttonType={ButtonTypes.NoBrand}>Sign In</Button> </ReactRouterLink> </li>
     }
   }
-
 
   handleHover = (event) => {
     this.setState({ showAboutMenu: true });
@@ -65,15 +63,12 @@ class AccountDetailsSubMenu extends React.Component {
     }
   }
 
-
   signOut = event => {
-
     axios.delete('/logout')
       .then(res => {
-        console.log("root path")
         if (res.data.status == 200 && res.data.logged_out == true) {
           this.setState({ user_signed_in: false, showAboutMenu: false });
-          this.props.handleSignInSignOutMsgs(res.data.sign_out_msg, false)
+          this.props.handleSignOutMsg(res.data.sign_out_msg, false)
           this.redirectToHome()          
         }
       })
@@ -81,8 +76,6 @@ class AccountDetailsSubMenu extends React.Component {
         console.log(error);
     })    
   }
-
-
 
   AccountOrderLink() {
     if (this.state.user_signed_in) {
