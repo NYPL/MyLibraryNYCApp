@@ -35,8 +35,6 @@ import {
 
 export default class SearchTeacherSets extends Component {
 
-
-
   constructor(props) {
     super(props);
     this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: 0, error_msg: {}, email: "", 
@@ -48,8 +46,6 @@ export default class SearchTeacherSets extends Component {
     const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end }, this.state.selected_facets)
     this.getTeacherSets(params)
   }
-
-
 
   getTeacherSets(params) {
     axios.get('/teacher_sets', {params: params}).then(res => {
@@ -173,9 +169,9 @@ export default class SearchTeacherSets extends Component {
   }
 
   SignedInMessage() {
-    if (this.state.userSignedIn) {
-      return <Notification ariaLabel="SignIn Notification" id="sign-in-notification" className="signUpMessage" dismissible notificationType={NotificationTypes.Announcement} notificationContent={<>
-      Signed in successfully</>} />
+    if (this.props.userSignedIn && this.props.signInMsg !== "") {
+      return <Notification ariaLabel="SignIn Notification" id="sign-in-notification" className="signUpMessage" notificationType={NotificationTypes.Announcement} notificationContent={<>
+      {this.props.signInMsg}</>} />
     }
   }
 

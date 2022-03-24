@@ -22,11 +22,11 @@ class AccountDetailsSubMenu extends React.Component {
 
   redirectToHome = () => {
    const { history } = this.props;
-   if(history) history.push({ pathname: '/', state: { userSignedIn: false } });
+   if(history) history.push({ pathname: '/' });
   }
 
   signInAccountLinks() {
-    if (!this.state.user_signed_in) {
+    if (!this.props.userSignedIn) {
       return <li className="nav__submenu-item"> <ReactRouterLink to="/signin"> <Button className="signin_nav_button" buttonType={ButtonTypes.NoBrand}>Sign In</Button> </ReactRouterLink> </li>
     }
   }
@@ -40,7 +40,7 @@ class AccountDetailsSubMenu extends React.Component {
   };
 
   showAccountSigninLink() {
-    if (this.state.user_signed_in) {
+    if (this.props.userSignedIn) {
       return <>
         <ReactRouterLink to="/account_details" className="nav-link-colors" onMouseEnter={this.handleHover}>Account{' '}
           <Icon id="account-arrow-drop-down" size="small">
@@ -78,7 +78,7 @@ class AccountDetailsSubMenu extends React.Component {
   }
 
   AccountOrderLink() {
-    if (this.state.user_signed_in) {
+    if (this.props.userSignedIn) {
       return <>
         <li className="nav__submenu-item"><ReactRouterLink className="nav-link-colors" to="/account_details">My Account & Orders</ReactRouterLink></li>
         <li className="nav__submenu-item"><ReactRouterLink className="nav-link-colors" onClick={this.signOut}>Sign Out</ReactRouterLink></li>

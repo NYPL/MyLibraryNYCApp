@@ -25,7 +25,6 @@ export default class Navbar extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { user_signed_in: this.props.userSignedIn, showAboutMenu: false}
   }
 
   render() {
@@ -48,7 +47,7 @@ export default class Navbar extends React.Component {
           <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
 
           <li id="mln-navbar-ad-link" className="nav__menu-item">
-            <AccountDetailsSubMenu userSignedIn={this.state.user_signed_in} handleSignOutMsg={this.props.handleSignOutMsg} />
+            <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} />
           </li>
         </List>
       </div>

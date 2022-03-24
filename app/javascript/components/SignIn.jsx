@@ -19,7 +19,6 @@ export default class SignIn extends Component {
     this.state = { email: "", invali_email_msg: "", user_signed_in: this.props.userSignedIn, isInvalid: false };
   }
 
-
   handleEmail = event => {
     this.setState({
       email: event.target.value, isInvalid: false
@@ -31,6 +30,11 @@ export default class SignIn extends Component {
       this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
       return false;
     }
+  }
+
+  redirectToHome = (user_return_to) => {
+    const { history } = this.props;
+    if(history) history.push({ pathname: "/" + user_return_to, state: { userSignedIn: true } });
   }
 
   handleSubmit = event => {
@@ -45,12 +49,14 @@ export default class SignIn extends Component {
       return false;
     }
 
-
     axios.post('/login', {
         email: this.state.email
      }).then(res => {
+
         if (res.data.logged_in) {
-          window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + '/' + res.data.user_return_to
+          this.state.userSignedIn = true;
+          this.props.handleSignInMsg(res.data.sign_in_msg, true)
+          this.redirectToHome(res.data.user_return_to)
           return false;
         } else {
           this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
@@ -65,7 +71,6 @@ export default class SignIn extends Component {
     return (
       <TemplateAppContainer
         breakout={<AppBreadcrumbs />}
-
         contentPrimary={
           <>
             <Collapsible trigger={<><Text noSpace displaySize="caption">Your DOE Email Address <Icon align="left" color="ui.black" iconRotation="rotate0" name="action_help_default" size="small" /></Text></>}>

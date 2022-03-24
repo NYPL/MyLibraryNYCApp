@@ -31,9 +31,10 @@ export default class Routes extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: ""}
+    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: "", signin_msg: "" }
     this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
     this.handleSignOutMsg = this.handleSignOutMsg.bind(this);
+    this.handleSignInMsg = this.handleSignInMsg.bind(this);
   }
 
   handleTeacherSetOrderedData(hold, teacher_set, status_label) {
@@ -41,17 +42,18 @@ export default class Routes extends React.Component {
   }
 
   handleSignOutMsg(signoutMsg, userSignedIn) {
-    //if (signin_signout_msgs !== "") {
-      this.state.signout_msg = signoutMsg
-      this.state.userSignedIn = userSignedIn
-    //}
+    this.setState({ signout_msg: signoutMsg, userSignedIn: userSignedIn })
+  }
+
+  handleSignInMsg(signInMsg, userSignedIn) {
+    this.setState({ signin_msg: signInMsg, userSignedIn: userSignedIn })
   }
 
   render() {
     return (
       <DSProvider>
           <Router>
-            <div>
+            <div id="mln-main-content">
               <Banner />
               <Header userSignedIn={this.state.userSignedIn} handleSignOutMsg={this.handleSignOutMsg}/>
               <Switch>
@@ -66,7 +68,7 @@ export default class Routes extends React.Component {
                 <Route
                   path='/signin'
                   render={routeProps => (
-                    <SignIn {...routeProps} component={SignIn} userSignedIn={this.state.userSignedIn} />
+                    <SignIn {...routeProps} component={SignIn} userSignedIn={this.state.userSignedIn} handleSignInMsg={this.handleSignInMsg}/>
                   )}
                 />
                 <Route path="/signup" component={SignUp} />
@@ -74,7 +76,7 @@ export default class Routes extends React.Component {
                 <Route
                   path='/teacher_set_data'
                   render={routeProps => (
-                    <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={this.state.userSignedIn}/>
+                    <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={this.state.userSignedIn} signInMsg={this.state.signin_msg} />
                   )}
                 />
                 <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />

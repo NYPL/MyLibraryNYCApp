@@ -34,14 +34,11 @@ import {
 
 import bookImage from '../images/book.png'
 
-
-
 const styles = {
   heroCampaign: {
     background: "#F5F5F5"
   }
 }
-
 
 export default class Home extends React.Component {
 

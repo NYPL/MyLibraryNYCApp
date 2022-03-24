@@ -10,7 +10,8 @@ class SessionsController < ApplicationController
       render json: {
         logged_in: true,
         user: @user,
-        user_return_to: session["user_return_to"] || 'teacher_set_data'
+        user_return_to: session["user_return_to"] || 'teacher_set_data',
+        sign_in_msg: "Signed in successfully"
       }
     else
       render json: { 

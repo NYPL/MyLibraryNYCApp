@@ -12,13 +12,13 @@ export default class Header extends Component {
 
   constructor(props) {
     super(props); 
-    this.state = { user_signed_in: this.props.userSignedIn}
+    this.state = { user_signed_in: this.props.userSignedIn }
   }
 
   render() {
     return (
       <>
-        <Navbar userSignedIn={this.state.user_signed_in} handleSignOutMsg={this.props.handleSignOutMsg}/>
+        <Navbar userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg}/>
         <MobileHeader />
       </>
     )
