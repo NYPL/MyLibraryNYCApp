@@ -27,11 +27,22 @@ export default class Navbar extends React.Component {
     super(props);
   }
 
+  redirectToHome = () => {
+   const { history } = this.props;
+   if(history) history.push({ pathname: '/' });
+  }
+
+  hideHomeSignUpMsg = event => {
+    console.log(this.props)
+    this.props.hideSignUpMessage(true)
+    this.redirectToHome()
+  }
+
   render() {
     return (
       <div id="mln-navbar" className="header-topWrapper">
-        <ReactRouterLink to="/">
-          <div id="mln-header-logo" className="header-logo">
+        <ReactRouterLink to="/" onClick={this.hideHomeSignUpMsg}>
+          <div id="mln-header-logo" className="header-logo" >
             <Image id="mln-header-logo" className="header-logo" alt="Alt text" imageSize={ImageSizes.Small} src={mlnLogoRed} />
           </div>
         </ReactRouterLink>

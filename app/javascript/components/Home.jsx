@@ -106,7 +106,7 @@ export default class Home extends React.Component {
   };
 
   SignedUpMessage() {
-    if (!this.props.userSignedIn && this.props.signoutMsg !== "") {
+    if (!this.props.hideSignOutMsg && !this.props.userSignedIn && this.props.signoutMsg !== "") {
       return <Notification ariaLabel="SignOut Notification" id="sign-out-notification" className="signOutMessage" notificationType={NotificationTypes.Announcement} notificationContent={this.props.signoutMsg} />
     }
   }

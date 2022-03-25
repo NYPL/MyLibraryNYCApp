@@ -31,10 +31,11 @@ export default class Routes extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: "", signin_msg: "" }
+    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: "", signin_msg: "", hide_signout_msg: "" }
     this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
     this.handleSignOutMsg = this.handleSignOutMsg.bind(this);
     this.handleSignInMsg = this.handleSignInMsg.bind(this);
+    this.hideSignUpMessage = this.hideSignUpMessage.bind(this);
   }
 
   handleTeacherSetOrderedData(hold, teacher_set, status_label) {
@@ -49,17 +50,21 @@ export default class Routes extends React.Component {
     this.setState({ signin_msg: signInMsg, userSignedIn: userSignedIn })
   }
 
+  hideSignUpMessage(hideSignoutMessage) {
+    this.setState({ hide_signout_msg: hideSignoutMessage })
+  }
+
   render() {
     return (
       <DSProvider>
           <Router>
             <div id="mln-main-content">
               <Banner />
-              <Header userSignedIn={this.state.userSignedIn} handleSignOutMsg={this.handleSignOutMsg}/>
+              <Header userSignedIn={this.state.userSignedIn} handleSignOutMsg={this.handleSignOutMsg} hideSignUpMessage={this.hideSignUpMessage}/>
               <Switch>
                 <Route exact path='/'
                   render={ routeProps => (
-                    <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} signoutMsg={this.state.signout_msg} />
+                    <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} hideSignOutMsg={this.state.hide_signout_msg} signoutMsg={this.state.signout_msg}  />
                   ) }
                 />
                 <Route path="/faq" component={Faqs} />
