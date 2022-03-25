@@ -50,18 +50,18 @@ export default class SignIn extends Component {
     }
 
     axios.post('/login', {
-        email: this.state.email
-     }).then(res => {
-
-        if (res.data.logged_in) {
-          this.state.userSignedIn = true;
-          this.props.handleSignInMsg(res.data.sign_in_msg, true)
-          this.redirectToHome(res.data.user_return_to)
-          return false;
-        } else {
-          this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
-        }
-      })
+      email: this.state.email
+    }).then(res => {
+      if (res.data.logged_in) {
+        this.state.userSignedIn = true;
+        this.props.handleSignInMsg(res.data.sign_in_msg, true)
+        this.props.hideSignInMessage(false)
+        this.redirectToHome(res.data.user_return_to)
+        return false;
+      } else {
+        this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
+      }
+    })
       .catch(function (error) {
        console.log(error)
     })

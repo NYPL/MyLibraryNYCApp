@@ -69,16 +69,16 @@ export default class Routes extends React.Component {
               <Switch>
                 <Route exact path='/'
                   render={ routeProps => (
-                    <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} hideSignOutMsg={this.state.hide_signout_msg} signoutMsg={this.state.signout_msg}  />
+                    <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} hideSignOutMsg={this.state.hide_signout_msg} signoutMsg={this.state.signout_msg} />
                   ) }
                 />
                 <Route path="/faq" component={Faqs} />
                 <Route path="/contacts" component={Contacts} />
-                <Route path="/participating-schools" component={ParticipatingSchools}  />
+                <Route path="/participating-schools" component={ParticipatingSchools} />
                 <Route
                   path='/signin'
                   render={routeProps => (
-                    <SignIn {...routeProps} component={SignIn} userSignedIn={this.state.userSignedIn} handleSignInMsg={this.handleSignInMsg}/>
+                    <SignIn {...routeProps} component={SignIn} userSignedIn={this.state.userSignedIn} handleSignInMsg={this.handleSignInMsg} hideSignInMessage={this.hideSignInMessage} />
                   )}
                 />
                 <Route path="/signup" component={SignUp} />

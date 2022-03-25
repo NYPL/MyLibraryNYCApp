@@ -44,7 +44,7 @@ export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "", 
+    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: "", error_msg: {}, email: "",
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, 
                    computedCurrentPage: 1, pagination: "", keyword: new URLSearchParams(this.props.location.search).get('keyword') };
   }

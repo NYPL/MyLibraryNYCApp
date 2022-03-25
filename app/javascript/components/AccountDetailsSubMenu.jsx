@@ -69,6 +69,7 @@ class AccountDetailsSubMenu extends React.Component {
         if (res.data.status == 200 && res.data.logged_out == true) {
           this.setState({ user_signed_in: false, showAboutMenu: false });
           this.props.handleSignOutMsg(res.data.sign_out_msg, false)
+          this.props.hideSignUpMessage(false)
           this.redirectToHome()          
         }
       })
