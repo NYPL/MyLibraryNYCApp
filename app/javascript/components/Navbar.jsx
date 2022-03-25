@@ -33,9 +33,18 @@ export default class Navbar extends React.Component {
   }
 
   hideHomeSignUpMsg = event => {
-    console.log(this.props)
     this.props.hideSignUpMessage(true)
     this.redirectToHome()
+  }
+
+  redirectToTeacherSetPage = () => {
+    const { history } = this.props;
+    if(history) history.push({ pathname: '/teacher_set_data' });
+  }
+
+  hideSignInMsg = event => {
+    this.props.hideSignInMessage(true)
+    this.redirectToTeacherSetPage()
   }
 
   render() {
@@ -49,7 +58,7 @@ export default class Navbar extends React.Component {
       
         <List id="mln-navbar-list" type="ul" inline noStyling className="header-buttons" className="float-right">
 
-          <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
+          <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 
           <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
 

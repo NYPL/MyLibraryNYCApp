@@ -31,11 +31,12 @@ export default class Routes extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: "", signin_msg: "", hide_signout_msg: "" }
+    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: "", signin_msg: "", hide_signout_msg: "", hide_signin_msg: "" }
     this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
     this.handleSignOutMsg = this.handleSignOutMsg.bind(this);
     this.handleSignInMsg = this.handleSignInMsg.bind(this);
     this.hideSignUpMessage = this.hideSignUpMessage.bind(this);
+    this.hideSignInMessage = this.hideSignInMessage.bind(this);
   }
 
   handleTeacherSetOrderedData(hold, teacher_set, status_label) {
@@ -54,13 +55,17 @@ export default class Routes extends React.Component {
     this.setState({ hide_signout_msg: hideSignoutMessage })
   }
 
+  hideSignInMessage(hideSignInMessage) {
+    this.setState({ hide_signin_msg: hideSignInMessage })
+  }
+
   render() {
     return (
       <DSProvider>
           <Router>
             <div id="mln-main-content">
               <Banner />
-              <Header userSignedIn={this.state.userSignedIn} handleSignOutMsg={this.handleSignOutMsg} hideSignUpMessage={this.hideSignUpMessage}/>
+              <Header userSignedIn={this.state.userSignedIn} handleSignOutMsg={this.handleSignOutMsg} hideSignUpMessage={this.hideSignUpMessage} hideSignInMessage={this.hideSignInMessage} />
               <Switch>
                 <Route exact path='/'
                   render={ routeProps => (
@@ -81,7 +86,7 @@ export default class Routes extends React.Component {
                 <Route
                   path='/teacher_set_data'
                   render={routeProps => (
-                    <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={this.state.userSignedIn} signInMsg={this.state.signin_msg} />
+                    <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={this.state.userSignedIn} hideSignInMsg={this.state.hide_signin_msg} signInMsg={this.state.signin_msg} />
                   )}
                 />
                 <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />

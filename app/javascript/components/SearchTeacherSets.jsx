@@ -169,7 +169,7 @@ export default class SearchTeacherSets extends Component {
   }
 
   SignedInMessage() {
-    if (this.props.userSignedIn && this.props.signInMsg !== "") {
+    if (!this.props.hideSignInMsg && this.props.userSignedIn && this.props.signInMsg !== "") {
       return <Notification ariaLabel="SignIn Notification" id="sign-in-notification" className="signUpMessage" notificationType={NotificationTypes.Announcement} notificationContent={<>
       {this.props.signInMsg}</>} />
     }
