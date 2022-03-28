@@ -19,6 +19,14 @@ export default class SignIn extends Component {
     this.state = { email: "", invali_email_msg: "", user_signed_in: this.props.userSignedIn, isInvalid: false };
   }
 
+
+  componentDidMount() {
+    if(this.props.userSignedIn && this.props.location.pathname == "/signin") {
+      window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/account_details"
+      return false;
+    }
+  }
+
   handleEmail = event => {
     this.setState({
       email: event.target.value, isInvalid: false
@@ -45,7 +53,7 @@ export default class SignIn extends Component {
     }
 
     if (!validator.isEmail(this.state.email)) {
-      this.setState({isInvalid: true, invali_email_msg: "Please enssster a valid email address"});
+      this.setState({isInvalid: true, invali_email_msg: "Please enter a valid email address"});
       return false;
     }
 
