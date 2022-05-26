@@ -6,6 +6,6 @@ class ExceptionsController < ActionController::Base
   def render_error
     @hide_breadcrumbs = true
     @exception = request.env["action_dispatch.exception"]
-    @status_code = ActionDispatch::ExceptionWrapper.new(request.env['action_dispatch.backtrace_cleaner'], @exception).status_code
+    @status_code = ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
   end
 end
