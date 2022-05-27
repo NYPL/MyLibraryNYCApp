@@ -55,6 +55,7 @@ module MyLibraryNYC
 
     # custom error pages
     config.exceptions_app = lambda do |env|
+      puts "###########  #{ExceptionsController.action(:render_error).call(env)}    #########"
       ExceptionsController.action(:render_error).call(env)
     end
 
