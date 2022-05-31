@@ -58,7 +58,6 @@ module MyLibraryNYC
       ExceptionsController.action(:render_error).call(env)
     end
 
-
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 
