@@ -54,11 +54,9 @@ module MyLibraryNYC
     config.encoding = "utf-8"
 
     # custom error pages
-    config.exceptions_app = ActionDispatch::PublicExceptions.new(Rails.public_path)
-    # lambda do |env|
-    #   ExceptionsController.action(:render_error).call(env)
-    # end
-
+    config.exceptions_app = lambda do |env|
+      ExceptionsController.action(:render_error).call(env)
+    end
 
 
     # Configure sensitive parameters which will be filtered from the log file.

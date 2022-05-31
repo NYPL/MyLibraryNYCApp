@@ -4,8 +4,7 @@ class ExceptionsController < ActionController::Base
   layout 'application'
 
   def render_error
-    @exception = request.env["action_dispatch.exception"]
-    exception_wrapper = ActionDispatch::ExceptionWrapper.new(request.env['action_dispatch.backtrace_cleaner'], @exception)
-    trace = exception_wrapper.application_trace
+    @exception       = request.env['action_dispatch.exception']
+    @status_code     = ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code    
   end
 end
