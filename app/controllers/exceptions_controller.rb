@@ -5,6 +5,6 @@ class ExceptionsController < ActionController::Base
 
   def render_error
     @exception       = request.env['action_dispatch.exception']
-    @status_code     = ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code    
+    @status_code     = ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
   end
 end
