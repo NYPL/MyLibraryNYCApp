@@ -5,6 +5,7 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { host: ENV['MLN_INFO_SITE_HOSTNAME'] }
   config.action_mailer.perform_deliveries = true
   config.force_ssl = false
+  config.consider_all_requests_local = false
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
