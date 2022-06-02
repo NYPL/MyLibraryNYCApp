@@ -18,7 +18,7 @@ class TeacherSetsController < ApplicationController
                               'method' => 'app/controllers/teacher_sets_controller.rb.index'})
   
       # Get teachersets and facets from elastic search
-      teacher_sets, @facets = ElasticSearch.new.get_teacher_sets_from_es_test(params)
+      teacher_sets, @facets = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
     else
       LogWrapper.log('INFO', {'message' => "Calling database to get teacher-sets", 
