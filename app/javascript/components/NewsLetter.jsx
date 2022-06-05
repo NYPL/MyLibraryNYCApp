@@ -4,17 +4,15 @@ import axios from 'axios';
 
 import {
   Button,
-  ButtonTypes,
   SearchBar,
   Select,
   Input,
   SearchButton,
   InputTypes,
   Icon,
-  IconNames,
   HelperErrorText,
   LibraryExample,
-  Heading, TextInput, TextInputTypes, Form, FormField, FormRow, SimpleGrid, ButtonGroup, GridGaps
+  Heading, TextInput, Form, FormField, FormRow, SimpleGrid, ButtonGroup,
 } from '@nypl/design-system-react-components';
 
 
@@ -64,11 +62,11 @@ export default class NewsLetter extends Component {
       <div className="newsLetter newsLetterBox">
         <div style={{ display: this.state.display_block }}>
           <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
-          <Form id="news-letter-form" spacing={GridGaps.Small}>
+          <Form id="news-letter-form" gap="grid.s">
             <FormRow>
               <FormField>
-                <TextInput id="news-letter-text-input" type={TextInputTypes.email} onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
-                <Button id="news-letter-button" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}>Submit</Button>
+                <TextInput id="news-letter-text-input" type="email" onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
+                <Button id="news-letter-button" buttonType="noBrand" onClick={this.handleSubmit}>Submit</Button>
               </FormField>
             </FormRow>
           </Form>

@@ -75,10 +75,10 @@ export default class ParticipatingSchools extends Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-            <Text displaySize="default" id="your-school-participate-in-mln-text" isBold>Does your school participate in MyLibraryNYC?</Text>
-            <Text displaySize="default" id="find-school-name-text" className="schoolList">Find your school using the following links:</Text>
+            <Text size="default" id="your-school-participate-in-mln-text" isBold>Does your school participate in MyLibraryNYC?</Text>
+            <Text size="default" id="find-school-name-text" className="schoolList">Find your school using the following links:</Text>
             {this.AnchorTags()}
-            <Text displaySize="default" id="enter-school-name-text">or type the name of your school in the box below</Text>{<br/>}
+            <Text size="default" id="enter-school-name-text">or type the name of your school in the box below</Text>{<br/>}
               <TextInput
                 attributes={{
                   'aria-describedby': 'Choose wisely.',

@@ -3,8 +3,8 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 
 import {
-  Input, TextInput, List, Form, Button, FormRow, InputTypes, ButtonTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes, Table, Notification, NotificationTypes, Pagination, Icon
+  Input, TextInput, List, Form, Button, FormRow, InputTypes, Label, FormField, 
+  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon
 } from '@nypl/design-system-react-components';
 
 import {
@@ -129,7 +129,7 @@ export default class Accounts extends Component {
 
 
   orderCancelConfirmation(hold, index) {
-    return <div id={"cancel_"+ hold["access_key"]}><Button className="accountCancelOrder" buttonType={ButtonTypes.Secondary}        
+    return <div id={"cancel_"+ hold["access_key"]}><Button className="accountCancelOrder" buttonType="secondary"      
         onClick={(e) => {
           const confirmBox = window.confirm(
             "Are you sure you want to cancel this order for " + hold["title"]
@@ -144,7 +144,7 @@ export default class Accounts extends Component {
     if (this.state.message !== "") {
       return <Notification ariaLabel="Account Notification" id="account-details-notification" className="accountNotificationMsg"
         showIcon={false}
-        notificationType={NotificationTypes.Announcement}
+        notificationType="announcement"
         notificationContent={<><Icon align="none" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="small"/>{this.state.message}</>}
       />
     }
@@ -152,7 +152,7 @@ export default class Accounts extends Component {
 
   OrderDetails() {
     return <>
-      <Heading id="your-orders-text" level={HeadingLevels.Three} text='Your Orders' />
+      <Heading id="your-orders-text" level="three" text='Your Orders' />
       <Table
         columnHeaders={[
           'Order Placed',
@@ -206,7 +206,7 @@ export default class Accounts extends Component {
           contentPrimary={
             <>
               <div style={{display: 'flex'}}>
-                <Heading id="account-user-name" level={HeadingLevels.Three} text={'Hello, ' + user_name} />
+                <Heading id="account-user-name" level="three" text={'Hello, ' + user_name} />
               </div>
 
               <Form id="account-details-form" onSubmit={this.handleSubmit} method="put">
@@ -225,7 +225,7 @@ export default class Accounts extends Component {
                     {this.Schools()}
                   </Select>
                 </FormField>
-                <Button id="ad-submit-button" buttonType={ButtonTypes.NoBrand} className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
+                <Button id="ad-submit-button" buttonType="noBrand" className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
               </Form>
               {<br/>}
               {this.displayOrders()}

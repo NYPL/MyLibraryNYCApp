@@ -3,8 +3,8 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
-  Button, ButtonTypes, SearchBar, Select, TextInput, TextInputTypes, HelperErrorText, DSProvider, 
-  TemplateAppContainer, HeadingLevels, Text, FormField, Form, Notification, NotificationTypes, Checkbox, CheckboxGroup
+  Button, SearchBar, Select, TextInput, HelperErrorText, DSProvider, 
+  TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, CheckboxGroup
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 
@@ -422,7 +422,7 @@ export default class SignUp extends Component {
         <TemplateAppContainer
           breakout={<><AppBreadcrumbs />
             <div style={{ display: this.showErrors() }}>
-                <Notification ariaLabel="Signup Error Notifications" id="sign-up-error-notifications" className={this.showNotifications()} notificationType={NotificationTypes.Warning}
+                <Notification ariaLabel="Signup Error Notifications" id="sign-up-error-notifications" className={this.showNotifications()} notificationType="warning"
                   notificationContent={
                     <Text id="sign-up-error-notifications-text" noSpace className="signUpMessage">
                       <div style={{ display: this.showEmailError() }}> {error_msgs["email"]} {<br/>} </div>
@@ -510,7 +510,7 @@ export default class SignUp extends Component {
                     invalidText={password_error_msg}
                     isInvalid={password_is_invalid}
                     onChange={this.handlePassword.bind(this, 'password')}
-                    type={TextInputTypes.password}
+                    type="password"
                     helperText="We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.). Example: MyLib1731@"
                   />
                 </FormField>
@@ -530,7 +530,7 @@ export default class SignUp extends Component {
                   />
                 </div>
                 <FormField>
-                  <Button onClick={this.handleSubmit} buttonType={ButtonTypes.NoBrand} className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
+                  <Button onClick={this.handleSubmit} buttonType="noBrand" className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
                 </FormField>
               </Form>
             </>

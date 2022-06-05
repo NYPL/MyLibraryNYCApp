@@ -4,12 +4,10 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
   Button,
-  ButtonTypes,
   SearchBar,
   Select,
   SearchButton,
   Icon,
-  IconNames,
   HelperErrorText,
   LibraryExample,
   HorizontalRule,
@@ -94,7 +92,7 @@ export default class SearchTeacherSetsBox extends Component {
               onChange={this.handleNewsLetterEmail}
             />
             <Button
-              buttonType={ButtonTypes.Primary}
+              buttonType="primary"
               id="button"
               type="submit"
             >

@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import axios from 'axios';
-import { Link, LinkTypes, Icon, List, ListTypes, Button, ButtonTypes, Box, Image, ImageSizes, ImageRatios} from "@nypl/design-system-react-components";
+import { Link, Icon, List, Button, Box, Image} from "@nypl/design-system-react-components";
 import mlnLogoRed from '../images/MLN_Logo_red.png'
 
 
@@ -52,7 +52,7 @@ export default class Navbar extends React.Component {
       <div id="mln-navbar" className="header-topWrapper">
         <ReactRouterLink to="/" onClick={this.hideHomeSignUpMsg}>
           <div id="mln-header-logo" className="header-logo" >
-            <Image id="mln-header-logo" className="header-logo" alt="Alt text" imageSize={ImageSizes.Small} src={mlnLogoRed} />
+            <Image id="mln-header-logo" className="header-logo" alt="Alt text" size="small" src={mlnLogoRed} />
           </div>
         </ReactRouterLink>
       

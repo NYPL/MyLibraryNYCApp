@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
-import { Accordion, Link, List, Heading, CardHeading, Card, CardLayouts, CardContent, HeadingLevels, DSProvider } from '@nypl/design-system-react-components';
+import { Accordion, Link, List, Heading, CardHeading, Card, CardContent, DSProvider } from '@nypl/design-system-react-components';
 
 export default class AccessDigitalResources extends Component {
 
@@ -13,8 +13,8 @@ export default class AccessDigitalResources extends Component {
   render() {
     return (
       <>
-        <Heading id="access-digital-resources-header-text" level={HeadingLevels.Three}>Access Digital Resources</Heading>
-        <Accordion id="access-digital-resources" contentData={ [
+        <Heading id="access-digital-resources-header-text" level="three">Access Digital Resources</Heading>
+        <Accordion id="access-digital-resources" accordionData={ [
             {
               label: "Databases",
               panel: (

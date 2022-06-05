@@ -3,9 +3,9 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
-  Button, ButtonTypes,
-  SearchBar, Select, Input, SearchButton, Heading, Image, List, Link, LinkTypes, TextInput, Label, DSProvider,
-  TemplateAppContainer, Text, HeadingLevels, HeadingDisplaySizes
+  Button,
+  SearchBar, Select, Input, SearchButton, Heading, Image, List, Link, TextInput, Label, DSProvider,
+  TemplateAppContainer, Text
 } from '@nypl/design-system-react-components';
 
 
@@ -54,9 +54,9 @@ export default class TeacherSetOrder extends React.Component {
         breakout={<AppBreadcrumbs />}
         contentPrimary={
           <>
-            <Heading id="ts-cancellation-confirmation-text" level={HeadingLevels.One} displaySize={HeadingDisplaySizes.Tertiary} text="Please Confirm, Are you sure you want to cancle this order for" />{<br/>}
+            <Heading id="ts-cancellation-confirmation-text" level="one" size="tertiary" text="Please Confirm, Are you sure you want to cancle this order for" />{<br/>}
             <TextInput id="ts-cancel-order-button" labelText="Reason For cancelling" value={this.state.comment} showLabel showOptReqLabel type="text" onChange={this.handleCancelComment}/>
-            <Button id="ts-cancel-button-id" className="cancel-button" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Cancel My Order </Button>
+            <Button id="ts-cancel-button-id" className="cancel-button" buttonType="noBrand" onClick={this.handleSubmit}> Cancel My Order </Button>
           </>
         }
         contentSidebar={<></>}

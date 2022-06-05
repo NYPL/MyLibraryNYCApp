@@ -3,8 +3,8 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
-  Button, ButtonTypes, SearchBar, Select, TextInput, TextInputTypes, HelperErrorText, DSProvider, 
-  TemplateAppContainer, HeadingLevels, Text, FormField, Form, Notification, NotificationTypes
+  Button, SearchBar, Select, TextInput, HelperErrorText, DSProvider, 
+  TemplateAppContainer, Text, FormField, Form, Notification
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 

@@ -5,7 +5,6 @@ import "../../../styles/application.scss"
 
 import {
   Button,
-  ButtonTypes,
   Modal,
   Card,
 } from '@nypl/design-system-react-components';
@@ -19,7 +18,7 @@ const HelloWorld = (props) => {
       <h3>Hello, {name}!</h3>
       <hr />
        <Button
-            buttonType={ButtonTypes.Primary}
+            buttonType="primary"
             className="button"
           >
             Log off

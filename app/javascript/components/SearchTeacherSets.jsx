@@ -7,14 +7,12 @@ import qs from 'qs';
 import {
   Button, 
   ButtonGroup,
-  ButtonTypes,
   SearchBar,
   Select,
   Input,
   SearchButton,
   InputTypes,
   Icon,
-  IconNames,
   HelperErrorText,
   LibraryExample,
   HorizontalRule,
@@ -22,8 +20,7 @@ import {
   Card, 
   CardHeading, 
   CardContent,
-  CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageRatios, ImageSizes, HeadingLevels, Slider, CheckboxGroup, CheckboxGroupLayoutTypes, Notification, NotificationTypes, Flex, Spacer, Text, TextDisplaySizes, Box, Toggle, HeadingDisplaySizes, ToggleSizes, IconRotationTypes, IconSizes, IconAlign
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageSizes, Slider, CheckboxGroup, CheckboxGroupLayoutTypes, Notification, Flex, Spacer, Text, TextDisplaySizes, Box, Toggle
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -58,7 +55,7 @@ export default class SearchTeacherSets extends Component {
       }
     })
     .catch(function (error) {
-     console.log(error)
+       console.log(error)
     })
   }
 
@@ -109,8 +106,8 @@ export default class SearchTeacherSets extends Component {
     return this.state.teacher_sets.map((ts, i) => {
       return <div className="teacherSetResults" id="teacher-set-results">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
-          <Card id="ts-details" layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Alt text" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
-            <CardHeading level={HeadingLevels.Three} id="ts-order-details">
+          <Card id="ts-details" layout="row" imageSrc={bookImage} imageAlt="Alt text" aspectRatio="square" size="xxsmall">
+            <CardHeading level="three" id="ts-order-details">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id}>{ts.title}</ReactRouterLink>
             </CardHeading>
             <CardContent id="ts-suitabilities">{ts.suitabilities_string}</CardContent>
@@ -160,7 +157,7 @@ export default class SearchTeacherSets extends Component {
               <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
                 <Checkbox id={"ts-checkbox-"+ index} labelText={item["label"]} value={item["value"].toString()} />
                 <Spacer />
-                <Text id={"ts-count-"+ index} displaySize={TextDisplaySizes.Caption}>{item["count"]}</Text>
+                <Text id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
               </Flex>
             ) }{<br/>}
           </CheckboxGroup>
@@ -170,7 +167,7 @@ export default class SearchTeacherSets extends Component {
 
   SignedInMessage() {
     if (!this.props.hideSignInMsg && this.props.userSignedIn && this.props.signInMsg !== "") {
-      return <Notification ariaLabel="SignIn Notification" id="sign-in-notification" className="signUpMessage" notificationType={NotificationTypes.Announcement} notificationContent={<>
+      return <Notification ariaLabel="SignIn Notification" id="sign-in-notification" className="signUpMessage" notificationType="announcement" notificationContent={<>
       {this.props.signInMsg}</>} />
     }
   }
@@ -222,6 +219,7 @@ export default class SearchTeacherSets extends Component {
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
+          // Heading additionalStyles={{ pt: "var(--nypl-space-m)" }}
           contentTop={<>
               {this.SignedInMessage()}
               <SearchBar id="ts-search" labelText="Teacher-Set SearchBar" onSubmit={this.handleSubmit} className="teachersetSearchBar" 
@@ -235,10 +233,11 @@ export default class SearchTeacherSets extends Component {
                 }}
               />
               {<br/>}
-              <Heading id="search-and-find-teacher-sets-header" displaySize={HeadingDisplaySizes.Primary} level={HeadingLevels.Two} text="Search and Find Teacher Sets" additionalStyles={{ pt: "var(--nypl-space-m)" }} />
+
+              <Heading id="search-and-find-teacher-sets-header" size="primary" level="two" text="Search and Find Teacher Sets"  />
               <HorizontalRule id="ts-horizontal-rule" className="teacherSetHorizontal" />
               <Flex>
-                <Heading id="check-out-teacher-sets" level={HeadingLevels.Three}>
+                <Heading id="check-out-teacher-sets" level="three">
                   Check Out Newly Arrived Teacher Sets
                 </Heading>
                 <Spacer />
@@ -271,7 +270,7 @@ export default class SearchTeacherSets extends Component {
                 <div style={{ display: this.state.pagination }} >
                   <Flex alignItems="baseline">
                     <ButtonGroup>
-                      <Button id="teacher-sets-scroll-to-top" buttonType={ButtonTypes.Secondary} 
+                      <Button id="teacher-sets-scroll-to-top" buttonType="secondary"
                         onClick={() =>
                           window.scrollTo({
                             top: 100,
@@ -280,7 +279,7 @@ export default class SearchTeacherSets extends Component {
                         }
                       >
                         Back to Top
-                        <Icon name={IconNames.Arrow} iconRotation={IconRotationTypes.Rotate180} size={IconSizes.Small} className="backToTopIcon" align={IconAlign.Right} />
+                        <Icon name="arrow" iconRotation="rotate180" size="small" className="backToTopIcon" align="right" />
                       </Button>
                     </ButtonGroup>
                     <Spacer />
@@ -292,7 +291,7 @@ export default class SearchTeacherSets extends Component {
               </>
             }
           contentSidebar={<Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
-              <Heading displaySize={HeadingDisplaySizes.Tertiary} level={HeadingLevels.Three} > Refine Results </Heading>
+              <Heading size="tertiary" level="three" > Refine Results </Heading>
               {this.TeacherSetGradesSlider()}{<br/>}
               {this.TeacherSetFacets()}
           </Box>}

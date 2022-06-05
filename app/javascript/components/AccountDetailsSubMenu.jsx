@@ -6,8 +6,8 @@ import axios from 'axios';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import Home from "./Home";
 import {
-  Input, TextInput, List, Icon, Form, Button, FormRow, InputTypes, ButtonTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, HeadingLevels, Link, LinkTypes, Box, ListTypes
+  Input, TextInput, List, Icon, Form, Button, FormRow, InputTypes, Label, FormField, 
+  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Box
 } from '@nypl/design-system-react-components';
 
 
@@ -27,7 +27,7 @@ class AccountDetailsSubMenu extends React.Component {
 
   signInAccountLinks() {
     if (!this.props.userSignedIn) {
-      return <li className="nav__submenu-item"> <ReactRouterLink to="/signin"> <Button className="signin_nav_button" buttonType={ButtonTypes.NoBrand}>Sign In</Button> </ReactRouterLink> </li>
+      return <li className="nav__submenu-item"> <ReactRouterLink to="/signin"> <Button className="signin_nav_button" buttonType="noBrand">Sign In</Button> </ReactRouterLink> </li>
     }
   }
 
@@ -97,7 +97,7 @@ class AccountDetailsSubMenu extends React.Component {
       <>
       { this.showAccountSigninLink() }
       {this.state.showAboutMenu && <Box>
-        <List id="navbar-account-details" type={ListTypes.Ordered} inline={false} noStyling={false} className="nav__submenu">
+        <List id="navbar-account-details" type="ol" inline={false} noStyling={false} className="nav__submenu">
           {this.signInAccountLinks()}
           {this.AccountOrderLink() }
         </List>

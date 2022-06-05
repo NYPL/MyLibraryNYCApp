@@ -9,7 +9,7 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-import { Link, LinkTypes } from "@nypl/design-system-react-components";
+import { Link } from "@nypl/design-system-react-components";
 
 import { LionLogoIcon, LocatorIcon, MenuIcon, 
          LoginIcon, LoginIconSolid, SearchIcon, XIcon } from '@nypl/dgx-svg-icons';
@@ -210,20 +210,20 @@ renderMenuButton() {
 render() {
   return (
       <div className={this.props.className} style={styles.base}>
-        <Link type={LinkTypes.Action}>
+        <Link type="action">
           <ReactRouterLink to="/">
           <img className="homeLogo" border="0" src={mlnLogoRed}/></ReactRouterLink>
         </Link>
         <ul style={styles.list} >
           <li style={styles.listItem}>
-            <Link type={LinkTypes.Action}>
+            <Link type="action">
               <ReactRouterLink to="/users/start" className="nav-link-colors">
                 <LoginIcon ariaHidden fill="#000" focusable={false} />
               </ReactRouterLink>
             </Link>
           </li>
           <li style={styles.listItem}>
-            <Link type={LinkTypes.Action}>
+            <Link type="action">
               <ReactRouterLink to="/teacher_set_data" className="nav-link-colors">
                 <SearchIcon ariaHidden fill="#000" focusable={false} />
               </ReactRouterLink>

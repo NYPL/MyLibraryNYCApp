@@ -3,12 +3,12 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
-  Button, ButtonTypes,
+  Button,
   SearchBar, Select, Input,
-  SearchButton, Card, CardHeading, CardLayouts,
+  SearchButton, Card, CardHeading,
   CardContent, CardActions,
-  MDXCreateElement,HeadingLevels,
-  Heading, Image,List, Link, LinkTypes, DSProvider, Notification, Icon, TemplateAppContainer, NotificationTypes, Text
+  MDXCreateElement,
+  Heading, Image, List, Link, DSProvider, Notification, Icon, TemplateAppContainer, Text
 } from '@nypl/design-system-react-components';
 
 
@@ -88,7 +88,7 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   CancelButton() {
-    return <div style={{ display: this.showCancelButton() }}> <Button className="cancel-button" buttonType={ButtonTypes.NoBrand}>
+    return <div style={{ display: this.showCancelButton() }}> <Button className="cancel-button" buttonType="noBrand">
         <Link className="href_link whiteColor" href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
       </Button>
       </div>
