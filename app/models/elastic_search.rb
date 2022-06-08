@@ -77,11 +77,12 @@ class ElasticSearch
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
     query, agg_hash = teacher_sets_query_based_on_filters(params)
+    
     query[:from] = from
     query[:size] = @teachersets_per_page
     # Sorting teachersets based on availability and created_at values. 
     # Showing latest created teachersets.
-    query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
+    query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
     query[:aggs] = agg_hash
     teacherset_docs = search_by_query(query)
     facets = facets_for_teacher_sets(teacherset_docs)
@@ -266,6 +267,18 @@ class ElasticSearch
       area_of_study_data.include?(subject[:label])
     end
     subjects_facets
+  end
+
+
+  def teacher_sets_sort_order(sort_order=0)
+    if (sort_order == 2 || sort_order == 3)
+      sort_order = (sort_order == 2)? "asc" : (sort_order == 3) ? "desc" : "asc"
+      query = [{:"title.keyword" => {:order => sort_order }}]
+    elsif (sort_order == 0 || sort_order == 1)
+      sort_order = (sort_order == 0)? "desc" : (sort_order == 1) ? "asc" : "desc"
+      query = [{"_score": "desc", "availability.raw": "asc", "created_at": sort_order, "_id": "asc"}]
+    end
+    query
   end
 
   
