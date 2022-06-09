@@ -66,6 +66,9 @@ export default class NewsLetter extends Component {
             <FormRow>
               <FormField>
                 <TextInput id="news-letter-text-input" type="email" onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
+              </FormField>
+              
+              <FormField>
                 <Button id="news-letter-button" buttonType="noBrand" onClick={this.handleSubmit}>Submit</Button>
               </FormField>
             </FormRow>
