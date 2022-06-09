@@ -13,14 +13,12 @@ import {
   Hero,
   Image,
   Button,
-  ButtonTypes,
   SearchBar,
   Select,
   Input,
   SearchButton,
   InputTypes,
   Icon,
-  IconNames,
   HelperErrorText,
   LibraryExample,
   HorizontalRule,
@@ -28,8 +26,7 @@ import {
   Card, 
   CardHeading, 
   CardContent,
-  CardLayouts,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, HeroTypes, VStack, HeadingLevels, NotificationTypes, Notification, Text
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, VStack, Notification, Text
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -107,7 +104,7 @@ export default class Home extends React.Component {
 
   SignedUpMessage() {
     if (!this.props.hideSignOutMsg && !this.props.userSignedIn && this.props.signoutMsg !== "") {
-      return <Notification ariaLabel="SignOut Notification" id="sign-out-notification" className="signOutMessage" notificationType={NotificationTypes.Announcement} notificationContent={this.props.signoutMsg} />
+      return <Notification ariaLabel="SignOut Notification" id="sign-out-notification" className="signOutMessage" notificationType="announcement" notificationContent={this.props.signoutMsg} />
     }
   }
 
@@ -115,8 +112,8 @@ export default class Home extends React.Component {
     return (
         <TemplateAppContainer
           breakout={<>{this.SignedUpMessage()}
-                    <Hero heroType={HeroTypes.Campaign} 
-                          heading={<Heading level={HeadingLevels.One} 
+                    <Hero heroType="campaign" 
+                          heading={<Heading level="one"
                           id="mln-campaign-hero" text="Welcome To MyLibrary NYC" />} 
                           subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
                           backgroundImageSrc={heroCampaignBg} 
@@ -125,11 +122,11 @@ export default class Home extends React.Component {
           contentPrimary={
                 <>
                   <HorizontalRule id="home-horizonta-1" align="left" height="3px" />
-                  <Heading level={HeadingLevels.Three}>Search For Teacher Sets</Heading>
+                  <Heading level="three">Search For Teacher Sets</Heading>
                   <SearchBar id="home-page-teacher-set-search" labelText="home-page-teacher-set-search-label" onSubmit={this.handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
                   <HorizontalRule id="home-horizontal-2" align="left" height="3px" />
-                  <Heading id="professional-heading" level={HeadingLevels.Three}>Professional Development & Exclusive Programs</Heading>
-                  <Text displaySize="default">
+                  <Heading id="professional-heading" level="three">Professional Development & Exclusive Programs</Heading>
+                  <Text size="default">
                     MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State's 
                     Learning Standards to encourage reading and learning. From author talks to school programs, participating 
                     MyLibraryNYC schools can access a range of exciting programming.

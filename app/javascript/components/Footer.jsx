@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link, LinkTypes, DSProvider, TemplateAppContainer, Image, Link as ReactRouterLink, ImageRatios, ImageSizes} from '@nypl/design-system-react-components';
+import { Link, DSProvider, TemplateAppContainer, Image, Link as ReactRouterLink, ImageRatios} from '@nypl/design-system-react-components';
 
 import nyplLogo from '../images/nypl.png'
 import brooklynLibraryLogo from '../images/brooklyn_public_library.png'
@@ -12,20 +12,20 @@ function Footer() {
   return (
     <div className="app-footer">
       <div className="app-footer-links">
-        <Link id="nypl-footer-logo-link" className="footerImage" href="http://nypl.org" type={LinkTypes.Default} attributes={{ target: '_blank'}} >
-          <Image id="nypl-footer-logo" imageSize={ImageSizes.Small} src={nyplLogo} />
+        <Link id="nypl-footer-logo-link" className="footerImage" href="http://nypl.org" type="dafault" attributes={{ target: '_blank'}} >
+          <Image id="nypl-footer-logo" size="small" src={nyplLogo} />
         </Link>
 
-        <Link id="brooklyn-foooter-logo-link" className="footerImage" href="http://www.brooklynpubliclibrary.org" type={LinkTypes.Default} attributes={{ target: '_blank'}} >
-          <Image id="brooklyn-foooter-logo" imageSize={ImageSizes.Small} src={brooklynLibraryLogo} />
+        <Link id="brooklyn-foooter-logo-link" className="footerImage" href="http://www.brooklynpubliclibrary.org" type="dafault" attributes={{ target: '_blank'}} >
+          <Image id="brooklyn-foooter-logo" size="small" src={brooklynLibraryLogo} />
         </Link>
 
-        <Link id="queens-foooter-logo-link" className="footerImage" href="http://www.queenslibrary.org" type={LinkTypes.Default} attributes={{ target: '_blank'}} >
-          <Image id="queens-foooter-logo" imageSize={ImageSizes.Small} src={queensLibraryLogo} />
+        <Link id="queens-foooter-logo-link" className="footerImage" href="http://www.queenslibrary.org" type="dafault" attributes={{ target: '_blank'}} >
+          <Image id="queens-foooter-logo" size="small" src={queensLibraryLogo} />
         </Link>
 
-        <Link id="doe-foooter-logo-link" className="footerImage" href="http://schools.nyc.gov" type={LinkTypes.Default} attributes={{ target: '_blank'}} >
-          <Image id="doe-foooter-logo" imageSize={ImageSizes.Small} src={doeLogo} />
+        <Link id="doe-foooter-logo-link" className="footerImage" href="http://schools.nyc.gov" type="dafault" attributes={{ target: '_blank'}} >
+          <Image id="doe-foooter-logo" size="small" src={doeLogo} />
         </Link>
       </div>
       <div id="mln-terms-conditions" className="appTermsConditions">

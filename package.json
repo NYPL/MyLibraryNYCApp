@@ -59,7 +59,7 @@
     "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/register": "^7.15.3",
-    "@nypl/design-system-react-components": "^0.25.12",
+    "@nypl/design-system-react-components": "^1.0.3",
     "@nypl/dgx-svg-icons": "0.3.7",
     "@rails/activestorage": "^7.0.2-3",
     "@rails/ujs": "^7.0.2-3",

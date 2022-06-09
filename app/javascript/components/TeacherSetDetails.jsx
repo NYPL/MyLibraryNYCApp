@@ -6,19 +6,17 @@ import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterL
 import axios from 'axios';
 import {
   Button,
-  ButtonTypes,
   SearchBar,
   Select,
   Input,
   SearchButton,
   Card,
   CardHeading,
-  CardLayouts,
   CardContent,
   MDXCreateElement,
   Heading,
   Image,
-  List, Link, LinkTypes, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, ImageRatios, ImageSizes, SimpleGrid, ButtonGroup
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -110,9 +108,9 @@ export default class TeacherSetDetails extends React.Component {
 
   BookImage(data) {
     if (data.cover_uri) {
-      return <Image id={"ts-books-" + data.id} src={data.cover_uri} imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.Default}  />
+      return <Image id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default"  />
     } else {
-      return <Image id={"ts-books-" + data.id} src={mlnImage} imageSize={ImageSizes.Default} />
+      return <Image id={"ts-books-" + data.id} src={mlnImage} size="default" />
     }
   }
 
@@ -168,7 +166,7 @@ export default class TeacherSetDetails extends React.Component {
                           <Select id="ts-order-allowed_quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
                             {allowed_quantities}
                           </Select>
-                          <Button id="ts-order-submit" buttonType={ButtonTypes.NoBrand} onClick={this.handleSubmit}> Place Order </Button>
+                          <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
                         </ButtonGroup>
                       </FormField>
                     </Form>

@@ -5,19 +5,17 @@ import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterL
 import axios from 'axios';
 import {
   Button,
-  ButtonTypes,
   SearchBar,
   Select,
   Input,
   SearchButton,
   Card,
   CardHeading,
-  CardLayouts,
   CardContent,
   MDXCreateElement,
   Heading,
   Image,
-  List, Link, LinkTypes, DSProvider, TemplateAppContainer, HorizontalRule, Text, Form, FormRow, FormField, Icon, ImageSizes, HeadingLevels, ImageRatios
+  List, Link, DSProvider, TemplateAppContainer, HorizontalRule, Text, Form, FormRow, FormField, Icon, ImageRatios
 } from '@nypl/design-system-react-components';
 import mlnImage from '../images/mln.svg'
 import bookImage from '../images/book.png'
@@ -84,8 +82,8 @@ export default class TeacherSetBooks extends React.Component {
       return this.state.teacher_sets.map((ts, i) => {
         return <div>
           <div id="book-page-ts-details" className="bookPageTSBorder">
-            <Card id="book-page-ts-card-details" layout={CardLayouts.Row} imageSrc={bookImage} imageAlt="Book Details" imageAspectRatio={ImageRatios.Square} imageSize={ImageSizes.ExtraExtraSmall}>
-              <CardHeading level={HeadingLevels.Three} id="book-page-ts-title">
+            <Card id="book-page-ts-card-details" layout="row" imageSrc={bookImage} imageAlt="Book Details" aspectRatio="square" size="xxsmall">
+              <CardHeading level="three" id="book-page-ts-title">
                 <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
                   {ts.title}
                 </ReactRouterLink>
@@ -108,23 +106,24 @@ export default class TeacherSetBooks extends React.Component {
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
+              // additionalStyles={{background: "#F2F2F0", padding: "1px", position: "initial"}}
             <>
-              <Card id="book-page-card-details" layout={CardLayouts.Row}  imageComponent={<Image id="book-page-image" src={this.BookImage(book)} alt="Alt text" imageAspectRatio={ImageRatios.threeByFour} imageSize={ImageSizes.Small} additionalStyles={{background: "#F2F2F0", padding: "1px", position: "initial"}}/>} >
+              <Card id="book-page-card-details" layout="row"  imageComponent={<Image id="book-page-image" src={this.BookImage(book)} alt="Alt text" aspectRatio="threeByFour" size="small" />} >
 
                  { this.IsBookTitlePresent() ? (
-                  <CardHeading id="book-page-title" level={HeadingLevels.Three}>
+                  <CardHeading id="book-page-title" level="three">
                     {this.state.book.title}
                   </CardHeading>
                 ) : (<></>) }
 
                  { this.IsBookSubTitlePresent() ? (
-                  <CardHeading id="book-page-sub_title" level={HeadingLevels.Four}>
+                  <CardHeading id="book-page-sub_title" level="four">
                     {this.state.book.sub_title}
                   </CardHeading>
                 ) : (<></>) }
 
                 { this.IsBookStatementOfResponsibilityPresent() ? (
-                  <CardContent id="book-page-statement_of_responsibility" level={HeadingLevels.Three}>
+                  <CardContent id="book-page-statement_of_responsibility" level="three">
                     {this.state.book.statement_of_responsibility}{<br/>}
                   </CardContent>
                 ) : (<></>) }
@@ -190,7 +189,7 @@ export default class TeacherSetBooks extends React.Component {
                   </dt>
               </List>{<br/>}
 
-              <Heading id="appears-in-ts-text" level={HeadingLevels.Three}>Appears in These Sets</Heading>
+              <Heading id="appears-in-ts-text" level="three">Appears in These Sets</Heading>
               {this.TeacherSetDetails()}
             </>
           }

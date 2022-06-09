@@ -7,8 +7,7 @@ import {
   SearchBar,
   Select,
   Button,
-  ButtonTypes,
-  Hero, DSProvider, ColorVariants, colorVariant, HeroTypes, HeadingLevels
+  Hero, DSProvider, ColorVariants, colorVariant,
 } from '@nypl/design-system-react-components';
 
 import "../styles/application.scss"
@@ -38,7 +37,7 @@ export default class AppBreadcrumbs extends Component {
         />
         <Hero heroType="tertiary"
               backgroundColor="var(--nypl-colors-brand-primary)"
-              heading={<Heading level={HeadingLevels.One} id={"hero-"+location_path} text={BreadcrumbsDataValue(location_path)} />} />
+              heading={<Heading level="one" id={"hero-"+location_path} text={BreadcrumbsDataValue(location_path)} />} />
       </>
     )
   }
