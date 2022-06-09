@@ -3,6 +3,8 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import qs from 'qs';
+import { titleCase } from "title-case";
+
 
 import {
   Button, 
@@ -110,12 +112,12 @@ export default class SearchTeacherSets extends Component {
     return this.state.teacher_sets.map((ts, i) => {
       return <div className="teacherSetResults" id="teacher-set-results">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
-          <Card id="ts-details" layout="row" imageSrc={bookImage} imageAlt="Alt text" aspectRatio="square" size="xxsmall">
+          <Card id="ts-details" layout="row" imageAlt="Alt text" aspectRatio="square" size="xxsmall">
             <CardHeading level="three" id="ts-order-details">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id}>{ts.title}</ReactRouterLink>
             </CardHeading>
             <CardContent id="ts-suitabilities">{ts.suitabilities_string}</CardContent>
-            <CardContent id="ts-availability"><StatusBadge level="medium">{ts.availability}</StatusBadge></CardContent>
+            <CardContent id="ts-availability"><StatusBadge level="medium">{titleCase(ts.availability)}</StatusBadge></CardContent>
             <CardContent id="ts-description">{ts.description}</CardContent>
           </Card>
           <HorizontalRule id="ts-horizontal-rule" align="left" height="3px" />

@@ -5080,6 +5080,17 @@
         "title-case": "^2.1.0",
         "upper-case": "^1.1.1",
         "upper-case-first": "^1.1.0"
+      },
+      "dependencies": {
+        "title-case": {
+          "version": "2.1.1",
+          "resolved": "https://registry.npmjs.org/title-case/-/title-case-2.1.1.tgz",
+          "integrity": "sha1-PhJyFtpY0rxb7PE3q5Ha46fNj6o=",
+          "requires": {
+            "no-case": "^2.2.0",
+            "upper-case": "^1.0.3"
+          }
+        }
       }
     },
     "chardet": {
