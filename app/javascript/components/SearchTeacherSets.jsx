@@ -117,7 +117,9 @@ export default class SearchTeacherSets extends Component {
               <ReactRouterLink to={"/teacher_set_details/" + ts.id}>{ts.title}</ReactRouterLink>
             </CardHeading>
             <CardContent id="ts-suitabilities">{ts.suitabilities_string}</CardContent>
-            <CardContent id="ts-availability"><StatusBadge level="medium">{titleCase(ts.availability)}</StatusBadge></CardContent>
+            <CardContent id="ts-availability">
+              <StatusBadge level="medium">{ts.availability}</StatusBadge>
+            </CardContent>
             <CardContent id="ts-description">{ts.description}</CardContent>
           </Card>
           <HorizontalRule id="ts-horizontal-rule" align="left" height="3px" />

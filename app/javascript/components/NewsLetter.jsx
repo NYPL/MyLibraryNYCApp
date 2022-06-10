@@ -69,7 +69,7 @@ export default class NewsLetter extends Component {
               </FormField>
               
               <FormField>
-                <Button id="news-letter-button" buttonType="noBrand" onClick={this.handleSubmit}>Submit</Button>
+                <Button id="news-letter-button" buttonType="noBrand" width="100px" onClick={this.handleSubmit}>Submit</Button>
               </FormField>
             </FormRow>
           </Form>
