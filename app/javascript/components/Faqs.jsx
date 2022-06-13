@@ -1,5 +1,7 @@
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import HaveQuestions from "./HaveQuestions";
+
 import axios from 'axios';
 import { Accordion, Link, List, DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 
@@ -55,8 +57,8 @@ export default class Faqs extends Component {
           contentPrimary={
             <Accordion id="faqs-page" accordionData={this.FrequentlyAskedQuestions()} />
           }
-          contentSidebar={<></>}
-          sidebar="right" 
+          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          sidebar="right"
         />
     )
   }

@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-
+import HaveQuestions from "./HaveQuestions";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import {
@@ -97,7 +97,7 @@ export default class ParticipatingSchools extends Component {
              <div id="participating-schools-list">{this.Schools()}</div>
           </>
           }
-          contentSidebar={<></>}
+          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
           sidebar="right" 
         />
     )

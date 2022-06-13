@@ -1,5 +1,7 @@
 import React from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import HaveQuestions from "./HaveQuestions";
+
 import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 const Contacts = (props) => {
   return (
@@ -43,7 +45,7 @@ const Contacts = (props) => {
               </div>
             </div>
           }
-          contentSidebar={<></>}
+          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
           sidebar="right"          
         />
   )

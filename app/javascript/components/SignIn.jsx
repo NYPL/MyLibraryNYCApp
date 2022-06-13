@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 import Collapsible from 'react-collapsible';
 import {
@@ -107,7 +108,7 @@ export default class SignIn extends Component {
             </div>
           </>
         }
-        contentSidebar={<></>}
+        contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
         sidebar="right"
       />
     )

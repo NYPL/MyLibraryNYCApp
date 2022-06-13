@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 import {
   Button, SearchBar, Select, TextInput, HelperErrorText, DSProvider, 
@@ -535,7 +536,7 @@ export default class SignUp extends Component {
               </Form>
             </>
           }
-          contentSidebar={<></>}
+          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
           sidebar="right"
         />
     )

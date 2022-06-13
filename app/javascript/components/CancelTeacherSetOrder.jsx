@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 import {
   Button,
@@ -59,7 +60,7 @@ export default class TeacherSetOrder extends React.Component {
             <Button id="ts-cancel-button-id" className="cancel-button" buttonType="noBrand" onClick={this.handleSubmit}> Cancel My Order </Button>
           </>
         }
-        contentSidebar={<></>}
+        contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
         sidebar="right"
       />
   )}

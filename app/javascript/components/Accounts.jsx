@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 
 import {
@@ -233,8 +234,8 @@ export default class Accounts extends Component {
               <Pagination id="ad-pagination"className="accocuntOrderPagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
             </>
           }
-        contentSidebar={<></>}
-        sidebar="right"
+          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          sidebar="right"
     />)
   }
 }

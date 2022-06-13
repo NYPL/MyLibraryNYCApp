@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 import {
   Button,
@@ -127,7 +128,7 @@ export default class TeacherSetOrder extends React.Component {
               </Card>
             </>
           }
-        contentSidebar={<></>}
+        contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
         sidebar="right"
       />
   )}

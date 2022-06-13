@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import HaveQuestions from "./HaveQuestions";
 import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink} from "react-router-dom";
 
 import axios from 'axios';
@@ -230,7 +231,7 @@ export default class TeacherSetDetails extends React.Component {
               <a id="ts-page-details_url" target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>           
             </>
           }
-          contentSidebar={<></>}
+          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
           sidebar="right"
         />
       </DSProvider>
