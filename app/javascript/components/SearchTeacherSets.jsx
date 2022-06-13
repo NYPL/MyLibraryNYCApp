@@ -118,7 +118,7 @@ export default class SearchTeacherSets extends Component {
             </CardHeading>
             <CardContent id="ts-suitabilities">{ts.suitabilities_string}</CardContent>
             <CardContent id="ts-availability">
-              <StatusBadge level="medium">{ts.availability}</StatusBadge>
+              <StatusBadge level="medium">{titleCase(ts.availability)}</StatusBadge>
             </CardContent>
             <CardContent id="ts-description">{ts.description}</CardContent>
           </Card>
@@ -159,7 +159,7 @@ export default class SearchTeacherSets extends Component {
     return this.state.facets.map((ts, i) => {
       return <>
           <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
-          <CheckboxGroup id={"ts-checkbox-group"} defaultValue={[]} isRequired  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} optReqFlag={false} >
+          <CheckboxGroup id={"ts-checkbox-group"} defaultValue={[]} isRequired  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} >
             { ts.items.map((item, index) =>
               <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
                 <Checkbox id={"ts-checkbox-"+ index} labelText={item["label"]} value={item["value"].toString()} />
@@ -189,7 +189,6 @@ export default class SearchTeacherSets extends Component {
         max={12}
         min={-1}
         onChange={this.getGrades}
-        optReqFlag={false}
         showBoxes={false}
         showHelperInvalidText
         showLabel

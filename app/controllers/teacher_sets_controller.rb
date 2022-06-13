@@ -26,6 +26,7 @@ class TeacherSetsController < ApplicationController
       @facets = TeacherSet.facets_for_query @teacher_sets
       total_count =  @teacher_sets.length
     end
+
     # Determine what facets are selected based on query string
     @facets.each do |f|
       f[:items].each do |v|
