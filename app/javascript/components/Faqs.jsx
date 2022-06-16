@@ -3,63 +3,36 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 
 import axios from 'axios';
-import { Accordion, Link, List, DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
-
-export default class Faqs extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { faqs: [], collapsed: true, clicked: {} };
-  }
+import { Accordion, Link, List, DSProvider, TemplateAppContainer, VStack } from '@nypl/design-system-react-components';
 
 
-  onToggle = () => {
-    const { collapsed } = this.state;
-    this.setState(() => ({
-      collapsed : !collapsed
-    }))
-  }
+export default function Faqs() {
+
+  const [faqs, setFaqs] = useState([])
+
+  React.useEffect(() => {
+    axios.get('/faqs/show').then((response) => {
+      setFaqs(response.data.faqs);
+    }).catch(function (error) {
+    })
+  }, []);
 
 
-  handleClick = i => {
-    this.setState(prevState => {
-      const clicked = { ...prevState.clicked };
-      clicked[i] = !clicked[i];
-      return { clicked };
-    });
-  };
+  if (!faqs) return null;
 
 
-  componentDidMount() {
-    axios.get('/faqs/show')
-      .then(res => {
-        this.setState({ faqs: res.data.faqs });
-      })
-      .catch(function (error) {
+  function FrequentlyAskedQuestions() {
+    return faqs.map((data, i) => {
+      return <Accordion id={"faqs-page-"+ i} accordionData={[ { "label": data["question"], "panel": data["answer"] } ]} />
     })
   }
 
-
-  FrequentlyAskedQuestions() {
-      return this.state.faqs.map((data, i) => {
-        return {
-          label: data["question"],
-          panel: data["answer"]
-        }
-    })
-  }
-
-
-  render() {
-    return (
-        <TemplateAppContainer
-          breakout={<AppBreadcrumbs />}
-          contentPrimary={
-            <Accordion id="faqs-page" accordionData={this.FrequentlyAskedQuestions()} />
-          }
-          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
-          sidebar="right"
-        />
-    )
-  }
+  return (
+    <TemplateAppContainer
+      breakout={<AppBreadcrumbs />}
+      contentPrimary={FrequentlyAskedQuestions()}
+      contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+      sidebar="right"
+    />
+  )
 }
