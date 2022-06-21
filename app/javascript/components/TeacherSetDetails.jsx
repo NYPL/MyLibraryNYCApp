@@ -3,6 +3,7 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink} from "react-router-dom";
+import { titleCase } from "title-case";
 
 import axios from 'axios';
 import {
@@ -16,8 +17,8 @@ import {
   CardContent,
   MDXCreateElement,
   Heading,
-  Image,
-  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup
+  Image, Flex, Spacer, 
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Styled, Box, HorizontalRule, StatusBadge
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -66,7 +67,7 @@ export default class TeacherSetDetails extends React.Component {
         teacher_set_id: this.props.match.params.id, query_params: {quantity: this.state.quantity}
      }).then(res => {
 
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {
@@ -90,7 +91,7 @@ export default class TeacherSetDetails extends React.Component {
   }
 
   AvailableCopies() {
-    return <div>ORDER NOW! {this.state.teacher_set["available_copies"]} of {this.state.teacher_set["total_copies"]} Available</div>
+    return <div color="var(--nypl-colors-ui-black)">{this.state.teacher_set["available_copies"]} of {this.state.teacher_set["total_copies"]} Available</div>
   }
 
   BooksCount() {
@@ -122,6 +123,25 @@ export default class TeacherSetDetails extends React.Component {
     })
   }
 
+
+  OrderTeacherSets() {
+    return <Styled bg="var(--nypl-colors-ui-grey-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" >
+      <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
+        <FormField id="ts-order-field">
+            <Select id="ts-order-allowed_quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+              { this.state.allowed_quantities.map((item, i) => {
+                  return (
+                    <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
+                  )
+                }, this)
+              }
+            </Select>
+            <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
+        </FormField>
+      </Form>
+    </Styled>
+  }
+
   render() {
     let allowed_quantities = this.state.allowed_quantities.map((item, i) => {
       return (
@@ -138,6 +158,7 @@ export default class TeacherSetDetails extends React.Component {
     let call_number = teacher_set.call_number;
     let access_key = this.state.access_key;
     let details_url = teacher_set.details_url;
+    let availability = teacher_set.availability;
 
 
     return (
@@ -146,92 +167,96 @@ export default class TeacherSetDetails extends React.Component {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <div className="content-top card_details">
-                <Card id="ts-card-details" layout="row" border className="order-list">
-                  <CardHeading id="ts-card-title" level={3} className="ts-details">
-                   { this.TeacherSetTitle() }
-                  </CardHeading>
-
-                  <CardHeading  id="ts-card-available-copies" level={4} className="ts-details">
-                   { this.AvailableCopies() }
-                  </CardHeading>
-
-                  <CardContent id="ts-card-desc">
-                     <Text isItalic>Note : Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at help@mylibrarynyc.org</Text>
-                  </CardContent>
-
-                  <CardContent level={5} id="ts-allowed-quantity-details-form">
-                    <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
-                      <FormField id="ts-order-field">
-                        <ButtonGroup>
-                          <Select id="ts-order-allowed_quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
-                            {allowed_quantities}
-                          </Select>
-                          <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
-                        </ButtonGroup>
-                      </FormField>
-                    </Form>
-                  </CardContent>
-                </Card>
-              </div>{<br/>}
+              <Flex alignItems="baseline">
+                <Heading id="heading-secondary" level="one" size="secondary" text={ this.TeacherSetTitle() } />
+                <Spacer />
+                <StatusBadge level="medium">{availability}</StatusBadge>
+                <a className="tsDetailUrl" id="ts-page-details_url" target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>
+              </Flex>
+              <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
 
               <div>
-                <Heading id="ts-header-desc-text" level={2} text="What is in the box" />
+                <Heading id="ts-header-desc-text" level="one" size="tertiary" text="What is in the box" />                
                 <div id="ts-page-desc"> { this.TeacherSetDescription() } </div>{<br/>}
                 <div id="ts-page-books-count"> { this.BooksCount() } </div> {<br/>}
                 <SimpleGrid id="ts-page-books-panel" columns={5} gap="xxs"> { this.TeacherSetBooks() } </SimpleGrid>
               </div>{<br/>}
 
+
               <div className="tsDetails">
-                <List id="ts-list-details" type="dl" className="listType">
-                  <dt id="ts-suggested-grade-range-text" className="font-weight-500 orderDetails">
+                <List id="ts-list-details" type="dl">
+                  <dt id="ts-suggested-grade-range-text">
                     Suggested Grade Range [New]
                   </dt>
-                  <dd id="ts-page-suitabilities" className="orderDetails">
+                  <dd id="ts-page-suitabilities">
                     {suitabilities_string}
                   </dd>
 
-                  <dt id="ts-page-primary-language-text" className="font-weight-500 orderDetails">
+                  <dt id="ts-page-primary-language-text">
                     Primary Language
                   </dt>
-                  <dd id="ts-page-primary-language" className="orderDetails">
+                  <dd id="ts-page-primary-language">
                     {primary_language}
                   </dd>
 
-                  <dt id="ts-page-set-type-text" className="font-weight-500 orderDetails">
+                  <dt id="ts-page-set-type-text">
                     Type
                   </dt>
-                  <dd id="ts-page-set-type" className="orderDetails">
+                  <dd id="ts-page-set-type">
                     {set_type}
                   </dd>
 
-                  <dt id="ts-page-physical-desc-text" className="font-weight-500 orderDetails">
+                  <dt id="ts-page-physical-desc-text">
                     Physical Description
                   </dt>
-                  <dd id="ts-page-physical-desc" className="orderDetails">
+                  <dd id="ts-page-physical-desc">
                     {physical_description}
                   </dd>
 
-                  <dt id="ts-page-notes-content-text" className="font-weight-500 orderDetails">
+                  <dt id="ts-page-notes-content-text">
                     Notes
                   </dt>
-                  <dd id="ts-page-notes-content" className="orderDetails">
+                  <dd id="ts-page-notes-content">
                     {this.TeacherSetNotesContent()}
                   </dd>
 
-                  <dt id="ts-page-call-number-text" className="font-weight-500 orderDetails">
+                  <dt id="ts-page-call-number-text">
                     Call Number
                   </dt>
-                  <dd id="ts-page-call-number" className="orderDetails">
+                  <dd id="ts-page-call-number">
                     {call_number}
                   </dd>
                 </List>
               </div>
-
-              <a id="ts-page-details_url" target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>           
             </>
           }
-          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          contentSidebar={
+              <>
+                  <Box bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
+                    <Heading id="heading-secondary" level="one" size="secondary" text="Order Set!" />
+                    <Heading id="heading-five" level="five" text={this.AvailableCopies()} />
+              
+                    <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
+                      <FormField id="ts-order-field">
+                        <Select id="ts-order-allowed_quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+                          { this.state.allowed_quantities.map((item, i) => {
+                              return (
+                                <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
+                              )
+                            }, this)
+                          }
+                        </Select>
+                        <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
+                      </FormField>
+                    </Form>
+                    {<br/>}
+                    <Text isItalic size="default">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
+
+                  </Box>
+                  {<br/>}
+                  <HaveQuestions />
+              </>
+            }
           sidebar="right"
         />
       </DSProvider>

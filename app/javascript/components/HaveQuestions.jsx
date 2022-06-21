@@ -5,7 +5,7 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-import { Link } from "@nypl/design-system-react-components";
+import { Link, Heading } from "@nypl/design-system-react-components";
 
 export default class HaveQuestions extends Component {
 	
@@ -16,7 +16,7 @@ export default class HaveQuestions extends Component {
 	render() {
     return (
       <>
-      	<div id="have-questions" className="have_questions">Have Questions?</div>
+        <Heading id="heading-tertiary" level="one" size="tertiary" text="Have Questions?" />
       	<div id="have-questions-links" className="have_questions_links">
 	      	Visit Our
 	      	<Link id="home-faq-link" type="action" target="_blank">
