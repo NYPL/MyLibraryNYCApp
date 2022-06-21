@@ -37,7 +37,7 @@ export default class AppBreadcrumbs extends Component {
         />
         <Hero heroType="tertiary"
               backgroundColor="var(--nypl-colors-brand-primary)"
-              heading={<Heading level="one" id={"hero-"+location_path} text={BreadcrumbsDataValue(location_path)} />} />
+              heading={<Heading level="one" id={"hero-"+location_path} text={HeroDataValue(location_path)} />} />
       </>
     )
   }
@@ -64,7 +64,36 @@ const BreadcrumbsDataValue = (levelString) => {
       return 'Account Details';
     case 'book_details':
       return 'Book Details';
+    case 'signup':
+      return 'SignUp';
     default:
       return levelString;
   }
 };
+
+const HeroDataValue = (levelString) => {
+  switch (levelString) {
+    case 'participating-schools':
+      return 'Participating schools';
+    case 'faq':
+      return 'Frequently Asked Questions';
+    case 'contacts':
+      return 'Contacts';
+    case 'teacher_set_data':
+      return 'Teacher Sets';
+    case "teacher_set_details":
+      return 'Teacher Set Order Details';
+    case 'ordered_holds':
+      return 'Teacher Set Order';
+    case 'holds':
+      return 'Cancel Order';
+    case 'account_details':
+      return 'Account Details';
+    case 'book_details':
+      return 'Book Details';
+    case 'signup':
+      return 'Account';
+    default:
+      return levelString;
+  }
+}

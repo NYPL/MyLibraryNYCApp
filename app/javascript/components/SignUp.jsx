@@ -5,7 +5,7 @@ import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 import {
   Button, SearchBar, Select, TextInput, HelperErrorText, DSProvider, 
-  TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, CheckboxGroup
+  TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, CheckboxGroup, HorizontalRule, Heading
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 
@@ -332,6 +332,10 @@ export default class SignUp extends Component {
     return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] || this.state.errors["serverError"] ? 'block' : 'none'
   }
 
+  showErrorMessage() {
+    return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] || this.state.errors["serverError"] ? 'block' : 'none'
+  }
+
   showEmailError() {
     return this.state.errors["email"]? 'block' : 'none'
   }
@@ -422,24 +426,23 @@ export default class SignUp extends Component {
     return (
         <TemplateAppContainer
           breakout={<><AppBreadcrumbs />
-            <div style={{ display: this.showErrors() }}>
+            
+            < />}
+          contentPrimary={
+            <>
+              <Heading id="heading-tertiary" level="one" size="tertiary" text="Sign Up" />
+              <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
+
+              <div style={{ display: this.showErrors() }}>
                 <Notification ariaLabel="Signup Error Notifications" id="sign-up-error-notifications" className={this.showNotifications()} notificationType="warning"
                   notificationContent={
                     <Text id="sign-up-error-notifications-text" noSpace className="signUpMessage">
-                      <div style={{ display: this.showEmailError() }}> {error_msgs["email"]} {<br/>} </div>
-                      <div style={{ display: this.showAltEmailError() }}> {error_msgs["alt_email"]} {<br/>} </div>
-                      <div style={{ display: this.showFirstNamerror() }}> {error_msgs["first_name"]} {<br/>} </div>
-                      <div style={{ display: this.showLastNamerror() }}> {error_msgs["last_name"]} {<br/>} </div>
-                      <div style={{ display: this.showPasswordError() }}> {error_msgs["password"]} {<br/>} </div>
-                      <div style={{ display: this.showSchoolError() }}> {error_msgs["school_id"]} {<br/>} </div>
-                      <div style={{ display: this.showServerError() }}> {error_msgs["serverError"]} {<br/>} </div>
+                      <div style={{ display: this.showErrorMessage() }}> Some of your information needs to be updated before your account can be created. See the fields highlighted below. {<br/>} </div>
                     </Text>
                   } 
                 />
               </div>
-            </>}
-          contentPrimary={
-            <>
+
               <Form>
                 <FormField>
                   <TextInput id="sign-up-email"
