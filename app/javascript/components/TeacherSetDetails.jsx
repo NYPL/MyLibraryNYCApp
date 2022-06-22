@@ -143,12 +143,6 @@ export default class TeacherSetDetails extends React.Component {
   }
 
   render() {
-    let allowed_quantities = this.state.allowed_quantities.map((item, i) => {
-      return (
-        <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
-      )
-    }, this);
-
 
     let teacher_set =  this.state.teacher_set
     let suitabilities_string = teacher_set.suitabilities_string;
@@ -158,9 +152,7 @@ export default class TeacherSetDetails extends React.Component {
     let call_number = teacher_set.call_number;
     let access_key = this.state.access_key;
     let details_url = teacher_set.details_url;
-    let availability = teacher_set.availability;
-
-
+    let availability = teacher_set.availability !== undefined ? teacher_set.availability : ""
     return (
       <DSProvider>
         <TemplateAppContainer
@@ -170,7 +162,7 @@ export default class TeacherSetDetails extends React.Component {
               <Flex alignItems="baseline">
                 <Heading id="heading-secondary" level="one" size="secondary" text={ this.TeacherSetTitle() } />
                 <Spacer />
-                <StatusBadge level="medium">{availability}</StatusBadge>
+                <StatusBadge level="medium">{titleCase(availability)}</StatusBadge>
                 <a className="tsDetailUrl" id="ts-page-details_url" target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>
               </Flex>
               <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
