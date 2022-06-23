@@ -5,6 +5,7 @@ module.exports = {
         es6: true,
         jest: true
     },
+    "parser": "@typescript-eslint/parser",
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended"
