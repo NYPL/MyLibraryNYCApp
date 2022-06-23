@@ -224,13 +224,13 @@ export default class TeacherSetDetails extends React.Component {
           }
           contentSidebar={
               <>
-                  <Box bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
-                    <Heading id="heading-secondary" level="one" size="secondary" text="Order Set!" />
-                    <Heading id="heading-five" level="five" text={this.AvailableCopies()} />
+                  <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
+                    <Heading id="ts-oder-set" level="one" size="secondary" text="Order Set!" />
+                    <Heading id="ts-available-copies" level="five" text={this.AvailableCopies()} />
               
                     <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
                       <FormField id="ts-order-field">
-                        <Select id="ts-order-allowed_quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+                        <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
                           { this.state.allowed_quantities.map((item, i) => {
                               return (
                                 <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
