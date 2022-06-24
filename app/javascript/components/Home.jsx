@@ -118,10 +118,9 @@ export default class Home extends React.Component {
                           subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
                           backgroundImageSrc={heroCampaignBg} 
                           image={<Image id="mln-hero-image" alt="Mln hero image" blockName="hero" src={heroCampaignLeft}/>} /></>}
-          
+          contentTop={<></>}
           contentPrimary={
                 <>
-                  <HorizontalRule id="home-horizonta-1" align="left" height="3px" />
                   <Heading level="three">Search For Teacher Sets</Heading>
                   <SearchBar id="home-page-teacher-set-search" labelText="home-page-teacher-set-search-label" onSubmit={this.handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
                   <HorizontalRule id="home-horizontal-2" align="left" height="3px" />
