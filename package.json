@@ -1,7 +1,9 @@
 {
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.15.8",
+    "@babel/preset-flow": "^7.17.12",
     "@babel/preset-react": "^7.16.7",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "axios-mock-adapter": "1.7.1",
     "babel-core": "^7.0.0-bridge.0",
@@ -11,7 +13,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "esdoc": "^1.1.0",
-    "eslint": "^4.19.1",
+    "eslint": "^8.0.0",
     "eslint-config-airbnb": "16.1.0",
     "eslint-loader": "1.3.0",
     "eslint-plugin-import": "2.8.0",
@@ -31,7 +33,7 @@
     "supertest": "^6.1.5",
     "typescript": "^4.7.4",
     "webpack-bundle-analyzer": "^3.8.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.9.2"
   },
   "repository": {
     "type": "git",
@@ -59,7 +61,7 @@
     "@activeadmin/activeadmin": "^2.13.1",
     "@babel/core": "^7.15.0",
     "@babel/polyfill": "^7.7.0",
-    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-env": "^7.18.2",
     "@babel/register": "^7.15.3",
     "@nypl/design-system-react-components": "^1.0.3",
     "@nypl/dgx-svg-icons": "0.3.7",

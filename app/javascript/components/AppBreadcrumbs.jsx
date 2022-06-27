@@ -31,9 +31,10 @@ export default class AppBreadcrumbs extends Component {
       <>
         <Breadcrumbs id={"mln-breadcrumbs-"+location_path} breadcrumbsData={ [
           { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+          { url: "//"+ window.location.hostname + window.location.pathname, text: HeroDataValue(location_path) },
           { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(location_path) } 
-         ] } 
-          colorVariant="booksAndMore"
+         ] }
+          breadcrumbsType="booksAndMore"
         />
         <Hero heroType="tertiary"
               backgroundColor="var(--nypl-colors-brand-primary)"
@@ -64,7 +65,7 @@ const BreadcrumbsDataValue = (levelString) => {
       return 'Account Details';
     case 'book_details':
       return 'Book Details';
-    case 'signup':
+    case 'signup' || 'signin':
       return 'SignUp';
     default:
       return levelString;
@@ -91,7 +92,7 @@ const HeroDataValue = (levelString) => {
       return 'Account Details';
     case 'book_details':
       return 'Book Details';
-    case 'signup':
+    case 'signup' || 'signin':
       return 'Account';
     default:
       return levelString;
