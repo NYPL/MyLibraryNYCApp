@@ -23,6 +23,9 @@ module.exports = {
         "@typescript-eslint",
     ],
     "rules": {
+        // disabling this bc it is checked by typescript so it is
+        // redundant and doesn't function properly
+        "react/prop-types": 0,
         "@typescript-eslint/rule-name": "error",
         "@typescript-eslint/no-use-before-define": [
           "error",
@@ -40,6 +43,29 @@ module.exports = {
             ignoreRestSiblings: true,
           },
         ],
-        
-    }
+        // disable this rule because it is unnecessarily strict for TS
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/explicit-module-boundary-types": 0,
+        camelcase: "error",
+        eqeqeq: ["error", "smart"],
+        "id-blacklist": [
+          "error",
+          "any",
+          "Number",
+          "number",
+          "String",
+          "string",
+          "Boolean",
+          "Undefined",
+        ],
+        "id-match": "error",
+        "no-eval": "error",
+        "no-redeclare": "error",
+        "no-var": "error",
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
 }

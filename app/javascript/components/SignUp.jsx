@@ -1,9 +1,9 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 import {
-  Button, SearchBar, Select, TextInput, HelperErrorText, 
+  Button, Select, TextInput, 
   TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, HorizontalRule, Heading
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
