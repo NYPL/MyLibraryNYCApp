@@ -18,7 +18,7 @@ import {
   MDXCreateElement,
   Heading,
   Image, Flex, Spacer, 
-  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Styled, Box, HorizontalRule, StatusBadge
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -125,7 +125,7 @@ export default class TeacherSetDetails extends React.Component {
 
 
   OrderTeacherSets() {
-    return <Styled bg="var(--nypl-colors-ui-grey-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" >
+    return <div bg="var(--nypl-colors-ui-grey-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" >
       <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
         <FormField id="ts-order-field">
             <Select id="ts-order-allowed_quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
@@ -139,7 +139,7 @@ export default class TeacherSetDetails extends React.Component {
             <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
         </FormField>
       </Form>
-    </Styled>
+    </div>
   }
 
   render() {

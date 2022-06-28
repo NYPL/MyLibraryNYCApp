@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 import {
-  Button, SearchBar, Select, TextInput, HelperErrorText, DSProvider, 
-  TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, CheckboxGroup, HorizontalRule, Heading
+  Button, SearchBar, Select, TextInput, HelperErrorText, 
+  TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, HorizontalRule, Heading
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 
@@ -43,34 +42,29 @@ export default class SignUp extends Component {
             return false;
           } else {
             if (res.data.message.alt_email && res.data.message.alt_email.length > 0) {
-              this.state.errors['alt_email'] = res.data.message.alt_email[0]
+              this.setState({ errors: { alt_email: res.data.message.alt_email[0] } })
               this.setState({altEmailIsvalid: true, isDisabled: true })
             }
             if (res.data.message.email && res.data.message.email.length > 0) {
-              this.state.errors["email"] = res.data.message.email[0]
+              this.setState({ errors: { email: res.data.message.email[0] } })
               this.setState({emailIsInvalid: true, isDisabled: true })
             }
             if (res.data.message.first_name && res.data.message.first_name.length > 0) {
-              this.state.errors["first_name"] = res.data.message.first_name[0]
+              this.setState({ errors: { first_name: res.data.message.first_name[0] } })
               this.setState({firstNameIsValid: true, isDisabled: true })
             }
             if (res.data.message.last_name && res.data.message.last_name.length > 0) {
-              this.state.errors["email"] = res.data.message.last_name[0]
-              this.setState({lastNameIsValid: true, isDisabled: true })
+              this.setState({ errors: { last_name: res.data.message.last_name[0] }, lastNameIsValid: true, isDisabled: true })
             }
             if (res.data.message.school_id && res.data.message.school_id.length > 0) {
-              this.state.errors["school_id"] = res.data.message.school_id[0]
-              this.setState({schoolIsValid: true, isDisabled: true })
+              this.setState({ errors: { school_id: res.data.message.school_id[0] }, schoolIsValid: true, isDisabled: true })
             }
             if (res.data.message.password && res.data.message.password.length > 0) {
-              this.state.errors["password"] = res.data.message.password[0]
-              this.setState({passwordIsValid: true, isDisabled: true })
+              this.setState({ errors: { password: res.data.message.password[0] }, passwordIsValid: true, isDisabled: true })
             }
             if (res.data.message.error && res.data.message.error.length > 0) {
-              this.state.errors["serverError"] = res.data.message.error[0]
-              this.setState({serverErrorIsValid: true, isDisabled: true })
+              this.setState({ errors: { serverError: res.data.message.error[0] }, serverErrorIsValid: true, isDisabled: true })
             }
-
           }
         })
         .catch(function (error) {
@@ -86,7 +80,7 @@ export default class SignUp extends Component {
     let domain = email.split('@')
     let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
 
-    if (!email_domain_is_allowed) {
+    if (email && !email_domain_is_allowed) {
       let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
       this.state.errors['email'] = msg
       this.setState({emailIsInvalid: true, isDisabled: true })
@@ -96,14 +90,19 @@ export default class SignUp extends Component {
       this.setState({news_letter_error: "", show_news_letter_error: false, emailIsInvalid: false, isDisabled: false  })
     }
 
-    axios.get('/check_email', { params: { email: email } }).then(res => {
-      if (res.data.statusCode !== 404) {
-        this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
-        this.setState({emailIsInvalid: true, isDisabled: true })
-      }      
-    }).catch(function (error) {
-       console.log(error)
-    })
+    if (email) {
+      axios.get('/check_email', { params: { email: email } }).then(res => {
+        console.log("plplp")
+        console.log(typeof res.data.statusCode)
+        if (res.data.statusCode == 409) {
+          this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
+          this.setState({emailIsInvalid: true, isDisabled: true })
+        }      
+      }).catch(function (error) {
+         console.log(error)
+      })
+    }
+
   }
 
   validateAltEmailDomain(alt_email) {
@@ -125,6 +124,22 @@ export default class SignUp extends Component {
       formIsValid = false;
       this.setState({emailIsInvalid: true, isDisabled: true })
       this.state.errors['email'] = "Email can't be empty";
+    } else {
+      this.validateEmailDomain(fields["email"])
+    }
+
+    if (!fields["alt_email"]) {
+      formIsValid = false;
+      this.setState({emailIsInvalid: true, isDisabled: true })
+      this.state.errors['alt_email'] = "Alternate email can't be empty";
+    } else {
+      this.validateAltEmailDomain(fields["alt_email"])
+    }
+
+    if (!fields["first_name"]) {
+      formIsValid = false;
+      this.setState({firstNameIsValid: true, isDisabled: true })
+      this.state.errors['first_name'] = "First name can't be empty";
     }
 
     if (!fields["first_name"]) {
@@ -161,12 +176,11 @@ export default class SignUp extends Component {
       this.state.errors['password'] = "Password can't be empty";
     }
 
-
     if (fields["password"] && typeof fields["password"] == "string" ) {
-      if (!fields["password"] && !this.isStrongPassword(fields["password"])) {
+      if (!this.isStrongPassword(fields["password"])) {
         formIsValid = false;
         this.setState({passwordIsValid: true, isDisabled: true })
-        this.state.errors['password'] = "Password is in-valid";
+        this.state.errors['password'] = "Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, and have at least one special character except period (.)"
       }
     }
 
@@ -187,23 +201,30 @@ export default class SignUp extends Component {
     fields[field] = e.target.value
     this.setState({ fields });
 
-    if (!this.state.fields["email"]) {
-      this.setState({emailIsInvalid: true, isDisabled: true })
-      this.state.errors['email'] = "Email can't be empty"
-    }
-    this.validateEmailDomain(e.target.value)
-    this.showNotifications()
+    // if (!this.state.fields["email"]) {
+    //   this.setState({emailIsInvalid: true, isDisabled: true })
+    //   this.state.errors['email'] = "Email can't be empty"
+    // }
+    //this.validateEmailDomain(e.target.value)
   }
 
   handleAltEmail(field, e) {
-    this.setState ({ altEmailIsvalid: false })
+    this.setState ({ altEmailIsvalid: false, isDisabled: false })
     this.state.errors['alt_email'] = ""
 
     let fields = this.state.fields;
     fields[field] = e.target.value
     this.setState({ fields });
-    this.validateAltEmailDomain(e.target.value)
-    this.showNotifications()
+
+    if (e.target.value && !validator.isEmail(e.target.value)) {
+      this.setState({altEmailIsvalid: true, isDisabled: true, isCheckedVal: false })
+    } else {
+      this.state.errors['alt_email'] = ""
+      this.setState({ altEmailIsvalid: false, isDisabled: false, isCheckedVal: false, news_letter_error: "", show_news_letter_error: false })
+    }
+
+    // this.validateAltEmailDomain(e.target.value)
+    // this.showNotifications()
   }
 
 
@@ -216,17 +237,17 @@ export default class SignUp extends Component {
     this.setState({ fields });
 
     if (!this.state.fields["first_name"]) {
-      this.setState({firstNameIsValid: true, isDisabled: true })
-      this.state.errors['first_name'] = "First name can't be empty"
+      //this.setState({firstNameIsValid: true, isDisabled: true })
+      //this.state.errors['first_name'] = "First name can't be empty"
     }
 
     if (this.state.fields["first_name"] && typeof this.state.fields["first_name"] == "string") {
       if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
-        this.setState({firstNameIsValid: true, isDisabled: true })
-        this.state.errors['first_name'] = "First name is in-valid";
+        //this.setState({firstNameIsValid: true, isDisabled: true })
+        //this.state.errors['first_name'] = "First name is in-valid";
       }
     }
-    this.showNotifications()
+    //this.showNotifications()
   }
 
   handleLastName(field, e) {
@@ -238,17 +259,17 @@ export default class SignUp extends Component {
     this.setState({ fields });
 
     if (!this.state.fields["last_name"]) {
-      this.setState({lastNameIsValid: true, isDisabled: true })
-      this.state.errors['last_name'] = "Last name can't be empty"
+      // this.setState({lastNameIsValid: true, isDisabled: true })
+      // this.state.errors['last_name'] = "Last name can't be empty"
     } 
 
-    if (this.state.fields["last_name"] && typeof this.state.fields["last_name"] == "string") {
-      if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
-        this.setState({lastNameIsValid: true, isDisabled: true })
-        this.state.errors['last_name'] = "Last name is in-valid";
-      }
-    }
-    this.showNotifications()
+    // if (this.state.fields["last_name"] && typeof this.state.fields["last_name"] == "string") {
+    //   if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
+    //     this.setState({lastNameIsValid: true, isDisabled: true })
+    //     this.state.errors['last_name'] = "Last name is in-valid";
+    //   }
+    // }
+    //this.showNotifications()
   }
 
   handlePassword(field, e) {
@@ -259,18 +280,18 @@ export default class SignUp extends Component {
      fields[field] = e.target.value
     this.setState({ fields });
 
-    if (!this.state.fields["password"]) {
-      this.setState({passwordIsValid: true, isDisabled: true })
-      this.state.errors['password'] = "Password can't be empty"
-    }
+    // if (!this.state.fields["password"]) {
+    //   this.setState({passwordIsValid: true, isDisabled: true })
+    //   this.state.errors['password'] = "Password can't be empty"
+    // }
 
-    let password = this.state.fields["password"]
+    // let password = this.state.fields["password"]
 
-    if (!this.isStrongPassword(password)) {
-      this.setState({passwordIsValid: true, isDisabled: true })
-      this.state.errors['password'] = "Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, and have at least one special character except period (.)"
-    }
-    this.showNotifications()
+    // if (!this.isStrongPassword(password)) {
+    //   this.setState({passwordIsValid: true, isDisabled: true })
+    //   this.state.errors['password'] = "Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, and have at least one special character except period (.)"
+    // }
+    //this.showNotifications()
   }
 
 
@@ -297,7 +318,6 @@ export default class SignUp extends Component {
       this.setState({schoolIsValid: true, isDisabled: true })
       this.state.errors['school_id'] = "Please select school"
     }
-    this.showNotifications()
   }
 
 
@@ -316,7 +336,6 @@ export default class SignUp extends Component {
     let fields = this.state.fields;
     fields[field] = e.target.value;
     this.setState({ fields });
-    this.handleValidation()
   }
 
   showNotifications() {
@@ -425,9 +444,7 @@ export default class SignUp extends Component {
   
     return (
         <TemplateAppContainer
-          breakout={<><AppBreadcrumbs />
-            
-            < />}
+          breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
               <Heading id="heading-tertiary" level="one" size="tertiary" text="Sign Up" />
