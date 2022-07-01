@@ -5,8 +5,8 @@ import {
 } from "react-router-dom";
 
 import axios from 'axios';
-import { Link, Icon, List, Button, Box, Image} from "@nypl/design-system-react-components";
-import mlnLogoRed from '../images/MLN_Logo_red.png'
+import { Link, Icon, List, Button, Box, Image, Flex, Spacer} from "@nypl/design-system-react-components";
+import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
 
 
 const styles = {
@@ -50,26 +50,38 @@ export default class Navbar extends React.Component {
   render() {
     return (
       <div id="mln-navbar" className="header-topWrapper">
-        <ReactRouterLink to="/" onClick={this.hideHomeSignUpMsg}>
-          <div id="mln-header-logo" className="header-logo" >
-            <Image id="mln-header-logo" className="header-logo" alt="Alt text" size="small" src={mlnLogoRed} />
-          </div>
-        </ReactRouterLink>
-      
-        <List id="mln-navbar-list" type="ul" inline noStyling className="header-buttons" className="float-right">
+        <Flex alignItems="baseline">
 
-          <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
+          <ReactRouterLink to="/" onClick={this.hideHomeSignUpMsg}>
+              <Image id="mln-header-logo" alt="Alt text" className="header-logo" size="small" src={mlnLogoRed} />
+          </ReactRouterLink>
 
-          <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
+          <Spacer />
+          <List id="mln-navbar-list" type="ul" inline noStyling className="header-buttons" className="float-right">
 
-          <li id="mln-navbar-faq-link"><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
+            <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 
-          <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" className="nav-link-colors ">Participating Schools</ReactRouterLink></li>
+            <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
 
-          <li id="mln-navbar-ad-link" className="nav__menu-item">
-            <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} />
-          </li>
-        </List>
+            <li id="mln-navbar-faq-link"><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
+
+            <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" className="nav-link-colors">Participating Schools</ReactRouterLink></li>
+
+            <li id="mln-navbar-ad-link" className="nav__menu-item">
+              <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} />
+            </li>
+
+            <li id="mln-navbar-social-media-link" className="nav__menu-item nav-link-colors socialMediaIcon">
+              <Link type="action" target="_blank" href="https://twitter.com/mylibrarynyc/">
+                <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="icon-id" name="socialTwitter" size="medium" type="default" />
+              </Link>
+              
+              <Link type="action" target="_blank" href="https://www.instagram.com/mylibrarynyc/">
+                <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="icon-id" name="socialInstagram" size="medium" type="default" />
+              </Link>
+            </li>
+          </List>
+        </Flex>
       </div>
     );
   }

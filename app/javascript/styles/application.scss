@@ -202,10 +202,11 @@ body {
 
 
 .nav-link-colors {
-  color: #000000 !important;
+  color: var(--nypl-colors-ui-black);
   font-weight: 500;
   font-size: 15px;
   line-height: 125%;
+  margin-left: 1em;
 }
 
 .nav-links {
@@ -932,7 +933,7 @@ $submenu-width: 229px;
 }
 
 .nav__submenu {
-  display: none;
+  display: block;
 }
 
 .nav__menu-item:hover {
@@ -953,7 +954,7 @@ $submenu-width: 229px;
     }
   }
 }
-    
+
 .nav__submenu {
   font-weight: 300;
   text-transform: none;
@@ -964,6 +965,14 @@ $submenu-width: 229px;
   z-index: 1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
+}
+
+.account_details {
+  left: -110px;
+  min-width: 255px;
+}
+
+.signin_details {
   left: -160px;
 }
     
@@ -1002,4 +1011,22 @@ $submenu-width: 229px;
 
 .tsDetailUrl {
   padding-left: 15px;
+}
+
+.navBarIcon {
+  margin-bottom: -3px;
+  margin-right: 10px;
+}
+
+.socialMediaIcon {
+  margin-top: 5px;
+}
+
+.navBarDropDown {
+  color: #000000 !important;
+  font-weight: 300;
+}
+
+.header-logo {
+  background-color: var(--nypl-colors-ui-white) !important;
 }
