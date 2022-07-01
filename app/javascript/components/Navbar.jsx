@@ -1,23 +1,7 @@
-import React, { Component, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Link as ReactRouterLink, useHistory
-} from "react-router-dom";
-
-import axios from 'axios';
-import { Link, Icon, List, Button, Box, Image, Flex, Spacer} from "@nypl/design-system-react-components";
+import React from 'react';
+import { Link as ReactRouterLink } from "react-router-dom";
+import { Link, Icon, List, Image, Flex, Spacer} from "@nypl/design-system-react-components";
 import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
-
-
-const styles = {
-  headerNav: {
-    position: 'absolute',
-    top: '28px',
-    display: 'block',
-  }
-}
-
-
 import AccountDetailsSubMenu from "./AccountDetailsSubMenu";
 
 
@@ -32,7 +16,7 @@ export default class Navbar extends React.Component {
    if(history) history.push({ pathname: '/' });
   }
 
-  hideHomeSignUpMsg = event => {
+  hideHomeSignUpMsg = () => {
     this.props.hideSignUpMessage(true)
     this.redirectToHome()
   }
@@ -42,7 +26,7 @@ export default class Navbar extends React.Component {
     if(history) history.push({ pathname: '/teacher_set_data' });
   }
 
-  hideSignInMsg = event => {
+  hideSignInMsg = () => {
     this.props.hideSignInMessage(true)
     this.redirectToTeacherSetPage()
   }
@@ -57,7 +41,7 @@ export default class Navbar extends React.Component {
           </ReactRouterLink>
 
           <Spacer />
-          <List id="mln-navbar-list" type="ul" inline noStyling className="header-buttons" className="float-right">
+          <List id="mln-navbar-list" type="ul" inline noStyling className="float-right">
 
             <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 
@@ -85,4 +69,4 @@ export default class Navbar extends React.Component {
       </div>
     );
   }
-};
+}

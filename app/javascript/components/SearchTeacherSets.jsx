@@ -33,7 +33,7 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-const sort_by_optionsw =  [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
+const sort_by_options =  [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
 
 export default class SearchTeacherSets extends Component {
 
@@ -49,6 +49,10 @@ export default class SearchTeacherSets extends Component {
     const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end }, this.state.selected_facets)
     this.getTeacherSets(params)
   }
+
+
+  
+
 
   getTeacherSets(params) {
     axios.get('/teacher_sets', {params: params}).then(res => {
@@ -111,7 +115,7 @@ export default class SearchTeacherSets extends Component {
 
   TeacherSetDetails() {
     return this.state.teacher_sets.map((ts, i) => {
-      return <div className="teacherSetResults" id="teacher-set-results">
+      return <div id="teacher-set-results">
         <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
           <Card id="ts-details" layout="row" imageAlt="Alt text" aspectRatio="square" size="xxsmall">
             <CardHeading level="three" id="ts-order-details">
@@ -204,10 +208,14 @@ export default class SearchTeacherSets extends Component {
     this.getTeacherSets(Object.assign({ sort_order: this.state.sortTitleValue}, this.state.selected_facets));
   };
 
+  ResultsFound() {
+
+  }
+
 
   render() {
-    const sort = sort_by_optionsw.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
-  
+    const sort = sort_by_options.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
+    const ts_total_count = this.state.ts_total_count > 0 ? this.state.ts_total_count : ""
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -228,39 +236,32 @@ export default class SearchTeacherSets extends Component {
 
               <Heading id="search-and-find-teacher-sets-header" size="primary" level="two" text="Search and Find Teacher Sets"  />
               <HorizontalRule id="ts-horizontal-rule" className="teacherSetHorizontal" />
-              <Flex>
-                <Heading id="check-out-teacher-sets" level="three">
-                  Check Out Newly Arrived Teacher Sets
-                </Heading>
-                <Spacer />
-                <label
-                  htmlFor="sort-by-select"
-                  style={{
-                    display: "inline-block",
-                    marginRight: "var(--nypl-space-s)",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Sort By
-                </label>
-                <Select
-                  id="ts-sort-by-select"
-                  name="sortBy"
-                  labelText="Sort By"
-                  showLabel={false}
-                  showOptReqLabel={false}
-                  selectType="default"
-                  value={this.state.sortTitleValue}
-                  onChange={this.sortTeacherSetTitle.bind(this)}
-                >
-                  {sort}
-                </Select>
-              </Flex>              
+
+              <Heading id="check-out-teacher-sets" level="three">
+                Check Out Newly Arrived Teacher Sets
+              </Heading>            
             </>
           }
           contentPrimary={
               <>
-                <div>{this.TeacherSetDetails()}</div>
+                <div className="teacherSetResults">
+                  <Text isBold size="default"> {ts_total_count} results found</Text>
+                  <Flex>                    
+                    <Select
+                      id="ts-sort-by-select"
+                      name="sortBy"
+                      labelText="Sort By"
+                      showLabel={false}
+                      showOptReqLabel={false}
+                      selectType="default"
+                      value={this.state.sortTitleValue}
+                      onChange={this.sortTeacherSetTitle.bind(this)}
+                    >
+                      {sort}
+                    </Select>
+                  </Flex>
+                  {this.TeacherSetDetails()}
+                </div>
                 <div style={{ display: this.state.pagination }} >
                   <Flex alignItems="baseline">
                     <ButtonGroup>
