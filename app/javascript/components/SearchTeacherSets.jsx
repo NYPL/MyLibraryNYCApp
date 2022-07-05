@@ -112,22 +112,22 @@ export default class SearchTeacherSets extends Component {
     })
   };
 
-
   TeacherSetDetails() {
     return this.state.teacher_sets.map((ts, i) => {
-      return <div id="teacher-set-results">
-        <div style={{ display: "grid", "grid-gap": "2rem", "grid-template-columns": "repeat(1, 1fr)" }}>
+      let availability_status_badge =  (ts.availability == "available") ? "medium" : "low"
+      return <div id="teacher-set-results" style={{"margin-top": "1.5rem"}}>
+        <div style={{ display: "grid", "grid-gap": "1rem", "grid-template-columns": "repeat(1, 1fr)" }}>
           <Card id="ts-details" layout="row" imageAlt="Alt text" aspectRatio="square" size="xxsmall">
             <CardHeading level="three" id="ts-order-details">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id}>{ts.title}</ReactRouterLink>
             </CardHeading>
             <CardContent id="ts-suitabilities">{ts.suitabilities_string}</CardContent>
             <CardContent id="ts-availability">
-              <StatusBadge level="medium">{titleCase(ts.availability)}</StatusBadge>
+              <StatusBadge level={availability_status_badge}>{titleCase(ts.availability)}</StatusBadge>
             </CardContent>
             <CardContent id="ts-description">{ts.description}</CardContent>
           </Card>
-          <HorizontalRule id="ts-horizontal-rule" align="left" height="3px" />
+          <HorizontalRule id="ts-horizontal-rule" align="left"  className="tsDetailHorizontalLine"/>
         </div>
       </div>
     })
@@ -219,27 +219,20 @@ export default class SearchTeacherSets extends Component {
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
-          // Heading additionalStyles={{ pt: "var(--nypl-space-m)" }}
           contentTop={<>
               {this.SignedInMessage()}
-              <SearchBar id="ts-search" labelText="Teacher-Set SearchBar" onSubmit={this.handleSubmit} className="teachersetSearchBar" 
+              <Heading id="search-and-find-teacher-sets-header" size="secondary" level="two" text="Search and Find Teacher Sets"  />
+              <HorizontalRule id="ts-horizontal-rule" className="teacherSetHorizontal" />
+              <SearchBar id="ts-search" noBrandButtonType labelText="Teacher-Set SearchBar" onSubmit={this.handleSubmit} className="" 
                 textInputProps={{
-                  id: "ts-input",
-                  labelText: "Search Teacher set",
+                  id: "search-teacher-set",
+                  labelText: "Enter a teacher set name",
                   name: "TeacherSetInputName",
                   onChange: this.handleSearchKeyword,
-                  placeholder: "Search Teacher set",
+                  placeholder: "Enter a teacher set name",
                   value: this.state.keyword
                 }}
-              />
-              {<br/>}
-
-              <Heading id="search-and-find-teacher-sets-header" size="primary" level="two" text="Search and Find Teacher Sets"  />
-              <HorizontalRule id="ts-horizontal-rule" className="teacherSetHorizontal" />
-
-              <Heading id="check-out-teacher-sets" level="three">
-                Check Out Newly Arrived Teacher Sets
-              </Heading>            
+              />           
             </>
           }
           contentPrimary={
