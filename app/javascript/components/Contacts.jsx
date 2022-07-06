@@ -45,7 +45,7 @@ const Contacts = (props) => {
               </div>
             </div>
           }
-          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          contentSidebar={<HaveQuestions />}
           sidebar="right"          
         />
   )

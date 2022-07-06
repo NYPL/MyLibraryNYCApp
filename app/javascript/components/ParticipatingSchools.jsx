@@ -97,7 +97,7 @@ export default class ParticipatingSchools extends Component {
              <div id="participating-schools-list">{this.Schools()}</div>
           </>
           }
-          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          contentSidebar={<HaveQuestions />}
           sidebar="right" 
         />
     )

@@ -223,9 +223,8 @@ export default class TeacherSetDetails extends React.Component {
             </>
           }
           contentSidebar={
-              <>  
-                <VStack align="left" spacing="s">
-                  <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
+                <VStack align="left" spacing="s" margin="m">
+                  <Box marginBottom="m"id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
                     <Heading id="ts-order-set" level="one" size="secondary" text="Order Set!" />
                     <Heading id="ts-available-copies" level="five" text={this.AvailableCopies()} />
                     <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
@@ -245,7 +244,6 @@ export default class TeacherSetDetails extends React.Component {
                   </Box>
                   <HaveQuestions />
                 </VStack>
-              </>
             }
           sidebar="right"
         />

@@ -57,7 +57,7 @@ export default class Faqs extends Component {
           contentPrimary={
             <Accordion id="faqs-page" accordionData={this.FrequentlyAskedQuestions()} />
           }
-          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          contentSidebar={<HaveQuestions />}
           sidebar="right"
         />
     )
