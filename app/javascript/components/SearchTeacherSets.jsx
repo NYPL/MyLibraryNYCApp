@@ -1,9 +1,6 @@
-import PropTypes from 'prop-types';
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
-import qs from 'qs';
 import { titleCase } from "title-case";
 
 
@@ -12,28 +9,21 @@ import {
   ButtonGroup,
   SearchBar,
   Select,
-  Input,
-  SearchButton,
-  InputTypes,
   Icon,
-  HelperErrorText,
-  LibraryExample,
   HorizontalRule,
   Heading,
   Card, 
   CardHeading, 
   CardContent,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, ImageSizes, Slider, CheckboxGroup, CheckboxGroupLayoutTypes, Notification, Flex, Spacer, Text, TextDisplaySizes, Box, Toggle, StatusBadge
+  Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge
 } from '@nypl/design-system-react-components';
 
-import bookImage from '../images/book.png'
 
-import {
-  BrowserRouter as Router,
-  Link as ReactRouterLink,
-} from "react-router-dom";
+import { Link as ReactRouterLink } from "react-router-dom";
 
-const sort_by_options =  [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
+const sortByOptions =  [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
+
+
 
 export default class SearchTeacherSets extends Component {
 
@@ -41,17 +31,15 @@ export default class SearchTeacherSets extends Component {
     super(props);
     this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: 0, error_msg: {}, email: "", 
                    display_block: "block", display_none: "none", setComputedCurrentPage: 1, total_pages: 0,
-                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {}, grade_begin: -1, grade_end: 12,
+                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {}, 
+                   grade_begin: -1, grade_end: 12, availableToggle: false,
                    ts_sort_by_id: "", sortTitleValue: 0 };
   }
 
   componentDidMount() {
-    const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end }, this.state.selected_facets)
+    const params = Object.assign({ keyword: this.state.keyword }, this.state.selected_facets)
     this.getTeacherSets(params)
   }
-
-
-  
 
 
   getTeacherSets(params) {
@@ -78,6 +66,24 @@ export default class SearchTeacherSets extends Component {
     this.state.params = Object.assign({ keyword: this.state.keyword, sort_order: this.state.sortTitleValue, grade_begin: grade_begin_val, grade_end: grade_end_val}, this.state.selected_facets)
     this.getTeacherSets(this.state.params)
   };
+
+
+  availableResults = (e) => {
+    // This will return the value through the event object.
+    console.log(this.state.availableToggle)
+
+    if (this.state.availableToggle == true) {
+      this.setState({ availableToggle: false })
+      this.state.params = Object.assign({ })
+    } else {
+      this.setState({ availableToggle: true })
+      this.state.params = Object.assign({ availability: ["available"] })
+    }
+
+    this.getTeacherSets(this.state.params)
+
+  };
+
 
   handleSubmit = event => {
     event.preventDefault();
@@ -111,6 +117,8 @@ export default class SearchTeacherSets extends Component {
        console.log(error)
     })
   };
+
+
 
   TeacherSetDetails() {
     return this.state.teacher_sets.map((ts, i) => {
@@ -152,19 +160,18 @@ export default class SearchTeacherSets extends Component {
     } else {
       this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue}, this.state.selected_facets)
     }
-
     this.getTeacherSets(this.state.params)
-  };
+  }
 
   TeacherSetFacets() {
     if (this.state.teacher_sets && this.state.teacher_sets.length <= 0) {
       return <Heading id="ts-results-not-found" level={5} text="No Results Found" />
     }
 
-    return this.state.facets.map((ts, i) => {
+    return this.state.facets.map((ts, _i) => {
       return <>
           <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
-          <CheckboxGroup id={"ts-checkbox-group"} defaultValue={[]} isRequired  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} >
+          <CheckboxGroup id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} >
             { ts.items.map((item, index) =>
               <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
                 <Checkbox id={"ts-checkbox-"+ index} labelText={item["label"]} value={item["value"].toString()} />
@@ -185,7 +192,7 @@ export default class SearchTeacherSets extends Component {
   }
 
   TeacherSetGradesSlider() {
-    const grade_begin = this.state.grade_begin == -1? 'Pre-K' :  this.state.grade_begin
+    const grade_begin = this.state.grade_begin === -1? 'Pre-K' :  this.state.grade_begin
     return <>
       <Slider
         id="ts_slider-range"
@@ -208,14 +215,11 @@ export default class SearchTeacherSets extends Component {
     this.getTeacherSets(Object.assign({ sort_order: this.state.sortTitleValue}, this.state.selected_facets));
   };
 
-  ResultsFound() {
-
-  }
-
 
   render() {
-    const sort = sort_by_options.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
+    const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
     const ts_total_count = this.state.ts_total_count > 0 ? this.state.ts_total_count : ""
+
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -280,6 +284,14 @@ export default class SearchTeacherSets extends Component {
             }
           contentSidebar={<Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
               <Heading size="tertiary" level="three" > Refine Results </Heading>
+
+              <Toggle
+                id="toggle"
+                isChecked={this.state.availableToggle}
+                labelText="Available Now"
+                onChange={this.availableResults.bind(this)}
+                size="small"
+              />{<br/>}
               {this.TeacherSetGradesSlider()}{<br/>}
               {this.TeacherSetFacets()}
           </Box>}
