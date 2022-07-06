@@ -7,7 +7,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import Home from "./Home";
 import {
   Input, TextInput, List, Icon, Form, Button, FormRow, InputTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Box
+  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Box, HStack
 } from '@nypl/design-system-react-components';
 
 
@@ -140,9 +140,7 @@ class AccountDetailsSubMenu extends React.Component {
       <>
         { this.showAccountSigninLink() }
         { this.state.showAboutMenu && <Box>
-          
             {this.AccountOrderLink() }
-          
         </Box>}
       </>
     )

@@ -18,7 +18,7 @@ import {
   MDXCreateElement,
   Heading,
   Image, Flex, Spacer, 
-  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -87,7 +87,7 @@ export default class TeacherSetDetails extends React.Component {
 
 
   TeacherSetDescription() {
-    return <div>{this.state.teacher_set["description"]}</div>
+    return <div id="ts-page-desc">{this.state.teacher_set["description"]}</div>
   }
 
   AvailableCopies() {
@@ -167,16 +167,16 @@ export default class TeacherSetDetails extends React.Component {
               </Flex>
               <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
 
-              <div>
+              <VStack align="left" spacing="s">
                 <Heading id="ts-header-desc-text" level="one" size="tertiary" text="What is in the box" />                
-                <div id="ts-page-desc"> { this.TeacherSetDescription() } </div>{<br/>}
-                <div id="ts-page-books-count"> { this.BooksCount() } </div> {<br/>}
+                 { this.TeacherSetDescription() }
+                <div id="ts-page-books-count"> { this.BooksCount() } </div>
                 <SimpleGrid id="ts-page-books-panel" columns={5} gap="xxs"> { this.TeacherSetBooks() } </SimpleGrid>
-              </div>{<br/>}
+              </VStack>
 
 
               <div className="tsDetails">
-                <List id="ts-list-details" type="dl">
+                <List id="ts-list-details" type="dl" title="Details">
                   <dt id="ts-suggested-grade-range-text">
                     Suggested Grade Range [New]
                   </dt>
@@ -223,11 +223,11 @@ export default class TeacherSetDetails extends React.Component {
             </>
           }
           contentSidebar={
-              <>
+              <>  
+                <VStack align="left" spacing="s">
                   <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
-                    <Heading id="ts-oder-set" level="one" size="secondary" text="Order Set!" />
+                    <Heading id="ts-order-set" level="one" size="secondary" text="Order Set!" />
                     <Heading id="ts-available-copies" level="five" text={this.AvailableCopies()} />
-              
                     <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
                       <FormField id="ts-order-field">
                         <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
@@ -241,12 +241,10 @@ export default class TeacherSetDetails extends React.Component {
                         <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
                       </FormField>
                     </Form>
-                    {<br/>}
-                    <Text isItalic size="default">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
-
+                    <Text isItalic size="default" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
                   </Box>
-                  {<br/>}
                   <HaveQuestions />
+                </VStack>
               </>
             }
           sidebar="right"

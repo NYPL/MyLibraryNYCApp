@@ -206,7 +206,7 @@ body {
   font-weight: 500;
   font-size: 15px;
   line-height: 125%;
-  margin-left: 1em;
+  /*margin-left: 1em;*/
 }
 
 .nav-links {
@@ -968,8 +968,8 @@ $submenu-width: 229px;
 }
 
 .account_details {
-  left: -110px;
-  min-width: 255px;
+  left: -115px;
+  min-width: 240px;
 }
 
 .signin_details {
@@ -1014,17 +1014,17 @@ $submenu-width: 229px;
 }
 
 .navBarIcon {
-  margin-bottom: -3px;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .socialMediaIcon {
-  margin-top: 5px;
+  margin-top: 5px !important;
 }
 
 .navBarDropDown {
+  align-items: center;
+  display: flex;
   color: #000000 !important;
-  font-weight: 300;
 }
 
 .header-logo {

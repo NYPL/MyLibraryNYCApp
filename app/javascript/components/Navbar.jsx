@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as ReactRouterLink } from "react-router-dom";
-import { Link, Icon, List, Image, Flex, Spacer} from "@nypl/design-system-react-components";
+import { Link, Icon, List, Image, Flex, Spacer, HStack} from "@nypl/design-system-react-components";
 import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
 import AccountDetailsSubMenu from "./AccountDetailsSubMenu";
 
@@ -42,28 +42,29 @@ export default class Navbar extends React.Component {
 
           <Spacer />
           <List id="mln-navbar-list" type="ul" inline noStyling className="float-right">
+            <HStack spacing="m">
+              <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 
-            <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
+              <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
 
-            <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" className="nav-link-colors">Contacts</ReactRouterLink></li>
+              <li id="mln-navbar-faq-link"><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
 
-            <li id="mln-navbar-faq-link"><ReactRouterLink to="/faq" className="nav-link-colors">FAQs</ReactRouterLink></li>
+              <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" className="nav-link-colors">Participating Schools</ReactRouterLink></li>
 
-            <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" className="nav-link-colors">Participating Schools</ReactRouterLink></li>
+              <li id="mln-navbar-ad-link" className="nav__menu-item">
+                <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} />
+              </li>
 
-            <li id="mln-navbar-ad-link" className="nav__menu-item">
-              <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} />
-            </li>
-
-            <li id="mln-navbar-social-media-link" className="nav__menu-item nav-link-colors socialMediaIcon">
-              <Link type="action" target="_blank" href="https://twitter.com/mylibrarynyc/">
-                <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="icon-id" name="socialTwitter" size="medium" type="default" />
-              </Link>
-              
-              <Link type="action" target="_blank" href="https://www.instagram.com/mylibrarynyc/">
-                <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="icon-id" name="socialInstagram" size="medium" type="default" />
-              </Link>
-            </li>
+              <li id="mln-navbar-social-media-link" className="nav__menu-item nav-link-colors socialMediaIcon">
+                <Link type="action" target="_blank" href="https://twitter.com/mylibrarynyc/">
+                  <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="icon-id" name="socialTwitter" size="medium" type="default" />
+                </Link>
+                
+                <Link type="action" target="_blank" href="https://www.instagram.com/mylibrarynyc/">
+                  <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="icon-id" name="socialInstagram" size="medium" type="default" />
+                </Link>
+              </li>
+            </HStack>
           </List>
         </Flex>
       </div>
