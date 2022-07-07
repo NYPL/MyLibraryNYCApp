@@ -42,7 +42,7 @@ class AccountDetailsSubMenu extends React.Component {
   showAccountSigninLink() {
     if (this.props.userSignedIn) {
       return <>
-        <ReactRouterLink to="/account_details" className="nav-link-colors" onMouseEnter={this.handleHover}>
+        <ReactRouterLink to="/account_details" className="nav-link-colors navBarDropDown" onMouseEnter={this.handleHover}>
         <Icon className="navBarIcon" align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="utilityAccountFilled" size="medium" type="default" />
           My Account{' '}
           <Icon id="account-arrow-drop-down" size="small" className="navBarIcon">
@@ -54,10 +54,10 @@ class AccountDetailsSubMenu extends React.Component {
       </>
     } else {
       return <>
-        <ReactRouterLink to="/signin" className="nav-link-colors" onMouseEnter={this.handleHover}>
+        <ReactRouterLink to="/signin" className="nav-link-colors navBarDropDown" onMouseEnter={this.handleHover}>
         <Icon className="navBarIcon" align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="actionExit" size="medium" type="default" />
             Sign In{' '}
-            <Icon id="signin-arrow-drop-down" size="small">
+            <Icon id="signin-arrow-drop-down" size="small" className="navBarIcon" >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
               <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z"/>
             </svg>
