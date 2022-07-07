@@ -1,39 +1,32 @@
-import PropTypes from 'prop-types';
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
-import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink} from "react-router-dom";
+import { Link as ReactRouterLink} from "react-router-dom";
 import axios from 'axios';
+import { titleCase } from "title-case";
 import {
-  Button,
-  SearchBar,
-  Select,
-  Input,
-  SearchButton,
   Card,
   CardHeading,
   CardContent,
-  MDXCreateElement,
   Heading,
   Image,
-  List, Link, DSProvider, TemplateAppContainer, HorizontalRule, Text, Form, FormRow, FormField, Icon, ImageRatios
+  List, TemplateAppContainer, HorizontalRule, StatusBadge, Flex, Spacer
 } from '@nypl/design-system-react-components';
 import mlnImage from '../images/mln.svg'
-import bookImage from '../images/book.png'
-import TeacherSetOrder from "./TeacherSetOrder";
+
 
 export default class TeacherSetBooks extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {book: "", teacher_sets: ""};
+    this.state = {book: "", teacherSets: ""};
   }
 
   componentDidMount() {
     axios.get('/books/'+ this.props.match.params.id)
       .then(res => {
         this.setState({
-          book: res.data.book, teacher_sets: res.data.teacher_sets, 
+          book: res.data.book, teacherSets: res.data.teacher_sets, 
         });
       })
       .catch(function (error) {
@@ -78,123 +71,126 @@ export default class TeacherSetBooks extends React.Component {
   }
 
 
+
+
   TeacherSetDetails() {
-    if (this.state.teacher_sets) {
-      return this.state.teacher_sets.map((ts, i) => {
+    if (this.state.teacherSets) {
+      return this.state.teacherSets.map((ts, i) => {
+        let availability_status_badge =  (ts.availability == "available") ? "medium" : "low"
+        let availability = ts.availability !== undefined ? ts.availability : ""
         return <div>
-          <div id="book-page-ts-details" className="bookPageTSBorder">
-            <Card id="book-page-ts-card-details" layout="row" imageSrc={bookImage} imageAlt="Book Details" aspectRatio="square" size="xxsmall">
-              <CardHeading level="three" id="book-page-ts-title">
+            <Card id="book-page-ts-card-details" layout="row">
+              <CardHeading level="four" id="book-page-ts-title">
                 <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
                   {ts.title}
                 </ReactRouterLink>
               </CardHeading>
               <CardContent id="book-page-ts-suitabilities"> {ts.suitabilities_string} </CardContent>
-              <CardContent id="book-page-ts-availability"> {ts.availability} </CardContent>
+              <CardContent id="book-page-ts-availability"> 
+                <StatusBadge level={availability_status_badge}>{availability}</StatusBadge>
+              </CardContent>
               <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
             </Card>
-          </div>
+            <HorizontalRule />
         </div>
       })
     }
   }
 
+
   render() {
     let book = this.state.book;
-    let teacher_sets = this.state.teacher_sets
-
+    let bookTitle = this.state.book.title
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
-              // additionalStyles={{background: "#F2F2F0", padding: "1px", position: "initial"}}
             <>
-              <Card id="book-page-card-details" layout="row"  imageComponent={<Image id="book-page-image" src={this.BookImage(book)} alt="Alt text" aspectRatio="threeByFour" size="small" />} >
+              <Flex alignItems="baseline">
+                <Heading id="heading-id" level="two" size="secondary" text={"" + bookTitle} />
+                <Spacer />
+                <a id="book-page-catalog-link" target='_blank' href={this.state.book.details_url}>View in catalog</a>
+              </Flex>
 
-                 { this.IsBookTitlePresent() ? (
-                  <CardHeading id="book-page-title" level="three">
-                    {this.state.book.title}
-                  </CardHeading>
-                ) : (<></>) }
+              <HorizontalRule style={{"margin-top": "0px"}} id="ts-book-details-horizontal-rule" className="teacherSetHorizontal" />
 
-                 { this.IsBookSubTitlePresent() ? (
-                  <CardHeading id="book-page-sub_title" level="four">
+              <Card id="book-page-card-details" layout="row" imageProps={{ alt: 'Book Details', aspectRatio: 'square', isAtEnd: false, size: 'default', src: this.BookImage(book) }} >
+
+                { this.IsBookSubTitlePresent() ? (
+                  <CardHeading id="book-page-sub_title" level="three">
                     {this.state.book.sub_title}
                   </CardHeading>
                 ) : (<></>) }
 
                 { this.IsBookStatementOfResponsibilityPresent() ? (
                   <CardContent id="book-page-statement_of_responsibility" level="three">
-                    {this.state.book.statement_of_responsibility}{<br/>}
+                    {this.state.book.statement_of_responsibility}
                   </CardContent>
                 ) : (<></>) }
 
                 { this.IsBookDescriptionPresent() ? (
                   <CardContent id="book-page-desc">
-                    {this.state.book.description}{<br/>}
+                    {this.state.book.description}
                   </CardContent>
                 ) : (<></>) }
               </Card>
-              {<br/>}{<br/>}
+              
 
-              <List id="book-page-list-details" type="dl" className="listType">
+              <List id="book-page-list-details" type="dl" title="Details" marginTop="s">
                 { book.publication_date ? (<>
-                  <dt id="book-page-publication-date-text" className="font-weight-500 orderDetails">
+                  <dt id="book-page-publication-date-text">
                     Publication Date
                   </dt> 
-                  <dd id="book-page-publication-date" className="orderDetails">
+                  <dd id="book-page-publication-date">
                     {book.publication_date}
                   </dd> </>) : (<></>) }
 
                 { book.call_number ? (<>
-                  <dt id="book-page-call-number-text" className="font-weight-500 orderDetails">
+                  <dt id="book-page-call-number-text">
                     Call Number
                   </dt> 
-                  <dd id="book-page-call-number" className="orderDetails">
+                  <dd id="book-page-call-number">
                     {book.call_number}
                   </dd> </>) : (<></>) }
 
                 { book.physical_description ? (<>
-                  <dt id="book-page-physical-desc-text" className="font-weight-500 orderDetails">
+                  <dt id="book-page-physical-desc-text">
                     Physical Description
                   </dt> 
-                  <dd id="book-page-physical-desc" className="orderDetails">
+                  <dd id="book-page-physical-desc">
                     {book.physical_description}
                   </dd></>) : (<></>) }
 
                 { book.primary_language ? (<>
-                  <dt id="book-page-primary-language-text" className="font-weight-500 orderDetails">
+                  <dt id="book-page-primary-language-text">
                     Primary Language
                   </dt> 
-                  <dd id="book-page-primary-language" className="orderDetails">
+                  <dd id="book-page-primary-language">
                     {book.primary_language}
                   </dd></>) : (<></>) }
 
-                { book.notes ? (<>
-                  <dt id="book-page-isbn-text" className="font-weight-500 orderDetails">
+                { book.isbn ? (<>
+                  <dt id="book-page-isbn-text">
                     ISBN
                   </dt> 
-                  <dd id="book-page-isbn" className="orderDetails">
+                  <dd id="book-page-isbn">
                     {book.isbn}
                   </dd></>) : (<></>) }
 
                 { book.notes ? (<>
-                  <dt id="book-page-notes-text" className="font-weight-500 orderDetails">
+                  <dt id="book-page-notes-text">
                     Notes
                   </dt> 
-                  <dd id="book-page-notes" className="orderDetails">
-                    {book.notes}
+                  <dd id="book-page-notes">
+                    {book.notes}]
                   </dd></>) : (<></>) }
-                  <dt id="book-page-catalog" className="font-weight-500 orderDetails">
-                    <a id="book-page-catalog-link" target='_blank' href={book.details_url}>View in catalog</a>{<br/>}
-                  </dt>
-              </List>{<br/>}
+              </List>
 
-              <Heading id="appears-in-ts-text" level="three">Appears in These Sets</Heading>
+              <Heading marginTop="s" id="appears-in-ts-text" size="tertiary" level="three">Appears in These Sets</Heading>
               {this.TeacherSetDetails()}
             </>
           }
-          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          contentSidebar={<HaveQuestions />}
           sidebar="right"
         />
     )

@@ -15,7 +15,6 @@ import {
   Card,
   CardHeading,
   CardContent,
-  MDXCreateElement,
   Heading,
   Image, Flex, Spacer, 
   List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack
@@ -110,9 +109,9 @@ export default class TeacherSetDetails extends React.Component {
 
   BookImage(data) {
     if (data.cover_uri) {
-      return <Image id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default"  />
+      return <Image additionalImageStyles={{height:"auto"}} id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default"  />
     } else {
-      return <Image id={"ts-books-" + data.id} src={mlnImage} size="default" />
+      return <Image additionalImageStyles={{height: "auto"}} id={"ts-books-" + data.id} src={mlnImage} aspectRatio="square" size="default" />
     }
   }
 
@@ -153,6 +152,7 @@ export default class TeacherSetDetails extends React.Component {
     let access_key = this.state.access_key;
     let details_url = teacher_set.details_url;
     let availability = teacher_set.availability !== undefined ? teacher_set.availability : ""
+    let availability_status_badge =  (teacher_set.availability == "available") ? "medium" : "low"
     return (
       <DSProvider>
         <TemplateAppContainer
@@ -162,7 +162,7 @@ export default class TeacherSetDetails extends React.Component {
               <Flex alignItems="baseline">
                 <Heading id="heading-secondary" level="one" size="secondary" text={ this.TeacherSetTitle() } />
                 <Spacer />
-                <StatusBadge level="medium">{titleCase(availability)}</StatusBadge>
+                <StatusBadge level={availability_status_badge}>{titleCase(availability)}</StatusBadge>
                 <a className="tsDetailUrl" id="ts-page-details_url" target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>
               </Flex>
               <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
@@ -175,51 +175,49 @@ export default class TeacherSetDetails extends React.Component {
               </VStack>
 
 
-              <div className="tsDetails">
-                <List id="ts-list-details" type="dl" title="Details">
-                  <dt id="ts-suggested-grade-range-text">
-                    Suggested Grade Range [New]
-                  </dt>
-                  <dd id="ts-page-suitabilities">
-                    {suitabilities_string}
-                  </dd>
+              <List id="ts-list-details" type="dl" title="Details" marginTop="s">
+                <dt id="ts-suggested-grade-range-text">
+                  Suggested Grade Range [New]
+                </dt>
+                <dd id="ts-page-suitabilities">
+                  {suitabilities_string}
+                </dd>
 
-                  <dt id="ts-page-primary-language-text">
-                    Primary Language
-                  </dt>
-                  <dd id="ts-page-primary-language">
-                    {primary_language}
-                  </dd>
+                <dt id="ts-page-primary-language-text">
+                  Primary Language
+                </dt>
+                <dd id="ts-page-primary-language">
+                  {primary_language}
+                </dd>
 
-                  <dt id="ts-page-set-type-text">
-                    Type
-                  </dt>
-                  <dd id="ts-page-set-type">
-                    {set_type}
-                  </dd>
+                <dt id="ts-page-set-type-text">
+                  Type
+                </dt>
+                <dd id="ts-page-set-type">
+                  {set_type}
+                </dd>
 
-                  <dt id="ts-page-physical-desc-text">
-                    Physical Description
-                  </dt>
-                  <dd id="ts-page-physical-desc">
-                    {physical_description}
-                  </dd>
+                <dt id="ts-page-physical-desc-text">
+                  Physical Description
+                </dt>
+                <dd id="ts-page-physical-desc">
+                  {physical_description}
+                </dd>
 
-                  <dt id="ts-page-notes-content-text">
-                    Notes
-                  </dt>
-                  <dd id="ts-page-notes-content">
-                    {this.TeacherSetNotesContent()}
-                  </dd>
+                <dt id="ts-page-notes-content-text">
+                  Notes
+                </dt>
+                <dd id="ts-page-notes-content">
+                  {this.TeacherSetNotesContent()}
+                </dd>
 
-                  <dt id="ts-page-call-number-text">
-                    Call Number
-                  </dt>
-                  <dd id="ts-page-call-number">
-                    {call_number}
-                  </dd>
-                </List>
-              </div>
+                <dt id="ts-page-call-number-text">
+                  Call Number
+                </dt>
+                <dd id="ts-page-call-number">
+                  {call_number}
+                </dd>
+              </List>
             </>
           }
           contentSidebar={
