@@ -116,8 +116,9 @@ export default class Home extends React.Component {
                           heading={<Heading level="one"
                           id="mln-campaign-hero" text="Welcome To MyLibrary NYC" />} 
                           subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
-                          backgroundImageSrc={heroCampaignBg} 
-                          image={<Image id="mln-hero-image" alt="Mln hero image" blockName="hero" src={heroCampaignLeft}/>} /></>}
+                          backgroundImageSrc={heroCampaignBg}
+                          imageProps={{alt: "Mln hero image", src: heroCampaignLeft, id: "mln-hero-image"}}
+                          /></>}
           contentTop={<></>}
           contentPrimary={
                 <>
