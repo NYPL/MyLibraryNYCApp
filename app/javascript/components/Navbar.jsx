@@ -2,6 +2,8 @@ import React from 'react';
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link, Icon, List, Image, Flex, Spacer, HStack} from "@nypl/design-system-react-components";
 import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
+import Vector from '../images/Vector.png'
+
 import AccountDetailsSubMenu from "./AccountDetailsSubMenu";
 
 
@@ -34,14 +36,15 @@ export default class Navbar extends React.Component {
   render() {
     return (
       <div id="mln-navbar" className="header-topWrapper">
-        <Flex alignItems="baseline">
+        <Flex alignItems="center">
 
           <ReactRouterLink to="/" onClick={this.hideHomeSignUpMsg}>
-              <Image id="mln-header-logo" alt="Alt text" className="header-logo" size="small" src={mlnLogoRed} />
+            <Image id="mln-header-logo" marginLeft="m" style={{"color": "purple"}} alt="Alt text" className="header-logo" additionalImageStyles={{ "background-color": "var(--nypl-colors-ui-white)", "margin-left": "35px" }} size="small" src={mlnLogoRed} />
+            <Image id="mln-header-logo" marginLeft="m" alt="Alt text" className="header-logo" additionalImageStyles={{ "background-color": "var(--nypl-colors-ui-white)", "margin-left": "35px" }} size="small" src={Vector} />
           </ReactRouterLink>
 
           <Spacer />
-          <List id="mln-navbar-list" type="ul" inline noStyling className="float-right">
+          <List id="mln-navbar-list" type="ul" inline noStyling>
             <HStack spacing="m">
               <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 

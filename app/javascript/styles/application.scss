@@ -1026,11 +1026,16 @@ $submenu-width: 229px;
   color: #000000 !important;
 }
 
-.header-logo {
+/*.header-logo {
   background-color: var(--nypl-colors-ui-white) !important;
-}
+}*/
 
 .tsDetailHorizontalLine {
   color: var(--nypl-colors-ui-gray-light-cool);
   height: 1px;
+}
+
+.header-logo {
+  color: var(--nypl-colors-brand-primary);
+  background-color: var(--nypl-colors-brand-primary);
 }
