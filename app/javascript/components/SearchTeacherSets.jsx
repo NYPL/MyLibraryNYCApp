@@ -29,23 +29,23 @@ export default class SearchTeacherSets extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { userSignedIn: this.props.userSignedIn, teacher_sets: [], facets: [], ts_total_count: 0, error_msg: {}, email: "", 
-                   display_block: "block", display_none: "none", setComputedCurrentPage: 1, total_pages: 0,
-                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), query_params: {}, selected_facets: {}, params: {}, 
-                   grade_begin: -1, grade_end: 12, availableToggle: false,
+    this.state = { userSignedIn: this.props.userSignedIn, teacherSets: [], facets: [], tsTotalCount: 0, email: "", 
+                   setComputedCurrentPage: 1, totalPages: 0,
+                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), selectedFacets: {}, params: {}, 
+                   grade_begin: -1, grade_end: 12, availableToggle: false, availability: "",
                    ts_sort_by_id: "", sortTitleValue: 0 };
   }
 
   componentDidMount() {
-    const params = Object.assign({ keyword: this.state.keyword }, this.state.selected_facets)
+    const params = Object.assign({ keyword: this.state.keyword }, this.state.selectedFacets)
     this.getTeacherSets(params)
   }
 
 
   getTeacherSets(params) {
     axios.get('/teacher_sets', {params: params}).then(res => {
-      this.setState({ teacher_sets: res.data.teacher_sets, facets: res.data.facets,
-                      ts_total_count: res.data.total_count, total_pages: res.data.total_pages });
+      this.setState({ teacherSets: res.data.teacher_sets, facets: res.data.facets,
+                      tsTotalCount: res.data.total_count, totalPages: res.data.total_pages });
       if (res.data.teacher_sets.length > 0 && res.data.total_count > 20 ) {
         this.setState({ pagination: 'block' })
       } else {
@@ -58,28 +58,29 @@ export default class SearchTeacherSets extends Component {
   }
 
   getGrades = grades => {
-    const [grade_begin_val, grade_end_val] = grades;
-    const grade_begin =  grade_begin_val == -1? 'Pre-K' :  grade_begin_val == 0 ? 'K' :  grade_begin_val;
-    const grade_end = grade_end_val == -1? 'Pre-K' :  grade_end_val == 0 ? 'K' :  grade_end_val;
+    const [gradeBeginVal, gradeEndVal] = grades;
+    const gradeBegin = gradeBeginVal === -1? 'Pre-K' : gradeBeginVal === 0 ? 'K' : gradeBeginVal;
+    const gradeEnd = gradeEndVal === -1? 'Pre-K' :  gradeEndVal === 0 ? 'K' : gradeEndVal;
 
-    this.setState({ grade_begin: grade_begin, grade_end: grade_end })
-    this.state.params = Object.assign({ keyword: this.state.keyword, sort_order: this.state.sortTitleValue, grade_begin: grade_begin_val, grade_end: grade_end_val}, this.state.selected_facets)
+    this.setState({ grade_begin: gradeBegin, grade_end: gradeEnd })
+    this.state.params = Object.assign({ keyword: this.state.keyword, sort_order: this.state.sortTitleValue, availability: this.state.availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal}, this.state.selectedFacets)
+    
     this.getTeacherSets(this.state.params)
+  
   };
 
 
   availableResults = (e) => {
-    // This will return the value through the event object.
-    console.log(this.state.availableToggle)
 
-    if (this.state.availableToggle == true) {
+    if (this.state.availableToggle === true) {
       this.setState({ availableToggle: false })
-      this.state.params = Object.assign({ })
+      this.setState({ availability: ""})
+      this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ""}, this.state.selectedFacets)
     } else {
-      this.setState({ availableToggle: true })
-      this.state.params = Object.assign({ availability: ["available"] })
-    }
+      this.setState({ availableToggle: true, availability: ["available"] })
+      this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ["available"]}, this.state.selectedFacets)
 
+    }
     this.getTeacherSets(this.state.params)
 
   };
@@ -87,18 +88,18 @@ export default class SearchTeacherSets extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue}, this.state.selected_facets)
+    const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets)
     this.getTeacherSets(params)
   }
 
   handleSearchKeyword = event => {
-    if (event.target.value == "") {
+    if (event.target.value === "") {
       delete this.state.keyword;
-      delete this.state.selected_facets;
+      delete this.state.selectedFacets;
       this.props.history.push("/teacher_set_data");
-      this.getTeacherSets(Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue}, this.state.selected_facets));
+      this.getTeacherSets(Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets));
     } else {
-      this.setState({ keyword: event.target.value, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue })
+      this.setState({ keyword: event.target.value, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability })
     }
   }
 
@@ -108,10 +109,11 @@ export default class SearchTeacherSets extends Component {
         params: {
           keyword: this.state.keyword,
           page: page,
-          sort_order: this.state.sortTitleValue
+          sort_order: this.state.sortTitleValue,
+          availability: this.state.availability
         }
      }).then(res => {
-        this.setState({ teacher_sets: res.data.teacher_sets, ts_total_count: res.data.total_count, sort_order: this.state.sortTitleValue});
+        this.setState({ teacherSets: res.data.teacher_sets, tsTotalCount: res.data.total_count, sort_order: this.state.sortTitleValue, availability: this.state.availability});
       })
       .catch(function (error) {
        console.log(error)
@@ -121,8 +123,8 @@ export default class SearchTeacherSets extends Component {
 
 
   TeacherSetDetails() {
-    return this.state.teacher_sets.map((ts, i) => {
-      let availability_status_badge =  (ts.availability == "available") ? "medium" : "low"
+    return this.state.teacherSets.map((ts, i) => {
+      let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
       return <div id="teacher-set-results" style={{"margin-top": "1.5rem"}}>
         <div style={{ display: "grid", "grid-gap": "1rem", "grid-template-columns": "repeat(1, 1fr)" }}>
           <Card id="ts-details" layout="row" imageAlt="Alt text" aspectRatio="square" size="xxsmall">
@@ -142,46 +144,51 @@ export default class SearchTeacherSets extends Component {
   }
 
   SelectedFacets(field, event) {
-    if (field == 'area of study') {
-      this.state.selected_facets[field] = event
-    } else if (field == 'availability') {
-      this.state.selected_facets[field] = event
-    } else if (field == 'set type') {
-      this.state.selected_facets[field] = event
-    } else if (field == 'language') {
-      this.state.selected_facets[field] = event
-    } else if (field == 'subjects') {
-      this.state.selected_facets[field] = event
+    if (field === 'area of study') {
+      this.state.selectedFacets[field] = event
+    } else if (field === 'availability') {
+      this.state.selectedFacets[field] = event
+    } else if (field === 'set type') {
+      this.state.selectedFacets[field] = event
+    } else if (field === 'language') {
+      this.state.selectedFacets[field] = event
+    } else if (field === 'subjects') {
+      this.state.selectedFacets[field] = event
     }
-    this.state.selected_facets
+    this.state.selectedFacets
 
-    if (this.state.keyword !== null) {
-      this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue}, this.state.selected_facets)
+    if (this.state.keyword !==null) {
+      this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets)
     } else {
-      this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue}, this.state.selected_facets)
+      this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets)
     }
     this.getTeacherSets(this.state.params)
   }
 
-  TeacherSetFacets() {
-    if (this.state.teacher_sets && this.state.teacher_sets.length <= 0) {
-      return <Heading id="ts-results-not-found" level={5} text="No Results Found" />
-    }
 
-    return this.state.facets.map((ts, _i) => {
-      return <>
-          <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
-          <CheckboxGroup id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} >
-            { ts.items.map((item, index) =>
-              <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
-                <Checkbox id={"ts-checkbox-"+ index} labelText={item["label"]} value={item["value"].toString()} />
-                <Spacer />
-                <Text id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
-              </Flex>
-            ) }{<br/>}
-          </CheckboxGroup>
-        </>
-    })
+  noResultsFound() {
+    if (this.state.teacherSets && this.state.teacherSets.length <= 0) {
+      return <Text marginTop="s" id="ts-results-not-found" level={5}>No Results Found</Text>
+    }
+  }
+
+  TeacherSetFacets() {
+    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
+      return this.state.facets.map((ts, _i) => {
+        return <>
+            <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
+            <CheckboxGroup id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} >
+              { ts.items.map((item, index) =>
+                <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
+                  <Checkbox id={"ts-checkbox-"+ index} labelText={item["label"]} value={item["value"].toString()} />
+                  <Spacer />
+                  <Text id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
+                </Flex>
+              ) }{<br/>}
+            </CheckboxGroup>
+          </>
+      })
+    }
   }
 
   SignedInMessage() {
@@ -192,34 +199,74 @@ export default class SearchTeacherSets extends Component {
   }
 
   TeacherSetGradesSlider() {
-    const grade_begin = this.state.grade_begin === -1? 'Pre-K' :  this.state.grade_begin
-    return <>
-      <Slider
-        id="ts_slider-range"
-        isRangeSlider
-        labelText={"Grades Range   " + grade_begin + " To " + this.state.grade_end}
-        max={12}
-        min={-1}
-        onChange={this.getGrades}
-        showBoxes={false}
-        showHelperInvalidText
-        showLabel
-        showValues={false}
-        step={1}
-      />
-    </>
+    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
+      const grade_begin = this.state.grade_begin === -1? 'Pre-K' :  this.state.grade_begin
+      return <>
+        <Slider
+          id="ts_slider-range"
+          isRangeSlider
+          labelText={"Grades Range   " + grade_begin + " To " + this.state.grade_end}
+          max={12}
+          min={-1}
+          onChange={this.getGrades}
+          showBoxes={false}
+          showHelperInvalidText
+          showLabel
+          showValues={false}
+          step={1}
+        />
+      </>
+    }
   }
 
   sortTeacherSetTitle = (e) => {
     this.state.sortTitleValue = e.target.value;
-    this.getTeacherSets(Object.assign({ sort_order: this.state.sortTitleValue}, this.state.selected_facets));
+    this.getTeacherSets(Object.assign({ sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets));
   };
 
+  teacherSetSideBarResults = (e) => {
+    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
+      return <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
+          <Heading size="tertiary" level="three" > Refine Results </Heading>
+          <Toggle
+            id="toggle"
+            isChecked={this.state.availableToggle}
+            labelText="Available Now"
+            onChange={this.availableResults.bind(this)}
+            size="small"
+          />{<br/>}
+          {this.TeacherSetGradesSlider()}{<br/>}
+          {this.TeacherSetFacets()}
+      </Box>
+    }
+  }
+
+  teacherSetTitleOrder() {
+    const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
+    const tsTotalCount = this.state.tsTotalCount > 0 ? this.state.tsTotalCount : 0
+    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
+      return <div className="teacherSetResults">
+        <Text isBold size="default"> {tsTotalCount} results found</Text>
+        <Flex>                    
+          <Select
+            id="ts-sort-by-select"
+            name="sortBy"
+            labelText="Sort By"
+            showLabel={false}
+            showOptReqLabel={false}
+            selectType="default"
+            value={this.state.sortTitleValue}
+            onChange={this.sortTeacherSetTitle.bind(this)}
+          >
+            {sort}
+          </Select>
+        </Flex>
+        {this.TeacherSetDetails()}
+      </div>
+    }
+  }
 
   render() {
-    const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
-    const ts_total_count = this.state.ts_total_count > 0 ? this.state.ts_total_count : ""
-
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -236,29 +283,13 @@ export default class SearchTeacherSets extends Component {
                   placeholder: "Enter a teacher set name",
                   value: this.state.keyword
                 }}
-              />           
+              /> 
+              {this.noResultsFound()}          
             </>
           }
           contentPrimary={
               <>
-                <div className="teacherSetResults">
-                  <Text isBold size="default"> {ts_total_count} results found</Text>
-                  <Flex>                    
-                    <Select
-                      id="ts-sort-by-select"
-                      name="sortBy"
-                      labelText="Sort By"
-                      showLabel={false}
-                      showOptReqLabel={false}
-                      selectType="default"
-                      value={this.state.sortTitleValue}
-                      onChange={this.sortTeacherSetTitle.bind(this)}
-                    >
-                      {sort}
-                    </Select>
-                  </Flex>
-                  {this.TeacherSetDetails()}
-                </div>
+                {this.teacherSetTitleOrder()}
                 <div style={{ display: this.state.pagination }} >
                   <Flex alignItems="baseline">
                     <ButtonGroup>
@@ -276,25 +307,13 @@ export default class SearchTeacherSets extends Component {
                     </ButtonGroup>
                     <Spacer />
                     <div>
-                      <Pagination id="ts-pagination" className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
+                      <Pagination id="ts-pagination" className="teacher_set_pagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.totalPages} />
                     </div>
                   </Flex>
                 </div>
               </>
             }
-          contentSidebar={<Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
-              <Heading size="tertiary" level="three" > Refine Results </Heading>
-
-              <Toggle
-                id="toggle"
-                isChecked={this.state.availableToggle}
-                labelText="Available Now"
-                onChange={this.availableResults.bind(this)}
-                size="small"
-              />{<br/>}
-              {this.TeacherSetGradesSlider()}{<br/>}
-              {this.TeacherSetFacets()}
-          </Box>}
+          contentSidebar={this.teacherSetSideBarResults()}
           sidebar="left" 
         />
     )

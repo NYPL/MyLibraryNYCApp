@@ -47,6 +47,7 @@ module.exports = {
         "@typescript-eslint/explicit-function-return-type": 0,
         "@typescript-eslint/explicit-module-boundary-types": 0,
         camelcase: "error",
+        "@typescript-eslint/camelcase": 0,
         eqeqeq: ["error", "smart"],
         "id-blacklist": [
           "error",
