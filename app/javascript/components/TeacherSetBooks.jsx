@@ -10,7 +10,7 @@ import {
   CardContent,
   Heading,
   Image,
-  List, TemplateAppContainer, HorizontalRule, StatusBadge, Flex, Spacer
+  List, TemplateAppContainer, HorizontalRule, StatusBadge, Flex, Spacer,Link, Icon
 } from '@nypl/design-system-react-components';
 import mlnImage from '../images/mln.svg'
 
@@ -108,13 +108,11 @@ export default class TeacherSetBooks extends React.Component {
             <>
               <Flex alignItems="baseline">
                 <Heading id="heading-id" level="two" size="secondary" text={"" + bookTitle} />
-                <Spacer />
-                <a id="book-page-catalog-link" target='_blank' href={this.state.book.details_url}>View in catalog</a>
               </Flex>
 
               <HorizontalRule style={{"margin-top": "0px"}} id="ts-book-details-horizontal-rule" className="teacherSetHorizontal" />
 
-              <Card id="book-page-card-details" layout="row" imageProps={{ alt: 'Book Details', aspectRatio: 'square', isAtEnd: false, size: 'default', src: this.BookImage(book) }} >
+              <Card id="book-page-card-details" layout="row" imageProps={{ alt: 'Book Details', aspectRatio: 'original', isAtEnd: false, size: 'default', src: this.BookImage(book) }} >
 
                 { this.IsBookSubTitlePresent() ? (
                   <CardHeading id="book-page-sub_title" level="three">
@@ -185,8 +183,11 @@ export default class TeacherSetBooks extends React.Component {
                     {book.notes}]
                   </dd></>) : (<></>) }
               </List>
-
-              <Heading marginTop="s" id="appears-in-ts-text" size="tertiary" level="three">Appears in These Sets</Heading>
+              <Link className="tsDetailUrl" href="https://legacycatalog.nypl.org" id="ts-page-details_url" type="action" target='_blank'>
+                View in catalog
+                <Icon name="actionLaunch" iconRotation="rotate180" size="small" align="left" />
+              </Link>
+              <Heading marginTop="m" id="appears-in-ts-text" size="tertiary" level="three">Appears in These Sets</Heading>
               {this.TeacherSetDetails()}
             </>
           }

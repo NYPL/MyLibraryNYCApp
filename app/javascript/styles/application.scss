@@ -1008,7 +1008,7 @@ $submenu-width: 229px;
 }
 
 .tsDetailUrl {
-  padding-left: 15px;
+  padding-top: 15px;
 }
 
 .navBarIcon {
@@ -1039,3 +1039,16 @@ $submenu-width: 229px;
   color: var(--nypl-colors-brand-primary);
   background-color: var(--nypl-colors-brand-primary);
 }
+
+.libraryCards {
+  width: 532px !important;
+}
+
+.generalInfo {
+  width: 620px !important;
+}
+
+.contactsInfo {
+  width: 825px !important;
+}
+

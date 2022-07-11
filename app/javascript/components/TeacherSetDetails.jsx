@@ -17,7 +17,7 @@ import {
   CardContent,
   Heading,
   Image, Flex, Spacer, 
-  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -150,7 +150,7 @@ export default class TeacherSetDetails extends React.Component {
     let physical_description = teacher_set.physical_description;
     let call_number = teacher_set.call_number;
     let access_key = this.state.access_key;
-    let details_url = teacher_set.details_url;
+    let details_url = teacher_set.details_url? teacher_set.details_url : "";
     let availability = teacher_set.availability !== undefined ? teacher_set.availability : ""
     let availability_status_badge =  (teacher_set.availability == "available") ? "medium" : "low"
     return (
@@ -163,7 +163,6 @@ export default class TeacherSetDetails extends React.Component {
                 <Heading id="heading-secondary" level="one" size="secondary" text={ this.TeacherSetTitle() } />
                 <Spacer />
                 <StatusBadge level={availability_status_badge}>{titleCase(availability)}</StatusBadge>
-                <a className="tsDetailUrl" id="ts-page-details_url" target='_blank' href={this.state.teacher_set['details_url']}>View in catalog</a>
               </Flex>
               <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
 
@@ -218,31 +217,36 @@ export default class TeacherSetDetails extends React.Component {
                   {call_number}
                 </dd>
               </List>
+              <Link className="tsDetailUrl" href="https://legacycatalog.nypl.org" id="ts-page-details_url" type="action" target='_blank'>
+                View in catalog
+                <Icon name="actionLaunch" iconRotation="rotate180" size="small" align="left" />
+              </Link>
+
             </>
           }
           contentSidebar={
-                <VStack align="left" spacing="s" margin="m">
-                  <Box marginBottom="m"id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
-                    <Heading id="ts-order-set" level="one" size="secondary" text="Order Set!" />
-                    <Heading id="ts-available-copies" level="five" text={this.AvailableCopies()} />
-                    <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
-                      <FormField id="ts-order-field">
-                        <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
-                          { this.state.allowed_quantities.map((item, i) => {
-                              return (
-                                <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
-                              )
-                            }, this)
-                          }
-                        </Select>
-                        <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
-                      </FormField>
-                    </Form>
-                    <Text isItalic size="default" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
-                  </Box>
-                  <HaveQuestions />
-                </VStack>
-            }
+            <VStack align="left" spacing="s" margin="m">
+              <Box marginBottom="m"id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
+                <Heading id="ts-order-set" level="one" size="secondary" text="Order Set!" />
+                <Heading id="ts-available-copies" level="five" text={this.AvailableCopies()} />
+                <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
+                  <FormField id="ts-order-field">
+                    <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+                      { this.state.allowed_quantities.map((item, i) => {
+                          return (
+                            <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
+                          )
+                        }, this)
+                      }
+                    </Select>
+                    <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
+                  </FormField>
+                </Form>
+                <Text isItalic size="default" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
+              </Box>
+              <HaveQuestions />
+            </VStack>
+          }
           sidebar="right"
         />
       </DSProvider>
