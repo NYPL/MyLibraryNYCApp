@@ -41,7 +41,6 @@ export default class SearchTeacherSets extends Component {
     this.getTeacherSets(params)
   }
 
-
   getTeacherSets(params) {
     axios.get('/teacher_sets', {params: params}).then(res => {
       this.setState({ teacherSets: res.data.teacher_sets, facets: res.data.facets,
@@ -64,25 +63,22 @@ export default class SearchTeacherSets extends Component {
 
     this.setState({ grade_begin: gradeBegin, grade_end: gradeEnd })
     this.state.params = Object.assign({ keyword: this.state.keyword, sort_order: this.state.sortTitleValue, availability: this.state.availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal}, this.state.selectedFacets)
-    
     this.getTeacherSets(this.state.params)
-  
   };
 
-
   availableResults = (e) => {
-
     if (this.state.availableToggle === true) {
       this.setState({ availableToggle: false })
       this.setState({ availability: ""})
-      this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ""}, this.state.selectedFacets)
+      const grade_begin = (this.state.grade_begin == "-1") ? "" : this.state.grade_begin
+      const grade_end = (this.state.grade_end == "12") ? "" : this.state.grade_end
+
+      this.state.params = Object.assign({ grade_begin: grade_begin, grade_end: grade_end, sort_order: this.state.sortTitleValue, availability: ""}, this.state.selectedFacets)
     } else {
       this.setState({ availableToggle: true, availability: ["available"] })
       this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ["available"]}, this.state.selectedFacets)
-
     }
     this.getTeacherSets(this.state.params)
-
   };
 
 
@@ -119,8 +115,6 @@ export default class SearchTeacherSets extends Component {
        console.log(error)
     })
   };
-
-
 
   TeacherSetDetails() {
     return this.state.teacherSets.map((ts, i) => {
@@ -165,7 +159,6 @@ export default class SearchTeacherSets extends Component {
     this.getTeacherSets(this.state.params)
   }
 
-
   noResultsFound() {
     if (this.state.teacherSets && this.state.teacherSets.length <= 0) {
       return <Text marginTop="s" id="ts-results-not-found" level={5}>No Results Found</Text>
@@ -177,14 +170,18 @@ export default class SearchTeacherSets extends Component {
       return this.state.facets.map((ts, _i) => {
         return <>
             <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
-            <CheckboxGroup id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)} >
+            <CheckboxGroup isFullWidth id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)}>
               { ts.items.map((item, index) =>
-                <Flex marginTop="var(--nypl-space-xs)" marginRight="0px">
-                  <Checkbox id={"ts-checkbox-"+ index} labelText={item["label"]} value={item["value"].toString()} />
-                  <Spacer />
-                  <Text id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
-                </Flex>
-              ) }{<br/>}
+                  <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()} 
+                     labelText={
+                       <Flex>
+                          <span>{item["label"]}</span>
+                          <Spacer />
+                          <Text id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
+                      </Flex>
+                    }
+                 />
+              )}
             </CheckboxGroup>
           </>
       })
@@ -200,12 +197,12 @@ export default class SearchTeacherSets extends Component {
 
   TeacherSetGradesSlider() {
     if (this.state.teacherSets && this.state.teacherSets.length > 0) {
-      const grade_begin = this.state.grade_begin === -1? 'Pre-K' :  this.state.grade_begin
+      const grade_begin = this.state.grade_begin === -1? 'Pre-K' :  this.state.grade_begin;
       return <>
         <Slider
-          id="ts_slider-range"
+          id="ts-slider-range"
           isRangeSlider
-          labelText={"Grades Range   " + grade_begin + " To " + this.state.grade_end}
+          labelText={"Grades Range  " + grade_begin + " To " + this.state.grade_end}
           max={12}
           min={-1}
           onChange={this.getGrades}
@@ -227,26 +224,40 @@ export default class SearchTeacherSets extends Component {
   teacherSetSideBarResults = (e) => {
     if (this.state.teacherSets && this.state.teacherSets.length > 0) {
       return <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
-          <Heading size="tertiary" level="three" > Refine Results </Heading>
-          <Toggle
-            id="toggle"
-            isChecked={this.state.availableToggle}
-            labelText="Available Now"
-            onChange={this.availableResults.bind(this)}
-            size="small"
-          />{<br/>}
-          {this.TeacherSetGradesSlider()}{<br/>}
-          {this.TeacherSetFacets()}
+        <Heading size="tertiary" level="three" > Refine Results </Heading>
+        <Toggle
+          id="toggle"
+          isChecked={this.state.availableToggle}
+          labelText="Available Now"
+          onChange={this.availableResults.bind(this)}
+          size="small"
+        />{<br/>}
+        {this.TeacherSetGradesSlider()}{<br/>}
+        {this.TeacherSetFacets()}
       </Box>
+    }
+  }
+
+  keyword() {
+    if (this.state.keyword || this.state.availableToggle === true) {
+      console.log("pppp")
+      console.log(this.state.availableToggle === true)
+      console.log("olol")
+      let availableNow = ""
+      let searchKeyword = ""
+      if (this.state.availableToggle === true){
+        let availableNow = ', Available Now'
+      } else if (this.state.keyword) {
+        let searchKeyword = 'for ' + this.state.keyword
+      }
+      return searchKeyword + "availableNow"
     }
   }
 
   teacherSetTitleOrder() {
     const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
-    const tsTotalCount = this.state.tsTotalCount > 0 ? this.state.tsTotalCount : 0
     if (this.state.teacherSets && this.state.teacherSets.length > 0) {
-      return <div className="teacherSetResults">
-        <Text isBold size="default"> {tsTotalCount} results found</Text>
+      return <>
         <Flex>                    
           <Select
             id="ts-sort-by-select"
@@ -262,11 +273,12 @@ export default class SearchTeacherSets extends Component {
           </Select>
         </Flex>
         {this.TeacherSetDetails()}
-      </div>
+      </>
     }
   }
 
   render() {
+    const tsTotalCount = this.state.tsTotalCount > 0 ? this.state.tsTotalCount + ' results found' : "";
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -289,7 +301,10 @@ export default class SearchTeacherSets extends Component {
           }
           contentPrimary={
               <>
-                {this.teacherSetTitleOrder()}
+                <div className="teacherSetResults">
+                  <Text isBold size="default"> {tsTotalCount}</Text>
+                  {this.teacherSetTitleOrder()}
+                </div>
                 <div style={{ display: this.state.pagination }} >
                   <Flex alignItems="baseline">
                     <ButtonGroup>
