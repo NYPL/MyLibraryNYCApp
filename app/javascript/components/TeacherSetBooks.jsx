@@ -187,7 +187,7 @@ export default class TeacherSetBooks extends React.Component {
                 View in catalog
                 <Icon name="actionLaunch" iconRotation="rotate180" size="small" align="left" />
               </Link>
-              <Heading marginTop="m" id="appears-in-ts-text" size="tertiary" level="three">Appears in These Sets</Heading>
+              <Heading marginTop="l" id="appears-in-ts-text" size="tertiary" level="three">Appears in Teacher Sets</Heading>
               {this.TeacherSetDetails()}
             </>
           }
