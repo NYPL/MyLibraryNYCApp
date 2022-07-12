@@ -126,8 +126,8 @@ class AccountDetailsSubMenu extends React.Component {
             </li>
             <li className="nav__submenu-item">
               <ReactRouterLink className="navBarDropDown" to="/signup">
-                <Icon className="navBarIcon" align="right" color="var(--nypl-colors-ui-gray-dark)" decorative iconRotation="rotate0" id="icon-id" name="utilityAccountFilled" size="medium" type="default" />
-                Not Registered? Please Sign Up
+                <Icon className="navBarIcon" align="right" color="var(--nypl-colors-ui-gray-dark)" decorative iconRotation="rotate0" id="icon-id" name="actionRegistration" size="medium" type="default" />
+                Not Registered? {<br/>} Please Sign Up
               </ReactRouterLink>
             </li>
           </List>

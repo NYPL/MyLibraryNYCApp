@@ -2421,9 +2421,9 @@
       }
     },
     "@nypl/design-system-react-components": {
-      "version": "1.0.4",
-      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.0.4.tgz",
-      "integrity": "sha512-Kk9GFoaOfdLxTalWUCJzmf+YhNJn7UE31HfVBbbwU33GLEexFfj6/mIIeNbMAWynMstKmNxHtc+BHH/X9jdwcA==",
+      "version": "1.0.5",
+      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.0.5.tgz",
+      "integrity": "sha512-98kXLHSDfvAn+h+SnmbYywVVwShylxcIcnqhs4Ns4qFw8R5GuhM1rwa0JZ6jA2axa5uTy5JKBmtqa8O5R5vI4A==",
       "requires": {
         "@chakra-ui/react": ">=1.8.5 <=1.8.8",
         "@chakra-ui/system": ">=1.11.0 <=1.12.1",
