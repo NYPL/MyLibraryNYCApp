@@ -221,7 +221,7 @@ export default class TeacherSetDetails extends React.Component {
               </List>
               <Link className="tsDetailUrl" href={legacy_detail_url} id="ts-page-details_url" type="action" target='_blank'>
                 View in catalog
-                <Icon name="actionLaunch" iconRotation="rotate180" size="small" align="left" />
+                <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
               </Link>
 
             </>

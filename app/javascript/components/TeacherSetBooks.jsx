@@ -101,6 +101,8 @@ export default class TeacherSetBooks extends React.Component {
   render() {
     let book = this.state.book;
     let bookTitle = this.state.book.title
+    let legacy_detail_url = "http://legacycatalog.nypl.org/record="+ book.bnumber +"~S1"
+    
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -183,9 +185,10 @@ export default class TeacherSetBooks extends React.Component {
                     {book.notes}]
                   </dd></>) : (<></>) }
               </List>
-              <Link className="tsDetailUrl" href="https://legacycatalog.nypl.org" id="ts-page-details_url" type="action" target='_blank'>
+
+              <Link className="tsDetailUrl" href={legacy_detail_url} id="ts-book-page-details_url" type="action" target='_blank'>
                 View in catalog
-                <Icon name="actionLaunch" iconRotation="rotate180" size="small" align="left" />
+                <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
               </Link>
               <Heading marginTop="l" id="appears-in-ts-text" size="tertiary" level="three">Appears in Teacher Sets</Heading>
               {this.TeacherSetDetails()}
