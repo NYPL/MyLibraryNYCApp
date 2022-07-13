@@ -153,6 +153,8 @@ export default class TeacherSetDetails extends React.Component {
     let details_url = teacher_set.details_url? teacher_set.details_url : "";
     let availability = teacher_set.availability !== undefined ? teacher_set.availability : ""
     let availability_status_badge =  (teacher_set.availability == "available") ? "medium" : "low"
+
+    let legacy_detail_url = "http://legacycatalog.nypl.org/record="+ teacher_set.bnumber +"~S1"
     return (
       <DSProvider>
         <TemplateAppContainer
@@ -217,7 +219,7 @@ export default class TeacherSetDetails extends React.Component {
                   {call_number}
                 </dd>
               </List>
-              <Link className="tsDetailUrl" href="https://legacycatalog.nypl.org" id="ts-page-details_url" type="action" target='_blank'>
+              <Link className="tsDetailUrl" href={legacy_detail_url} id="ts-page-details_url" type="action" target='_blank'>
                 View in catalog
                 <Icon name="actionLaunch" iconRotation="rotate180" size="small" align="left" />
               </Link>
