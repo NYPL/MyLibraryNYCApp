@@ -31,7 +31,6 @@ export default class TeacherSetDetails extends React.Component {
                    quantity: "1", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true };
   }
 
-
   componentDidMount() {
     axios.get('/teacher_sets/'+ this.props.match.params.id)
       .then(res => {
@@ -50,7 +49,6 @@ export default class TeacherSetDetails extends React.Component {
         console.log(error);
     })    
   }
-
 
   handleQuantity = event => {
     this.setState({
@@ -76,7 +74,6 @@ export default class TeacherSetDetails extends React.Component {
        console.log(error)
     })
   }
-
 
   teacherSetTitle() {
     return <>{this.state.teacher_set["title"]}</>
@@ -139,6 +136,23 @@ export default class TeacherSetDetails extends React.Component {
     </div>
   }
 
+
+  truncateTitle( str, n, useWordBoundary ){
+    if (str.length <= n) { return str; }
+    const subString = str.substr(0, n-1); // the original check
+    return (useWordBoundary 
+      ? subString.substr(0, subString.lastIndexOf(" ")) 
+      : subString) + "...";
+  };
+
+  breadcrumbTitle(title) {
+    if (title.length >= 60) {
+      return this.truncateTitle( title, 60, true )
+    } else {
+      return this.truncateTitle( title, 60, false )
+    }
+  }
+
   render() {
 
     let teacher_set =  this.state.teacher_set
@@ -154,7 +168,7 @@ export default class TeacherSetDetails extends React.Component {
     let legacy_detail_url = "http://legacycatalog.nypl.org/record="+ teacher_set.bnumber +"~S1"
     let breadcrumbs_location_path = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
     let location_path = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
-    let title = teacher_set.title && teacher_set.title.length >= 200 ? <>{this.state.teacher_set.title.substring(0, 200)}&hellip;</> : this.state.teacher_set.title 
+    let title = teacher_set.title? this.state.teacher_set.title : ""
     
 
     return (
@@ -163,8 +177,9 @@ export default class TeacherSetDetails extends React.Component {
           breakout={<>
             <Breadcrumbs id={"mln-breadcrumbs-ts-details"}
                          breadcrumbsData={[{ url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" }, 
-                                           { url: "//"+ window.location.hostname + window.location.pathname, text: "Teacher Sets" },
-                                           { url: "//"+ window.location.hostname + window.location.pathname, text: title }]}
+                                           { url: "//"+ window.location.hostname + '/teacher_set_data', text: "Teacher Sets" },
+                                           { url: "//"+ window.location.hostname + window.location.pathname, text: this.breadcrumbTitle(title) }]}
+
                          breadcrumbsType="booksAndMore" />
             <Hero heroType="tertiary"
               backgroundColor="var(--nypl-colors-brand-primary)"
@@ -174,7 +189,7 @@ export default class TeacherSetDetails extends React.Component {
             <>
       
               <Flex alignItems="baseline">
-                <Heading id="heading-secondary" level="one" size="secondary" text={this.teacherSetTitle() } />
+                <Heading id="heading-secondary" level="one" size="secondary" text={ this.teacherSetTitle() } />
                 <Spacer />
                 <StatusBadge level={availability_status_badge}>{titleCase(availability)}</StatusBadge>
               </Flex>

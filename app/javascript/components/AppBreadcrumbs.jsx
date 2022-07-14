@@ -1,22 +1,6 @@
-import React, { Component, useState } from 'react';
-import PropTypes from 'prop-types';
-
-import {
-  Breadcrumbs,
-  Heading,
-  SearchBar,
-  Select,
-  Button,
-  Hero, DSProvider, ColorVariants, colorVariant,
-} from '@nypl/design-system-react-components';
-
+import React, { Component } from 'react';
+import { Breadcrumbs, Heading, Hero } from '@nypl/design-system-react-components';
 import "../styles/application.scss"
-
-let breadcrumbs_text;
-let path_url;
-import BreadcrumbsList from "./BreadcrumbsList";
-
-
 
 export default class AppBreadcrumbs extends Component {
 
@@ -25,31 +9,38 @@ export default class AppBreadcrumbs extends Component {
   }
 
   render() {
-    let location_path = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
+    let locationPath = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
 
     return (
       <>
-        <Breadcrumbs id={"mln-breadcrumbs-"+location_path} breadcrumbsData={ breadcrumbsUrl(location_path) }
+        <Breadcrumbs id={"mln-breadcrumbs-"+locationPath} breadcrumbsData={ breadcrumbsUrl(locationPath) }
           breadcrumbsType="booksAndMore"
         />
         <Hero heroType="tertiary"
               backgroundColor="var(--nypl-colors-brand-primary)"
-              heading={<Heading level="one" id={"hero-"+location_path} text={HeroDataValue(location_path)} />} />
+              heading={<Heading level="one" id={"hero-"+locationPath} text={HeroDataValue(locationPath)} />} />
       </>
     )
   }
 }
 
-
-
-const breadcrumbsUrl = (location_path) => {
+const breadcrumbsUrl = (locationPath) => {
 
   let urls = [{ url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" }]
-  
-    urls.push({ url: "//"+ window.location.hostname + window.location.pathname, text: HeroDataValue(location_path) })
-  
-  if (['signup', 'signin', 'ordered_holds', 'teacher_set_details', 'book_details'].includes(location_path)) {
-    urls.push({ url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(location_path) })
+
+  let locationPathname = window.location.pathname
+
+  if (['ordered_holds', 'teacher_set_details', 'book_details'].includes(locationPath)) {
+    locationPathname = '/teacher_set_data'
+  } else if (['signup', 'signin'].includes(locationPath)) {
+    locationPathname = '/account_details'
+    urls.push({ url: "//"+ window.location.hostname + '/account_details', text: HeroDataValue(locationPath) })
+  }
+
+  urls.push({ url: "//"+ window.location.hostname + locationPathname, text: HeroDataValue(locationPath) })
+
+  if (['signup', 'signin', 'ordered_holds', 'teacher_set_details', 'book_details'].includes(locationPath)) {
+    urls.push({ url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(locationPath) })
   }
   return urls;
 }
@@ -100,7 +91,7 @@ const HeroDataValue = (levelString) => {
     case 'account_details':
       return 'My Account & Orders';
     case 'book_details':
-      return 'Book Details';
+      return 'Teacher Sets';
     case 'signup':
       return 'Account';
     case 'signin':
