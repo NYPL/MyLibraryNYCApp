@@ -78,8 +78,8 @@ export default class TeacherSetDetails extends React.Component {
   }
 
 
-  TeacherSetTitle() {
-    return <div>{this.state.teacher_set["title"]}</div>
+  teacherSetTitle() {
+    return <>{this.state.teacher_set["title"]}</>
   }
 
 
@@ -174,7 +174,7 @@ export default class TeacherSetDetails extends React.Component {
             <>
       
               <Flex alignItems="baseline">
-                <Heading id="heading-secondary" level="one" size="secondary" text={ this.teacherSetTitle() } />
+                <Heading id="heading-secondary" level="one" size="secondary" text={this.teacherSetTitle() } />
                 <Spacer />
                 <StatusBadge level={availability_status_badge}>{titleCase(availability)}</StatusBadge>
               </Flex>

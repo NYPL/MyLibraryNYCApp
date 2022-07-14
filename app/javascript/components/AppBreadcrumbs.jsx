@@ -43,12 +43,15 @@ export default class AppBreadcrumbs extends Component {
 
 
 const breadcrumbsUrl = (location_path) => {
-  return [
-    { url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
-    { url: "//"+ window.location.hostname + window.location.pathname, text: HeroDataValue(location_path) },
-    { url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(location_path) }
-   ]
 
+  let urls = [{ url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" }]
+  
+    urls.push({ url: "//"+ window.location.hostname + window.location.pathname, text: HeroDataValue(location_path) })
+  
+  if (['signup', 'signin', 'ordered_holds', 'teacher_set_details', 'book_details'].includes(location_path)) {
+    urls.push({ url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(location_path) })
+  }
+  return urls;
 }
 
 const BreadcrumbsDataValue = (levelString) => {
@@ -62,13 +65,11 @@ const BreadcrumbsDataValue = (levelString) => {
     case 'teacher_set_data':
       return 'Teacher Sets';
     case "teacher_set_details":
-      return 'Teacher Set Order Details';
+      return 'Teacher Sets';
     case 'ordered_holds':
-      return 'Teacher Set Order';
+      return 'Order Confirmation';
     case 'holds':
       return 'Cancel Order';
-    case 'account_details':
-      return 'Account Details';
     case 'book_details':
       return 'Book Details';
     case 'signup':
@@ -91,13 +92,13 @@ const HeroDataValue = (levelString) => {
     case 'teacher_set_data':
       return 'Teacher Sets';
     case "teacher_set_details":
-      return 'Teacher Set Order Details';
+      return 'Teacher Sets';
     case 'ordered_holds':
-      return 'Teacher Set Order';
+      return 'Teacher Sets';
     case 'holds':
       return 'Cancel Order';
     case 'account_details':
-      return 'Account Details';
+      return 'My Account & Orders';
     case 'book_details':
       return 'Book Details';
     case 'signup':
