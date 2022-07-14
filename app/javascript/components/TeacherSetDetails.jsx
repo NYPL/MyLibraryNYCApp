@@ -17,13 +17,11 @@ import {
   CardContent,
   Heading,
   Image, Flex, Spacer, 
-  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon, Breadcrumbs, Hero
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
 import mlnImage from '../images/mln.svg'
-
-
 
 export default class TeacherSetDetails extends React.Component {
 
@@ -153,16 +151,30 @@ export default class TeacherSetDetails extends React.Component {
     let details_url = teacher_set.details_url? teacher_set.details_url : "";
     let availability = teacher_set.availability !== undefined ? teacher_set.availability : ""
     let availability_status_badge =  (teacher_set.availability == "available") ? "medium" : "low"
-
     let legacy_detail_url = "http://legacycatalog.nypl.org/record="+ teacher_set.bnumber +"~S1"
+    let breadcrumbs_location_path = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
+    let location_path = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
+    let title = teacher_set.title && teacher_set.title.length >= 200 ? <>{this.state.teacher_set.title.substring(0, 200)}&hellip;</> : this.state.teacher_set.title 
+    
+
     return (
       <DSProvider>
         <TemplateAppContainer
-          breakout={<AppBreadcrumbs />}
+          breakout={<>
+            <Breadcrumbs id={"mln-breadcrumbs-ts-details"}
+                         breadcrumbsData={[{ url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" }, 
+                                           { url: "//"+ window.location.hostname + window.location.pathname, text: "Teacher Sets" },
+                                           { url: "//"+ window.location.hostname + window.location.pathname, text: title }]}
+                         breadcrumbsType="booksAndMore" />
+            <Hero heroType="tertiary"
+              backgroundColor="var(--nypl-colors-brand-primary)"
+              heading={<Heading level="one" id={"hero-"+breadcrumbs_location_path} text="Teacher Sets"  />} />
+          </>}
           contentPrimary={
             <>
+      
               <Flex alignItems="baseline">
-                <Heading id="heading-secondary" level="one" size="secondary" text={ this.TeacherSetTitle() } />
+                <Heading id="heading-secondary" level="one" size="secondary" text={ this.teacherSetTitle() } />
                 <Spacer />
                 <StatusBadge level={availability_status_badge}>{titleCase(availability)}</StatusBadge>
               </Flex>
