@@ -91,7 +91,7 @@ const HeroDataValue = (levelString) => {
     case 'account_details':
       return 'My Account & Orders';
     case 'book_details':
-      return 'Teacher Sets';
+      return 'Book Details';
     case 'signup':
       return 'Account';
     case 'signin':

@@ -10,7 +10,7 @@ import {
   CardContent,
   Heading,
   Image,
-  List, TemplateAppContainer, HorizontalRule, StatusBadge, Flex, Spacer,Link, Icon
+  List, TemplateAppContainer, HorizontalRule, StatusBadge, Flex, Spacer,Link, Icon, Breadcrumbs
 } from '@nypl/design-system-react-components';
 import mlnImage from '../images/mln.svg'
 
@@ -70,7 +70,21 @@ export default class TeacherSetBooks extends React.Component {
     }
   }
 
+  truncateTitle( str, n, useWordBoundary ){
+    if (str.length <= n) { return str; }
+    const subString = str.substr(0, n-1); // the original check
+    return (useWordBoundary 
+      ? subString.substr(0, subString.lastIndexOf(" ")) 
+      : subString) + "...";
+  };
 
+  breadcrumbTitle(title) {
+    if (title.length >= 60) {
+      return this.truncateTitle( title, 60, true )
+    } else {
+      return this.truncateTitle( title, 60, false )
+    }
+  }
 
 
   TeacherSetDetails() {
@@ -100,12 +114,16 @@ export default class TeacherSetBooks extends React.Component {
 
   render() {
     let book = this.state.book;
-    let bookTitle = this.state.book.title
+    let bookTitle = this.state.book.title? this.state.book.title : "Book Title"
     let legacy_detail_url = "http://legacycatalog.nypl.org/record="+ book.bnumber +"~S1"
     
     return (
         <TemplateAppContainer
-          breakout={<AppBreadcrumbs />}
+          breakout={<Breadcrumbs id={"mln-breadcrumbs-ts-details"}
+                         breadcrumbsData={[{ url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" }, 
+                                           { url: "//"+ window.location.hostname + window.location.pathname, text: "Book Details" },
+                                           { url: "//"+ window.location.hostname + window.location.pathname, text: this.breadcrumbTitle(bookTitle) }]}
+                         breadcrumbsType="booksAndMore" />}
           contentPrimary={
             <>
               <Flex alignItems="baseline">
