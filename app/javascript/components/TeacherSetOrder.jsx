@@ -2,13 +2,14 @@ import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
+import { ReactRouterLink } from "react-router-dom";
 import {
   Button,
   SearchBar, Select, Input,
   SearchButton, Card, CardHeading,
   CardContent, CardActions,
   MDXCreateElement,
-  Heading, Image, List, Link, DSProvider, Notification, Icon, TemplateAppContainer, Text
+  Heading, Image, List, Link, DSProvider, Notification, Icon, TemplateAppContainer, Text, HorizontalRule, StatusBadge
 } from '@nypl/design-system-react-components';
 
 
@@ -52,7 +53,7 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   OrderMessage() {
-    const order_message = "Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details." 
+    const order_message = "Your order has been received by our system and will be soon delivered to your school!. Check your email inbox for further details." 
     const cancelled_message = "Your order has been cancelled. If you want to reorder this Teacher Set please contact us at the help@mylibrarynyc.org."
     return this.state.hold["status"] == 'cancelled' ? cancelled_message : order_message
   }
@@ -62,69 +63,79 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   OrderDetails() {
-    return <div className="tsOrderDetails">
-      <List id="nypl-list2" className="listType" title="" type="dl">
-        <dt className="orderDetails font-weight-500">
+    return <List marginTop="l" id="order-confirmation-list-details" title="Order Details" type="dl">
+        <dt>
+          Teacher Set
+        </dt>
+        <dd>
+          {this.teacherSetCardDetails()}
+        </dd>
+        <dt>
           Quantity
         </dt>
-        <dd className="orderDetails">
+        <dd>
           {this.state.hold["quantity"]}
         </dd>
-
-        <dt className="orderDetails font-weight-500">
-          Status
+        <dt>
+          Order Placed
         </dt>
-        <dd className="orderDetails">
-          {this.state.hold["status"]}
-        </dd>
-        <dt className="orderDetails font-weight-500">
-          Placed
-        </dt>
-        <dd className="orderDetails">
+        <dd>
           {this.state.hold["created_at"]}
         </dd>
+        <dt>
+          Status
+        </dt>
+        <dd>
+          {this.state.hold["status"]}
+        </dd>
       </List>
-    </div>
   }
 
+  teacherSetCardDetails() {
+    if (this.state.teacher_set) {
+      let ts = this.state.teacher_set
+      let title = ts.title? ts.title : " "
+      let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
+      let availability = ts.availability !== undefined ? ts.availability : ""
+      return <div>
+          <Card id="book-page-ts-card-details" layout="row">
+            
+            <CardContent id="book-page-ts-suitabilities"> {ts.suitabilities_string} </CardContent>
+            <CardContent id="book-page-ts-availability"> 
+              <StatusBadge level={availability_status_badge}>{availability}</StatusBadge>
+            </CardContent>
+            <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
+          </Card>
+      </div>
+    }
+  }
+
+
   CancelButton() {
-    return <div style={{ display: this.showCancelButton() }}> <Button className="cancel-button" buttonType="noBrand">
-        <Link className="href_link whiteColor" href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
+    return <div style={{ display: this.showCancelButton() }}>
+      <Button id="order-cancel-button" className="cancel-button" buttonType="secondary" >
+        <Link className="href_link cancelOrderButton" href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
       </Button>
       </div>
   }
 
   render() {
+    let confirmationMsg = this.state.hold.status == 'cancelled' ? 'Cancel Order' : 'Order Confirmation'
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <>
-              <Card id="ts-order-card-details" border className="orderPage">
-                <CardHeading id="ts-order-msg" className="order_message">
-                  <Icon id="ts-order-msg-icon" align="left" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="medium" />
-                  { this.OrderMessage() }
-                </CardHeading>
+              <Heading id="order-confirmation-heading" level="two" size="secondary" text={confirmationMsg} />
+              <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
+              { this.OrderMessage() }
+              { this.OrderDetails() }
+              { this.CancelButton() }
 
-                <CardHeading id="ts-order-title" className="order_page_title">
-                  { this.TeacherSetTitle() }
-                </CardHeading>
-
-                <CardContent id="ts-order-desc" className="order_page_desc">
-                  { this.TeacherSetDescription() }
-                </CardContent>
-
-                <CardContent id="ts-order-page-details">
-                  { this.OrderDetails() }
-                </CardContent>
-                
-                <CardContent id="ts-order-cancel-button">
-                  { this.CancelButton() }
-                </CardContent>
-
-                {<br/>}
-                <a id="ts-details-link-page" href="/teacher_set_data">Go To Search Teacher Sets Page</a>
-              </Card>
+              <Link  marginTop="l" href="/teacher_set_data" id="ts-details-link-page" type="action" target='_blank'>
+                <Icon name="arrow" iconRotation="rotate90" size="small" align="left" />
+                Back to Search Teacher Sets Page
+              </Link>
             </>
           }
         contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
