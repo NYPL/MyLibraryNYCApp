@@ -34,7 +34,6 @@ const breadcrumbsUrl = (locationPath) => {
     locationPathname = '/teacher_set_data'
   } else if (['signup', 'signin'].includes(locationPath)) {
     locationPathname = '/account_details'
-    urls.push({ url: "//"+ window.location.hostname + '/account_details', text: HeroDataValue(locationPath) })
   }
 
   urls.push({ url: "//"+ window.location.hostname + locationPathname, text: HeroDataValue(locationPath) })
