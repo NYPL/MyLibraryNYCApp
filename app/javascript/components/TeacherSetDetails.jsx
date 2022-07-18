@@ -79,7 +79,6 @@ export default class TeacherSetDetails extends React.Component {
     return <>{this.state.teacher_set["title"]}</>
   }
 
-
   TeacherSetDescription() {
     return <div id="ts-page-desc">{this.state.teacher_set["description"]}</div>
   }
@@ -92,7 +91,6 @@ export default class TeacherSetDetails extends React.Component {
     return <div className="bookTitlesCount">{this.state.books.length > 0 ? this.state.books.length + " Titles" : ""}</div>
   }
 
-
   TeacherSetBooks() {
     return this.state.books.map((data, i) => {
       return <ReactRouterLink id={"ts-books-" + i} to={"/book_details/" + data.id} >
@@ -100,7 +98,6 @@ export default class TeacherSetDetails extends React.Component {
         </ReactRouterLink>
     })
   }
-
 
   BookImage(data) {
     if (data.cover_uri) {
