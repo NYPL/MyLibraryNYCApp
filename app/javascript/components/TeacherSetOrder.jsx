@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
+import TeacherSetOrderDetails from "./TeacherSetOrderDetails";
 import axios from 'axios';
 import { ReactRouterLink } from "react-router-dom";
 import {
@@ -136,6 +137,7 @@ export default class TeacherSetOrder extends React.Component {
                 <Icon name="arrow" iconRotation="rotate90" size="small" align="left" />
                 Back to Search Teacher Sets Page
               </Link>
+              <TeacherSetOrderDetails  userSignedIn={this.state.userSignedIn}/>
             </>
           }
         contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
