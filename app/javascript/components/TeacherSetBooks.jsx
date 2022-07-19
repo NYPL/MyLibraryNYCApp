@@ -101,7 +101,7 @@ export default class TeacherSetBooks extends React.Component {
               </CardHeading>
               <CardContent id="book-page-ts-suitabilities"> {ts.suitabilities_string} </CardContent>
               <CardContent id="book-page-ts-availability"> 
-                <StatusBadge level={availability_status_badge}>{availability}</StatusBadge>
+                <StatusBadge level={availability_status_badge}>{titleCase(availability)}</StatusBadge>
               </CardContent>
               <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
             </Card>
@@ -208,7 +208,7 @@ export default class TeacherSetBooks extends React.Component {
                 View in catalog
                 <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
               </Link>
-              <Heading marginTop="l" id="appears-in-ts-text" size="tertiary" level="three">Appears in Teacher Sets</Heading>
+              <Heading marginTop="l" id="appears-in-ts-text" size="tertiary" level="three">Appears in These Sets</Heading>
               {this.TeacherSetDetails()}
             </>
           }

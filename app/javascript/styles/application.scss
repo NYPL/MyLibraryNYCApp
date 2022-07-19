@@ -609,6 +609,7 @@ ul.list li:before {
 
 .teacherSetHorizontal {
   background-color: #D23B42 !important;
+  height: 3px !important;
 }
 
 .cardImage {
@@ -1054,4 +1055,8 @@ $submenu-width: 245px;
 
 .cancelOrderButton {
   color: var(--nypl-colors-ui-black) !important;
+}
+
+.cancelOrderDate {
+  display: "none";
 }

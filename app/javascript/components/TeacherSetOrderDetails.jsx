@@ -38,6 +38,16 @@ export default function TeacherSetOrderDetails(props) {
   }
 
   const teacherSetOrderDetails = () => {
+    let orderCancellled = ""
+    let orderUpdatedDate = ""
+    let showCancelledDate = "display_none"
+
+    if (orderDetails && orderDetails["status"] == "cancelled"){
+      orderCancellled = "Order Cancelled"
+      orderUpdatedDate = orderDetails["updated_at"]
+      showCancelledDate = "display_block"
+    }
+
     return <List marginTop="l" id="order-confirmation-list-details" title="Order Details" type="dl">
         <dt>
           Teacher Set
@@ -62,6 +72,12 @@ export default function TeacherSetOrderDetails(props) {
         </dt>
         <dd>
           {STATUS_LABEL[orderDetails["status"]]}
+        </dd>
+        <dt className={showCancelledDate}>
+          {orderCancellled}
+        </dt>
+        <dd className={showCancelledDate}>
+          {orderUpdatedDate}
         </dd>
       </List>
   }

@@ -89,7 +89,7 @@ export default class TeacherSetDetails extends React.Component {
   }
 
   BooksCount() {
-    return <div className="bookTitlesCount">{this.state.books.length > 0 ? this.state.books.length + " Titles" : ""}</div>
+    return <div className="bookTitlesCount">{this.state.books.length > 1 ? this.state.books.length + " Titles" : this.state.books.length >= 1 ?  this.state.books.length + "Title" : ""}</div>
   }
 
 
