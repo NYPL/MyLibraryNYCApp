@@ -51,7 +51,7 @@ deploy:
   bucket_path: my-library-nyc-app-react-dev-18
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: reactonrails-development # for testing
+    branch: july-18-branch # for testing
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
