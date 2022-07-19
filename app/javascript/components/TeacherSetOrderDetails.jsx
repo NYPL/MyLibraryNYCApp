@@ -2,6 +2,9 @@ import React, { Component, useState } from 'react';
 import { List, Card, CardContent, StatusBadge, CardHeading, Link, Heading } from '@nypl/design-system-react-components';
 import { ReactRouterLink } from "react-router-dom";
 import { titleCase } from "title-case";
+import { compareAsc, format } from 'date-fns'
+import dateFormat from 'dateformat';
+
 
 export default function TeacherSetOrderDetails(props) {
 
@@ -44,7 +47,7 @@ export default function TeacherSetOrderDetails(props) {
 
     if (orderDetails && orderDetails["status"] == "cancelled"){
       orderCancellled = "Order Cancelled"
-      orderUpdatedDate = orderDetails["updated_at"]
+      orderUpdatedDate = dateFormat(orderDetails["updated_at"], "dddd, mmmm d, yyyy")
       showCancelledDate = "display_block"
     }
 
@@ -65,7 +68,7 @@ export default function TeacherSetOrderDetails(props) {
           Order Placed
         </dt>
         <dd>
-          {orderDetails["created_at"]}
+          {dateFormat(orderDetails["created_at"], "dddd, mmmm d, yyyy")}
         </dd>
         <dt>
           Status
