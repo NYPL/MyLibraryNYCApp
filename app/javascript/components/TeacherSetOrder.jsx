@@ -4,6 +4,8 @@ import HaveQuestions from "./HaveQuestions";
 import TeacherSetOrderDetails from "./TeacherSetOrderDetails";
 import axios from 'axios';
 import { ReactRouterLink } from "react-router-dom";
+import { titleCase } from "title-case";
+
 import {
   Button,
   SearchBar, Select, Input,
@@ -12,8 +14,6 @@ import {
   MDXCreateElement,
   Heading, Image, List, Link, DSProvider, Notification, Icon, TemplateAppContainer, Text, HorizontalRule, StatusBadge
 } from '@nypl/design-system-react-components';
-
-
 
 export default class TeacherSetOrder extends React.Component {
 
@@ -26,7 +26,6 @@ export default class TeacherSetOrder extends React.Component {
   
 
   componentDidMount() {
-
     if (typeof this.state.hold == 'string') {
       axios.get('/holds/' + this.props.match.params.access_key)
         .then((res) => {
@@ -55,7 +54,7 @@ export default class TeacherSetOrder extends React.Component {
 
   OrderMessage() {
     const order_message = "Your order has been received by our system and will be soon delivered to your school!. Check your email inbox for further details." 
-    const cancelled_message = "Your order has been cancelled. If you want to reorder this Teacher Set please contact us at the help@mylibrarynyc.org."
+    const cancelled_message = "Your cancellation of the order below has been received."
     return this.state.hold["status"] == 'cancelled' ? cancelled_message : order_message
   }
 
@@ -63,53 +62,53 @@ export default class TeacherSetOrder extends React.Component {
     return this.state.hold.status == 'cancelled' ? 'none' : 'block'
   }
 
-  OrderDetails() {
-    return <List marginTop="l" id="order-confirmation-list-details" title="Order Details" type="dl">
-        <dt>
-          Teacher Set
-        </dt>
-        <dd>
-          {this.teacherSetCardDetails()}
-        </dd>
-        <dt>
-          Quantity
-        </dt>
-        <dd>
-          {this.state.hold["quantity"]}
-        </dd>
-        <dt>
-          Order Placed
-        </dt>
-        <dd>
-          {this.state.hold["created_at"]}
-        </dd>
-        <dt>
-          Status
-        </dt>
-        <dd>
-          {this.state.hold["status"]}
-        </dd>
-      </List>
-  }
+  // OrderDetails() {
+  //   return <List marginTop="l" id="order-confirmation-list-details" title="Order Details" type="dl">
+  //       <dt>
+  //         Teacher Set
+  //       </dt>
+  //       <dd>
+  //         {this.teacherSetCardDetails()}
+  //       </dd>
+  //       <dt>
+  //         Quantity
+  //       </dt>
+  //       <dd>
+  //         {this.state.hold["quantity"]}
+  //       </dd>
+  //       <dt>
+  //         Order Placed
+  //       </dt>
+  //       <dd>
+  //         {this.state.hold["created_at"]}
+  //       </dd>
+  //       <dt>
+  //         Status
+  //       </dt>
+  //       <dd>
+  //         {this.state.hold["status"]}
+  //       </dd>
+  //     </List>
+  // }
 
-  teacherSetCardDetails() {
-    if (this.state.teacher_set) {
-      let ts = this.state.teacher_set
-      let title = ts.title? ts.title : " "
-      let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
-      let availability = ts.availability !== undefined ? ts.availability : ""
-      return <div>
-          <Card id="book-page-ts-card-details" layout="row">
+  // teacherSetCardDetails() {
+  //   if (this.state.teacher_set) {
+  //     let ts = this.state.teacher_set
+  //     let title = ts.title? ts.title : " "
+  //     let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
+  //     let availability = ts.availability !== undefined ? ts.availability : ""
+  //     return <div>
+  //         <Card id="book-page-ts-card-details" layout="row">
             
-            <CardContent id="book-page-ts-suitabilities"> {ts.suitabilities_string} </CardContent>
-            <CardContent id="book-page-ts-availability"> 
-              <StatusBadge level={availability_status_badge}>{availability}</StatusBadge>
-            </CardContent>
-            <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
-          </Card>
-      </div>
-    }
-  }
+  //           <CardContent id="book-page-ts-suitabilities"> {ts.suitabilities_string} </CardContent>
+  //           <CardContent id="book-page-ts-availability"> 
+  //             <StatusBadge level={availability_status_badge}>{availability}</StatusBadge>
+  //           </CardContent>
+  //           <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
+  //         </Card>
+  //     </div>
+  //   }
+  // }
 
 
   CancelButton() {
@@ -121,7 +120,7 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   render() {
-    let confirmationMsg = this.state.hold.status == 'cancelled' ? 'Cancel Order' : 'Order Confirmation'
+    let confirmationMsg = this.state.hold.status == 'cancelled' ? 'Cancel Order Confirmation' : 'Order Confirmation'
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -130,14 +129,14 @@ export default class TeacherSetOrder extends React.Component {
               <Heading id="order-confirmation-heading" level="two" size="secondary" text={confirmationMsg} />
               <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
               { this.OrderMessage() }
-              { this.OrderDetails() }
+              <TeacherSetOrderDetails  teacherSetDetails={this.state.teacher_set} orderDetails={this.state.hold}/>
+              
               { this.CancelButton() }
 
-              <Link  marginTop="l" href="/teacher_set_data" id="ts-details-link-page" type="action" target='_blank'>
+              <Link  marginTop="l" href="/teacher_set_data" id="ts-details-link-page" type="action">
                 <Icon name="arrow" iconRotation="rotate90" size="small" align="left" />
                 Back to Search Teacher Sets Page
               </Link>
-              <TeacherSetOrderDetails  userSignedIn={this.state.userSignedIn}/>
             </>
           }
         contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}

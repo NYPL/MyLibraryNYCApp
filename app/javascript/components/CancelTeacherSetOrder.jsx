@@ -2,11 +2,12 @@ import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
+import TeacherSetOrderDetails from "./TeacherSetOrderDetails";
 import axios from 'axios';
 import {
   Button,
-  SearchBar, Select, Input, SearchButton, Heading, Image, List, Link, TextInput, Label, DSProvider,
-  TemplateAppContainer, Text
+  SearchBar, Select, Input, SearchButton, Heading, Image, List, Link, TextInput, Label, DSProvider, HStack,
+  TemplateAppContainer, Text, HorizontalRule
 } from '@nypl/design-system-react-components';
 
 
@@ -49,15 +50,27 @@ export default class TeacherSetOrder extends React.Component {
     })
   }
 
-  render() {  
+  render() {
     return (
       <TemplateAppContainer
         breakout={<AppBreadcrumbs />}
         contentPrimary={
           <>
-            <Heading id="ts-cancellation-confirmation-text" level="one" size="tertiary" text="Please Confirm, Are you sure you want to cancle this order for" />{<br/>}
-            <TextInput id="ts-cancel-order-button" labelText="Reason For cancelling" value={this.state.comment} showLabel showOptReqLabel type="text" onChange={this.handleCancelComment}/>
-            <Button id="ts-cancel-button-id" className="cancel-button" buttonType="noBrand" onClick={this.handleSubmit}> Cancel My Order </Button>
+            <Heading id="ts-cancellation-confirmation-text" level="two" size="secondary" text="Cancel Order" />
+            <HorizontalRule id="ts-cancel-order-horizontal=line" className="teacherSetHorizontal" />
+            <div>Review your order details below and verify this is the order you would like cancel.</div>
+            <TeacherSetOrderDetails  teacherSetDetails={this.state.teacher_set} orderDetails={this.state.hold}/>
+            <Heading marginTop="l" id="ts-cancellation-confirmation-text" level="one" size="tertiary" text="Confirm Cancellation" />
+            <TextInput id="ts-cancel-order-button" labelText="Reason For cancelling order" type="textarea" value={this.state.comment} showLabel showOptReqLabel onChange={this.handleCancelComment}/>
+            
+            <Label marginTop="m" htmlFor="id-of-input-element" id="confirm-teacher-set-order-label">Are you sure you want to cancel your teacher set order?</Label>
+            <HStack spacing="s">
+              <Button id="ts-cancel-button-id" buttonType="noBrand" onClick={this.handleSubmit}> Cancel My Order </Button>
+              
+              <Button id="keep-my-order-button" className="cancel-button" buttonType="secondary" >
+                <Link className="href_link cancelOrderButton" href={"/ordered_holds/" + this.state.access_key } > No, keep my order </Link>
+              </Button>
+            </HStack>
           </>
         }
         contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
