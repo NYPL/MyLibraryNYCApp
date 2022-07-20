@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import HaveQuestions from "./HaveQuestions";
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
 import {
   Input, TextInput, List, DSProvider, TemplateAppContainer, Text
@@ -73,6 +74,7 @@ export default class ParticipatingSchools extends Component {
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
+          contentTop={<SignedInMsg signInDetails={this.props} />}
           contentPrimary={
             <>
             <Text size="default" id="your-school-participate-in-mln-text" isBold>Does your school participate in MyLibraryNYC?</Text>

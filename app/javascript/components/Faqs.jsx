@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
-
+import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
 import { Accordion, Link, List, DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 
@@ -54,6 +54,7 @@ export default class Faqs extends Component {
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
+          contentTop={<SignedInMsg signInDetails={this.props} />}
           contentPrimary={
             <Accordion id="faqs-page" accordionData={this.FrequentlyAskedQuestions()} />
           }

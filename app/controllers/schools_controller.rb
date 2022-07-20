@@ -3,6 +3,9 @@
 class SchoolsController < ApplicationController
   
   def index
+    if storable_location?
+      store_user_location!
+    end
     schools = School.active
     # Group by first letter of the school.
     group_by_schools = schools.group_by { |school| school.name[0] }

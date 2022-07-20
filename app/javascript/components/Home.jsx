@@ -26,7 +26,7 @@ import {
   Card, 
   CardHeading, 
   CardContent,
-  Pagination, Checkbox, DSProvider, TemplateAppContainer, VStack, Notification, Text
+  Pagination, Checkbox, DSProvider, TemplateAppContainer, VStack, Notification, Text, Link
 } from '@nypl/design-system-react-components';
 
 import bookImage from '../images/book.png'
@@ -104,14 +104,15 @@ export default class Home extends React.Component {
 
   SignedUpMessage() {
     if (!this.props.hideSignOutMsg && !this.props.userSignedIn && this.props.signoutMsg !== "") {
-      return <Notification ariaLabel="SignOut Notification" id="sign-out-notification" className="signOutMessage" notificationType="announcement" notificationContent={this.props.signoutMsg} />
+      return <Notification marginTop="l" icon={<Icon name="alertNotificationImportant" color="section.locations.primary" />} ariaLabel="SignOut Notification" id="sign-out-notification" notificationType="announcement" 
+      notificationContent={<><b>You have been signed out.</b> You will need to <Link href="/signin">sign in</Link> again to access your account details.</>} />
     }
   }
 
   render() {
     return (
         <TemplateAppContainer
-          breakout={<>{this.SignedUpMessage()}
+          breakout={<>
                     <Hero heroType="campaign" 
                           heading={<Heading level="one"
                           id="mln-campaign-hero" text="Welcome To MyLibrary NYC" />} 
@@ -119,7 +120,7 @@ export default class Home extends React.Component {
                           backgroundImageSrc={heroCampaignBg}
                           imageProps={{alt: "Mln hero image", src: heroCampaignLeft, id: "mln-hero-image"}}
                           /></>}
-          contentTop={<></>}
+          contentTop={this.SignedUpMessage()}
           contentPrimary={
                 <>
                   <Heading level="three">Search For Teacher Sets</Heading>

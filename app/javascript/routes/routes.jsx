@@ -72,9 +72,24 @@ export default class Routes extends React.Component {
                     <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} hideSignOutMsg={this.state.hide_signout_msg} signoutMsg={this.state.signout_msg} />
                   ) }
                 />
-                <Route path="/faq" component={Faqs} />
-                <Route path="/contacts" component={Contacts} />
-                <Route path="/participating-schools" component={ParticipatingSchools} />
+                <Route
+                  path='/faq'
+                  render={routeProps => (
+                    <Faqs {...routeProps} component={Faqs} userSignedIn={this.state.userSignedIn} hideSignInMsg={this.state.hide_signin_msg} signInMsg={this.state.signin_msg} />
+                  )}
+                />
+                <Route
+                  path='/contacts'
+                  render={routeProps => (
+                    <Contacts {...routeProps} component={Contacts} userSignedIn={this.state.userSignedIn} hideSignInMsg={this.state.hide_signin_msg} signInMsg={this.state.signin_msg} />
+                  )}
+                />
+                <Route
+                  path='/participating-schools'
+                  render={routeProps => (
+                    <ParticipatingSchools {...routeProps} component={ParticipatingSchools} userSignedIn={this.state.userSignedIn} hideSignInMsg={this.state.hide_signin_msg} signInMsg={this.state.signin_msg} />
+                  )}
+                />
                 <Route
                   path='/signin'
                   render={routeProps => (

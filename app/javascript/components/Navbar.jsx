@@ -48,11 +48,11 @@ export default class Navbar extends React.Component {
             <HStack spacing="m">
               <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
 
-              <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" className="nav-link-colors">Contact</ReactRouterLink></li>
+              <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" onClick={this.hideSignInMsg} className="nav-link-colors">Contact</ReactRouterLink></li>
 
-              <li id="mln-navbar-faq-link"><ReactRouterLink to="/faq" className="nav-link-colors">FAQ</ReactRouterLink></li>
+              <li id="mln-navbar-faq-link"><ReactRouterLink to="/faq" onClick={this.hideSignInMsg} className="nav-link-colors">FAQ</ReactRouterLink></li>
 
-              <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" className="nav-link-colors">Participating Schools</ReactRouterLink></li>
+              <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" onClick={this.hideSignInMsg} className="nav-link-colors">Participating Schools</ReactRouterLink></li>
 
               <li id="mln-navbar-ad-link" className="nav__menu-item">
                 <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} />

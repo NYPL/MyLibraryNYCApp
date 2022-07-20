@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
 import { titleCase } from "title-case";
 
@@ -76,7 +77,7 @@ export default class SearchTeacherSets extends Component {
       this.setState({ availableToggle: true, availability: ["available"] })
       this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ["available"]}, this.state.selectedFacets)
     }
-    
+
     this.getTeacherSets(this.state.params)
   };
 
@@ -286,7 +287,8 @@ export default class SearchTeacherSets extends Component {
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
           contentTop={<>
-              {this.SignedInMessage()}
+              {<SignedInMsg signInDetails={this.props} />}
+
               <Heading id="search-and-find-teacher-sets-header" size="secondary" level="two" text="Search and Find Teacher Sets"  />
               <HorizontalRule id="ts-horizontal-rule" className="teacherSetHorizontal" />
               <SearchBar id="ts-search" noBrandButtonType labelText="Teacher-Set SearchBar" onSubmit={this.handleSubmit} className="" 

@@ -43,7 +43,11 @@ class HomeController < ApplicationController
   def digital_resources; end
 
 
-  def help; end
+  def help; 
+    if storable_location?
+      store_user_location!
+    end
+  end
 
 
   def faq
