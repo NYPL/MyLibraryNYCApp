@@ -70,14 +70,13 @@ export default class SearchTeacherSets extends Component {
     if (this.state.availableToggle === true) {
       this.setState({ availableToggle: false })
       this.setState({ availability: ""})
-      const grade_begin = (this.state.grade_begin == "-1") ? "" : this.state.grade_begin
-      const grade_end = (this.state.grade_end == "12") ? "" : this.state.grade_end
 
-      this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: this.state.sortTitleValue, availability: ""}, this.state.selectedFacets)
+      this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ""}, this.state.selectedFacets)
     } else {
       this.setState({ availableToggle: true, availability: ["available"] })
       this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ["available"]}, this.state.selectedFacets)
     }
+    
     this.getTeacherSets(this.state.params)
   };
 
