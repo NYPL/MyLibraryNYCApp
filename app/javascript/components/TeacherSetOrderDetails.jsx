@@ -8,7 +8,6 @@ import dateFormat from 'dateformat';
 
 export default function TeacherSetOrderDetails(props) {
 
-  const [mesage, setMessage] = useState([]);
   const orderDetails = props.orderDetails;
   const STATUS_LABEL = {
     'new': 'Awaiting Review',

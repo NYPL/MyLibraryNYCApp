@@ -37,7 +37,7 @@ export default class SearchTeacherSets extends Component {
   }
 
   componentDidMount() {
-    const params = Object.assign({ keyword: this.state.keyword }, this.state.selectedFacets)
+    const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end}, this.state.selectedFacets)
     this.getTeacherSets(params)
   }
 
@@ -73,10 +73,10 @@ export default class SearchTeacherSets extends Component {
       const grade_begin = (this.state.grade_begin == "-1") ? "" : this.state.grade_begin
       const grade_end = (this.state.grade_end == "12") ? "" : this.state.grade_end
 
-      this.state.params = Object.assign({ grade_begin: grade_begin, grade_end: grade_end, sort_order: this.state.sortTitleValue, availability: ""}, this.state.selectedFacets)
+      this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: this.state.sortTitleValue, availability: ""}, this.state.selectedFacets)
     } else {
       this.setState({ availableToggle: true, availability: ["available"] })
-      this.state.params = Object.assign({ grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ["available"]}, this.state.selectedFacets)
+      this.state.params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: ["available"]}, this.state.selectedFacets)
     }
     this.getTeacherSets(this.state.params)
   };
@@ -91,7 +91,11 @@ export default class SearchTeacherSets extends Component {
   handleSearchKeyword = event => {
     if (event.target.value === "") {
       delete this.state.keyword;
-      delete this.state.selectedFacets;
+      // delete this.state.selectedFacets;
+      // delete this.state.grade_begin;
+      // delete this.state.grade_end;
+      // delete this.state.sortTitleValue;
+      // delete this.state.availability;
       this.props.history.push("/teacher_set_data");
       this.getTeacherSets(Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets));
     } else {
@@ -109,7 +113,7 @@ export default class SearchTeacherSets extends Component {
           availability: this.state.availability
         }
      }).then(res => {
-        this.setState({ teacherSets: res.data.teacher_sets, tsTotalCount: res.data.total_count, sort_order: this.state.sortTitleValue, availability: this.state.availability});
+        this.setState({ teacherSets: res.data.teacher_sets, tsTotalCount: res.data.total_count, sort_order: this.state.sortTitleValue, availability: this.state.availability, keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end});
       })
       .catch(function (error) {
        console.log(error)
@@ -218,7 +222,7 @@ export default class SearchTeacherSets extends Component {
 
   sortTeacherSetTitle = (e) => {
     this.state.sortTitleValue = e.target.value;
-    this.getTeacherSets(Object.assign({ sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets));
+    this.getTeacherSets(Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets));
   };
 
   teacherSetSideBarResults = (e) => {
