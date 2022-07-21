@@ -106,6 +106,8 @@ export default class Home extends React.Component {
     if (!this.props.hideSignOutMsg && !this.props.userSignedIn && this.props.signoutMsg !== "") {
       return <Notification marginTop="l" icon={<Icon name="alertNotificationImportant" color="section.locations.primary" />} ariaLabel="SignOut Notification" id="sign-out-notification" notificationType="announcement" 
       notificationContent={<><b>You have been signed out.</b> You will need to <Link href="/signin">sign in</Link> again to access your account details.</>} />
+    } else {
+      return <></>
     }
   }
 
