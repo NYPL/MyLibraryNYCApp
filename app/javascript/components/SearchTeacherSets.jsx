@@ -106,12 +106,14 @@ export default class SearchTeacherSets extends Component {
   onPageChange = (page) => {
     this.state.setComputedCurrentPage = page;
     axios.get('/teacher_sets', {
-        params: {
+        params: Object.assign({
           keyword: this.state.keyword,
           page: page,
           sort_order: this.state.sortTitleValue,
-          availability: this.state.availability
-        }
+          availability: this.state.availability,
+          grade_begin: this.state.grade_begin,
+          grade_end: this.state.grade_end,
+        }, this.state.selectedFacets), 
      }).then(res => {
         this.setState({ teacherSets: res.data.teacher_sets, tsTotalCount: res.data.total_count, sort_order: this.state.sortTitleValue, availability: this.state.availability, keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end});
       })
