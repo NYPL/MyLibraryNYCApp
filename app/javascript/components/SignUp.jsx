@@ -12,7 +12,7 @@ export default class SignUp extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { email: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
+    this.state = { email: "", errorEmailMsg: "", errorAltEmailMsg: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
                    password: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
                    lastNameIsValid: false, passwordIsValid: false, schoolIsValid: false, emailIsInvalid: false,
                    altEmailIsvalid: false, messages: {}, news_letter_error: "", show_news_letter_error: false, isCheckedVal: false, signUpmsg: "", isDisabled: false, serverError: "", serverErrorIsValid: false}
@@ -42,28 +42,33 @@ export default class SignUp extends Component {
             return false;
           } else {
             if (res.data.message.alt_email && res.data.message.alt_email.length > 0) {
-              this.setState({ errors: { alt_email: res.data.message.alt_email[0] } })
+              this.state.errors['alt_email'] = res.data.message.alt_email[0];
               this.setState({altEmailIsvalid: true, isDisabled: true })
             }
+
             if (res.data.message.email && res.data.message.email.length > 0) {
-              this.setState({ errors: { email: res.data.message.email[0] } })
+              this.state.errors['email'] = res.data.message.email[0];
               this.setState({emailIsInvalid: true, isDisabled: true })
             }
             if (res.data.message.first_name && res.data.message.first_name.length > 0) {
-              this.setState({ errors: { first_name: res.data.message.first_name[0] } })
+              this.state.errors['first_name'] = res.data.message.first_name[0];
               this.setState({firstNameIsValid: true, isDisabled: true })
             }
             if (res.data.message.last_name && res.data.message.last_name.length > 0) {
-              this.setState({ errors: { last_name: res.data.message.last_name[0] }, lastNameIsValid: true, isDisabled: true })
+              this.state.errors['last_name'] = res.data.message.last_name[0];
+              this.setState({lastNameIsValid: true, isDisabled: true })
             }
             if (res.data.message.school_id && res.data.message.school_id.length > 0) {
-              this.setState({ errors: { school_id: res.data.message.school_id[0] }, schoolIsValid: true, isDisabled: true })
+              this.state.errors['school_id'] = res.data.message.school_id[0];
+              this.setState({schoolIsValid: true, isDisabled: true })
             }
             if (res.data.message.password && res.data.message.password.length > 0) {
-              this.setState({ errors: { password: res.data.message.password[0] }, passwordIsValid: true, isDisabled: true })
+              this.state.errors['password'] = res.data.message.password[0];
+              this.setState({ passwordIsValid: true, isDisabled: true })
             }
-            if (res.data.message.error && res.data.message.error.length > 0) {
-              this.setState({ errors: { serverError: res.data.message.error[0] }, serverErrorIsValid: true, isDisabled: true })
+            if (res.data.status === 500 && res.data.message.error && res.data.message.error.length > 0) {
+              this.state.errors['serverError'] = res.data.message.error[0];
+              this.setState({ serverErrorIsValid: true, isDisabled: true })
             }
           }
         })
@@ -92,8 +97,8 @@ export default class SignUp extends Component {
 
     if (email) {
       axios.get('/check_email', { params: { email: email } }).then(res => {
-        console.log("plplp")
-        console.log(typeof res.data.statusCode)
+        // console.log("plplp")
+        // console.log(typeof res.data.statusCode)
         if (res.data.statusCode == 409) {
           this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
           this.setState({emailIsInvalid: true, isDisabled: true })
@@ -107,7 +112,7 @@ export default class SignUp extends Component {
 
   validateAltEmailDomain(alt_email) {
     if (alt_email && !validator.isEmail(alt_email)) {
-      let msg = 'Enter a valid alternate email'
+      let msg = 'Alternate email address is invalid'
       this.state.errors['alt_email'] = msg
       this.setState({altEmailIsvalid: true, isDisabled: true, isCheckedVal: false })
     } else {
@@ -122,16 +127,14 @@ export default class SignUp extends Component {
 
     if (!fields["email"]) {
       formIsValid = false;
-      this.setState({emailIsInvalid: true, isDisabled: true })
+      this.setState({emailIsInvalid: true, isDisabled: true, errorEmailMsg: "Email can't be empty" })
       this.state.errors['email'] = "Email can't be empty";
     } else {
       this.validateEmailDomain(fields["email"])
     }
 
     if (!fields["alt_email"]) {
-      formIsValid = false;
-      this.setState({emailIsInvalid: true, isDisabled: true })
-      this.state.errors['alt_email'] = "Alternate email can't be empty";
+      this.state.errors['alt_email'] = "";
     } else {
       this.validateAltEmailDomain(fields["alt_email"])
     }
@@ -149,10 +152,10 @@ export default class SignUp extends Component {
     }
 
     if (fields["first_name"] && typeof fields["first_name"] == "string") {
-      if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
+      if (!fields["first_name"].match(/^[a-z ,.'()-]+$/i)) {
         formIsValid = false;
         this.setState({firstNameIsValid: true, isDisabled: true })
-        this.state.errors['first_name'] = "First name is in-valid";
+        this.state.errors['first_name'] = "First name can only contain letters and characters like '-.,()";
       }
     }
 
@@ -163,10 +166,10 @@ export default class SignUp extends Component {
     }
 
     if (fields["last_name"] && typeof fields["last_name"] == "string") {
-      if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
+      if (!fields["last_name"].match(/^[a-z ,.'()-]+$/i)) {
         formIsValid = false;
         this.setState({lastNameIsValid: true, isDisabled: true })
-        this.state.errors['last_name'] = "Last name is in-valid";
+        this.state.errors['last_name'] = "Last name can only contain letters and characters like '-.,()";
       }
     }
 
@@ -190,6 +193,9 @@ export default class SignUp extends Component {
       this.state.errors['school_id'] = "Please select school"
     }
     this.showNotifications()
+    if (!formIsValid) {
+      this.setState({serverErrorIsValid: false })
+    }
     return formIsValid;
   }
 
@@ -200,12 +206,6 @@ export default class SignUp extends Component {
     let fields = this.state.fields;
     fields[field] = e.target.value
     this.setState({ fields });
-
-    // if (!this.state.fields["email"]) {
-    //   this.setState({emailIsInvalid: true, isDisabled: true })
-    //   this.state.errors['email'] = "Email can't be empty"
-    // }
-    //this.validateEmailDomain(e.target.value)
   }
 
   handleAltEmail(field, e) {
@@ -236,18 +236,6 @@ export default class SignUp extends Component {
      fields[field] = e.target.value
     this.setState({ fields });
 
-    if (!this.state.fields["first_name"]) {
-      //this.setState({firstNameIsValid: true, isDisabled: true })
-      //this.state.errors['first_name'] = "First name can't be empty"
-    }
-
-    if (this.state.fields["first_name"] && typeof this.state.fields["first_name"] == "string") {
-      if (!fields["first_name"].match(/^[a-zA-Z]+$/)) {
-        //this.setState({firstNameIsValid: true, isDisabled: true })
-        //this.state.errors['first_name'] = "First name is in-valid";
-      }
-    }
-    //this.showNotifications()
   }
 
   handleLastName(field, e) {
@@ -257,19 +245,6 @@ export default class SignUp extends Component {
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
-
-    if (!this.state.fields["last_name"]) {
-      // this.setState({lastNameIsValid: true, isDisabled: true })
-      // this.state.errors['last_name'] = "Last name can't be empty"
-    } 
-
-    // if (this.state.fields["last_name"] && typeof this.state.fields["last_name"] == "string") {
-    //   if (!fields["last_name"].match(/^[a-zA-Z]+$/)) {
-    //     this.setState({lastNameIsValid: true, isDisabled: true })
-    //     this.state.errors['last_name'] = "Last name is in-valid";
-    //   }
-    // }
-    //this.showNotifications()
   }
 
   handlePassword(field, e) {
@@ -279,19 +254,6 @@ export default class SignUp extends Component {
     let fields = this.state.fields;
      fields[field] = e.target.value
     this.setState({ fields });
-
-    // if (!this.state.fields["password"]) {
-    //   this.setState({passwordIsValid: true, isDisabled: true })
-    //   this.state.errors['password'] = "Password can't be empty"
-    // }
-
-    // let password = this.state.fields["password"]
-
-    // if (!this.isStrongPassword(password)) {
-    //   this.setState({passwordIsValid: true, isDisabled: true })
-    //   this.state.errors['password'] = "Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, and have at least one special character except period (.)"
-    // }
-    //this.showNotifications()
   }
 
 
@@ -411,19 +373,26 @@ export default class SignUp extends Component {
   }
 
 
-  isStrongPassword(password) {
-    if (password && (password.match(/[a-z]/g) && password.match(
-                    /[A-Z]/g) && password.match(
-                    /[0-9]/g) && password.match(
-                    /[^a-zA-Z.\d]/g) && password.length >= 8)) {
+  isStrongPassword(password) {    
+    if (password && (password.match(/[a-z]/g) && password.match(/[A-Z]/g) &&
+                     password.match(/[0-9]/g) && password.match(/[^a-zA-Z.\d]/g) &&
+                     password.length >= 8)) {
       return true
     } else {
       return false
     }
   }
 
+  showCommonErrorMsg() {
+    if (this.state.serverErrorIsValid && this.state.errors["serverError"]) {
+      return "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."
+    } else {
+      return "Some of your information needs to be updated before your account can be created. See the fields highlighted below."
+    }
+  }
+
   render() {
-    let error_email_msg = this.state.errors["email"]
+    let error_email_msg = this.state.errors['email']
     let email_is_invalid = this.state.emailIsInvalid
     let first_name_invalid = this.state.firstNameIsValid
     let last_name_invalid = this.state.lastNameIsValid
@@ -454,7 +423,7 @@ export default class SignUp extends Component {
                 <Notification ariaLabel="Signup Error Notifications" id="sign-up-error-notifications" className={this.showNotifications()} notificationType="warning"
                   notificationContent={
                     <Text id="sign-up-error-notifications-text" noSpace className="signUpMessage">
-                      <div style={{ display: this.showErrorMessage() }}> Some of your information needs to be updated before your account can be created. See the fields highlighted below. {<br/>} </div>
+                      <div style={{ display: this.showErrorMessage() }}> {this.showCommonErrorMsg()} </div>
                     </Text>
                   } 
                 />
