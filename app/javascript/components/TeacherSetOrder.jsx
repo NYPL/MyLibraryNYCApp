@@ -62,55 +62,6 @@ export default class TeacherSetOrder extends React.Component {
     return this.state.hold.status == 'cancelled' ? 'none' : 'block'
   }
 
-  // OrderDetails() {
-  //   return <List marginTop="l" id="order-confirmation-list-details" title="Order Details" type="dl">
-  //       <dt>
-  //         Teacher Set
-  //       </dt>
-  //       <dd>
-  //         {this.teacherSetCardDetails()}
-  //       </dd>
-  //       <dt>
-  //         Quantity
-  //       </dt>
-  //       <dd>
-  //         {this.state.hold["quantity"]}
-  //       </dd>
-  //       <dt>
-  //         Order Placed
-  //       </dt>
-  //       <dd>
-  //         {this.state.hold["created_at"]}
-  //       </dd>
-  //       <dt>
-  //         Status
-  //       </dt>
-  //       <dd>
-  //         {this.state.hold["status"]}
-  //       </dd>
-  //     </List>
-  // }
-
-  // teacherSetCardDetails() {
-  //   if (this.state.teacher_set) {
-  //     let ts = this.state.teacher_set
-  //     let title = ts.title? ts.title : " "
-  //     let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
-  //     let availability = ts.availability !== undefined ? ts.availability : ""
-  //     return <div>
-  //         <Card id="book-page-ts-card-details" layout="row">
-            
-  //           <CardContent id="book-page-ts-suitabilities"> {ts.suitabilities_string} </CardContent>
-  //           <CardContent id="book-page-ts-availability"> 
-  //             <StatusBadge level={availability_status_badge}>{availability}</StatusBadge>
-  //           </CardContent>
-  //           <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
-  //         </Card>
-  //     </div>
-  //   }
-  // }
-
-
   CancelButton() {
     return <div style={{ display: this.showCancelButton() }}>
       <Button id="order-cancel-button" className="cancel-button" buttonType="secondary" >
