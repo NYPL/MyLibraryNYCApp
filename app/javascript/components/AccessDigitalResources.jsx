@@ -3,14 +3,8 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from 'axios';
 import { Accordion, Link, List, Heading, CardHeading, Card, CardContent, DSProvider } from '@nypl/design-system-react-components';
 
-export default class AccessDigitalResources extends Component {
+export default function AccessDigitalResources(props) {
 
-  constructor(props) {
-    super(props);
-  }
-
-
-  render() {
     return (
       <>
         <Heading id="access-digital-resources-header-text" level="three">Access Digital Resources</Heading>
@@ -32,7 +26,9 @@ export default class AccessDigitalResources extends Component {
                     See your school librarian if you encounter technical issues or need further assistance. You may also <a href="http://www.mylibrarynyc.org/contacts-links">contact</a> your public library for help.<br/><br/>
                 </p>
               ),
-            },
+            } ]}
+        />
+        <Accordion marginTop="s" accordionData={ [
             {
               label: "E-Books and More",
               panel: (
@@ -44,7 +40,10 @@ export default class AccessDigitalResources extends Component {
                   <a href="https://www.queenslibrary.org/help/how-to-access-digital-media/eBooks">Queens Public Library Ebooks</a><br/><br/>
                 </p>
               ),
-            },
+            } ]}
+        />
+
+        <Accordion marginTop="s" accordionData={ [
             {
               label: "Other Resources",
               panel: (
@@ -70,8 +69,7 @@ export default class AccessDigitalResources extends Component {
                 </p>
               ),
             }
-          ]} 
+          ] }
         />
       </>)
-    }
   }
