@@ -153,6 +153,8 @@ class ApplicationController < ActionController::Base
         originating_location = "faq"
       elsif originating_location == "/contacts"
         originating_location = "contacts"
+      elsif params["controller"] == "books" && params["action"] == "show" && params["id"].present?
+        originating_location = "book_details/#{params["id"]}"
       else
         originating_location = "teacher_set_data"
       end

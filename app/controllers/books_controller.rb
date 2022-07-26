@@ -8,6 +8,9 @@ class BooksController < ApplicationController
 
   
   def show
+    if storable_location?
+      store_user_location!
+    end
     @book = Book.find params[:id]
     # If the bib record has "n" or "e" in the "Bib Code 3 field" we should not show the "View in catalog" link on the book show page.
     render json: {
