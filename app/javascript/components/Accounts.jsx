@@ -130,13 +130,15 @@ export default class Accounts extends Component {
 
 
   orderCancelConfirmation(hold, index) {
-    return <div id={"cancel_"+ hold["access_key"]}>
-      <Button className="accountCancelOrder" buttonType="secondary"> 
-        <Link className="href_link cancelOrderButton" href={"/holds/" + hold["access_key"] + "/cancel"} > Cancel My Order </Link>
-      </Button>
-    </div>
-
-
+    return <div id={"cancel_"+ hold["access_key"]}><Button className="accountCancelOrder" buttonType="secondary"      
+        onClick={(e) => {
+          const confirmBox = window.confirm(
+            "Are you sure you want to cancel this order for " + hold["title"]
+          )
+          if (confirmBox === true) {
+            this.cancelOrder(e.target.value, hold["access_key"], index)
+          }
+        }}> Cancel Order </Button></div>
   }
 
   AccountUpdatedMessage() {
@@ -161,7 +163,8 @@ export default class Accounts extends Component {
           ''
         ]}
         showRowDividers={true}
-        columnHeadersBackgroundColor="var(--nypl-colors-ui-gray-x-light-cool)"
+        columnHeadersBackgroundColor="#F5F5F5"
+        columnHeadersTextColor="\"
         tableData={this.HoldsDetails()}
         id="ts-order-details-list"
       />
