@@ -17,7 +17,7 @@ import {
   CardContent,
   Heading,
   Image, Flex, Spacer, 
-  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon, Breadcrumbs, Hero
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon, Breadcrumbs, Hero, Notification
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -28,7 +28,7 @@ export default class TeacherSetDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = { ts_details: {}, allowed_quantities: [], teacher_set: "", active_hold: "", books: [], value: "",
-                   quantity: "1", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true };
+                   quantity: "1", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true, errorMessage: "" };
   }
 
   componentDidMount() {
@@ -61,13 +61,17 @@ export default class TeacherSetDetails extends React.Component {
     axios.post('/holds', {
         teacher_set_id: this.props.match.params.id, query_params: {quantity: this.state.quantity}
      }).then(res => {
-
         if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {
-          this.props.handleTeacherSetOrderedData(res.data.hold, this.state.teacher_set)
-          this.props.history.push("/ordered_holds/"+ res.data.hold["access_key"])
+
+          if (res.data.status === 'created') {
+            this.props.handleTeacherSetOrderedData(res.data.hold, this.state.teacher_set)
+            this.props.history.push("/ordered_holds/"+ res.data.hold["access_key"])
+          } else {
+            this.setState({ errorMessage: res.data.message})
+          }
         }
       })
       .catch(function (error) {
@@ -92,7 +96,6 @@ export default class TeacherSetDetails extends React.Component {
     return <div className="bookTitlesCount">{this.state.books.length > 1 ? this.state.books.length + " Titles" : this.state.books.length >= 1 ?  this.state.books.length + "Title" : ""}</div>
   }
 
-
   TeacherSetBooks() {
     return this.state.books.map((data, i) => {
       return <ReactRouterLink id={"ts-books-" + i} to={"/book_details/" + data.id} >
@@ -100,7 +103,6 @@ export default class TeacherSetDetails extends React.Component {
         </ReactRouterLink>
     })
   }
-
 
   BookImage(data) {
     if (data.cover_uri) {
@@ -110,13 +112,11 @@ export default class TeacherSetDetails extends React.Component {
     }
   }
 
-
   TeacherSetNotesContent() {
     return this.state.teacher_set_notes.map((note, i) => {
       return <div id={"ts-notes-content-" + i}>{note.content}</div> 
     })
   }
-
 
   OrderTeacherSets() {
     return <div bg="var(--nypl-colors-ui-grey-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" >
@@ -136,7 +136,6 @@ export default class TeacherSetDetails extends React.Component {
     </div>
   }
 
-
   truncateTitle( str, n, useWordBoundary ){
     if (str.length <= n) { return str; }
     const subString = str.substr(0, n-1); // the original check
@@ -153,8 +152,16 @@ export default class TeacherSetDetails extends React.Component {
     }
   }
 
-  render() {
+  errorMessage() {
+    if (this.state.errorMessage) {
+      return <Notification fontWeight="bold" ariaLabel="Hold creation error" id="hold-error-message"
+                           dismissible notificationType="warning" notificationContent={this.state.errorMessage} />
+    } else {
+      return <></>
+    }
+  }
 
+  render() {
     let teacher_set =  this.state.teacher_set
     let suitabilities_string = teacher_set.suitabilities_string;
     let primary_language = teacher_set.primary_language;
@@ -170,7 +177,6 @@ export default class TeacherSetDetails extends React.Component {
     let location_path = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
     let title = teacher_set.title? this.state.teacher_set.title : ""
     
-
     return (
       <DSProvider>
         <TemplateAppContainer
@@ -185,9 +191,9 @@ export default class TeacherSetDetails extends React.Component {
               backgroundColor="var(--nypl-colors-brand-primary)"
               heading={<Heading level="one" id={"hero-"+breadcrumbs_location_path} text="Teacher Sets"  />} />
           </>}
+          contentTop={this.errorMessage()}
           contentPrimary={
             <>
-      
               <Flex alignItems="baseline">
                 <Heading id="heading-secondary" level="one" size="secondary" text={ this.teacherSetTitle() } />
                 <Spacer />
@@ -201,7 +207,6 @@ export default class TeacherSetDetails extends React.Component {
                 <div id="ts-page-books-count"> { this.BooksCount() } </div>
                 <SimpleGrid id="ts-page-books-panel" columns={5} gap="xxs"> { this.TeacherSetBooks() } </SimpleGrid>
               </VStack>
-
 
               <List id="ts-list-details" type="dl" title="Details" marginTop="s">
                 <dt id="ts-suggested-grade-range-text">

@@ -71,55 +71,52 @@ class HoldsController < ApplicationController
         return
       end
 
-      set = TeacherSet.find(params[:teacher_set_id])
-      params.permit!
-      @hold = set.holds.build(params[:hold])
-      @hold.user = current_user
+      Hold.transaction do
+        set = TeacherSet.find(params[:teacher_set_id])
+        params.permit!
+        @hold = set.holds.build(params[:hold])
+        @hold.user = current_user
 
-      unless params[:settings].nil?
-        current_user.update(params.require(:settings).to_hash)
-      end
+        unless params[:settings].nil?
+          current_user.update(params.require(:settings).to_hash)
+        end
 
-      quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
-      @hold.quantity = quantity.to_i
-      if @hold.save
-        teacher_set = @hold.teacher_set
+        quantity = params[:query_params] && params[:query_params][:quantity] ? params[:query_params][:quantity] : @hold.quantity
+        @hold.quantity = quantity.to_i
+        if @hold.save
+          teacher_set = @hold.teacher_set
 
-        LogWrapper.log('INFO', {message: 'Teacher-set hold is created', method: __method__, 
-                        teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
-        
-       
-        # Update teacher-set availability in DB
-        teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
-        
-        # Update teacher-set availability in elastic search document
-        teacher_set.update_teacher_set_availability_in_elastic_search
-        LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
-        # format.html { redirect_to hold_url(@hold.access_key), notice:
-        #   'Your order has been received by our system and will soon be delivered to your school.\
-        #   <br/><br/>Check your email inbox for a message with further details.' 
-        # }
-        render json: { hold: @hold.as_json, status: :created, location: @hold.as_json }
-      else
-        LogWrapper.log('DEBUG', {'message' => 'create: a new hold was generated', 'method' => 'app/controllers/holds_controller.rb.create'})
-        format.html { render action: 'new' }
-        format.json { render json: @hold.errors, status: :unprocessable_entity }
+          LogWrapper.log('INFO', {message: 'Teacher-set hold is created', method: __method__, 
+                          teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
+          
+         
+          # Update teacher-set availability in DB
+          teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
+          
+          # Update teacher-set availability in elastic search document
+          teacher_set.update_teacher_set_availability_in_elastic_search
+          LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
+          # format.html { redirect_to hold_url(@hold.access_key), notice:
+          #   'Your order has been received by our system and will soon be delivered to your school.\
+          #   <br/><br/>Check your email inbox for a message with further details.' 
+          # }
+          render json: { hold: @hold.as_json, status: :created, location: @hold.as_json, message: "successfully" }
+        else
+          LogWrapper.log('DEBUG', {'message' => 'create: a new hold was generated', 'method' => 'app/controllers/holds_controller.rb.create'})
+          render json: { hold: @hold.as_json, status: :unprocessable_entity, location: @hold.as_json }
+          #format.html { render action: 'new' }
+          #format.json { render json: @hold.errors, status: :unprocessable_entity }
+        end
       end
     rescue => exception
-      error_message(exception)
+      render json: { status: :error, message: "We've encountered an error and were unable to confirm your order.\
+                           Please try again later or email help@mylibrarynyc.org for assistance.", rails_error_message: exception.message }
     end
   end
 
 
-  def error_message(exception)
-    # Note: don't need an explicit return here
-    respond_to do |format|
-      format.html {}
-      format.json {
-        render json: { error: "We've encountered an error and were unable to confirm your order.\
-          Please try again later or email help@mylibrarynyc.org for assistance.", rails_error_message: exception.message }.to_json, status: 500 
-      }
-    end
+  def error_message(exception)    
+    
   end
 
   
