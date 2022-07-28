@@ -65,7 +65,7 @@ export default class TeacherSetOrder extends React.Component {
   CancelButton() {
     return <div style={{ display: this.showCancelButton() }}>
       <Button id="order-cancel-button" className="cancel-button" buttonType="secondary" >
-        <Link className="href_link cancelOrderButton" href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
+        <Link className="cancelOrderButton" href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
       </Button>
       </div>
   }

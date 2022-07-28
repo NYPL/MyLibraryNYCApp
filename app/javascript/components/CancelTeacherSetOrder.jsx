@@ -59,7 +59,7 @@ export default class TeacherSetOrder extends React.Component {
         <HStack spacing="s">
           <Button id="ts-cancel-button-id" buttonType="noBrand" onClick={this.handleSubmit}> Cancel My Order </Button>
           <Button id="keep-my-order-button" className="cancel-button" buttonType="secondary" >
-            <Link className="href_link cancelOrderButton" href={"/ordered_holds/" + this.state.access_key } > No, keep my order </Link>
+            <Link className="cancelOrderButton" href={"/ordered_holds/" + this.state.access_key } > No, keep my order </Link>
           </Button>
         </HStack>
       </>
