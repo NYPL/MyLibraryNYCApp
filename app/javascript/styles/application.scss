@@ -1054,6 +1054,7 @@ $submenu-width: 245px;
 }
 
 .cancelOrderButton {
+  text-decoration: none !important;
   color: var(--nypl-colors-ui-black) !important;
 }
 
@@ -1073,4 +1074,8 @@ $submenu-width: 245px;
 .accountPageTeacherSetOrder {
   text-decoration: none !important;
   color: var(--nypl-colors-ui-black) !important;
+}
+
+.maxContent {
+  width: max-content;
 }

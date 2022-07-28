@@ -135,7 +135,7 @@ export default class Accounts extends Component {
 
   orderCancelConfirmation(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
-      <Button buttonType="noBrand" style={{"width": "-webkit-fill-available"}}> 
+      <Button buttonType="noBrand" className="maxContent"> 
         <Link className="accountPageCancelOrder" href={"/holds/" + hold["access_key"] + "/cancel"} > Cancel </Link>
       </Button>
     </div>
@@ -143,7 +143,7 @@ export default class Accounts extends Component {
 
   orderTeacherSet(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
-      <Button buttonType="secondary" style={{"width": "-webkit-fill-available"}}> 
+      <Button buttonType="secondary" className="maxContent"> 
         <Link className="accountPageTeacherSetOrder" href={"/teacher_set_details/" + hold.teacher_set_id} > Order Again </Link>
       </Button>
     </div>
