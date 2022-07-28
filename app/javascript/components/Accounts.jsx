@@ -72,10 +72,14 @@ export default class Accounts extends Component {
   HoldsDetails() {
     if (this.state.holds) {
       return this.state.holds.map((hold, index) => (
-           [ hold["created_at"], hold["quantity"], hold["title"], this.statusLabel(hold), this.cancelButton(hold, index) ]
+           [ this.orderCreatedLink(hold), hold["quantity"], hold["title"], this.statusLabel(hold), this.cancelButton(hold, index) ]
           )
         )
     }
+  }
+
+  orderCreatedLink(hold){
+    return <Link href={"/ordered_holds/" + hold["access_key"]} > {hold["created_at"]} </Link>
   }
 
   statusLabel(hold) {
@@ -131,16 +135,16 @@ export default class Accounts extends Component {
 
   orderCancelConfirmation(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
-      <Button buttonType="noBrand" > 
-        <Link className="href_link" href={"/holds/" + hold["access_key"] + "/cancel"} > Cancel </Link>
+      <Button buttonType="noBrand" style={{"width": "-webkit-fill-available"}}> 
+        <Link className="accountPageCancelOrder" href={"/holds/" + hold["access_key"] + "/cancel"} > Cancel </Link>
       </Button>
     </div>
   }
 
   orderTeacherSet(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
-      <Button buttonType="secondary"> 
-        <Link className="href_link" href={"/teacher_set_details/" + hold.teacher_set_id} > Order Again </Link>
+      <Button buttonType="secondary" style={{"width": "-webkit-fill-available"}}> 
+        <Link className="accountPageTeacherSetOrder" href={"/teacher_set_details/" + hold.teacher_set_id} > Order Again </Link>
       </Button>
     </div>
   }
