@@ -129,7 +129,7 @@ export default class Accounts extends Component {
   orderCancelConfirmation(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
     <ButtonGroup buttonWidth="full">
-      <Button buttonType="noBrand" width="m"> 
+      <Button buttonType="noBrand"> 
         <Link className="accountPageCancelOrder" href={"/holds/" + hold["access_key"] + "/cancel"} > Cancel </Link>
       </Button>
     </ButtonGroup>
@@ -139,7 +139,7 @@ export default class Accounts extends Component {
   orderTeacherSet(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
     <ButtonGroup buttonWidth="full">
-      <Button buttonType="secondary" width="m"> 
+      <Button buttonType="secondary"> 
         <Link className="accountPageTeacherSetOrder" href={"/teacher_set_details/" + hold.teacher_set_id} > Order Again </Link>
       </Button>
      </ButtonGroup>
@@ -149,11 +149,11 @@ export default class Accounts extends Component {
   AccountUpdatedMessage() {
     if (this.state.message !== "") {
       return <Notification ariaLabel="Account Notification" id="account-details-notification" className="accountNotificationMsg"
-        showIcon={false}
         notificationType="announcement"
-        notificationContent={<><Icon align="none" color="ui.black" iconRotation="rotate0" name="action_check_circle" size="small"/>{this.state.message}</>}
+        icon={<Icon color="ui.black" iconRotation="rotate0" name="actionCheckCircle" size="small"/>}
+        notificationContent={this.state.message}
       />
-    }
+    }  
   }
 
   OrderDetails() {
