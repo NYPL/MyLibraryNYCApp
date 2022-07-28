@@ -148,7 +148,8 @@ export default class Accounts extends Component {
 
   AccountUpdatedMessage() {
     if (this.state.message !== "") {
-      return <Notification ariaLabel="Account Notification" id="account-details-notification" className="accountNotificationMsg"
+      return <Notification ariaLabel="Account Notification" id="account-details-notification"
+        className="accountNotificationMsg"
         notificationType="announcement"
         icon={<Icon color="ui.black" iconRotation="rotate0" name="actionCheckCircle" size="small"/>}
         notificationContent={this.state.message}
@@ -180,7 +181,7 @@ export default class Accounts extends Component {
     if (this.state.holds.length > 0) {
       return this.OrderDetails()
      } else {
-      return "No orders yet"
+      return "You have not yet placed any orders."
      }
   }
 

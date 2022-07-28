@@ -82,6 +82,7 @@ export default class SignUp extends Component {
   }
 
   validateEmailDomain(email) {
+    let formIsValid = true;
     let domain = email.split('@')
     let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
 
@@ -89,6 +90,7 @@ export default class SignUp extends Component {
       let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
       this.state.errors['email'] = msg
       this.setState({emailIsInvalid: true, isDisabled: true })
+      formIsValid = false;
     }
     else {
       this.state.errors['email'] = ""
@@ -97,17 +99,16 @@ export default class SignUp extends Component {
 
     if (email) {
       axios.get('/check_email', { params: { email: email } }).then(res => {
-        // console.log("plplp")
-        // console.log(typeof res.data.statusCode)
         if (res.data.statusCode == 409) {
           this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
           this.setState({emailIsInvalid: true, isDisabled: true })
+          formIsValid = false;
         }      
       }).catch(function (error) {
          console.log(error)
       })
     }
-
+    return formIsValid
   }
 
   validateAltEmailDomain(alt_email) {
@@ -130,7 +131,7 @@ export default class SignUp extends Component {
       this.setState({emailIsInvalid: true, isDisabled: true, errorEmailMsg: "Email can't be empty" })
       this.state.errors['email'] = "Email can't be empty";
     } else {
-      this.validateEmailDomain(fields["email"])
+      formIsValid = this.validateEmailDomain(fields["email"])
     }
 
     if (!fields["alt_email"]) {
@@ -222,9 +223,6 @@ export default class SignUp extends Component {
       this.state.errors['alt_email'] = ""
       this.setState({ altEmailIsvalid: false, isDisabled: false, isCheckedVal: false, news_letter_error: "", show_news_letter_error: false })
     }
-
-    // this.validateAltEmailDomain(e.target.value)
-    // this.showNotifications()
   }
 
 

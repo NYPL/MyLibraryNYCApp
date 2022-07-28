@@ -1,8 +1,6 @@
-import React, { Component, useState } from 'react';
-import { List, Card, CardContent, StatusBadge, CardHeading, Link, Heading } from '@nypl/design-system-react-components';
-import { ReactRouterLink } from "react-router-dom";
+import React from 'react';
+import { List, Card, CardContent, StatusBadge, CardHeading, Link } from '@nypl/design-system-react-components';
 import { titleCase } from "title-case";
-import { compareAsc, format } from 'date-fns'
 import dateFormat from 'dateformat';
 
 
@@ -15,23 +13,26 @@ export default function TeacherSetOrderDetails(props) {
     'closed': 'Fulfilled',
     'cancelled': 'Cancelled'
   }
+   
+  if (orderDetails === undefined) {
+    return null;
+  }
 
   const teacherSetDetails = () => {
     if (props.teacherSetDetails) {
       let ts = props.teacherSetDetails
-      let title = ts.title? ts.title : " "
-      let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
+      let availabilityStatusBadge =  (ts.availability === "available") ? "medium" : "low"
       let availability = ts.availability !== undefined ? ts.availability : ""
-      let suitabilities_string = ts.suitabilities_string ? suitabilities_string : ""
-      console.log(suitabilities_string)
+      let suitabilitiesString = ts.suitabilities_string ? ts.suitabilities_string : ""
+
       return <div>
           <Card id="book-page-ts-card-details" layout="row" imageAlt="Alt text" aspectRatio="square" size="xxsmall">
             <CardHeading level="four" id="ts-order-details">
               <Link  href={"/teacher_set_details/" + ts.id}  to={"/teacher_set_details/" + ts.id}>{ts.title}</Link>
             </CardHeading>
-            <CardHeading level="six"id="ts-suitabilities">{ts.suitabilities_string}</CardHeading>
+            <CardHeading level="six"id="ts-suitabilities">{suitabilitiesString}</CardHeading>
             <CardContent id="book-page-ts-availability"> 
-              <StatusBadge level={availability_status_badge}>{titleCase(ts.availability)}</StatusBadge>
+              <StatusBadge level={availabilityStatusBadge}>{titleCase(availability)}</StatusBadge>
             </CardContent>
             <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
           </Card>

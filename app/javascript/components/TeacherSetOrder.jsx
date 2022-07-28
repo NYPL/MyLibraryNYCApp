@@ -55,11 +55,11 @@ export default class TeacherSetOrder extends React.Component {
   OrderMessage() {
     const order_message = "Your order has been received by our system and will be soon delivered to your school!. Check your email inbox for further details." 
     const cancelled_message = "Your cancellation of the order below has been received."
-    return this.state.hold["status"] == 'cancelled' ? cancelled_message : order_message
+    return this.state.hold && this.state.hold["status"] == 'cancelled' ? cancelled_message : order_message
   }
 
   showCancelButton() {
-    return this.state.hold.status == 'cancelled' ? 'none' : 'block'
+    return this.state.hold && this.state.hold.status == 'cancelled' ? 'none' : 'block'
   }
 
   CancelButton() {
@@ -71,7 +71,7 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   render() {
-    let confirmationMsg = this.state.hold.status == 'cancelled' ? 'Cancel Order Confirmation' : 'Order Confirmation'
+    let confirmationMsg = (this.state.hold && this.state.hold.status === 'cancelled') ? 'Cancel Order Confirmation' : 'Order Confirmation'
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
