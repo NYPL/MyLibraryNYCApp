@@ -83,10 +83,10 @@ export default class Accounts extends Component {
   }
 
   cancelButton(hold, index) {
-    if (hold["status"] == "new") {
-      return <div> <div style={{display: "flex"}} id={index}> {this.orderCancelConfirmation(hold, index)} </div> </div>
-    } else {
-      return null;
+    if (hold["status"] === "new") {
+      return <div id={"cancel-hold-button-"+index}> {this.orderCancelConfirmation(hold, index)} </div>
+    } else if (hold["status"] === "cancelled"){
+      return <div id={"order-ts-button-"+index}> {this.orderTeacherSet(hold, index)} </div>
     }
   }
 
@@ -130,15 +130,19 @@ export default class Accounts extends Component {
 
 
   orderCancelConfirmation(hold, index) {
-    return <div id={"cancel_"+ hold["access_key"]}><Button className="accountCancelOrder" buttonType="secondary"      
-        onClick={(e) => {
-          const confirmBox = window.confirm(
-            "Are you sure you want to cancel this order for " + hold["title"]
-          )
-          if (confirmBox === true) {
-            this.cancelOrder(e.target.value, hold["access_key"], index)
-          }
-        }}> Cancel Order </Button></div>
+    return <div id={"cancel_"+ hold["access_key"]}>
+      <Button buttonType="noBrand" > 
+        <Link className="href_link" href={"/holds/" + hold["access_key"] + "/cancel"} > Cancel </Link>
+      </Button>
+    </div>
+  }
+
+  orderTeacherSet(hold, index) {
+    return <div id={"cancel_"+ hold["access_key"]}>
+      <Button buttonType="secondary"> 
+        <Link className="href_link" href={"/teacher_set_details/" + hold.teacher_set_id} > Order Again </Link>
+      </Button>
+    </div>
   }
 
   AccountUpdatedMessage() {
