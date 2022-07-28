@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon
+  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon, ButtonGroup
 } from '@nypl/design-system-react-components';
 
 import {
@@ -79,7 +79,7 @@ export default class Accounts extends Component {
   }
 
   orderCreatedLink(hold){
-    return <Link href={"/ordered_holds/" + hold["access_key"]} > {hold["created_at"]} </Link>
+    return <Link style={{"white-space": "nowrap"}} href={"/ordered_holds/" + hold["access_key"]} > {hold["created_at"]} </Link>
   }
 
   statusLabel(hold) {
@@ -117,13 +117,6 @@ export default class Accounts extends Component {
           this.setState({
             holds : updatedHolds
           });
-
-            // if (this.state.holds) {
-            //   return this.state.holds.map((hold, index) => (
-            //       [ hold["created_at"], hold["quantity"], hold["title"], this.statusLabel(hold), this.cancelButton(hold, index) ]
-            //     )
-            //   )
-            // }
           }
         }
       })
@@ -135,17 +128,21 @@ export default class Accounts extends Component {
 
   orderCancelConfirmation(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
-      <Button buttonType="noBrand" className="maxContent"> 
+    <ButtonGroup buttonWidth="full">
+      <Button buttonType="noBrand" width="m"> 
         <Link className="accountPageCancelOrder" href={"/holds/" + hold["access_key"] + "/cancel"} > Cancel </Link>
       </Button>
+    </ButtonGroup>
     </div>
   }
 
   orderTeacherSet(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
-      <Button buttonType="secondary" className="maxContent"> 
+    <ButtonGroup buttonWidth="full">
+      <Button buttonType="secondary" width="m"> 
         <Link className="accountPageTeacherSetOrder" href={"/teacher_set_details/" + hold.teacher_set_id} > Order Again </Link>
       </Button>
+     </ButtonGroup>
     </div>
   }
 
@@ -168,7 +165,7 @@ export default class Accounts extends Component {
           'Quantity',
           'Title',
           'Status',
-          ''
+          'Action'
         ]}
         showRowDividers={true}
         columnHeadersBackgroundColor="#F5F5F5"

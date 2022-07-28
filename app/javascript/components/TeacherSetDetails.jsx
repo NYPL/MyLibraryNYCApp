@@ -154,8 +154,8 @@ export default class TeacherSetDetails extends React.Component {
 
   errorMessage() {
     if (this.state.errorMessage) {
-      return <Notification fontWeight="bold" ariaLabel="Hold creation error" id="hold-error-message"
-                           dismissible notificationType="warning" notificationContent={this.state.errorMessage} />
+      return <Notification ariaLabel="Hold creation error" id="hold-error-message"
+                           notificationType="warning" notificationContent={this.state.errorMessage} />
     } else {
       return <></>
     }
