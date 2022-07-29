@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    LogWrapper.log('INFO', {'message' => "current_usercurrent_usercurrent_user #{current_user}",
+    LogWrapper.log('INFO', {'message' => "current_usercurrent_usercurrent_user #{User.find(session[:user_id])}",
                              'method' => '###########"###########"###########"###########"###########'})
   
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
