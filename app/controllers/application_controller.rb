@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token
 
-  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!
+  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!, :set_user
 
   def login!
     session[:user_id] = @user.id
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    LogWrapper.log('INFO', {'message' => "current_usercurrent_usercurrent_user #{User.find(session[:user_id])}",
+    LogWrapper.log('INFO', {'message' => "current_usercurrent_usercurrent_user #{session[:user_id]}",
                              'method' => '###########"###########"###########"###########"###########'})
   
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
@@ -33,10 +33,14 @@ class ApplicationController < ActionController::Base
   
   def logout!
     puts "###########    logout     ###########"
-    LogWrapper.log('INFO', {'message' => '######################"###########',
-                             'method' => '###########"###########"###########"###########"###########'})
+    LogWrapper.log('INFO', {'message' => '###################### logout  logout ###########',
+                            'method' => '###########"###########"###########"###########"###########'})
   
     session.clear
+  end
+
+  def set_user
+    @user = User.find_by(id: session[:user_id])
   end
 
 
