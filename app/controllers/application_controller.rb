@@ -14,6 +14,9 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
+    LogWrapper.log('INFO', {'message' => 'Session controller session',
+                             'method' => 'logged_inlogged_inlogged_inlogged_inlogged_inlogged_inlogged_in'})
+  
     !!session[:user_id]
   end
 
@@ -26,6 +29,10 @@ class ApplicationController < ActionController::Base
   end
   
   def logout!
+    puts "###########    logout     ###########"
+    LogWrapper.log('INFO', {'message' => '######################"###########',
+                             'method' => '###########"###########"###########"###########"###########'})
+  
     session.clear
   end
 
