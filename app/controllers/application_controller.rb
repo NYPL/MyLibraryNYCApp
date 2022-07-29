@@ -7,23 +7,17 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token
 
-  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!, :set_user
+  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!#, :set_user
 
   def login!
     session[:user_id] = @user.id
   end
 
-  def logged_in?
-    LogWrapper.log('INFO', {'message' => "Session controller session   #{session[:user_id]}",
-                             'method' => 'logged_inlogged_inlogged_inlogged_inlogged_inlogged_inlogged_in'})
-  
+  def logged_in?  
     !!session[:user_id]
   end
 
   def current_user
-    LogWrapper.log('INFO', {'message' => "current_usercurrent_usercurrent_user #{session[:user_id]}",
-                             'method' => '###########"###########"###########"###########"###########'})
-  
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
 
@@ -31,17 +25,13 @@ class ApplicationController < ActionController::Base
     @user == current_user
   end
   
-  def logout!
-    puts "###########    logout     ###########"
-    LogWrapper.log('INFO', {'message' => '###################### logout  logout ###########',
-                            'method' => '###########"###########"###########"###########"###########'})
-  
+  def logout!  
     session.clear
   end
 
-  def set_user
-    @user = User.find_by(id: session[:user_id])
-  end
+  # def set_user
+  #   @user = User.find_by(id: session[:user_id])
+  # end
 
 
   def append_info_to_payload(payload)
