@@ -106,9 +106,9 @@ export default class TeacherSetDetails extends React.Component {
 
   BookImage(data) {
     if (data.cover_uri) {
-      return <Image additionalImageStyles={{height:"auto"}} id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default"  />
+      return <Image additionalImageStyles={{height:"auto"}} id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default" alt="Book image" />
     } else {
-      return <Image additionalImageStyles={{height: "auto"}} id={"ts-books-" + data.id} src={mlnImage} aspectRatio="square" size="default" />
+      return <Image additionalImageStyles={{height: "auto"}} id={"ts-books-" + data.id} src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
     }
   }
 

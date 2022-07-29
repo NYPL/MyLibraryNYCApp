@@ -44,7 +44,6 @@ export default class NewsLetter extends Component {
      })
       .then(res => {
           this.state.message = res.data.message;
-
           if (res.data.status == "success") {
             this.setState({display_none: 'block', display_block: 'none', isInvalid: false})
           } else {
@@ -62,14 +61,16 @@ export default class NewsLetter extends Component {
       <div className="newsLetter newsLetterBox">
         <div style={{ display: this.state.display_block }}>
           <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
-          <Form id="news-letter-form" gap="grid.s">
+          <Form id="news-letter-form" gap="grid.xs">
             <FormRow>
               <FormField>
                 <TextInput id="news-letter-text-input" type="email" onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
               </FormField>
               
               <FormField>
-                <Button id="news-letter-button" buttonType="noBrand" width="100px" onClick={this.handleSubmit}>Submit</Button>
+                <ButtonGroup>
+                  <Button id="news-letter-button" buttonType="noBrand" onClick={this.handleSubmit}>Submit</Button>
+                </ButtonGroup>
               </FormField>
             </FormRow>
           </Form>
