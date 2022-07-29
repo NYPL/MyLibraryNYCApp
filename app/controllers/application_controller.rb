@@ -14,13 +14,16 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
-    LogWrapper.log('INFO', {'message' => 'Session controller session',
+    LogWrapper.log('INFO', {'message' => "Session controller session   #{session[:user_id]}",
                              'method' => 'logged_inlogged_inlogged_inlogged_inlogged_inlogged_inlogged_in'})
   
     !!session[:user_id]
   end
 
   def current_user
+    LogWrapper.log('INFO', {'message' => "current_usercurrent_usercurrent_user #{current_user}",
+                             'method' => '###########"###########"###########"###########"###########'})
+  
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
 
