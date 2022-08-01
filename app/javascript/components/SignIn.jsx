@@ -20,7 +20,6 @@ export default class SignIn extends Component {
     this.state = { email: "", invali_email_msg: "", user_signed_in: this.props.userSignedIn, isInvalid: false };
   }
 
-
   componentDidMount() {
     if(this.props.userSignedIn && this.props.location.pathname == "/signin") {
       window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/account_details"

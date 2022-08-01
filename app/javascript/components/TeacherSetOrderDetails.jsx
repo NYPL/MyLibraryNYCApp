@@ -7,6 +7,7 @@ import dateFormat from 'dateformat';
 export default function TeacherSetOrderDetails(props) {
 
   const orderDetails = props.orderDetails;
+  
   const STATUS_LABEL = {
     'new': 'Awaiting Review',
     'pending': 'Order processed and awaiting next available set',
