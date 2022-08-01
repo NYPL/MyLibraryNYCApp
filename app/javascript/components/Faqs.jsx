@@ -41,11 +41,11 @@ export default class Faqs extends Component {
 
 
   FrequentlyAskedQuestions() {
-      return this.state.faqs.map((data, i) => {
-        return {
-          label: data["question"],
-          panel: data["answer"]
-        }
+    return this.state.faqs.map((data, i) => {
+      return {
+        label: data["question"],
+        panel: data["answer"]
+      }
     })
   }
 
