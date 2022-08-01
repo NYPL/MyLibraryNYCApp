@@ -8,7 +8,6 @@ import { DSProvider } from '@nypl/design-system-react-components';
 export default function App(props) {
 
   const [isLoggedIn, setIsLoggedIn] = useState([false])
-  const [user, setUser] = useState([])
 
   useEffect(() => {
     loginStatus();
@@ -16,12 +15,10 @@ export default function App(props) {
 
   const handleLogin = (data) => {
     setIsLoggedIn(true)
-    setUser(data.setUser)
   }
 
   const handleLogout = () => {
     setIsLoggedIn(false)
-    setUser(data.setUser)
   }
 
   const loginStatus = () => {
