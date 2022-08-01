@@ -5,35 +5,15 @@ import "../styles/application.scss"
 
 import { DSProvider } from '@nypl/design-system-react-components';
 
-export default function App(props) {
+export default class App extends React.Component {
 
-  const [isLoggedIn, setIsLoggedIn] = useState([false])
-
-  useEffect(() => {
-    loginStatus();
-  }, []);
-
-  const handleLogin = (data) => {
-    setIsLoggedIn(true)
+  constructor(props) {
+    super(props);
   }
 
-  const handleLogout = () => {
-    setIsLoggedIn(false)
-  }
-
-  const loginStatus = () => {
-    axios.get('/logged_in', {withCredentials: true}).then(response => {
-      if (response.data.logged_in) {
-        handleLogin(response.data)
-      } else {
-        handleLogout()
-      }
-    })
-    .catch(error => console.log('api errors:', error))
-  };
-
-
-  return (
-    <Routes userSignedIn={isLoggedIn}/>
-  )
+  render() {
+    return (
+      <Routes userSignedIn={this.props.userSignedIn}/>
+    )
+  } 
 }
