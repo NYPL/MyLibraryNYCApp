@@ -163,7 +163,8 @@ class ElasticSearch
   def group_by_facets_query(aggregation_hash)
     aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 100, :order => {:_key => "asc"} } }
     aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10, :order => {:_key => "asc"} } }
-    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
+    # Remove Availability lable in facets.
+    # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
     aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
@@ -184,7 +185,7 @@ class ElasticSearch
 
     # Specify desired order of facets:
     facets.sort_by! do |f|
-      ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
+      ind = ['area of study', 'subjects', 'language','set type'].index f[:label]
       ind.nil? ? 1000 : ind
     end
 
