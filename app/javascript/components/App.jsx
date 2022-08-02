@@ -1,19 +1,37 @@
+import { DSProvider } from '@nypl/design-system-react-components';
 import React, { Component, useState, useEffect } from 'react';
 import axios from 'axios';
 import Routes from "../routes/routes";
-import "../styles/application.scss"
 
-import { DSProvider } from '@nypl/design-system-react-components';
+export default function App(props) {
 
-export default class App extends React.Component {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  constructor(props) {
-    super(props);
+  useEffect(() => {
+    loginStatus();
+  }, []);
+
+  const handleLogin = (data) => {
+    setIsLoggedIn(true)
   }
 
-  render() {
-    return (
-      <Routes userSignedIn={this.props.userSignedIn}/>
-    )
-  } 
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+  }
+
+  const loginStatus = () => {
+    axios.get('/logged_in', {withCredentials: true}).then(response => {
+      if (response.data.logged_in) {
+        handleLogin(response.data)
+      } else {
+        handleLogout()
+      }
+    })
+    .catch(error => console.log('api errors:', error))
+  };
+
+console.log(isLoggedIn)
+  return (
+    <Routes userSignedIn={isLoggedIn}/>
+  )
 }
