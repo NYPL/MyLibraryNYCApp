@@ -28,7 +28,7 @@ export default class TeacherSetDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = { ts_details: {}, allowed_quantities: [], teacher_set: "", active_hold: "", books: [], value: "",
-                   quantity: "1", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true, errorMessage: "" };
+                   quantity: "1", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true, errorMessage: "", maxCopiesRequestable: "" };
   }
 
   componentDidMount() {
@@ -118,11 +118,27 @@ export default class TeacherSetDetails extends React.Component {
     })
   }
 
+
+  teacherSetUnAvailable() {
+    if (this.state.teacher_set <= 0) {
+      return <Text sixe="default">This Teacher Set is unavailable. As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at help@mylibrarynyc.org.</Text>
+    }
+  }
+
   OrderTeacherSets() {
-    return <div bg="var(--nypl-colors-ui-grey-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" >
-      <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
-        <FormField id="ts-order-field">
-            <Select id="ts-order-allowed_quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+    console.log(this.state.teacher_set)
+    console.log("ooooo")
+
+    if (this.state.teacher_set && this.state.teacher_set.available_copies <= 0 ) {
+      return <Text buttonWidth="full" size="default"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
+    } else if(this.state.allowed_quantities.length <= 0) {
+      return <Text buttonWidth="full" size="default"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link href='/account_details' id="ts-page-account-details-link" type="action" target='_blank'>requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
+    }
+    else {
+      return <div>
+        <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
+          <FormField id="ts-order-field">
+            <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
               { this.state.allowed_quantities.map((item, i) => {
                   return (
                     <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
@@ -131,9 +147,11 @@ export default class TeacherSetDetails extends React.Component {
               }
             </Select>
             <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
-        </FormField>
-      </Form>
-    </div>
+          </FormField>
+        </Form>
+        <Text isItalic size="default" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
+      </div>
+    }
   }
 
   truncateTitle( str, n, useWordBoundary ){
@@ -260,23 +278,11 @@ export default class TeacherSetDetails extends React.Component {
           }
           contentSidebar={
             <VStack align="left" spacing="s" margin="m">
-              <Box marginBottom="m"id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
-                <Heading id="ts-order-set" level="one" size="secondary" text="Order Set!" />
-                <Heading id="ts-available-copies" level="five" text={this.AvailableCopies()} />
-                <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
-                  <FormField id="ts-order-field">
-                    <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
-                      { this.state.allowed_quantities.map((item, i) => {
-                          return (
-                            <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
-                          )
-                        }, this)
-                      }
-                    </Select>
-                    <Button id="ts-order-submit" buttonType="noBrand" onClick={this.handleSubmit}> Place Order </Button>
-                  </FormField>
-                </Form>
-                <Text isItalic size="default" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
+              <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
+                <Heading id="ts-order-set" level="three" size="secondary" text="Order Set!" />
+                <Heading id="ts-available-copies" size="callout" level="four" text={this.AvailableCopies()} />
+                {this.OrderTeacherSets()}
+
               </Box>
               <HaveQuestions />
             </VStack>
