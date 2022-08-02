@@ -308,10 +308,8 @@ export default class SearchTeacherSets extends Component {
           }
           contentPrimary={
               <>
-                <div className="teacherSetResults">
-                  <Text isBold size="default"> {tsTotalCount}</Text>
-                  {this.teacherSetTitleOrder()}
-                </div>
+                <Text isBold size="default"> {tsTotalCount}</Text>
+                {this.teacherSetTitleOrder()}
                 <div style={{ display: this.state.pagination }} >
                   <Flex alignItems="baseline">
                     <ButtonGroup>

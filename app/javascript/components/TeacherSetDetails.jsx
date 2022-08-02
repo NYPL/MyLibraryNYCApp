@@ -130,13 +130,13 @@ export default class TeacherSetDetails extends React.Component {
     console.log("ooooo")
 
     if (this.state.teacher_set && this.state.teacher_set.available_copies <= 0 ) {
-      return <Text buttonWidth="full" size="default"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
+      return <Text width="m" size="default"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
     } else if(this.state.allowed_quantities.length <= 0) {
-      return <Text buttonWidth="full" size="default"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link href='/account_details' id="ts-page-account-details-link" type="action" target='_blank'>requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
+      return <Text width="m" size="default"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link href='/account_details' id="ts-page-account-details-link" type="action" target='_blank'>requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
     }
     else {
       return <div>
-        <Form id="ts-order-form" onSubmit={this.handleSubmit} className="order_select">
+        <Form gap="grid.xs" id="ts-order-form" onSubmit={this.handleSubmit} >
           <FormField id="ts-order-field">
             <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
               { this.state.allowed_quantities.map((item, i) => {
@@ -277,10 +277,10 @@ export default class TeacherSetDetails extends React.Component {
             </>
           }
           contentSidebar={
-            <VStack align="left" spacing="s" margin="m">
-              <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
-                <Heading id="ts-order-set" level="three" size="secondary" text="Order Set!" />
-                <Heading id="ts-available-copies" size="callout" level="four" text={this.AvailableCopies()} />
+            <VStack align="left" spacing="s">
+              <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
+                <Heading id="ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Order Set!" />
+                <Heading id="ts-available-copies" textAlign="center" size="callout" level="four" text={this.AvailableCopies()} />
                 {this.OrderTeacherSets()}
 
               </Box>
