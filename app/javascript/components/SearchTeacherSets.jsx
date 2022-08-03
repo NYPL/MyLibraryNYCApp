@@ -246,9 +246,6 @@ export default class SearchTeacherSets extends Component {
 
   keyword() {
     if (this.state.keyword || this.state.availableToggle === true) {
-      console.log("pppp")
-      console.log(this.state.availableToggle === true)
-      console.log("olol")
       let availableNow = ""
       let searchKeyword = ""
       if (this.state.availableToggle === true){
