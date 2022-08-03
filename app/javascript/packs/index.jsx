@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = JSON.parse(node.getAttribute('data'))
   render(
     <BrowserRouter>
-      <App userSignedIn={data}/>
+      <App />
     </BrowserRouter>, 
     document.body.appendChild(document.createElement("div"))
   );
