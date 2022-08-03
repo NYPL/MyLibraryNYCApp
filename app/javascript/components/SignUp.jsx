@@ -372,9 +372,10 @@ export default class SignUp extends Component {
 
 
   isStrongPassword(password) {    
-    if (password && (password.match(/[a-z]/g) && password.match(/[A-Z]/g) &&
-                     password.match(/[0-9]/g) && password.match(/[^a-zA-Z.\d]/g) &&
-                     password.length >= 8)) {
+    if (password && (password.length >= 8 && password.match(/[a-z]/g) && password.match(/[A-Z]/g) && !password.match(/[\.\s]/g) &&
+                     password.match(/[0-9]/g) && password.match(/[^a-zA-Z\.\d]/g) &&
+                     !password.match(/(.)\1{2,}/g) &&
+                     !password.match(/(..+)\1{1,}/g))) {
       return true
     } else {
       return false
@@ -427,7 +428,7 @@ export default class SignUp extends Component {
                 />
               </div>
 
-              <Form>
+              <Form id="sign-up-form">
                 <FormField>
                   <TextInput id="sign-up-email"
                     isRequired
@@ -498,8 +499,11 @@ export default class SignUp extends Component {
                     invalidText={password_error_msg}
                     isInvalid={password_is_invalid}
                     onChange={this.handlePassword.bind(this, 'password')}
-                    type="password"
-                    helperText="We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.). Example: MyLib1731@"
+                    //type="password"
+                    helperText={<>
+                      <Text noSpace>We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.).</Text>
+                      <Text>Please ensure you do not use common patterns such as consecutively repeating a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab.</Text>
+                    </>}
                   />
                 </FormField>
                 
@@ -518,7 +522,7 @@ export default class SignUp extends Component {
                   />
                 </div>
                 <FormField>
-                  <Button onClick={this.handleSubmit} buttonType="noBrand" className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
+                  <Button id="sign-up-button-id" onClick={this.handleSubmit} buttonType="noBrand" className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
                 </FormField>
               </Form>
             </>
