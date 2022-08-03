@@ -278,7 +278,7 @@ export default class TeacherSetDetails extends React.Component {
           }
           contentSidebar={
             <VStack align="left" spacing="s">
-              <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="s" borderWidth="1px" borderRadius="sm" overflow="hidden">
+              <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
                 <Heading id="ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Order Set!" />
                 <Heading id="ts-available-copies" textAlign="center" size="callout" level="four" text={this.AvailableCopies()} />
                 {this.OrderTeacherSets()}

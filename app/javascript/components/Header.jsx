@@ -18,7 +18,7 @@ export default class Header extends Component {
   render() {
     return (
       <>
-        <Navbar userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} hideSignInMessage={this.props.hideSignInMessage}/>
+        <Navbar userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} hideSignInMessage={this.props.hideSignInMessage} handleLogout={this.props.handleLogout}/>
         <MobileHeader />
       </>
     )

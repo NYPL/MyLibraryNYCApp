@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, useState, useEffect } from 'react';
 import { Route, BrowserRouter as Router, Switch , Redirect} from "react-router-dom";
 
 import Header from "../components/Header";
@@ -27,105 +27,130 @@ import AccountDetailsSubMenu from "../components/AccountDetailsSubMenu";
 
 
 
-export default class Routes extends React.Component {
+export default function Routes(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: "", signin_msg: "", hide_signout_msg: "", hide_signin_msg: "" }
-    this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
-    this.handleSignOutMsg = this.handleSignOutMsg.bind(this);
-    this.handleSignInMsg = this.handleSignInMsg.bind(this);
-    this.hideSignUpMessage = this.hideSignUpMessage.bind(this);
-    this.hideSignInMessage = this.hideSignInMessage.bind(this);
+  const [hold, setHold] = useState("")
+  const [teacher_set, setTeacherSet] = useState("")
+  const {userSignedIn, setUserSignedIn} = props
+  const [signout_msg, setsignout_msg] = useState("")
+  const [signin_msg, setsignin_msg] = useState("")
+  const [hide_signout_msg, sethide_signout_msg] = useState("")
+  const [hide_signin_msg, sethide_signin_msg] = useState("")
+  const [status_label, setstatus_label] = useState("")
+
+
+  // constructor(props) {
+  //   super(props);
+  //   this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: "", signin_msg: "", hide_signout_msg: "", hide_signin_msg: "" }
+  //   this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
+  //   this.handleSignOutMsg = this.handleSignOutMsg.bind(this);
+  //   this.handleSignInMsg = this.handleSignInMsg.bind(this);
+  //   this.hideSignUpMessage = this.hideSignUpMessage.bind(this);
+  //   this.hideSignInMessage = this.hideSignInMessage.bind(this);
+  //   this.handleLogin = this.handleLogin.bind(this);
+  //   this.handleLogout = this.handleLogout.bind(this);
+  // }
+
+
+  const handleLogin = (logginIn) => {
+    setUserSignedIn(logginIn)
   }
 
-  handleTeacherSetOrderedData(hold, teacher_set, status_label) {
-    this.setState({ hold: hold, teacher_set: teacher_set, status_label: status_label })
+  const handleLogout = (loggedOut) => {
+    setUserSignedIn(loggedOut)
   }
 
-  handleSignOutMsg(signoutMsg, userSignedIn) {
-    this.setState({ signout_msg: signoutMsg, userSignedIn: userSignedIn })
+  const handleTeacherSetOrderedData = (hold, teacher_set, status_label) => {
+    setHold(hold)
+    setTeacherSet(teacher_set)
+    setstatus_label(status_label)
   }
 
-  handleSignInMsg(signInMsg, userSignedIn) {
-    this.setState({ signin_msg: signInMsg, userSignedIn: userSignedIn })
+  const handleSignOutMsg = (signoutMsg, userSignedIn) => {
+    setsignout_msg(signoutMsg)
+    setUserSignedIn(userSignedIn)
   }
 
-  hideSignUpMessage(hideSignoutMessage) {
-    this.setState({ hide_signout_msg: hideSignoutMessage })
+  const handleSignInMsg = (signInMsg, userSignedIn) => {
+    console.log(userSignedIn)
+    setsignin_msg(signInMsg)
+    setUserSignedIn(userSignedIn)
   }
 
-  hideSignInMessage(hideSignInMessage) {
-    this.setState({ hide_signin_msg: hideSignInMessage })
+  const hideSignUpMessage = (hideSignoutMessage) => {
+    sethide_signout_msg(hideSignoutMessage)
   }
 
-  render() {
-    return (
-      <DSProvider>
-          <Router>
-            <div id="mln-main-content">
-              <Banner />
-              <Header userSignedIn={this.state.userSignedIn} handleSignOutMsg={this.handleSignOutMsg} hideSignUpMessage={this.hideSignUpMessage} hideSignInMessage={this.hideSignInMessage} />
-              <Switch>
-                <Route exact path='/'
-                  render={ routeProps => (
-                    <Home {...routeProps} component={Home} userSignedIn={this.state.userSignedIn} hideSignOutMsg={this.state.hide_signout_msg} signoutMsg={this.state.signout_msg} />
-                  ) }
-                />
-                <Route
-                  path='/faq'
-                  render={routeProps => (
-                    <Faqs {...routeProps} component={Faqs} userSignedIn={this.state.userSignedIn} hideSignInMsg={this.state.hide_signin_msg} signInMsg={this.state.signin_msg} />
-                  )}
-                />
-                <Route
-                  path='/contacts'
-                  render={routeProps => (
-                    <Contacts {...routeProps} component={Contacts} userSignedIn={this.state.userSignedIn} hideSignInMsg={this.state.hide_signin_msg} signInMsg={this.state.signin_msg} />
-                  )}
-                />
-                <Route
-                  path='/participating-schools'
-                  render={routeProps => (
-                    <ParticipatingSchools {...routeProps} component={ParticipatingSchools} userSignedIn={this.state.userSignedIn} hideSignInMsg={this.state.hide_signin_msg} signInMsg={this.state.signin_msg} />
-                  )}
-                />
-                <Route
-                  path='/signin'
-                  render={routeProps => (
-                    <SignIn {...routeProps} component={SignIn} userSignedIn={this.state.userSignedIn} handleSignInMsg={this.handleSignInMsg} hideSignInMessage={this.hideSignInMessage} />
-                  )}
-                />
-                <Route path="/signup" component={SignUp} />
-                <Route path="/signout" component={SignOut} />                
-                <Route
-                  path='/teacher_set_data'
-                  render={routeProps => (
-                    <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={this.state.userSignedIn} hideSignInMsg={this.state.hide_signin_msg} signInMsg={this.state.signin_msg} />
-                  )}
-                />
-                <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
-                <Route path="/account_details" component={Accounts} />
-                <Route
-                  path='/teacher_set_details/:id'
-                  render={routeProps => (
-                    <TeacherSetDetails {...routeProps} handleTeacherSetOrderedData={this.handleTeacherSetOrderedData} />
-                  )}
-                />
-                <Route
-                  path='/ordered_holds/:access_key'
-                  render={routeProps => (
-                    <TeacherSetOrder {...routeProps} holddetails={this.state.hold} teachersetdetails={this.state.teacher_set} statusLabel={this.state.status_label} />
-                  )}
-                />
-
-                <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
-                <Route path="/book_details/:id" component={TeacherSetBooks} />
-              </Switch>
-              <footer className="footer"> <Footer /></footer>
-            </div>
-          </Router>
-      </DSProvider>
-    )
+  const hideSignInMessage = (hideSignInMessage) => {
+    sethide_signin_msg(hideSignInMessage)
   }
+
+
+  return (
+    <DSProvider>
+        <Router>
+          <div id="mln-main-content">
+            <Banner />
+            <Header userSignedIn={userSignedIn} handleSignOutMsg={handleSignOutMsg} hideSignUpMessage={hideSignUpMessage} hideSignInMessage={hideSignInMessage} handleLogout={handleLogout} />
+            <Switch>
+              <Route exact path='/'
+                render={ routeProps => (
+                  <Home {...routeProps} component={Home} userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />
+                ) }
+              />
+              <Route
+                path='/faq'
+                render={routeProps => (
+                  <Faqs {...routeProps} component={Faqs} userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />
+                )}
+              />
+              <Route
+                path='/contacts'
+                render={routeProps => (
+                  <Contacts {...routeProps} component={Contacts} userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />
+                )}
+              />
+              <Route
+                path='/participating-schools'
+                render={routeProps => (
+                  <ParticipatingSchools {...routeProps} component={ParticipatingSchools} userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />
+                )}
+              />
+              <Route
+                path='/signin'
+                render={routeProps => (
+                  <SignIn {...routeProps} component={SignIn} userSignedIn={userSignedIn} handleSignInMsg={handleSignInMsg} hideSignInMessage={hideSignInMessage} handleLogin={handleLogin} />
+                )}
+              />
+              <Route path="/signup" component={SignUp} />
+              <Route path="/signout" component={SignOut} />                
+              <Route
+                path='/teacher_set_data'
+                render={routeProps => (
+                  <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />
+                )}
+              />
+              <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
+              <Route path="/account_details" component={Accounts} />
+              <Route
+                path='/teacher_set_details/:id'
+                render={routeProps => (
+                  <TeacherSetDetails {...routeProps} handleTeacherSetOrderedData={handleTeacherSetOrderedData} />
+                )}
+              />
+              <Route
+                path='/ordered_holds/:access_key'
+                render={routeProps => (
+                  <TeacherSetOrder {...routeProps} holddetails={hold} teachersetdetails={teacher_set} statusLabel={status_label} />
+                )}
+              />
+
+              <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
+              <Route path="/book_details/:id" component={TeacherSetBooks} />
+            </Switch>
+            <footer className="footer"> <Footer /></footer>
+          </div>
+        </Router>
+    </DSProvider>
+  )
 }

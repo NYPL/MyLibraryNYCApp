@@ -55,7 +55,7 @@ export default class Navbar extends React.Component {
               <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" onClick={this.hideSignInMsg} className="nav-link-colors">Participating Schools</ReactRouterLink></li>
 
               <li id="mln-navbar-ad-link" className="nav__menu-item">
-                <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} />
+                <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} handleLogout={this.props.handleLogout}/>
               </li>
 
               <li id="mln-navbar-social-media-link" className="nav__menu-item nav-link-colors socialMediaIcon">

@@ -30,8 +30,7 @@ export default function App(props) {
     .catch(error => console.log('api errors:', error))
   };
 
-console.log(isLoggedIn)
   return (
-    <Routes userSignedIn={isLoggedIn}/>
+    <Routes userSignedIn={isLoggedIn} setUserSignedIn={setIsLoggedIn}/>
   )
 }

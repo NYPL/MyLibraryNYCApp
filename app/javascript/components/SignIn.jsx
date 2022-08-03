@@ -62,6 +62,7 @@ export default class SignIn extends Component {
     }).then(res => {
       if (res.data.logged_in) {
         this.state.userSignedIn = true;
+        this.props.handleLogin(true)
         this.props.handleSignInMsg(res.data.sign_in_msg, true)
         this.props.hideSignInMessage(false)
         this.redirectToHome(res.data.user_return_to)
