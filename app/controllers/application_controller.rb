@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   helper_method :login!, :logged_in?, :current_user, :authorized_user?, :set_user
 
   def login!
+    LogWrapper.log('INFO', {'message' => 'login.start',
+                             'method' => "after_sign_in_path_for........ #{@user.id}"})
     session[:user_id] = @user.id
   end
 
