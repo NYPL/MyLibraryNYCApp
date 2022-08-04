@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     puts "**************  #{session["user_return_to"]}    ***************"
 
     if @user
-     # sign_in :user, @user, bypass: true
+      #sign_in :user, @user, bypass: true
       login!
       render json: {
         logged_in: true,
@@ -24,6 +24,8 @@ class SessionsController < ApplicationController
 
   def is_logged_in?
     if logged_in? && current_user
+      LogWrapper.log('INFO', {'message' => 'is_logged_in',
+                             'method' => "is_logged_in........ "})
       render json: {
         logged_in: true,
         user: current_user
