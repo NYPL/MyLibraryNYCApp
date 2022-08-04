@@ -39,19 +39,6 @@ export default function Routes(props) {
   const [status_label, setstatus_label] = useState("")
 
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = { hold: "", teacher_set: "", userSignedIn: this.props.userSignedIn, signout_msg: "", signin_msg: "", hide_signout_msg: "", hide_signin_msg: "" }
-  //   this.handleTeacherSetOrderedData = this.handleTeacherSetOrderedData.bind(this);
-  //   this.handleSignOutMsg = this.handleSignOutMsg.bind(this);
-  //   this.handleSignInMsg = this.handleSignInMsg.bind(this);
-  //   this.hideSignUpMessage = this.hideSignUpMessage.bind(this);
-  //   this.hideSignInMessage = this.hideSignInMessage.bind(this);
-  //   this.handleLogin = this.handleLogin.bind(this);
-  //   this.handleLogout = this.handleLogout.bind(this);
-  // }
-
-
   const handleLogin = (logginIn) => {
     setUserSignedIn(logginIn)
   }

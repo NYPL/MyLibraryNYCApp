@@ -184,7 +184,7 @@ export default class SignUp extends Component {
       if (!this.isStrongPassword(fields["password"])) {
         formIsValid = false;
         this.setState({passwordIsValid: true, isDisabled: true })
-        this.state.errors['password'] = "Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, and have at least one special character except period (.)"
+        this.state.errors['password'] = "Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, have at least one special character except period (.) and please do not repeat a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab"
       }
     }
 
