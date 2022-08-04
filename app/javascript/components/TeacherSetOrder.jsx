@@ -53,8 +53,8 @@ export default class TeacherSetOrder extends React.Component {
   }
 
   OrderMessage() {
-    const order_message = "Your order has been received by our system and will be soon delivered to your school!. Check your email inbox for further details." 
-    const cancelled_message = "Your cancellation of the order below has been received."
+    const order_message = "Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details." 
+    const cancelled_message = "The order below has been cancelled."
     return this.state.hold && this.state.hold["status"] == 'cancelled' ? cancelled_message : order_message
   }
 

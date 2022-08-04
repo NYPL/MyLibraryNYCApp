@@ -15,7 +15,7 @@ class RegistrationsController <  ApplicationController
     current_user.save!
 
     if current_user.save!
-      render json: { status: :updated, user: current_user, message: "You updated your account successfully." }
+      render json: { status: :updated, user: current_user, message: "Your account has been updated." }
     else
       render json: { message: error_msg_hash(current_user) }
     end
