@@ -63,9 +63,6 @@ module MyLibraryNYC
 
     config.api_only = false
 
-    config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore
-
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
