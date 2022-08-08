@@ -16,7 +16,7 @@ import {
   Card, 
   CardHeading, 
   CardContent,
-  Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge
+  Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion
 } from '@nypl/design-system-react-components';
 
 
@@ -175,20 +175,29 @@ export default class SearchTeacherSets extends Component {
     if (this.state.teacherSets && this.state.teacherSets.length > 0) {
       return this.state.facets.map((ts, _i) => {
         return <>
-            <div className="bold" style={{textTransform: "capitalize"}}> {ts.label} </div> 
-            <CheckboxGroup isFullWidth id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)}>
-              { ts.items.map((item, index) =>
-                  <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()} 
-                     labelText={
-                       <Flex>
-                          <span>{item["label"]}</span>
-                          <Spacer />
-                          <Text id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
-                      </Flex>
-                    }
-                 />
-              )}
-            </CheckboxGroup>
+            <Accordion marginTop="s" id={"ts-facet-label " + ts.label} accordionData={ [
+              {
+                label: <Text isCapitalized noSpace>{ts.label}</Text>,
+                panel: (
+                  <CheckboxGroup isFullWidth id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)}>
+              
+                    { ts.items.map((item, index) =>
+
+                        <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()} 
+                           labelText={
+                             <Flex>
+                                <span>{item["label"]}</span>
+                                <Spacer />
+                                <Text id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
+                            </Flex>
+                          }
+                       />
+
+                    )}
+                  </CheckboxGroup>
+                ),
+              } ]}
+            />
           </>
       })
     }
