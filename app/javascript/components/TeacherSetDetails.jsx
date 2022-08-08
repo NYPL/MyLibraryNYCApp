@@ -28,7 +28,7 @@ export default class TeacherSetDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = { ts_details: {}, allowed_quantities: [], teacher_set: "", active_hold: "", books: [], value: "",
-                   quantity: "1", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true, errorMessage: "", maxCopiesRequestable: "" };
+                   quantity: "1", access_key: "", hold: {}, teacher_set_notes: [], disableOrderButton: true, errorMessage: "", maxCopiesRequestable: "", bookImageHeight: "", bookImageWidth: "" };
   }
 
   componentDidMount() {
@@ -104,9 +104,16 @@ export default class TeacherSetDetails extends React.Component {
     })
   }
 
+  bookImageDimensions = ({target:img}) => {
+    this.setState({bookImageHeight: img.offsetHeight, bookImageWidth: img.offsetWidth});
+  }
+
   BookImage(data) {
     if (data.cover_uri) {
-      return <Image additionalImageStyles={{height:"auto"}} id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default" alt="Book image" />
+      if (this.state.bookImageHeight === 1 && this.state.bookImageWidth === 1) {
+        return <img src={mlnImage} />
+      }
+      return <img onLoad={this.bookImageDimensions} src={data.cover_uri} />
     } else {
       return <Image additionalImageStyles={{height: "auto"}} id={"ts-books-" + data.id} src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
     }
@@ -118,7 +125,6 @@ export default class TeacherSetDetails extends React.Component {
     })
   }
 
-
   teacherSetUnAvailable() {
     if (this.state.teacher_set <= 0) {
       return <Text sixe="default">This Teacher Set is unavailable. As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at help@mylibrarynyc.org.</Text>
@@ -126,9 +132,6 @@ export default class TeacherSetDetails extends React.Component {
   }
 
   OrderTeacherSets() {
-    console.log(this.state.teacher_set)
-    console.log("ooooo")
-
     if (this.state.teacher_set && this.state.teacher_set.available_copies <= 0 ) {
       return <Text width="m" size="default"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
     } else if(this.state.allowed_quantities.length <= 0) {
