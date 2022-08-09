@@ -2,19 +2,21 @@ import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import ReactTappable from 'react-tappable';
 import FocusTrap from 'focus-trap-react';
-import ContactsFaqsSchoolsNavMenu from "./ContactsFaqsSchoolsNavMenu";
+import MobileNavbarSubmenu from "./MobileNavbarSubmenu";
+import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
+import Vector from '../images/Vector.png'
 
 import {
   BrowserRouter as Router,
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-import { Link } from "@nypl/design-system-react-components";
+import { Link, Flex, Icon, HStack, Image, List, Spacer} from "@nypl/design-system-react-components";
 
 import { LionLogoIcon, LocatorIcon, MenuIcon, 
          LoginIcon, LoginIconSolid, SearchIcon, XIcon } from '@nypl/dgx-svg-icons';
 import { extend as _extend } from 'underscore';
-import mlnLogoRed from '../images/MLN_Logo_red.png'
+import mlnLogoRed1 from '../images/MLN_Logo_red.png'
 
 const styles = {
   base: {
@@ -33,8 +35,9 @@ const styles = {
   listItem: {
     display: 'inline-block',
     padding: 0,
-    margin: '0 0 0 4px',
+    margin: '0 -8 0 4px',
     lineHeight: 'normal',
+    backgroundColor: '#121212',
   },
   mobileLogoLink: {
     color: '#000',
@@ -144,7 +147,6 @@ toggleMobileActiveBtn(activeButton) {
   }
 }
 
-
 componentDidMount() {
   document.body.addEventListener("click", () => {
     if (this.state.activeButton) {
@@ -153,10 +155,9 @@ componentDidMount() {
   });
 }
 
-
 renderMenuButton() {
   let mobileMenuClass = '';
-  let icon = <MenuIcon ariaHidden fill="#000" focusable={false} />;
+  let icon = <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="utilityHamburger" size="medium" type="default" />;
   let buttonStyles = styles.inactiveMenuButton;
   let buttonLabel = 'Open Navigation';
   let dialogWindow = null;
@@ -164,11 +165,11 @@ renderMenuButton() {
 
   if (active) {
     mobileMenuClass = ' active';
-    icon = <XIcon ariaHidden fill="#FFF" focusable={false} />;
+    icon = <Icon color="ui.white" align="right" name="close" size="medium" type="default"  />;
     buttonStyles = styles.activeMenuButton;
     buttonLabel = 'Close Navigation';
     dialogWindow = (
-      <ContactsFaqsSchoolsNavMenu />
+      <MobileNavbarSubmenu />
     );
   }
 
@@ -176,10 +177,11 @@ renderMenuButton() {
   const initialFocus = active ? 'ul.header-mobile-navMenu-list li:first-of-type a' : null;
 
 
-
   return (
     <li style={styles.listItem}>
       <FocusTrap
+        id="dasdsdd"
+        style={{ "margin": "0px -8px 0px 0px", "background-color": "#121212" }}
         focusTrapOptions={{
           initialFocus,
           clickOutsideDeactivates: true,
@@ -207,32 +209,31 @@ renderMenuButton() {
 }
 
 
-render() {
-  return (
-      <div className={this.props.className} style={styles.base}>
-        <Link type="action">
-          <ReactRouterLink to="/">
-          <img className="homeLogo" border="0" src={mlnLogoRed}/></ReactRouterLink>
-        </Link>
-        <ul style={styles.list} >
-          <li style={styles.listItem}>
-            <Link type="action">
-              <ReactRouterLink to="/users/start" className="nav-link-colors">
-                <LoginIcon ariaHidden fill="#000" focusable={false} />
-              </ReactRouterLink>
-            </Link>
-          </li>
-          <li style={styles.listItem}>
-            <Link type="action">
+  render() {
+    return (
+      <Flex alignItems="center" id="mln-mobile-header-topWrapper">
+        <ReactRouterLink to="/">
+          <Image id="mln-header-logo" alt="Alt text" className="header-logo homeLogo" additionalImageStyles={{ "background-color": "var(--nypl-colors-ui-white)", "width": "7em", "margin-left": "1em"}} size="small" src={mlnLogoRed} />
+          <Image id="mln-header-logo" alt="Alt text" className="header-logo homeLogo" additionalImageStyles={{ "background-color": "var(--nypl-colors-ui-white)", "width": "7em", "margin-left": "1em"}} size="small" src={Vector} />
+        </ReactRouterLink>
+        <Spacer />         
+        <List id="mobile-mln-navbar-list" type="ul" inline noStyling marginTop="s" marginRight="xs">
+          <HStack spacing="xxs">
+            <li id="mobile-mln-navbar-ts-link">
               <ReactRouterLink to="/teacher_set_data" className="nav-link-colors">
-                <SearchIcon ariaHidden fill="#000" focusable={false} />
+                <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="search" size="medium" type="default" />
               </ReactRouterLink>
-            </Link>
             </li>
-          {this.renderMenuButton()}
-        </ul>
-      </div>
-    );
+            <li id="mobile-mln-navbar-signin-link">
+              <ReactRouterLink to="/signin" className="nav-link-colors">
+                <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="actionExit" size="medium" type="default" />
+              </ReactRouterLink>
+            </li>
+            {this.renderMenuButton()}
+          </HStack>
+        </List>
+      </Flex>
+    )
   }
 }
 

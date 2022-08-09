@@ -42,8 +42,9 @@ export default class Navbar extends React.Component {
             <Image id="mln-header-logo" marginLeft="m" style={{"color": "purple"}} alt="Alt text" className="header-logo" additionalImageStyles={{ "background-color": "var(--nypl-colors-ui-white)", "margin-left": "35px" }} size="small" src={mlnLogoRed} />
             <Image id="mln-header-logo" marginLeft="m" alt="Alt text" className="header-logo" additionalImageStyles={{ "background-color": "var(--nypl-colors-ui-white)", "margin-left": "35px" }} size="small" src={Vector} />
           </ReactRouterLink>
-
+          
           <Spacer />
+          
           <List id="mln-navbar-list" type="ul" inline noStyling>
             <HStack spacing="m">
               <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>

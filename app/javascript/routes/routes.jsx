@@ -16,7 +16,7 @@ import SignOut from "../components/SignOut";
 import CalendarOfEvents from "../components/CalendarOfEvents";
 import SearchTeacherSets from "../components/SearchTeacherSets";
 import Accounts from "../components/Accounts";
-import ContactsFaqsSchoolsNavMenu from "../components/ContactsFaqsSchoolsNavMenu";
+import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
 import TeacherSetDetails from "../components/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
@@ -117,7 +117,7 @@ export default function Routes(props) {
                   <SearchTeacherSets {...routeProps} component={SearchTeacherSets} userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />
                 )}
               />
-              <Route path="/secondary_menu" component={ContactsFaqsSchoolsNavMenu} />
+              <Route path="/secondary_menu" component={MobileNavbarSubmenu} />
               <Route path="/account_details" component={Accounts} />
               <Route
                 path='/teacher_set_details/:id'

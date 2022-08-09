@@ -1,3 +1,17 @@
+$nypl-breakpoint-small: 320px;
+$nypl-breakpoint-medium: 600px;
+$nypl-breakpoint-large: 960px;
+$nypl-breakpoint-xlarge: 1280px;
+$nypl-breakpoint-xxlarge: 1600px;
+
+
+:root {
+  --nypl-breakpoint-small: 320px;
+  --nypl-breakpoint-medium: 600px;
+  --nypl-breakpoint-large: 960px;
+  --nypl-breakpoint-xl: 1280px;
+}
+
 .navMenu-wrapper {
   display: inline-block;
   position: inherit;
@@ -132,18 +146,14 @@
 }
 
 .navMenu-wrapper {
-  line-height: normal;
-  margin-top: -2.5px;
   position: absolute;
   width: 100%;
-  height: 419px;
   z-index: 1000;
-  background-color: #FFF;
-  border-top: 1px solid #D23B42;
+  background-color: #121212;
 }
 
 .mobileHeader-menuButton.active{
-  background-color: #D23B42 !important;
+  /*background-color: #D23B42 !important;*/
 }
 
 .menu-list {
@@ -269,7 +279,7 @@
   &-topWrapper {
     display: none;
 
-    @include min-screen(769px) {
+    @include min-screen($nypl-breakpoint-medium) {
       display: block;
       max-width: 1312px;
      /* margin: 0px 20px;*/
@@ -494,6 +504,18 @@
   }
 }
 
+#mln-navbar {
+   @include max-screen($nypl-breakpoint-large) {
+    display: none;
+   }
+}
+
+#mln-mobile-header-topWrapper {
+   @include min-screen($nypl-breakpoint-large) {
+    display: none;
+   }
+}
+
 .NewsLetterHeaderStyles {
   font-size: 20px;
   font-weight: 500;
@@ -506,4 +528,19 @@
 
 .text_center {
   text-align: center;
+}
+
+.mobileSubmenu {
+  color: var(--nypl-colors-ui-white);
+  text-decoration: none !important;
+}
+
+.mobileHorizontalRule {
+  height: 0.5px !important;
+  background: var(--nypl-colors-ui-gray-dark) !important;
+  margin-top: 8px !important;
+}
+
+.mobileList {
+  color: var(--nypl-colors-ui-gray-dark) !important;
 }

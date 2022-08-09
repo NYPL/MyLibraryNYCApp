@@ -180,7 +180,6 @@ export default class SearchTeacherSets extends Component {
                 label: <Text isCapitalized noSpace>{ts.label}</Text>,
                 panel: (
                   <CheckboxGroup isFullWidth id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={this.SelectedFacets.bind(this, ts.label)}>
-              
                     { ts.items.map((item, index) =>
 
                         <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()} 
@@ -192,7 +191,6 @@ export default class SearchTeacherSets extends Component {
                             </Flex>
                           }
                        />
-
                     )}
                   </CheckboxGroup>
                 ),
@@ -296,7 +294,6 @@ export default class SearchTeacherSets extends Component {
           breakout={<AppBreadcrumbs />}
           contentTop={<>
               {<SignedInMsg signInDetails={this.props} />}
-
               <Heading id="search-and-find-teacher-sets-header" size="secondary" level="two" text="Search and Find Teacher Sets"  />
               <HorizontalRule id="ts-horizontal-rule" className="teacherSetHorizontal" />
               <SearchBar id="ts-search" noBrandButtonType labelText="Teacher-Set SearchBar" onSubmit={this.handleSubmit} className="" 
