@@ -35,7 +35,7 @@ export default class ParticipatingSchools extends Component {
           return <Link marginRight="xs" style={{"text-decoration": "none"}} fontWeight="bold" href={"#" + anchor}> {anchor} </Link>
         } else {
           if (anchor != '#') {
-            return <a style={{"text-decoration": "none", "font-weight": "bold", "color": "var(--nypl-colors-ui-gray-medium)"}}>{anchor}</a>
+            return <a style={{"text-decoration": "none", "font-weight": "bold", "color": "var(--nypl-colors-ui-gray-medium)", "margin-right": "8px"}}>{anchor}</a>
           }
         }
     })
