@@ -223,7 +223,7 @@ export default class TeacherSetDetails extends React.Component {
               <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
 
               <VStack align="left" spacing="s">
-                <Heading id="ts-header-desc-text" isCapitalized level="three" size="tertiary" text="What is in the box" />                
+                <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
                  { this.TeacherSetDescription() }
                 <div id="ts-page-books-count"> { this.BooksCount() } </div>
                 <SimpleGrid id="ts-page-books-panel" columns={5} gap="xxs"> { this.TeacherSetBooks() } </SimpleGrid>
