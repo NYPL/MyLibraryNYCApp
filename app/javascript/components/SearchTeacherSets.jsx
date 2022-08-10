@@ -16,7 +16,7 @@ import {
   Card, 
   CardHeading, 
   CardContent,
-  Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion
+  Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion, SkeletonLoader
 } from '@nypl/design-system-react-components';
 
 
@@ -166,8 +166,28 @@ export default class SearchTeacherSets extends Component {
   }
 
   noResultsFound() {
-    if (this.state.teacherSets && this.state.teacherSets.length <= 0) {
+     if (this.state.teacherSets.length <= 0){
+      return <SkeletonLoader contentSize={3} headingSize={3} imageAspectRatio="portrait" layout="row"
+        showContent
+        showHeading
+        showImage
+        //width="900px"
+      />
+    } else if (this.state.teacherSets && this.state.teacherSets.length <= 0) {
       return <Text marginTop="s" id="ts-results-not-found" level={5}>No Results Found</Text>
+    }
+  }
+
+  skeletonLoader() {
+    if (this.state.teacherSets.length <= 0){
+      return <SkeletonLoader
+          contentSize={3}
+          headingSize={1}
+          imageAspectRatio="portrait"
+          layout="row"
+          showImage
+          width="900px"
+        />
     }
   }
 
@@ -236,7 +256,8 @@ export default class SearchTeacherSets extends Component {
 
   teacherSetSideBarResults = (e) => {
     if (this.state.teacherSets && this.state.teacherSets.length > 0) {
-      return <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
+      return <>
+      <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
         <Heading size="tertiary" level="three" > Refine Results </Heading>
         <Toggle
           id="toggle"
@@ -248,6 +269,7 @@ export default class SearchTeacherSets extends Component {
         {this.TeacherSetGradesSlider()}{<br/>}
         {this.TeacherSetFacets()}
       </Box>
+      </>
     }
   }
 
@@ -305,8 +327,7 @@ export default class SearchTeacherSets extends Component {
                   placeholder: "Enter a teacher set name",
                   value: this.state.keyword
                 }}
-              /> 
-              {this.noResultsFound()}          
+              />       
             </>
           }
           contentPrimary={
@@ -336,7 +357,7 @@ export default class SearchTeacherSets extends Component {
                 </div>
               </>
             }
-          contentSidebar={this.teacherSetSideBarResults()}
+          contentSidebar={<>{this.skeletonLoader()}{this.teacherSetSideBarResults()}</>}
           sidebar="left" 
         />
     )
