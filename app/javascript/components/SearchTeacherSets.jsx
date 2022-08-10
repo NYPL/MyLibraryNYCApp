@@ -195,7 +195,7 @@ export default class SearchTeacherSets extends Component {
     if (this.state.teacherSets && this.state.teacherSets.length > 0) {
       return this.state.facets.map((ts, _i) => {
         return <>
-            <Accordion marginTop="s" id={"ts-facet-label " + ts.label} accordionData={ [
+            <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="s" id={"ts-facet-label " + ts.label} accordionData={ [
               {
                 label: <Text isCapitalized noSpace>{ts.label}</Text>,
                 panel: (
