@@ -41,8 +41,10 @@ class TeacherSetsController < ApplicationController
     per_page = 20;
     total_pages = (total_count/per_page.to_f).ceil
 
+    no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
+
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count, total_pages: total_pages}
+      render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg}
     else
       render json: { teacher_sets: @teacher_sets, facets: @facets, total_count: total_count, total_pages: total_pages}, serializer: SearchSerializer, include_books: false, include_contents: false
     end

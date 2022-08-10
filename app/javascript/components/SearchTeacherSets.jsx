@@ -34,7 +34,7 @@ export default class SearchTeacherSets extends Component {
                    setComputedCurrentPage: 1, totalPages: 0,
                    computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), selectedFacets: {}, params: {}, 
                    grade_begin: -1, grade_end: 12, availableToggle: false, availability: "",
-                   ts_sort_by_id: "", sortTitleValue: 0 };
+                   ts_sort_by_id: "", sortTitleValue: 0, noTsResultsFound: "" };
   }
 
   componentDidMount() {
@@ -45,7 +45,7 @@ export default class SearchTeacherSets extends Component {
   getTeacherSets(params) {
     axios.get('/teacher_sets', {params: params}).then(res => {
       this.setState({ teacherSets: res.data.teacher_sets, facets: res.data.facets,
-                      tsTotalCount: res.data.total_count, totalPages: res.data.total_pages });
+                      tsTotalCount: res.data.total_count, totalPages: res.data.total_pages, noTsResultsFound: res.data.no_results_found_msg });
       if (res.data.teacher_sets.length > 0 && res.data.total_count > 20 ) {
         this.setState({ pagination: 'block' })
       } else {
@@ -166,23 +166,18 @@ export default class SearchTeacherSets extends Component {
   }
 
   noResultsFound() {
-     if (this.state.teacherSets.length <= 0){
-      return <SkeletonLoader contentSize={3} headingSize={3} imageAspectRatio="portrait" layout="row"
-        showContent
-        showHeading
-        showImage
-        //width="900px"
-      />
-    } else if (this.state.teacherSets && this.state.teacherSets.length <= 0) {
+    console.log(this.state.teacherSets.length <= 0 && this.state.noTsResultsFound !== "")
+    console.log("pppp")
+    if (this.state.teacherSets.length <= 0 && this.state.noTsResultsFound !== ""){
       return <Text marginTop="s" id="ts-results-not-found" level={5}>No Results Found</Text>
     }
   }
 
   skeletonLoader() {
-    if (this.state.teacherSets.length <= 0){
+    if (this.state.noTsResultsFound === "" && this.state.teacherSets.length <= 0){
       return <SkeletonLoader
-          contentSize={3}
-          headingSize={1}
+          contentSize={4}
+          headingSize={2}
           imageAspectRatio="portrait"
           layout="row"
           showImage
@@ -327,7 +322,8 @@ export default class SearchTeacherSets extends Component {
                   placeholder: "Enter a teacher set name",
                   value: this.state.keyword
                 }}
-              />       
+              />
+              {this.noResultsFound()}      
             </>
           }
           contentPrimary={
