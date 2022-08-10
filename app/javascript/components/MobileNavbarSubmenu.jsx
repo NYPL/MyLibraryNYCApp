@@ -5,7 +5,6 @@ import {
   BrowserRouter as Router,
   Link as ReactRouterLink,
 } from "react-router-dom";
-import { slide as Menu } from 'react-burger-menu'
 import { Link, Icon, List, VStack, HorizontalRule } from "@nypl/design-system-react-components";
 
 
