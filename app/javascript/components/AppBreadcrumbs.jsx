@@ -63,9 +63,9 @@ const BreadcrumbsDataValue = (levelString) => {
     case 'book_details':
       return 'Book Details';
     case 'signup':
-      return 'SignUp';
+      return 'Sign Up';
     case 'signin':
-      return 'SignIn';
+      return 'Sign In';
     default:
       return levelString;
   }

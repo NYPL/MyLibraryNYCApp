@@ -3,31 +3,14 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
-import { Accordion, Link, List, DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
+import { Accordion, Link, List, DSProvider, TemplateAppContainer, SkeletonLoader } from '@nypl/design-system-react-components';
 
 export default class Faqs extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { faqs: [], collapsed: true, clicked: {} };
+    this.state = { faqs: [] };
   }
-
-
-  onToggle = () => {
-    const { collapsed } = this.state;
-    this.setState(() => ({
-      collapsed : !collapsed
-    }))
-  }
-
-
-  handleClick = i => {
-    this.setState(prevState => {
-      const clicked = { ...prevState.clicked };
-      clicked[i] = !clicked[i];
-      return { clicked };
-    });
-  };
 
 
   componentDidMount() {
@@ -49,6 +32,11 @@ export default class Faqs extends Component {
     })
   }
 
+  skeletonLoaderForFaqs() {
+    if (this.state.faqs.length <= 0) {
+      return <SkeletonLoader layout="row" showImage={false} showContent={5} showHeading={1} width="900px"/>
+    }
+  }
 
   render() {
     return (
@@ -56,7 +44,11 @@ export default class Faqs extends Component {
           breakout={<AppBreadcrumbs />}
           contentTop={<SignedInMsg signInDetails={this.props} />}
           contentPrimary={
-            <Accordion id="faqs-page" accordionData={this.FrequentlyAskedQuestions()} />
+            <>
+              {this.skeletonLoaderForFaqs()}
+              <Accordion id="faqs-page" accordionData={this.FrequentlyAskedQuestions()} />
+            </>
+            
           }
           contentSidebar={<HaveQuestions />}
           sidebar="right"

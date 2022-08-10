@@ -26,7 +26,8 @@ class SchoolsController < ApplicationController
       end
       schools_arr << school_hash
     end
-    render json: { schools: schools_arr, anchor_tags: anchor_tags }
+    school_not_found = schools_arr.length <= 0 ? "There are no results that match your search criteria." : ""
+    render json: { schools: schools_arr, anchor_tags: anchor_tags, school_not_found: school_not_found }
   end
 
   def participating_schools_data

@@ -166,8 +166,6 @@ export default class SearchTeacherSets extends Component {
   }
 
   noResultsFound() {
-    console.log(this.state.teacherSets.length <= 0 && this.state.noTsResultsFound !== "")
-    console.log("pppp")
     if (this.state.teacherSets.length <= 0 && this.state.noTsResultsFound !== ""){
       return <Text marginTop="s" id="ts-results-not-found" level={5}>No Results Found</Text>
     }

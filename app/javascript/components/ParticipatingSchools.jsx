@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
 import {
-  Input, TextInput, List, DSProvider, TemplateAppContainer, Text, Heading, HorizontalRule, Link
+  Input, TextInput, List, DSProvider, TemplateAppContainer, Text, Heading, HorizontalRule, Link, SkeletonLoader
 } from '@nypl/design-system-react-components';
 
 
@@ -13,7 +13,7 @@ export default class ParticipatingSchools extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { schools: [], search_school: "", anchor_tags: [], school_not_found: "", isInvalid: false};
+    this.state = { schools: [], search_school: "", anchor_tags: [], schoolNotFound: "", isInvalid: false};
     this.handleChange = this.handleChange.bind(this);
 
   }
@@ -21,7 +21,7 @@ export default class ParticipatingSchools extends Component {
   componentDidMount() {
     axios.get('/schools')
       .then(res => {
-        this.setState({ schools: res.data.schools, anchor_tags: res.data.anchor_tags });
+        this.setState({ schools: res.data.schools, anchor_tags: res.data.anchor_tags, schoolNotFound: res.data.school_not_found });
       })
       .catch(function (error) {
         console.log(error);
@@ -41,8 +41,13 @@ export default class ParticipatingSchools extends Component {
     })
   }
 
+  schoolSkeletonLoader() {
+    if (this.state.schoolNotFound === "" && this.state.schools.length <= 0) {
+      return <SkeletonLoader marginTop="s" layout="row" showImage={false} showContent={5} showHeading={1} />
+    }
+  }
+
   Schools() {
-    this.state.school_not_found = ""
     this.state.isInvalid = false;
     let schoolsCount = 0;
 
@@ -71,7 +76,7 @@ export default class ParticipatingSchools extends Component {
       } 
     })
     if (schoolsCount === 0) {
-      return <Text marginTop="m" isItalic size="default" color="var(--nypl-colors-ui-error-primary)">There are no results that match your search criteria.</Text>
+      return <Text marginTop="m" isItalic size="default" color="var(--nypl-colors-ui-error-primary)">{this.state.schoolNotFound}</Text>
     } else {
       return schoolsData
     }
@@ -105,13 +110,12 @@ export default class ParticipatingSchools extends Component {
               id="participating-school"
               labelText="Search by Name"
               placeholder="School name"
-              invalidText={this.state.school_not_found}
               isInvalid={this.state.isInvalid}
               showLabel
             />
             <Text marginTop="l" size="default" fontWeight="medium"> Filter by Name</Text>
             {this.AnchorTags()}
-           <div id="participating-schools-list">{this.Schools()}</div>
+           <div id="participating-schools-list">{this.schoolSkeletonLoader()}{this.Schools()}</div>
           </>
           }
           contentSidebar={<HaveQuestions />}
