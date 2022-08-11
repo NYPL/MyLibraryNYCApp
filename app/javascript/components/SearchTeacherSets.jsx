@@ -200,7 +200,7 @@ export default class SearchTeacherSets extends Component {
                              <Flex>
                                 <span>{item["label"]}</span>
                                 <Spacer />
-                                <Text id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
+                                <Text noSpace id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
                             </Flex>
                           }
                        />

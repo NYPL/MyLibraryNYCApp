@@ -34,7 +34,7 @@ export default class Faqs extends Component {
 
   skeletonLoaderForFaqs() {
     if (this.state.faqs.length <= 0) {
-      return <SkeletonLoader layout="row" showImage={false} showContent={5} showHeading={1} width="900px"/>
+      return <div width="900px"/>
     }
   }
 

@@ -43,7 +43,7 @@ export default class ParticipatingSchools extends Component {
 
   schoolSkeletonLoader() {
     if (this.state.schoolNotFound === "" && this.state.schools.length <= 0) {
-      return <SkeletonLoader marginTop="s" layout="row" showImage={false} showContent={5} showHeading={1} />
+      return <SkeletonLoader marginTop="s" layout="row" showImage={false} showContent={5} contentSize={4} showHeading={1} />
     }
   }
 
@@ -113,7 +113,7 @@ export default class ParticipatingSchools extends Component {
               isInvalid={this.state.isInvalid}
               showLabel
             />
-            <Text marginTop="l" size="default" fontWeight="medium"> Filter by Name</Text>
+            <Text marginTop="l" size="default" fontWeight="medium">Filter by Name</Text>
             {this.AnchorTags()}
            <div id="participating-schools-list">{this.schoolSkeletonLoader()}{this.Schools()}</div>
           </>
