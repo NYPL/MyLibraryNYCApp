@@ -1,6 +1,6 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do 
   allow do
-    origins Rails.application.config.allowed_cors_origins 
+    origins ENV['MLN_INFO_SITE_HOSTNAME']
 
     resource '*',
       headers: :any,
