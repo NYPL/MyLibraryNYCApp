@@ -47,6 +47,6 @@ MyLibraryNYC::Application.configure do
   config.assets.logger = true
 
   config.eager_load = false
-
+  config.allowed_cors_origins = ["#{ENV['MLN_INFO_SITE_HOSTNAME']}"]
   config.active_job.queue_adapter = :delayed_job
 end

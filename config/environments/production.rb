@@ -74,7 +74,8 @@ MyLibraryNYC::Application.configure do
   config.logger.level = Logger::INFO
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
                   ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL']]
-
+  config.allowed_cors_origins = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
+                  ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL']]
 
   config.eager_load = true
 end

@@ -46,5 +46,10 @@ MyLibraryNYC::Application.configure do
                   "http://my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com",
                   "my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com"
                 ]
+  config.allowed_cors_origins = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
+                  ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL'],
+                  "http://my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com",
+                  "my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com"
+                ]
   config.eager_load = false
 end
