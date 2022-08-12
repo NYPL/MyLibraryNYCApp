@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-  #protect_from_forgery
+  protect_from_forgery
   before_action :redirect_if_old_domain
 
 
