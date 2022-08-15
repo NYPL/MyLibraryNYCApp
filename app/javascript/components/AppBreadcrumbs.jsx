@@ -38,7 +38,7 @@ const breadcrumbsUrl = (locationPath) => {
 
   urls.push({ url: "//"+ window.location.hostname + locationPathname, text: HeroDataValue(locationPath) })
 
-  if (['signup', 'signin', 'ordered_holds', 'teacher_set_details', 'book_details'].includes(locationPath)) {
+  if (['signup', 'signin', 'ordered_holds', 'teacher_set_details', 'book_details', 'holds'].includes(locationPath)) {
     urls.push({ url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(locationPath) })
   }
   return urls;
@@ -59,7 +59,7 @@ const BreadcrumbsDataValue = (levelString) => {
     case 'ordered_holds':
       return 'Order Confirmation';
     case 'holds':
-      return 'Cancel Order';
+      return 'Order Confirmation';
     case 'book_details':
       return 'Book Details';
     case 'signup':
@@ -86,7 +86,7 @@ const HeroDataValue = (levelString) => {
     case 'ordered_holds':
       return 'Teacher Sets';
     case 'holds':
-      return 'Cancel Order';
+      return 'Teacher Sets';
     case 'account_details':
       return 'My Account & Orders';
     case 'book_details':
