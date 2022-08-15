@@ -1,5 +1,7 @@
 $nypl-breakpoint-small: 320px;
 $nypl-breakpoint-medium: 600px;
+$nypl-breakpoint-mid-medium: 780px;
+$nypl-breakpoint-mid-large: 860px;
 $nypl-breakpoint-large: 960px;
 $nypl-breakpoint-xlarge: 1280px;
 $nypl-breakpoint-xxlarge: 1600px;
@@ -504,17 +506,7 @@ $nypl-breakpoint-xxlarge: 1600px;
   }
 }
 
-#mln-navbar {
-   @include max-screen($nypl-breakpoint-large) {
-    display: none;
-   }
-}
 
-#mln-mobile-header-topWrapper {
-   @include min-screen($nypl-breakpoint-large) {
-    display: none;
-   }
-}
 
 .NewsLetterHeaderStyles {
   font-size: 20px;
@@ -531,8 +523,9 @@ $nypl-breakpoint-xxlarge: 1600px;
 }
 
 .mobileSubmenu {
-  color: var(--nypl-colors-ui-white);
+  color: var(--nypl-colors-ui-white) !important;
   text-decoration: none !important;
+  margin-left: 16px;
 }
 
 .mobileHorizontalRule {
@@ -543,4 +536,59 @@ $nypl-breakpoint-xxlarge: 1600px;
 
 .mobileList {
   color: var(--nypl-colors-ui-gray-dark) !important;
+}
+
+.mobile-memu-icon {
+  
+}
+
+#mln-navbar {
+   @include max-screen($nypl-breakpoint-mid-large) {
+    display: none;
+   }
+}
+
+#mln-mobile-header-topWrapper {
+   @include min-screen($nypl-breakpoint-mid-large) {
+    display: none;
+   }
+}
+
+#mln-mobile-header-logo {
+  @include max-screen(890px) {
+    max-width: 130px;
+  }
+  
+}
+
+
+
+@media screen and (max-width: $nypl-breakpoint-mid-large) {
+  .body {
+    overflow: hidden !important;
+  }
+
+  .Log {
+    display: flex;
+    position: absolute;
+    top: 15px;
+    left: 35px;
+  }
+
+  .nav-links-none {
+    display: none;
+  }
+
+  .nav-links-mobile {
+    position: fixed;
+    display: block;
+    list-style: none;
+    left: 0;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    transition: all 0.5s ease-out;
+    width: 100%;
+    background-color: #121212;
+  }
 }

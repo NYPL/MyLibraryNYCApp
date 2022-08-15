@@ -11,7 +11,7 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-import { Link, Flex, Icon, HStack, Image, List, Spacer, HorizontalRule} from "@nypl/design-system-react-components";
+import { Link, Flex, Icon, HStack, Image, List, Spacer, HorizontalRule, Center, Box, Logo, Square} from "@nypl/design-system-react-components";
 
 import { LionLogoIcon, LocatorIcon, MenuIcon, 
          LoginIcon, LoginIconSolid, SearchIcon, XIcon } from '@nypl/dgx-svg-icons';
@@ -49,49 +49,51 @@ export default function MobileHeader(props) {
           </li>
 
             <li>
-              
-
-              <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} id="mobile-sub-menu"  align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="utilityHamburger" size="medium" type="default" />
-     
-              <List id="mobile-navbar-submenu-list"className={mobileMenuActive? "nav-links-mobile nav-links" : "nav-links-none nav-links"} type="ul" noStyling >
+             
+                <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} id="mobile-sub-menu"  align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="utilityHamburger" size="medium" type="default" />
                 
-                
-                <ReactRouterLink to="/">
-                  <Image id="mln-header-logo" alt="Alt text" marginTop="s" additionalImageStyles={{ "background-color": "#121212", "width": "7em", "margin-left": "1em"}} size="medium" src={mlnLogoRed} />
-                  <Image id="mln-header-logo" alt="Alt text" additionalImageStyles={{ "background-color": "#121212", "width": "7em", "margin-left": "1em"}} size="medium" src={Vector} />
-                </ReactRouterLink>
-
-                <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} className={mobileMenuActive? "nav-links-mobile nav-links" : "nav-links-none nav-links"}color="ui.white" align="right" name="close" size="medium" type="default"  /> 
-
-                <li>
-                  <ReactRouterLink className="mobileSubmenu" to="/signin">Sign In</ReactRouterLink>
-                  <HorizontalRule align="left" className="mobileHorizontalRule"/>
-                </li>
-                <li>
-                  <ReactRouterLink className="mobileSubmenu" to="/contacts">Contact</ReactRouterLink>
-                  <HorizontalRule align="left" className="mobileHorizontalRule"/>
-                </li>
-                
-                <li>
-                  <ReactRouterLink className="mobileSubmenu" to="/faq">FAQ</ReactRouterLink>
-                  <HorizontalRule align="left" className="mobileHorizontalRule"/>
-                </li>
-                
-                <li>
-                  <ReactRouterLink className="mobileSubmenu" to="/participating-schools">Participating Schools</ReactRouterLink>
-                  <HorizontalRule align="left" className="mobileHorizontalRule"/>
-                </li>
-                
-                <li id="mln-navbar-social-media-link" style={{"margin-bottom": "16px"}} className="nav__menu-item socialMediaIcon" >
-                  <Link type="action" target="_blank" href="https://twitter.com/mylibrarynyc/">
-                    <Icon align="right" color="ui.white" decorative iconRotation="rotate0" id="icon-id" name="socialTwitter" size="medium" type="default" />
-                  </Link>
-                
-                  <Link type="action" target="_blank" href="https://www.instagram.com/mylibrarynyc/" marginLeft="s">
-                    <Icon align="right" color="ui.white" decorative iconRotation="rotate0" id="icon-id" name="socialInstagram" size="medium" type="default" />
-                  </Link>
-                </li>
-              </List>
+                <Box id="mobile-navbar-submenu-list" >
+                  <List noStyling className={mobileMenuActive? "nav-links-mobile" : "nav-links-none"}>
+                    <Square top="s" position="absolute" right="s" size="50px" bg="var(--nypl-colors-ui-gray-xx-dark)">
+                      <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} color="ui.white" align="right" name="close" size="large" type="default"  /> 
+                    </Square>
+                    <li>
+                      <Center>
+                        <Link href="/">
+                          <Logo id="mln-mobile-header-logo" marginTop="m" decorative name="mlnColor" size="small" />
+                        </Link>
+                     </Center>
+                    </li>
+                    <li>
+                      <Link className="mobileSubmenu" href="/signin">Sign In</Link>
+                      <HorizontalRule align="right" className="mobileHorizontalRule"/>
+                    </li>
+                    <li>
+                      <Link className="mobileSubmenu" href="/contacts">Contact</Link>
+                      <HorizontalRule align="right" className="mobileHorizontalRule"/>
+                    </li>
+                    
+                    <li>
+                      <Link className="mobileSubmenu" href="/faq">FAQ</Link>
+                      <HorizontalRule align="right" className="mobileHorizontalRule"/>
+                    </li>
+                    
+                    <li>
+                      <Link className="mobileSubmenu" href="/participating-schools">Participating Schools</Link>
+                      <HorizontalRule align="right" className="mobileHorizontalRule"/>
+                    </li>
+                    
+                    <li id="mln-navbar-social-media-link" style={{"margin-bottom": "16px"}} className="mobileSubmenu nav__menu-item socialMediaIcon" >
+                      <Link type="action" target="_blank" href="https://twitter.com/mylibrarynyc/">
+                        <Icon align="right" color="ui.white" decorative iconRotation="rotate0" id="icon-id" name="socialTwitter" size="medium" type="default" />
+                      </Link>
+                    
+                      <Link type="action" target="_blank" href="https://www.instagram.com/mylibrarynyc/" marginLeft="s">
+                        <Icon align="right" color="ui.white" decorative iconRotation="rotate0" id="icon-id" name="socialInstagram" size="medium" type="default" />
+                      </Link>
+                    </li>
+                  </List>
+              </Box>
           </li>
           
         </HStack>
