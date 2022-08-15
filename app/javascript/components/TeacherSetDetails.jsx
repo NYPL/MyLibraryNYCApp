@@ -111,7 +111,7 @@ export default class TeacherSetDetails extends React.Component {
   BookImage(data) {
     if (data.cover_uri) {
       if (this.state.bookImageHeight === 1 && this.state.bookImageWidth === 1) {
-        return <img src={mlnImage} />
+        return <Image additionalImageStyles={{height: "auto"}} id={"ts-books-" + data.id} src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
       }
       return <img onLoad={this.bookImageDimensions} src={data.cover_uri} />
     } else {
@@ -141,7 +141,7 @@ export default class TeacherSetDetails extends React.Component {
       return <div>
         <Form gap="grid.xs" id="ts-order-form" onSubmit={this.handleSubmit} >
           <FormField id="ts-order-field">
-            <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
+            <Select labelText="Teacher-set Order" id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
               { this.state.allowed_quantities.map((item, i) => {
                   return (
                     <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
