@@ -552,9 +552,9 @@ $nypl-breakpoint-xxlarge: 1600px;
 
 @media screen and (max-width: $nypl-breakpoint-mid-large) {
 
-  body {
+  /*body {
     overflow: hidden !important;
-  }
+  }*/
 
   .nav-links-none {
     display: none;
