@@ -54,8 +54,8 @@ export default function MobileHeader(props) {
                 
                 <Box id="mobile-navbar-submenu-list" >
                   <List noStyling className={mobileMenuActive? "nav-links-mobile" : "nav-links-none"}>
-                    <li marginTop="s">
-                      <Square top="s" position="absolute" right="s" size="50px" bg="var(--nypl-colors-ui-gray-xx-dark)">
+                    <li>
+                      <Square marginTop="s" top="s" position="absolute" right="s" size="50px" bg="var(--nypl-colors-ui-gray-xx-dark)">
                         <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} color="ui.white" align="right" name="close" size="large" type="default"  /> 
                       </Square>
                     </li>
