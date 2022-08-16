@@ -31,13 +31,13 @@ export default function MobileHeader(props) {
     if (props.details.userSignedIn) {
       return <li id="mobile-mln-navbar-account-link">
               <ReactRouterLink to="/account_details" className="nav-link-colors" >
-                <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="mobile-account-icon-id" name="utilityAccountFilled" size="medium" type="default" />
+                <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="mobile-account-icon-id" name="utilityAccountFilled" size="large" type="default" />
               </ReactRouterLink>
           </li>
     } else {
         return <li id="mobile-mln-navbar-signin-link">
           <ReactRouterLink to="/signin" className="nav-link-colors">
-            <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="mobile-signin-icon-id" name="actionExit" size="medium" type="default" />
+            <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="mobile-signin-icon-id" name="actionExit" size="large" type="default" />
           </ReactRouterLink>
         </li>
     }
@@ -67,12 +67,12 @@ export default function MobileHeader(props) {
         <HStack spacing="xs">
           <li id="mobile-mln-navbar-ts-link">
             <ReactRouterLink to="/teacher_set_data" className="nav-link-colors">
-              <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="search" size="medium" type="default" />
+              <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="search" size="large" type="default" />
             </ReactRouterLink>
           </li>
           {signInAccountDetails()}
           <li>
-            <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} id="mobile-sub-menu"  align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="utilityHamburger" size="medium" type="default" />
+            <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} id="mobile-sub-menu"  align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="utilityHamburger" size="large" type="default" />
             <Box id="mobile-navbar-submenu-list" >
               <List noStyling type="ul" className={mobileMenuActive? "nav-links-mobile" : "nav-links-none"}>
                 <li>
