@@ -5,11 +5,8 @@ import FocusTrap from 'focus-trap-react';
 import MobileNavbarSubmenu from "./MobileNavbarSubmenu";
 import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
 import Vector from '../images/Vector.png'
-
-import {
-  BrowserRouter as Router,
-  Link as ReactRouterLink,
-} from "react-router-dom";
+import axios from 'axios';
+import { BrowserRouter as Router, Redirect, Link as ReactRouterLink } from "react-router-dom";
 
 import { Link, Flex, Icon, HStack, Image, List, Spacer, HorizontalRule, Center, Box, Logo, Square} from "@nypl/design-system-react-components";
 
@@ -18,6 +15,7 @@ import { LionLogoIcon, LocatorIcon, MenuIcon,
 import { extend as _extend } from 'underscore';
 import mlnLogoRed1 from '../images/MLN_Logo_red.png'
 
+import { redirectToHome() } from 'react-router';
 
 export default function MobileHeader(props) {
 
@@ -43,10 +41,31 @@ export default function MobileHeader(props) {
     }
   }
 
+  const redirectToHome = () => {
+    console.log(props)
+    const { history } = props;
+    if(history) history.push({ pathname: '/' });
+  }
+
+  const mobileSignOut = () => {
+    axios.delete('/logout')
+      .then(res => {
+        if (res.data.status == 200 && res.data.logged_out == true) {
+          props.details.handleLogout(false)
+          props.details.handleSignOutMsg(res.data.sign_out_msg, false)
+          props.details.hideSignUpMessage(false)
+          redirectToHome();
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+    })    
+  }
+
   const navMenuSignInAccountDetails = () => {
     if (props.details.userSignedIn) {
       return <li> 
-              <Link className="mobileSubmenu" href="/account_details">Account</Link>
+              <ReactRouterLink className="mobileSubmenu" onClick={mobileSignOut}>Sign Out</ReactRouterLink>
               <HorizontalRule align="right" className="mobileHorizontalRule"/>
             </li>
     } else {
