@@ -15,7 +15,6 @@ import { LionLogoIcon, LocatorIcon, MenuIcon,
 import { extend as _extend } from 'underscore';
 import mlnLogoRed1 from '../images/MLN_Logo_red.png'
 
-import { redirectToHome() } from 'react-router';
 
 export default function MobileHeader(props) {
 
