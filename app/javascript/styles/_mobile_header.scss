@@ -553,7 +553,7 @@ $nypl-breakpoint-xxlarge: 1600px;
 
 @media screen and (max-width: $nypl-breakpoint-mid-large) {
   .body {
-    overflow-x: hidden !important;
+    overflow: hidden !important;
   }
 
   .Log {
