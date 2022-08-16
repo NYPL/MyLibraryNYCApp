@@ -54,12 +54,14 @@ export default function MobileHeader(props) {
                 
                 <Box id="mobile-navbar-submenu-list" >
                   <List noStyling className={mobileMenuActive? "nav-links-mobile" : "nav-links-none"}>
-                    <Square top="s" position="absolute" right="s" size="50px" bg="var(--nypl-colors-ui-gray-xx-dark)">
-                      <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} color="ui.white" align="right" name="close" size="large" type="default"  /> 
-                    </Square>
+                    <li marginTop="s">
+                      <Square top="s" position="absolute" right="s" size="50px" bg="var(--nypl-colors-ui-gray-xx-dark)">
+                        <Icon onClick={() => setMobileMenuActive(!mobileMenuActive)} color="ui.white" align="right" name="close" size="large" type="default"  /> 
+                      </Square>
+                    </li>
                     <li>
                       <Center>
-                        <Link href="/">
+                        <Link marginTop="l" href="/">
                           <Logo id="mln-mobile-header-logo" marginTop="m" decorative name="mlnColor" size="small" />
                         </Link>
                      </Center>
