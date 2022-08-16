@@ -553,7 +553,7 @@ $nypl-breakpoint-xxlarge: 1600px;
 
 @media screen and (max-width: $nypl-breakpoint-mid-large) {
   .body {
-    overflow: hidden !important;
+    overflow-x: hidden !important;
   }
 
   .Log {
@@ -569,6 +569,7 @@ $nypl-breakpoint-xxlarge: 1600px;
 
   .nav-links-mobile {
     position: fixed;
+    z-index: 1;
     display: block;
     list-style: none;
     left: 0;
