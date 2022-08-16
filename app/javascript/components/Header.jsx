@@ -19,7 +19,7 @@ export default class Header extends Component {
     return (
       <>
         <Navbar userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} hideSignInMessage={this.props.hideSignInMessage} handleLogout={this.props.handleLogout}/>
-        <MobileHeader />
+        <MobileHeader details={this.props}/>
       </>
     )
   }

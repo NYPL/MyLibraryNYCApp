@@ -39,7 +39,7 @@ export default class Navbar extends React.Component {
         <Flex alignItems="center">
 
           <ReactRouterLink to="/" onClick={this.hideHomeSignUpMsg}>
-            <Logo id="mln-mobile-header-logo" marginLeft="m" decorative name="mlnColor" size="small" />
+            <Logo id="mln-nav-bar-header-logo" marginLeft="m" decorative name="mlnColor" size="small" />
           </ReactRouterLink>
           
           <Spacer />

@@ -546,21 +546,23 @@ $nypl-breakpoint-xxlarge: 1600px;
 
 #mln-mobile-header-logo {
   @include max-screen(890px) {
-    max-width: 130px;
+    /*max-width: 130px;*/
   }
   
 }
 
-@media screen and (max-width: $nypl-breakpoint-mid-large) {
-  .body {
+
+.body {
+  @include max-screen($nypl-breakpoint-mid-large) {
     overflow: hidden !important;
   }
+}
 
-  .Log {
-    display: flex;
-    position: absolute;
-    top: 15px;
-    left: 35px;
+
+@media screen and (max-width: $nypl-breakpoint-mid-large) {
+
+  .body {
+    overflow: hidden !important;
   }
 
   .nav-links-none {

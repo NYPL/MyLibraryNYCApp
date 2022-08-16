@@ -115,7 +115,7 @@ class AccountDetailsSubMenu extends React.Component {
           <List id="navbar-account-details" type="ol" inline={false} noStyling={false} className="nav__submenu signin_details">
             <li className="nav__submenu-item">
               <ReactRouterLink to="/signin">
-                <Button className="signin_nav_button" buttonType="noBrand">Sign In</Button>
+                <Button id="sign-in-button" className="signin_nav_button" buttonType="noBrand">Sign In</Button>
               </ReactRouterLink>
             </li>
 
