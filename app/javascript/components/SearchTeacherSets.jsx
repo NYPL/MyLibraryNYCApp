@@ -269,6 +269,7 @@ export default class SearchTeacherSets extends Component {
 
   teacherSetTitleOrder() {
     const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
+    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
       return <>
         <Flex>                    
           <Select
@@ -286,6 +287,7 @@ export default class SearchTeacherSets extends Component {
         </Flex>
         {this.TeacherSetDetails()}
       </>
+    }
   }
 
   resultsFoundMessage() {
