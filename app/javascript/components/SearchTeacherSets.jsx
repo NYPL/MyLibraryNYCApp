@@ -185,7 +185,7 @@ export default class SearchTeacherSets extends Component {
   }
 
   TeacherSetFacets() {
-    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
+    //if (this.state.teacherSets && this.state.teacherSets.length > 0) {
       return this.state.facets.map((ts, _i) => {
         return <>
             <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="s" id={"ts-facet-label " + ts.label} accordionData={ [
@@ -211,7 +211,7 @@ export default class SearchTeacherSets extends Component {
             />
           </>
       })
-    }
+    //}
   }
 
   SignedInMessage() {
@@ -222,7 +222,7 @@ export default class SearchTeacherSets extends Component {
   }
 
   TeacherSetGradesSlider() {
-    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
+    //if (this.state.teacherSets && this.state.teacherSets.length > 0) {
       const grade_begin = this.state.grade_begin === -1? 'Pre-K' :  this.state.grade_begin;
       return <>
         <Slider
@@ -239,7 +239,7 @@ export default class SearchTeacherSets extends Component {
           step={1}
         />
       </>
-    }
+    //}
   }
 
   sortTeacherSetTitle = (e) => {
@@ -248,7 +248,7 @@ export default class SearchTeacherSets extends Component {
   };
 
   teacherSetSideBarResults = (e) => {
-    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
+    //if (this.state.teacherSets && this.state.teacherSets.length > 0) {
       return <>
       <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
         <Heading size="tertiary" level="three" > Refine Results </Heading>
@@ -263,7 +263,7 @@ export default class SearchTeacherSets extends Component {
         {this.TeacherSetFacets()}
       </Box>
       </>
-    }
+   // }
   }
 
   keyword() {
@@ -302,8 +302,17 @@ export default class SearchTeacherSets extends Component {
     }
   }
 
+  resultsFoundMessage() {
+    if ((this.state.tsTotalCount === 0)) {
+      return "No results found"
+    } else if (this.state.tsTotalCount === 1) {
+      return this.state.tsTotalCount + ' result found';
+    } else {
+      return this.state.tsTotalCount + ' results found';
+    }
+  }
+
   render() {
-    const tsTotalCount = this.state.tsTotalCount > 0 ? this.state.tsTotalCount + ' results found' : "";
     return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -320,13 +329,12 @@ export default class SearchTeacherSets extends Component {
                   placeholder: "Enter a teacher set name",
                   value: this.state.keyword
                 }}
-              />
-              {this.noResultsFound()}      
+              />     
             </>
           }
           contentPrimary={
               <>
-                <Text isBold size="default"> {tsTotalCount}</Text>
+                <Text isBold size="default">{this.resultsFoundMessage()}</Text>
                 {this.teacherSetTitleOrder()}
                 <div style={{ display: this.state.pagination }} >
                   <Flex alignItems="baseline">
