@@ -94,7 +94,7 @@ export default class SignIn extends Component {
               <FormRow>
                 <FormField>
                   <TextInput id="sign-in-text-input" className="signInEmail" type="email" onChange={this.handleEmail} required invalidText={this.state.invali_email_msg} isInvalid={this.state.isInvalid} />
-                  <Button id="sign-in-button" buttonType="noBrand" onClick={this.handleSubmit}>Sign In</Button>
+                  <Button id="sign-in-button" className="signin-button" size="small" buttonType="noBrand" onClick={this.handleSubmit}>Sign In</Button>
                 </FormField>
               </FormRow>
             </Form>
