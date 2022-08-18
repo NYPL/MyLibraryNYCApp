@@ -11,7 +11,7 @@ function Contacts(props) {
           contentPrimary={
             <div id="contacts-page">
               <Heading id="general-information-heading" level="two" size="secondary" text="General Information"/>
-              <Text>Have a question about library cards, your account or delivery?</Text>
+              <Text size="default">Have a question about library cards, your account or delivery?</Text>
               <Table
                   className="generalInfo"
                   useRowHeaders

@@ -123,18 +123,18 @@ export default class SearchTeacherSets extends Component {
   TeacherSetDetails() {
     return this.state.teacherSets.map((ts, i) => {
       let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
-      return <div id="teacher-set-results">
-          <Card id="ts-details" marginTop="m" layout="row" aspectratio="square" size="xxsmall">
-            <CardHeading level="three" id="ts-order-details">
+      return <div id={"teacher-set-results-" + i}>
+          <Card id={"ts-details-" + i} marginTop="m" layout="row" aspectratio="square" size="xxsmall">
+            <CardHeading level="three" id={"ts-order-details-" + i}>
               <ReactRouterLink to={"/teacher_set_details/" + ts.id}>{ts.title}</ReactRouterLink>
             </CardHeading>
-            <CardContent id="ts-suitabilities">{ts.suitabilities_string}</CardContent>
-            <CardContent id="ts-availability">
+            <CardContent id={"ts-suitabilities-"+ i}>{ts.suitabilities_string}</CardContent>
+            <CardContent id={"ts-availability-"+ i}>
               <StatusBadge level={availability_status_badge}>{titleCase(ts.availability)}</StatusBadge>
             </CardContent>
-            <CardContent id="ts-description">{ts.description}</CardContent>
+            <CardContent id={"ts-description-"+ i}>{ts.description}</CardContent>
           </Card>
-          <HorizontalRule id="ts-horizontal-rule" align="left"  className="tsDetailHorizontalLine"/>
+          <HorizontalRule id={"ts-horizontal-rule-"+ i} align="left"  className="tsDetailHorizontalLine"/>
       </div>
     })
   }
@@ -265,12 +265,14 @@ export default class SearchTeacherSets extends Component {
     }
   }
 
+  isTeacherSetPresent() {
+    return (this.state.teacherSets && this.state.teacherSets.length >= 1) ? true : false
+  }
+
   teacherSetTitleOrder() {
-    //if (this.state.teacherSets.length >= 1) {
+    if (this.isTeacherSetPresent()) {
       let sortByOptions = [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
-      let sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
-      return <>
-        <Flex>                    
+      return <Flex>                    
           <Select
             id="ts-sort-by-select"
             name="sortBy"
@@ -279,12 +281,10 @@ export default class SearchTeacherSets extends Component {
             onChange={this.sortTeacherSetTitle.bind(this)}
             labelText="Sort By"
           >
-            {sort}
+            {sortByOptions.map((s) => <option id={"ts-sort-by-options-" + s.value} key={s.value} value={s.value}>{s.sort_order}</option>)}
           </Select>
-        </Flex>
-        {this.TeacherSetDetails()}
-      </>
-    //}
+      </Flex>
+    }
   }
 
   resultsFoundMessage() {
@@ -321,6 +321,7 @@ export default class SearchTeacherSets extends Component {
               <>
                 <Text isBold size="default">{this.resultsFoundMessage()}</Text>
                 {this.teacherSetTitleOrder()}
+                <div id="teacher-set-results">{this.TeacherSetDetails()}</div>
                 <div style={{ display: this.state.pagination }} >
                   <Flex alignItems="baseline">
                     <ButtonGroup>
