@@ -22,7 +22,6 @@ import {
 
 import { Link as ReactRouterLink } from "react-router-dom";
 
-const sortByOptions =  [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
 
 export default class SearchTeacherSets extends Component {
 
@@ -39,6 +38,7 @@ export default class SearchTeacherSets extends Component {
     const params = Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end}, this.state.selectedFacets)
     this.getTeacherSets(params)
   }
+
 
   getTeacherSets(params) {
     axios.get('/teacher_sets', {params: params}).then(res => {
@@ -265,6 +265,7 @@ export default class SearchTeacherSets extends Component {
 
   teacherSetTitleOrder() {
     if (this.state.teacherSets.length >= 1) {
+      const sortByOptions = [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
       const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
       return <>
         <Flex>                    
@@ -274,6 +275,7 @@ export default class SearchTeacherSets extends Component {
             selectType="default"
             value={this.state.sortTitleValue}
             onChange={this.sortTeacherSetTitle.bind(this)}
+            labelText="Sort By"
           >
             {sort}
           </Select>
@@ -284,11 +286,11 @@ export default class SearchTeacherSets extends Component {
   }
 
   resultsFoundMessage() {
-    if (this.state.tsTotalCount === 0) {
+    if (this.state.noTsResultsFound !== "" && this.state.tsTotalCount === 0) {
       return "No results found"
     } else if (this.state.tsTotalCount === 1) {
       return this.state.tsTotalCount + ' result found';
-    } else {
+    } else if (this.state.tsTotalCount >= 1) {
       return this.state.tsTotalCount + ' results found';
     }
   }
