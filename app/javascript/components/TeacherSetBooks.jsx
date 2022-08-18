@@ -130,7 +130,7 @@ export default class TeacherSetBooks extends React.Component {
                 <Heading id="heading-id" level="two" size="secondary" text={"" + bookTitle} />
               </Flex>
 
-              <HorizontalRule style={{"margin-top": "0px"}} id="ts-book-details-horizontal-rule" className="teacherSetHorizontal" />
+              <HorizontalRule id="ts-book-details-horizontal-rule" className="teacherSetHorizontal" />
 
               <Card id="book-page-card-details" layout="row" imageProps={{ alt: 'Book Details', aspectRatio: 'original', isAtEnd: false, size: 'default', src: this.BookImage(book) }} >
 

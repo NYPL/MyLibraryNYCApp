@@ -30,7 +30,7 @@ export default class SearchTeacherSets extends Component {
     super(props);
     this.state = { userSignedIn: this.props.userSignedIn, teacherSets: [], facets: [], tsTotalCount: 0, email: "", 
                    setComputedCurrentPage: 1, totalPages: 0,
-                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword'), selectedFacets: {}, params: {}, 
+                   computedCurrentPage: 1, pagination: "none", keyword: new URLSearchParams(this.props.location.search).get('keyword') || "", selectedFacets: {}, params: {}, 
                    grade_begin: -1, grade_end: 12, availableToggle: false, availability: "",
                    ts_sort_by_id: "", sortTitleValue: 0, noTsResultsFound: "" };
   }
@@ -123,9 +123,8 @@ export default class SearchTeacherSets extends Component {
   TeacherSetDetails() {
     return this.state.teacherSets.map((ts, i) => {
       let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
-      return <div id="teacher-set-results" style={{"margin-top": "1.5rem"}}>
-        <div style={{ display: "grid", "grid-gap": "1rem", "grid-template-columns": "repeat(1, 1fr)" }}>
-          <Card id="ts-details" layout="row" imageAlt="Alt text" aspectRatio="square" size="xxsmall">
+      return <div id="teacher-set-results">
+          <Card id="ts-details" marginTop="m" layout="row" aspectratio="square" size="xxsmall">
             <CardHeading level="three" id="ts-order-details">
               <ReactRouterLink to={"/teacher_set_details/" + ts.id}>{ts.title}</ReactRouterLink>
             </CardHeading>
@@ -136,7 +135,6 @@ export default class SearchTeacherSets extends Component {
             <CardContent id="ts-description">{ts.description}</CardContent>
           </Card>
           <HorizontalRule id="ts-horizontal-rule" align="left"  className="tsDetailHorizontalLine"/>
-        </div>
       </div>
     })
   }
@@ -266,16 +264,13 @@ export default class SearchTeacherSets extends Component {
   }
 
   teacherSetTitleOrder() {
-    if (this.state.teacherSets) {
+    if (this.state.teacherSets.length >= 1) {
       const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
       return <>
         <Flex>                    
           <Select
             id="ts-sort-by-select"
             name="sortBy"
-            labelText="Sort By"
-            showLabel={false}
-            showOptReqLabel={false}
             selectType="default"
             value={this.state.sortTitleValue}
             onChange={this.sortTeacherSetTitle.bind(this)}
