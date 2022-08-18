@@ -235,19 +235,21 @@ export default class SearchTeacherSets extends Component {
     this.getTeacherSets(Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets));
   };
 
-  teacherSetSideBarResults = (e) => {
-    return <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
-      <Heading size="tertiary" level="three" > Refine Results </Heading>
-      <Toggle
-        id="toggle"
-        isChecked={this.state.availableToggle}
-        labelText="Available Now"
-        onChange={this.availableResults.bind(this)}
-        size="small"
-      />{<br/>}
-      {this.TeacherSetGradesSlider()}{<br/>}
-      {this.TeacherSetFacets()}
-    </Box>
+  teacherSetSideBarResults() {
+    if (this.state.facets.length >= 1) {
+      return <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
+        <Heading size="tertiary" level="three" > Refine Results </Heading>
+        <Toggle
+          id="toggle"
+          isChecked={this.state.availableToggle}
+          labelText="Available Now"
+          onChange={this.availableResults.bind(this)}
+          size="small"
+        />{<br/>}
+        {this.TeacherSetGradesSlider()}{<br/>}
+        {this.TeacherSetFacets()}
+      </Box>
+    }
   }
 
   keyword() {
@@ -264,7 +266,7 @@ export default class SearchTeacherSets extends Component {
   }
 
   teacherSetTitleOrder() {
-    if (this.state.teacherSets.length >= 1) {
+    //if (this.state.teacherSets.length >= 1) {
       const sortByOptions = [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
       const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
       return <>
@@ -282,7 +284,7 @@ export default class SearchTeacherSets extends Component {
         </Flex>
         {this.TeacherSetDetails()}
       </>
-    }
+    //}
   }
 
   resultsFoundMessage() {
