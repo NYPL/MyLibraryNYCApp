@@ -276,7 +276,7 @@ export default class SearchTeacherSets extends Component {
   }
 
   teacherSetTitleOrder() {
-    if (this.isTeacherSetPresent()) {
+    //if (this.isTeacherSetPresent()) {
       let sortByOptions = [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
       return <Flex>                    
           <Select
@@ -290,7 +290,7 @@ export default class SearchTeacherSets extends Component {
             {sortByOptions.map((s) => <option id={"ts-sort-by-options-" + s.value} key={s.value} value={s.value}>{s.sort_order}</option>)}
           </Select>
       </Flex>
-    }
+    //}
   }
 
   resultsFoundMessage() {
