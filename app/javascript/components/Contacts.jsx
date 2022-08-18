@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 
-import { DSProvider, TemplateAppContainer, Heading, Flex, HStack, Table } from '@nypl/design-system-react-components';
+import { DSProvider, TemplateAppContainer, Heading, Flex, HStack, Table, Text } from '@nypl/design-system-react-components';
 
 function Contacts(props) {
   return (
@@ -11,6 +11,7 @@ function Contacts(props) {
           contentPrimary={
             <div id="contacts-page">
               <Heading id="general-information-heading" level="two" size="secondary" text="General Information"/>
+              <Text>Have a question about library cards, your account or delivery?</Text>
               <Table
                   className="generalInfo"
                   useRowHeaders
@@ -26,7 +27,7 @@ function Contacts(props) {
                   ]}
               />
 
-              <Heading id="library-cards-account" marginTop="30px" level="two" size="secondary" text="Library Cards, Your Account or Professional Development"/>
+              <Heading id="library-cards-account" marginTop="30px" level="two" size="secondary" text="Want to find out about library staff visiting your school for professional development?"/>
               <div>Have a question about library cards, your account, or library staff visiting your school for professional development?</div>
               <Table
                   className="libraryCards"
@@ -57,7 +58,8 @@ function Contacts(props) {
               <a id="mln-ps-link" className="contact_email" href="http://www.mylibrarynyc.org/schools">Participating schools</a>
 
               <Heading id="eligibility" level="three" marginTop="30px" size="tertiary" text="Eligibility"/>
-              To find out if your school is eligible to participate in the program next year Call the DOE Office of Library Services.
+              To find out if your school is eligible to participate in the program next year Call the 
+              <a id="eligible-to-participate-in-program" href="https://nycdoe.libguides.com/home"> DOE Office of Library Services</a>
               <Table
                 className="contactsInfo"
                 useRowHeaders
@@ -65,10 +67,6 @@ function Contacts(props) {
                   [
                     'Phone',
                     '917-521-3734'
-                  ],
-                  [
-                    'Brooklyn',
-                    <a id="doe-service" className="contact_email" href="http://nycdoe.libguides.com/home">nycdoe.libguides.com</a> 
                   ]
                 ]}
               />              
