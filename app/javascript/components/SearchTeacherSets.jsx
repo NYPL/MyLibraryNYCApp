@@ -24,8 +24,6 @@ import { Link as ReactRouterLink } from "react-router-dom";
 
 const sortByOptions =  [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
 
-
-
 export default class SearchTeacherSets extends Component {
 
   constructor(props) {
@@ -268,28 +266,30 @@ export default class SearchTeacherSets extends Component {
   }
 
   teacherSetTitleOrder() {
-    const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
-    return <>
-      <Flex>                    
-        <Select
-          id="ts-sort-by-select"
-          name="sortBy"
-          labelText="Sort By"
-          showLabel={false}
-          showOptReqLabel={false}
-          selectType="default"
-          value={this.state.sortTitleValue}
-          onChange={this.sortTeacherSetTitle.bind(this)}
-        >
-          {sort}
-        </Select>
-      </Flex>
-      {this.TeacherSetDetails()}
-    </>
+    if (this.state.teacherSets && this.state.teacherSets.length > 0) {
+      const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
+      return <>
+        <Flex>                    
+          <Select
+            id="ts-sort-by-select"
+            name="sortBy"
+            labelText="Sort By"
+            showLabel={false}
+            showOptReqLabel={false}
+            selectType="default"
+            value={this.state.sortTitleValue}
+            onChange={this.sortTeacherSetTitle.bind(this)}
+          >
+            {sort}
+          </Select>
+        </Flex>
+        {this.TeacherSetDetails()}
+      </>
+    }
   }
 
   resultsFoundMessage() {
-    if ((this.state.tsTotalCount === 0)) {
+    if (this.state.tsTotalCount === 0) {
       return "No results found"
     } else if (this.state.tsTotalCount === 1) {
       return this.state.tsTotalCount + ' result found';
