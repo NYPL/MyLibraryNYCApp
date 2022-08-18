@@ -236,7 +236,7 @@ export default class SearchTeacherSets extends Component {
   };
 
   teacherSetSideBarResults() {
-    if (this.state.facets.length >= 1) {
+    //if (this.state.facets.length >= 1) {
       return <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
         <Heading size="tertiary" level="three" > Refine Results </Heading>
         <Toggle
@@ -249,7 +249,7 @@ export default class SearchTeacherSets extends Component {
         {this.TeacherSetGradesSlider()}{<br/>}
         {this.TeacherSetFacets()}
       </Box>
-    }
+    //}
   }
 
   keyword() {
