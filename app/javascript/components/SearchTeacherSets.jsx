@@ -181,8 +181,8 @@ export default class SearchTeacherSets extends Component {
   }
 
   TeacherSetFacets() {
-    return this.state.facets.map((ts, _i) => {
-      return <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="s" id={"ts-facet-label " + ts.label} accordionData={ [
+    return this.state.facets.map((ts, i) => {
+      return <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id={"ts-facet-label-" + i} accordionData={ [
             {
               label: <Text isCapitalized noSpace>{ts.label}</Text>,
               panel: (
@@ -215,7 +215,7 @@ export default class SearchTeacherSets extends Component {
 
   TeacherSetGradesSlider() {
       const grade_begin = this.state.grade_begin === -1? 'Pre-K' :  this.state.grade_begin;
-      return <Slider
+      return <Slider marginTop="s" marginBottom="xl"
         id="ts-slider-range"
         isRangeSlider
         labelText={"Grades Range  " + grade_begin + " To " + this.state.grade_end}
@@ -235,8 +235,13 @@ export default class SearchTeacherSets extends Component {
     this.getTeacherSets(Object.assign({ keyword: this.state.keyword, grade_begin: this.state.grade_begin, grade_end: this.state.grade_end, sort_order: this.state.sortTitleValue, availability: this.state.availability}, this.state.selectedFacets));
   };
 
+
+  isFacetsPresent() {
+    return (this.state.facets && this.state.facets.length >= 1) ? true : false
+  }
+
   teacherSetSideBarResults() {
-    //if (this.state.facets.length >= 1) {
+    if (this.isFacetsPresent()) {
       return <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
         <Heading size="tertiary" level="three" > Refine Results </Heading>
         <Toggle
@@ -245,11 +250,12 @@ export default class SearchTeacherSets extends Component {
           labelText="Available Now"
           onChange={this.availableResults.bind(this)}
           size="small"
+          marginBottom="m"
         />
-        {this.TeacherSetGradesSlider()}{<br/>}
-        {this.TeacherSetFacets()}
+        <div>{this.TeacherSetGradesSlider()}</div>
+        <div>{this.TeacherSetFacets()}</div>
       </Box>
-    //}
+    }
   }
 
   keyword() {
