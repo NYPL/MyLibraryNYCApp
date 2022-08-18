@@ -351,7 +351,8 @@ export default class SearchTeacherSets extends Component {
                 </div>
               </>
             }
-          contentSidebar={<>{this.skeletonLoader()}{this.teacherSetSideBarResults()}</>}
+          contentSidebar={<><div>{this.skeletonLoader()}</div><div>{this.teacherSetSideBarResults()}</div></>}
+
           sidebar="left" 
         />
     )
