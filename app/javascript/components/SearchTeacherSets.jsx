@@ -266,7 +266,7 @@ export default class SearchTeacherSets extends Component {
   }
 
   teacherSetTitleOrder() {
-    //if (this.state.teacherSets.length >= 1) {
+    return this.state.teacherSets.map((ts, i) => {
       const sortByOptions = [{sort_order: 'Date Added: Newest to Oldest', value: 0}, {sort_order: 'Date Added: Oldest to Newest', value: 1}, {sort_order: 'Title: A-Z', value: 2}, {sort_order: 'Title: Z-A', value: 3}]
       const sort = sortByOptions.map((ts) => <option id={"ts-sort-by-options-" + ts.value} key={ts.value} value={ts.value}>{ts.sort_order}</option>);
       return <>
@@ -284,7 +284,7 @@ export default class SearchTeacherSets extends Component {
         </Flex>
         {this.TeacherSetDetails()}
       </>
-    //}
+    })
   }
 
   resultsFoundMessage() {
