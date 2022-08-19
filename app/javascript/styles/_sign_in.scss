@@ -1,4 +1,4 @@
-/*$nypl-breakpoint-small: 320px;
+$nypl-breakpoint-small: 320px;
 $nypl-breakpoint-medium: 600px;
 $nypl-breakpoint-mid-medium: 780px;
 $nypl-breakpoint-mid-large: 860px;
@@ -10,4 +10,4 @@ $nypl-breakpoint-xxlarge: 1600px;
   @include min-screen($nypl-breakpoint-medium) {
     width: 6em;
   }
-}*/
+}
