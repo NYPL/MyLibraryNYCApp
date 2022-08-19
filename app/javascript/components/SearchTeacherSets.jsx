@@ -25,8 +25,6 @@ import { Link as ReactRouterLink } from "react-router-dom";
 
 export default function SearchTeacherSets(props) {
 
-
-
   const [teacherSets, setTeacherSets] = useState([])
   const [facets, setFacets] = useState([])
   const [tsTotalCount, setTsTotalCount] = useState(0)
@@ -173,7 +171,6 @@ export default function SearchTeacherSets(props) {
 
   const getGrades = (grades) => {
     const [gradeBeginVal, gradeEndVal] = grades;
-    console.log(grades)
     const gradeBegin = gradeBeginVal === -1? 'Pre-K' : gradeBeginVal === 0 ? 'K' : gradeBeginVal;
     const gradeEnd = gradeEndVal === -1? 'Pre-K' :  gradeEndVal === 0 ? 'K' : gradeEndVal;
     setGradeBegin(gradeBegin)

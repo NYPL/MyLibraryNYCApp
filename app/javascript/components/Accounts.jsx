@@ -79,7 +79,7 @@ export default class Accounts extends Component {
   }
 
   orderCreatedLink(hold){
-    return <Link style={{"white-space": "nowrap"}} href={"/ordered_holds/" + hold["access_key"]} > {hold["created_at"]} </Link>
+    return <Link whiteSpace="nowrap" href={"/ordered_holds/" + hold["access_key"]} > {hold["created_at"]} </Link>
   }
 
   statusLabel(hold) {
@@ -139,8 +139,8 @@ export default class Accounts extends Component {
   orderTeacherSet(hold, index) {
     return <div id={"cancel_"+ hold["access_key"]}>
     <ButtonGroup buttonWidth="full">
-      <Button id="account-page-order-button" buttonType="secondary"> 
-        <Link className="accountPageTeacherSetOrder" href={"/teacher_set_details/" + hold.teacher_set_id} > Order Again </Link>
+      <Button id="account-page-order-button" buttonType="secondary" whiteSpace="nowrap"> 
+        <Link id="account-page-order-link"className="accountPageTeacherSetOrder" href={"/teacher_set_details/" + hold.teacher_set_id} > Order Again </Link>
       </Button>
      </ButtonGroup>
     </div>
@@ -205,22 +205,19 @@ export default class Accounts extends Component {
   };
 
   render() {
-    let user_name = this.state.current_user.first_name
+    let user_name = this.state.current_user.first_name 
 
     return (
       <TemplateAppContainer
           breakout={<><AppBreadcrumbs />{ this.AccountUpdatedMessage() }</>}
           contentPrimary={
             <>
-              <div style={{display: 'flex'}}>
-                <Heading id="account-user-name" level="three" text={'Hello, ' + user_name} />
-              </div>
+
+              <Heading id="account-user-name" level="three" text={'Hello, ' + this.state.current_user.first_name } />
 
               <Form id="account-details-form" onSubmit={this.handleSubmit} method="put">
                 <FormField>
                   <TextInput
-                    isRequired
-                    showOptReqLabel={false}
                     labelText="Your DOE Email Address"
                     id="account-details-input"
                     value={this.state.alt_email}
@@ -228,7 +225,7 @@ export default class Accounts extends Component {
                   />
                 </FormField>
                 <FormField>
-                  <Select id="ad-select-schools" labelText="Your School" value={this.state.school_id} showLabel showOptReqLabel={false} onChange={this.handleSchool}>
+                  <Select id="ad-select-schools" labelText="Your School" value={this.state.school_id} showLabel onChange={this.handleSchool}>
                     {this.Schools()}
                   </Select>
                 </FormField>
