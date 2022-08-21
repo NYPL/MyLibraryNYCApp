@@ -1,11 +1,11 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon, ButtonGroup
+  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon, ButtonGroup, Text, SkeletonLoader
 } from '@nypl/design-system-react-components';
 
 import {
@@ -14,38 +14,63 @@ import {
 } from "react-router-dom";
 
 
-export default class Accounts extends Component {
+export default function Accounts(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = {contact_email: "", current_user: "", teacher_set: "", school: "", alt_email: "", email: "", schools: "", school_id: "", holds: "", password: "", message: "", cancel_message: "", cancel_button_display: "block", setComputedCurrentPage: 1, total_pages: ""}
-  }
+  const [contact_email, setContactEmail] = useState("")
+  const [current_user, setCurrentUser] = useState("")
+  const [teacher_set, setTeacherSet] = useState("")
+  const [school, setSchool] = useState("")
+  const [alt_email, setAltEmail] = useState("")
+  const [email, setEmail] = useState("")
+  const [schools, setSchools] = useState("")
+  const [school_id, setSchoolId] = useState("")
+  const [holds, setHolds] = useState("")
+  const [password, setPassword] = useState("")
+  const [message, setMessage] = useState("")
+  const [cancel_message, setCancelMessage] = useState("")
+  const [cancel_button_display, SetCancelButtonDisplay] = useState("block")
+  const [computedCurrentPage, setComputedCurrentPage] = useState(1)
+  const [total_pages, setTotalPages] = useState("")
+  const [ordersNotPresentMsg, setOrdersNotPresentMsg] = useState("")
 
-  componentDidMount() {
-    axios.get('/account', { params: { page: this.state.setComputedCurrentPage } } ).then(res => {
+
+  useEffect(() => {
+    axios.get('/account', { params: { page: 1 } } ).then(res => {
       if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
         return false;
       }
       else {
         let account_details = res.data.accountdetails
-        this.setState({ contact_email: account_details.contact_email, school: account_details.school, email: account_details.email,
-        alt_email: account_details.alt_email, schools: account_details.schools, current_user: account_details.current_user,
-        holds: account_details.holds, school_id: account_details.school.id, password: account_details.current_password, total_pages: account_details.total_pages })
+        setContactEmail(account_details.contact_email)
+        setSchool(account_details.school)
+        setEmail(account_details.email)
+        setAltEmail(account_details.alt_email)
+        setSchools(account_details.schools)
+        setCurrentUser(account_details.current_user)
+        setHolds(account_details.holds)
+        setSchoolId(account_details.school.id)
+        setPassword(account_details.current_password)
+        setTotalPages(account_details.total_pages)
+        setOrdersNotPresentMsg(account_details.ordersNotPresentMsg)
       }
     }).catch(function (error) {
         console.log("cancel order fail")
         console.log(error)
     })
-  }
 
-  handleSubmit = event => {
+  }, []);
+
+
+  const handleSubmit = () => {
     event.preventDefault();
-    axios.put('/registrations/'+ this.state.current_user.id , {
-        user: { alt_email: this.state.alt_email, school_id: this.state.school_id, current_password: this.state.password }
+    axios.put('/registrations/'+ current_user.id, {
+        user: { alt_email: alt_email, school_id: school_id, current_password: password }
      }).then(res => {
-        if (res.data.status == "updated") {
-          this.setState ({ message: res.data.message })
+        console.log(res.data.status)
+        console.log("pppp")
+        if (res.data.status === "updated") {
+          setMessage(res.data.message)
         }
       })
       .catch(function (error) {
@@ -53,49 +78,49 @@ export default class Accounts extends Component {
     })
   }
 
-  handleAltEmail = event => {
-    this.setState ({ alt_email: event.target.value})
+  const handleAltEmail = (event) => {
+    setAltEmail(event.target.value)
   }
 
-  handleSchool = event => {
-    this.setState ({ school_id: event.target.value })
+  const handleSchool = event => {
+    setSchool(event.target.value)
   }
 
-  Schools() {
-    return Object.entries(this.state.schools).map((school, i) => {
+  const Schools = () => {
+    return Object.entries(schools).map((school, i) => {
       return (
         <option key={school[1]} value={school[1]}>{school[0]}</option>
       )
     }, this);
   }
   
-  HoldsDetails() {
-    if (this.state.holds) {
-      return this.state.holds.map((hold, index) => (
-           [ this.orderCreatedLink(hold), hold["quantity"], hold["title"], this.statusLabel(hold), this.cancelButton(hold, index) ]
+  const HoldsDetails = () => {
+    if (holds) {
+      return holds.map((hold, index) => (
+           [ orderCreatedLink(hold), hold["quantity"], hold["title"], statusLabel(hold), cancelButton(hold, index) ]
           )
         )
     }
   }
 
-  orderCreatedLink(hold){
+  const orderCreatedLink = (hold) => {
     return <Link whiteSpace="nowrap" href={"/ordered_holds/" + hold["access_key"]} > {hold["created_at"]} </Link>
   }
 
-  statusLabel(hold) {
+  const statusLabel = (hold) => {
     return hold["status_label"]
   }
 
-  cancelButton(hold, index) {
+  const cancelButton = (hold, index)  =>{
     if (hold["status"] === "new") {
-      return <div id={"cancel-hold-button-"+index}> {this.orderCancelConfirmation(hold, index)} </div>
+      return <div id={"cancel-hold-button-"+index}> {orderCancelConfirmation(hold, index)} </div>
     } else if (hold["status"] === "cancelled"){
-      return <div id={"order-ts-button-"+index}> {this.orderTeacherSet(hold, index)} </div>
+      return <div id={"order-ts-button-"+index}> {orderTeacherSet(hold, index)} </div>
     }
   }
 
-  cancelOrder(value, access_key, cancel_button_index) {
-    this.state.cancel_message = ""
+  const cancelOrder = (value, access_key, cancel_button_index) => {
+    setCancelMessage("")
     axios.put('/holds/'+ access_key, { hold_change: { status: 'cancelled' } 
      }).then(res => {
         if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
@@ -103,10 +128,10 @@ export default class Accounts extends Component {
           return false;
         } else {
           if (res.data.hold.status == "cancelled") {
-            this.setState({cancel_button_display: 'none'})
-            this.state.cancel_message = "Successfully Cancelled"
+            SetCancelButtonDisplay("none")
+            setCancelMessage("Successfully Cancelled")
 
-            let updatedHolds = this.state.holds.map( (obj, index) => {
+            let updatedHolds = holds.map( (obj, index) => {
              if(index === cancel_button_index) {
                return Object.assign({}, obj, {
                  status: "cancelled", status_label: "Cancelled"
@@ -114,9 +139,7 @@ export default class Accounts extends Component {
              }
              return obj;
           });
-          this.setState({
-            holds : updatedHolds
-          });
+            setHolds(updatedHolds)
           }
         }
       })
@@ -125,8 +148,7 @@ export default class Accounts extends Component {
     })
   }
 
-
-  orderCancelConfirmation(hold, index) {
+  const orderCancelConfirmation = (hold, index) => {
     return <div id={"cancel_"+ hold["access_key"]}>
     <ButtonGroup buttonWidth="full">
       <Button id="account-page-cancel-button" buttonType="noBrand"> 
@@ -136,7 +158,7 @@ export default class Accounts extends Component {
     </div>
   }
 
-  orderTeacherSet(hold, index) {
+  const orderTeacherSet = (hold, index) => {
     return <div id={"cancel_"+ hold["access_key"]}>
     <ButtonGroup buttonWidth="full">
       <Button id="account-page-order-button" buttonType="secondary" whiteSpace="nowrap"> 
@@ -146,20 +168,19 @@ export default class Accounts extends Component {
     </div>
   }
 
-  AccountUpdatedMessage() {
-    if (this.state.message !== "") {
+  const AccountUpdatedMessage = () => {
+    if (message !== "") {
       return <Notification ariaLabel="Account Notification" id="account-details-notification"
         className="accountNotificationMsg"
         notificationType="announcement"
         icon={<Icon color="ui.black" iconRotation="rotate0" name="actionCheckCircle" size="small"/>}
-        notificationContent={this.state.message}
+        notificationContent={message}
       />
     }  
   }
 
-  OrderDetails() {
+  const OrderDetails = () => {
     return <>
-      <Heading id="your-orders-text" level="three" text='Your Orders' />
       <Table
         columnHeaders={[
           'Order Placed',
@@ -171,22 +192,34 @@ export default class Accounts extends Component {
         showRowDividers={true}
         columnHeadersBackgroundColor="#F5F5F5"
         columnHeadersTextColor="\"
-        tableData={this.HoldsDetails()}
+        tableData={HoldsDetails()}
         id="ts-order-details-list"
       />
     </>
   }
 
-  displayOrders() {
-    if (this.state.holds.length > 0) {
-      return this.OrderDetails()
-     } else {
-      return "You have not yet placed any orders."
+  const accountSkeletonLoader = () => {
+    if (ordersNotPresentMsg === "" && holds.length <= 0) {
+      return <SkeletonLoader
+        contentSize={4}
+        headingSize={1}
+        imageAspectRatio="portrait"
+        layout="row"
+        showImage={false}
+      />
+    }
+  }
+
+  const displayOrders = () => {
+    if (holds.length > 0) {
+      return OrderDetails()
+     } else if (ordersNotPresentMsg !== ""){
+      return <Text marginTop="m" size="default">You have not yet placed any orders.</Text>
      }
   }
 
-  onPageChange = (page) => {
-    this.state.setComputedCurrentPage = page;
+  const onPageChange = (page) => {
+    setComputedCurrentPage(page);
     axios.get('/account', { params: { page: page } }).then(res => {
       if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
@@ -194,9 +227,17 @@ export default class Accounts extends Component {
       }
       else {
         let account_details = res.data.accountdetails
-        this.setState({ contact_email: account_details.contact_email, school: account_details.school, email: account_details.email,
-        alt_email: account_details.alt_email, schools: account_details.schools, current_user: account_details.current_user,
-        holds: account_details.holds, school_id: account_details.school.id, password: account_details.current_password })
+        setContactEmail(account_details.contact_email)
+        setSchool(account_details.school)
+        setEmail(account_details.email)
+        setAltEmail(account_details.alt_email)
+        setSchools(account_details.schools)
+        setCurrentUser(account_details.current_user)
+        setHolds(account_details.holds)
+        setSchoolId(account_details.school.id)
+        setPassword(account_details.current_password)
+        setTotalPages(account_details.total_pages)
+        setOrdersNotPresentMsg(account_details.ordersNotPresentMsg)
       }
     }).catch(function (error) {
         console.log("cancel order fail")
@@ -204,41 +245,39 @@ export default class Accounts extends Component {
     })
   };
 
-  render() {
-    let user_name = this.state.current_user.first_name 
-
-    return (
-      <TemplateAppContainer
-          breakout={<><AppBreadcrumbs />{ this.AccountUpdatedMessage() }</>}
-          contentPrimary={
-            <>
-
-              <Heading id="account-user-name" level="three" text={'Hello, ' + this.state.current_user.first_name } />
-
-              <Form id="account-details-form" onSubmit={this.handleSubmit} method="put">
-                <FormField>
-                  <TextInput
-                    labelText="Your DOE Email Address"
-                    id="account-details-input"
-                    value={this.state.alt_email}
-                    onChange={this.handleAltEmail}
-                  />
-                </FormField>
-                <FormField>
-                  <Select id="ad-select-schools" labelText="Your School" value={this.state.school_id} showLabel onChange={this.handleSchool}>
-                    {this.Schools()}
-                  </Select>
-                </FormField>
-                <Button id="ad-submit-button" buttonType="noBrand" className="accountButton" onClick={this.handleSubmit}> Update Account Information </Button>
-              </Form>
-              {<br/>}
-              {this.displayOrders()}
-              {<br/>}
-              <Pagination id="ad-pagination"className="accocuntOrderPagination" currentPage={1} onPageChange={this.onPageChange}  pageCount={this.state.total_pages} />
-            </>
-          }
-          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
-          sidebar="right"
-    />)
+  const userFirstName = () => {
+    return current_user.first_name ? current_user.first_name : ""
   }
+
+  return (
+    <TemplateAppContainer
+      breakout={<><AppBreadcrumbs />{ AccountUpdatedMessage() }</>}
+      contentPrimary={
+        <>
+          <Heading id="account-user-name" level="three" text={'Hello, ' + userFirstName() } />
+          <Form id="account-details-form">
+            <FormField>
+              <TextInput
+                labelText="Your DOE Email Address"
+                id="account-details-input"
+                value={alt_email}
+                onChange={handleAltEmail}
+              />
+            </FormField>
+            <FormField>
+              <Select id="ad-select-schools" labelText="Your School" value={school_id} showLabel onChange={handleSchool}>
+                {Schools()}
+              </Select>
+            </FormField>
+            <Button id="ad-submit-button" buttonType="noBrand" className="accountButton" onClick={handleSubmit}> Update Account Information </Button>
+          </Form>
+          <Heading marginTop="l" marginBottom="m" id="your-orders-text" size="tertiary" level="three" text='Orders' />
+          {accountSkeletonLoader()}
+          {displayOrders()}
+          <Pagination marginTop="s" id="ad-pagination"className="accocuntOrderPagination" currentPage={1} onPageChange={onPageChange} pageCount={total_pages} />
+        </>
+      }
+      contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+      sidebar="right"
+  />)
 }
