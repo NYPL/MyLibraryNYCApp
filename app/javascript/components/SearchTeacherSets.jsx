@@ -77,7 +77,7 @@ export default function SearchTeacherSets(props) {
   const handleSearchKeyword = (event) => {
     setKeyWord(event.target.value)
     if (event.target.value === "") {
-      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets));
+      getTeacherSets(Object.assign({ keyword: "", grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets));
     }
   }
 
