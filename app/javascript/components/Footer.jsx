@@ -13,7 +13,7 @@ function Footer() {
     <div className="app-footer">
       <div className="app-footer-links">
         <Link id="nypl-footer-logo-link" marginLeft="s" href="http://nypl.org" type="dafault" attributes={{ target: '_blank'}} >
-          <Logo name="nyplFullBlack" size="small" />
+          <Image id="nypl-foooter-logo" size="small" src={nyplLogo} />
         </Link>
 
         <Link id="brooklyn-foooter-logo-link" marginLeft="s" href="http://www.brooklynpubliclibrary.org" type="dafault" attributes={{ target: '_blank'}} >
@@ -21,7 +21,7 @@ function Footer() {
         </Link>
 
         <Link id="queens-foooter-logo-link" marginLeft="s" href="http://www.queenslibrary.org" type="dafault" attributes={{ target: '_blank'}} >
-          <Logo name="qplAltBlack" size="small" />
+          <Image id="queens-foooter-logo" size="small" src={queensLibraryLogo} />
         </Link>
 
         <Link id="doe-foooter-logo-link" marginLeft="s" href="http://schools.nyc.gov" type="dafault" attributes={{ target: '_blank'}} >
