@@ -12,7 +12,7 @@ import {
   Icon,
   HelperErrorText,
   LibraryExample,
-  Heading, TextInput, Form, FormField, FormRow, SimpleGrid, ButtonGroup,
+  Heading, TextInput, Form, FormField, FormRow, SimpleGrid, ButtonGroup, Text, Box, Center
 } from '@nypl/design-system-react-components';
 
 
@@ -57,32 +57,35 @@ export default class NewsLetter extends Component {
 
 
   render() {
-    return (
-      <div className="newsLetter newsLetterBox">
-        <div style={{ display: this.state.display_block }}>
-          <div className="NewsLetterHeaderStyles text_center">Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!</div>
-          <Form id="news-letter-form" gap="grid.xs">
-            <FormRow>
-              <FormField>
-                <TextInput id="news-letter-text-input" type="email" onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
-              </FormField>
-              
-              <FormField>
-                <ButtonGroup>
-                  <Button id="news-letter-button" buttonType="noBrand" onClick={this.handleSubmit}>Submit</Button>
-                </ButtonGroup>
-              </FormField>
-            </FormRow>
-          </Form>
-        </div>
-        
-        <div style={{ display: this.state.display_none }}>
-          <div id="news-letter-success-msg" className="NewsLetterHeaderStyles">
-            Thank you for signing up to the MyLibraryNYC Newsletter!
+    return ( 
+      <Box bg="var(--nypl-colors-ui-gray-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderRadius="sm" overflow="hidden">
+        <Center>
+          <div style={{ display: this.state.display_block }}>
+            <Text noSpace fontWeight="heading.callout">Learn about new teacher sets, best practices &</Text>
+            <Text fontWeight="heading.callout">exclusive events when you sign up for the MyLibraryNYC Newsletter!</Text>
+            <Form id="news-letter-form" gap="grid.xs">
+              <FormRow>
+                <FormField>
+                  <TextInput id="news-letter-text-input" type="email" onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
+                </FormField>
+                
+                <FormField>
+                  <ButtonGroup>
+                    <Button id="news-letter-button" buttonType="noBrand" onClick={this.handleSubmit}>Submit</Button>
+                  </ButtonGroup>
+                </FormField>
+              </FormRow>
+            </Form>
           </div>
-          Check your email to learn about teacher sets, best practices & exclusive events.
-        </div>
-      </div>
+          
+          <div style={{ display: this.state.display_none }}>
+            <Text noSpace id="news-letter-success-msg" fontWeight="heading.callout">
+              Thank you for signing up to the MyLibraryNYC Newsletter!
+            </Text>
+            <Text fontWeight="text.mini"> Check your email to learn about teacher sets, best practices & exclusive events.</Text>
+          </div>
+        </Center>
+      </Box>
     )
   }
 }

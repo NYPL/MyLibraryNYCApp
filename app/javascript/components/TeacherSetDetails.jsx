@@ -139,7 +139,7 @@ export default class TeacherSetDetails extends React.Component {
     }
     else {
       return <div>
-        <Form gap="grid.xs" id="ts-order-form" onSubmit={this.handleSubmit} >
+        <Form gap="grid.xs" id="ts-order-form" >
           <FormField id="ts-order-field">
             <Select id="ts-order-allowed-quantities" showLabel={false} onChange={this.handleQuantity} value={this.state.quantity}>
               { this.state.allowed_quantities.map((item, i) => {

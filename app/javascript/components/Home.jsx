@@ -86,9 +86,9 @@ export default class Home extends React.Component {
                 <AccessDigitalResources />
               </>
             }
+        contentBottom={<NewsLetter />}
         contentSidebar={<HaveQuestions />}
         sidebar="right"
-        footer={<NewsLetter />}
       />
     )
   }

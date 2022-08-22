@@ -751,6 +751,10 @@ ul.list li:before {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  @include max-screen($nypl-breakpoint-medium) {
+    flex-direction: column;
+    display: contents;
+  } 
 }
 
 .footerImage {
