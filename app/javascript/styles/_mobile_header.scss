@@ -488,6 +488,7 @@ $nypl-breakpoint-xxlarge: 1600px;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
+  margin-top: 64px;
 
   @include min-screen(279px) {
     padding: 20px !important;
@@ -568,5 +569,37 @@ $nypl-breakpoint-xxlarge: 1600px;
     transition: all 0.5s ease-out;
     width: 100%;
     background-color: #121212;
+  }
+
+}
+
+@media screen and (max-width: 545px) {
+  .teacher-set-skeleton-loader {
+    width: 500px !important;
+  }
+}
+
+
+@media screen and (max-width: $nypl-breakpoint-large) {
+  .teacher-set-skeleton-loader {
+    width: 600px !important;
+  }
+}
+
+@media screen and (max-width: $nypl-breakpoint-medium) {
+  .teacher-set-skeleton-loader {
+    width: 450px !important;
+  }
+}
+
+@media screen and (max-width: 285px) {
+  .teacher-set-skeleton-loader {
+    width: 225px !important;
+  }
+}
+
+@media screen and (max-width: 415px) {
+  .teacher-set-skeleton-loader {
+    width: 285px !important;
   }
 }

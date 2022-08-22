@@ -241,7 +241,7 @@ export default function SearchTeacherSets(props) {
 
   const skeletonLoader = () => {
     if (noTsResultsFound === "" && teacherSets.length <= 0) {
-      return <SkeletonLoader
+      return <SkeletonLoader className="teacher-set-skeleton-loader"
         contentSize={4}
         headingSize={2}
         imageAspectRatio="portrait"
@@ -252,27 +252,35 @@ export default function SearchTeacherSets(props) {
     }
   }
 
+
+  const displayAccordionData = (ts) => {
+    const tsItems = ts.items;
+
+    if (tsItems.length >= 1) {
+      return <CheckboxGroup isFullWidth id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={tsSelectedFacets.bind(this, ts.label)}>
+        { tsItems.map((item, index) =>
+            <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()} 
+               labelText={
+                 <Flex>
+                    <span>{item["label"]}</span>
+                    <Spacer />
+                    <Text noSpace id={"ts-count-"+ index} size="caption">{item["count"] || 0}</Text>
+                </Flex>
+              }
+           />
+        )}
+      </CheckboxGroup>
+    } else {
+      return <Text isItalic size="caption" id="accordion-no-results-found">No results found</Text>
+    }
+  }
+
   const TeacherSetFacets = () => {
     return facets.map((ts, i) => {
       return <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id={"ts-facet-label-" + i} accordionData={ [
         {
           label: <Text isCapitalized noSpace>{ts.label}</Text>,
-          panel: (
-            <CheckboxGroup isFullWidth id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={tsSelectedFacets.bind(this, ts.label)}>
-              { ts.items.map((item, index) =>
-
-                  <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()} 
-                     labelText={
-                       <Flex>
-                          <span>{item["label"]}</span>
-                          <Spacer />
-                          <Text noSpace id={"ts-count-"+ index} size="caption">{item["count"]}</Text>
-                      </Flex>
-                    }
-                 />
-              )}
-            </CheckboxGroup>
-          ),
+          panel: (displayAccordionData(ts)) 
         } ]}
       />
     })

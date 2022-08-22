@@ -27,8 +27,8 @@ function Contacts(props) {
                   ]}
               />
 
-              <Heading id="library-cards-account" marginTop="30px" level="two" size="secondary" text="Want to find out about library staff visiting your school for professional development?"/>
-              <div>Have a question about library cards, your account, or library staff visiting your school for professional development?</div>
+              <Heading id="library-cards-account" marginTop="30px" level="two" size="secondary" text="Professional Development"/>
+              <div>Want to find out about library staff visiting your school?</div>
               <Table
                   className="libraryCards"
                   useRowHeaders
