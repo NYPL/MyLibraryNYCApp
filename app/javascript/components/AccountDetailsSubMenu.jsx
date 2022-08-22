@@ -148,4 +148,4 @@ class AccountDetailsSubMenu extends React.Component {
   }
 }
 
-export default withRouter(AccountDetailsSubMenu);
+export default AccountDetailsSubMenu;

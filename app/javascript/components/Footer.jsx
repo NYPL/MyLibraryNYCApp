@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link, DSProvider, TemplateAppContainer, Image, Logo} from '@nypl/design-system-react-components';
+import { Link, DSProvider, TemplateAppContainer, Image, Logo, Center} from '@nypl/design-system-react-components';
 
 import nyplLogo from '../images/nypl.png'
 import brooklynLibraryLogo from '../images/brooklyn_public_library.png'
@@ -28,10 +28,10 @@ function Footer() {
           <Image id="doe-foooter-logo" size="small" src={doeLogo} />
         </Link>
       </div>
-      <div id="mln-terms-conditions" className="appTermsConditions">
-        <Link marginLeft="s" id="mln-terms" href="http://www.nypl.org/help/about-nypl/legal-notices/website-terms-and-conditions" target="_blank">Terms</Link>|
-        <Link id="mln-privacy-policy" href="http://www.nypl.org/help/about-nypl/legal-notices/privacy-policy" target="_blank">Privacy Policy</Link>
-      </div>
+      <Center id="mln-terms-conditions" className="appTermsConditions">
+        <Link id="mln-terms" href="http://www.nypl.org/help/about-nypl/legal-notices/website-terms-and-conditions" target="_blank" margin="s">Terms</Link>|
+        <Link id="mln-privacy-policy" href="http://www.nypl.org/help/about-nypl/legal-notices/privacy-policy" target="_blank" margin="s">Privacy Policy</Link>
+      </Center>
     </div>
   )
 }
