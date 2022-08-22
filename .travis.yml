@@ -15,8 +15,8 @@ before_install:
 - gem --version
 - gem install bundler -v '< 2'  # helps with compatibility issues when upgrading to rails 5
 - bundle config --global github.https true
-# before_script:
-#- bundle exec rubocop
+before_script:
+- bundle exec rubocop
 services:
 - postgresql
 script:

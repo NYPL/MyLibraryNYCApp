@@ -55,7 +55,7 @@ gem 'paper_trail', '~> 11.1'
 gem 'pg', '~> 1.2'
 gem 'rack-cors'
 gem 'rails-controller-testing'
-gem 'rubocop','~> 0.59.1', require: false
+gem 'rubocop','~> 1.35.1', require: false
 gem 'test-unit'
 gem 'travis'
 gem 'will_paginate', '~> 3.0'
