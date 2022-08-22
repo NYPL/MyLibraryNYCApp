@@ -271,7 +271,7 @@ export default function SearchTeacherSets(props) {
         )}
       </CheckboxGroup>
     } else {
-      return <Text isItalic size="caption" id="accordion-no-results-found">No results found</Text>
+      return <Text isItalic size="caption" id="accordion-no-results-found">No options available</Text>
     }
   }
 
@@ -280,7 +280,7 @@ export default function SearchTeacherSets(props) {
       return <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id={"ts-facet-label-" + i} accordionData={ [
         {
           label: <Text isCapitalized noSpace>{ts.label}</Text>,
-          panel: (displayAccordionData(ts)) 
+          panel: displayAccordionData(ts)
         } ]}
       />
     })
