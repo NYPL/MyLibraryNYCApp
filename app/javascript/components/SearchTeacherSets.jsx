@@ -252,7 +252,6 @@ export default function SearchTeacherSets(props) {
     }
   }
 
-
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
 
@@ -313,7 +312,7 @@ export default function SearchTeacherSets(props) {
                 <div style={{ display: pagination }} >
                   <Flex alignItems="baseline">
                     <ButtonGroup>
-                      <Button id="teacher-sets-scroll-to-top" buttonType="secondary"
+                      <Button id="teacher-sets-scroll-to-top" buttonType="secondary" className="backToTop"
                         onClick={() =>
                           window.scrollTo({
                             top: 100,

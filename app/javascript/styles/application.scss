@@ -1089,3 +1089,9 @@ $submenu-width: 245px;
 .maxContent {
   width: max-content;
 }
+
+.backToTop {
+  @include max-screen($nypl-breakpoint-medium) {
+    width: -webkit-fit-content;
+  }
+}
