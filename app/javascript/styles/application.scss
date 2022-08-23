@@ -1,3 +1,11 @@
+$nypl-breakpoint-small: 320px;
+$nypl-breakpoint-medium: 600px;
+$nypl-breakpoint-mid-medium: 780px;
+$nypl-breakpoint-mid-large: 860px;
+$nypl-breakpoint-large: 960px;
+$nypl-breakpoint-xlarge: 1280px;
+$nypl-breakpoint-xxlarge: 1600px;
+
 @import '@nypl/design-system-react-components/dist/resources.scss';
 @import 'utils/viewports';
 @import 'utils/breakpoint';
@@ -1037,15 +1045,22 @@ $submenu-width: 245px;
 }
 
 .libraryCards {
-  width: 532px !important;
+  @include min-screen($nypl-breakpoint-medium) {
+    width: 532px !important;
+  }
 }
 
 .generalInfo {
-  width: 620px !important;
+  @include min-screen($nypl-breakpoint-medium) {
+    width: 620px !important;
+  }
+
 }
 
 .contactsInfo {
-  width: 825px !important;
+  @include min-screen($nypl-breakpoint-medium) {
+    width: 825px !important;
+  }
 }
 
 .cancelOrderButton {
