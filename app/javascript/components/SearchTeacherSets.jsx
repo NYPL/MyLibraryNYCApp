@@ -16,7 +16,7 @@ import {
   Card, 
   CardHeading, 
   CardContent,
-  Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion, SkeletonLoader
+  Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion, SkeletonLoader, useNYPLBreakpoints
 } from '@nypl/design-system-react-components';
 
 
@@ -41,6 +41,8 @@ export default function SearchTeacherSets(props) {
   const [noTsResultsFound, setNoTsResultsFound] = useState("")
   const [sort_order, setSortOrder] = useState("")
   const [computedCurrentPage, setComputedCurrentPage] = useState(1)
+  const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
+
 
   useEffect(() => {
     const params = Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end}, selectedFacets)
@@ -83,11 +85,11 @@ export default function SearchTeacherSets(props) {
 
   const resultsFoundMessage = () => {
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
-      return <Text isItalic size="caption">No results found</Text>
+      return "No results found"
     } else if (tsTotalCount === 1) {
-      return <Text isItalic size="caption">{tsTotalCount + ' result found'}</Text>
+      return tsTotalCount + ' result found'
     } else if (tsTotalCount >= 1) {
-      return <Text isItalic size="caption">{tsTotalCount + ' results found'}</Text>
+      return tsTotalCount + ' results found'
     }
   }
 
@@ -196,10 +198,33 @@ export default function SearchTeacherSets(props) {
     />
   }
 
+  const RefineResults = () => {
+    if (isLargerThanMedium) {
+      return teacherSetSideBarResults()
+    } else {
+      return <>
+        <Text noSpace isBold size="caption">{resultsFoundMessage()}</Text>
+        <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id="mobile-ts-facet-label" accordionData={ [
+          {
+            label: <Text isCapitalized noSpace>Refine Results</Text>,
+            panel: teacherSetSideBarResults()
+          } ]}
+        />
+      </>
+    }
+  }
+
+  const tsRefineResultsHeading = () => {
+    if (isLargerThanMedium) {
+      return <Heading id="refine-results" size="tertiary" level="three" > Refine Results </Heading>
+    }
+  }
+
   const teacherSetSideBarResults = () => {
+    const bgColor = isLargerThanMedium ? "var(--nypl-colors-ui-gray-x-light-cool)" : ""
     if (facets && facets.length >= 1) {
-      return <Box id="ts-all-facets" bg="var(--nypl-colors-ui-gray-x-light-cool)" padding="var(--nypl-space-m)">
-          <Heading size="tertiary" level="three" > Refine Results </Heading>
+      return <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
+          {tsRefineResultsHeading()}
           <Toggle
             id="toggle"
             isChecked={availableToggle}
@@ -254,7 +279,6 @@ export default function SearchTeacherSets(props) {
 
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
-
     if (tsItems.length >= 1) {
       return <CheckboxGroup isFullWidth id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={tsSelectedFacets.bind(this, ts.label)}>
         { tsItems.map((item, index) =>
@@ -285,6 +309,10 @@ export default function SearchTeacherSets(props) {
     })
   }
 
+  const mobileSupport = () => {
+    return isLargerThanMedium ? "block" : "none"
+  }
+
   return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -306,7 +334,7 @@ export default function SearchTeacherSets(props) {
           }
           contentPrimary={
               <>
-                {resultsFoundMessage()}
+                <Text style={{display: mobileSupport()}} isItalic size="caption">{resultsFoundMessage()}</Text>
                 {teacherSetTitleOrder()}
                 <div id="teacher-set-results">{teacherSetDetails()}</div>
                 <div style={{ display: pagination }} >
@@ -332,7 +360,7 @@ export default function SearchTeacherSets(props) {
                 </div>
               </>
             }
-          contentSidebar={<><div>{skeletonLoader()}</div><div>{teacherSetSideBarResults()}</div></>}
+          contentSidebar={<><div>{skeletonLoader()}</div><div>{RefineResults()}</div></>}
           sidebar="left" 
         />
     )
