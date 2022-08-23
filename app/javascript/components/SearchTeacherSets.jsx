@@ -224,7 +224,7 @@ export default function SearchTeacherSets(props) {
     const bgColor = isLargerThanMedium ? "var(--nypl-colors-ui-gray-x-light-cool)" : ""
     if (facets && facets.length >= 1) {
       return <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
-          {tsRefineResultsHeading()}
+          <div>{tsRefineResultsHeading()}</div>
           <Toggle
             id="toggle"
             isChecked={availableToggle}
