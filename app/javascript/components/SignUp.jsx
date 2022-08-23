@@ -527,7 +527,7 @@ export default class SignUp extends Component {
               </Form>
             </>
           }
-          contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+          contentSidebar={<HaveQuestions />}
           sidebar="right"
         />
     )

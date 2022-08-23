@@ -90,7 +90,7 @@ export default class TeacherSetOrder extends React.Component {
               </Link>
             </>
           }
-        contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+        contentSidebar={<HaveQuestions />}
         sidebar="right"
       />
   )}

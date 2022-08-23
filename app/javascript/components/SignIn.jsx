@@ -108,7 +108,7 @@ export default class SignIn extends Component {
             </div>
           </>
         }
-        contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+        contentSidebar={<HaveQuestions />}
         sidebar="right"
       />
     )
