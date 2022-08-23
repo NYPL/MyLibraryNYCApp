@@ -13,10 +13,8 @@ before_install:
   # looks like travis internal rvm handling has changed
   # - rvm use 2.5.7 --install --binary --fuzzy
 - gem --version
-- gem install bundler -v '< 2.3'  # helps with compatibility issues when upgrading to rails 5
+- gem install bundler -v '2.3.20'
 - bundle config --global github.https true
-- bundle config set --local deployment 'true'
-- bundle lock --add-platform x86_64-linux
 before_script:
 - bundle exec rubocop
 services:
