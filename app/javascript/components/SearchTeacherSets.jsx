@@ -145,7 +145,7 @@ export default function SearchTeacherSets(props) {
         setTeacherSets(res.data.teacher_sets)
         setFacets(res.data.facets)
         setTsTotalCount(res.data.total_count)
-        setSortOrder(sortTitleValue)
+        setSortTitleValue(sortTitleValue)
         setAvailability(availability)
         setGradeBegin(grade_begin)
         setGradeEnd(grade_end)
@@ -216,7 +216,7 @@ export default function SearchTeacherSets(props) {
 
   const sortTeacherSetTitle = (e) => {
     setSortTitleValue(e.target.value)
-    getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets));
+    getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: e.target.value, availability: availability}, selectedFacets));
   };
 
   const tsSelectedFacets = (field, label) => {
