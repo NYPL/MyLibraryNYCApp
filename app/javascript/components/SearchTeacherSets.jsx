@@ -79,7 +79,7 @@ export default function SearchTeacherSets(props) {
     }
 
     if (resultStr && isLargerThanMedium) {
-      return <Text noSpace isItalic size="caption">{resultStr}</Text>
+      return <Text isItalic size="caption">{resultStr}</Text>
     } else if (resultStr && !isLargerThanMedium) {
       return <Text noSpace isBold size="caption">{resultStr}</Text>;
     } else {
@@ -297,7 +297,7 @@ export default function SearchTeacherSets(props) {
         )}
       </CheckboxGroup>
     } else {
-      return <Text isItalic size="caption" id="accordion-no-results-found">No options available</Text>
+      return <Text isItalic noSpace size="caption" id="accordion-no-results-found">No options available</Text>
     }
   }
 
