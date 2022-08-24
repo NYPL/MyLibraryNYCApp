@@ -200,14 +200,14 @@ export default function SearchTeacherSets(props) {
 
   const RefineResults = () => {
     if (isLargerThanMedium) {
-      return {teacherSetSideBarResults()}
+      return <div>{teacherSetSideBarResults()}</div>
     } else {
       return <>
         <Text noSpace isBold size="caption">{resultsFoundMessage()}</Text>
         <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id="mobile-ts-facet-label" accordionData={ [
           {
             label: <Text isCapitalized noSpace>Refine Results</Text>,
-            panel: {teacherSetSideBarResults()}
+            panel: <div>{teacherSetSideBarResults()}</div>
           } ]}
         />
       </>
