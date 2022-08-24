@@ -19,7 +19,7 @@ export default class TeacherSetBooks extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {book: "", teacherSets: ""};
+    this.state = {book: "", teacherSets: "", bookImageHeight: "", bookImageWidth: ""};
   }
 
   componentDidMount() {
@@ -59,15 +59,6 @@ export default class TeacherSetBooks extends React.Component {
     return <div>
       book.cover_uri
     </div>
-  }
-
-
-  BookImage(book) {
-    if (book.cover_uri) {
-      return book.cover_uri
-    } else {
-      return mlnImage
-    }
   }
 
   truncateTitle( str, n, useWordBoundary ){
@@ -111,6 +102,27 @@ export default class TeacherSetBooks extends React.Component {
     }
   }
 
+  BookImage = (data) => {
+    if (data.cover_uri) {
+      if (this.state.bookImageHeight === 1 && this.state.bookImageWidth === 1) {
+        return <Image src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
+      } else if (this.state.bookImageHeight === 189 && this.state.bookImageWidth === 189){
+        return <Image id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default" alt="Book image"/>
+      } else {
+        return <img onLoad={this.bookImageDimensions} src={data.cover_uri} />
+      }
+    } else {
+      return <Image id={"ts-books-" + data.id} src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
+    }
+  }
+
+  bookImageDimensions = ({target: img }) => {
+    if ((img.offsetHeight === 1) || (img.offsetWidth === 1)) {
+      this.setState({bookImageHeight: img.offsetHeight, bookImageWidth: img.offsetWidth})
+    } else {
+      this.setState({bookImageHeight: 189, bookImageWidth: 189})
+    }
+  }
 
   render() {
     let book = this.state.book;
@@ -132,8 +144,7 @@ export default class TeacherSetBooks extends React.Component {
 
               <HorizontalRule id="ts-book-details-horizontal-rule" className="teacherSetHorizontal" />
 
-              <Card id="book-page-card-details" layout="row" imageProps={{ alt: 'Book Details', aspectRatio: 'original', isAtEnd: false, size: 'default', src: this.BookImage(book) }} >
-
+              <Card id="book-page-card-details" layout="row" imageProps={{ component: this.BookImage(book) }} >
                 { this.IsBookSubTitlePresent() ? (
                   <CardHeading id="book-page-sub_title" level="three">
                     {this.state.book.sub_title}
