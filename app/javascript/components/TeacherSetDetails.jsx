@@ -4,6 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink} from "react-router-dom";
 import { titleCase } from "title-case";
+import AnchorLink from 'react-anchor-link-smooth-scroll'
 
 import axios from 'axios';
 import {
@@ -45,8 +46,6 @@ export default function TeacherSetDetails(props) {
   const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
 
   const gridColumns = isLargerThanSmall ? 5 : 2;
-
-  console.log(isLargerThanMobile)
 
   useEffect(() => {
     axios.get('/teacher_sets/'+ props.match.params.id)
@@ -224,7 +223,15 @@ export default function TeacherSetDetails(props) {
     return teacher_set.title? teacher_set.title : ""
   }
 
-    
+  
+  const mobileOrderButton = () => {
+    if (!isLargerThanMobile) {
+      return <AnchorLink href="#ts-order-set">
+         <ButtonGroup><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
+      </AnchorLink>
+    }
+  }
+
   return (
     <DSProvider>
       <TemplateAppContainer
@@ -248,14 +255,12 @@ export default function TeacherSetDetails(props) {
               <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacherSetAvailability())}</StatusBadge>
             </Flex>
             <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
-
+            { mobileOrderButton() }
             <VStack align="left" spacing="s">
               <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
                { TeacherSetDescription() }
               <div id="ts-page-books-count"> { BooksCount() } </div>
-
               <SimpleGrid id="ts-page-books-panel" columns={gridColumns} gap="xxs"> { TeacherSetBooks() } </SimpleGrid>
-            
             </VStack>
 
             <List id="ts-list-details" type="dl" title="Details" marginTop="s">
