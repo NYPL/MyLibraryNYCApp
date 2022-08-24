@@ -3,20 +3,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
 import { titleCase } from "title-case";
-
-
-import {
-  Button, 
-  ButtonGroup,
-  SearchBar,
-  Select,
-  Icon,
-  HorizontalRule,
-  Heading,
-  Card, 
-  CardHeading, 
-  CardContent,
-  Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion, SkeletonLoader, useNYPLBreakpoints
+import { Button, ButtonGroup, SearchBar, Select, Icon, HorizontalRule, Heading, Card, CardHeading, CardContent, Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion, SkeletonLoader, useNYPLBreakpoints
 } from '@nypl/design-system-react-components';
 
 
@@ -49,7 +36,6 @@ export default function SearchTeacherSets(props) {
     getTeacherSets(params)
   }, []);
 
-
   const getTeacherSets = (params) => {
     axios.get('/teacher_sets', {params: params}).then(res => {
       setTeacherSets(res.data.teacher_sets)
@@ -69,7 +55,6 @@ export default function SearchTeacherSets(props) {
     })
   }
 
-
   const  handleSubmit = (event) => {
     event.preventDefault()
     const params = Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets)
@@ -84,7 +69,7 @@ export default function SearchTeacherSets(props) {
   }
 
   const resultsFoundMessage = () => {
-    const resultStr = "";
+    let resultStr = "";
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
       resultStr = "No results found"
     } else if (tsTotalCount === 1) {
@@ -92,7 +77,14 @@ export default function SearchTeacherSets(props) {
     } else if (tsTotalCount >= 1) {
       resultStr = tsTotalCount + ' results found'
     }
-    return (resultStr && isLargerThanMedium) ? <Text noSpace isItalic size="caption">{resultStr}</Text> : <Text noSpace isBold size="caption">{resultStr}</Text>;
+
+    if (resultStr && isLargerThanMedium) {
+      return <Text noSpace isItalic size="caption">{resultStr}</Text>
+    } else if (resultStr && !isLargerThanMedium) {
+      return <Text noSpace isBold size="caption">{resultStr}</Text>;
+    } else {
+      null
+    }
   }
 
   const teacherSetTitleOrder = () => {
@@ -182,7 +174,6 @@ export default function SearchTeacherSets(props) {
     getTeacherSets(Object.assign({ keyword: keyword, sort_order: sortTitleValue, availability: availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal}, selectedFacets))
   };
 
-
   const TeacherSetGradesSlider = () => {
     const g_begin = grade_begin === -1? 'Pre-K' :  grade_begin;
       return <Slider marginTop="s" marginBottom="l"
@@ -205,7 +196,7 @@ export default function SearchTeacherSets(props) {
       return <div>{teacherSetSideBarResults()}</div>
     } else {
       return <>
-        <Text noSpace isBold size="caption">{resultsFoundMessage()}</Text>
+        {resultsFoundMessage()}
         <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id="mobile-ts-facet-label" accordionData={ [
           {
             label: <Text isCapitalized noSpace>Refine Results</Text>,
@@ -336,7 +327,7 @@ export default function SearchTeacherSets(props) {
           }
           contentPrimary={
               <>
-                <Text style={{display: mobileSupport()}} isItalic size="caption">{resultsFoundMessage()}</Text>
+                <div style={{display: mobileSupport()}} >{resultsFoundMessage()}</div>
                 <div>{teacherSetTitleOrder()}</div>
                 <div id="teacher-set-results">{teacherSetDetails()}</div>
                 <div style={{ display: pagination }} >
