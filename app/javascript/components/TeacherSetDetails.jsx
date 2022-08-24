@@ -24,8 +24,6 @@ import TeacherSetOrder from "./TeacherSetOrder";
 import mlnImage from '../images/mln.svg'
 
 
-
-
 export default function TeacherSetDetails(props) {
 
   const [ts_details, setTsDetails] = useState({})
@@ -44,16 +42,10 @@ export default function TeacherSetDetails(props) {
   const [bookImageHeight, setBookImageHeight] = useState("")
   const [bookImageWidth, setbookImageWidth] = useState("")
 
-  const {
-  isLargerThanSmall,
-  isLargerThanMedium,
-  isLargerThanMobile,
-  isLargerThanLarge,
-  isLargerThanXLarge,
-  } = useNYPLBreakpoints();
+  const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
 
   const gridColumns = isLargerThanSmall ? 5 : 2;
-  
+
   console.log(isLargerThanMobile)
 
   useEffect(() => {
@@ -142,7 +134,7 @@ export default function TeacherSetDetails(props) {
   const BookImage = (data) => {
     if (data.cover_uri) {
       if (bookImageHeight === 1 && bookImageWidth === 1) {
-        return <Image src={mlnImage} />
+        return <Image src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
       } else if (bookImageHeight === 189 && bookImageWidth === 189){
         return <Image id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default" alt="Book image"/>
       } else {
@@ -338,7 +330,7 @@ export default function TeacherSetDetails(props) {
                 <Heading id="ts-available-copies" textAlign="center" size="callout" level="four" text={AvailableCopies()} />
                 {OrderTeacherSets()}
               </Box>
-              <HaveQuestions />
+              <div><HaveQuestions /></div>
             </VStack>
           }
           sidebar="right"

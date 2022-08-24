@@ -183,7 +183,7 @@ export default function SearchTeacherSets(props) {
 
   const TeacherSetGradesSlider = () => {
     const g_begin = grade_begin === -1? 'Pre-K' :  grade_begin;
-      return <Slider marginTop="s" marginBottom="xl"
+      return <Slider marginTop="s" marginBottom="l"
         id="ts-slider-range"
         isRangeSlider
         labelText={"Grades Range  " + g_begin + " To " + grade_end}

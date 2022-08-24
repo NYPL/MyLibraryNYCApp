@@ -277,7 +277,7 @@ export default function Accounts(props) {
           <Pagination marginTop="s" id="ad-pagination"className="accocuntOrderPagination" currentPage={1} onPageChange={onPageChange} pageCount={total_pages} />
         </>
       }
-      contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+      contentSidebar={<div><HaveQuestions /></div>}
       sidebar="right"
   />)
 }

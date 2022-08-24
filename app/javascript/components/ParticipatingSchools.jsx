@@ -118,7 +118,7 @@ export default class ParticipatingSchools extends Component {
            <div id="participating-schools-list">{this.schoolSkeletonLoader()}{this.Schools()}</div>
           </>
           }
-          contentSidebar={<HaveQuestions />}
+          contentSidebar={<div><HaveQuestions /></div>}
           sidebar="right" 
         />
     )

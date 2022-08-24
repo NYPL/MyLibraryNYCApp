@@ -80,7 +80,7 @@ export default class TeacherSetOrder extends React.Component {
             {this.cancelConfirmation()}
           </>
         }
-        contentSidebar={<div className="have_questions_section"><HaveQuestions /></div>}
+        contentSidebar={<div><HaveQuestions /></div>}
         sidebar="right"
       />
   )}

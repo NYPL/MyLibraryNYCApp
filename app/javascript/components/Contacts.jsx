@@ -73,7 +73,7 @@ function Contacts(props) {
               />              
             </div>
           }
-          contentSidebar={<HaveQuestions />}
+          contentSidebar={<div><HaveQuestions /></div>}
           sidebar="right"          
         />
   )

@@ -50,7 +50,7 @@ export default class Faqs extends Component {
             </>
             
           }
-          contentSidebar={<HaveQuestions />}
+          contentSidebar={<div><HaveQuestions /></div>}
           sidebar="right"
         />
     )

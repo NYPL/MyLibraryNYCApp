@@ -87,7 +87,7 @@ export default class Home extends React.Component {
               </>
             }
         contentBottom={<NewsLetter />}
-        contentSidebar={<HaveQuestions />}
+        contentSidebar={<div><HaveQuestions /></div>}
         sidebar="right"
       />
     )

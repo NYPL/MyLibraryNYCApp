@@ -212,7 +212,7 @@ export default class TeacherSetBooks extends React.Component {
               {this.TeacherSetDetails()}
             </>
           }
-          contentSidebar={<HaveQuestions />}
+          contentSidebar={<div><HaveQuestions /></div>}
           sidebar="right"
         />
     )
