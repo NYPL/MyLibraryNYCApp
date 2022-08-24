@@ -335,7 +335,7 @@ export default function SearchTeacherSets(props) {
           contentPrimary={
               <>
                 <Text style={{display: mobileSupport()}} isItalic size="caption">{resultsFoundMessage()}</Text>
-                {teacherSetTitleOrder()}
+                <div>{teacherSetTitleOrder()}</div>
                 <div id="teacher-set-results">{teacherSetDetails()}</div>
                 <div style={{ display: pagination }} >
                   <Flex alignItems="baseline">
