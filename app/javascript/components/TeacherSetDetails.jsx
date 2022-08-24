@@ -226,8 +226,8 @@ export default function TeacherSetDetails(props) {
   
   const mobileOrderButton = () => {
     if (!isLargerThanMobile) {
-      return <AnchorLink href="#ts-order-set">
-         <ButtonGroup><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
+      return <AnchorLink href="#teacher-set-details-order-page">
+         <ButtonGroup marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
       </AnchorLink>
     }
   }
