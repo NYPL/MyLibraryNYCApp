@@ -84,13 +84,15 @@ export default function SearchTeacherSets(props) {
   }
 
   const resultsFoundMessage = () => {
+    const resultStr = "";
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
-      return "No results found"
+      resultStr = "No results found"
     } else if (tsTotalCount === 1) {
-      return tsTotalCount + ' result found'
+      resultStr = tsTotalCount + ' result found'
     } else if (tsTotalCount >= 1) {
-      return tsTotalCount + ' results found'
+      resultStr = tsTotalCount + ' results found'
     }
+    return (resultStr && isLargerThanMedium) ? <Text noSpace isItalic size="caption">{resultStr}</Text> : <Text noSpace isBold size="caption">{resultStr}</Text>;
   }
 
   const teacherSetTitleOrder = () => {

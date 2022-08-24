@@ -208,7 +208,6 @@ export default function TeacherSetDetails(props) {
     }
   }
 
-
   const teacherSetAvailability = () => {
     return teacher_set.availability !== undefined ? teacher_set.availability : ""
   }
@@ -225,116 +224,102 @@ export default function TeacherSetDetails(props) {
     return teacher_set.title? teacher_set.title : ""
   }
 
-    //let teacher_set =  this.state.teacher_set
-    // let suitabilities_string = teacher_set.suitabilities_string;
-    // let primary_language = teacher_set.primary_language;
-    // let set_type =  teacher_set.set_type;
-    // let physical_description = teacher_set.physical_description;
-    // let call_number = teacher_set.call_number;
-    // //let access_key = access_key;
-    // //let details_url = teacher_set.details_url? teacher_set.details_url : "";
-    // let availability = teacher_set.availability !== undefined ? teacher_set.availability : ""
-    // let availability_status_badge =  (teacher_set.availability == "available") ? "medium" : "low"
-    // let legacy_detail_url = "http://legacycatalog.nypl.org/record="+ teacher_set.bnumber +"~S1"
-    // let breadcrumbs_location_path = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
-    // let location_path = window.location.pathname.split(/\/|\?|&|=|\./g)[1]
-    // let title = teacher_set.title? teacher_set.title : ""
     
-    return (
-      <DSProvider>
-        <TemplateAppContainer
-          breakout={<>
-            <Breadcrumbs id={"mln-breadcrumbs-ts-details"}
-                         breadcrumbsData={[{ url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" }, 
-                                           { url: "//"+ window.location.hostname + '/teacher_set_data', text: "Teacher Sets" },
-                                           { url: "//"+ window.location.hostname + window.location.pathname, text: breadcrumbTitle(tsTitle()) }]}
+  return (
+    <DSProvider>
+      <TemplateAppContainer
+        breakout={<>
+          <Breadcrumbs id={"mln-breadcrumbs-ts-details"}
+                       breadcrumbsData={[{ url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" }, 
+                                         { url: "//"+ window.location.hostname + '/teacher_set_data', text: "Teacher Sets" },
+                                         { url: "//"+ window.location.hostname + window.location.pathname, text: breadcrumbTitle(tsTitle()) }]}
 
-                         breadcrumbsType="booksAndMore" />
-            <Hero heroType="tertiary"
-              backgroundColor="var(--nypl-colors-brand-primary)"
-              heading={<Heading level="one" id={"hero-"+ window.location.pathname.split(/\/|\?|&|=|\./g)[1]} text="Teacher Sets"  />} />
-          </>}
-          contentTop={errorMsg()}
-          contentPrimary={
-            <>
-              <Flex alignItems="baseline">
-                <Heading id="heading-secondary" level="one" size="secondary" text={teacherSetTitle() } />
-                <Spacer />
-                <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacherSetAvailability())}</StatusBadge>
-              </Flex>
-              <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
+                       breadcrumbsType="booksAndMore" />
+          <Hero heroType="tertiary"
+            backgroundColor="var(--nypl-colors-brand-primary)"
+            heading={<Heading level="one" id={"hero-"+ window.location.pathname.split(/\/|\?|&|=|\./g)[1]} text="Teacher Sets"  />} />
+        </>}
+        contentTop={errorMsg()}
+        contentPrimary={
+          <>
+            <Flex alignItems="baseline">
+              <Heading id="heading-secondary" level="one" size="secondary" text={teacherSetTitle() } />
+              <Spacer />
+              <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacherSetAvailability())}</StatusBadge>
+            </Flex>
+            <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
 
-              <VStack align="left" spacing="s">
-                <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
-                 { TeacherSetDescription() }
-                <div id="ts-page-books-count"> { BooksCount() } </div>
-
-                <SimpleGrid id="ts-page-books-panel" columns={gridColumns} gap="xxs"> { TeacherSetBooks() } </SimpleGrid>
-              
-              </VStack>
-
-              <List id="ts-list-details" type="dl" title="Details" marginTop="s">
-                <dt id="ts-suggested-grade-range-text">
-                  Suggested Grade Range [New]
-                </dt>
-                <dd id="ts-page-suitabilities">
-                  {teacher_set.suitabilities_string}
-                </dd>
-
-                <dt id="ts-page-primary-language-text">
-                  Primary Language
-                </dt>
-                <dd id="ts-page-primary-language">
-                  {teacher_set.primary_language}
-                </dd>
-
-                <dt id="ts-page-set-type-text">
-                  Type
-                </dt>
-                <dd id="ts-page-set-type">
-                  {teacher_set.set_type}
-                </dd>
-
-                <dt id="ts-page-physical-desc-text">
-                  Physical Description
-                </dt>
-                <dd id="ts-page-physical-desc">
-                  {teacher_set.physical_description}
-                </dd>
-
-                <dt id="ts-page-notes-content-text">
-                  Notes
-                </dt>
-                <dd id="ts-page-notes-content">
-                  {TeacherSetNotesContent()}
-                </dd>
-
-                <dt id="ts-page-call-number-text">
-                  Call Number
-                </dt>
-                <dd id="ts-page-call-number">
-                  {teacher_set.call_number}
-                </dd>
-              </List>
-              <Link className="tsDetailUrl" href={legacyDetailUrl()} id="ts-page-details_url" type="action" target='_blank'>
-                View in catalog
-                <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
-              </Link>
-
-            </>
-          }
-          contentSidebar={
             <VStack align="left" spacing="s">
-              <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
-                <Heading id="ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Order Set!" />
-                <Heading id="ts-available-copies" textAlign="center" size="callout" level="four" text={AvailableCopies()} />
-                {OrderTeacherSets()}
-              </Box>
-              <div><HaveQuestions /></div>
+              <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
+               { TeacherSetDescription() }
+              <div id="ts-page-books-count"> { BooksCount() } </div>
+
+              <SimpleGrid id="ts-page-books-panel" columns={gridColumns} gap="xxs"> { TeacherSetBooks() } </SimpleGrid>
+            
             </VStack>
-          }
-          sidebar="right"
-        />
-      </DSProvider>
-    )
+
+            <List id="ts-list-details" type="dl" title="Details" marginTop="s">
+              <dt id="ts-suggested-grade-range-text">
+                Suggested Grade Range [New]
+              </dt>
+              <dd id="ts-page-suitabilities">
+                {teacher_set.suitabilities_string}
+              </dd>
+
+              <dt id="ts-page-primary-language-text">
+                Primary Language
+              </dt>
+              <dd id="ts-page-primary-language">
+                {teacher_set.primary_language}
+              </dd>
+
+              <dt id="ts-page-set-type-text">
+                Type
+              </dt>
+              <dd id="ts-page-set-type">
+                {teacher_set.set_type}
+              </dd>
+
+              <dt id="ts-page-physical-desc-text">
+                Physical Description
+              </dt>
+              <dd id="ts-page-physical-desc">
+                {teacher_set.physical_description}
+              </dd>
+
+              <dt id="ts-page-notes-content-text">
+                Notes
+              </dt>
+              <dd id="ts-page-notes-content">
+                {TeacherSetNotesContent()}
+              </dd>
+
+              <dt id="ts-page-call-number-text">
+                Call Number
+              </dt>
+              <dd id="ts-page-call-number">
+                {teacher_set.call_number}
+              </dd>
+            </List>
+            <Link className="tsDetailUrl" href={legacyDetailUrl()} id="ts-page-details_url" type="action" target='_blank'>
+              View in catalog
+              <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
+            </Link>
+
+          </>
+        }
+        contentSidebar={
+          <VStack align="left" spacing="s">
+            <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
+              <Heading id="ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Order Set!" />
+              <Heading id="ts-available-copies" textAlign="center" size="callout" level="four" text={AvailableCopies()} />
+              {OrderTeacherSets()}
+            </Box>
+            <div><HaveQuestions /></div>
+          </VStack>
+        }
+        sidebar="right"
+      />
+    </DSProvider>
+  )
 }
