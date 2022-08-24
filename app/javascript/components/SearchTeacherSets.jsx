@@ -79,7 +79,7 @@ export default function SearchTeacherSets(props) {
     }
 
     if (resultStr && isLargerThanMedium) {
-      return <Text isItalic size="caption">{resultStr}</Text>
+      return <Text noSpace isItalic size="caption">{resultStr}</Text>
     } else if (resultStr && !isLargerThanMedium) {
       return <Text noSpace isBold size="caption">{resultStr}</Text>;
     } else {
@@ -192,18 +192,20 @@ export default function SearchTeacherSets(props) {
   }
 
   const RefineResults = () => {
-    if (isLargerThanMedium) {
-      return <div>{teacherSetSideBarResults()}</div>
-    } else {
-      return <>
-        {resultsFoundMessage()}
-        <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id="mobile-ts-facet-label" accordionData={ [
-          {
-            label: <Text isCapitalized noSpace>Refine Results</Text>,
-            panel: <div>{teacherSetSideBarResults()}</div>
-          } ]}
-        />
-      </>
+    if (facets && facets.length >= 1) {
+      if (isLargerThanMedium) {
+        return <div>{teacherSetSideBarResults()}</div>
+      } else {
+        return <>
+          {resultsFoundMessage()}
+          <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id="mobile-ts-facet-label" accordionData={ [
+            {
+              label: <Text isCapitalized noSpace>Refine Results</Text>,
+              panel: <div>{teacherSetSideBarResults()}</div>
+            } ]}
+          />
+        </>
+      }
     }
   }
 
@@ -215,21 +217,19 @@ export default function SearchTeacherSets(props) {
 
   const teacherSetSideBarResults = () => {
     const bgColor = isLargerThanMedium ? "var(--nypl-colors-ui-gray-x-light-cool)" : ""
-    if (facets && facets.length >= 1) {
-      return <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
-          <div>{tsRefineResultsHeading()}</div>
-          <Toggle
-            id="toggle"
-            isChecked={availableToggle}
-            labelText="Available Now"
-            onChange={availableResults}
-            size="small"
-            marginBottom="m"
-          />
-          <div>{TeacherSetGradesSlider()}</div>
-          <div>{TeacherSetFacets()}</div>
-      </Box>
-    }
+    return <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
+        <div>{tsRefineResultsHeading()}</div>
+        <Toggle
+          id="toggle"
+          isChecked={availableToggle}
+          labelText="Available Now"
+          onChange={availableResults}
+          size="small"
+          marginBottom="m"
+        />
+        <div>{TeacherSetGradesSlider()}</div>
+        <div>{TeacherSetFacets()}</div>
+    </Box>
   }
 
   const sortTeacherSetTitle = (e) => {
@@ -327,7 +327,7 @@ export default function SearchTeacherSets(props) {
           }
           contentPrimary={
               <>
-                <div style={{display: mobileSupport()}} >{resultsFoundMessage()}</div>
+                <div style={{display: mobileSupport()}}>{resultsFoundMessage()}</div>
                 <div>{teacherSetTitleOrder()}</div>
                 <div id="teacher-set-results">{teacherSetDetails()}</div>
                 <div style={{ display: pagination }} >
