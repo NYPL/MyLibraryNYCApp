@@ -105,6 +105,16 @@ export default function SearchTeacherSets(props) {
     }
   }
 
+  const teacherSetAvailability = (ts) => {
+    if (ts.availability !== undefined)  {
+      return <StatusBadge level={availabilityStatusBadge(ts)}>{titleCase(ts.availability)}</StatusBadge>
+    }
+  }
+
+  const availabilityStatusBadge = (ts) => {
+    return (ts.availability == "available") ? "medium" : "low"
+  }
+
   const teacherSetDetails = () => {
     return teacherSets.map((ts, i) => {
       let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
@@ -115,7 +125,7 @@ export default function SearchTeacherSets(props) {
             </CardHeading>
             <CardContent id={"ts-suitabilities-"+ i}>{ts.suitabilities_string}</CardContent>
             <CardContent id={"ts-availability-"+ i}>
-              <StatusBadge level={availability_status_badge}>{titleCase(ts.availability)}</StatusBadge>
+              <>{teacherSetAvailability(ts)}</>
             </CardContent>
             <CardContent id={"ts-description-"+ i}>{ts.description}</CardContent>
           </Card>

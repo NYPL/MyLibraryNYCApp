@@ -208,7 +208,9 @@ export default function TeacherSetDetails(props) {
   }
 
   const teacherSetAvailability = () => {
-    return teacher_set.availability !== undefined ? teacher_set.availability : ""
+    if (teacher_set.availability !== undefined)  {
+      return <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacher_set.availability)}</StatusBadge>
+    }
   }
 
   const availabilityStatusBadge = () => {
@@ -252,7 +254,7 @@ export default function TeacherSetDetails(props) {
             <Flex alignItems="baseline">
               <Heading id="heading-secondary" level="one" size="secondary" text={teacherSetTitle() } />
               <Spacer />
-              <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacherSetAvailability())}</StatusBadge>
+              <div>{teacherSetAvailability()}</div>
             </Flex>
             <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
             { mobileOrderButton() }
