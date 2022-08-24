@@ -79,7 +79,7 @@ export default function SearchTeacherSets(props) {
     }
 
     if (resultStr && isLargerThanMedium) {
-      return <Text noSpace isItalic size="caption">{resultStr}</Text>
+      return <Text isItalic size="caption">{resultStr}</Text>
     } else if (resultStr && !isLargerThanMedium) {
       return <Text noSpace isBold size="caption">{resultStr}</Text>;
     } else {
