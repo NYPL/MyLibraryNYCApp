@@ -108,6 +108,8 @@ export default function SearchTeacherSets(props) {
   const teacherSetAvailability = (ts) => {
     if (ts.availability !== undefined)  {
       return <StatusBadge level={availabilityStatusBadge(ts)}>{titleCase(ts.availability)}</StatusBadge>
+    } else {
+      return null
     }
   }
 
@@ -146,7 +148,6 @@ export default function SearchTeacherSets(props) {
           grade_end: grade_end,
         }, selectedFacets), 
      }).then(res => {
-        // this.setState({ teacherSets: res.data.teacher_sets, tsTotalCount: res.data.total_count, sort_order: sortTitleValue, availability: availability, keyword: keyword, grade_begin: grade_begin, grade_end: grade_end});
         setKeyWord(keyword)
         setTeacherSets(res.data.teacher_sets)
         setFacets(res.data.facets)
@@ -216,6 +217,8 @@ export default function SearchTeacherSets(props) {
           />
         </>
       }
+    } else {
+      return null
     }
   }
 

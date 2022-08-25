@@ -208,8 +208,10 @@ export default function TeacherSetDetails(props) {
   }
 
   const teacherSetAvailability = () => {
-    if (teacher_set.availability !== undefined)  {
+    if (teacher_set.availability !== undefined) {
       return <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacher_set.availability)}</StatusBadge>
+    } else {
+      return null
     }
   }
 
