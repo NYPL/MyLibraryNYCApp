@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink} from "react-router-dom";
 import { titleCase } from "title-case";
-import AnchorLink from 'react-anchor-link-smooth-scroll'
+//import { AnchorLink } from 'react-anchor-link-smooth-scroll'
 
 import axios from 'axios';
 import {
@@ -234,8 +234,7 @@ export default function TeacherSetDetails(props) {
   //        <ButtonGroup marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
   //     </AnchorLink>
   //   }
-
-  //   { mobileOrderButton() }
+   
   // }
 
   return (
