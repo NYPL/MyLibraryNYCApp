@@ -229,6 +229,8 @@ export default function TeacherSetDetails(props) {
       return <AnchorLink href="#teacher-set-details-order-page">
          <ButtonGroup marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
       </AnchorLink>
+    } else {
+      null
     }
   }
 
@@ -255,7 +257,7 @@ export default function TeacherSetDetails(props) {
               <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacherSetAvailability())}</StatusBadge>
             </Flex>
             <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
-            { mobileOrderButton() }
+            <div>{ mobileOrderButton() }</div>
             <VStack align="left" spacing="s">
               <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
                { TeacherSetDescription() }
