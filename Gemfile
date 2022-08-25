@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ruby '2.7.4'
+ruby '2.7.6'
 
 source 'https://rubygems.org'
 
@@ -44,6 +44,8 @@ gem 'railties', '~> 6.1.4.1'
 gem 'google-api-client'
 gem 'google_drive'
 gem 'httparty'
+gem 'jquery-rails', '> 4.0'
+gem 'jquery-ui-rails'
 gem 'json'
 gem 'lograge', '~> 0.11.2'
 gem 'logstash-event', github: 'elastic/logstash', tag: 'v1.5.4'
@@ -53,7 +55,8 @@ gem 'paper_trail', '~> 11.1'
 gem 'pg', '~> 1.2'
 gem 'rack-cors'
 gem 'rails-controller-testing'
-gem 'rubocop','~> 0.59.1', require: false
+gem 'rubocop','~> 1.35.1', require: false
+gem 'rubocop-performance', '~> 1.14.1', require: false
 gem 'test-unit'
 gem 'travis'
 gem 'will_paginate', '~> 3.0'
@@ -61,16 +64,6 @@ gem 'webmock'
 gem 'yaml_db'
 gem 'rexml', '~> 3.2'
 gem 'thread_safe', '~> 0.3.6'
-gem "react_on_rails", "12.0.0"
-gem "webpacker", "~> 5"
-gem "breakpoint", "~>2.4.0"
-gem 'execjs'
-gem 'therubyracer', :platforms => :ruby
-gem 'bcrypt', '~> 3.1.7'
-gem 'puma', '~> 5.5'
-gem 'activeadmin_addons', '~> 1.9'
-gem 'turbolinks', '~> 5.2.0'
-gem 'rack', '~> 2.2.4'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
