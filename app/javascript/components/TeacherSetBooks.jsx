@@ -105,14 +105,14 @@ export default class TeacherSetBooks extends React.Component {
   BookImage = (data) => {
     if (data.cover_uri) {
       if (this.state.bookImageHeight === 1 && this.state.bookImageWidth === 1) {
-        return <Image src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
+        return <Image src={mlnImage} aspectRatio="original" size="medium" alt="Book image"/>
       } else if (this.state.bookImageHeight === 189 && this.state.bookImageWidth === 189){
-        return <Image id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default" alt="Book image"/>
+        return <Image id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="original" size="medium" alt="Book image"/>
       } else {
         return <img onLoad={this.bookImageDimensions} src={data.cover_uri} />
       }
     } else {
-      return <Image id={"ts-books-" + data.id} src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
+      return <Image id={"ts-books-" + data.id} src={mlnImage} aspectRatio="original" size="medium" alt="Book image"/>
     }
   }
 

@@ -166,7 +166,7 @@ export default function TeacherSetDetails(props) {
       return <div>
         <Form gap="grid.xs" id="ts-order-form" >
           <FormField id="ts-order-field">
-            <Select id="ts-order-allowed-quantities" showLabel={false} onChange={handleQuantity} value={quantity}>
+            <Select id="ts-order-allowed-quantities" labelText="" onChange={handleQuantity} value={quantity}>
               { allowed_quantities.map((item, i) => {
                   return (
                     <option id={"ts-quantity-" + i} key={i} value={item}>{item}</option>
@@ -252,7 +252,7 @@ export default function TeacherSetDetails(props) {
         contentPrimary={
           <>
             <Flex alignItems="baseline">
-              <Heading id="heading-secondary" level="one" size="secondary" text={teacherSetTitle() } />
+              <Heading id="heading-secondary" noSpace level="two" size="secondary" text={teacherSetTitle() } />
               <Spacer />
               <div>{teacherSetAvailability()}</div>
             </Flex>
