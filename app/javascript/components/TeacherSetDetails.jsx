@@ -228,13 +228,15 @@ export default function TeacherSetDetails(props) {
   }
 
   
-  const mobileOrderButton = () => {
-    if (!isLargerThanMobile) {
-      return <AnchorLink href="#teacher-set-details-order-page">
-         <ButtonGroup marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
-      </AnchorLink>
-    }
-  }
+  // const mobileOrderButton = () => {
+  //   if (!isLargerThanMobile) {
+  //     return <AnchorLink href="#teacher-set-details-order-page">
+  //        <ButtonGroup marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
+  //     </AnchorLink>
+  //   }
+
+  //   { mobileOrderButton() }
+  // }
 
   return (
     <DSProvider>
@@ -259,7 +261,7 @@ export default function TeacherSetDetails(props) {
               <div>{teacherSetAvailability()}</div>
             </Flex>
             <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
-            { mobileOrderButton() }
+            
             <VStack align="left" spacing="s">
               <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
                { TeacherSetDescription() }
