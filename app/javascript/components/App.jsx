@@ -20,7 +20,7 @@ export default function App(props) {
   }
 
   const loginStatus = () => {
-    axios.get('/logged_in', {withCredentials: true}).then(response => {
+    axios.get('/logged_in', {withCredentials: 'include'}).then(response => {
       if (response.data.logged_in) {
         handleLogin(response.data)
       } else {
