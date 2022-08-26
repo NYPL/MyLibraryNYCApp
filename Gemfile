@@ -66,7 +66,7 @@ gem "webpacker", "~> 5"
 gem "breakpoint", "~>2.4.0"
 gem 'execjs'
 gem 'therubyracer', :platforms => :ruby
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt'
 gem 'puma', '~> 5.5'
 gem 'activeadmin_addons', '~> 1.9'
 gem 'turbolinks', '~> 5.2.0'

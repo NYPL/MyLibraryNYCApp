@@ -85,13 +85,11 @@ module MyLibraryNYC
     config.assets.version = '1.0'
 
     config.assets.initialize_on_precompile = false
+    
+    config.session_store :cookie_store, key: '_MyLibraryNYC_session'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
 
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins '*'
-        resource '*', headers: :any, methods: [:get, :post, :options, :put, :patch, :delete, :head]
-      end
-    end
 
     config.active_job.queue_adapter = :delayed_job
   end
