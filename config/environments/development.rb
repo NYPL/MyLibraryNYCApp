@@ -38,6 +38,10 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
   config.action_mailer.perform_deliveries = false
 
+  config.session_store :cookie_store, key: '_MyLibraryNYC_session'
+  config.middleware.use ActionDispatch::Cookies
+  config.middleware.use config.session_store, config.session_options
+
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::DEBUG
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],

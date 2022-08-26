@@ -11,7 +11,7 @@
 
 
 Rails.application.config.session_store :cookie_store, {
-  :key => '_MyLibraryNYC',
+  :key => '_MyLibraryNYC_sesion',
   :domain => :all,
   :same_site => :none,
   :secure => :true,
