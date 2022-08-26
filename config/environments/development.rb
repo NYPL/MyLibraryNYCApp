@@ -35,12 +35,6 @@ MyLibraryNYC::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-
-
-  config.session_store :cookie_store, key: '_MyLibraryNYC_session'
-  config.middleware.use ActionDispatch::Cookies
-  config.middleware.use config.session_store, config.session_options
-
   config.action_mailer.default_url_options = { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
   config.action_mailer.perform_deliveries = false
 
