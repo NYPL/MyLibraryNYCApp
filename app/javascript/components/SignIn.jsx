@@ -57,7 +57,7 @@ export default class SignIn extends Component {
       return false;
     }
 
-    axios.post('/login', {
+    axios.post('/login', {withCredentials: true,
       email: this.state.email
     }).then(res => {
       if (res.data.logged_in) {
