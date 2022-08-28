@@ -2,7 +2,11 @@
 
 # Be sure to restart your server when you modify this file.
 
-Rails.application.config.session_store :cookie_store, key: '_mln_session'
+if Rails.env === 'production' 
+  Rails.application.config.session_store :cookie_store, key: '_mln_app', domain: :all
+else
+  Rails.application.config.session_store :cookie_store, key: '_mln_app'
+end
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information

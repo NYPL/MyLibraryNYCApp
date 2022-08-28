@@ -1,15 +1,14 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-  include ActionController::Cookies
+  #skip_before_action :verify_authenticity_token
+  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!, :set_user
 
-  protect_from_forgery
   before_action :redirect_if_old_domain
 
 
-  skip_before_action :verify_authenticity_token
+  #skip_before_action :verify_authenticity_token
 
-  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :set_user
 
   def login!
     LogWrapper.log('INFO', {'message' => 'login.start',
