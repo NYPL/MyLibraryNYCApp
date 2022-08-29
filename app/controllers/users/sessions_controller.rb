@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
-  # before_action :configure_sign_in_params, only: [:create]
+  #before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
   def new
@@ -11,7 +11,8 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     resource = User.find_by(email: params[:user][:email].downcase)
-    current_user = sign_in(resource_name, resource)
+    sign_in :user, resource, bypass: true
+    current_user.remember_me!
     if current_user
       render json: {
         logged_in: true,
