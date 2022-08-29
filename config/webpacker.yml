@@ -56,9 +56,9 @@ local:
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
     https: false
-    host: localhost
+    host: ENV['MLN_INFO_SITE_HOSTNAME']
     port: 3035
-    public: localhost:3035
+    public: ENV['MLN_INFO_SITE_HOSTNAME']
     hmr: false
     # Inline should be set to true if using HMR
     inline: true
@@ -72,54 +72,53 @@ local:
       'Access-Control-Allow-Origin': '*'
     watch_options:
       ignored: '**/node_modules/**'
+# development:
+#   <<: *default
+#   compile: true
 
-development:
-  <<: *default
-  compile: true
+#   # Reference: https://webpack.js.org/configuration/dev-server/
+#   dev_server:
+#     https: true
+#     host: localhost
+#     port: 3035
+#     public: localhost:3035
+#     hmr: false
+#     # Inline should be set to true if using HMR
+#     inline: true
+#     overlay: true
+#     compress: true
+#     disable_host_check: true
+#     use_local_ip: false
+#     quiet: false
+#     pretty: false
+#     headers:
+#       'Access-Control-Allow-Origin': '*'
+#     watch_options:
+#       ignored: '**/node_modules/**'
 
-  # Reference: https://webpack.js.org/configuration/dev-server/
-  dev_server:
-    https: false
-    host: localhost
-    port: 3035
-    public: localhost:3035
-    hmr: false
-    # Inline should be set to true if using HMR
-    inline: true
-    overlay: true
-    compress: true
-    disable_host_check: true
-    use_local_ip: false
-    quiet: false
-    pretty: false
-    headers:
-      'Access-Control-Allow-Origin': '*'
-    watch_options:
-      ignored: '**/node_modules/**'
+# qa:
+#   <<: *default
+#   compile: true
 
-qa:
-  <<: *default
-  compile: true
-
-  # Reference: https://webpack.js.org/configuration/dev-server/
-  dev_server:
-    https: false
-    host: localhost
-    port: 3035
-    public: localhost:3035
-    hmr: false
-    # Inline should be set to true if using HMR
-    inline: true
-    overlay: true
-    compress: true
-    disable_host_check: true
-    use_local_ip: false
-    quiet: false
-    pretty: false
-    headers:
-      'Access-Control-Allow-Origin': '*'
-    watch_options:
-      ignored: '**/node_modules/**'
+#   # Reference: https://webpack.js.org/configuration/dev-server/
+#   dev_server:
+#     https: false
+#     host: localhost
+#     port: 3035
+#     public: localhost:3035
+#     hmr: false
+#     # Inline should be set to true if using HMR
+#     inline: true
+#     overlay: true
+#     compress: true
+#     disable_host_check: true
+#     use_local_ip: false
+#     quiet: false
+#     pretty: false
+#     headers:
+#       'Access-Control-Allow-Origin': '*'
+#     watch_options:
+#       ignored: '**/node_modules/**'
 
 test:
   <<: *default
