@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
   end
 
   def is_logged_in?
-    if logged_in? && current_user
+    if user_signed_in? && current_user
       LogWrapper.log('INFO', {'message' => 'is_logged_in',
                              'method' => "is_logged_in........ "})
       render json: {

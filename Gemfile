@@ -34,7 +34,7 @@ gem 'actionview', '6.1.4.1'
 gem 'aws-sdk', '~> 3'
 gem 'client_side_validations', '17.2.0'
 gem 'cranky'
-gem 'devise', '4.7.3'
+gem 'devise', '4.8.1'
 gem 'elasticsearch', '6.8'
 gem 'email_validator'
 gem 'faker'
@@ -71,6 +71,7 @@ gem 'puma', '~> 5.5'
 gem 'activeadmin_addons', '~> 1.9'
 gem 'turbolinks', '~> 5.2.0'
 gem 'rack', '~> 2.2.4'
+gem "jsonapi-serializer"
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'

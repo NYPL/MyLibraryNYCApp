@@ -42,7 +42,7 @@ export default class SignIn extends Component {
 
   redirectToHome = (user_return_to) => {
     const { history } = this.props;
-    if(history) history.push({ pathname: "/" + user_return_to, state: { userSignedIn: true } });
+    if(history) history.push({ pathname: user_return_to, state: { userSignedIn: true } });
   }
 
   handleSubmit = event => {
@@ -57,9 +57,8 @@ export default class SignIn extends Component {
       return false;
     }
 
-    axios.post('/login', {withCredentials: true,
-      email: this.state.email
-    }).then(res => {
+    axios.post('/users/login', { user: { email: this.state.email } } 
+    ).then(res => {
       if (res.data.logged_in) {
         this.state.userSignedIn = true;
         this.props.handleLogin(true)

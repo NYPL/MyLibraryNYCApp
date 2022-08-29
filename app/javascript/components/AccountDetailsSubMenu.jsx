@@ -69,7 +69,7 @@ class AccountDetailsSubMenu extends React.Component {
   }
 
   signOut = event => {
-    axios.delete('/logout')
+    axios.delete('/users/logout')
       .then(res => {
         if (res.data.status == 200 && res.data.logged_out == true) {
           this.props.handleLogout(false)

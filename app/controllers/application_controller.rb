@@ -1,21 +1,25 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-  #skip_before_action :verify_authenticity_token
-  include ActionController::Cookies
-  helper_method :login!, :logged_in?, :current_user, :authorized_user?, :logout!, :set_user
 
-  before_action :redirect_if_old_domain
+ # before_action :authenticate_user!
+  #before_action :configure_permitted_parameters, if: :devise_controller?
+
+  # protect_from_forgery with: :null_session
+  # include ActionController::Cookies
+  # helper_method :login!, :logged_in?, :current_user_test, :authorized_user?, :logout!, :set_user
+
+  # before_action :redirect_if_old_domain
 
 
-  #skip_before_action :verify_authenticity_token
+  # #skip_before_action :verify_authenticity_token
 
 
-  def login!
-    LogWrapper.log('INFO', {'message' => 'login.start',
-                             'method' => "after_sign_in_path_for........ #{@user.id}"})
-    session[:user_id] = @user.id
-  end
+  # def login!
+  #   LogWrapper.log('INFO', {'message' => 'login.start',
+  #                            'method' => "after_sign_in_path_for........ #{@user.id}"})
+  #   session[:user_id] = @user.id
+  # end
 
   def logged_in?
     LogWrapper.log('INFO', {'message' => 'logged_in',
@@ -27,21 +31,21 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def current_user
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
-  end
+  # def current_user_test
+  #   @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  # end
 
-  def authorized_user?
-    @user == current_user
-  end
+  # def authorized_user?
+  #   @user == current_user_test
+  # end
   
-  def logout!  
-    session.clear
-  end
+  # def logout!  
+  #   session.clear
+  # end
 
-  def set_user
-    @user = User.find_by(id: session[:user_id])
-  end
+  # def set_user
+  #   @user = User.find_by(id: session[:user_id])
+  # end
 
 
   def append_info_to_payload(payload)
@@ -91,7 +95,7 @@ class ApplicationController < ActionController::Base
   # Is called by functionality that needs to make sure the user is authenticated,
   # s.a. making a teacher set order.  Takes the user to a login page.
   def require_login
-    unless logged_in?
+    unless user_signed_in?
       flash[:error] = "Please sign in to complete your order!"
       respond_to do |format|
         format.html {
@@ -129,6 +133,11 @@ class ApplicationController < ActionController::Base
   # So we must exclude the standard "is_navigational_format?" requirement.
   def storable_location?
     request.get? && !devise_controller? && !request.xhr?
+  end
+
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
   end
 
 
