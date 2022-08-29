@@ -2,7 +2,8 @@
 
 class ApplicationController < ActionController::Base
 
-  protect_from_forgery
+  protect_from_forgery except: [:create]
+  protect_from_forgery only: [:update]
  # before_action :authenticate_user!
   #before_action :configure_permitted_parameters, if: :devise_controller?
 
