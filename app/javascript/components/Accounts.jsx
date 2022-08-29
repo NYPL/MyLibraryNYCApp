@@ -36,7 +36,7 @@ export default function Accounts(props) {
 
   useEffect(() => {
     axios.get('/account', { params: { page: 1 } } ).then(res => {
-      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+      if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
         return false;
       }
@@ -123,7 +123,7 @@ export default function Accounts(props) {
     setCancelMessage("")
     axios.put('/holds/'+ access_key, { hold_change: { status: 'cancelled' } 
      }).then(res => {
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+        if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {
@@ -221,7 +221,7 @@ export default function Accounts(props) {
   const onPageChange = (page) => {
     setComputedCurrentPage(page);
     axios.get('/account', { params: { page: page } }).then(res => {
-      if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+      if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
         return false;
       }

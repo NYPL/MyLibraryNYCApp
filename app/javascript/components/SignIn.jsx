@@ -22,7 +22,7 @@ export default class SignIn extends Component {
 
   componentDidMount() {
     if(this.props.userSignedIn && this.props.location.pathname == "/signin") {
-      window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/account_details"
+      window.location = "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/account_details"
       return false;
     }
   }

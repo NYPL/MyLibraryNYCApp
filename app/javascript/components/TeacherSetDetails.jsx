@@ -77,7 +77,7 @@ export default function TeacherSetDetails(props) {
     axios.post('/holds', {
         teacher_set_id: props.match.params.id, query_params: {quantity: quantity}
      }).then(res => {
-        if (res.request.responseURL == "http://" + process.env.MLN_INFO_SITE_HOSTNAME + ":3000/signin") {
+        if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {

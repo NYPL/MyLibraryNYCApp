@@ -38,7 +38,7 @@ export default class SignUp extends Component {
        }).then(res => {
           if (res.data.status == "created") {
             this.setState({ signUpmsg: res.data.message })
-            window.location = "http://" + process.env.MLN_INFO_SITE_HOSTNAME + "/teacher_set_data";
+            window.location = "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/teacher_set_data";
             return false;
           } else {
             if (res.data.message.alt_email && res.data.message.alt_email.length > 0) {
