@@ -11,8 +11,9 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     resource = User.find_by(email: params[:user][:email].downcase)
-    current_user = sign_in :user, resource, bypass: true
-    if current_user
+
+    if resource
+      user = sign_in(resource_name, resource)
       render json: {
         logged_in: true,
         user: current_user,

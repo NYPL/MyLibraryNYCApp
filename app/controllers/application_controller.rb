@@ -2,8 +2,8 @@
 
 class ApplicationController < ActionController::Base
 
-  protect_from_forgery except: [:create]
-  protect_from_forgery only: [:update]
+  # protect_from_forgery except: [:create]
+
  # before_action :authenticate_user!
   #before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -24,9 +24,7 @@ class ApplicationController < ActionController::Base
   # end
 
   def logged_in?
-    LogWrapper.log('INFO', {'message' => 'logged_in',
-                             'method' => "after_sign_logged_in........ #{session[:user_id]}"})
-    if session[:user_id].present?
+    if user_signed_in?
       return true
     else
       return false
