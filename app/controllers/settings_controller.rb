@@ -12,16 +12,16 @@ class SettingsController < ApplicationController
   end
 
   def index
-    unless logged_in?
-      flash[:error] = "You must be logged in to access this page"
+    # unless logged_in?
+    #   flash[:error] = "You must be logged in to access this page"
 
-      # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
-      # session[:redirect_after_login] = "/users/edit"
-      store_location_for(:user, "/users/edit")
+    #   # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
+    #   # session[:redirect_after_login] = "/users/edit"
+    #   store_location_for(:user, "/users/edit")
 
-      redirect_to new_user_session_path
-      return
-    end
+    #   render json: { accountdetails: {}, ordersNotPresentMsg: "", errorMsg: "You must be logged in to access this page" }
+    #   return
+    # end
 
     unless params[:settings].nil?
       current_user.update({
