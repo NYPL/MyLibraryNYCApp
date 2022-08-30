@@ -37,6 +37,7 @@ export default function SearchTeacherSets(props) {
   }, []);
 
   const getTeacherSets = (params) => {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/teacher_sets', {params: params}).then(res => {
       setTeacherSets(res.data.teacher_sets)
       setFacets(res.data.facets)
@@ -138,6 +139,7 @@ export default function SearchTeacherSets(props) {
 
   const onPageChange = (page) => {
     setComputedCurrentPage(page);
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/teacher_sets', {
         params: Object.assign({
           keyword: keyword,

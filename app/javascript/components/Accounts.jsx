@@ -35,6 +35,9 @@ export default function Accounts(props) {
 
 
   useEffect(() => {
+
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+
     axios.get('/account', { params: { page: 1 } } ).then(res => {
       if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
@@ -64,6 +67,7 @@ export default function Accounts(props) {
 
   const handleSubmit = () => {
     event.preventDefault();
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.put('/registrations/'+ current_user.id, {
         user: { alt_email: alt_email, school_id: school_id, current_password: password }
      }).then(res => {
@@ -121,6 +125,7 @@ export default function Accounts(props) {
 
   const cancelOrder = (value, access_key, cancel_button_index) => {
     setCancelMessage("")
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.put('/holds/'+ access_key, { hold_change: { status: 'cancelled' } 
      }).then(res => {
         if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
@@ -220,6 +225,7 @@ export default function Accounts(props) {
 
   const onPageChange = (page) => {
     setComputedCurrentPage(page);
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/account', { params: { page: page } }).then(res => {
       if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;

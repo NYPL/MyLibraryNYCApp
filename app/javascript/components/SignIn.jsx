@@ -57,7 +57,8 @@ export default class SignIn extends Component {
       return false;
     }
 
-    axios.post('/users/login', { user: { email: this.state.email }, headers: {"Content-Type": "application/json", 'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute("content") } } 
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+    axios.post('/users/login', { user: { email: this.state.email } } 
     ).then(res => {
       if (res.data.logged_in) {
         this.state.userSignedIn = true;

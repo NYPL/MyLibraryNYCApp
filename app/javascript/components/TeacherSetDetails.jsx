@@ -48,6 +48,7 @@ export default function TeacherSetDetails(props) {
   const gridColumns = isLargerThanSmall ? 5 : 2;
 
   useEffect(() => {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/teacher_sets/'+ props.match.params.id)
       .then(res => {
         setAllowedQuantities(res.data.allowed_quantities)
@@ -73,7 +74,7 @@ export default function TeacherSetDetails(props) {
   
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.post('/holds', {
         teacher_set_id: props.match.params.id, query_params: {quantity: quantity}
      }).then(res => {
