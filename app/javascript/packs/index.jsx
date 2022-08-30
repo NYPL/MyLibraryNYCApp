@@ -8,8 +8,9 @@ import Header from '../components/Header';
 
 // This is how react_on_rails can see the Header in the browser.
 ReactOnRails.register({
-  Header,
+  Header, App
 });
+
 
 
 document.addEventListener("DOMContentLoaded", () => {

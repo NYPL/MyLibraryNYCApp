@@ -2,31 +2,16 @@
 
 class ApplicationController < ActionController::Base
 
-  before_action :set_csrf_cookie
-  include ActionController::Cookies
-  include ActionController::RequestForgeryProtection
+  # before_action :set_csrf_cookie
+  # include ActionController::Cookies
+  # include ActionController::RequestForgeryProtection
 
   protect_from_forgery except: [:create]
-  protect_from_forgery only: [:update, :get, :post, :delete, :put]
+  protect_from_forgery only: [:update]
 
  # before_action :authenticate_user!
   #before_action :configure_permitted_parameters, if: :devise_controller?
 
-  # protect_from_forgery with: :null_session
-  # include ActionController::Cookies
-  # helper_method :login!, :logged_in?, :current_user_test, :authorized_user?, :logout!, :set_user
-
-  # before_action :redirect_if_old_domain
-
-
-  # skip_before_action :verify_authenticity_token
-
-
-  # def login!
-  #   LogWrapper.log('INFO', {'message' => 'login.start',
-  #                            'method' => "after_sign_in_path_for........ #{@user.id}"})
-  #   session[:user_id] = @user.id
-  # end
 
   def logged_in?
     if user_signed_in?
@@ -36,21 +21,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # def current_user_test
-  #   @current_user ||= User.find(session[:user_id]) if session[:user_id]
-  # end
 
-  # def authorized_user?
-  #   @user == current_user_test
-  # end
-  
-  # def logout!  
-  #   session.clear
-  # end
-
-  # def set_user
-  #   @user = User.find_by(id: session[:user_id])
-  # end
 
 
   def append_info_to_payload(payload)

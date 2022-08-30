@@ -4,7 +4,8 @@
 		<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" />
     <title>MyLibraryNYC</title>
     <%= content_tag :div, id: "user_data", data: user_signed_in? do %> <% end %>
-    <%= csrf_meta_tags %>
+    <%#= csrf_meta_tags %>
+    <%= react_component("App", { csrf_token: form_authenticity_token }) %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag 'application' %>
     <%= javascript_pack_tag "index", 'data-turbolinks-track': 'reload' %>

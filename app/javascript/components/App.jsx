@@ -20,7 +20,7 @@ export default function App(props) {
   }
 
   const loginStatus = () => {
-    axios.get('/logged_in', {headers: {"Content-Type": "application/json", 'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute("content") }}).then(response => {
+    axios.get('/logged_in').then(response => {
       if (response.data.logged_in) {
         handleLogin(response.data)
       } else {
