@@ -2,7 +2,12 @@
 
 class ApplicationController < ActionController::Base
 
-  # protect_from_forgery except: [:create]
+  before_action :set_csrf_cookie
+  include ActionController::Cookies
+  include ActionController::RequestForgeryProtection
+
+  protect_from_forgery except: [:create]
+  protect_from_forgery only: [:update, :get, :post, :delete, :put]
 
  # before_action :authenticate_user!
   #before_action :configure_permitted_parameters, if: :devise_controller?
@@ -185,5 +190,14 @@ class ApplicationController < ActionController::Base
 
     # :user is the scope we are authenticating
     store_location_for(:user, originating_location)
+  end
+
+  private 
+              
+  def set_csrf_cookie
+     cookies["CSRF-TOKEN"] = {
+          value: form_authenticity_token,
+          domain: :all 
+      }
   end
 end
