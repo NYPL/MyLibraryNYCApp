@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   def logged_in?
     LogWrapper.log('INFO', {'message' => 'logged_in',
                              'method' => "after_sign_logged_in........ #{session[:user_id]}"})
-    if session[:user_id].present?
+    if user_signed_in?
       return true
     else
       return false
