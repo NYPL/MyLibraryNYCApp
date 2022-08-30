@@ -2,16 +2,7 @@
 
 class ApplicationController < ActionController::Base
 
-  # before_action :set_csrf_cookie
-  # include ActionController::Cookies
-  # include ActionController::RequestForgeryProtection
-
-  protect_from_forgery except: [:create]
-  protect_from_forgery only: [:update]
-
- # before_action :authenticate_user!
-  #before_action :configure_permitted_parameters, if: :devise_controller?
-
+  protect_from_forgery
 
   def logged_in?
     if user_signed_in?
@@ -20,10 +11,7 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
-
-
-
-
+  
   def append_info_to_payload(payload)
     super
     if ActiveRecord::Base.connected? && payload[:status].present?

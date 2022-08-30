@@ -16,7 +16,7 @@ function CalendarOfEvents(props) {
   }, []);
 
   const getCalendarFileName = () => {
-    axios.get('/home/get_mln_file_name')
+    axios.get('/home/get_mln_file_name', {headers: {"Content-Type": "application/json", 'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute("content") }})
       .then(res => {
         setCalendarFileName(res.data.mln_calendar_file_name);
       })
