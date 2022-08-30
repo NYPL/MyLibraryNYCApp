@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   # before_action :redirect_if_old_domain
 
 
-  # #skip_before_action :verify_authenticity_token
+  # skip_before_action :verify_authenticity_token
 
 
   # def login!
