@@ -3,15 +3,14 @@
 class UsersController < ApplicationController
 
   def settings
-    if logged_in?
-      redirect_to "/users/edit"
+    if user_signed_in? && current_user
+      redirect_to "/account_details"
     else
-      flash[:error] = "You must be logged in to access this page"
       # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
       # session[:redirect_after_login] = "/users/edit"
-      store_location_for(:user, "/users/edit")
+      store_location_for(:user, "/signin")
 
-      redirect_to new_user_session_path
+      render json: { accountdetails: {}, ordersNotPresentMsg: "",  errorMsg: "You must be logged in to access this page"}
     end
   end
 

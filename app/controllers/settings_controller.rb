@@ -12,14 +12,13 @@ class SettingsController < ApplicationController
   end
 
   def index
-    unless logged_in?
+    unless user_signed_in? && current_user
       flash[:error] = "You must be logged in to access this page"
 
       # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
       # session[:redirect_after_login] = "/users/edit"
-      store_location_for(:user, "/users/edit")
-
-      redirect_to new_user_session_path
+      store_location_for(:user, "/signin")
+      redirect_to "/signin"
       return
     end
 
@@ -57,7 +56,7 @@ class SettingsController < ApplicationController
 
 
   def acccount_details
-    unless logged_in?
+    unless (user_signed_in? && current_user)
       redirect_to "/signin"
     end
   end
