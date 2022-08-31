@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink} from "react-router-dom";
 import { titleCase } from "title-case";
-//import { AnchorLink } from 'react-anchor-link-smooth-scroll'
+import AnchorLink from "react-anchor-link-smooth-scroll"
 
 import axios from 'axios';
 import {
@@ -18,7 +18,7 @@ import {
   CardContent,
   Heading,
   Image, Flex, Spacer, 
-  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon, Breadcrumbs, Hero, Notification, useNYPLBreakpoints
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon, Breadcrumbs, Hero, Notification, useNYPLBreakpoints, Accordion
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -44,8 +44,6 @@ export default function TeacherSetDetails(props) {
   const [bookImageWidth, setbookImageWidth] = useState("")
 
   const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
-
-  const gridColumns = isLargerThanSmall ? 5 : 2;
 
   useEffect(() => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -78,11 +76,10 @@ export default function TeacherSetDetails(props) {
     axios.post('/holds', {
         teacher_set_id: props.match.params.id, query_params: {quantity: quantity}
      }).then(res => {
-        if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+        if (res.request.responseURL.includes("/signin")) {
           window.location = res.request.responseURL;
           return false;
         } else {
-
           if (res.data.status === 'created') {
             props.handleTeacherSetOrderedData(res.data.hold, teacher_set)
             props.history.push("/ordered_holds/"+ res.data.hold["access_key"])
@@ -157,11 +154,19 @@ export default function TeacherSetDetails(props) {
     }
   }
 
+  const teacherSetUnAvailableMsg = () => {
+    return <Text width="m" size="default"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
+  }
+
+  const UnableToOrderAdditionalTeacherSetsMsg = () => {
+    return <Text width="m" size="default"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link href='/account_details' id="ts-page-account-details-link" type="action" target='_blank'>requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
+  }
+
   const OrderTeacherSets = () => {
     if (teacher_set && teacher_set.available_copies <= 0 ) {
-      return <Text width="m" size="default"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
+      return teacherSetUnAvailableMsg()
     } else if(allowed_quantities.length <= 0) {
-      return <Text width="m" size="default"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link href='/account_details' id="ts-page-account-details-link" type="action" target='_blank'>requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></i></Text>
+      return UnableToOrderAdditionalTeacherSetsMsg()
     }
     else {
       return <div>
@@ -182,6 +187,7 @@ export default function TeacherSetDetails(props) {
       </div>
     }
   }
+
 
   const truncateTitle = ( str, n, useWordBoundary ) => {
     if (str.length <= n) { return str; }
@@ -228,15 +234,61 @@ export default function TeacherSetDetails(props) {
     return teacher_set.title? teacher_set.title : ""
   }
 
+
+  const orderTeacherSetsInfo = () => {
+    if (isLargerThanMobile || (!isLargerThanMobile && ((teacher_set && teacher_set.available_copies > 0) && allowed_quantities.length > 0) )) {
+      return <VStack align="left" spacing="s">
+        <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
+          <Heading id="ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Order Set!" />
+          <Heading id="ts-available-copies" textAlign="center" size="callout" level="four" text={AvailableCopies()} />
+          {OrderTeacherSets()}
+        </Box>
+        <HaveQuestions />
+      </VStack>
+    }
+  }
+            
   
-  // const mobileOrderButton = () => {
-  //   if (!isLargerThanMobile) {
-  //     return <AnchorLink href="#teacher-set-details-order-page">
-  //        <ButtonGroup marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
-  //     </AnchorLink>
-  //   }
-   
-  // }
+  const mobileTeacherSetOrderButton = () => {
+    if (!isLargerThanMobile) {
+      if (teacher_set && teacher_set.available_copies <= 0 ) {
+        return <Box marginBottom="l" id="mobile-teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
+          <Heading id="mobile-ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Set Unavailable" />
+          {teacherSetUnAvailableMsg()}
+        </Box>
+
+      } else if(allowed_quantities.length <= 0) {
+          return <Box marginBottom="l" id="mobile-teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
+            <Heading id="mobile-ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Set Unavailable" />
+            {UnableToOrderAdditionalTeacherSetsMsg()}
+          </Box>
+      } else {
+          return <AnchorLink href="#teacher-set-details-order-page">
+             <ButtonGroup marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
+            </AnchorLink>
+      }
+    }
+  }
+
+  const displayTeacherSetBooks = () => {
+    if (isLargerThanMobile) {
+      return <><div id="ts-page-books-count"> { BooksCount() } </div>
+        <SimpleGrid id="ts-page-books-panel" columns={5} gap="xxs"> { TeacherSetBooks() } </SimpleGrid>
+      </>
+    } else {
+      return <Accordion
+        accordionData={[
+          {
+            accordionType: 'default',
+            label: <div id="mobile-ts-page-books-count"> { BooksCount() } </div>,
+            panel: TeacherSetBooks()
+          }
+        ]}
+        id="mobile-ts-page-books-panel"
+        panelMaxHeight="600px"
+      />
+    }
+  }
 
   return (
     <DSProvider>
@@ -261,12 +313,11 @@ export default function TeacherSetDetails(props) {
               <div>{teacherSetAvailability()}</div>
             </Flex>
             <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
-            
+            {mobileTeacherSetOrderButton()}
             <VStack align="left" spacing="s">
               <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
                { TeacherSetDescription() }
-              <div id="ts-page-books-count"> { BooksCount() } </div>
-              <SimpleGrid id="ts-page-books-panel" columns={gridColumns} gap="xxs"> { TeacherSetBooks() } </SimpleGrid>
+               { displayTeacherSetBooks() }
             </VStack>
 
             <List id="ts-list-details" type="dl" title="Details" marginTop="s">
@@ -319,16 +370,7 @@ export default function TeacherSetDetails(props) {
 
           </>
         }
-        contentSidebar={
-          <VStack align="left" spacing="s">
-            <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
-              <Heading id="ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Order Set!" />
-              <Heading id="ts-available-copies" textAlign="center" size="callout" level="four" text={AvailableCopies()} />
-              {OrderTeacherSets()}
-            </Box>
-            <div><HaveQuestions /></div>
-          </VStack>
-        }
+        contentSidebar={ orderTeacherSetsInfo() }
         sidebar="right"
       />
     </DSProvider>
