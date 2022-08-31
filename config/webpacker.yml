@@ -149,10 +149,9 @@ production:
       'Access-Control-Allow-Origin': '*'
     watch_options:
       ignored: '**/node_modules/**'
+  # # Extract and emit a css file
+  # extract_css: true
 
-  # Extract and emit a css file
-  extract_css: true
-
-  # Cache manifest.json for performance
-  cache_manifest: true
+  # # Cache manifest.json for performance
+  # cache_manifest: true
   
