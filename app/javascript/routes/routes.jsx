@@ -109,7 +109,13 @@ export default function Routes(props) {
                   <SignIn {...routeProps} component={SignIn} userSignedIn={userSignedIn} handleSignInMsg={handleSignInMsg} hideSignInMessage={hideSignInMessage} handleLogin={handleLogin} />
                 )}
               />
-              <Route path="/signup" component={SignUp} />
+              <Route
+                path='/signup'
+                render={routeProps => (
+                  <SignUp {...routeProps} component={SignUp} userSignedIn={userSignedIn} handleLogin={handleLogin} />
+                )}
+              />
+
               <Route path="/signout" component={SignOut} />                
               <Route
                 path='/teacher_set_data'

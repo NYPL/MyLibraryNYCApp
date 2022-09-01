@@ -13,7 +13,6 @@ import {
   Link as ReactRouterLink,
 } from "react-router-dom";
 
-
 export default function Accounts(props) {
 
   const [contact_email, setContactEmail] = useState("")
@@ -63,7 +62,6 @@ export default function Accounts(props) {
     })
 
   }, []);
-
 
   const handleSubmit = () => {
     event.preventDefault();

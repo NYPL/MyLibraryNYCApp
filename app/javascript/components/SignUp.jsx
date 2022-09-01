@@ -15,7 +15,8 @@ export default class SignUp extends Component {
     this.state = { email: "", errorEmailMsg: "", errorAltEmailMsg: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
                    password: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
                    lastNameIsValid: false, passwordIsValid: false, schoolIsValid: false, emailIsInvalid: false,
-                   altEmailIsvalid: false, messages: {}, news_letter_error: "", show_news_letter_error: false, isCheckedVal: false, signUpmsg: "", isDisabled: false, serverError: "", serverErrorIsValid: false}
+                   altEmailIsvalid: false, messages: {}, news_letter_error: "", show_news_letter_error: false, isCheckedVal: false, 
+                   signUpmsg: "", isDisabled: false, serverError: "", serverErrorIsValid: false, userSignedIn: this.props.userSignedIn}
     this.verifyNewsLetterEmailInSignUpPage = this.verifyNewsLetterEmailInSignUpPage.bind(this)
   }
 
@@ -29,6 +30,11 @@ export default class SignUp extends Component {
   }
 
 
+  redirectToTeacherSetPage = () => {
+    const { history } = this.props;
+    if(history) history.push({ pathname: "/teacher_set_data", state: { userSignedIn: true } });
+  }
+
   handleSubmit = event => {
     event.preventDefault();
     if (this.handleValidation()) {
@@ -38,7 +44,8 @@ export default class SignUp extends Component {
        }).then(res => {
           if (res.data.status == "created") {
             this.setState({ signUpmsg: res.data.message })
-            window.location = "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/teacher_set_data";
+            this.props.handleLogin(true)
+            this.redirectToTeacherSetPage()
             return false;
           } else {
             if (res.data.message.alt_email && res.data.message.alt_email.length > 0) {
@@ -499,7 +506,7 @@ export default class SignUp extends Component {
                     invalidText={password_error_msg}
                     isInvalid={password_is_invalid}
                     onChange={this.handlePassword.bind(this, 'password')}
-                    //type="password"
+                    type="password"
                     helperText={<>
                       <Text noSpace>We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.).</Text>
                       <Text>Please ensure you do not use common patterns such as consecutively repeating a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab.</Text>
