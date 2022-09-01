@@ -215,7 +215,15 @@ export default function TeacherSetDetails(props) {
   }
 
   const teacherSetAvailability = () => {
-    if (teacher_set.availability !== undefined) {
+    if (isLargerThanMobile && teacher_set.availability !== undefined) {
+      return <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacher_set.availability)}</StatusBadge>
+    } else {
+      return null
+    }
+  }
+
+  const mobileteacherSetAvailability = () => {
+    if (!isLargerThanMobile && teacher_set.availability !== undefined) {
       return <StatusBadge level={availabilityStatusBadge()}>{titleCase(teacher_set.availability)}</StatusBadge>
     } else {
       return null
@@ -252,19 +260,19 @@ export default function TeacherSetDetails(props) {
   const mobileTeacherSetOrderButton = () => {
     if (!isLargerThanMobile) {
       if (teacher_set && teacher_set.available_copies <= 0 ) {
-        return <Box marginBottom="l" id="mobile-teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
+        return <Box marginTop="l" marginBottom="l" id="mobile-teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
           <Heading id="mobile-ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Set Unavailable" />
           {teacherSetUnAvailableMsg()}
         </Box>
 
       } else if(allowed_quantities.length <= 0) {
-          return <Box marginBottom="l" id="mobile-teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
+          return <Box marginTop="l" marginBottom="l" id="mobile-teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
             <Heading id="mobile-ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Set Unavailable" />
             {UnableToOrderAdditionalTeacherSetsMsg()}
           </Box>
       } else {
           return <AnchorLink href="#teacher-set-details-order-page">
-             <ButtonGroup marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
+             <ButtonGroup marginTop="l" marginBottom="l"><Button buttonType="noBrand" size="small" id="mobile-teacher-set-order-button">Order This Set</Button></ButtonGroup>
             </AnchorLink>
       }
     }
@@ -275,7 +283,7 @@ export default function TeacherSetDetails(props) {
       return <><div id="ts-page-books-count"> { BooksCount() } </div>
         <SimpleGrid id="ts-page-books-panel" columns={5} gap="xxs"> { TeacherSetBooks() } </SimpleGrid>
       </>
-    } else {
+    } else if (books.length > 0) {
       return <Accordion
         accordionData={[
           {
@@ -310,9 +318,11 @@ export default function TeacherSetDetails(props) {
             <Flex alignItems="baseline">
               <Heading id="heading-secondary" noSpace level="two" size="secondary" text={teacherSetTitle() } />
               <Spacer />
-              <div>{teacherSetAvailability()}</div>
+              {teacherSetAvailability()}
             </Flex>
             <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
+            <Flex alignItems="baseline"><Spacer />{mobileteacherSetAvailability()}</Flex>
+
             {mobileTeacherSetOrderButton()}
             <VStack align="left" spacing="s">
               <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
