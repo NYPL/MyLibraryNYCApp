@@ -273,8 +273,7 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
-
-    case response.code
+    case 201# for testing
     when 201
       LogWrapper.log('DEBUG', {
           'message' => "The account with e-mail #{email} was
