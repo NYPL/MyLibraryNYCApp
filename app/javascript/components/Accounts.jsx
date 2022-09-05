@@ -66,11 +66,9 @@ export default function Accounts(props) {
   const handleSubmit = () => {
     event.preventDefault();
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-    axios.put('/registrations/'+ current_user.id, {
+    axios.put('/users/', {
         user: { alt_email: alt_email, school_id: school_id, current_password: password }
      }).then(res => {
-        console.log(res.data.status)
-        console.log("pppp")
         if (res.data.status === "updated") {
           setMessage(res.data.message)
         }

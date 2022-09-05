@@ -39,7 +39,7 @@ export default class SignUp extends Component {
     event.preventDefault();
     if (this.handleValidation()) {
       axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-      axios.post('/registrations', {
+      axios.post('/users', {
           user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
                   last_name: this.state.fields["last_name"], password: this.state.fields["password"], school_id: this.state.fields["school_id"], news_letter_email: this.state.fields["alt_email"] || this.state.fields["email"] }
        }).then(res => {
