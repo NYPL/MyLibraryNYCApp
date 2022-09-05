@@ -1,8 +1,8 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-  #protect_from_forgery with: :exception
-  protect_from_forgery only: [:update, :get, :put, :delete, :post]
+
+  protect_from_forgery only: [:update, :get, :put, :delete, :post, :patch]
 
   def logged_in?
     if user_signed_in?
@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
       payload
     end
   end
+
 
   ##
   # Decides where to take the user who has just successfully logged in.
