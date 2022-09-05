@@ -1,7 +1,8 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-  protect_from_forgery only: [:update, :get, :put, :delete]
+  #protect_from_forgery with: :exception
+  protect_from_forgery only: [:update, :get, :put, :delete, :post]
 
   def logged_in?
     if user_signed_in?
