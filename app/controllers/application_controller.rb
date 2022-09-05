@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
 
-  protect_from_forgery only: [:update, :get, :put, :delete, :post, :patch]
+  protect_from_forgery only: [:update, :get, :put, :delete]
 
   def logged_in?
     if user_signed_in?
