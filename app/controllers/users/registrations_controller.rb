@@ -17,7 +17,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       if resource.valid?
         if patron_service
           resource.save!
-          sign_up :user, resource, bypass: true
+          sign_up(resource_name, resource)
           if params.require(:registration)["user"]['news_letter_email'].present?
             # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
             email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
