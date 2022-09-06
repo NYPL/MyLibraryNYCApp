@@ -76,7 +76,7 @@ export default class ParticipatingSchools extends Component {
       } 
     })
     if (schoolsCount === 0) {
-      return <Text marginTop="m" isItalic size="default" color="var(--nypl-colors-ui-error-primary)">{this.state.schoolNotFound}</Text>
+      return <Text marginTop="m" isItalic size="default" color="var(--nypl-colors-ui-error-primary)">There are no results that match your search criteria.</Text>
     } else {
       return schoolsData
     }
