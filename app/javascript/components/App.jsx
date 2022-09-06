@@ -5,7 +5,7 @@ import Routes from "../routes/routes";
 
 export default function App(props) {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(props.userSignedIn || false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     loginStatus();
