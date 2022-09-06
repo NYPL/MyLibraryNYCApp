@@ -70,21 +70,12 @@ export default function SearchTeacherSets(props) {
   }
 
   const resultsFoundMessage = () => {
-    let resultStr = "";
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
-      resultStr = "No results found"
+      return <Text isItalic size="caption">No results found</Text>
     } else if (tsTotalCount === 1) {
-      resultStr = tsTotalCount + ' result found'
+      return <Text noSpace isBold size="caption">{tsTotalCount + ' result found'}</Text>
     } else if (tsTotalCount >= 1) {
-      resultStr = tsTotalCount + ' results found'
-    }
-
-    if (resultStr && isLargerThanMedium) {
-      return <Text isItalic size="caption">{resultStr}</Text>
-    } else if (resultStr && !isLargerThanMedium) {
-      return <Text noSpace isBold size="caption">{resultStr}</Text>;
-    } else {
-      null
+      return <Text noSpace isBold size="caption">{tsTotalCount + ' results found'}</Text>
     }
   }
 
