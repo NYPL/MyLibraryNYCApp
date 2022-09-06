@@ -30,7 +30,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
   ##
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
@@ -55,7 +54,6 @@ class ApplicationController < ActionController::Base
     redirect_url
   end
 
-
   # Is called by functionality that needs to make sure the user is authenticated,
   # s.a. making a teacher set order.  Takes the user to a login page.
   def require_login
@@ -77,7 +75,6 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-
 
   def redirect_to_angular
     if request.format != "json"
