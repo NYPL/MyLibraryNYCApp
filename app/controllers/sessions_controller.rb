@@ -51,7 +51,6 @@ class SessionsController < ApplicationController
     session["warden.user.user.session"]["last_request_at"] + max_session_duration
   end
 
-
   def timeout_warning_timestamp
     timeout_timestamp - timeout_warning_duration
   end
