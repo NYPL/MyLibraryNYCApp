@@ -11,14 +11,12 @@ ReactOnRails.register({
   Header, App
 });
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const node = document.getElementById('user_data')
   const data = JSON.parse(node.getAttribute('data'))
   render(
     <BrowserRouter>
-      <App />
+      <App userSignedIn={node}/>
     </BrowserRouter>, 
     document.body.appendChild(document.createElement("div"))
   );

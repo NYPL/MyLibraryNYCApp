@@ -121,7 +121,7 @@ export default function MobileHeader(props) {
                   <HorizontalRule align="right" className="mobileHorizontalRule"/>
                 </li>
                 
-                <li id="mln-navbar-social-media-link" className="mobileSubmenu nav__menu-item socialMediaIcon" >
+                <li id="mln-navbar-social-media-link" className="mobileSubmenu socialMediaIcon" >
                   <Link type="action" target="_blank" href="https://twitter.com/mylibrarynyc/">
                     <Icon align="right" color="ui.white" decorative iconRotation="rotate0" id="icon-id" name="socialTwitter" size="medium" type="default" />
                   </Link>
