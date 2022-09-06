@@ -46,13 +46,13 @@ export default class Navbar extends React.Component {
           
           <List id="mln-navbar-list" type="ul" inline noStyling>
             <HStack spacing="m">
-              <li id="mln-navbar-ts-link"><ReactRouterLink to="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</ReactRouterLink></li>
+              <li id="mln-navbar-ts-link"><Link href="/teacher_set_data" onClick={this.hideSignInMsg} className="nav-link-colors">Search Teacher Sets</Link></li>
 
               <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" onClick={this.hideSignInMsg} className="nav-link-colors">Contact</ReactRouterLink></li>
 
               <li id="mln-navbar-faq-link"><ReactRouterLink to="/faq" onClick={this.hideSignInMsg} className="nav-link-colors">FAQ</ReactRouterLink></li>
 
-              <li id="mln-navbar-ps-link"><ReactRouterLink to="/participating-schools" onClick={this.hideSignInMsg} className="nav-link-colors">Participating Schools</ReactRouterLink></li>
+              <li id="mln-navbar-ps-link"><Link href="/participating-schools" onClick={this.hideSignInMsg} className="nav-link-colors">Participating Schools</Link></li>
 
               <li id="mln-navbar-ad-link" className="nav__menu-item">
                 <AccountDetailsSubMenu userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} handleLogout={this.props.handleLogout}/>

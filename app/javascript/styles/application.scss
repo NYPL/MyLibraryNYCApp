@@ -202,7 +202,8 @@ $nypl-breakpoint-xxlarge: 1600px;
 }
 
 .nav-link-colors {
-  color: var(--nypl-colors-ui-black);
+  color: var(--nypl-colors-ui-black) !important;
+  text-decoration: none !important;
   font-weight: 500;
   font-size: 15px;
   line-height: 125%;
