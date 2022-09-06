@@ -131,14 +131,14 @@ export default function TeacherSetDetails(props) {
   const BookImage = (data) => {
     if (data.cover_uri) {
       if (bookImageHeight === 1 && bookImageWidth === 1) {
-        return <Image src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
+        return <Image src={mlnImage} aspectRatio="square" size="default" alt="Book image" className="bookImageTop"/>
       } else if (bookImageHeight === 189 && bookImageWidth === 189){
-        return <Image id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="square" size="default" alt="Book image"/>
+        return <Image id={"ts-books-" + data.id} src={data.cover_uri} className="bookImageTop" aspectRatio="square" size="default" alt="Book image"/>
       } else {
         return <img onLoad={bookImageDimensions} src={data.cover_uri} />
       }
     } else {
-      return <Image id={"ts-books-" + data.id} src={mlnImage} aspectRatio="square" size="default" alt="Book image"/>
+      return <Image id={"ts-books-" + data.id} src={mlnImage} className="bookImageTop" aspectRatio="square" size="default" alt="Book image"/>
     }
   }
 

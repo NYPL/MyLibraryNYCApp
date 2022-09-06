@@ -589,6 +589,10 @@ $nypl-breakpoint-xxlarge: 1600px;
   .teacher-set-skeleton-loader {
     width: 450px !important;
   }
+
+  .bookImageTop {
+    margin-top: var(--nypl-space-xs);
+  }
 }
 
 @media screen and (max-width: 285px) {

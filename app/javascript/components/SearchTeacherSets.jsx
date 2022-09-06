@@ -192,7 +192,7 @@ export default function SearchTeacherSets(props) {
       return <Slider marginTop="s" marginBottom="l"
         id="ts-slider-range"
         isRangeSlider
-        labelText={"Grades Range  " + g_begin + " To " + grade_end}
+        labelText={"Grades " + g_begin + " To " + grade_end}
         max={12}
         min={-1}
         onChange={getGrades}
@@ -308,7 +308,7 @@ export default function SearchTeacherSets(props) {
 
   const TeacherSetFacets = () => {
     return facets.map((ts, i) => {
-      return <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id={"ts-facet-label-" + i} accordionData={ [
+      return <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id={"ts-facet-label-" + i} panelMaxHeight="400px" accordionData={ [
         {
           label: <Text isCapitalized noSpace>{ts.label}</Text>,
           panel: displayAccordionData(ts)
