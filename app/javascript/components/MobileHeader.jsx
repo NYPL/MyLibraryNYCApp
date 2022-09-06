@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
 import ReactTappable from 'react-tappable';
 import FocusTrap from 'focus-trap-react';
-import MobileNavbarSubmenu from "./MobileNavbarSubmenu";
 import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
 import Vector from '../images/Vector.png'
 import axios from 'axios';
@@ -22,10 +21,6 @@ export default function MobileHeader(props) {
 
   const [mobileMenuActive, setMobileMenuActive] = useState(false)
 
-  const showMobileMenu = event => {
-    return <MobileNavbarSubmenu />
-  }
-
   const signInAccountDetails = () => {
     if (props.details.userSignedIn) {
       return <li id="mobile-mln-navbar-account-link">
@@ -42,9 +37,8 @@ export default function MobileHeader(props) {
     }
   }
 
-
   function mobileSignOut(){
-    axios.delete('/logout')
+    axios.delete('/users/logout')
       .then(res => {
         if (res.data.status == 200 && res.data.logged_out == true) {
           props.details.handleLogout(false)

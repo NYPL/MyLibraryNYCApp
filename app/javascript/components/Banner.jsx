@@ -1,16 +1,35 @@
-import React from "react";
+import React, { Component, useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
-import Navbar from "./Navbar";
+import axios from 'axios';
 import "../styles/application.scss"
 import { Notification, Link } from '@nypl/design-system-react-components';
 
 function Banner() {
+
+  const [bannerText, setBannerText] =  useState("")
+
+  useEffect(() => {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+    axios.get('/mln_banner_message')
+      .then(res => {
+        setBannerText(res.data.bannerText)
+      })
+      .catch(function (error) {
+        console.log(error);
+    })
+  }, []);
+
+
+  const bannerMessage = () => {
+    if (bannerText !== undefined) {
+      return <Notification ariaLabel="Banner Notification" id="banner-notification" className="bannerMessage" isCentered showIcon={false} dismissible notificationType="announcement" notificationContent=<div dangerouslySetInnerHTML={{ __html: bannerText }}></div> />
+    } else {
+      return <></>
+    }
+  }
+
   return (
-    <Notification ariaLabel="Banner Notification" id="banner-notification" className="bannerMessage" isCentered showIcon={false} dismissible notificationType="announcement" notificationContent={<>
-      We are now accepting teacher set returns. Teacher set deliveries are still currently suspended. Please email 
-    <Link href="mailto:help@mylibrarynyc.org"> help@mylibrarynyc.org </Link> for all general questions and 
-    <Link href="mailto:delivery@mylibrarynyc.org"> delivery@mylibrarynyc.org </Link> for all delivery questions.</>} />
+    bannerMessage()
   );
 }
-
 export default Banner;

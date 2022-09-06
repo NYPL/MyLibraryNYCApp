@@ -11,6 +11,12 @@ class SettingsController < ApplicationController
   def signout
   end
 
+  def mln_banner_message
+    if ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.downcase == "true" && ENV['MAINTENANCE_BANNER_TEXT'].present?
+      render json: { bannerText: ENV['MAINTENANCE_BANNER_TEXT'].html_safe }
+    end
+  end
+
   def index
     unless logged_in?
       flash[:error] = "You must be logged in to access this page"
