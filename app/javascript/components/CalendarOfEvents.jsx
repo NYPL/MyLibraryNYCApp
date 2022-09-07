@@ -33,7 +33,7 @@ function CalendarOfEvents(props) {
         </Button>
 
         <Button id="menu-of-services-button" buttonType="noBrand"> 
-          <Link id="menu-of-services-link" className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/assets/2018_2019_School_Outreach_Menu_of_Services.pdf" } > Menu of Services </Link>
+          <Link id="menu-of-services-link" className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/assets/2021_2022_MyLibraryNYC_Menu_of_Services_for_Educators.pdf" } > Menu of Services </Link>
         </Button>
       </ButtonGroup>
     </div>

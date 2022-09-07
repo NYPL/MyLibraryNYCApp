@@ -66,6 +66,8 @@ const BreadcrumbsDataValue = (levelString) => {
       return 'Sign Up';
     case 'signin':
       return 'Sign In';
+    case 'home':
+      return 'Calendar Event';
     default:
       return levelString;
   }
@@ -95,6 +97,8 @@ const HeroDataValue = (levelString) => {
       return 'Account';
     case 'signin':
       return 'Account';
+    case 'home':
+      return 'Calendar Event';
     default:
       return levelString;
   }

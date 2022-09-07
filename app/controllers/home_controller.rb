@@ -64,14 +64,18 @@ class HomeController < ApplicationController
     @is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
   end
 
+  def calendar_event_error
+  end
+
+  def calendar_event
+    render json: { calendar_event: Document.calendar_of_events }
+  end
 
   # Read MylibraryNyc calendar pdf from document table and display's in home page.
   def mln_calendar
     @calendar_event = Document.calendar_of_events
     return @calendar_event if @calendar_event.nil? && params["filename"] == "error"
-    
     file = @calendar_event.present? && @calendar_event.file.present? ? @calendar_event.file : nil
-    
     if params["filename"] != "error"
       respond_to do |format|
         format.pdf { send_data(file, type: "application/pdf", disposition: :inline) }

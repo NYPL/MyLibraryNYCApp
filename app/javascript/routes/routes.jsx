@@ -21,14 +21,13 @@ import TeacherSetDetails from "../components/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks";
+import CalendarEventError from "../components/CalendarEventError";
 import { render } from "react-dom";
 import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 import AccountDetailsSubMenu from "../components/AccountDetailsSubMenu";
 
 
-
 export default function Routes(props) {
-
   const [hold, setHold] = useState("")
   const [teacher_set, setTeacherSet] = useState("")
   const {userSignedIn, setUserSignedIn} = props
@@ -140,6 +139,7 @@ export default function Routes(props) {
 
               <Route path="/holds/:id/cancel" component={CancelTeacherSetOrder} />
               <Route path="/book_details/:id" component={TeacherSetBooks} />
+              <Route path="/home/calendar_event/error" component={CalendarEventError} />
             </Switch>
             <footer className="footer"> <Footer /></footer>
           </div>

@@ -142,6 +142,8 @@ MyLibraryNYC::Application.routes.draw do
 
   get 'api/unauthorized' => 'api/v01/general#unauthorized'
   get 'home/calendar_event/:filename', to: 'home#mln_calendar'
+  get 'home/calendar_event/error', to: 'home#calendar_event_error'
+  get 'home/calendar_event', to: 'home#calendar_event'
 
 
   # See how all your routes lay out with "rake routes"
