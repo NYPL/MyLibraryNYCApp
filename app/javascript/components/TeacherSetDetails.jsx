@@ -292,7 +292,8 @@ export default function TeacherSetDetails(props) {
           }
         ]}
         id="mobile-ts-page-books-panel"
-        panelMaxHeight="600px"
+        panelMaxHeight="500px"
+        isDefaultOpen
       />
     }
   }

@@ -73,9 +73,9 @@ export default function SearchTeacherSets(props) {
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
       return <Text isItalic size="caption">No results found</Text>
     } else if (tsTotalCount === 1) {
-      return <Text noSpace isBold size="caption">{tsTotalCount + ' result found'}</Text>
+      return <Text isBold size="caption">{tsTotalCount + ' result found'}</Text>
     } else if (tsTotalCount >= 1) {
-      return <Text noSpace isBold size="caption">{tsTotalCount + ' results found'}</Text>
+      return <Text isBold size="caption">{tsTotalCount + ' results found'}</Text>
     }
   }
 
