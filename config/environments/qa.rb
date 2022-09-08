@@ -9,9 +9,9 @@ MyLibraryNYC::Application.configure do
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
   
-  config.session_store :cookie_store, key: '_interslice_session'
-  config.middleware.use ActionDispatch::Cookies
-  config.middleware.use config.session_store, config.session_options
+  # config.session_store :cookie_store, key: '_interslice_session'
+  # config.middleware.use ActionDispatch::Cookies
+  # config.middleware.use config.session_store, config.session_options
 
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
                   ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL'],

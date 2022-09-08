@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
-  #layout 'empty', :only => [ :extend_session_iframe ]
+  layout 'empty', :only => [ :extend_session_iframe ]
 
   def index
   end
