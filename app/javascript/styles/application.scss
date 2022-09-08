@@ -1047,20 +1047,26 @@ $submenu-width: 245px;
 
 .libraryCards {
   @include min-screen($nypl-breakpoint-medium) {
-    width: 532px !important;
+   tbody tr th {
+      width: 255px
+    }
   }
 }
 
 .generalInfo {
   @include min-screen($nypl-breakpoint-medium) {
-    width: 620px !important;
+    tbody tr th {
+      width: 255px
+    }
   }
 
 }
 
 .contactsInfo {
   @include min-screen($nypl-breakpoint-medium) {
-    width: 825px !important;
+    tbody tr th {
+      width: 255px
+    }
   }
 }
 
