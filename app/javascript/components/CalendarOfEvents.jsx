@@ -9,16 +9,18 @@ import { BrowserRouter as Router, Link as ReactRouterLink } from "react-router-d
 
 function CalendarOfEvents(props) {
 
-  const [calendarFileName, setCalendarFileName] = useState([])
+  const [calendarFileName, setCalendarFileName] = useState("")
+  const [menuOfServicesFileName, setMenuOfServicesFileName] = useState("")
 
   useEffect(() => {
-    getCalendarFileName();
+    getCalendarFileNames();
   }, []);
 
-  const getCalendarFileName = () => {
-    axios.get('/home/get_mln_file_name', {headers: {"Content-Type": "application/json", 'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute("content") }})
+  const getCalendarFileNames = () => {
+    axios.get('/home/get_mln_file_names', {headers: {"Content-Type": "application/json", 'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute("content") }})
       .then(res => {
         setCalendarFileName(res.data.mln_calendar_file_name);
+        setMenuOfServicesFileName(res.data.menu_of_services_file_name)
       })
       .catch(function (error) {
        console.log(error);
@@ -33,7 +35,7 @@ function CalendarOfEvents(props) {
         </Button>
 
         <Button id="menu-of-services-button" buttonType="noBrand"> 
-          <Link id="menu-of-services-link" className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/assets/2021_2022_MyLibraryNYC_Menu_of_Services_for_Educators.pdf" } > Menu of Services </Link>
+          <Link id="menu-of-services-link" className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/menu_of_services/" + menuOfServicesFileName } > Menu of Services </Link>
         </Button>
       </ButtonGroup>
     </div>

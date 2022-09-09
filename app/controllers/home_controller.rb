@@ -1,16 +1,18 @@
 # frozen_string_literal: true
+require 'open-uri'
 
 class HomeController < ApplicationController
   layout 'empty', :only => [ :extend_session_iframe ]
 
   def index
+    
   end
 
 
-  def get_mln_file_name
+  def get_mln_file_names
     calendar_event = Document.calendar_of_events
     mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
-    render json: { mln_calendar_file_name: mln_calendar_file_name }
+    render json: { mln_calendar_file_name: mln_calendar_file_name, menu_of_services_file_name: "menu_of_services.pdf" }
   end
 
   def swagger_docs
@@ -81,6 +83,20 @@ class HomeController < ApplicationController
         format.pdf { send_data(file, type: "application/pdf", disposition: :inline) }
       end
     elsif @calendar_event.present? && params["filename"] == "error"
+      redirect_to root_url
+    end
+  end
+
+  def menu_of_services
+    if params["filename"] == "menu_of_services"
+      respond_to do |format|
+        file = URI.open(File.join(Rails.root, 'app/javascript/pdf/2021_2022_MyLibraryNYC_Menu_of_Services_for_Educators.pdf'))
+        menu_of_services_pdf = file.read
+        format.pdf { 
+          send_data(menu_of_services_pdf, type: "application/pdf", disposition: :inline)
+        }
+      end
+    else
       redirect_to root_url
     end
   end

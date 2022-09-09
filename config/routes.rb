@@ -66,7 +66,7 @@ MyLibraryNYC::Application.routes.draw do
   match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post, :put]
   match '/news_letter/index' => 'news_letter#index', via: [:get, :post]
 
-  match '/home/get_mln_file_name' => 'home#get_mln_file_name', via: [:get]
+  match '/home/get_mln_file_names' => 'home#get_mln_file_names', via: [:get]
   match '/secondary_menu' => 'home#secondary_menu', via: [:get]
 
   match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page', via: [:get, :post]
@@ -144,7 +144,7 @@ MyLibraryNYC::Application.routes.draw do
   get 'home/calendar_event/:filename', to: 'home#mln_calendar'
   get 'home/calendar_event/error', to: 'home#calendar_event_error'
   get 'home/calendar_event', to: 'home#calendar_event'
-
+  get '/menu_of_services/:filename', to: 'home#menu_of_services'
 
   # See how all your routes lay out with "rake routes"
 
