@@ -64,10 +64,10 @@ export default class TeacherSetOrder extends React.Component {
 
   CancelButton() {
     return <div style={{ display: this.showCancelButton() }}>
-      <Button id="order-cancel-button" className="cancel-button" buttonType="secondary" >
+      <Button id="order-cancel-button" className="cancel-button" buttonType="secondary" onClick={ () => window.scrollTo({ top: 10 })}>
         <Link className="cancelOrderButton" href={"/holds/" + this.props.match.params.access_key + "/cancel"} > Cancel My Order </Link>
       </Button>
-      </div>
+    </div>
   }
 
   render() {
