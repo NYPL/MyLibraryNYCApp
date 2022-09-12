@@ -170,7 +170,7 @@ export default function TeacherSetDetails(props) {
     else {
       return <div>
         <Form gap="grid.xs" id="ts-order-form" >
-          <FormField id="ts-order-field">
+          <FormField id="ts-order-field" onClick={ () => window.scrollTo({ top: 10 }) }>
             <Select id="ts-order-allowed-quantities" labelText="" onChange={handleQuantity} value={quantity}>
               { allowed_quantities.map((item, i) => {
                   return (
