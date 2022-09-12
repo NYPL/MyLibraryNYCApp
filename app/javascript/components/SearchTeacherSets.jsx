@@ -115,7 +115,8 @@ export default function SearchTeacherSets(props) {
       return <div id={"teacher-set-results-" + i}>
           <Card id={"ts-details-" + i} marginTop="m" layout="row" aspectratio="square" size="xxsmall">
             <CardHeading level="three" id={"ts-order-details-" + i}>
-              <ReactRouterLink to={"/teacher_set_details/" + ts.id}>{ts.title}</ReactRouterLink>
+              <ReactRouterLink to={"/teacher_set_details/" + ts.id} onClick={ () => window.scrollTo({ top: 10, behavior: "smooth", }) }>{ts.title}</ReactRouterLink>
+                        
             </CardHeading>
             <CardContent id={"ts-suitabilities-"+ i}>{ts.suitabilities_string}</CardContent>
             <CardContent id={"ts-availability-"+ i}>
@@ -342,7 +343,7 @@ export default function SearchTeacherSets(props) {
                       <Button id="teacher-sets-scroll-to-top" buttonType="secondary" className="backToTop"
                         onClick={() =>
                           window.scrollTo({
-                            top: 100,
+                            top: 10,
                             behavior: "smooth",
                           })
                         }
