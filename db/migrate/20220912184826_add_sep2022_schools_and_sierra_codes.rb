@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSep2022SchoolsAndSierraCodes < ActiveRecord::Migration[6.1]
   def up
     Rake::Task['ingest:import_all_nyc_schools'].invoke('data/public/Sep_2022_schools_in_mln.csv', true)
