@@ -56,7 +56,7 @@ export default class TeacherSetOrder extends React.Component {
         <Heading marginTop="l" id="ts-cancellation-confirmation-text" level="one" size="tertiary" text="Confirm Cancellation" />
         <TextInput id="ts-cancel-order-button" labelText="Reason for cancelling order (optional)" type="textarea" value={this.state.comment} showLabel showRequiredLabel={false} onChange={this.handleCancelComment}/>
         <Label marginTop="m" htmlFor="id-of-input-element" id="confirm-teacher-set-order-label">Are you sure you want to cancel your teacher set order?</Label>
-        <HStack spacing="s" onClick={ () => window.scrollTo({ top: 10 })}>
+        <HStack spacing="s" onClick={ () => window.scrollTo({ top: 10 }) }>
           <Button id="ts-cancel-button-id" buttonType="noBrand" onClick={this.handleSubmit}> Cancel My Order </Button>
           <Button id="keep-my-order-button" className="cancel-button" buttonType="secondary" >
             <Link className="cancelOrderButton" href={"/ordered_holds/" + this.state.access_key } > No, keep my order </Link>

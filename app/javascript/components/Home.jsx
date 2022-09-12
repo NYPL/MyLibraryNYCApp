@@ -75,7 +75,7 @@ export default class Home extends React.Component {
         contentPrimary={
               <>
                 <Heading id="search-for-home-page-teacher-sets" level="two">Search For Teacher Sets</Heading>
-                <SearchBar id="home-page-teacher-set-search" labelText="home-page-teacher-set-search-label" noBrandButtonType onSubmit={this.handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
+                <SearchBar onClick={ () => window.scrollTo({ top: 0 }) } id="home-page-teacher-set-search" labelText="home-page-teacher-set-search-label" noBrandButtonType onSubmit={this.handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: this.handleSearchKeyword}} />{<br/>}
                 <HorizontalRule id="home-horizontal-2" align="left" height="3px" />
                 <Heading id="professional-heading" level="three">Professional Development & Exclusive Programs</Heading>
                 <Text size="default">
