@@ -26,6 +26,7 @@ export default function NewsLetter(props) {
   const [display_none, setDisplayNone] = useState("none")
   const [buttonDisabled, setButtonDisabled] = useState(false)
   const [isInvalid, setIsInvalid] = useState(false)
+  const [successFullySignedUp, setSuccessFullySignedUp] = useState(false)
 
   const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
 
@@ -50,6 +51,7 @@ export default function NewsLetter(props) {
             setDisplayNone("block")
             setDisplayBlock("none")
             setIsInvalid(false)
+            setSuccessFullySignedUp(true)
           } else {
             setDisplayNone("none")
             setDisplayBlock("block")
@@ -61,6 +63,63 @@ export default function NewsLetter(props) {
        setButtonDisabled(false)
        console.log(error)
     })
+  }
+
+  const newLetterSignup = (event) => {
+    if (successFullySignedUp) {
+      return <VStack gap="m" justifyContent="center">
+        <Heading
+          level="two"
+          size="callout"
+          maxWidth="640px"
+          noSpace
+          textAlign="center"
+        > Thank you for signing up to the MyLibraryNYC Newsletter!
+        </Heading>
+        <Heading
+          level="three"
+          size="callout"
+          maxWidth="640px"
+          noSpace
+          textAlign="center"
+        > Check your email to learn about teacher sets, best practices & exclusive events.
+        </Heading>
+      </VStack>
+    } else {
+      return <VStack gap="l" justifyContent="center">
+        <Heading
+          level="two"
+          size="callout"
+          maxWidth="640px"
+          noSpace
+          textAlign="center"
+        >
+          Learn about new teacher sets, best practices &amp; exclusive
+          events when you sign up for the MyLibraryNYC Newsletter!
+        </Heading>
+        <Stack
+          direction={isLargerThanMobile ? "row" : "column"}
+          width="100%"
+          alignItems="flex-start"
+          justifyContent="center"
+        >
+          <TextInput
+            helperText="jdoe@domain.com"
+            id="news-letter-text-input"
+            labelText="email"
+            showLabel={false}
+            maxWidth="500px"
+            placeholder="your email address"
+            width="100%"
+            onChange={handleNewsLetterEmail}
+            required
+            invalidText={message}
+            isInvalid={isInvalid}
+          />
+          {submitButtonaAndProgressBar()}
+        </Stack>
+      </VStack>
+    }
   }
 
   const submitButtonaAndProgressBar = () => {
@@ -90,45 +149,7 @@ export default function NewsLetter(props) {
   return (
     <Box bg="ui.bg.default" p="l">
       <VStack gap="l" justifyContent="center">
-        <div style={{ display: display_block }}>
-          <Heading
-            level="two"
-            size="callout"
-            maxWidth="640px"
-            noSpace
-            textAlign="center"
-          >
-            Learn about new teacher sets, best practices &amp; exclusive
-            events when you sign up for the MyLibraryNYC Newsletter!
-          </Heading>
-          <Stack
-            direction={isLargerThanMobile ? "row" : "column"}
-            width="100%"
-            alignItems="flex-start"
-            justifyContent="center"
-          >
-            <TextInput
-              helperText="jdoe@domain.com"
-              id="news-letter-text-input"
-              labelText="email"
-              showLabel={false}
-              maxWidth="500px"
-              placeholder="your email address"
-              width="100%"
-              onChange={handleNewsLetterEmail}
-              required
-              invalidText={message}
-              isInvalid={isInvalid}
-            />
-            {submitButtonaAndProgressBar()}
-          </Stack>
-        </div>
-        <div style={{ display: display_none }}>
-          <Text noSpace id="news-letter-success-msg" fontWeight="heading.callout">
-            Thank you for signing up to the MyLibraryNYC Newsletter!
-          </Text>
-          <Text fontWeight="text.mini"> Check your email to learn about teacher sets, best practices & exclusive events.</Text>
-        </div>
+        {newLetterSignup()}
       </VStack>
     </Box>
   )
