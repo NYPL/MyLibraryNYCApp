@@ -67,7 +67,7 @@ export default function NewsLetter(props) {
 
   const newLetterSignup = (event) => {
     if (successFullySignedUp) {
-      return <VStack gap="m" justifyContent="center">
+      return <VStack justifyContent="center">
         <Heading
           level="two"
           size="callout"
@@ -76,17 +76,12 @@ export default function NewsLetter(props) {
           textAlign="center"
         > Thank you for signing up to the MyLibraryNYC Newsletter!
         </Heading>
-        <Heading
-          level="three"
-          size="callout"
-          maxWidth="640px"
-          noSpace
-          textAlign="center"
-        > Check your email to learn about teacher sets, best practices & exclusive events.
-        </Heading>
+        <Text noSpace> 
+          Check your email to learn about teacher sets, best practices & exclusive events.
+        </Text>
       </VStack>
     } else {
-      return <VStack gap="l" justifyContent="center">
+      return <VStack gap="m" justifyContent="center">
         <Heading
           level="two"
           size="callout"
@@ -104,8 +99,8 @@ export default function NewsLetter(props) {
           justifyContent="center"
         >
           <TextInput
-            helperText="jdoe@domain.com"
             id="news-letter-text-input"
+            type="email"
             labelText="email"
             showLabel={false}
             maxWidth="500px"
@@ -133,6 +128,8 @@ export default function NewsLetter(props) {
         showLabel
         size="small"
         value={1}
+        marginTop="xs"
+        style={{"margin-top": "8px"}}
       />
     } else {
       return <Button
@@ -148,9 +145,7 @@ export default function NewsLetter(props) {
 
   return (
     <Box bg="ui.bg.default" p="l">
-      <VStack gap="l" justifyContent="center">
-        {newLetterSignup()}
-      </VStack>
+      {newLetterSignup()}
     </Box>
   )
 }
