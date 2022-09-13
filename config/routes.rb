@@ -3,15 +3,6 @@
 MyLibraryNYC::Application.routes.draw do
 
   devise_for :users, :path => "users", :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }, :controllers => { :registrations => 'users/registrations', :sessions => 'users/sessions' }
-  #devise_for :users, controllers: { sessions: 'users/sessions' }
-
-  #devise_for :users, controllers: { registrations: ‘registrations’, sessions: ‘sessions’ }
-  #devise_for :users, controllers: { sessions: 'users/sessions' }
-
-
-  # devise_scope :user do
-  #   get 'sign_in', to: 'devise/sessions#new'
-  # end
 
   get 'hello_world', to: 'hello_world#index'
   get 'teacher_set_data', to: 'teacher_sets#teacher_set_data'
@@ -21,12 +12,11 @@ MyLibraryNYC::Application.routes.draw do
   get 'timeout_check' => 'sessions#timeout_check'
   get 'timeout' => 'sessions#timeout'
   get '/logged_in', to: 'sessions#is_logged_in?'
-  # post '/login', to: 'sessions#create'
-  # delete '/logout', to: 'sessions#delete'
-
-
-
   get 'extend_session_iframe' => 'home#extend_session_iframe'
+  get 'home/calendar_event/:filename', to: 'home#mln_calendar'
+  get 'home/calendar_event/error', to: 'home#calendar_event_error'
+  get 'home/calendar_event', to: 'home#calendar_event'
+  get '/menu_of_services/:filename', to: 'home#menu_of_services'
 
   resources :teacher_sets do
     resources :holds
@@ -35,7 +25,6 @@ MyLibraryNYC::Application.routes.draw do
   resources :schools, :only => [:index, :create]
   resources :faqs
 
-  # match '/login' => 'teacher_sets#teacher_set_details', via: [:get, :post]
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
   match 'teacher_set_details/:id' => 'teacher_sets#teacher_set_details', via: [:get]
   match 'book_details/:id' => 'books#book_details', via: [:get]
@@ -44,23 +33,10 @@ MyLibraryNYC::Application.routes.draw do
   match 'holds/:id/cancel_details' => 'holds#cancel_details', via: [:get, :post]
 
   resources :holds
-
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
-
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
   get '/check_email', to: 'users#check_email'
   get '/mln_banner_message', to: 'settings#mln_banner_message'
   post '/require_login', to: 'application#require_login'
   post '/redirect_to_angular', to: 'application#redirect_to_angular'
-
-  # match 'app' => 'angular#index', :as => :app, via: [:get, :patch, :post]
 
   match 'settings' => 'settings#index', via: [:get, :patch, :post]
   match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post, :put]
@@ -80,55 +56,10 @@ MyLibraryNYC::Application.routes.draw do
   match '/signup' => 'settings#signup', via: [:get, :post]
   match '/sign_up_details' => 'settings#sign_up_details', via: [:get]
 
-
-
-  # match 'users/autocomplete_school_name' => 'users#autocomplete_school_name', :as => :autocomplete_school_name
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-
   root :to => 'home#index'
   match '/participating-schools' => 'schools#participating_schools_data', via: [:get]
   match '/contacts' => 'home#help', via: [:get]
   match '/faq' => 'home#faq_data', via: [:get]
-
-
   match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]
   match '/help/access-digital-resources' => 'home#digital_resources', via: [:get]
 
@@ -137,18 +68,6 @@ MyLibraryNYC::Application.routes.draw do
 
   post 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#create_or_update_teacher_set'
   delete 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#delete_teacher_set'
-
   post 'api/v0.1/mylibrarynyc/item-availability' => 'api/v01/items#update_availability'
-
   get 'api/unauthorized' => 'api/v01/general#unauthorized'
-  get 'home/calendar_event/:filename', to: 'home#mln_calendar'
-  get 'home/calendar_event/error', to: 'home#calendar_event_error'
-  get 'home/calendar_event', to: 'home#calendar_event'
-  get '/menu_of_services/:filename', to: 'home#menu_of_services'
-
-  # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id))(.:format)'
 end

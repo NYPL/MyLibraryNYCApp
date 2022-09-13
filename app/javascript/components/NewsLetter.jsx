@@ -12,80 +12,124 @@ import {
   Icon,
   HelperErrorText,
   LibraryExample,
-  Heading, TextInput, Form, FormField, FormRow, SimpleGrid, ButtonGroup, Text, Box, Center
+  Heading, TextInput, Form, FormField, FormRow, SimpleGrid, ButtonGroup, Text, Box, Center, ProgressIndicator, VStack, Stack, useNYPLBreakpoints
 } from '@nypl/design-system-react-components';
 
 
-export default class NewsLetter extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {message: "", error_msg: {}, email: "", display_block: "block", display_none: "none", buttondisabled: false, isInvalid: false};
-    this.handleSubmit = this.handleSubmit.bind(this);
+export default function NewsLetter(props) {
+
+  const [message, setMessage] = useState("")
+  const [error_msg, setErrorMsg] = useState({})
+  const [email, setEmail] = useState("")
+  const [display_block, setDisplayBlock] = useState("block")
+  const [display_none, setDisplayNone] = useState("none")
+  const [buttonDisabled, setButtonDisabled] = useState(false)
+  const [isInvalid, setIsInvalid] = useState(false)
+
+  const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
+
+  const handleNewsLetterEmail = (event) => {
+    setEmail(event.target.value)
+    setIsInvalid(false)
   }
 
-
-  handleNewsLetterEmail = event => {
-    this.setState({
-      email: event.target.value, isInvalid: false
-    })
-  }
-
-  handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault()
-    this.setState({
-      buttondisabled: true,
-    })
+    setButtonDisabled(true)
 
      axios.get('/news_letter/index', {
         params: {
-          email: this.state.email
+          email: email
         }
      })
       .then(res => {
-          this.state.message = res.data.message;
+          setMessage(res.data.message)
+
           if (res.data.status == "success") {
-            this.setState({display_none: 'block', display_block: 'none', isInvalid: false})
+            setDisplayNone("block")
+            setDisplayBlock("none")
+            setIsInvalid(false)
           } else {
-            this.setState({display_none: 'none', display_block: 'block', isInvalid: true})
+            setDisplayNone("none")
+            setDisplayBlock("block")
+            setIsInvalid(true)
+            setButtonDisabled(false)
           }
       })
       .catch(function (error) {
+       setButtonDisabled(false)
        console.log(error)
     })
   }
 
-
-  render() {
-    return ( 
-      <Box bg="var(--nypl-colors-ui-gray-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderRadius="sm" overflow="hidden">
-        <Center>
-          <div style={{ display: this.state.display_block }}>
-            <Text noSpace fontWeight="heading.callout">Learn about new teacher sets, best practices &</Text>
-            <Text fontWeight="heading.callout">exclusive events when you sign up for the MyLibraryNYC Newsletter!</Text>
-            <Form id="news-letter-form" gap="grid.xs">
-              <FormRow>
-                <FormField>
-                  <TextInput id="news-letter-text-input" type="email" onChange={this.handleNewsLetterEmail} required  invalidText={this.state.message} isInvalid={this.state.isInvalid} />
-                </FormField>
-                
-                <FormField>
-                  <ButtonGroup>
-                    <Button id="news-letter-button" buttonType="noBrand" onClick={this.handleSubmit}>Submit</Button>
-                  </ButtonGroup>
-                </FormField>
-              </FormRow>
-            </Form>
-          </div>
-          
-          <div style={{ display: this.state.display_none }}>
-            <Text noSpace id="news-letter-success-msg" fontWeight="heading.callout">
-              Thank you for signing up to the MyLibraryNYC Newsletter!
-            </Text>
-            <Text fontWeight="text.mini"> Check your email to learn about teacher sets, best practices & exclusive events.</Text>
-          </div>
-        </Center>
-      </Box>
-    )
+  const submitButtonaAndProgressBar = () => {
+    if (buttonDisabled) {
+      return <ProgressIndicator
+        darkMode
+        id="news-letter-progress-bar-indicator"
+        isIndeterminate
+        indicatorType="circular"
+        labelText="Progress"
+        showLabel
+        size="small"
+        value={1}
+      />
+    } else {
+      return <Button
+        id="news-letter-button"
+        buttonType="noBrand"
+        width={isLargerThanMobile ? null : "100%"}
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
+    }
   }
+
+  return (
+    <Box bg="ui.bg.default" p="l">
+      <VStack gap="l" justifyContent="center">
+        <div style={{ display: display_block }}>
+          <Heading
+            level="two"
+            size="callout"
+            maxWidth="640px"
+            noSpace
+            textAlign="center"
+          >
+            Learn about new teacher sets, best practices &amp; exclusive
+            events when you sign up for the MyLibraryNYC Newsletter!
+          </Heading>
+          <Stack
+            direction={isLargerThanMobile ? "row" : "column"}
+            width="100%"
+            alignItems="flex-start"
+            justifyContent="center"
+          >
+            <TextInput
+              helperText="jdoe@domain.com"
+              id="news-letter-text-input"
+              labelText="email"
+              showLabel={false}
+              maxWidth="500px"
+              placeholder="your email address"
+              width="100%"
+              onChange={handleNewsLetterEmail}
+              required
+              invalidText={message}
+              isInvalid={isInvalid}
+            />
+            {submitButtonaAndProgressBar()}
+          </Stack>
+        </div>
+        <div style={{ display: display_none }}>
+          <Text noSpace id="news-letter-success-msg" fontWeight="heading.callout">
+            Thank you for signing up to the MyLibraryNYC Newsletter!
+          </Text>
+          <Text fontWeight="text.mini"> Check your email to learn about teacher sets, best practices & exclusive events.</Text>
+        </div>
+      </VStack>
+    </Box>
+  )
 }

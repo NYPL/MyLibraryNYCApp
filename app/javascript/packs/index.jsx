@@ -5,12 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import ReactOnRails from 'react-on-rails';
 import Header from '../components/Header';
 
-
-// This is how react_on_rails can see the Header in the browser.
-ReactOnRails.register({
-  Header, App
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   const node = document.getElementById('user_data')
   const data = JSON.parse(node.getAttribute('data'))
