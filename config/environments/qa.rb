@@ -16,7 +16,8 @@ MyLibraryNYC::Application.configure do
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
                   ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL'],
                   "http://my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com",
-                  "my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com"
+                  "my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com",
+                  "qa-new-www.mylibrarynyc.org"
                 ]
   config.eager_load = true
 end
