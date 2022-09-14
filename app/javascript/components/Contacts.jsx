@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 
-import { DSProvider, TemplateAppContainer, Heading, Flex, HStack, Table, Text } from '@nypl/design-system-react-components';
+import { DSProvider, TemplateAppContainer, Heading, Flex, HStack, Table, Text, Link} from '@nypl/design-system-react-components';
 
 function Contacts(props) {
   return (
@@ -13,16 +13,17 @@ function Contacts(props) {
               <Heading id="general-information-heading" level="two" size="secondary" text="General Information"/>
               <Text size="default">Have a question about library cards, your account or delivery?</Text>
               <Table
-                  className="generalInfo"
+                  columnHeaders={["Information", "Contact Emails"]}
+                  className="contactInfo"
                   useRowHeaders
                   tableData={[
                     [
-                      'General Information',
-                       <a id="mln-help-email" className="contact_email" href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>,
+                      <Text>General Information</Text>,
+                      <Link id="mln-help-email" href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</Link>,
                     ],
                     [ 
-                      'Delivery Questions',
-                      <a id="mln-delivery-email" className="contact_email" href="mailto:delivery@mylibrarynyc.org">delivery@mylibrarynyc.org</a>
+                      <Text>Delivery Questions</Text>,
+                      <Link id="mln-delivery-email" href="mailto:delivery@mylibrarynyc.org">delivery@mylibrarynyc.org</Link>
                     ]
                   ]}
               />
@@ -30,22 +31,22 @@ function Contacts(props) {
               <Heading id="library-cards-account" marginTop="30px" level="two" size="secondary" text="Professional Development"/>
               <div>Want to find out about library staff visiting your school?</div>
               <Table
-                  className="libraryCards"
+                  columnHeaders={["Information", "Contact Emails"]}
+                  className="contactInfo"
                   useRowHeaders
                   tableData={[
                     [
-                      'The Bronx, Manhattan and Staten Island',
-                      <a id="mln-nypl-email" className="contact_email" href="mailto:mylibrarynyc@nypl.org">mylibrarynyc@nypl.org</a>
+                      <Text>The Bronx, Manhattan and Staten Island</Text>,
+                      <Link id="mln-nypl-email" href="mailto:mylibrarynyc@nypl.org">mylibrarynyc@nypl.org</Link>
                     ],
                     [
-                      'Brooklyn',
-                      <a id="mln-brooklyn-email" className="contact_email" href="mailto:mylibrarynyc@bklynlibrary.org">mylibrarynyc@bklynlibrary.org</a>
+                      <Text>Brooklyn</Text>,
+                      <Link id="mln-brooklyn-email" href="mailto:mylibrarynyc@bklynlibrary.org">mylibrarynyc@bklynlibrary.org</Link>
                     ],
 
                     [
-                      'Queens',
-                       <a id="mln-queens-email" className="contact_email" href="mailto:mylibrarynyc@queenslibrary.org">mylibrarynyc@queenslibrary.org</a>
-
+                      <Text>Queens</Text>,
+                      <Link id="mln-queens-email" href="mailto:mylibrarynyc@queenslibrary.org">mylibrarynyc@queenslibrary.org</Link>
                     ]
                   ]}
               />
@@ -55,14 +56,15 @@ function Contacts(props) {
             
               <Heading id="my-library-nyc-questions" level="three" marginTop="30px" size="tertiary" text="Find Your School"/>
               <div>Search our list of schools to see if your school already participates.</div>
-              <a id="mln-ps-link" className="contact_email" href="http://www.mylibrarynyc.org/schools">Participating schools</a>
+              <Link id="mln-ps-link" href="http://www.mylibrarynyc.org/schools">Participating schools</Link>
 
               <Heading id="eligibility" level="three" marginTop="30px" size="tertiary" text="Eligibility"/>
               To find out if your school is eligible to participate in the program next year Call the 
-              <a id="eligible-to-participate-in-program" href="https://nycdoe.libguides.com/home"> DOE Office of Library Services</a>
+              <Link id="eligible-to-participate-in-program" href="https://nycdoe.libguides.com/home"> DOE Office of Library Services</Link>
               <Table
                 marginTop="s"
-                className="contactsInfo"
+                columnHeaders={["Information", "Contact Number"]}
+                className=""
                 useRowHeaders
                 tableData={[
                   [
@@ -73,7 +75,7 @@ function Contacts(props) {
               />              
             </div>
           }
-          contentSidebar={<div><HaveQuestions /></div>}
+          contentSidebar={<HaveQuestions />}
           sidebar="right"          
         />
   )

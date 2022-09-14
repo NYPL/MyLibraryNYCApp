@@ -1047,25 +1047,47 @@ $submenu-width: 245px;
 
 .libraryCards {
   @include min-screen($nypl-breakpoint-medium) {
-   tbody tr th {
-      width: 255px
-    }
-  }
-}
-
-.generalInfo {
-  @include min-screen($nypl-breakpoint-medium) {
     tbody tr th {
       width: 255px
     }
-  }
 
+    thead tr th {
+      display: none;
+    }
+
+  }
 }
 
-.contactsInfo {
+.contactInfo {
+
+  @include max-screen($nypl-breakpoint-medium) {
+
+    tbody tr td span:first-child {
+      display: none;
+    }
+
+    tbody tr th span p {
+      margin-left: 16px;
+    }
+
+    tbody tr td span a {
+      margin-left: 16px;
+    }
+
+    tbody tr th span:first-child {
+      display: none;
+    }
+  }
+  
+
   @include min-screen($nypl-breakpoint-medium) {
+
     tbody tr th {
-      width: 255px
+      width: 310px;
+    }
+
+    thead tr th {
+      display: none;
     }
   }
 }
