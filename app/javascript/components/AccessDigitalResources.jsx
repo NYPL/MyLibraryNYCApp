@@ -18,7 +18,7 @@ export default function AccessDigitalResources(props) {
                 <Text>Offers the option to limit searches by audience to children or teens/young adults.</Text>
                 <a href="https://www.queenslibrary.org/research/research-databases">Queens Public Library Databases</a>
                 <Text>Features a list of databases intended for schoolwork.</Text>
-                <Text>See your school librarian if you encounter technical issues or need further assistance. You may also <a target="_blank" href="/contacts">contact</a> your public library for help.</Text>
+                <Text>See your school librarian if you encounter technical issues or need further assistance. You may also <a href="/contacts">contact</a> your public library for help.</Text>
               </p>
             ),
           } ]}
