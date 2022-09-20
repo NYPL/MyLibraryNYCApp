@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component, useState } from 'react';
-import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink, withRouter} from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink, 
+  useLocation,
+  useParams, useNavigate} from "react-router-dom";
 
 import axios from 'axios';
 import AppBreadcrumbs from "./AppBreadcrumbs";
@@ -10,39 +12,30 @@ import {
   DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Box, HStack
 } from '@nypl/design-system-react-components';
 
+function AccountDetailsSubMenu(props) {
+  const params = useParams();
+  const navigate = useNavigate();
+  const [user_signed_in, setUserSignedIn] = useState(props.userSignedIn)
+  const [showAboutMenu, setShowAboutMenu] = useState(false)
 
-class AccountDetailsSubMenu extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { user_signed_in: this.props.userSignedIn, showAboutMenu: false}
-    this.handleHover = this.handleHover.bind(this);
-    this.handleLeave = this.handleLeave.bind(this);
-  }
-
-  redirectToHome = () => {
-   const { history } = this.props;
-   if(history) history.push({ pathname: '/' });
-  }
-
-  signInAccountLinks() {
-    if (!this.props.userSignedIn) {
+  const signInAccountLinks = () => {
+    if (!props.userSignedIn) {
       return <li className="nav__submenu-item"> <ReactRouterLink to="/signin"> <Button className="signin_nav_button" buttonType="noBrand">Sign In</Button> </ReactRouterLink> </li>
     }
   }
 
-  handleHover = (event) => {
-    this.setState({ showAboutMenu: true });
+  const handleHover = (event) => {
+    setShowAboutMenu(true)
   };
 
-  handleLeave = (event) => {
-    this.setState({ showAboutMenu: false });
+  const handleLeave = (event) => {
+    setShowAboutMenu(false)
   };
 
-  showAccountSigninLink() {
-    if (this.props.userSignedIn) {
+  const showAccountSigninLink = () => {
+    if (props.userSignedIn) {
       return <>
-        <Link href="/account_details" className="nav-link-colors navBarDropDown" onMouseEnter={this.handleHover}>
+        <Link href="/account_details" className="nav-link-colors navBarDropDown" onMouseEnter={handleHover}>
         <Icon className="navBarIcon" align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="utilityAccountFilled" size="medium" type="default" />
           My Account{' '}
           <Icon id="account-arrow-drop-down" size="small" className="navBarIcon">
@@ -54,7 +47,7 @@ class AccountDetailsSubMenu extends React.Component {
       </>
     } else {
       return <>
-        <Link href="/signin" className="nav-link-colors navBarDropDown" onMouseEnter={this.handleHover}>
+        <Link href="/signin" className="nav-link-colors navBarDropDown" onMouseEnter={handleHover}>
         <Icon className="navBarIcon" align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="actionExit" size="medium" type="default" />
             Sign In{' '}
             <Icon id="signin-arrow-drop-down" size="small" className="navBarIcon" >
@@ -68,15 +61,17 @@ class AccountDetailsSubMenu extends React.Component {
     }
   }
 
-  signOut = event => {
+  const signOut = event => {
     axios.delete('/users/logout', { headers: {"Content-Type": "application/json", 'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute("content") } })
       .then(res => {
         if (res.data.status == 200 && res.data.logged_out == true) {
-          this.props.handleLogout(false)
-          this.setState({ user_signed_in: false, showAboutMenu: false });
-          this.props.handleSignOutMsg(res.data.sign_out_msg, false)
-          this.props.hideSignUpMessage(false)
-          this.redirectToHome()          
+          props.handleLogout(false)
+          setUserSignedIn(false)
+          setShowAboutMenu(false)
+          props.handleSignOutMsg(res.data.sign_out_msg, false)
+          props.hideSignUpMessage(false)
+          navigate('/')
+          //redirectToHome()  - need to fix asap       
         }
       })
       .catch(function (error) {
@@ -84,8 +79,8 @@ class AccountDetailsSubMenu extends React.Component {
     })    
   }
 
-  AccountOrderLink() {
-    if (this.props.userSignedIn) {
+  const AccountOrderLink = () => {
+    if (props.userSignedIn) {
       return <>
         <List id="navbar-account-details" type="ol" inline={false} noStyling={false} className="nav__submenu account_details">
           <li className="nav__submenu-item">
@@ -103,7 +98,7 @@ class AccountDetailsSubMenu extends React.Component {
           </li>
 
           <li className="nav__submenu-item">
-            <ReactRouterLink className="navBarDropDown" onClick={this.signOut}>
+            <ReactRouterLink className="navBarDropDown" onClick={signOut}>
               <Icon align="right" className="navBarIcon" color="var(--nypl-colors-ui-gray-dark)" decorative iconRotation="rotate0" id="icon-id" name="actionPower" size="medium" type="default" />
               Sign Out
             </ReactRouterLink>
@@ -136,16 +131,16 @@ class AccountDetailsSubMenu extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <>
-        { this.showAccountSigninLink() }
-        { this.state.showAboutMenu && <Box>
-            {this.AccountOrderLink() }
-        </Box>}
-      </>
-    )
-  }
+
+  return (
+    <>
+      { showAccountSigninLink() }
+      { showAboutMenu && <Box>
+          {AccountOrderLink() }
+      </Box>}
+    </>
+  )
 }
 
-export default withRouter(AccountDetailsSubMenu);
+
+export default AccountDetailsSubMenu;

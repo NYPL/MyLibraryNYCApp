@@ -1,10 +1,12 @@
 import { DSProvider } from '@nypl/design-system-react-components';
 import React, { Component, useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
 import axios from 'axios';
-import Routes from "../routes/routes";
+import AppRoutes from "../routes/AppRoutes";
+import { useNavigate } from 'react-router-dom';
+import useOnLocationChange from './useOnLocationChange';
 
 export default function App(props) {
-
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
@@ -32,6 +34,9 @@ export default function App(props) {
   };
 
   return (
-    <Routes userSignedIn={isLoggedIn} setUserSignedIn={setIsLoggedIn}/>
+    <>
+      <AppRoutes userSignedIn={isLoggedIn} setUserSignedIn={setIsLoggedIn}/>
+    </>
+    
   )
 }

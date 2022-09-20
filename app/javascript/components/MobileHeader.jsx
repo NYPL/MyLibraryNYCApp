@@ -5,7 +5,7 @@ import FocusTrap from 'focus-trap-react';
 import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
 import Vector from '../images/Vector.png'
 import axios from 'axios';
-import { BrowserRouter as Router, Redirect, Link as ReactRouterLink, useHistory } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Link as ReactRouterLink, useNavigate } from "react-router-dom";
 
 import { Link, Flex, Icon, HStack, Image, List, Spacer, HorizontalRule, Center, Box, Logo, Square} from "@nypl/design-system-react-components";
 
@@ -16,9 +16,7 @@ import mlnLogoRed1 from '../images/MLN_Logo_red.png'
 
 
 export default function MobileHeader(props) {
-
-  let history = useHistory();
-
+  const navigate = useNavigate();
   const [mobileMenuActive, setMobileMenuActive] = useState(false)
 
   const signInAccountDetails = () => {
@@ -45,7 +43,7 @@ export default function MobileHeader(props) {
           props.details.handleSignOutMsg(res.data.sign_out_msg, false)
           props.details.hideSignUpMessage(false)
           setMobileMenuActive(!mobileMenuActive)
-          history.push("/");
+          navigate("/");
         }
       })
       .catch(function (error) {

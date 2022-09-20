@@ -8,28 +8,25 @@ import {
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 
-export default class SignOut extends Component {
+export default function SignOut(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = { logged_out: ""  }
-  }
+  const [logged_out, setLoggedOut] = useState("")
 
-  signOutMessage() {
-    if (this.state.logged_out) {
+
+  const signOutMessage = () => {
+    if (logged_out) {
       return "Signed out successfully"
     }
   }
 
-  render() {
-    return (
-        <DSProvider>
-          <TemplateAppContainer
-            breakout={<><AppBreadcrumbs />
-              {this.signOutMessage()}
-            </>}
-          />
-        </DSProvider>
-    )
-  }
+  return (
+      <DSProvider>
+        <TemplateAppContainer
+          breakout={<><AppBreadcrumbs />
+            {signOutMessage()}
+          </>}
+        />
+      </DSProvider>
+  )
+  
 }

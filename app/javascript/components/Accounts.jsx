@@ -8,10 +8,10 @@ import {
   DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon, ButtonGroup, Text, SkeletonLoader
 } from '@nypl/design-system-react-components';
 
-import {
-  BrowserRouter as Router,
-  Link as ReactRouterLink,
-} from "react-router-dom";
+// import {
+//   BrowserRouter as Router,
+//   Link as ReactRouterLink,
+// } from "react-router-dom";
 
 export default function Accounts(props) {
 
@@ -38,6 +38,7 @@ export default function Accounts(props) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
     axios.get('/account', { params: { page: 1 } } ).then(res => {
+      
       if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
         return false;

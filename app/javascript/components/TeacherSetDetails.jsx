@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component, useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
-import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink} from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink, useParams, useNavigate} from "react-router-dom";
 import { titleCase } from "title-case";
 import AnchorLink from "react-anchor-link-smooth-scroll"
 
@@ -26,7 +26,8 @@ import mlnImage from '../images/mln.svg'
 
 
 export default function TeacherSetDetails(props) {
-
+  const params = useParams();
+  const navigate = useNavigate();
   const [ts_details, setTsDetails] = useState({})
   const [allowed_quantities, setAllowedQuantities] = useState([])
   const [teacher_set, setTeacherSet] = useState("")
@@ -46,7 +47,7 @@ export default function TeacherSetDetails(props) {
 
   useEffect(() => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-    axios.get('/teacher_sets/'+ props.match.params.id)
+    axios.get('/teacher_sets/'+ params["id"])
       .then(res => {
         setAllowedQuantities(res.data.allowed_quantities)
         setTeacherSet(res.data.teacher_set)
@@ -73,7 +74,7 @@ export default function TeacherSetDetails(props) {
     event.preventDefault();
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.post('/holds', {
-        teacher_set_id: props.match.params.id, query_params: {quantity: quantity}
+        teacher_set_id: params["id"], query_params: {quantity: quantity}
      }).then(res => {
         if (res.request.responseURL.includes("/signin")) {
           window.location = res.request.responseURL;
@@ -81,7 +82,7 @@ export default function TeacherSetDetails(props) {
         } else {
           if (res.data.status === 'created') {
             props.handleTeacherSetOrderedData(res.data.hold, teacher_set)
-            props.history.push("/ordered_holds/"+ res.data.hold["access_key"])
+            navigate("/ordered_holds/"+ res.data.hold["access_key"])
           } else {
             setErrorMessage(res.data.message)
           }
