@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
@@ -7,76 +7,103 @@ import {
   TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, HorizontalRule, Heading
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
+import {useParams, useNavigate} from "react-router-dom";
 
-export default class SignUp extends Component {
+export default function SignUp(props) {
+  const params = useParams();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("")
+  const [errorEmailMsg, setErrorEmailMsg] = useState("")
+  const [errorAltEmailMsg, setAltEmailErrorMsg] = useState("")
+  const [alt_email, setAltEmail] = useState("")
+  const [first_name, setFirstName] = useState("")
+  const [last_name, setLastName] = useState("")
+  const [school_id, setSchoolId] = useState("")
+  const [password, setPassword] = useState("")
+  const [active_schools, setActiveSchools] = useState("")
+  const [firstNameIsValid, setFirstNameIsValid] = useState(false)
+  const [firstNameErrorMsg, setFirstNameErrorMsg] = useState("")
+  const [lastNameIsValid, setLastNameIsValid] = useState(false)
+  const [lastNameErrorMsg, setLastNameErrorMsg] = useState("")
+  const [passwordIsValid, setPasswordIsValid] = useState(false)
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState("")
+  const [schoolIsValid, setSchoolIsValid] = useState(false)
+  const [schoolErrorMsg, setSchoolErrorMsg] = useState("")
+  const [emailIsInvalid, setEmailIsInvalid] = useState(false)
+  const [altEmailIsvalid, setAltEmailIsvalid] = useState(false)
+  const [messages, setMessages] = useState({})
+  const [news_letter_error, setNewsLetterError] = useState("")
+  const [show_news_letter_error, setShowNewsLetterError] = useState(false)
+  const [isCheckedVal, setIsCheckedVal] = useState(false)
+  const [signUpmsg, setSignUpmsg] = useState("")
+  const [isDisabled, setIsDisabled] = useState(false)
+  const [serverError, setServerError] = useState("")
+  const [serverErrorIsValid, setServerErrorIsValid] = useState(false)
+  const [userSignedIn, setUserSignedIn] = useState(props.userSignedIn)
+  const [allowed_email_patterns, setAllowedEmailPatterns] = useState([])
 
-  constructor(props) {
-    super(props);
-    this.state = { email: "", errorEmailMsg: "", errorAltEmailMsg: "", alt_email: "", first_name: "", last_name: "", school_id: "",  
-                   password: "", active_schools: "", errors: {}, fields: {}, firstNameIsValid: false,  
-                   lastNameIsValid: false, passwordIsValid: false, schoolIsValid: false, emailIsInvalid: false,
-                   altEmailIsvalid: false, messages: {}, news_letter_error: "", show_news_letter_error: false, isCheckedVal: false, 
-                   signUpmsg: "", isDisabled: false, serverError: "", serverErrorIsValid: false, userSignedIn: this.props.userSignedIn}
-    this.verifyNewsLetterEmailInSignUpPage = this.verifyNewsLetterEmailInSignUpPage.bind(this)
-  }
-
-
-  componentDidMount() {
+  useEffect(() => {
     axios.get('/sign_up_details').then(res => {
-      this.setState( { active_schools: res.data.activeSchools, allowed_email_patterns: res.data.emailMasks } )
+      setActiveSchools(res.data.activeSchools)
+      setAllowedEmailPatterns(res.data.emailMasks)
     }).catch(function (error) {
        console.log(error)
     })
+  }, []);
+
+  const redirectToTeacherSetPage = () => {
+    navigate("teacher_set_data", { state: { userSignedIn: true } })
   }
 
-
-  redirectToTeacherSetPage = () => {
-    const { history } = this.props;
-    if(history) history.push({ pathname: "/teacher_set_data", state: { userSignedIn: true } });
-  }
-
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    if (this.handleValidation()) {
+    if (handleValidation()) {
       axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
       axios.post('/users', {
-          user: { email: this.state.fields["email"], alt_email: this.state.fields["alt_email"], first_name: this.state.fields["first_name"],
-                  last_name: this.state.fields["last_name"], password: this.state.fields["password"], school_id: this.state.fields["school_id"], news_letter_email: this.state.fields["alt_email"] || this.state.fields["email"] }
+          user: { email: email, alt_email: alt_email, first_name: first_name,
+                  last_name: last_name, password: password, school_id: school_id, news_letter_email: alt_email || email }
        }).then(res => {
           if (res.data.status == "created") {
-            this.setState({ signUpmsg: res.data.message })
-            this.props.handleLogin(true)
-            this.redirectToTeacherSetPage()
+            setSignUpmsg(res.data.message)
+            props.handleLogin(true)
+            redirectToTeacherSetPage()
             return false;
           } else {
             if (res.data.message.alt_email && res.data.message.alt_email.length > 0) {
-              this.state.errors['alt_email'] = res.data.message.alt_email[0];
-              this.setState({altEmailIsvalid: true, isDisabled: true })
+              setAltEmailErrorMsg(res.data.message.alt_email[0])
+              setAltEmailIsvalid(true)
+              setIsDisabled(true)
             }
 
             if (res.data.message.email && res.data.message.email.length > 0) {
-              this.state.errors['email'] = res.data.message.email[0];
-              this.setState({emailIsInvalid: true, isDisabled: true })
+              setErrorEmailMsg(res.data.message.email[0])
+              setEmailIsInvalid(true)
+              setIsDisabled(true)
             }
             if (res.data.message.first_name && res.data.message.first_name.length > 0) {
-              this.state.errors['first_name'] = res.data.message.first_name[0];
-              this.setState({firstNameIsValid: true, isDisabled: true })
+              setFirstNameErrorMsg(res.data.message.first_name[0])
+              setFirstNameIsValid(true)
+              setIsDisabled(true)
             }
             if (res.data.message.last_name && res.data.message.last_name.length > 0) {
-              this.state.errors['last_name'] = res.data.message.last_name[0];
-              this.setState({lastNameIsValid: true, isDisabled: true })
+              setLastNameErrorMsg(res.data.message.last_name[0])
+              setLastNameIsValid(true)
+              setIsDisabled(true)
             }
             if (res.data.message.school_id && res.data.message.school_id.length > 0) {
-              this.state.errors['school_id'] = res.data.message.school_id[0];
-              this.setState({schoolIsValid: true, isDisabled: true })
+              setSchoolErrorMsg(res.data.message.school_id[0])
+              setSchoolIsValid(true)
+              setIsDisabled(true)
             }
             if (res.data.message.password && res.data.message.password.length > 0) {
-              this.state.errors['password'] = res.data.message.password[0];
-              this.setState({ passwordIsValid: true, isDisabled: true })
+              setPasswordErrorMsg(res.data.message.password[0])
+              setPasswordIsValid(true)
+              setIsDisabled(true)
             }
             if (res.data.status === 500 && res.data.message.error && res.data.message.error.length > 0) {
-              this.state.errors['serverError'] = res.data.message.error[0];
-              this.setState({ serverErrorIsValid: true, isDisabled: true })
+              setServerError(res.data.message.error[0])
+              setIsDisabled(true)
+              setServerErrorIsValid(true)
             }
           }
         })
@@ -86,30 +113,35 @@ export default class SignUp extends Component {
     } else {
       
     }
-    
   }
 
-  validateEmailDomain(email) {
+  const validateEmailDomain = (email) => {
     let formIsValid = true;
     let domain = email.split('@')
-    let email_domain_is_allowed = this.state.allowed_email_patterns.includes('@' + domain[1])
+    let email_domain_is_allowed = allowed_email_patterns.includes('@' + domain[1])
 
     if (email && !email_domain_is_allowed) {
       let msg = 'Enter a valid email address ending in "@schools.nyc.gov" or another participating school domain.'
-      this.state.errors['email'] = msg
-      this.setState({emailIsInvalid: true, isDisabled: true })
+      setErrorEmailMsg(msg)
+      setEmailIsInvalid(true)
+      setIsDisabled(true)
       formIsValid = false;
     }
     else {
-      this.state.errors['email'] = ""
-      this.setState({news_letter_error: "", show_news_letter_error: false, emailIsInvalid: false, isDisabled: false  })
+      setErrorEmailMsg("")
+      setNewsLetterError("")
+      setShowNewsLetterError(false)
+      setEmailIsInvalid(false)
+      setIsDisabled(false)
+      formIsValid = false;
     }
 
     if (email) {
       axios.get('/check_email', { params: { email: email } }).then(res => {
         if (res.data.statusCode == 409) {
-          this.state.errors['email'] = "An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance."
-          this.setState({emailIsInvalid: true, isDisabled: true })
+          setErrorEmailMsg("An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance.")
+          setEmailIsInvalid(true)
+          setIsDisabled(true)
           formIsValid = false;
         }      
       }).catch(function (error) {
@@ -119,151 +151,149 @@ export default class SignUp extends Component {
     return formIsValid
   }
 
-  validateAltEmailDomain(alt_email) {
+  const validateAltEmailDomain = (alt_email) => {
     if (alt_email && !validator.isEmail(alt_email)) {
       let msg = 'Alternate email address is invalid'
-      this.state.errors['alt_email'] = msg
-      this.setState({altEmailIsvalid: true, isDisabled: true, isCheckedVal: false })
+      setAltEmailErrorMsg(msg)
+      setAltEmailIsvalid(true)
+      setIsDisabled(true)
+      setIsCheckedVal(false)
     } else {
-      this.state.errors['alt_email'] = ""
-      this.setState({ altEmailIsvalid: false, isDisabled: false, isCheckedVal: false, news_letter_error: "", show_news_letter_error: false })
+      setAltEmailErrorMsg("")
+      setAltEmailIsvalid(false)
+      setIsDisabled(false)
+      setIsCheckedVal(false)
+      setNewsLetterError("")
+      setShowNewsLetterError(false)
     }
   }
 
-  handleValidation() {
-    let fields = this.state.fields;
+  const handleValidation = () => {
     let formIsValid = true;
 
-    if (!fields["email"]) {
-      formIsValid = false;
-      this.setState({emailIsInvalid: true, isDisabled: true, errorEmailMsg: "Email can't be empty" })
-      this.state.errors['email'] = "Email can't be empty";
+    if (!email) {
+      formIsValid = false;      
+      setEmailIsInvalid(true)
+      setIsDisabled(true)
+      setErrorEmailMsg("Email can't be empty")
     } else {
-      formIsValid = this.validateEmailDomain(fields["email"])
+      formIsValid = validateEmailDomain(email)
     }
 
-    if (!fields["alt_email"]) {
-      this.state.errors['alt_email'] = "";
+    if (!alt_email) {
+      setAltEmailErrorMsg("");
     } else {
-      this.validateAltEmailDomain(fields["alt_email"])
+      validateAltEmailDomain(alt_email)
     }
 
-    if (!fields["first_name"]) {
+    if (!first_name) {
       formIsValid = false;
-      this.setState({firstNameIsValid: true, isDisabled: true })
-      this.state.errors['first_name'] = "First name can't be empty";
+      setFirstNameIsValid(true)
+      setIsDisabled(true)
+      setFirstNameErrorMsg("First name can't be empty")
     }
 
-    if (!fields["first_name"]) {
-      formIsValid = false;
-      this.setState({firstNameIsValid: true, isDisabled: true })
-      this.state.errors['first_name'] = "First name can't be empty";
-    }
-
-    if (fields["first_name"] && typeof fields["first_name"] == "string") {
-      if (!fields["first_name"].match(/^[a-z ,.'()-]+$/i)) {
+    if (first_name && typeof first_name == "string") {
+      if (!first_name.match(/^[a-z ,.'()-]+$/i)) {
         formIsValid = false;
-        this.setState({firstNameIsValid: true, isDisabled: true })
-        this.state.errors['first_name'] = "First name can only contain letters and characters like '-.,()";
+        setFirstNameIsValid(true)
+        setIsDisabled(true)
+        setFirstNameErrorMsg("First name can only contain letters and characters like '-.,()")
       }
     }
 
-    if (!fields["last_name"]) {
-      this.setState({lastNameIsValid: true, isDisabled: true })
+    if (!last_name) {
+      setLastNameIsValid(true)
+      setIsDisabled(true)
       formIsValid = false;
-      this.state.errors['last_name'] = "Last name can't be empty";
+      setLastNameErrorMsg("Last name can't be empty")
     }
 
-    if (fields["last_name"] && typeof fields["last_name"] == "string") {
-      if (!fields["last_name"].match(/^[a-z ,.'()-]+$/i)) {
+    if (last_name && typeof last_name == "string") {
+      if (!last_name.match(/^[a-z ,.'()-]+$/i)) {
         formIsValid = false;
-        this.setState({lastNameIsValid: true, isDisabled: true })
-        this.state.errors['last_name'] = "Last name can only contain letters and characters like '-.,()";
+        setLastNameIsValid(true)
+        setIsDisabled(true)
+        setLastNameErrorMsg("Last name can only contain letters and characters like '-.,()")
       }
     }
 
-    if (!fields["password"]) {
+    if (!password) {
       formIsValid = false;
-      this.setState({passwordIsValid: true, isDisabled: true })
-      this.state.errors['password'] = "Password can't be empty";
+      setPasswordIsValid(true)
+      setIsDisabled(true)
+      setPasswordErrorMsg("Password can't be empty")
     }
 
-    if (fields["password"] && typeof fields["password"] == "string" ) {
-      if (!this.isStrongPassword(fields["password"])) {
+    if (password && typeof password == "string" ) {
+      if (!isStrongPassword(password)) {
         formIsValid = false;
-        this.setState({passwordIsValid: true, isDisabled: true })
-        this.state.errors['password'] = "Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, have at least one special character except period (.) and please do not repeat a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab"
+        setPasswordIsValid(true)
+        setIsDisabled(true)
+        setPasswordErrorMsg("Your password must be at least 8 characters, include a mixture of both uppercase and lowercase letters, include a mixture of letters and numbers, have at least one special character except period (.) and please do not repeat a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab")
       }
     }
 
-    if (!fields["school_id"]) {
-      this.setState({schoolIsValid: true, isDisabled: true })
+    if (!school_id) {
+      setSchoolIsValid(true)
+      setIsDisabled(true)
+      setSchoolErrorMsg("Please select school")      
       formIsValid = false;
-      this.state.errors['school_id'] = "Please select school"
     }
-    this.showNotifications()
+
+    showNotifications()
+
     if (!formIsValid) {
-      this.setState({serverErrorIsValid: false })
+      setServerErrorIsValid(false)
     }
     return formIsValid;
   }
 
-  handleEmail(field, e) {
-    this.setState({ emailIsInvalid: false, isDisabled: false })
-    this.state.errors['email'] = ""
-
-    let fields = this.state.fields;
-    fields[field] = e.target.value
-    this.setState({ fields });
+  const handleEmail = (field, e)  =>{
+    setEmail(e.target.value)
+    setEmailIsInvalid(false)
+    setIsDisabled(false)
+    setErrorEmailMsg("")
   }
 
-  handleAltEmail(field, e) {
-    this.setState ({ altEmailIsvalid: false, isDisabled: false })
-    this.state.errors['alt_email'] = ""
-
-    let fields = this.state.fields;
-    fields[field] = e.target.value
-    this.setState({ fields });
+  const handleAltEmail = (field, e) => {
+    setAltEmail(e.target.value)
+    setAltEmailIsvalid(false)
+    setIsDisabled(false)
+    setAltEmailErrorMsg("")
 
     if (e.target.value && !validator.isEmail(e.target.value)) {
-      this.setState({altEmailIsvalid: true, isDisabled: true, isCheckedVal: false })
+      setAltEmailIsvalid(true)
+      setIsDisabled(true)
+      setIsCheckedVal(false)
     } else {
-      this.state.errors['alt_email'] = ""
-      this.setState({ altEmailIsvalid: false, isDisabled: false, isCheckedVal: false, news_letter_error: "", show_news_letter_error: false })
+      setAltEmailIsvalid(false)
+      setIsDisabled(false)
+      setIsCheckedVal(false)
+      setNewsLetterError("")
+      setShowNewsLetterError(false)
     }
   }
 
-
-  handleFirstName(field, e) {
-    this.setState({ firstNameIsValid: false, isDisabled: false})
-    this.state.errors['first_name'] = ""
-
-    let fields = this.state.fields;
-     fields[field] = e.target.value
-    this.setState({ fields });
-
+  const handleFirstName = (field, e) => {
+    setFirstNameIsValid(false)
+    setIsDisabled(false)
+    setFirstName(e.target.value)
   }
 
-  handleLastName(field, e) {
-    this.setState({ lastNameIsValid: false, isDisabled: false})
-    this.state.errors['last_name'] = ""
-
-    let fields = this.state.fields;
-     fields[field] = e.target.value
-    this.setState({ fields });
+  const handleLastName = (field, e) => {
+    setLastName(e.target.value)
+    setLastNameIsValid(false)
+    setIsDisabled(false)
   }
 
-  handlePassword(field, e) {
-    this.setState({ passwordIsValid: false, isDisabled: false})
-    this.state.errors['password'] = ""
-
-    let fields = this.state.fields;
-     fields[field] = e.target.value
-    this.setState({ fields });
+  const handlePassword = (field, e) => {
+    setPassword(e.target.value)
+    setPasswordIsValid(false)
+    setIsDisabled(false)
   }
 
-
-  handlePasswordvas(field, value) {
+  const handlePasswordvas = (field, value) => {
     if (validator.isStrongPassword(value, {
       minLength: 8, minLowercase: 1, maxLength: 32,
       minUppercase: 1, minNumbers: 1, minSymbols: 1
@@ -274,23 +304,20 @@ export default class SignUp extends Component {
     }
   }
 
-  handleSchool(field, e) {
-    this.setState({ schoolIsValid: false, isDisabled: false })
-    this.state.errors['school_id'] = ""
+  const handleSchool = (field, e) => {
+    setSchoolIsValid(false)
+    setIsDisabled(false)
+    setSchoolId(e.target.value)
 
-    let fields = this.state.fields;
-     fields[field] = e.target.value
-    this.setState({ fields });
-
-    if (!this.state.fields["school_id"]) {
-      this.setState({schoolIsValid: true, isDisabled: true })
-      this.state.errors['school_id'] = "Please select school"
+    if (!e.target.value) {
+      setSchoolIsValid(true)
+      setIsDisabled(true)
+      setSchoolErrorMsg("Please select school")
     }
   }
 
-
-  Schools() {
-    let schools = Object.entries(Object.assign({"-- Select A School -- ": ""}, this.state.active_schools))
+  const Schools = () => {
+    let schools = Object.entries(Object.assign({"-- Select A School -- ": ""}, active_schools))
     return schools.map((school, i) => {
       return (
         <option key={school[1]} value={school[1]}>{school[0]}</option>
@@ -298,78 +325,54 @@ export default class SignUp extends Component {
     }, this);
   }
 
-
-  handleChange(field, e) {
-    this.setState({ firstNameIsValid: false})
-    let fields = this.state.fields;
-    fields[field] = e.target.value;
-    this.setState({ fields });
-  }
-
-  showNotifications() {
-    if (Object.entries(this.state.errors).length > 0) {
-      return 'display_block signUpMessage'
+  const showNotifications = () => {
+    if (errorEmailMsg || errorAltEmailMsg || firstNameErrorMsg || lastNameErrorMsg || passwordErrorMsg || serverError) {
+       return 'display_block signUpMessage'
     } else {
       return 'display_none signUpMessage'
     }
   }
 
 
-  showErrors() {
-    return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] || this.state.errors["serverError"] ? 'block' : 'none'
+  const showErrors = () => {
+    return errorEmailMsg || errorAltEmailMsg || firstNameErrorMsg || lastNameErrorMsg || passwordErrorMsg || serverError ? 'block' : 'none'
+    //return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] || this.state.errors["serverError"] ? 'block' : 'none'
   }
 
-  showErrorMessage() {
-    return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] || this.state.errors["serverError"] ? 'block' : 'none'
+  const showErrorMessage = () => {
+    return errorEmailMsg || errorAltEmailMsg || firstNameErrorMsg || lastNameErrorMsg || passwordErrorMsg || serverError ? 'block' : 'none'
   }
 
-  showEmailError() {
-    return this.state.errors["email"]? 'block' : 'none'
-  }
 
-  showAltEmailError() {
-    return this.state.errors["alt_email"]? 'block' : 'none'
-  }
+  const verifyNewsLetterEmailInSignUpPage = (event) => {
+    const initial_check = isCheckedVal;
 
-  showFirstNamerror() {
-    return this.state.errors["first_name"]? 'block' : 'none'
-  }
-
-  showLastNamerror() {
-    return this.state.errors["last_name"]? 'block' : 'none'
-  }
-
-  showPasswordError() {
-    return this.state.errors["password"]? 'block' : 'none'
-  }
-
-  showSchoolError() {
-    return this.state.errors["school_id"]? 'block' : 'none'
-  }
-
-  showServerError() {
-    return this.state.errors["serverError"]? 'block' : 'none'
-  }
-
-  verifyNewsLetterEmailInSignUpPage(event) {
-    const initial_check = this.state.isCheckedVal;
-    this.setState({isCheckedVal: !initial_check})
-    
+    setIsCheckedVal(!initial_check)
     // If alternate email is present in sign-up page take alternate-email to send news-letters other-wise DOE email.
-    const  news_letter_email = this.state.fields["alt_email"] || this.state.fields["email"]
+    const news_letter_email = alt_email || email
 
     if (event.target.value == 1 && news_letter_email == undefined) {
-      this.setState({news_letter_error: "Please enter a valid email address", show_news_letter_error: true, isDisabled: true, isCheckedVal: false })
+      setNewsLetterError("Please enter a valid email address")
+      setShowNewsLetterError(true)
+      setIsDisabled(true)
+      setIsCheckedVal(false)
     } else {
-      this.setState({news_letter_error: "", show_news_letter_error: false, isDisabled: false })
+      setNewsLetterError("")
+      setShowNewsLetterError(false)
+      setIsDisabled(false)
     }
 
     if (news_letter_email !== undefined) {
       axios.post('/news_letter/validate_news_letter_email_from_user_sign_up_page',  { email: news_letter_email }).then(res => {
         if (event.target.value == 1 && res.data["error"] !== undefined) {
-          this.setState({news_letter_error: res.data["error"], show_news_letter_error: true, isCheckedVal: false })
+          setNewsLetterError(res.data["error"])
+          setShowNewsLetterError(true)
+          setIsCheckedVal(false)          
         } else if (event.target.value == 1 && res.data["success"] !== undefined) {
-          this.setState({news_letter_error: "", show_news_letter_error: false, isDisabled: false, isCheckedVal: !initial_check })
+          setNewsLetterError("")
+          setShowNewsLetterError(false)
+          setIsDisabled(false)
+          setIsCheckedVal(!initial_check)
         }
       })
         .catch(function (error) {
@@ -378,8 +381,7 @@ export default class SignUp extends Component {
     }
   }
 
-
-  isStrongPassword(password) {    
+  const isStrongPassword = (password) => {    
     if (password && (password.length >= 8 && password.match(/[a-z]/g) && password.match(/[A-Z]/g) && !password.match(/[\.\s]/g) &&
                      password.match(/[0-9]/g) && password.match(/[^a-zA-Z\.\d]/g) &&
                      !password.match(/(.)\1{2,}/g) &&
@@ -390,154 +392,133 @@ export default class SignUp extends Component {
     }
   }
 
-  showCommonErrorMsg() {
-    if (this.state.serverErrorIsValid && this.state.errors["serverError"]) {
+  const showCommonErrorMsg = () => {
+    if (serverErrorIsValid && serverError) {
       return "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."
     } else {
       return "Some of your information needs to be updated before your account can be created. See the fields highlighted below."
     }
   }
-
-  render() {
-    let error_email_msg = this.state.errors['email']
-    let email_is_invalid = this.state.emailIsInvalid
-    let first_name_invalid = this.state.firstNameIsValid
-    let last_name_invalid = this.state.lastNameIsValid
-    let password_is_invalid = this.state.passwordIsValid
-    let school_is_invalid = this.state.schoolIsValid
-    let alt_email_is_invalid = this.state.altEmailIsvalid
-    let server_error_invalid = this.state.schoolIsValid
-
-    let last_name_error_msg = this.state.errors["last_name"]
-    let first_name_error_msg = this.state.errors["first_name"]
-    let password_error_msg = this.state.errors["password"]
-    let school_error_msg = this.state.errors["school_id"]
-    let alt_email_error_msg = this.state.errors["alt_email"]
-    let server_error = this.state.errors["serverError"]
-
-    let error_msgs = this.state.errors
-    let email = error_msgs["email"] ? 'display' : 'none'
   
-    return (
-        <TemplateAppContainer
-          breakout={<AppBreadcrumbs />}
-          contentPrimary={
-            <>
-              <Heading id="heading-tertiary" level="one" size="tertiary" text="Sign Up" />
-              <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
+  return (
+      <TemplateAppContainer
+        breakout={<AppBreadcrumbs />}
+        contentPrimary={
+          <>
+            <Heading id="heading-tertiary" level="one" size="tertiary" text="Sign Up" />
+            <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
 
-              <div style={{ display: this.showErrors() }}>
-                <Notification ariaLabel="Signup Error Notifications" id="sign-up-error-notifications" className={this.showNotifications()} notificationType="warning"
-                  notificationContent={
-                    <Text id="sign-up-error-notifications-text" noSpace className="signUpMessage">
-                      <div style={{ display: this.showErrorMessage() }}> {this.showCommonErrorMsg()} </div>
-                    </Text>
-                  } 
+            <div style={{ display: showErrors() }}>
+              <Notification ariaLabel="Signup Error Notifications" id="sign-up-error-notifications" className={showNotifications()} notificationType="warning"
+                notificationContent={
+                  <Text id="sign-up-error-notifications-text" noSpace className="signUpMessage">
+                    <div style={{ display: showErrorMessage() }}> {showCommonErrorMsg()} </div>
+                  </Text>
+                } 
+              />
+            </div>
+            <Form id="sign-up-form">
+              <FormField>
+                <TextInput id="sign-up-email"
+                  isRequired
+                  showOptReqLabel={true}
+                  labelText="Your DOE Email Address"
+                  value={email}
+                  onChange={handleEmail.bind(this, "email")}
+                  invalidText={errorEmailMsg}
+                  isInvalid={emailIsInvalid}
+                  helperText="Email address must end with @schools.nyc.gov or a participating school domain."
+                />
+              </FormField>
+              <FormField>
+                <TextInput id="sign-up-alt-email"
+                  showOptReqLabel={true}
+                  labelText="Alternate email address"
+                  value={alt_email}
+                  invalidText={errorAltEmailMsg}
+                  isInvalid={altEmailIsvalid}
+                  onChange={handleAltEmail.bind(this, 'alt_email')}
+                />
+
+              </FormField>
+              <FormField>
+                <TextInput id="sign-up-first-name"
+                  showOptReqLabel={false}
+                  isRequired
+                  showOptReqLabel={true}
+                  labelText="First Name"
+                  value={first_name}
+                  invalidText={firstNameErrorMsg}
+                  isInvalid={firstNameIsValid}
+                  onChange={handleFirstName.bind(this, "first_name")}
+                />
+              </FormField>
+              <FormField>
+                <TextInput id="sign-up-last-name"
+                  showOptReqLabel={false}
+                  isRequired
+                  showOptReqLabel={true}
+                  labelText="Last Name"
+                  value={last_name}
+                  invalidText={lastNameErrorMsg}
+                  isInvalid={lastNameIsValid}
+                  onChange={handleLastName.bind(this, 'last_name')}
+                />
+              </FormField>
+              <FormField>
+                <Select id="sign-up-select-schools" 
+                  labelText="Your School" 
+                  value={school_id}
+                  showLabel
+                  isRequired
+                  showOptReqLabel={true}
+                  invalidText={schoolErrorMsg}
+                  isInvalid={schoolIsValid}
+                  onChange={handleSchool.bind(this, 'school_id')}>
+                  {Schools()}
+                </Select>
+              </FormField>
+              <FormField>
+                <TextInput
+                  id="sign-up-password"
+                  isRequired
+                  showOptReqLabel={true}
+                  labelText="Password"
+                  value={password}
+                  invalidText={passwordErrorMsg}
+                  isInvalid={passwordIsValid}
+                  onChange={handlePassword.bind(this, 'password')}
+                  type="password"
+                  helperText={<>
+                    <Text noSpace>We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.).</Text>
+                    <Text>Please ensure you do not use common patterns such as consecutively repeating a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab.</Text>
+                  </>}
+                />
+              </FormField>
+              
+              <div>
+                <Checkbox
+                  id="news-letter-checkbox"
+                  invalidText={news_letter_error}
+                  isInvalid={show_news_letter_error}
+                  labelText="Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)"
+                  isChecked={isCheckedVal}
+                  name="sign_up_page"
+                  onChange={verifyNewsLetterEmailInSignUpPage}
+                  showHelperInvalidText
+                  showLabel
+                  value="1"
                 />
               </div>
-
-              <Form id="sign-up-form">
-                <FormField>
-                  <TextInput id="sign-up-email"
-                    isRequired
-                    showOptReqLabel={true}
-                    labelText="Your DOE Email Address"
-                    value={this.state.fields["email"]}
-                    onChange={this.handleEmail.bind(this, "email")}
-                    invalidText={error_email_msg}
-                    isInvalid={email_is_invalid}
-                    helperText="Email address must end with @schools.nyc.gov or a participating school domain."
-                  />
-                </FormField>
-                <FormField>
-                  <TextInput id="sign-up-alt-email"
-                    showOptReqLabel={true}
-                    labelText="Alternate email address"
-                    value={this.state.fields['alt_email']}
-                    invalidText={alt_email_error_msg}
-                    isInvalid={alt_email_is_invalid}
-                    onChange={this.handleAltEmail.bind(this, 'alt_email')}
-                  />
-
-                </FormField>
-                <FormField>
-                  <TextInput id="sign-up-first-name"
-                    showOptReqLabel={false}
-                    isRequired
-                    showOptReqLabel={true}
-                    labelText="First Name"
-                    value={this.state.fields["first_name"]}
-                    invalidText={first_name_error_msg}
-                    isInvalid={first_name_invalid}
-                    onChange={this.handleFirstName.bind(this, "first_name")}
-                  />
-                </FormField>
-                <FormField>
-                  <TextInput id="sign-up-last-name"
-                    showOptReqLabel={false}
-                    isRequired
-                    showOptReqLabel={true}
-                    labelText="Last Name"
-                    value={this.state.fields["last_name"]}
-                    invalidText={last_name_error_msg}
-                    isInvalid={last_name_invalid}
-                    onChange={this.handleLastName.bind(this, 'last_name')}
-                  />
-                </FormField>
-                <FormField>
-                  <Select id="sign-up-select-schools" 
-                    labelText="Your School" 
-                    value={this.state.fields["school_id"]}
-                    showLabel
-                    isRequired
-                    showOptReqLabel={true}
-                    invalidText={school_error_msg}
-                    isInvalid={school_is_invalid}
-                    onChange={this.handleSchool.bind(this, 'school_id')}>
-                    {this.Schools()}
-                  </Select>
-                </FormField>
-                <FormField>
-                  <TextInput
-                    id="sign-up-password"
-                    isRequired
-                    showOptReqLabel={true}
-                    labelText="Password"
-                    value={this.state.fields["password"]}
-                    invalidText={password_error_msg}
-                    isInvalid={password_is_invalid}
-                    onChange={this.handlePassword.bind(this, 'password')}
-                    type="password"
-                    helperText={<>
-                      <Text noSpace>We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.).</Text>
-                      <Text>Please ensure you do not use common patterns such as consecutively repeating a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab.</Text>
-                    </>}
-                  />
-                </FormField>
-                
-                <div>
-                  <Checkbox
-                    id="news-letter-checkbox"
-                    invalidText={this.state.news_letter_error}
-                    isInvalid={this.state.show_news_letter_error}
-                    labelText="Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)"
-                    isChecked={this.state.isCheckedVal}
-                    name="sign_up_page"
-                    onChange={this.verifyNewsLetterEmailInSignUpPage}
-                    showHelperInvalidText
-                    showLabel
-                    value="1"
-                  />
-                </div>
-                <FormField>
-                  <Button id="sign-up-button-id" onClick={this.handleSubmit} buttonType="noBrand" className="accountButton" isDisabled={this.state.isDisabled}> Sign Up </Button>
-                </FormField>
-              </Form>
-            </>
-          }
-          contentSidebar={<div><HaveQuestions /></div>}
-          sidebar="right"
-        />
-    )
-  }
+              <FormField>
+                <Button id="sign-up-button-id" onClick={handleSubmit} buttonType="noBrand" className="accountButton" isDisabled={isDisabled}> Sign Up </Button>
+              </FormField>
+            </Form>
+          </>
+        }
+        contentSidebar={<HaveQuestions />}
+        sidebar="right"
+      />
+  )
+  
 }
