@@ -38,9 +38,9 @@ export default function Home(props) {
   const handleSubmit = event => {
     event.preventDefault();
     if (keyword !== null) {
-      navigate("/teacher_set_data"+ "?keyword=" + keyword)
+      navigate({ search: '?keyword='+ keyword});
     } else {
-      navigate("/teacher_set_data")
+      navigate("/")
     }
     getTeacherSets()
   }

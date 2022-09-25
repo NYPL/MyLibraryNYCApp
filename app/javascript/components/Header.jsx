@@ -8,19 +8,14 @@ import { render } from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 
 
-export default class Header extends Component {
+export default function Header(props) {
 
-  constructor(props) {
-    super(props); 
-    this.state = { user_signed_in: this.props.userSignedIn }
-  }
+  const [userSignedIn, setUserSignedIn] = useState(props.userSignedIn)
 
-  render() {
-    return (
-      <>
-        <Navbar userSignedIn={this.props.userSignedIn} handleSignOutMsg={this.props.handleSignOutMsg} hideSignUpMessage={this.props.hideSignUpMessage} hideSignInMessage={this.props.hideSignInMessage} handleLogout={this.props.handleLogout}/>
-        <MobileHeader details={this.props}/>
-      </>
-    )
-  }
+  return (
+    <>
+      <Navbar userSignedIn={props.userSignedIn} handleSignOutMsg={props.handleSignOutMsg} hideSignUpMessage={props.hideSignUpMessage} hideSignInMessage={props.hideSignInMessage} handleLogout={props.handleLogout}/>
+      <MobileHeader details={props}/>
+    </>
+  )
 }

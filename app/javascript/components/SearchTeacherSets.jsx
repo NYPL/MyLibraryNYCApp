@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, useContext, useLayoutEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
@@ -6,8 +6,7 @@ import { titleCase } from "title-case";
 import { Button, ButtonGroup, SearchBar, Select, Icon, HorizontalRule, Heading, Card, CardHeading, CardContent, Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion, SkeletonLoader, useNYPLBreakpoints
 } from '@nypl/design-system-react-components';
 
-import { Link as ReactRouterLink, useSearchParams, useNavigate, createSearchParams } from "react-router-dom";
-
+import { Link as ReactRouterLink, useSearchParams, useNavigate, createSearchParams, useLocation,  UNSAFE_NavigationContext } from "react-router-dom";
 
 export default function SearchTeacherSets(props) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,29 +14,34 @@ export default function SearchTeacherSets(props) {
   const queryParams = [];
 
   for(let entry of searchParams.entries()) {
-    console.log(entry)
     const queryParamsHash = {}
     queryParamsHash[entry[0]] = entry[1]
     queryParams.push(queryParamsHash)
   }
+
   const [teacherSets, setTeacherSets] = useState([])
   const [facets, setFacets] = useState([])
+  const [areaOfStudySelectedValues, setAreaOfStudySelectedValues] = useState([])
+  const [subjectsSelectedValues, setSubjectsSelectedValues] = useState([])
+  const [languageSelectedValues, setLanguageSelectedValues] = useState([])
+  const [setTypeSelectedValues, setSetTypeSelectedValues] = useState([])
+
   const [tsTotalCount, setTsTotalCount] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
   const [pagination, setPagination] = useState("none")
   const [keyword, setKeyWord] =  useState(searchParams.get("keyword") || "") //useState(new URLSearchParams(props.location.search).get('keyword') || "")
   const [selectedFacets, setSelectedFacets] = useState({})
-  const [checkedFacets, setCheckedFacets] = React.useState([false, false]);
-  const [grade_begin, setGradeBegin] = useState(searchParams.get("grade_begin") || -1)
-  const [grade_end, setGradeEnd] = useState(searchParams.get("grade_end") || 12)
+  const [checkedFacets, setCheckedFacets] = React.useState([false]);
+  const [grade_begin, setGradeBegin] = useState(-1)
+  const [grade_end, setGradeEnd] = useState(12)
   const [availableToggle, setAvailableToggle] = useState(false)
-  const [availability, setAvailability] = useState(searchParams.get("availability") || "")
+  const [availability, setAvailability] = useState("")
   const [sortTitleValue, setSortTitleValue] = useState(0)
   const [noTsResultsFound, setNoTsResultsFound] = useState("")
   const [sort_order, setSortOrder] = useState("")
   const [computedCurrentPage, setComputedCurrentPage] = useState(1)
   const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
-  
+  const location = useLocation();
 
   const queryParamsData = () => {
     let array = queryParams,
@@ -49,28 +53,56 @@ export default function SearchTeacherSets(props) {
     return grouped
   }
 
+  const setGrades = (g_begin, g_end) => {
+    if (g_begin && g_end){
+      const beginVal = g_begin === -1? 'Pre-K' : g_begin === 0 ? 'K' : g_begin;
+      const endVal = g_end === -1? 'Pre-K' :  g_end === 0 ? 'K' : g_end;
+      setGradeBegin(beginVal)
+      setGradeEnd(endVal)
+    }
+    // console.log(beginVal)
+  }
+
   useEffect(() => {
+      setSelectedFacets({})
 
-    console.log("test api")
+      const queryValue = new URLSearchParams(location.search)
+      const values = []
+      const tsfacets = {}
+      let facetsdata = queryParams.map((ts, i) => {
+        if (ts.subjects) {
+          tsfacets['subjects'] = ts.subjects.split(',');
+        } else if (ts['area of study']) {
+          tsfacets['area of study'] = [ts['area of study']]
+        } else if (ts['set type']) {
+          tsfacets['set type'] = [ts['set type']]
+        } else if (ts['availability']) {
+          setAvailableToggle(true)
+          tsfacets['availability'] = [ts['availability']]
+        } else if (ts['language']) {
+          tsfacets['language'] = [ts['language']]
+        }
+      })
 
-    let facetsData = queryParamsData().map((ts, i) => { 
-      if (ts.subjects) {
-        selectedFacets['subjects'] = ts.subjects
-      } else if (ts['area of study']) {
-        selectedFacets['area of study'] = ts['area of study']
-      } else if (ts['set type']) {
-        selectedFacets['set type'] = ts['set type']
-      } else if (ts['availability']) {
-        setAvailableToggle(true)
-        selectedFacets['availability'] = ts['availability']
-      } else if (ts['language']) {
-        selectedFacets['language'] = ts['language']
-      }
-    })
-    setSelectedFacets(selectedFacets)
-    const params = Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end}, selectedFacets)
-    getTeacherSets(params)
-  }, []);
+
+      const keywordValue = queryValue.get('keyword')? queryValue.get('keyword') : ""
+      const g_begin = queryValue.get('grade_begin')? queryValue.get('grade_begin') : -1
+      const g_end = queryValue.get('grade_end')? queryValue.get('grade_end') : 12
+      const availabilityval =  queryValue.get('availability')?  [queryValue.get('availability')] : []
+      const availableToggleVal =  queryValue.get('availability')?  true : false
+      
+      //console.log(tsfacets)
+      setSelectedFacets(tsfacets)
+
+      setGrades(queryValue.get('grade_begin'), queryValue.get('grade_end'))
+      setKeyWord(keywordValue)
+      setAvailability(availabilityval)
+      setAvailableToggle(availableToggleVal)
+
+      const params = Object.assign({ keyword: keywordValue, grade_begin: g_begin, grade_end: g_end, availability: availabilityval}, tsfacets)
+      getTeacherSets(params)
+    
+   }, [location.search]);
 
   const getTeacherSets = (params) => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -94,6 +126,7 @@ export default function SearchTeacherSets(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
     if (keyword === "") {
       searchParams.delete('keyword');
     } else {
@@ -101,11 +134,6 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
     }
     
-    navigate({
-      pathname: '/teacher_set_data',
-      search: `?${createSearchParams(searchParams)}`,
-    });
-
     const params = Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets)
     getTeacherSets(params)
   }
@@ -217,9 +245,9 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
       getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: ""}, selectedFacets))
     } else {
+      setAvailableToggle(true)
       searchParams.set('availability', ['available']);
       setSearchParams(searchParams);
-      setAvailableToggle(true)
       setAvailability(["available"])
       getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: ["available"]}, selectedFacets))
     }
@@ -229,29 +257,24 @@ export default function SearchTeacherSets(props) {
     const [gradeBeginVal, gradeEndVal] = grades;
     searchParams.set('grade_begin', gradeBeginVal);
     searchParams.set('grade_end', gradeEndVal);
-    const gradeBegin = gradeBeginVal === -1? 'Pre-K' : gradeBeginVal === 0 ? 'K' : gradeBeginVal;
-    const gradeEnd = gradeEndVal === -1? 'Pre-K' :  gradeEndVal === 0 ? 'K' : gradeEndVal;
-    setGradeBegin(gradeBegin)
-    setGradeEnd(gradeEnd)
     setSearchParams(searchParams);
     getTeacherSets(Object.assign({ keyword: keyword, sort_order: sortTitleValue, availability: availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal}, selectedFacets))
   };
 
   const TeacherSetGradesSlider = () => {
-    const g_begin = grade_begin === -1? 'Pre-K' :  grade_begin;
+    const g_begin = parseInt(grade_begin) === -1? 'Pre-K' : parseInt(grade_begin) === 0? 'K' : parseInt(grade_begin);
       return <Slider marginTop="s" marginBottom="l"
         id="ts-slider-range"
         isRangeSlider
-        labelText={"Grades " + g_begin + " To " + grade_end}
+        labelText={"Grades " + g_begin + " To " + parseInt(grade_end)}
         min={-1}
         max={12}
-        defaultValue={[g_begin, grade_end]}
+        defaultValue={[parseInt(grade_begin), parseInt(grade_end)]}
         onChange={getGrades}
         showBoxes={false}
         showHelperInvalidText
         showLabel
         showValues={false}
-        step={1}
     />
   }
 
@@ -299,7 +322,6 @@ export default function SearchTeacherSets(props) {
   }
 
   const sortTeacherSetTitle = (e) => {
-
     searchParams.set('sort_order', [e.target.value]);
     setSearchParams(searchParams);
     setSortTitleValue(e.target.value)
@@ -325,11 +347,8 @@ export default function SearchTeacherSets(props) {
     } else {
       searchParams.delete(field)
     }
-
     setSelectedFacets(selectedFacets)
     setSearchParams(searchParams);
-   // setSearch(selectedFacets)
-
     if (keyword !==null) {
       getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets))
     } else {
@@ -353,10 +372,10 @@ export default function SearchTeacherSets(props) {
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
     if (tsItems.length >= 1) {
-      return <CheckboxGroup isFullWidth id={"ts-checkbox-group"} defaultValue={[]} isRequired={false}  layout="column" name={ts.label} onChange={tsSelectedFacets.bind(this, ts.label)}>
+      return <CheckboxGroup isFullWidth id="ts-checkbox-group" defaultValue={selectedFacets[ts.label]} isRequired={false}  layout="column" name={ts.label} onChange={tsSelectedFacets.bind(this, ts.label)}>
         { tsItems.map((item, index) =>
-            <Checkbox id={"ts-checkbox-"+ index} isChecked={checkedFacets[index]} value={item["value"].toString()}
-              onChange={(e) => setCheckedFacets([e.target.checked, e.target.checked])}
+            <>
+            <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()}
               labelText={
                <Flex>
                   <span>{item["label"]}</span>
@@ -364,7 +383,7 @@ export default function SearchTeacherSets(props) {
                   <Text noSpace id={"ts-count-"+ index} size="caption">{item["count"] || 0}</Text>
               </Flex>
             }
-           />
+           /></>
         )}
       </CheckboxGroup>
     } else {
@@ -374,7 +393,8 @@ export default function SearchTeacherSets(props) {
 
   const TeacherSetFacets = () => {
     return facets.map((ts, i) => {
-      return <Accordion backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id={"ts-facet-label-" + i} panelMaxHeight="400px" accordionData={ [
+      return <Accordion id={"ts-facets-accordian-"+ i} backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id={"ts-facet-label-" + i} panelMaxHeight="400px" 
+      accordionData={ [
         {
           label: <Text isCapitalized noSpace>{ts.label}</Text>,
           panel: displayAccordionData(ts)
