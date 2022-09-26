@@ -63,12 +63,12 @@ export default function SearchTeacherSets(props) {
     // console.log(beginVal)
   }
 
-  useEffect(() => {
-      setSelectedFacets({})
 
+  useEffect(() => {
       const queryValue = new URLSearchParams(location.search)
       const values = []
       const tsfacets = {}
+
       let facetsdata = queryParams.map((ts, i) => {
         if (ts.subjects) {
           tsfacets['subjects'] = ts.subjects.split(',');
@@ -83,7 +83,6 @@ export default function SearchTeacherSets(props) {
           tsfacets['language'] = [ts['language']]
         }
       })
-
 
       const keywordValue = queryValue.get('keyword')? queryValue.get('keyword') : ""
       const g_begin = queryValue.get('grade_begin')? queryValue.get('grade_begin') : -1
@@ -101,7 +100,6 @@ export default function SearchTeacherSets(props) {
 
       const params = Object.assign({ keyword: keywordValue, grade_begin: g_begin, grade_end: g_end, availability: availabilityval}, tsfacets)
       getTeacherSets(params)
-    
    }, [location.search]);
 
   const getTeacherSets = (params) => {
@@ -342,7 +340,6 @@ export default function SearchTeacherSets(props) {
     }
 
     if (value.length > 0){
-      setCheckedFacets(true)
       searchParams.set(field, value)
     } else {
       searchParams.delete(field)
@@ -399,8 +396,13 @@ export default function SearchTeacherSets(props) {
           label: <Text isCapitalized noSpace>{ts.label}</Text>,
           panel: displayAccordionData(ts)
         } ]}
+      isDefaultOpen={isAccordionOpen(ts)}
       />
     })
+  }
+
+  const isAccordionOpen = (ts) => {
+    return selectedFacets[ts.label] && selectedFacets[ts.label].length > 0 ? true : false
   }
 
   const mobileSupport = () => {

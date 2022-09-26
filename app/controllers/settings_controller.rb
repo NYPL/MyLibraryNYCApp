@@ -13,7 +13,7 @@ class SettingsController < ApplicationController
 
   def mln_banner_message
     if ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.downcase == "true" && ENV['MAINTENANCE_BANNER_TEXT'].present?
-      render json: { bannerText: ENV['MAINTENANCE_BANNER_TEXT'].html_safe }
+      render json: { bannerText: ENV['MAINTENANCE_BANNER_TEXT'].html_safe, bannerTextFound: true }
     end
   end
 
