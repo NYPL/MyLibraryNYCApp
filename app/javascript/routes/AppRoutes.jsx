@@ -26,7 +26,6 @@ import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-comp
 import AccountDetailsSubMenu from "../components/AccountDetailsSubMenu";
 
 export default function AppRoutes(props) {
-  console.log("sss")
   const [hold, setHold] = useState("")
   const [teacher_set, setTeacherSet] = useState("")
   const {userSignedIn, setUserSignedIn} = props
@@ -91,7 +90,6 @@ export default function AppRoutes(props) {
           <Route path='/holds/:id/cancel' element={ <CancelTeacherSetOrder /> } />
           <Route path='/book_details/:id' element={ <TeacherSetBooks /> } />
           <Route path='/home/calendar_event/error' element={ <CalendarEventError /> } />
-          <Route path='/holds/:id/cancel' element={ <CancelTeacherSetOrder /> } />
         </Routes>
         <footer className="footer"> <Footer /></footer>
       </Router>

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
-import { Link as ReactRouterLink} from "react-router-dom";
+import { Link as ReactRouterLink, useParams} from "react-router-dom";
 import axios from 'axios';
 import { titleCase } from "title-case";
 import {
@@ -15,53 +15,53 @@ import {
 import mlnImage from '../images/mln.svg'
 
 
-export default class TeacherSetBooks extends React.Component {
+export default function TeacherSetBooks(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = {book: "", teacherSets: "", bookImageHeight: "", bookImageWidth: ""};
-  }
+  const params = useParams();
+  const [book, setBook] = useState("")
+  const [teacherSets, setTeacherSets] = useState([])
+  const [bookImageHeight, setBookImageHeight] = useState([])
+  const [bookImageWidth, setBookImageWidth] = useState([])
 
-  componentDidMount() {
-    axios.get('/books/'+ this.props.match.params.id)
+  useEffect(() => {
+    axios.get('/books/'+ params["id"])
       .then(res => {
-        this.setState({
-          book: res.data.book, teacherSets: res.data.teacher_sets, 
-        });
+        setTeacherSets(res.data.teacher_sets)
+        setBook(res.data.book)
       })
       .catch(function (error) {
         console.log(error);
     })    
+  }, []);
+
+
+  const IsBookTitlePresent = () => {
+    return (book["title"] == null) ? false : true
   }
 
-
-  IsBookTitlePresent() {
-    return (this.state.book["title"] == null) ? false : true
+  const IsBookSubTitlePresent = () => {
+    return (book["sub_title"] == null) ? false : true
   }
 
-  IsBookSubTitlePresent() {
-    return (this.state.book["sub_title"] == null) ? false : true
+  const IsBookDescriptionPresent = () => {
+    return (book["description"] == null) ? false : true
   }
 
-  IsBookDescriptionPresent() {
-    return (this.state.book["description"] == null) ? false : true
+  const IsBookStatementOfResponsibilityPresent = () => {
+    return (book["statement_of_responsibility"] == null) ? false : true
   }
 
-  IsBookStatementOfResponsibilityPresent() {
-    return (this.state.book["statement_of_responsibility"] == null) ? false : true
+  const IsBookNotesPresent = () => {
+    return (book["notes"] == null) ? false : true
   }
 
-  IsBookNotesPresent(){
-    return (this.state.book["notes"] == null) ? false : true
-  }
-
-  BookCoverUri() {
+  const BookCoverUri = () => {
     return <div>
       book.cover_uri
     </div>
   }
 
-  truncateTitle( str, n, useWordBoundary ){
+  const truncateTitle = ( str, n, useWordBoundary ) => {
     if (str.length <= n) { return str; }
     const subString = str.substr(0, n-1); // the original check
     return (useWordBoundary 
@@ -69,18 +69,18 @@ export default class TeacherSetBooks extends React.Component {
       : subString) + "...";
   };
 
-  breadcrumbTitle(title) {
+  const breadcrumbTitle = (title) => {
     if (title.length >= 60) {
-      return this.truncateTitle( title, 60, true )
+      return truncateTitle( title, 60, true )
     } else {
-      return this.truncateTitle( title, 60, false )
+      return truncateTitle( title, 60, false )
     }
   }
 
 
-  TeacherSetDetails() {
-    if (this.state.teacherSets) {
-      return this.state.teacherSets.map((ts, i) => {
+  const TeacherSetDetails = () => {
+    if (teacherSets) {
+      return teacherSets.map((ts, i) => {
         let availability_status_badge =  (ts.availability == "available") ? "medium" : "low"
         let availability = ts.availability !== undefined ? ts.availability : ""
         return <div>
@@ -102,31 +102,32 @@ export default class TeacherSetBooks extends React.Component {
     }
   }
 
-  BookImage = (data) => {
+  const BookImage = (data) => {
     if (data.cover_uri) {
-      if (this.state.bookImageHeight === 1 && this.state.bookImageWidth === 1) {
+      if (bookImageHeight === 1 && bookImageWidth === 1) {
         return <Image src={mlnImage} aspectRatio="original" size="medium" alt="Book image"/>
-      } else if (this.state.bookImageHeight === 189 && this.state.bookImageWidth === 189){
+      } else if (bookImageHeight === 189 && bookImageWidth === 189){
         return <Image id={"ts-books-" + data.id} src={data.cover_uri} aspectRatio="original" size="medium" alt="Book image"/>
       } else {
-        return <img onLoad={this.bookImageDimensions} src={data.cover_uri} />
+        return <img onLoad={bookImageDimensions} src={data.cover_uri} />
       }
     } else {
       return <Image id={"ts-books-" + data.id} src={mlnImage} aspectRatio="original" size="medium" alt="Book image"/>
     }
   }
 
-  bookImageDimensions = ({target: img }) => {
+  const bookImageDimensions = ({target: img }) => {
     if ((img.offsetHeight === 1) || (img.offsetWidth === 1)) {
-      this.setState({bookImageHeight: img.offsetHeight, bookImageWidth: img.offsetWidth})
+      setBookImageHeight(img.offsetHeight)
+      setBookImageWidth(img.offsetWidth)
     } else {
-      this.setState({bookImageHeight: 189, bookImageWidth: 189})
+      setBookImageHeight(189)
+      setBookImageWidth(189)
     }
   }
 
-  render() {
-    let book = this.state.book;
-    let bookTitle = this.state.book.title? this.state.book.title : "Book Title"
+   // let book = this.state.book;
+    let bookTitle = book.title? book.title : "Book Title"
     let legacy_detail_url = "http://legacycatalog.nypl.org/record="+ book.bnumber +"~S1"
     
     return (
@@ -134,7 +135,7 @@ export default class TeacherSetBooks extends React.Component {
           breakout={<Breadcrumbs id={"mln-breadcrumbs-ts-details"}
                          breadcrumbsData={[{ url: "//"+ process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" }, 
                                            { url: "//"+ window.location.hostname + window.location.pathname, text: "Book Details" },
-                                           { url: "//"+ window.location.hostname + window.location.pathname, text: this.breadcrumbTitle(bookTitle) }]}
+                                           { url: "//"+ window.location.hostname + window.location.pathname, text: breadcrumbTitle(bookTitle) }]}
                          breadcrumbsType="booksAndMore" />}
           contentPrimary={
             <>
@@ -144,22 +145,22 @@ export default class TeacherSetBooks extends React.Component {
 
               <HorizontalRule id="ts-book-details-horizontal-rule" className="teacherSetHorizontal" />
 
-              <Card id="book-page-card-details" layout="row" imageProps={{ component: this.BookImage(book) }} >
-                { this.IsBookSubTitlePresent() ? (
+              <Card id="book-page-card-details" layout="row" imageProps={{ component: BookImage(book) }} >
+                { IsBookSubTitlePresent() ? (
                   <CardHeading id="book-page-sub_title" level="three">
-                    {this.state.book.sub_title}
+                    {book.sub_title}
                   </CardHeading>
                 ) : (<></>) }
 
-                { this.IsBookStatementOfResponsibilityPresent() ? (
+                { IsBookStatementOfResponsibilityPresent() ? (
                   <CardContent id="book-page-statement_of_responsibility" level="three">
-                    {this.state.book.statement_of_responsibility}
+                    {book.statement_of_responsibility}
                   </CardContent>
                 ) : (<></>) }
 
-                { this.IsBookDescriptionPresent() ? (
+                { IsBookDescriptionPresent() ? (
                   <CardContent id="book-page-desc">
-                    {this.state.book.description}
+                    {book.description}
                   </CardContent>
                 ) : (<></>) }
               </Card>
@@ -220,12 +221,11 @@ export default class TeacherSetBooks extends React.Component {
                 <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
               </Link>
               <Heading marginTop="l" id="appears-in-ts-text" size="tertiary" level="three">Appears in These Sets</Heading>
-              {this.TeacherSetDetails()}
+              {TeacherSetDetails()}
             </>
           }
           contentSidebar={<div><HaveQuestions /></div>}
           sidebar="right"
         />
     )
-  }
 }
