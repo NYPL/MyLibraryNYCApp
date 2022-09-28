@@ -144,7 +144,7 @@ export default function NewsLetter(props) {
   }
 
   return (
-    <Box bg="ui.bg.default" p="l" marginTop="l">
+    <Box bg="ui.bg.default" p="l">
       {newLetterSignup()}
     </Box>
   )

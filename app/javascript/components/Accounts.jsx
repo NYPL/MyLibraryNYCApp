@@ -272,7 +272,7 @@ export default function Accounts(props) {
               <Button id="ad-submit-button" buttonType="noBrand" type="submit" onClick={handleSubmit}> Update Account Information </Button>
             </ButtonGroup>
           </Form>
-          <HorizontalRule id="ad-detail-page-horizontal-rule-id" color="var(--nypl-colors-ui-bg-hover)" marginTop="l" marginTop="l" height="1px" />
+          <HorizontalRule id="ad-detail-page-horizontal-rule-id" color="var(--nypl-colors-ui-bg-hover)" marginTop="l" height="2px" />
           <Heading marginTop="l" marginBottom="m" id="your-orders-text" size="tertiary" level="three" text='Orders' />
           {accountSkeletonLoader()}
           {displayOrders()}

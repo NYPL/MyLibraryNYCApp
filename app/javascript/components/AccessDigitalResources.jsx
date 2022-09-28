@@ -5,7 +5,7 @@ export default function AccessDigitalResources(props) {
 
     return (
       <>
-        <Heading id="access-digital-resources-header-text" size="secondary" marginTop="l">Access Digital Resources</Heading>
+        <Heading id="access-digital-resources-header-text" size="secondary" marginTop="s">Access Digital Resources</Heading>
         <Accordion id="access-digital-resources" marginTop="s"accordionData={ [
           {
             label: "Databases",

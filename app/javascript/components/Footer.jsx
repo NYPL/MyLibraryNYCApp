@@ -83,7 +83,7 @@ function Footer() {
 
   const footerData = () => {
     if (isLargerThanMobile) {
-      return <HStack spacing="m">
+      return <HStack spacing="xxl">
         {footerLinks()}
       </HStack>
     } else {

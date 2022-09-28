@@ -224,7 +224,7 @@ export default function TeacherSetBooks(props) {
                   </dd></>) : (<></>) }
               </List>
 
-              <Link marginTop="m" className="tsDetailUrl" href={legacy_detail_url} id="ts-book-page-details_url" type="action" target='_blank'>
+              <Link className="tsDetailUrl" href={legacy_detail_url} id="ts-book-page-details_url" type="action" target='_blank'>
                 View in catalog
                 <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
               </Link>

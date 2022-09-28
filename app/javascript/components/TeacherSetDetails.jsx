@@ -99,7 +99,7 @@ export default function TeacherSetDetails(props) {
 
 
   const TeacherSetDescription = () => {
-    return <Text marginTop="xs" id="ts-page-desc">{teacher_set["description"]}</Text>
+    return <Text noSpace marginTop="xs" id="ts-page-desc">{teacher_set["description"]}</Text>
   }
 
   const AvailableCopies = () => {
@@ -151,16 +151,16 @@ export default function TeacherSetDetails(props) {
 
   const teacherSetUnAvailable = () => {
     if (teacher_set <= 0) {
-      return <Text sixe="default">This Teacher Set is unavailable. As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at help@mylibrarynyc.org.</Text>
+      return <Text size="caption">This Teacher Set is unavailable. As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at help@mylibrarynyc.org.</Text>
     }
   }
 
   const teacherSetUnAvailableMsg = () => {
-    return <Text width="m" size="default"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at</i> <Link type="action" target='_blank' className="helpEmailLink" href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</Link></Text>
+    return <Text width="m" size="caption"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at</i> <Link type="action" target='_blank' className="helpEmailLink" href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</Link></Text>
   }
 
   const UnableToOrderAdditionalTeacherSetsMsg = () => {
-    return <Text width="m" size="default"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link className="helpEmailLink" href='/account_details' id="ts-page-account-details-link" type="action" target='_blank' className="hrefBlackColor">requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at</i><Link type="action" target='_blank' href="mailto:help@mylibrarynyc.org" className="hrefBlackColor">help@mylibrarynyc.org.</Link></Text>
+    return <Text width="m" size="caption"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link className="helpEmailLink" href='/account_details' id="ts-page-account-details-link" type="action" target='_blank' className="hrefBlackColor">requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at</i><Link type="action" target='_blank' href="mailto:help@mylibrarynyc.org" className="hrefBlackColor">help@mylibrarynyc.org.</Link></Text>
   }
 
   const OrderTeacherSets = () => {
@@ -184,7 +184,7 @@ export default function TeacherSetDetails(props) {
             <Button id="ts-order-submit" buttonType="noBrand" onClick={handleSubmit}> Place Order </Button>
           </FormField>
         </Form>
-        <Text isItalic size="default" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a className="hrefBlackColor" target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
+        <Text isItalic size="caption" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a className="hrefBlackColor" target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
       </div>
     }
   }
@@ -327,7 +327,7 @@ export default function TeacherSetDetails(props) {
 
             {mobileTeacherSetOrderButton()}
             
-            <Heading marginTop="l" id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
+            <Heading marginTop="l" noSpace id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
             { TeacherSetDescription() }
             { displayTeacherSetBooks() }
           

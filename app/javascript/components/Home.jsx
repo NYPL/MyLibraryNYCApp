@@ -79,7 +79,7 @@ export default function Home(props) {
               <Heading id="search-for-home-page-teacher-sets" size="secondary">Search For Teacher Sets</Heading>
               <SearchBar id="home-page-teacher-set-search" labelText="home-page-teacher-set-search-label" noBrandButtonType onSubmit={handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: handleSearchKeyword}} />
               <HorizontalRule marginTop="l" id="home-horizontal-2" align="left" height="2px" />
-              <Heading id="professional-heading" marginTop="l" size="secondary">Professional Development & Exclusive Programs</Heading>
+              <Heading id="professional-heading" marginTop="s" size="secondary">Professional Development & Exclusive Programs</Heading>
               <Text noSpace marginTop="s" size="default">
                 MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State's Learning Standards to encourage reading and learning. From author talks to school programs, participating MyLibraryNYC schools can access a range of exciting programming.
               </Text>

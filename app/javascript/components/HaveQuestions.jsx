@@ -8,7 +8,7 @@ export default function HaveQuestions(props) {
 
   return (
     <>
-      <Heading id="heading-tertiary" level="three" size="tertiary" text="Have Questions?" />
+      <Heading id="heading-tertiary" level="two" size="tertiary" text="Have Questions?" />
       <div id="have-questions-links">
         <p className="visitOurText">Visit Our{' '}
           <Link id="home-faq-link" type="action" target="_blank">
