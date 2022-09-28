@@ -4,7 +4,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
 import {
-  Input, TextInput, List, DSProvider, TemplateAppContainer, Text, Heading, HorizontalRule, Link, SkeletonLoader
+  Input, TextInput, List, DSProvider, TemplateAppContainer, Text, Heading, HorizontalRule, Link, SkeletonLoader, Icon, Button
 } from '@nypl/design-system-react-components';
 
 
@@ -63,7 +63,7 @@ export default class ParticipatingSchools extends Component {
       );
 
       if(filteredSchools.length > 0) {
-        return <List id={"participating-schools-list-" + data['alphabet_anchor']} noStyling>
+        return <><List id={"participating-schools-list-" + data['alphabet_anchor']} noStyling>
           <li id={"ps-name-" + data['alphabet_anchor']} key={i} className="schoolList alphabet_anchor">
             <a id={"ps-name-link-" + data['alphabet_anchor']} className="alphabet_anchor" name={data['alphabet_anchor']}>
               <Heading level="three" size="tertiary">{data['alphabet_anchor']}</Heading>
@@ -73,6 +73,18 @@ export default class ParticipatingSchools extends Component {
             <li fontWeight="heading.callout" id={"ps-name-" + data['alphabet_anchor'] + '-' + index} key={index}>{school}<br/></li>
           )}
         </List>
+        <Button id="ps-scroll-to-top" buttonType="link" className="backToTop"
+          onClick={() =>
+            window.scrollTo({
+              top: 10,
+              behavior: "smooth",
+            })
+          }
+        >
+          <Icon name="arrow" iconRotation="rotate180" size="small" className="backToTopIcon" align="right" marginRight="xs"/>
+          Back to Top
+        </Button>
+        </>
       } 
     })
     if (schoolsCount === 0) {
