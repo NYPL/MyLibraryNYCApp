@@ -32,10 +32,10 @@ export default class ParticipatingSchools extends Component {
     let school_anchors = this.state.schools.map((school, i) => { return school['alphabet_anchor']})
     return this.state.anchor_tags.map((anchor, i) => {
         if (school_anchors.includes(anchor)) {
-          return <Link marginRight="xs" style={{"text-decoration": "none"}} fontWeight="bold" href={"#" + anchor}> {anchor} </Link>
+          return <Link marginRight="xs" style={{"textDecoration": "none"}} fontWeight="bold" href={"#" + anchor}> {anchor} </Link>
         } else {
           if (anchor != '#') {
-            return <a style={{"text-decoration": "none", "font-weight": "bold", "color": "var(--nypl-colors-ui-gray-medium)", "margin-right": "8px"}}>{anchor}</a>
+            return <a style={{"textDecoration": "none", "fontWeight": "bold", "color": "var(--nypl-colors-ui-gray-medium)", "marginRight": "8px"}}>{anchor}</a>
           }
         }
     })
