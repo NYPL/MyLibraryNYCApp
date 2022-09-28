@@ -263,7 +263,7 @@ export default function Accounts(props) {
               <TextInput
                 labelText="Your DOE Email Address"
                 id="account-details-input"
-                value={alt_email}
+                value={alt_email || email}
                 onChange={handleAltEmail}
               />
             </FormField>

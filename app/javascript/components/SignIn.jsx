@@ -7,7 +7,7 @@ import Collapsible from 'react-collapsible';
 import {
   Button, SearchBar, Select, TextInput, HelperErrorText, DSProvider, 
   TemplateAppContainer, Icon, Notification, Card,
-  CardHeading, CardContent, Text, Form, FormField, FormRow
+  CardHeading, CardContent, Text, Form, FormField, FormRow, Heading, HorizontalRule
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 import { BrowserRouter as Router, Link as ReactRouterLink, useNavigate, useLocation } from "react-router-dom";
@@ -85,30 +85,22 @@ export default function SignIn(props) {
       breakout={<AppBreadcrumbs />}
       contentPrimary={
         <>
-          <Collapsible trigger={<><Text noSpace size="caption">Your DOE Email Address <Icon align="left" color="ui.black" iconRotation="rotate0" name="action_help_default" size="small" /></Text></>}>
+          <Heading id="sign-in-heading-id" level="two" size="secondary" text="Sign In" />
+          <HorizontalRule id="ts-detail-page-horizontal-rulel" marginTop="s" className="teacherSetHorizontal" />
+          <Collapsible trigger={<><Text marginTop="l" noSpace size="caption" fontWeight="heading.secondary">Your DOE Email Address <Icon align="right" color="ui.black" style={{marginBottom: "-3"}} iconRotation="rotate0" name="actionHelpDefault" size="medium" type="default"/></Text></>}>
             <Notification className="signInEmailAlert" noMargin notificationType="announcement" showIcon={false}
             notificationContent={
-              <Text noSpace size="mini">Your DOE email address will look like jsmith@schools.nyc.gov, 
-                consisting of your first initial plus your last name. It may also contain a numeral after your name ( jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
+              <Text noSpace size="caption">Your DOE email address will look like <b>jsmith@schools.nyc.gov</b>, 
+                consisting of your first initial plus your last name. It may also contain a numeral after your name (<b>jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.</b>). Even if you do not check your DOE email regularly, please use it to sign in. You can provide an alternate email address later for delivery notifications and other communications.
               </Text>} />
           </Collapsible> 
           
-          <Form id="sign-in-form">
-            <FormRow>
-              <FormField>
-                <TextInput id="sign-in-text-input" className="signInEmail" type="email" onChange={handleEmail} required invalidText={invali_email_msg} isInvalid={isInvalid} />
-                <Button id="sign-in-button" className="signin-button" size="small" buttonType="noBrand" onClick={handleSubmit}>Sign In</Button>
-              </FormField>
-            </FormRow>
-          </Form>
-          <div className="sign-up-link">
-            <Text id="not-registered-text" noSpace size="caption">Not Registered ? Please
-              <span> </span>
-              <Link id="sign-up-link" type="action">
-                <ReactRouterLink to="/signup">Sign Up</ReactRouterLink>
-              </Link>
-            </Text>
-          </div>
+          <TextInput id="sign-in-text-input" marginTop="xs" type="text" placeholder="Enter email address" onChange={handleEmail} required invalidText={invali_email_msg} helperText="Ex:jsmith@schools.nyc.gov" isInvalid={isInvalid} />
+          <Button id="sign-in-button" marginTop="l" className="signin-button" size="small" buttonType="noBrand" onClick={handleSubmit}>Sign In</Button>
+              
+          <Text id="not-registered-text" marginTop="xs" noSpace fontWeight="text.tag">Not Registered ? Please 
+            <Link href="/signup" id="sign-up-link" type="action" marginLeft="xxs">Sign Up</Link>
+          </Text>
         </>
       }
       contentSidebar={<HaveQuestions />}

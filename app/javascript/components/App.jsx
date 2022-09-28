@@ -4,7 +4,6 @@ import { useLocation } from 'react-router';
 import axios from 'axios';
 import AppRoutes from "../routes/AppRoutes";
 import { useNavigate } from 'react-router-dom';
-import useOnLocationChange from './useOnLocationChange';
 
 export default function App(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)

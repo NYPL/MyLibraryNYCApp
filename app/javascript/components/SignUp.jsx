@@ -408,8 +408,8 @@ export default function SignUp(props) {
         breakout={<AppBreadcrumbs />}
         contentPrimary={
           <>
-            <Heading id="heading-tertiary" level="one" size="tertiary" text="Sign Up" />
-            <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
+            <Heading id="sign-up-heading-id" level="two" size="secondary" text="Sign Up" />
+            <HorizontalRule id="ts-detail-page-horizontal-rulel" marginTop="s" className="teacherSetHorizontal" />
 
             <div style={{ display: showErrors() }}>
               <Notification ariaLabel="Signup Error Notifications" id="sign-up-error-notifications" className={showNotifications()} notificationType="warning"
@@ -424,6 +424,7 @@ export default function SignUp(props) {
               <FormField>
                 <TextInput id="sign-up-email"
                   isRequired
+                  marginTop="l"
                   showOptReqLabel={true}
                   labelText="Your DOE Email Address"
                   value={email}
