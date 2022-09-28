@@ -24,7 +24,7 @@ function Banner() {
 
   const bannerMessage = () => {
     if (bannerText !== undefined && bannerTextFound) {
-      return <Notification ariaLabel="Banner Notification" id="banner-notification" notificationType="standard" className="bannerMessage" isCentered showIcon={false} dismissible notificationType="announcement" notificationContent=<div dangerouslySetInnerHTML={{ __html: bannerText }}></div> />
+      return <Notification ariaLabel="Banner Notification" id="banner-notification" notificationType="standard" className="bannerMessage" isCentered showIcon={false} dismissible notificationType="standard" notificationContent=<div dangerouslySetInnerHTML={{ __html: bannerText }}></div> />
     } else {
       return <></>
     }
