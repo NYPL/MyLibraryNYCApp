@@ -8,18 +8,18 @@ export default function HaveQuestions(props) {
 
   return (
     <>
-      <Heading id="heading-tertiary" level="four" size="tertiary" text="Have Questions?" />
+      <Heading id="heading-tertiary" level="three" size="tertiary" text="Have Questions?" />
       <div id="have-questions-links">
-          <p className="visitOurText">Visit Our{' '}
-            <Link id="home-faq-link" type="action" target="_blank">
-              <ReactRouterLink to="/faq"  target="_blank">Faq Page</ReactRouterLink>
-            </Link>
-          </p>
-          <p>Or{' '}
-            <Link id="home-contact-link" type="action">
-              <ReactRouterLink to="/contacts" target="_blank"> Contact Us</ReactRouterLink>
-            </Link>
-          </p>
+        <p className="visitOurText">Visit Our{' '}
+          <Link id="home-faq-link" type="action" target="_blank">
+            <ReactRouterLink to="/faq"  target="_blank">Faq Page</ReactRouterLink>
+          </Link>
+        </p>
+        <p>Or{' '}
+          <Link id="home-contact-link" type="action">
+            <ReactRouterLink to="/contacts" target="_blank"> Contact Us</ReactRouterLink>
+          </Link>
+        </p>
       </div>
     </>
   )

@@ -52,17 +52,19 @@ export default function SignUp(props) {
   }, []);
 
   const redirectToTeacherSetPage = () => {
-    navigate("teacher_set_data", { state: { userSignedIn: true } })
+    navigate("/teacher_set_data", { state: { userSignedIn: true } })
   }
 
   const handleSubmit = event => {
     event.preventDefault();
     if (handleValidation()) {
+
       axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
       axios.post('/users', {
           user: { email: email, alt_email: alt_email, first_name: first_name,
                   last_name: last_name, password: password, school_id: school_id, news_letter_email: alt_email || email }
        }).then(res => {
+
           if (res.data.status == "created") {
             setSignUpmsg(res.data.message)
             props.handleLogin(true)
@@ -133,12 +135,12 @@ export default function SignUp(props) {
       setShowNewsLetterError(false)
       setEmailIsInvalid(false)
       setIsDisabled(false)
-      formIsValid = false;
     }
 
     if (email) {
       axios.get('/check_email', { params: { email: email } }).then(res => {
-        if (res.data.statusCode == 409) {
+
+        if (res.data.statusCode === 409) {
           setErrorEmailMsg("An account is already registered to this email address. Contact help@mylibrarynyc.org if you need assistance.")
           setEmailIsInvalid(true)
           setIsDisabled(true)
@@ -237,7 +239,7 @@ export default function SignUp(props) {
     if (!school_id) {
       setSchoolIsValid(true)
       setIsDisabled(true)
-      setSchoolErrorMsg("Please select school")      
+      setSchoolErrorMsg("Please select a school")      
       formIsValid = false;
     }
 
@@ -257,15 +259,16 @@ export default function SignUp(props) {
   }
 
   const handleAltEmail = (field, e) => {
-    setAltEmail(e.target.value)
     setAltEmailIsvalid(false)
     setIsDisabled(false)
     setAltEmailErrorMsg("")
+    setAltEmail(e.target.value)
 
     if (e.target.value && !validator.isEmail(e.target.value)) {
-      setAltEmailIsvalid(true)
+      setAltEmailIsvalid(false) // need to revisit
       setIsDisabled(true)
       setIsCheckedVal(false)
+      setAltEmailErrorMsg("")
     } else {
       setAltEmailIsvalid(false)
       setIsDisabled(false)
@@ -312,7 +315,7 @@ export default function SignUp(props) {
     if (!e.target.value) {
       setSchoolIsValid(true)
       setIsDisabled(true)
-      setSchoolErrorMsg("Please select school")
+      setSchoolErrorMsg("Please select a school")
     }
   }
 
@@ -333,7 +336,6 @@ export default function SignUp(props) {
     }
   }
 
-
   const showErrors = () => {
     return errorEmailMsg || errorAltEmailMsg || firstNameErrorMsg || lastNameErrorMsg || passwordErrorMsg || serverError ? 'block' : 'none'
     //return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] || this.state.errors["serverError"] ? 'block' : 'none'
@@ -342,7 +344,6 @@ export default function SignUp(props) {
   const showErrorMessage = () => {
     return errorEmailMsg || errorAltEmailMsg || firstNameErrorMsg || lastNameErrorMsg || passwordErrorMsg || serverError ? 'block' : 'none'
   }
-
 
   const verifyNewsLetterEmailInSignUpPage = (event) => {
     const initial_check = isCheckedVal;
@@ -393,6 +394,8 @@ export default function SignUp(props) {
   }
 
   const showCommonErrorMsg = () => {
+    console.log(serverErrorIsValid)
+    console.log(serverError)
     if (serverErrorIsValid && serverError) {
       return "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."
     } else {

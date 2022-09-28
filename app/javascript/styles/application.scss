@@ -205,9 +205,6 @@ $nypl-breakpoint-xxlarge: 1600px;
   color: var(--nypl-colors-ui-black) !important;
   text-decoration: none !important;
   font-weight: 500;
-  font-size: 15px;
-  line-height: 125%;
-  /*margin-left: 1em;*/
 }
 
 .nav-links {
@@ -755,6 +752,10 @@ ul.list li:before {
   justify-content: center;
 }
 
+.termAndConditions {
+  color: var(--nypl-colors-ui-black) !important;
+}
+
 .app-footer-links {
   padding-top: 65px;
   display: flex;
@@ -1127,4 +1128,8 @@ $submenu-width: 245px;
 
 .helpEmailLink {
   color: var(--nypl-colors-ui-link-secondary) !important;
+}
+
+.footer {
+  margin-top: var(--nypl-space-l) !important;
 }

@@ -77,26 +77,34 @@ export default function TeacherSetBooks(props) {
     }
   }
 
+  const tsHorizontalRule = (index, arr) =>  {
+    if (index === arr.length - 1) {
+       <></>
+    } else {
+      return <HorizontalRule id={"ts-book-horizontal-rule-"+ index} marginTop="l"/>
+    }
+  }
 
   const TeacherSetDetails = () => {
     if (teacherSets) {
-      return teacherSets.map((ts, i) => {
+      return teacherSets.map((ts, index, arr) => {
+
         let availability_status_badge =  (ts.availability == "available") ? "medium" : "low"
         let availability = ts.availability !== undefined ? ts.availability : ""
         return <div>
             <Card id="book-page-ts-card-details" layout="row">
-              <CardHeading level="four" id="book-page-ts-title">
+              <CardHeading level="four" id="book-page-ts-title" marginBottom="xs">
                 <ReactRouterLink to={"/teacher_set_details/" + ts.id}>
                   {ts.title}
                 </ReactRouterLink>
               </CardHeading>
-              <CardContent id="book-page-ts-suitabilities"> {ts.suitabilities_string} </CardContent>
-              <CardContent id="book-page-ts-availability"> 
+              <CardContent id="book-page-ts-suitabilities" marginBottom="xs"> {ts.suitabilities_string} </CardContent>
+              <CardContent id="book-page-ts-availability" marginBottom="s"> 
                 <StatusBadge level={availability_status_badge}>{titleCase(availability)}</StatusBadge>
               </CardContent>
               <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
             </Card>
-            <HorizontalRule />
+            {tsHorizontalRule(index, arr)}
         </div>
       })
     }
@@ -140,14 +148,14 @@ export default function TeacherSetBooks(props) {
           contentPrimary={
             <>
               <Flex alignItems="baseline">
-                <Heading id="heading-id" level="two" size="secondary" text={"" + bookTitle} />
+                <Heading id="book-title-heading-id" noSpace level="two" size="secondary" text={"" + bookTitle} />
               </Flex>
 
-              <HorizontalRule id="ts-book-details-horizontal-rule" className="teacherSetHorizontal" />
+              <HorizontalRule id="ts-book-details-horizontal-rule" marginTop="s" className="teacherSetHorizontal" />
 
               <Card id="book-page-card-details" layout="row" imageProps={{ component: BookImage(book) }} >
                 { IsBookSubTitlePresent() ? (
-                  <CardHeading id="book-page-sub_title" level="three">
+                  <CardHeading id="book-page-sub_title" marginBottom="s" level="three">
                     {book.sub_title}
                   </CardHeading>
                 ) : (<></>) }
@@ -166,7 +174,7 @@ export default function TeacherSetBooks(props) {
               </Card>
               
 
-              <List id="book-page-list-details" type="dl" title="Details" marginTop="s">
+              <List id="book-page-list-details" type="dl" title="Details" marginTop="l">
                 { book.publication_date ? (<>
                   <dt id="book-page-publication-date-text">
                     Publication Date
@@ -216,11 +224,11 @@ export default function TeacherSetBooks(props) {
                   </dd></>) : (<></>) }
               </List>
 
-              <Link className="tsDetailUrl" href={legacy_detail_url} id="ts-book-page-details_url" type="action" target='_blank'>
+              <Link marginTop="m" className="tsDetailUrl" href={legacy_detail_url} id="ts-book-page-details_url" type="action" target='_blank'>
                 View in catalog
                 <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
               </Link>
-              <Heading marginTop="l" id="appears-in-ts-text" size="tertiary" level="three">Appears in These Sets</Heading>
+              <Heading marginTop="l" marginBottom="l" id="appears-in-ts-text" size="tertiary" level="three">Appears in These Sets</Heading>
               {TeacherSetDetails()}
             </>
           }

@@ -21,15 +21,11 @@ export default function SearchTeacherSets(props) {
 
   const [teacherSets, setTeacherSets] = useState([])
   const [facets, setFacets] = useState([])
-  const [areaOfStudySelectedValues, setAreaOfStudySelectedValues] = useState([])
-  const [subjectsSelectedValues, setSubjectsSelectedValues] = useState([])
-  const [languageSelectedValues, setLanguageSelectedValues] = useState([])
-  const [setTypeSelectedValues, setSetTypeSelectedValues] = useState([])
-
   const [tsTotalCount, setTsTotalCount] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
   const [pagination, setPagination] = useState("none")
-  const [keyword, setKeyWord] =  useState(searchParams.get("keyword") || "") //useState(new URLSearchParams(props.location.search).get('keyword') || "")
+  const [displayPagination, setDisplayPagination] = useState("none")
+  const [keyword, setKeyWord] =  useState(searchParams.get("keyword") || "")
   const [selectedFacets, setSelectedFacets] = useState({})
   const [checkedFacets, setCheckedFacets] = React.useState([false]);
   const [grade_begin, setGradeBegin] = useState(-1)
@@ -41,6 +37,7 @@ export default function SearchTeacherSets(props) {
   const [sort_order, setSortOrder] = useState("")
   const [computedCurrentPage, setComputedCurrentPage] = useState(1)
   const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
+  const [selectedPage, setSelectedPage] = useState("")
   const location = useLocation();
 
   const queryParamsData = () => {
@@ -87,18 +84,20 @@ export default function SearchTeacherSets(props) {
       const keywordValue = queryValue.get('keyword')? queryValue.get('keyword') : ""
       const g_begin = queryValue.get('grade_begin')? queryValue.get('grade_begin') : -1
       const g_end = queryValue.get('grade_end')? queryValue.get('grade_end') : 12
-      const availabilityval =  queryValue.get('availability')?  [queryValue.get('availability')] : []
-      const availableToggleVal =  queryValue.get('availability')?  true : false
+      const availabilityval = queryValue.get('availability')?  [queryValue.get('availability')] : []
+      const availableToggleVal = queryValue.get('availability')?  true : false
+      const sortOrderVal = queryValue.get('sort_order')?  queryValue.get('sort_order') : ""
+      const pageNumber = queryValue.get('page')?  queryValue.get('page') : 1
       
-      //console.log(tsfacets)
       setSelectedFacets(tsfacets)
-
       setGrades(queryValue.get('grade_begin'), queryValue.get('grade_end'))
       setKeyWord(keywordValue)
       setAvailability(availabilityval)
       setAvailableToggle(availableToggleVal)
+      setSortTitleValue(sortOrderVal)
+      setComputedCurrentPage(pageNumber)
 
-      const params = Object.assign({ keyword: keywordValue, grade_begin: g_begin, grade_end: g_end, availability: availabilityval}, tsfacets)
+      const params = Object.assign({ keyword: keywordValue, grade_begin: g_begin, grade_end: g_end, availability: availabilityval, sort_order: sortOrderVal, page: pageNumber}, tsfacets)
       getTeacherSets(params)
    }, [location.search]);
 
@@ -112,9 +111,9 @@ export default function SearchTeacherSets(props) {
       setNoTsResultsFound(res.data.no_results_found_msg)
 
       if (res.data.teacher_sets.length > 0 && res.data.total_count > 20 ) {
-        setPagination("block")
+        setDisplayPagination("block")
       } else {
-        setPagination("none")
+        setDisplayPagination("none")
       }
     })
     .catch(function (error) {
@@ -132,7 +131,7 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
     }
     
-    const params = Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets)
+    const params = Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability, page: computedCurrentPage}, selectedFacets)
     getTeacherSets(params)
   }
 
@@ -142,17 +141,17 @@ export default function SearchTeacherSets(props) {
       setKeyWord("")
       searchParams.delete('keyword');
       setSearchParams(searchParams);
-      getTeacherSets(Object.assign({ keyword: "", grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets));
+      getTeacherSets(Object.assign({ keyword: "", grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability, page: computedCurrentPage}, selectedFacets));
     }
   }
 
   const resultsFoundMessage = () => {
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
-      return <Text isItalic size="caption">No results found</Text>
+      return <Heading id="no-results-found-id" marginBottom="s" style={{fontStyle: "italic"}} level="three" size="callout" text="No results found" />
     } else if (tsTotalCount === 1) {
-      return <Text isBold size="caption">{tsTotalCount + ' result found'}</Text>
+      return <Heading id="ts-result-found-id" marginBottom="s" level="three" size="callout" text={tsTotalCount + ' result found'} />
     } else if (tsTotalCount >= 1) {
-      return <Text isBold size="caption">{tsTotalCount + ' results found'}</Text>
+      return <Heading id="ts-results-found-id" marginBottom="s" level="three" size="callout" text={tsTotalCount + ' results found'} />
     }
   }
 
@@ -167,6 +166,7 @@ export default function SearchTeacherSets(props) {
             value={sortTitleValue}
             onChange={sortTeacherSetTitle.bind(this)}
             labelText="Sort By"
+            marginBottom="l"
           >
             {sortByOptions.map((s) => <option id={"ts-sort-by-options-" + s.value} key={s.value} value={s.value}>{s.sort_order}</option>)}
           </Select>
@@ -186,28 +186,39 @@ export default function SearchTeacherSets(props) {
     return (ts.availability == "available") ? "medium" : "low"
   }
 
+  const tsHorizontalRule = (index, arr) =>  {
+    if (index === arr.length - 1) {
+       <></>
+    } else {
+      return <HorizontalRule marginTop="l" marginBottom="l" id={"ts-horizontal-rule-"+ index} align="left"  className="tsDetailHorizontalLine"/>
+    }
+  }
+
+
   const teacherSetDetails = () => {
-    return teacherSets.map((ts, i) => {
+    return teacherSets.map((ts, i, arr) => {
       let availability_status_badge =  (ts.availability === "available") ? "medium" : "low"
       return <div id={"teacher-set-results-" + i}>
-          <Card id={"ts-details-" + i} marginTop="m" layout="row" aspectratio="square" size="xxsmall">
-            <CardHeading level="three" id={"ts-order-details-" + i}>
+          <Card id={"ts-details-" + i} layout="row" aspectratio="square" size="xxsmall">
+            <CardHeading marginBottom="xs" level="three" id={"ts-order-details-" + i}>
               <ReactRouterLink to={"/teacher_set_details/" + ts.id} onClick={ () => window.scrollTo({ top: 10 })} >{ts.title}</ReactRouterLink>
-                        
             </CardHeading>
-            <CardContent id={"ts-suitabilities-"+ i}>{ts.suitabilities_string}</CardContent>
-            <CardContent id={"ts-availability-"+ i}>
-              <>{teacherSetAvailability(ts)}</>
+            <CardContent marginBottom="xs" id={"ts-suitabilities-"+ i}>{ts.suitabilities_string}</CardContent>
+            <CardContent marginBottom="s" id={"ts-availability-"+ i}>
+              {teacherSetAvailability(ts)}
             </CardContent>
             <CardContent id={"ts-description-"+ i}>{ts.description}</CardContent>
           </Card>
-          <HorizontalRule id={"ts-horizontal-rule-"+ i} align="left"  className="tsDetailHorizontalLine"/>
+          <HorizontalRule marginTop="l" marginBottom="l" id={"ts-horizontal-rule-"+ i} align="left"  className="tsDetailHorizontalLine"/>
       </div>
     })
   }
 
   const onPageChange = (page) => {
-    setComputedCurrentPage(page);
+    setComputedCurrentPage(page)
+    searchParams.set('page', page);
+    setSearchParams(searchParams);
+
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/teacher_sets', {
         params: Object.assign({
@@ -228,7 +239,7 @@ export default function SearchTeacherSets(props) {
         setGradeBegin(grade_begin)
         setGradeEnd(grade_end)
         setNoTsResultsFound(res.data.no_results_found_msg)
-
+        setComputedCurrentPage(page)
       })
       .catch(function (error) {
        console.log(error)
@@ -241,13 +252,13 @@ export default function SearchTeacherSets(props) {
       setAvailability("")
       searchParams.delete('availability')
       setSearchParams(searchParams);
-      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: ""}, selectedFacets))
+      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: "", page: computedCurrentPage}, selectedFacets))
     } else {
       setAvailableToggle(true)
       searchParams.set('availability', ['available']);
       setSearchParams(searchParams);
       setAvailability(["available"])
-      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: ["available"]}, selectedFacets))
+      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: ["available"], page: computedCurrentPage}, selectedFacets))
     }
   };
 
@@ -256,15 +267,16 @@ export default function SearchTeacherSets(props) {
     searchParams.set('grade_begin', gradeBeginVal);
     searchParams.set('grade_end', gradeEndVal);
     setSearchParams(searchParams);
-    getTeacherSets(Object.assign({ keyword: keyword, sort_order: sortTitleValue, availability: availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal}, selectedFacets))
+    getTeacherSets(Object.assign({ keyword: keyword, sort_order: sortTitleValue, availability: availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal, page: computedCurrentPage}, selectedFacets))
   };
 
   const TeacherSetGradesSlider = () => {
     const g_begin = parseInt(grade_begin) === -1? 'Pre-K' : parseInt(grade_begin) === 0? 'K' : parseInt(grade_begin);
+    const g_end = parseInt(grade_end) === -1? 'Pre-K' : parseInt(grade_end) === 0? 'K' : parseInt(grade_end);
       return <Slider marginTop="s" marginBottom="l"
         id="ts-slider-range"
         isRangeSlider
-        labelText={"Grades " + g_begin + " To " + parseInt(grade_end)}
+        labelText={"Grades " + g_begin + " To " + g_end}
         min={-1}
         max={12}
         defaultValue={[parseInt(grade_begin), parseInt(grade_end)]}
@@ -323,7 +335,7 @@ export default function SearchTeacherSets(props) {
     searchParams.set('sort_order', [e.target.value]);
     setSearchParams(searchParams);
     setSortTitleValue(e.target.value)
-    getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: e.target.value, availability: availability}, selectedFacets));
+    getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: e.target.value, availability: availability, page: computedCurrentPage}, selectedFacets));
   };
 
   const tsSelectedFacets = (field, value) => {
@@ -347,9 +359,9 @@ export default function SearchTeacherSets(props) {
     setSelectedFacets(selectedFacets)
     setSearchParams(searchParams);
     if (keyword !==null) {
-      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets))
+      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability, page: computedCurrentPage}, selectedFacets))
     } else {
-      getTeacherSets(Object.assign({ grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability}, selectedFacets))
+      getTeacherSets(Object.assign({ grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: availability, page: computedCurrentPage}, selectedFacets))
     }
   }
 
@@ -409,6 +421,11 @@ export default function SearchTeacherSets(props) {
     return isLargerThanMedium ? "block" : "none"
   }
 
+  const selectedPageNumber = (pageNumber) => {
+    setSelectedPage(pageNumber)
+    return `${location.origin}?q=celeste&page=${selectedPage}`;
+  }
+
   return (
         <TemplateAppContainer
           breakout={<AppBreadcrumbs />}
@@ -433,7 +450,7 @@ export default function SearchTeacherSets(props) {
                 <div style={{display: mobileSupport()}}>{resultsFoundMessage()}</div>
                 <div>{teacherSetTitleOrder()}</div>
                 <div id="teacher-set-results">{teacherSetDetails()}</div>
-                <div style={{ display: pagination }} >
+                <div style={{ display: displayPagination }} >
                   <Flex alignItems="baseline">
                     <ButtonGroup>
                       <Button id="teacher-sets-scroll-to-top" buttonType="secondary" className="backToTop"
@@ -449,14 +466,12 @@ export default function SearchTeacherSets(props) {
                       </Button>
                     </ButtonGroup>
                     <Spacer />
-                    <div>
-                      <Pagination id="ts-pagination" className="teacher_set_pagination" currentPage={1} onPageChange={onPageChange}  pageCount={totalPages} />
-                    </div>
+                    <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo({ top: 10 }) } className="teacher_set_pagination" onPageChange={onPageChange} initialPage={computedCurrentPage} pageCount={totalPages} /></div>
                   </Flex>
                 </div>
               </>
             }
-          contentSidebar={<><div>{skeletonLoader()}</div><div>{RefineResults()}</div></>}
+          contentSidebar={<>{skeletonLoader()}{RefineResults()}</>}
           sidebar="left" 
         />
     )

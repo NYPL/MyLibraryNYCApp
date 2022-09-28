@@ -51,11 +51,11 @@ export default function Navbar(props) {
 
             <li id="mln-navbar-social-media-link" className="nav__menu-item nav-link-colors socialMediaIcon">
               <Link type="action" target="_blank" href="https://twitter.com/mylibrarynyc/">
-                <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="icon-id" name="socialTwitter" size="medium" type="default" />
+                <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="social-twitter-icon-id" name="socialTwitter" size="large" type="default" />
               </Link>
               
               <Link type="action" target="_blank" href="https://www.instagram.com/mylibrarynyc/">
-                <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="icon-id" name="socialInstagram" size="medium" type="default" />
+                <Icon align="right" color="ui.black" className="navBarIcon" decorative iconRotation="rotate0" id="social-instagram-icon-id" name="socialInstagram" size="large" type="default" />
               </Link>
             </li>
           </HStack>

@@ -29,7 +29,7 @@ function CalendarOfEvents(props) {
 
   return (
     <div className="calendarButton">
-      <ButtonGroup>
+      <ButtonGroup marginTop="s">
         <Button id="calendar-of-events-button" buttonType="noBrand">
           <Link id="calendar-of-events-link" className="calendar_link" target="_blank" href={ "//"+ process.env.MLN_INFO_SITE_HOSTNAME + "/home/calendar_event/" + calendarFileName } > Calendar of Events </Link>
         </Button>

@@ -18,7 +18,7 @@ import {
   CardContent,
   Heading,
   Image, Flex, Spacer, 
-  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon, Breadcrumbs, Hero, Notification, useNYPLBreakpoints, Accordion
+  List, Link, DSProvider, TemplateAppContainer, Text, Form, FormRow, FormField, SimpleGrid, ButtonGroup, Box, HorizontalRule, StatusBadge, VStack, Icon, Breadcrumbs, Hero, Notification, useNYPLBreakpoints, Accordion, Tooltip
 } from '@nypl/design-system-react-components';
 
 import TeacherSetOrder from "./TeacherSetOrder";
@@ -99,7 +99,7 @@ export default function TeacherSetDetails(props) {
 
 
   const TeacherSetDescription = () => {
-    return <div id="ts-page-desc">{teacher_set["description"]}</div>
+    return <Text marginTop="xs" id="ts-page-desc">{teacher_set["description"]}</Text>
   }
 
   const AvailableCopies = () => {
@@ -107,14 +107,14 @@ export default function TeacherSetDetails(props) {
   }
 
   const BooksCount = () => {
-    return <div className="bookTitlesCount">{books.length > 1 ? books.length + " Titles" : books.length >= 1 ? books.length + " Title" : ""}</div>
+    return <div>{books.length > 1 ? books.length + " Titles" : books.length >= 1 ? books.length + " Title" : ""}</div>
   }
 
   const TeacherSetBooks = () => {
     return books.map((data, i) => {
-      return <ReactRouterLink id={"ts-books-" + i} to={"/book_details/" + data.id} >
-          {BookImage(data)}
-        </ReactRouterLink>
+      return <><ReactRouterLink id={"ts-books-" + i} to={"/book_details/" + data.id} >
+            {BookImage(data)}
+        </ReactRouterLink></>
     })
   }
 
@@ -131,14 +131,15 @@ export default function TeacherSetDetails(props) {
   const BookImage = (data) => {
     if (data.cover_uri) {
       if (bookImageHeight === 1 && bookImageWidth === 1) {
-        return <Image src={mlnImage} aspectRatio="square" size="default" alt="Book image" className="bookImageTop"/>
+        return <Image title={data.title} src={mlnImage} aspectRatio="square" size="default" alt="Book image" className="bookImageTop"/>
+
       } else if (bookImageHeight === 189 && bookImageWidth === 189){
-        return <Image id={"ts-books-" + data.id} src={data.cover_uri} className="bookImageTop" aspectRatio="square" size="default" alt="Book image"/>
+        return <Image title={data.title} id={"ts-books-" + data.id} src={data.cover_uri} className="bookImageTop" aspectRatio="square" size="default" alt="Book image"/>
       } else {
         return <img onLoad={bookImageDimensions} src={data.cover_uri} />
       }
     } else {
-      return <Image id={"ts-books-" + data.id} src={mlnImage} className="bookImageTop" aspectRatio="square" size="default" alt="Book image"/>
+      return <Image title={data.title} id={"ts-books-" + data.id} src={mlnImage} className="bookImageTop" aspectRatio="square" size="default" alt="Book image"/>
     }
   }
 
@@ -245,9 +246,9 @@ export default function TeacherSetDetails(props) {
 
   const orderTeacherSetsInfo = () => {
     if (isLargerThanMobile || (!isLargerThanMobile && ((teacher_set && teacher_set.available_copies > 0) && allowed_quantities.length > 0) )) {
-      return <VStack align="left" spacing="s">
-        <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
-          <Heading id="ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Order Set!" />
+      return <VStack align="left">
+        <Box id="teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden" marginBottom="l">
+          <Heading id="ts-order-set" textAlign="center" noSpace level="two" size="secondary" text="Order Set!" />
           <Heading id="ts-available-copies" textAlign="center" size="callout" level="four" text={AvailableCopies()} />
           {OrderTeacherSets()}
         </Box>
@@ -261,13 +262,13 @@ export default function TeacherSetDetails(props) {
     if (!isLargerThanMobile) {
       if (teacher_set && teacher_set.available_copies <= 0 ) {
         return <Box marginTop="l" marginBottom="l" id="mobile-teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
-          <Heading id="mobile-ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Set Unavailable" />
+          <Heading id="mobile-ts-order-set" textAlign="center" noSpace level="two" size="secondary" text="Set Unavailable" />
           {teacherSetUnAvailableMsg()}
         </Box>
 
       } else if(allowed_quantities.length <= 0) {
           return <Box marginTop="l" marginBottom="l" id="mobile-teacher-set-details-order-page" bg="var(--nypl-colors-ui-gray-x-light-cool)" color="var(--nypl-colors-ui-black)" padding="m" borderWidth="1px" borderRadius="sm" overflow="hidden">
-            <Heading id="mobile-ts-order-set" textAlign="center" noSpace level="three" size="secondary" text="Set Unavailable" />
+            <Heading id="mobile-ts-order-set" textAlign="center" noSpace level="two" size="secondary" text="Set Unavailable" />
             {UnableToOrderAdditionalTeacherSetsMsg()}
           </Box>
       } else {
@@ -280,8 +281,8 @@ export default function TeacherSetDetails(props) {
 
   const displayTeacherSetBooks = () => {
     if (isLargerThanMobile) {
-      return <><div id="ts-page-books-count"> { BooksCount() } </div>
-        <SimpleGrid id="ts-page-books-panel" columns={5} gap="xxs"> { TeacherSetBooks() } </SimpleGrid>
+      return <><Heading id="ts-page-books-count" marginTop="s" size="callout" level="four" text={BooksCount()}/>
+        <SimpleGrid id="ts-page-books-panel" marginTop="xs" columns={5} gap="xxs"> { TeacherSetBooks() } </SimpleGrid>
       </>
     } else if (books.length > 0) {
       return <Accordion
@@ -300,7 +301,6 @@ export default function TeacherSetDetails(props) {
   }
 
   return (
-    <DSProvider>
       <TemplateAppContainer
         breakout={<>
           <Breadcrumbs id={"mln-breadcrumbs-ts-details"}
@@ -317,21 +317,22 @@ export default function TeacherSetDetails(props) {
         contentPrimary={
           <>
             <Flex alignItems="baseline">
-              <Heading id="heading-secondary" noSpace level="two" size="secondary" text={teacherSetTitle() } />
+              <Heading id="ts-title-id" noSpace level="two" size="secondary" text={teacherSetTitle() } />
               <Spacer />
               {teacherSetAvailability()}
             </Flex>
-            <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
+            <HorizontalRule marginTop="s" id="ts-detail-page-horizontal-rule-id" className="teacherSetHorizontal" />
+            
             <Flex alignItems="baseline"><Spacer />{mobileteacherSetAvailability()}</Flex>
 
             {mobileTeacherSetOrderButton()}
-            <VStack align="left" spacing="s">
-              <Heading id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
-               { TeacherSetDescription() }
-               { displayTeacherSetBooks() }
-            </VStack>
+            
+            <Heading marginTop="l" id="ts-header-desc-text" level="three" size="tertiary" text="What is in the box" />                
+            { TeacherSetDescription() }
+            { displayTeacherSetBooks() }
+          
 
-            <List id="ts-list-details" type="dl" title="Details" marginTop="s">
+            <List id="ts-list-details" type="dl" title="Details" marginTop="l">
               <dt id="ts-suggested-grade-range-text">
                 Suggested Grade Range [New]
               </dt>
@@ -374,7 +375,7 @@ export default function TeacherSetDetails(props) {
                 {teacher_set.call_number}
               </dd>
             </List>
-            <Link className="tsDetailUrl" href={legacyDetailUrl()} id="ts-page-details_url" type="action" target='_blank'>
+            <Link href={legacyDetailUrl()} id="ts-page-details_url" type="action" target='_blank' marginTop="l">
               View in catalog
               <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
             </Link>
@@ -384,6 +385,5 @@ export default function TeacherSetDetails(props) {
         contentSidebar={ orderTeacherSetsInfo() }
         sidebar="right"
       />
-    </DSProvider>
   )
 }

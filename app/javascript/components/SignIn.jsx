@@ -62,12 +62,13 @@ export default function SignIn(props) {
     axios.post('/users/login', { user: { email: email } } 
     ).then(res => {
       if (res.data.logged_in) {
-        console.log("Loggedin")
         setUserSignedIn(true)
         props.handleLogin(true)
         props.handleSignInMsg(res.data.sign_in_msg, true)
         props.hideSignInMessage(false)
-        navigate(res.data.user_return_to, { state: { userSignedIn: true } });
+        console.log(res.data.user_return_to)
+        console.log(location)
+        navigate('/'+res.data.user_return_to, { state: { userSignedIn: true } });
         return false;
       } else {
         setInvalidEmailMsg("Please enter a valid email address")

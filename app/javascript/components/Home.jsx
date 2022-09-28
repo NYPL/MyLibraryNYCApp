@@ -37,10 +37,15 @@ export default function Home(props) {
 
   const handleSubmit = event => {
     event.preventDefault();
-    if (keyword !== null) {
-      navigate({ search: '?keyword='+ keyword});
+
+    if (keyword !== "") {
+      navigate({
+        pathname: '/teacher_set_data',
+        search: '?keyword=' + keyword,
+      });
+
     } else {
-      navigate("/")
+      navigate("/teacher_set_data")
     }
     getTeacherSets()
   }
@@ -71,20 +76,20 @@ export default function Home(props) {
       contentTop={SignedUpMessage()}
       contentPrimary={
             <>
-              <Heading id="search-for-home-page-teacher-sets" level="two">Search For Teacher Sets</Heading>
-              <SearchBar onClick={ () => window.scrollTo({ top: 0 }) } id="home-page-teacher-set-search" labelText="home-page-teacher-set-search-label" noBrandButtonType onSubmit={handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: handleSearchKeyword}} />{<br/>}
-              <HorizontalRule id="home-horizontal-2" align="left" height="3px" />
-              <Heading id="professional-heading" level="three">Professional Development & Exclusive Programs</Heading>
-              <Text size="default">
+              <Heading id="search-for-home-page-teacher-sets" size="secondary">Search For Teacher Sets</Heading>
+              <SearchBar id="home-page-teacher-set-search" labelText="home-page-teacher-set-search-label" noBrandButtonType onSubmit={handleSubmit} textInputProps={{ labelText: "Teacherset Search label", name: "teacherSetInputName", placeholder: "Enter teacher-set",  onChange: handleSearchKeyword}} />
+              <HorizontalRule marginTop="l" id="home-horizontal-2" align="left" height="2px" />
+              <Heading id="professional-heading" marginTop="l" size="secondary">Professional Development & Exclusive Programs</Heading>
+              <Text noSpace marginTop="s" size="default">
                 MyLibraryNYC educators can participate in workshops on a wide variety of subjects, aligned to New York State's Learning Standards to encourage reading and learning. From author talks to school programs, participating MyLibraryNYC schools can access a range of exciting programming.
               </Text>
               <CalendarOfEvents />
-              <HorizontalRule id="home-horizontal-3" align="left" height="3px" />
+              <HorizontalRule marginTop="l" id="home-horizontal-3" align="left" height="2px" />
               <AccessDigitalResources />
             </>
           }
       contentBottom={<NewsLetter />}
-      contentSidebar={<div><HaveQuestions /></div>}
+      contentSidebar={<HaveQuestions />}
       sidebar="right"
     />
   )

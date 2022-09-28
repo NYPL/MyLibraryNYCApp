@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     # and store it in a local var before printing out or any other access
     redirect_url = stored_location_for(:user)
     unless redirect_url.present?
-      redirect_url = '/teacher_set_data'
+      redirect_url = 'teacher_set_data'
     end
 
     # Redirect to admin dashboard if this is an admin login

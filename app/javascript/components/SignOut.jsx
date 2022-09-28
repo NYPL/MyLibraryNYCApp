@@ -20,13 +20,11 @@ export default function SignOut(props) {
   }
 
   return (
-      <DSProvider>
         <TemplateAppContainer
           breakout={<><AppBreadcrumbs />
             {signOutMessage()}
           </>}
         />
-      </DSProvider>
   )
   
 }

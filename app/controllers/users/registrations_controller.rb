@@ -61,11 +61,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def error_msg_hash(user)
     error_msg_hash = {}
     if user.errors.messages[:alt_email].present?
-      error_msg_hash[:alt_email] = ['Alternate email '.concat("#{user.errors.messages[:alt_email].join}.")]
+      error_msg_hash[:alt_email] = user.errors.messages[:alt_email] #['Alt Email '.concat(alt_email)]
     end
 
     if user.errors.messages[:email].present?
-      error_msg_hash[:email] = ['Email '.concat("#{user.errors.messages[:email].join}.")]
+      error_msg_hash[:email] = user.errors.messages[:email] #['Email '.concat(email)]
     end
     error_msg_hash
   end
