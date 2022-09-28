@@ -5,13 +5,9 @@ import axios from 'axios';
 
 import {
   Input, TextInput, List, Form, Button, FormRow, InputTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon, ButtonGroup, Text, SkeletonLoader
+  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon, ButtonGroup, Text, SkeletonLoader, HorizontalRule
 } from '@nypl/design-system-react-components';
 
-// import {
-//   BrowserRouter as Router,
-//   Link as ReactRouterLink,
-// } from "react-router-dom";
 
 export default function Accounts(props) {
 
@@ -192,8 +188,8 @@ export default function Accounts(props) {
           'Action'
         ]}
         showRowDividers={true}
-        columnHeadersBackgroundColor="#F5F5F5"
-        columnHeadersTextColor="\"
+        columnHeadersBackgroundColor="var(--nypl-colors-ui-gray-x-light-cool)"
+        columnHeadersTextColor="var(--nypl-colors-ui-black)"
         tableData={HoldsDetails()}
         id="ts-order-details-list"
       />
@@ -272,8 +268,11 @@ export default function Accounts(props) {
                 {Schools()}
               </Select>
             </FormField>
-            <Button id="ad-submit-button" buttonType="noBrand" className="accountButton" onClick={handleSubmit}> Update Account Information </Button>
+            <ButtonGroup>
+              <Button id="ad-submit-button" buttonType="noBrand" type="submit" onClick={handleSubmit}> Update Account Information </Button>
+            </ButtonGroup>
           </Form>
+          <HorizontalRule id="ad-detail-page-horizontal-rule-id" color="var(--nypl-colors-ui-bg-hover)" marginTop="l" marginTop="l" height="1px" />
           <Heading marginTop="l" marginBottom="m" id="your-orders-text" size="tertiary" level="three" text='Orders' />
           {accountSkeletonLoader()}
           {displayOrders()}

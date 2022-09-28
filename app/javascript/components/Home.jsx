@@ -56,7 +56,7 @@ export default function Home(props) {
 
   const SignedUpMessage = () => {
     if (!props.hideSignOutMsg && !props.userSignedIn && props.signoutMsg !== "") {
-      return <Notification marginTop="l" icon={<Icon name="alertNotificationImportant" color="section.locations.primary" />} ariaLabel="SignOut Notification" id="sign-out-notification" notificationType="announcement" 
+      return <Notification marginTop="l" icon={<Icon name="alertWarningFilled" color="ui.warning.primary" />} ariaLabel="SignOut Notification" id="sign-out-notification" notificationType="announcement" 
       notificationContent={<><b>You have been signed out.</b> You will need to <Link href="/signin">sign in</Link> again to access your account details.</>} />
     } else {
       return <></>
