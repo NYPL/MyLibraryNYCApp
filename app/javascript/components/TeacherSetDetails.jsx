@@ -160,7 +160,7 @@ export default function TeacherSetDetails(props) {
   }
 
   const UnableToOrderAdditionalTeacherSetsMsg = () => {
-    return <Text width="m" size="default"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link className="helpEmailLink" href='/account_details' id="ts-page-account-details-link" type="action" target='_blank'>requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at</i><Link type="action" target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</Link></Text>
+    return <Text width="m" size="default"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link className="helpEmailLink" href='/account_details' id="ts-page-account-details-link" type="action" target='_blank' className="hrefBlackColor">requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at</i><Link type="action" target='_blank' href="mailto:help@mylibrarynyc.org" className="hrefBlackColor">help@mylibrarynyc.org.</Link></Text>
   }
 
   const OrderTeacherSets = () => {
@@ -184,7 +184,7 @@ export default function TeacherSetDetails(props) {
             <Button id="ts-order-submit" buttonType="noBrand" onClick={handleSubmit}> Place Order </Button>
           </FormField>
         </Form>
-        <Text isItalic size="default" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
+        <Text isItalic size="default" marginTop="s">Note: Available Teacher Sets will deliver to your school within 2 weeks. For Teacher Sets that are currently in use by other educators, please allow 60 days or more for delivery. If you need materials right away, contact us at <a className="hrefBlackColor" target='_blank' href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</a></Text>
       </div>
     }
   }

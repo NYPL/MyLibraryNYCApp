@@ -4,7 +4,7 @@ import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 import {
   Button, Select, TextInput, 
-  TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, HorizontalRule, Heading
+  TemplateAppContainer,Text, FormField, Form, Notification, Checkbox, HorizontalRule, Heading, ButtonGroup
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
 import {useParams, useNavigate} from "react-router-dom";
@@ -431,7 +431,7 @@ export default function SignUp(props) {
                   onChange={handleEmail.bind(this, "email")}
                   invalidText={errorEmailMsg}
                   isInvalid={emailIsInvalid}
-                  helperText="Email address must end with @schools.nyc.gov or a participating school domain."
+                  helperText="Email not formatted correctly. Email address must end with @schools.nyc.gov or a participating school domain."
                 />
               </FormField>
               <FormField>
@@ -494,8 +494,8 @@ export default function SignUp(props) {
                   onChange={handlePassword.bind(this, 'password')}
                   type="password"
                   helperText={<>
-                    <Text noSpace>We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.).</Text>
-                    <Text>Please ensure you do not use common patterns such as consecutively repeating a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab.</Text>
+                    <Text noSpace>We encourage you to select a strong password that includes: at least 8 characters, a mixture of uppercase and lowercase letters, a mixture of letters and numbers, and at least one special character except period (.).
+                     Please ensure you do not use common patterns such as consecutively repeating a character three times, e.g. aaaatf54 or repeating a pattern, e.g. abcabcab.</Text>
                   </>}
                 />
               </FormField>
@@ -515,7 +515,9 @@ export default function SignUp(props) {
                 />
               </div>
               <FormField>
-                <Button id="sign-up-button-id" onClick={handleSubmit} buttonType="noBrand" className="accountButton" isDisabled={isDisabled}> Sign Up </Button>
+                <ButtonGroup>
+                  <Button id="sign-up-button-id" onClick={handleSubmit} buttonType="noBrand" isDisabled={isDisabled}> Sign Up </Button>
+                </ButtonGroup>
               </FormField>
             </Form>
           </>

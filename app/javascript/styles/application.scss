@@ -752,8 +752,9 @@ ul.list li:before {
   justify-content: center;
 }
 
-.termAndConditions {
+.hrefBlackColor {
   color: var(--nypl-colors-ui-black) !important;
+  text-decoration: underline;
 }
 
 .app-footer-links {
