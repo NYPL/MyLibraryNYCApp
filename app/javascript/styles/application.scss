@@ -273,25 +273,6 @@ $nypl-breakpoint-xxlarge: 1600px;
   background: #F9F9F9;
 }
 
-/*.breadcrumbsFont {
-  font-family: sans-serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 21px;
-  letter-spacing: 0px;
-  text-align: left;
-}
-*/
-
-/*.breadcrumbs__list {
-  list-style: none;
-  font-family: sans-serif !important;
-  font-weight: 300 !important;
-  margin: 0px 0px auto 40px !important;
-  letter-spacing: 0px !important;
-}*/
-
 .participating_schools_list {
   padding: 15px 0px !important;
 }
@@ -757,17 +738,6 @@ ul.list li:before {
   text-decoration: underline;
 }
 
-.app-footer-links {
-  padding-top: 65px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  @include max-screen($nypl-breakpoint-medium) {
-    flex-direction: column;
-    display: contents;
-  } 
-}
-
 .footerImage {
   margin: 0 5px;
 }
@@ -792,12 +762,6 @@ ul.list li:before {
   margin: 0px 0px 10px 0px !important;
 }
 
-.signOutMessage {
-  /*background: #F9F9F9 !important;
-  margin: 0px !important;
-  font-weight: "bold";*/
-}
-
 .bookPageImage {
   height: auto;
 }
@@ -814,108 +778,6 @@ ul.list li:before {
 .whiteColor {
   color: #FFFFFF !important;
 }
-
-/*
-This is the extracted copied part responsible for showing & hiding the submenu.
-*/
-
-/*.nav__account_submenu {
-  display: none;
-}
-
-.nav__menu-item:hover {
-  .nav__account_submenu {
-    display: block;
-  }
-}*/
-
-/*
-Layout styles.
-
-I like to work on stuff that's good looking so I remixed a cool simple menu by Mike Rojas (thanks!): https://codepen.io/mikerojas87/pen/rojKb 
-*/
-
-/*$color-blue: #00aeef;
-$color-blue-dark: #0d2035;
-180px: 180px;
-
-
-html {
-  box-sizing: border-box;
-}
-
-*, *:before, *:after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.account-menu-container {
-  text-align: center;
-}
-
-nav {
-  ul {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-}
-
-.nav {
-  display: inline-block;
-  margin: 2rem auto 0;
-  background: $color-blue-dark;
-  color: #fff;
-  text-align: left;
-  
-  a {
-    display: block;
-    padding: 0 16px;
-    line-height: inherit;
-    cursor: pointer;
-  }
-}
-  
-.nav__menu {
-  line-height: 45px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-  
-.nav__menu-item {
-  display: inline-block;
-  position: relative;
-
-  &:hover {
-    background-color: $color-blue;
-
-    .nav__account_submenu {
-      display: block;
-    }
-  }
-}
-    
-.nav__account_submenu {
-  font-weight: 300;
-  text-transform: none;
-  display: none;
-  position: absolute;
-  width: 180px;
-  background-color: $color-blue;
-}
-    
-.nav__account_submenu-item {
-  &:hover {
-    background: rgba(#000, 0.1);
-  }
-}*/
 
 $color-blue: #00aeef;
 $color-blue-dark: #0d2035;
@@ -963,13 +825,17 @@ $submenu-width: 245px;
 .nav__submenu {
   font-weight: 300;
   text-transform: none;
-  display: none;
+ /* display: none;*/
   position: absolute;
   min-width: $submenu-width;
   background: #FFFFFF;
   z-index: 1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
+}
+
+.subMenuColor {
+  text-decoration: none !important;
 }
 
 .account_details {
@@ -1032,10 +898,6 @@ $submenu-width: 245px;
   display: flex;
   color: #000000 !important;
 }
-
-/*.header-logo {
-  background-color: var(--nypl-colors-ui-white) !important;
-}*/
 
 .tsDetailHorizontalLine {
   color: var(--nypl-colors-ui-gray-light-cool);

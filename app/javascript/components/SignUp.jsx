@@ -177,7 +177,7 @@ export default function SignUp(props) {
       formIsValid = false;      
       setEmailIsInvalid(true)
       setIsDisabled(true)
-      setErrorEmailMsg("Email can't be empty")
+      setErrorEmailMsg("Email can not be empty")
     } else {
       formIsValid = validateEmailDomain(email)
     }
@@ -192,7 +192,7 @@ export default function SignUp(props) {
       formIsValid = false;
       setFirstNameIsValid(true)
       setIsDisabled(true)
-      setFirstNameErrorMsg("First name can't be empty")
+      setFirstNameErrorMsg("First name can not be empty")
     }
 
     if (first_name && typeof first_name == "string") {
@@ -208,7 +208,7 @@ export default function SignUp(props) {
       setLastNameIsValid(true)
       setIsDisabled(true)
       formIsValid = false;
-      setLastNameErrorMsg("Last name can't be empty")
+      setLastNameErrorMsg("Last name can not be empty")
     }
 
     if (last_name && typeof last_name == "string") {
@@ -224,7 +224,7 @@ export default function SignUp(props) {
       formIsValid = false;
       setPasswordIsValid(true)
       setIsDisabled(true)
-      setPasswordErrorMsg("Password can't be empty")
+      setPasswordErrorMsg("Password can not be empty")
     }
 
     if (password && typeof password == "string" ) {
