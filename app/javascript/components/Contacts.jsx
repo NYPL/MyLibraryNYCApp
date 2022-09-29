@@ -67,11 +67,11 @@ function Contacts(props) {
                 useRowHeaders
                 tableData={[
                   [
-                    'Phone',
-                    '917-521-3734'
+                    <Text>Phone</Text>,
+                    <Text>917-521-3734</Text>
                   ],
                   [
-                    'Website',
+                    <Text>Website</Text>,
                     <Link href="http://nycdoe.libguides.com/home">DOE Office of Library Services</Link>
                   ]
                 ]}

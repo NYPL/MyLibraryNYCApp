@@ -825,7 +825,7 @@ $submenu-width: 245px;
 .nav__submenu {
   font-weight: 300;
   text-transform: none;
- /* display: none;*/
+  display: none;
   position: absolute;
   min-width: $submenu-width;
   background: #FFFFFF;
@@ -1017,3 +1017,8 @@ $submenu-width: 245px;
 .footer {
   margin-top: var(--nypl-space-l) !important;
 }
+
+.textDecorationNone {
+  text-decoration: none !important;
+}
+

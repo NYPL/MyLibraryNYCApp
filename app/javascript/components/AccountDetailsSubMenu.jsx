@@ -84,21 +84,21 @@ function AccountDetailsSubMenu(props) {
       return <>
         <List id="navbar-account-details" type="ol" inline={false} noStyling={false} className="nav__submenu account_details">
           <li className="nav__submenu-item">
-            <Link className="navBarDropDown" href="/account_details">
+            <Link className="navBarDropDown textDecorationNone" href="/account_details">
               <Icon align="right" className="navBarIcon" color="var(--nypl-colors-ui-gray-dark)" decorative iconRotation="rotate0" id="icon-id" name="actionSettings" size="medium" type="default" />
               Settings
             </Link>
           </li>
 
           <li className="nav__submenu-item">
-            <Link className="navBarDropDown" href="/account_details">
+            <Link className="navBarDropDown textDecorationNone" href="/account_details">
               <Icon align="right" className="navBarIcon" color="var(--nypl-colors-ui-gray-dark)" decorative iconRotation="rotate0" id="icon-id" name="check" size="medium" type="default" />
               My Orders
             </Link>
           </li>
 
           <li className="nav__submenu-item">
-            <ReactRouterLink className="navBarDropDown" onClick={signOut}>
+            <ReactRouterLink className="navBarDropDown textDecorationNone" onClick={signOut}>
               <Icon align="right" className="navBarIcon" color="var(--nypl-colors-ui-gray-dark)" decorative iconRotation="rotate0" id="icon-id" name="actionPower" size="medium" type="default" />
               Sign Out
             </ReactRouterLink>
@@ -109,19 +109,19 @@ function AccountDetailsSubMenu(props) {
       return <>
           <List id="navbar-account-details" type="ol" inline={false} noStyling={false} className="nav__submenu signin_details">
             <li className="nav__submenu-item">
-              <Link href="/signin">
+              <Link href="/signin" className="textDecorationNone">
                 <Button id="sign-in-button" className="signin_nav_button" buttonType="noBrand">Sign In</Button>
               </Link>
             </li>
 
             <li className="nav__submenu-item" >
-              <Link className="navBarDropDown" href="/signin">
+              <Link className="navBarDropDown textDecorationNone" href="/signin">
                 <Icon className="navBarIcon" align="right" color="var(--nypl-colors-ui-gray-dark)" decorative iconRotation="rotate0" id="icon-id" name="utilityAccountFilled" size="medium" type="default" />
                 My Account
               </Link>
             </li>
             <li className="nav__submenu-item">
-              <Link className="navBarDropDown" href="/signup">
+              <Link className="navBarDropDown textDecorationNone" href="/signup">
                 <Icon className="navBarIcon" align="right" color="var(--nypl-colors-ui-gray-dark)" decorative iconRotation="rotate0" id="icon-id" name="actionRegistration" size="medium" type="default" />
                 Not Registered? {<br/>} Please Sign Up
               </Link>

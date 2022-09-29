@@ -394,8 +394,6 @@ export default function SignUp(props) {
   }
 
   const showCommonErrorMsg = () => {
-    console.log(serverErrorIsValid)
-    console.log(serverError)
     if (serverErrorIsValid && serverError) {
       return "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."
     } else {
