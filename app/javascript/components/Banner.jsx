@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import axios from 'axios';
 import "../styles/application.scss"
 import { Notification, Link } from '@nypl/design-system-react-components';
+import ReactParser from 'html-react-parser';
 
 function Banner() {
 
@@ -21,10 +22,9 @@ function Banner() {
     })
   }, []);
 
-
   const bannerMessage = () => {
     if (bannerText !== undefined && bannerTextFound) {
-      return <Notification ariaLabel="Banner Notification" id="banner-notification" notificationType="standard" className="bannerMessage" isCentered showIcon={false} dismissible notificationType="standard" notificationContent=<div dangerouslySetInnerHTML={{ __html: bannerText }}></div> />
+      return <Notification ariaLabel="Banner Notification" id="banner-notification" notificationType="standard" className="bannerMessage" isCentered showIcon={false} dismissible notificationType="standard" notificationContent={<div className="hrefLink">{bannerText}</div>} />
     } else {
       return <></>
     }

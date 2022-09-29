@@ -4,6 +4,7 @@ import HaveQuestions from "./HaveQuestions";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
 import { Accordion, Link, List, DSProvider, TemplateAppContainer, SkeletonLoader } from '@nypl/design-system-react-components';
+import HTMLReactParser from 'html-react-parser';
 
 export default class Faqs extends Component {
 
@@ -26,8 +27,8 @@ export default class Faqs extends Component {
   FrequentlyAskedQuestions() {
     return this.state.faqs.map((data, i) => {
       return {
-        label: data["question"],
-        panel: data["answer"]
+        label: <div className="hrefLink">{HTMLReactParser(data["question"])}</div>,
+        panel: <div className="hrefLink">{HTMLReactParser(data["answer"])}</div>
       }
     })
   }
