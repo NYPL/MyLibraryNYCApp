@@ -156,11 +156,11 @@ export default function TeacherSetDetails(props) {
   }
 
   const teacherSetUnAvailableMsg = () => {
-    return <Text width="m" size="caption"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at</i> <Link type="action" target='_blank' className="helpEmailLink" href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</Link></Text>
+    return <Text width="m" size="caption"><b>This Teacher Set is unavailable.</b> <i>As it is currently being used by other educators, please allow 60 days or more for availability. If you would like to be placed on the wait list for this Teacher Set, contact us at</i> <Link type="action" target='_blank' className="hrefBlackColor" href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org.</Link></Text>
   }
 
   const UnableToOrderAdditionalTeacherSetsMsg = () => {
-    return <Text width="m" size="caption"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link className="helpEmailLink" href='/account_details' id="ts-page-account-details-link" type="action" target='_blank' className="hrefBlackColor">requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at</i><Link type="action" target='_blank' href="mailto:help@mylibrarynyc.org" className="hrefBlackColor">help@mylibrarynyc.org.</Link></Text>
+    return <Text width="m" size="caption"><b>Unable to order additional Teacher Sets.</b> <i>You have <Link className="hrefBlackColor" href='/account_details' id="ts-page-account-details-link" type="action" target='_blank' >requested</Link> the maximum allowed quantity of this Teacher Set. If you need more copies of this Teacher Set, contact us at</i><Link type="action" target='_blank' href="mailto:help@mylibrarynyc.org" className="hrefBlackColor">help@mylibrarynyc.org.</Link></Text>
   }
 
   const OrderTeacherSets = () => {

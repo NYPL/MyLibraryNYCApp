@@ -10,8 +10,8 @@ function Contacts(props) {
           breakout={<AppBreadcrumbs />}
           contentPrimary={
             <div id="contacts-page">
-              <Heading id="general-information-heading" level="two" size="secondary" text="General Information"/>
-              <Text size="default">Have a question about library cards, your account or delivery?</Text>
+              <Heading id="general-information-heading" level="two" size="secondary" marginBottom="s" text="General Information"/>
+              <Text size="default" marginBottom="l">Have a question about library cards, your account or delivery?</Text>
               <Table
                   columnHeaders={["Information", "Contact Emails"]}
                   className="contactInfo"
@@ -28,8 +28,8 @@ function Contacts(props) {
                   ]}
               />
 
-              <Heading id="library-cards-account" marginTop="30px" level="two" size="secondary" text="Professional Development"/>
-              <div>Want to find out about library staff visiting your school?</div>
+              <Heading id="library-cards-account" marginTop="xl" level="two" size="secondary" text="Professional Development"/>
+              <Text marginTop="s" marginBottom="l" size="default">Want to find out about library staff visiting your school?</Text>
               <Table
                   columnHeaders={["Information", "Contact Emails"]}
                   className="contactInfo"
@@ -51,25 +51,28 @@ function Contacts(props) {
                   ]}
               />
 
-              <Heading id="my-library-nyc-questions" level="two" marginTop="30px" size="secondary" text="Joining MyLibraryNYC"/>
-              <div>Do you have questions about MyLibraryNYC or how to join?</div>
+              <Heading id="my-library-nyc-questions" level="two" marginTop="xl" size="secondary" text="Joining MyLibraryNYC"/>
+              <Text marginTop="s" marginBottom="l" size="default">Do you have questions about MyLibraryNYC or how to join?</Text>
             
-              <Heading id="my-library-nyc-questions" level="three" marginTop="30px" size="tertiary" text="Find Your School"/>
-              <div>Search our list of schools to see if your school already participates.</div>
+              <Heading id="my-library-nyc-questions" level="three" size="tertiary" text="Find Your School"/>
+              <Text marginTop="s" marginBottom="l" size="default">Search our list of schools to see if your school already participates.</Text>
               <Link id="mln-ps-link" href="http://www.mylibrarynyc.org/schools">Participating schools</Link>
 
-              <Heading id="eligibility" level="three" marginTop="30px" size="tertiary" text="Eligibility"/>
+              <Heading id="eligibility" marginTop="l" level="three" size="tertiary" text="Eligibility"/>
               To find out if your school is eligible to participate in the program next year Call the 
-              <Link id="eligible-to-participate-in-program" href="https://nycdoe.libguides.com/home"> DOE Office of Library Services</Link>
+              <Link marginTop="s" marginBottom="l" id="eligible-to-participate-in-program" href="https://nycdoe.libguides.com/home"> DOE Office of Library Services</Link>
               <Table
-                marginTop="s"
                 columnHeaders={["Information", "Contact Number"]}
-                className=""
+                className="contactInfo"
                 useRowHeaders
                 tableData={[
                   [
                     'Phone',
                     '917-521-3734'
+                  ],
+                  [
+                    'Website',
+                    <Link href="http://nycdoe.libguides.com/home">DOE Office of Library Services</Link>
                   ]
                 ]}
               />              
