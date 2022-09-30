@@ -129,7 +129,6 @@ export default function NewsLetter(props) {
         size="small"
         value={1}
         marginTop="xs"
-        style={{"margin-top": "8px"}}
       />
     } else {
       return <Button

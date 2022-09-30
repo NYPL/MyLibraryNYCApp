@@ -38,6 +38,8 @@ export default function SearchTeacherSets(props) {
   const [computedCurrentPage, setComputedCurrentPage] = useState(1)
   const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
   const [selectedPage, setSelectedPage] = useState("")
+  const [rangeValues, setRangevalues] = useState([-1, 12])
+  const [checkBoxValues, setCheckBoxValues] = useState({});
   const location = useLocation();
 
   const queryParamsData = () => {
@@ -56,8 +58,8 @@ export default function SearchTeacherSets(props) {
       const endVal = g_end === -1? 'Pre-K' :  g_end === 0 ? 'K' : g_end;
       setGradeBegin(beginVal)
       setGradeEnd(endVal)
+      setRangevalues([beginVal, endVal])
     }
-    // console.log(beginVal)
   }
 
 
@@ -285,6 +287,7 @@ export default function SearchTeacherSets(props) {
         showHelperInvalidText
         showLabel
         showValues={false}
+        value={rangeValues}
     />
   }
 
@@ -300,6 +303,7 @@ export default function SearchTeacherSets(props) {
               label: <Text isCapitalized noSpace>Refine Results</Text>,
               panel: <div>{teacherSetSideBarResults()}</div>
             } ]}
+            isAlwaysRendered
           />
         </>
       }
@@ -383,7 +387,6 @@ export default function SearchTeacherSets(props) {
     if (tsItems.length >= 1) {
       return <CheckboxGroup isFullWidth id="ts-checkbox-group" defaultValue={selectedFacets[ts.label]} isRequired={false}  layout="column" name={ts.label} onChange={tsSelectedFacets.bind(this, ts.label)}>
         { tsItems.map((item, index) =>
-            <>
             <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()}
               labelText={
                <Flex>
@@ -392,7 +395,7 @@ export default function SearchTeacherSets(props) {
                   <Text noSpace id={"ts-count-"+ index} size="caption">{item["count"] || 0}</Text>
               </Flex>
             }
-           /></>
+           />
         )}
       </CheckboxGroup>
     } else {
@@ -409,6 +412,7 @@ export default function SearchTeacherSets(props) {
           panel: displayAccordionData(ts)
         } ]}
       isDefaultOpen={isAccordionOpen(ts)}
+      isAlwaysRendered
       />
     })
   }

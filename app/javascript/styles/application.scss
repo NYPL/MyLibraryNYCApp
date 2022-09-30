@@ -848,8 +848,8 @@ $submenu-width: 245px;
 }
     
 .nav__submenu-item {
-  margin-bottom: 25px;
-  margin-top: 18px !important;
+  margin-bottom: 16px;
+  margin-top: 16px !important;
   padding-right: 20px;
   &:hover {
     background: hsba(0, 0%, 0%, 0.25);
@@ -858,7 +858,8 @@ $submenu-width: 245px;
 }
 
 .signin_nav_button {
-  width:  100%;
+  width: 100% !important;
+  background-color: var(--nypl-colors-ui-black) !important;
 }
 
 .teacher_set_pagination {

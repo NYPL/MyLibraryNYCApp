@@ -24,7 +24,7 @@ export default class MobileNavbarSubmenu extends Component {
     return (
         <div className="navMenu-wrapper">
           <List type="ul" noStyling marginLeft="s" marginBottom="s">
-            <li style={{"margin-top": "16px"}}>
+            <li marginTop="s">
               <ReactRouterLink className="mobileSubmenu" to="/signin">Sign In</ReactRouterLink>
               <HorizontalRule align="left" className="mobileHorizontalRule"/>
             </li>

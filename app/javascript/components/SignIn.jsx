@@ -88,7 +88,7 @@ export default function SignIn(props) {
           <HorizontalRule id="ts-detail-page-horizontal-rule-id" marginTop="s" className="teacherSetHorizontal" />
           
           <TextInput isRequired id="sign-in-text-input" marginTop="xs" type="text" labelText="Your DOE Email Address" placeholder="Enter email address" onChange={handleEmail} invalidText={invali_email_msg} helperText="Ex:jsmith@schools.nyc.gov" isInvalid={isInvalid} />
-          <Button id="sign-in-button" marginTop="l" className="signin-button" size="small" buttonType="noBrand" onClick={handleSubmit}>Sign In</Button>
+          <Button id="sign-in-button" marginTop="l" className="signin-button" size="medium" buttonType="noBrand" onClick={handleSubmit}>Sign In</Button>
               
           <Text id="not-registered-text" marginTop="xs" noSpace size="default">Not Registered? Please 
             <Link href="/signup" id="sign-up-link" type="action" marginLeft="xxs">Sign Up</Link>

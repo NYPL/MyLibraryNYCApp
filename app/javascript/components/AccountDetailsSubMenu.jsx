@@ -35,7 +35,7 @@ function AccountDetailsSubMenu(props) {
   const showAccountSigninLink = () => {
     if (props.userSignedIn) {
       return <>
-        <Link href="/account_details" className="nav-link-colors navBarDropDown" onMouseEnter={handleHover}>
+        <Link href="/account_details" marginRight="m" className="nav-link-colors navBarDropDown" onMouseEnter={handleHover}>
         <Icon className="navBarIcon" align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="utilityAccountFilled" size="medium" type="default" />
           My Account{' '}
           <Icon id="account-arrow-drop-down" size="small" className="navBarIcon">
@@ -47,7 +47,7 @@ function AccountDetailsSubMenu(props) {
       </>
     } else {
       return <>
-        <Link href="/signin" className="nav-link-colors navBarDropDown" onMouseEnter={handleHover}>
+        <Link href="/signin" marginRight="m" className="nav-link-colors navBarDropDown" onMouseEnter={handleHover}>
         <Icon className="navBarIcon" align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="actionExit" size="medium" type="default" />
             Sign In{' '}
             <Icon id="signin-arrow-drop-down" size="small" className="navBarIcon" >
@@ -109,8 +109,8 @@ function AccountDetailsSubMenu(props) {
       return <>
           <List id="navbar-account-details" type="ol" inline={false} noStyling={false} className="nav__submenu signin_details">
             <li className="nav__submenu-item">
-              <Link href="/signin" className="textDecorationNone">
-                <Button id="sign-in-button" className="signin_nav_button" buttonType="noBrand">Sign In</Button>
+              <Link href="/signin" type="button" className="textDecorationNone signin_nav_button">
+                Sign In
               </Link>
             </li>
 

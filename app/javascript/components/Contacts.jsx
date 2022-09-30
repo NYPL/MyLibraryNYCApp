@@ -18,11 +18,11 @@ function Contacts(props) {
                   useRowHeaders
                   tableData={[
                     [
-                      <Text>General Information</Text>,
+                      <Text noSpace>General Information</Text>,
                       <Link id="mln-help-email" href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</Link>,
                     ],
                     [ 
-                      <Text>Delivery Questions</Text>,
+                      <Text noSpace>Delivery Questions</Text>,
                       <Link id="mln-delivery-email" href="mailto:delivery@mylibrarynyc.org">delivery@mylibrarynyc.org</Link>
                     ]
                   ]}
@@ -36,16 +36,16 @@ function Contacts(props) {
                   useRowHeaders
                   tableData={[
                     [
-                      <Text>The Bronx, Manhattan and Staten Island</Text>,
+                      <Text noSpace>The Bronx, Manhattan and Staten Island</Text>,
                       <Link id="mln-nypl-email" href="mailto:mylibrarynyc@nypl.org">mylibrarynyc@nypl.org</Link>
                     ],
                     [
-                      <Text>Brooklyn</Text>,
+                      <Text noSpace>Brooklyn</Text>,
                       <Link id="mln-brooklyn-email" href="mailto:mylibrarynyc@bklynlibrary.org">mylibrarynyc@bklynlibrary.org</Link>
                     ],
 
                     [
-                      <Text>Queens</Text>,
+                      <Text noSpace>Queens</Text>,
                       <Link id="mln-queens-email" href="mailto:mylibrarynyc@queenslibrary.org">mylibrarynyc@queenslibrary.org</Link>
                     ]
                   ]}
@@ -67,11 +67,11 @@ function Contacts(props) {
                 useRowHeaders
                 tableData={[
                   [
-                    <Text>Phone</Text>,
+                    <Text noSpace>Phone</Text>,
                     <Text>917-521-3734</Text>
                   ],
                   [
-                    <Text>Website</Text>,
+                    <Text noSpace>Website</Text>,
                     <Link href="http://nycdoe.libguides.com/home">DOE Office of Library Services</Link>
                   ]
                 ]}
