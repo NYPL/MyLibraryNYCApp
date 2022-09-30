@@ -73,8 +73,8 @@ export default function MobileHeader(props) {
       <Spacer />         
       <List id="mobile-mln-navbar-list" type="ul" inline noStyling marginTop="s" marginRight="xs" >
         <li id="mobile-mln-navbar-ts-link">
-          <Link to="/teacher_set_data" className="nav-link-colors">
-            <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="icon-id" name="search" size="large" type="default" />
+          <Link href="/teacher_set_data" className="nav-link-colors">
+            <Icon align="right" color="ui.black" decorative iconRotation="rotate0" id="mobile-search-ts-icon-id" name="utilitySearch" size="large" type="default" />
           </Link>
         </li>
         {signInAccountDetails()}
