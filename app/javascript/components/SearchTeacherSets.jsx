@@ -254,22 +254,23 @@ export default function SearchTeacherSets(props) {
       setAvailability("")
       searchParams.delete('availability')
       setSearchParams(searchParams);
-      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: "", page: computedCurrentPage}, selectedFacets))
+      //getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: "", page: computedCurrentPage}, selectedFacets))
     } else {
       setAvailableToggle(true)
       searchParams.set('availability', ['available']);
       setSearchParams(searchParams);
       setAvailability(["available"])
-      getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: ["available"], page: computedCurrentPage}, selectedFacets))
+      //getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: ["available"], page: computedCurrentPage}, selectedFacets))
     }
   };
 
   const getGrades = (grades) => {
+
     const [gradeBeginVal, gradeEndVal] = grades;
     searchParams.set('grade_begin', gradeBeginVal);
     searchParams.set('grade_end', gradeEndVal);
     setSearchParams(searchParams);
-    getTeacherSets(Object.assign({ keyword: keyword, sort_order: sortTitleValue, availability: availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal, page: computedCurrentPage}, selectedFacets))
+    //getTeacherSets(Object.assign({ keyword: keyword, sort_order: sortTitleValue, availability: availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal, page: computedCurrentPage}, selectedFacets))
   };
 
   const TeacherSetGradesSlider = () => {
@@ -385,7 +386,12 @@ export default function SearchTeacherSets(props) {
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
     if (tsItems.length >= 1) {
-      return <CheckboxGroup isFullWidth id="ts-checkbox-group" defaultValue={selectedFacets[ts.label]} isRequired={false}  layout="column" name={ts.label} onChange={tsSelectedFacets.bind(this, ts.label)}>
+
+      if (selectedFacets[ts.label] === undefined) {
+        selectedFacets[ts.label] = []
+      }
+
+      return <CheckboxGroup isFullWidth id="ts-checkbox-group" isRequired={false}  layout="column" name={ts.label} onChange={tsSelectedFacets.bind(this, ts.label)} value={selectedFacets[ts.label]}>
         { tsItems.map((item, index) =>
             <Checkbox id={"ts-checkbox-"+ index} value={item["value"].toString()}
               labelText={
@@ -423,11 +429,6 @@ export default function SearchTeacherSets(props) {
 
   const mobileSupport = () => {
     return isLargerThanMedium ? "block" : "none"
-  }
-
-  const selectedPageNumber = (pageNumber) => {
-    setSelectedPage(pageNumber)
-    return `${location.origin}?q=celeste&page=${selectedPage}`;
   }
 
   return (
