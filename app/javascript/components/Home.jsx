@@ -74,7 +74,7 @@ export default function Home(props) {
                       id="mln-campaign-hero" text="Welcome To MyLibrary NYC" />} 
                       subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
                       backgroundImageSrc={homeBgImg}
-                      imageProps={{alt: "Mln hero image", src: homeFgImg, id: "mln-hero-image"}}
+                      imageProps={{alt: "Book highlights from MyLibrary NYC", src: homeFgImg, id: "mln-hero-image"}}
                       backgroundColor="var(--nypl-colors-brand-primary)"
                       /></>}
       contentTop={SignedUpMessage()}

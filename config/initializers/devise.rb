@@ -258,5 +258,5 @@ Devise.setup do |config|
   #
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
-  config.timeout_in = 90.minutes
+  config.timeout_in = 180.minutes
 end
