@@ -5,6 +5,9 @@ import CalendarOfEvents from "./CalendarOfEvents";
 import NewsLetter from "./NewsLetter";
 import heroCampaignBg from '../images/hero_campaign_bg.jpg'
 import heroCampaignLeft from '../images/hero_campaign_left.jpg'
+import homeBgImg from '../images/mln-homepage-background.jpg'
+import homeFgImg from '../images/mln-homepage-foreground.jpg'
+
 import axios from 'axios';
 import {useParams, useNavigate} from "react-router-dom";
 import { Hero, SearchBar, Icon, HorizontalRule, Heading, TemplateAppContainer, Notification, Text, Link } from '@nypl/design-system-react-components';
@@ -70,8 +73,9 @@ export default function Home(props) {
                       heading={<Heading level="one"
                       id="mln-campaign-hero" text="Welcome To MyLibrary NYC" />} 
                       subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities." 
-                      backgroundImageSrc={heroCampaignBg}
-                      imageProps={{alt: "Mln hero image", src: heroCampaignLeft, id: "mln-hero-image"}}
+                      backgroundImageSrc={homeBgImg}
+                      imageProps={{alt: "Mln hero image", src: homeFgImg, id: "mln-hero-image"}}
+                      backgroundColor="var(--nypl-colors-brand-primary)"
                       /></>}
       contentTop={SignedUpMessage()}
       contentPrimary={
