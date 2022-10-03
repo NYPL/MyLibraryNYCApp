@@ -10,31 +10,21 @@ import { Button, Heading, Link, Icon, TemplateAppContainer, HorizontalRule
 
 export default function TeacherSetOrder(props) {
 
-  // constructor(props) {
-  //   super(props);
-  //   state = { access_key: this.props.match.params.access_key, 
-  //                  hold: this.props.holddetails, 
-  //                  teacher_set: this.props.teachersetdetails, status_label: this.props.statusLabel };
-  // }
   const params = useParams();
   const navigate = useNavigate();
-  const [access_key, setAccessKey] = useState(params["access_key"])
   const [hold, setHold] = useState(props.holddetails)
   const [teacher_set, setTeacherSet] = useState(props.teachersetdetails)
-  const [status_label, setStatusLabel] = useState(props.statusLabel)
 
   useEffect(() => {
     if (typeof hold === 'string') {
       axios.get('/holds/' + params["access_key"])
         .then((res) => {
-          if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
-            //window.location = res.request.responseURL;
+          if (res.request.responseURL === "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
             navigate(res.request.responseURL)
             return false;
           } else {
             setTeacherSet(res.data.teacher_set)
             setHold(res.data.hold)
-            setStatusLabel(res.data.status_label)
           }
       })
       .catch(function (error) {
@@ -43,22 +33,14 @@ export default function TeacherSetOrder(props) {
     }
   }, []);
 
-  const TeacherSetTitle = () => {
-    return <div>{teacher_set["title"]}</div>
-  }
-
-  const TeacherSetDescription = () => {
-    return <div>{teacher_set["description"]}</div>
-  }
-
   const OrderMessage = () => {
     const order_message = "Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details." 
     const cancelled_message = "The order below has been cancelled."
-    return hold && hold["status"] == 'cancelled' ? cancelled_message : order_message
+    return hold && hold["status"] === 'cancelled' ? cancelled_message : order_message
   }
 
   const showCancelButton = () => {
-    return hold && hold.status == 'cancelled' ? 'none' : 'block'
+    return hold && hold.status === 'cancelled' ? 'none' : 'block'
   }
 
   const CancelButton = () => {
