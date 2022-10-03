@@ -33,9 +33,6 @@ export default function App(props) {
   };
 
   return (
-    <>
-      <AppRoutes userSignedIn={isLoggedIn} setUserSignedIn={setIsLoggedIn}/>
-    </>
-    
+    <AppRoutes userSignedIn={isLoggedIn} setUserSignedIn={setIsLoggedIn}/>
   )
 }
