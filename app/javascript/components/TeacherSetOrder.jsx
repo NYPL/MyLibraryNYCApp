@@ -1,18 +1,11 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import TeacherSetOrderDetails from "./TeacherSetOrderDetails";
 import axios from 'axios';
-import { ReactRouterLink, useParams, useNavigate } from "react-router-dom";
-import { titleCase } from "title-case";
+import { useParams, useNavigate } from "react-router-dom";
 
-import {
-  Button,
-  SearchBar, Select, Input,
-  SearchButton, Card, CardHeading,
-  CardContent, CardActions,
-  MDXCreateElement,
-  Heading, Image, List, Link, DSProvider, Notification, Icon, TemplateAppContainer, Text, HorizontalRule, StatusBadge
+import { Button, Heading, Link, Icon, TemplateAppContainer, HorizontalRule
 } from '@nypl/design-system-react-components';
 
 export default function TeacherSetOrder(props) {
