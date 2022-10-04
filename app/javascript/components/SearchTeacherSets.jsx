@@ -54,11 +54,11 @@ export default function SearchTeacherSets(props) {
 
   const setGrades = (g_begin, g_end) => {
     if (g_begin && g_end){
-      const beginVal = g_begin === -1? 'Pre-K' : g_begin === 0 ? 'K' : g_begin;
-      const endVal = g_end === -1? 'Pre-K' :  g_end === 0 ? 'K' : g_end;
-      setGradeBegin(beginVal)
-      setGradeEnd(endVal)
-      setRangevalues([beginVal, endVal])
+      // const beginVal = g_begin === -1? 'Pre-K' : g_begin === 0 ? 'K' : g_begin;
+      // const endVal = g_end === -1? 'Pre-K' :  g_end === 0 ? 'K' : g_end;
+      setGradeBegin(g_begin)
+      setGradeEnd(g_end)
+      setRangevalues([g_begin, g_end])
     }
   }
 
