@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useContext, useLayoutEffect } from 'react';
+import React, { Component, useState, useEffect, useContext, useLayoutEffect, useMemo } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
@@ -36,11 +36,31 @@ export default function SearchTeacherSets(props) {
   const [noTsResultsFound, setNoTsResultsFound] = useState("")
   const [sort_order, setSortOrder] = useState("")
   const [computedCurrentPage, setComputedCurrentPage] = useState(1)
+  const initialPage = 1;
   const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
-  const [selectedPage, setSelectedPage] = useState("")
+  const [selectedPage, setSelectedPage] =  useState(initialPage);
   const [rangeValues, setRangevalues] = useState([-1, 12])
   const [checkBoxValues, setCheckBoxValues] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
+
+  useEffect(() => {
+    setIsLoading(true);
+    setSelectedPage(1);
+  }, [facets, teacherSets, tsTotalCount, noTsResultsFound]);
+
+
+  useEffect(() => {
+    let timeoutId = "";
+    if (isLoading) {
+      timeoutId = setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
+    return () => {
+      clearInterval(timeoutId);
+    };
+  }, [isLoading]);
 
   const queryParamsData = () => {
     let array = queryParams,
@@ -54,16 +74,11 @@ export default function SearchTeacherSets(props) {
 
   const setGrades = (g_begin, g_end) => {
     if (g_begin && g_end){
-      console.log(g_begin)
-      console.log(g_end)
-      // const beginVal = g_begin === -1? 'Pre-K' : g_begin === 0 ? 'K' : g_begin;
-      // const endVal = g_end === -1? 'Pre-K' :  g_end === 0 ? 'K' : g_end;
       setGradeBegin(parseInt(g_begin))
       setGradeEnd(parseInt(g_end))
       setRangevalues([parseInt(g_begin), parseInt(g_end)])
     }
   }
-
 
   useEffect(() => {
       const queryValue = new URLSearchParams(location.search)
@@ -375,13 +390,54 @@ export default function SearchTeacherSets(props) {
   const skeletonLoader = () => {
     if (noTsResultsFound === "" && teacherSets.length <= 0) {
       return <SkeletonLoader className="teacher-set-skeleton-loader"
+        contentSize={1}
+        headingSize={1}
+        imageAspectRatio="portrait"
+        layout="row"
+        showImage
+        showHeading={false}
+        showContent={false}
+        showButton={false}
+        width="300px"
+      />
+    }
+  }
+
+  const tsDetails = () =>{
+    if (isLoading) {
+      return <SkeletonLoader className="teacher-set-details-skeleton-loader"
         contentSize={4}
         headingSize={2}
         imageAspectRatio="portrait"
         layout="row"
-        showImage
+        showImage={false}
         width="900px"
       />
+    } else {
+      return <>
+        <div style={{display: mobileSupport()}}>{resultsFoundMessage()}</div>
+          <div>{teacherSetTitleOrder()}</div>
+          <div id="teacher-set-results">{teacherSetDetails()}</div>
+          <div style={{ display: displayPagination }} >
+            <Flex alignItems="baseline">
+              <ButtonGroup>
+                <Button id="teacher-sets-scroll-to-top" buttonType="secondary" className="backToTop"
+                  onClick={() =>
+                    window.scrollTo({
+                      top: 10,
+                      behavior: "smooth",
+                    })
+                  }
+                >
+                  Back to Top
+                  <Icon name="arrow" iconRotation="rotate180" size="small" className="backToTopIcon" align="right" />
+                </Button>
+              </ButtonGroup>
+              <Spacer />
+              <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo({ top: 10 }) } className="teacher_set_pagination" onPageChange={onPageChange} initialPage={computedCurrentPage} pageCount={totalPages} /></div>
+            </Flex>
+          </div>
+      </>
     }
   }
 
@@ -452,32 +508,7 @@ export default function SearchTeacherSets(props) {
               />     
             </>
           }
-          contentPrimary={
-              <>
-                <div style={{display: mobileSupport()}}>{resultsFoundMessage()}</div>
-                <div>{teacherSetTitleOrder()}</div>
-                <div id="teacher-set-results">{teacherSetDetails()}</div>
-                <div style={{ display: displayPagination }} >
-                  <Flex alignItems="baseline">
-                    <ButtonGroup>
-                      <Button id="teacher-sets-scroll-to-top" buttonType="secondary" className="backToTop"
-                        onClick={() =>
-                          window.scrollTo({
-                            top: 10,
-                            behavior: "smooth",
-                          })
-                        }
-                      >
-                        Back to Top
-                        <Icon name="arrow" iconRotation="rotate180" size="small" className="backToTopIcon" align="right" />
-                      </Button>
-                    </ButtonGroup>
-                    <Spacer />
-                    <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo({ top: 10 }) } className="teacher_set_pagination" onPageChange={onPageChange} initialPage={computedCurrentPage} pageCount={totalPages} /></div>
-                  </Flex>
-                </div>
-              </>
-            }
+          contentPrimary={tsDetails()}
           contentSidebar={<>{skeletonLoader()}{RefineResults()}</>}
           sidebar="left" 
         />
