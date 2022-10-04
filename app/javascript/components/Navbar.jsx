@@ -22,7 +22,7 @@ export default function Navbar(props) {
 
   const hideSignInMsg = () => {
     props.hideSignInMessage(true)
-    redirectToTeacherSetPage()
+    //redirectToTeacherSetPage()
   }
 
   return (
@@ -38,7 +38,7 @@ export default function Navbar(props) {
           <List id="mln-navbar-list" type="ul" inline noStyling>
             <li id="mln-navbar-ts-link"><Link marginRight="m"href="/teacher_set_data" onClick={hideSignInMsg} className="nav-link-colors">Search Teacher Sets</Link></li>
 
-            <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contacts" onClick={hideSignInMsg} className="nav-link-colors">Contact</ReactRouterLink></li>
+            <li id="mln-navbar-contacts-link"><ReactRouterLink to="/contact" onClick={hideSignInMsg} className="nav-link-colors">Contact</ReactRouterLink></li>
 
             <li id="mln-navbar-faq-link"><Link marginLeft="m" marginRight="m"href="/faq" onClick={hideSignInMsg} className="nav-link-colors">FAQ</Link></li>
 

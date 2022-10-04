@@ -36,7 +36,11 @@ const breadcrumbsUrl = (locationPath) => {
     locationPathname = '/account_details'
   }
 
-  urls.push({ url: "//"+ window.location.hostname + locationPathname, text: HeroDataValue(locationPath) })
+  if (['contact'].includes(locationPath)){
+    urls.push({ url: "//"+ window.location.hostname + locationPathname, text: BreadcrumbsDataValue(locationPath) })
+  } else {
+    urls.push({ url: "//"+ window.location.hostname + locationPathname, text: HeroDataValue(locationPath) })
+  }
 
   if (['signup', 'signin', 'ordered_holds', 'teacher_set_details', 'book_details', 'holds'].includes(locationPath)) {
     urls.push({ url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(locationPath) })
@@ -50,7 +54,7 @@ const BreadcrumbsDataValue = (levelString) => {
       return 'Participating schools';
     case 'faq':
       return 'Frequently Asked Questions';
-    case 'contacts':
+    case 'contact':
       return 'Contacts';
     case 'teacher_set_data':
       return 'Teacher Sets';
@@ -79,8 +83,8 @@ const HeroDataValue = (levelString) => {
       return 'Participating schools';
     case 'faq':
       return 'Frequently Asked Questions';
-    case 'contacts':
-      return 'Contacts';
+    case 'contact':
+      return 'Contact';
     case 'teacher_set_data':
       return 'Teacher Sets';
     case "teacher_set_details":
