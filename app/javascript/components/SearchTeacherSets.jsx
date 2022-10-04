@@ -306,7 +306,7 @@ export default function SearchTeacherSets(props) {
               label: <Text isCapitalized noSpace>Refine Results</Text>,
               panel: <div>{teacherSetSideBarResults()}</div>
             } ]}
-            isAlwaysRendered
+            // isAlwaysRendered
           />
         </>
       }
@@ -412,15 +412,15 @@ export default function SearchTeacherSets(props) {
   }
 
   const TeacherSetFacets = () => {
-    return facets.map((ts, i) => {
+     return facets.map((ts, i) => {
       return <Accordion id={"ts-facets-accordian-"+ i} backgroundColor="var(--nypl-colors-ui-white)" marginTop="m" id={"ts-facet-label-" + i} panelMaxHeight="400px" 
       accordionData={ [
         {
           label: <Text isCapitalized noSpace>{ts.label}</Text>,
           panel: displayAccordionData(ts)
         } ]}
-      isDefaultOpen={isAccordionOpen(ts)}
-      isAlwaysRendered
+        isDefaultOpen={isAccordionOpen(ts)}
+        //isAlwaysRendered
       />
     })
   }
