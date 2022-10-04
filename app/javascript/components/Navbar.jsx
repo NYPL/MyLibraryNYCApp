@@ -29,9 +29,9 @@ export default function Navbar(props) {
     <div id="mln-navbar" className="header-topWrapper">
       <Flex alignItems="center">
 
-        <ReactRouterLink to="/" onClick={hideHomeSignUpMsg}>
+        <Link href="/" onClick={hideHomeSignUpMsg}>
           <Logo id="mln-nav-bar-header-logo" marginLeft="m" decorative name="mlnColor" size="small" />
-        </ReactRouterLink>
+        </Link>
         
         <Spacer />
         
