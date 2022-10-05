@@ -20,23 +20,8 @@ export default function Home(props) {
   const [keyword, setKeyWord] = useState("")
 
   useEffect(() => {
-    if (keyword !== "" ) {
-      getTeacherSets()
-    }
+    window.scrollTo({ top: 10 });
   }, []);
-
-  const getTeacherSets = () => {
-    axios.get('/teacher_sets', {
-        params: {
-          keyword: keyword
-        }
-     }).then(res => {
-        setTeacherSets(res.data.teacher_sets)
-      })
-      .catch(function (error) {
-       console.log(error)
-    })
-  }
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -50,7 +35,6 @@ export default function Home(props) {
     } else {
       navigate("/teacher_set_data")
     }
-    getTeacherSets()
   }
 
   const handleSearchKeyword = event => {

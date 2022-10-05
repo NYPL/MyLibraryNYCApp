@@ -1,6 +1,5 @@
-import React, { Component, useState, useContext } from 'react';
+import React from 'react';
 import { Notification, Icon } from '@nypl/design-system-react-components';
-// import { MessageContext } from "./Home"
 
 export default function SignedInMsg(props) {
   const details = props.signInDetails;
@@ -12,6 +11,7 @@ export default function SignedInMsg(props) {
       return null;
     }
   }
+  
   return(
     notification()
   )

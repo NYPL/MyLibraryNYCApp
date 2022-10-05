@@ -43,6 +43,7 @@ export default function SignUp(props) {
   const [allowed_email_patterns, setAllowedEmailPatterns] = useState([])
 
   useEffect(() => {
+    window.scrollTo({ top: 10 });
     axios.get('/sign_up_details').then(res => {
       setActiveSchools(res.data.activeSchools)
       setAllowedEmailPatterns(res.data.emailMasks)

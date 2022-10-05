@@ -81,43 +81,44 @@ export default function SearchTeacherSets(props) {
   }
 
   useEffect(() => {
-      const queryValue = new URLSearchParams(location.search)
-      const values = []
-      const tsfacets = {}
+    window.scrollTo({ top: 10 });
+    const queryValue = new URLSearchParams(location.search)
+    const values = []
+    const tsfacets = {}
 
-      let facetsdata = queryParams.map((ts, i) => {
-        if (ts.subjects) {
-          tsfacets['subjects'] = ts.subjects.split(',');
-        } else if (ts['area of study']) {
-          tsfacets['area of study'] = [ts['area of study']]
-        } else if (ts['set type']) {
-          tsfacets['set type'] = [ts['set type']]
-        } else if (ts['availability']) {
-          setAvailableToggle(true)
-          tsfacets['availability'] = [ts['availability']]
-        } else if (ts['language']) {
-          tsfacets['language'] = [ts['language']]
-        }
-      })
+    let facetsdata = queryParams.map((ts, i) => {
+      if (ts.subjects) {
+        tsfacets['subjects'] = ts.subjects.split(',');
+      } else if (ts['area of study']) {
+        tsfacets['area of study'] = [ts['area of study']]
+      } else if (ts['set type']) {
+        tsfacets['set type'] = [ts['set type']]
+      } else if (ts['availability']) {
+        setAvailableToggle(true)
+        tsfacets['availability'] = [ts['availability']]
+      } else if (ts['language']) {
+        tsfacets['language'] = [ts['language']]
+      }
+    })
 
-      const keywordValue = queryValue.get('keyword')? queryValue.get('keyword') : ""
-      const g_begin = queryValue.get('grade_begin')? queryValue.get('grade_begin') : -1
-      const g_end = queryValue.get('grade_end')? queryValue.get('grade_end') : 12
-      const availabilityval = queryValue.get('availability')?  [queryValue.get('availability')] : []
-      const availableToggleVal = queryValue.get('availability')?  true : false
-      const sortOrderVal = queryValue.get('sort_order')?  queryValue.get('sort_order') : ""
-      const pageNumber = queryValue.get('page')?  queryValue.get('page') : 1
-      
-      setSelectedFacets(tsfacets)
-      setGrades(queryValue.get('grade_begin'), queryValue.get('grade_end'))
-      setKeyWord(keywordValue)
-      setAvailability(availabilityval)
-      setAvailableToggle(availableToggleVal)
-      setSortTitleValue(sortOrderVal)
-      setComputedCurrentPage(pageNumber)
+    const keywordValue = queryValue.get('keyword')? queryValue.get('keyword') : ""
+    const g_begin = queryValue.get('grade_begin')? queryValue.get('grade_begin') : -1
+    const g_end = queryValue.get('grade_end')? queryValue.get('grade_end') : 12
+    const availabilityval = queryValue.get('availability')?  [queryValue.get('availability')] : []
+    const availableToggleVal = queryValue.get('availability')?  true : false
+    const sortOrderVal = queryValue.get('sort_order')?  queryValue.get('sort_order') : ""
+    const pageNumber = queryValue.get('page')?  queryValue.get('page') : 1
+    
+    setSelectedFacets(tsfacets)
+    setGrades(queryValue.get('grade_begin'), queryValue.get('grade_end'))
+    setKeyWord(keywordValue)
+    setAvailability(availabilityval)
+    setAvailableToggle(availableToggleVal)
+    setSortTitleValue(sortOrderVal)
+    setComputedCurrentPage(pageNumber)
 
-      const params = Object.assign({ keyword: keywordValue, grade_begin: g_begin, grade_end: g_end, availability: availabilityval, sort_order: sortOrderVal, page: pageNumber}, tsfacets)
-      getTeacherSets(params)
+    const params = Object.assign({ keyword: keywordValue, grade_begin: g_begin, grade_end: g_end, availability: availabilityval, sort_order: sortOrderVal, page: pageNumber}, tsfacets)
+    getTeacherSets(params)
    }, [location.search]);
 
   const getTeacherSets = (params) => {

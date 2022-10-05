@@ -426,11 +426,9 @@ h1 {
   text-transform: capitalize !important;
 }
 
-
 ul.list li:before {
   color: #FFF !important;
 }
-
 
 .hero_campaigh_height {
   margin-top: 320px
@@ -455,39 +453,12 @@ ul.list li:before {
   float: left;
 }
 
-
-.home_page_text {
-  /*height: 70px;
-  font-family: system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 27.5px;
-  color: #000000;*/
-}
-
 .lowercase {
   text-transform: lowercase;
 }
 
 .float-right {
   float: right;
-}
-
-
-/*.input, .react-autosuggest__input {
-  width: 620px !important;
-  height: 36px !important;
-  padding: 7.5px 16px !important;
-}
-*/
-
-
-.search-bar .button {
-  /*width: 94px;*/
-  /*height: 36px !important;
-  padding: 7.5px 16px !important;
-  padding: 7px 13px !important;*/
-  background: #000000 !important;
 }
 
 .have_questions_links {
@@ -604,16 +575,8 @@ ul.list li:before {
   flex: 0 0 75px !important;
 }
 
-
 .card_details {
-  margin-top: 20px;
-   
-}
-
-@include min-screen(769px) {
-  #teacher_set_details .search-bar .select {
-    flex: 0 0 20%;
-  }
+  margin-top: 20px;   
 }
 
 .italic {

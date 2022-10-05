@@ -1,5 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
-import AppBreadcrumbs from "./AppBreadcrumbs";
+import React, { useState, useEffect } from 'react';
 import HaveQuestions from "./HaveQuestions";
 import { Link as ReactRouterLink, useParams} from "react-router-dom";
 import axios from 'axios';
@@ -10,13 +9,11 @@ import {
   CardContent,
   Heading,
   Image,
-  List, TemplateAppContainer, HorizontalRule, StatusBadge, Flex, Spacer,Link, Icon, Breadcrumbs
+  List, TemplateAppContainer, HorizontalRule, StatusBadge, Flex,Link, Icon, Breadcrumbs
 } from '@nypl/design-system-react-components';
 import mlnImage from '../images/mln.svg'
 
-
 export default function TeacherSetBooks(props) {
-
   const params = useParams();
   const [book, setBook] = useState("")
   const [teacherSets, setTeacherSets] = useState([])
@@ -24,6 +21,7 @@ export default function TeacherSetBooks(props) {
   const [bookImageWidth, setBookImageWidth] = useState([])
 
   useEffect(() => {
+    window.scrollTo({ top: 10 });
     axios.get('/books/'+ params["id"])
       .then(res => {
         setTeacherSets(res.data.teacher_sets)
@@ -34,31 +32,16 @@ export default function TeacherSetBooks(props) {
     })    
   }, []);
 
-
-  const IsBookTitlePresent = () => {
-    return (book["title"] == null) ? false : true
-  }
-
   const IsBookSubTitlePresent = () => {
-    return (book["sub_title"] == null) ? false : true
+    return (book["sub_title"] === null) ? false : true
   }
 
   const IsBookDescriptionPresent = () => {
-    return (book["description"] == null) ? false : true
+    return (book["description"] === null) ? false : true
   }
 
   const IsBookStatementOfResponsibilityPresent = () => {
     return (book["statement_of_responsibility"] == null) ? false : true
-  }
-
-  const IsBookNotesPresent = () => {
-    return (book["notes"] == null) ? false : true
-  }
-
-  const BookCoverUri = () => {
-    return <div>
-      book.cover_uri
-    </div>
   }
 
   const truncateTitle = ( str, n, useWordBoundary ) => {
@@ -89,7 +72,7 @@ export default function TeacherSetBooks(props) {
     if (teacherSets) {
       return teacherSets.map((ts, index, arr) => {
 
-        let availability_status_badge =  (ts.availability == "available") ? "medium" : "low"
+        let availabilityStatusBadge =  (ts.availability === "available") ? "medium" : "low"
         let availability = ts.availability !== undefined ? ts.availability : ""
         return <div>
             <Card id="book-page-ts-card-details" layout="row">
@@ -100,7 +83,7 @@ export default function TeacherSetBooks(props) {
               </CardHeading>
               <CardContent id="book-page-ts-suitabilities" marginBottom="xs"> {ts.suitabilities_string} </CardContent>
               <CardContent id="book-page-ts-availability" marginBottom="s"> 
-                <StatusBadge level={availability_status_badge}>{titleCase(availability)}</StatusBadge>
+                <StatusBadge level={availabilityStatusBadge}>{titleCase(availability)}</StatusBadge>
               </CardContent>
               <CardContent id="book-page-ts-description"> {ts.description} </CardContent>
             </Card>
@@ -136,7 +119,7 @@ export default function TeacherSetBooks(props) {
 
    // let book = this.state.book;
     let bookTitle = book.title? book.title : "Book Title"
-    let legacy_detail_url = "http://legacycatalog.nypl.org/record="+ book.bnumber +"~S1"
+    let legacyDetailUrl = "http://legacycatalog.nypl.org/record="+ book.bnumber +"~S1"
     
     return (
         <TemplateAppContainer
@@ -224,7 +207,7 @@ export default function TeacherSetBooks(props) {
                   </dd></>) : (<></>) }
               </List>
 
-              <Link className="tsDetailUrl" href={legacy_detail_url} id="ts-book-page-details_url" type="action" target='_blank'>
+              <Link className="tsDetailUrl" href={legacyDetailUrl} id="ts-book-page-details_url" type="action" target='_blank'>
                 View in catalog
                 <Icon name="actionLaunch" iconRotation="rotate0" size="medium" align="left" />
               </Link>

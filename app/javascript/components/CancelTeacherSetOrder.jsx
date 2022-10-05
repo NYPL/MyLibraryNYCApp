@@ -14,10 +14,6 @@ import {useParams, useNavigate} from "react-router-dom";
 
 export default function TeacherSetOrder(props) {
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = { access_key: params["id"], hold: "",  teacher_set: "", comment: ""};
-  // }
   const params = useParams();
   const navigate = useNavigate();
   const [access_key, setAccessKey] = useState(params["id"])
@@ -26,6 +22,7 @@ export default function TeacherSetOrder(props) {
   const [comment, setComment] = useState("")
 
   useEffect(() => {
+    window.scrollTo({ top: 10 });
     axios({method: 'get', url: '/holds/'+ params["id"] + '/cancel_details'}).then(res => {
       setTeacherSet(res.data.teacher_set)
       setHold(res.data.hold)

@@ -30,7 +30,7 @@ export default function Accounts(props) {
 
 
   useEffect(() => {
-
+    window.scrollTo({ top: 10 });
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
     axios.get('/account', { params: { page: 1 } } ).then(res => {
@@ -276,7 +276,7 @@ export default function Accounts(props) {
           <Heading marginTop="l" marginBottom="m" id="your-orders-text" size="tertiary" level="three" text='Orders' />
           {accountSkeletonLoader()}
           {displayOrders()}
-          <Pagination marginTop="s" id="ad-pagination"className="accocuntOrderPagination" currentPage={1} onPageChange={onPageChange} pageCount={total_pages} />
+          <Pagination marginTop="s" id="ad-pagination" className="accocuntOrderPagination" onClick={ () => window.scrollTo({ top: 275 }) } currentPage={1} onPageChange={onPageChange} pageCount={total_pages} />
         </>
       }
       contentSidebar={<div><HaveQuestions /></div>}

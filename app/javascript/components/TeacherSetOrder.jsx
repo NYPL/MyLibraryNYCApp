@@ -16,6 +16,8 @@ export default function TeacherSetOrder(props) {
   const [teacherSet, setTeacherSet] = useState(props.teachersetdetails)
 
   useEffect(() => {
+    window.scrollTo({ top: 10 });
+    
     if (typeof hold === 'string') {
       axios.get('/holds/' + params["access_key"])
         .then((res) => {
@@ -45,7 +47,7 @@ export default function TeacherSetOrder(props) {
 
   const CancelButton = () => {
     return <div style={{ display: showCancelButton() }}>
-      <Button id="order-cancel-button" className="cancel-button" buttonType="secondary" onClick={ () => window.scrollTo({ top: 10 })}>
+      <Button id="order-cancel-button" className="cancel-button" buttonType="secondary" onClick={ () => window.scrollTo({ top: 10 }) }>
         <Link className="cancelOrderButton" href={"/holds/" + params["access_key"] + "/cancel"} > Cancel My Order </Link>
       </Button>
     </div>

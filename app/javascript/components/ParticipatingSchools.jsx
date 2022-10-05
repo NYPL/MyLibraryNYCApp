@@ -15,7 +15,6 @@ export default class ParticipatingSchools extends Component {
     super(props);
     this.state = { schools: [], search_school: "", anchor_tags: [], schoolNotFound: "", isInvalid: false};
     this.handleChange = this.handleChange.bind(this);
-
   }
 
   componentDidMount() {

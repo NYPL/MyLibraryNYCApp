@@ -34,6 +34,7 @@ export default function TeacherSetDetails(props) {
   const { isLargerThanMobile } = useNYPLBreakpoints();
 
   useEffect(() => {
+    window.scrollTo({ top: 10 });
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/teacher_sets/'+ params["id"])
       .then(res => {
@@ -146,8 +147,8 @@ export default function TeacherSetDetails(props) {
     }
     else {
       return <div>
-        <Form gap="grid.xs" id="ts-order-form" >
-          <FormField id="ts-order-field" onClick={ () => window.scrollTo({ top: 10 }) }>
+        <Form gap="grid.xs" id="ts-order-form">
+          <FormField id="ts-order-field">
             <Select id="ts-order-allowed-quantities" labelText="" onChange={handleQuantity} value={quantity}>
               { allowedQuantities.map((item, i) => {
                   return (

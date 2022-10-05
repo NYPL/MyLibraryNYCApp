@@ -11,14 +11,10 @@ export default function HaveQuestions(props) {
       <Heading id="heading-tertiary" level="two" size="tertiary" text="Have Questions?" />
       <div id="have-questions-links">
         <p className="visitOurText">Visit Our{' '}
-          <Link id="home-faq-link" type="action" target="_blank">
-            <ReactRouterLink to="/faq"  target="_blank">Faq Page</ReactRouterLink>
-          </Link>
+          <Link id="home-faq-link" type="action" href="/faq">Faq Page</Link>
         </p>
         <p>Or{' '}
-          <Link id="home-contact-link" type="action">
-            <ReactRouterLink to="/contact" target="_blank"> Contact Us</ReactRouterLink>
-          </Link>
+          <Link id="home-contact-link" type="action" href="/contact">Contact Us</Link>
         </p>
       </div>
     </>
