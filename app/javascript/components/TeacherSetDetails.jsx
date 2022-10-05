@@ -334,7 +334,7 @@ export default function TeacherSetDetails(props) {
 
             <List id="ts-list-details" type="dl" title="Details" marginTop="l">
               <dt id="ts-suggested-grade-range-text">
-                Suggested Grade Range [New]
+                Suggested Grade Range
               </dt>
               <dd id="ts-page-suitabilities">
                 {teacher_set.suitabilities_string}
