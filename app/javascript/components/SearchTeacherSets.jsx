@@ -434,7 +434,7 @@ export default function SearchTeacherSets(props) {
                 </Button>
               </ButtonGroup>
               <Spacer />
-              <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo({ top: 10 }) } className="teacher_set_pagination" onPageChange={onPageChange} initialPage={computedCurrentPage} pageCount={totalPages} /></div>
+              <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo({ top: 10 }) } className="teacher_set_pagination" onPageChange={onPageChange} pageCount={totalPages} /></div>
             </Flex>
           </div>
       </>
