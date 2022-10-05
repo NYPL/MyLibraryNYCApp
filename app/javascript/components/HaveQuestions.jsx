@@ -17,7 +17,7 @@ export default function HaveQuestions(props) {
         </p>
         <p>Or{' '}
           <Link id="home-contact-link" type="action">
-            <ReactRouterLink to="/contacts" target="_blank"> Contact Us</ReactRouterLink>
+            <ReactRouterLink to="/contact" target="_blank"> Contact Us</ReactRouterLink>
           </Link>
         </p>
       </div>
