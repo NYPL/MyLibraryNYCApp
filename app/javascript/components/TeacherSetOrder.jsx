@@ -13,7 +13,7 @@ export default function TeacherSetOrder(props) {
   const params = useParams();
   const navigate = useNavigate();
   const [hold, setHold] = useState(props.holddetails)
-  const [teacher_set, setTeacherSet] = useState(props.teachersetdetails)
+  const [teacherSet, setTeacherSet] = useState(props.teachersetdetails)
 
   useEffect(() => {
     if (typeof hold === 'string') {
@@ -34,9 +34,9 @@ export default function TeacherSetOrder(props) {
   }, []);
 
   const OrderMessage = () => {
-    const order_message = "Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details." 
-    const cancelled_message = "The order below has been cancelled."
-    return hold && hold["status"] === 'cancelled' ? cancelled_message : order_message
+    const orderMessage = "Your order has been received by our system and will be soon delivered to your school. Check your email inbox for further details." 
+    const cancelledMessage = "The order below has been cancelled."
+    return hold && hold["status"] === 'cancelled' ? cancelledMessage : orderMessage
   }
 
   const showCancelButton = () => {
@@ -63,7 +63,7 @@ export default function TeacherSetOrder(props) {
             <Heading id="order-confirmation-heading" level="two" size="secondary" text={confirmationMsg} />
             <HorizontalRule id="ts-detail-page-horizontal-rulel" className="teacherSetHorizontal" />
             { OrderMessage() }
-            <TeacherSetOrderDetails  teacherSetDetails={teacher_set} orderDetails={hold}/>
+            <TeacherSetOrderDetails teacherSetDetails={teacherSet} orderDetails={hold}/>
             
             { CancelButton() }
 

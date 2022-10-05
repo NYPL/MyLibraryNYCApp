@@ -46,7 +46,7 @@ export default function TeacherSetOrderDetails(props) {
     let orderUpdatedDate = ""
     let showCancelledDate = "display_none"
 
-    if (orderDetails && orderDetails["status"] == "cancelled"){
+    if (orderDetails && orderDetails["status"] === "cancelled"){
       orderCancellled = "Order Cancelled"
       orderUpdatedDate = dateFormat(orderDetails["updated_at"], "dddd, mmmm d, yyyy")
       showCancelledDate = "display_block"

@@ -98,7 +98,7 @@ export default function MobileHeader(props) {
               {navMenuSignInAccountDetails()}
 
               <li>
-                <Link className="mobileSubmenu" href="/contacts">Contact</Link>
+                <Link className="mobileSubmenu" href="/contact">Contact</Link>
                 <HorizontalRule align="right" className="mobileHorizontalRule"/>
               </li>
               
