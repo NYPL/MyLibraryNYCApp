@@ -36,11 +36,7 @@ const breadcrumbsUrl = (locationPath) => {
     locationPathname = '/account_details'
   }
 
-  if (['contact'].includes(locationPath)){
-    urls.push({ url: "//"+ window.location.hostname + locationPathname, text: BreadcrumbsDataValue(locationPath) })
-  } else {
-    urls.push({ url: "//"+ window.location.hostname + locationPathname, text: HeroDataValue(locationPath) })
-  }
+  urls.push({ url: "//"+ window.location.hostname + locationPathname, text: HeroDataValue(locationPath) })
 
   if (['signup', 'signin', 'ordered_holds', 'teacher_set_details', 'book_details', 'holds'].includes(locationPath)) {
     urls.push({ url: "//"+ window.location.hostname + window.location.pathname, text: BreadcrumbsDataValue(locationPath) })

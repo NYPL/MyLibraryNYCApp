@@ -576,16 +576,26 @@ $nypl-breakpoint-xxlarge: 1600px;
   .teacher-set-skeleton-loader {
     width: 500px !important;
   }
+  .teacher-set-details-skeleton-loader {
+    width: 500px !important;
+  }
 }
 
 @media screen and (max-width: $nypl-breakpoint-large) {
   .teacher-set-skeleton-loader {
     width: 600px !important;
   }
+  .teacher-set-details-skeleton-loader {
+    width: 600px !important;
+  }
 }
 
 @media screen and (max-width: $nypl-breakpoint-medium) {
   .teacher-set-skeleton-loader {
+    width: 450px !important;
+  }
+
+  .teacher-set-details-skeleton-loader {
     width: 450px !important;
   }
 
@@ -598,10 +608,18 @@ $nypl-breakpoint-xxlarge: 1600px;
   .teacher-set-skeleton-loader {
     width: 225px !important;
   }
+
+  .teacher-set-details-skeleton-loader {
+    width: 225px !important;
+  }
 }
 
 @media screen and (max-width: 415px) {
   .teacher-set-skeleton-loader {
+    width: 285px !important;
+  }
+
+  .teacher-set-details-skeleton-loader {
     width: 285px !important;
   }
 }

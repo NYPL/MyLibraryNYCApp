@@ -112,7 +112,7 @@ export default function TeacherSetDetails(props) {
 
   const TeacherSetBooks = () => {
     return books.map((data, i) => {
-      return <><ReactRouterLink id={"ts-books-" + i} to={"/book_details/" + data.id} >
+      return <><ReactRouterLink onClick={ () => window.scrollTo({ top: 10 }) } id={"ts-books-" + i} to={"/book_details/" + data.id} >
             {BookImage(data)}
         </ReactRouterLink></>
     })
