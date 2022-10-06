@@ -1,31 +1,25 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 
 import {
-  Input, TextInput, List, Form, Button, FormRow, InputTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Table, Notification, Pagination, Icon, ButtonGroup, Text, SkeletonLoader, HorizontalRule
+  TextInput, Form, Button, FormField, 
+  TemplateAppContainer, Select, Heading, Link, Table, Notification, Pagination, Icon, ButtonGroup, Text, SkeletonLoader, HorizontalRule
 } from '@nypl/design-system-react-components';
 
+export default function Accounts() {
 
-export default function Accounts(props) {
-
-  const [contact_email, setContactEmail] = useState("")
-  const [current_user, setCurrentUser] = useState("")
-  const [teacher_set, setTeacherSet] = useState("")
+  const [currentUser, setCurrentUser] = useState("")
   const [school, setSchool] = useState("")
-  const [alt_email, setAltEmail] = useState("")
+  const [altEmail, setAltEmail] = useState("")
   const [email, setEmail] = useState("")
   const [schools, setSchools] = useState("")
-  const [school_id, setSchoolId] = useState("")
+  const [schoolId, setSchoolId] = useState("")
   const [holds, setHolds] = useState("")
   const [password, setPassword] = useState("")
   const [message, setMessage] = useState("")
-  const [cancel_message, setCancelMessage] = useState("")
-  const [cancel_button_display, SetCancelButtonDisplay] = useState("block")
-  const [computedCurrentPage, setComputedCurrentPage] = useState(1)
-  const [total_pages, setTotalPages] = useState("")
+  const [totalPages, setTotalPages] = useState("")
   const [ordersNotPresentMsg, setOrdersNotPresentMsg] = useState("")
 
 
@@ -35,23 +29,22 @@ export default function Accounts(props) {
 
     axios.get('/account', { params: { page: 1 } } ).then(res => {
       
-      if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+      if (res.request.responseURL === "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
         return false;
       }
       else {
-        let account_details = res.data.accountdetails
-        setContactEmail(account_details.contact_email)
-        setSchool(account_details.school)
-        setEmail(account_details.email)
-        setAltEmail(account_details.alt_email)
-        setSchools(account_details.schools)
-        setCurrentUser(account_details.current_user)
-        setHolds(account_details.holds)
-        setSchoolId(account_details.school.id)
-        setPassword(account_details.current_password)
-        setTotalPages(account_details.total_pages)
-        setOrdersNotPresentMsg(account_details.ordersNotPresentMsg)
+        let accountDetails = res.data.accountdetails
+        setSchool(accountDetails.school)
+        setEmail(accountDetails.email)
+        setAltEmail(accountDetails.alt_email)
+        setSchools(accountDetails.schools)
+        setCurrentUser(accountDetails.current_user)
+        setHolds(accountDetails.holds)
+        setSchoolId(accountDetails.school.id)
+        setPassword(accountDetails.current_password)
+        setTotalPages(accountDetails.total_pages)
+        setOrdersNotPresentMsg(accountDetails.ordersNotPresentMsg)
       }
     }).catch(function (error) {
         console.log("cancel order fail")
@@ -64,7 +57,7 @@ export default function Accounts(props) {
     event.preventDefault();
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.put('/users/', {
-        user: { alt_email: alt_email, school_id: school_id, current_password: password }
+        user: { alt_email: altEmail, school_id: schoolId, current_password: password }
      }).then(res => {
         if (res.data.status === "updated") {
           setMessage(res.data.message)
@@ -81,6 +74,7 @@ export default function Accounts(props) {
 
   const handleSchool = event => {
     setSchool(event.target.value)
+    setSchoolId(event.target.value)
   }
 
   const Schools = () => {
@@ -110,31 +104,28 @@ export default function Accounts(props) {
 
   const cancelButton = (hold, index)  =>{
     if (hold["status"] === "new") {
-      return <div id={"cancel-hold-button-"+index}> {orderCancelConfirmation(hold, index)} </div>
+      return <div id={"cancel-hold-button-"+ index}> {orderCancelConfirmation(hold, index)} </div>
     } else if (hold["status"] === "cancelled"){
-      return <div id={"order-ts-button-"+index}> {orderTeacherSet(hold, index)} </div>
+      return <div id={"order-ts-button-"+ index}> {orderTeacherSet(hold, index)} </div>
     }
   }
 
   const cancelOrder = (value, access_key, cancel_button_index) => {
-    setCancelMessage("")
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.put('/holds/'+ access_key, { hold_change: { status: 'cancelled' } 
      }).then(res => {
-        if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+        if (res.request.responseURL === "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {
-          if (res.data.hold.status == "cancelled") {
-            SetCancelButtonDisplay("none")
-            setCancelMessage("Successfully Cancelled")
+          if (res.data.hold.status === "cancelled") {
 
             let updatedHolds = holds.map( (obj, index) => {
-             if(index === cancel_button_index) {
+              if(index === cancel_button_index) {
                return Object.assign({}, obj, {
                  status: "cancelled", status_label: "Cancelled"
                });
-             }
+              }
              return obj;
           });
             setHolds(updatedHolds)
@@ -217,26 +208,24 @@ export default function Accounts(props) {
   }
 
   const onPageChange = (page) => {
-    setComputedCurrentPage(page);
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/account', { params: { page: page } }).then(res => {
-      if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+      if (res.request.responseURL === "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
         window.location = res.request.responseURL;
         return false;
       }
       else {
-        let account_details = res.data.accountdetails
-        setContactEmail(account_details.contact_email)
-        setSchool(account_details.school)
-        setEmail(account_details.email)
-        setAltEmail(account_details.alt_email)
-        setSchools(account_details.schools)
-        setCurrentUser(account_details.current_user)
-        setHolds(account_details.holds)
-        setSchoolId(account_details.school.id)
-        setPassword(account_details.current_password)
-        setTotalPages(account_details.total_pages)
-        setOrdersNotPresentMsg(account_details.ordersNotPresentMsg)
+        let accountDetails = res.data.accountdetails
+        setSchool(accountDetails.school)
+        setEmail(accountDetails.email)
+        setAltEmail(accountDetails.alt_email)
+        setSchools(accountDetails.schools)
+        setCurrentUser(accountDetails.current_user)
+        setHolds(accountDetails.holds)
+        setSchoolId(accountDetails.school.id)
+        setPassword(accountDetails.current_password)
+        setTotalPages(accountDetails.total_pages)
+        setOrdersNotPresentMsg(accountDetails.ordersNotPresentMsg)
       }
     }).catch(function (error) {
         console.log("cancel order fail")
@@ -245,7 +234,7 @@ export default function Accounts(props) {
   };
 
   const userFirstName = () => {
-    return current_user.first_name ? current_user.first_name : ""
+    return currentUser.first_name ? currentUser.first_name : ""
   }
 
   return (
@@ -259,12 +248,12 @@ export default function Accounts(props) {
               <TextInput
                 labelText="Your DOE Email Address"
                 id="account-details-input"
-                value={alt_email || email}
+                value={altEmail || email}
                 onChange={handleAltEmail}
               />
             </FormField>
             <FormField>
-              <Select id="ad-select-schools" labelText="Your School" value={school_id} showLabel onChange={handleSchool}>
+              <Select id="ad-select-schools" labelText="Your School" value={schoolId} showLabel onChange={handleSchool}>
                 {Schools()}
               </Select>
             </FormField>
@@ -276,7 +265,7 @@ export default function Accounts(props) {
           <Heading marginTop="l" marginBottom="m" id="your-orders-text" size="tertiary" level="three" text='Orders' />
           {accountSkeletonLoader()}
           {displayOrders()}
-          <Pagination marginTop="s" id="ad-pagination" className="accocuntOrderPagination" onClick={ () => window.scrollTo({ top: 275 }) } currentPage={1} onPageChange={onPageChange} pageCount={total_pages} />
+          <Pagination marginTop="s" id="ad-pagination" className="accocuntOrderPagination" onClick={ () => window.scrollTo({ top: 275 }) } currentPage={1} onPageChange={onPageChange} pageCount={totalPages} />
         </>
       }
       contentSidebar={<div><HaveQuestions /></div>}
