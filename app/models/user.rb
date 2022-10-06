@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
          :timeoutable # adds session["warden.user.user.session"]["last_request_at"] which we use in sessions_controller
 
   # Makes getters and setters
-  attr_accessor :pin
+  attr_accessor :password
 
 
   # Validation's for email and pin only occurs when a user record is being
@@ -25,36 +25,38 @@ class User < ActiveRecord::Base
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
 
   
-  if MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled')
-    # pin allows mix of uppercase, lowercase letters, numbers and symbols.For example: MyLib1731@!
-    validates :pin, :presence => true, format: { with: /\w/}, length: { in: 4..32, message: 'must be 4 to 32 characters.' }, on: :create
-  else
-    validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
-    length: { is: 4, message: 'must be 4 digits.' }, on: :create
-  end
+  # if MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled')
+  #   # pin allows mix of uppercase, lowercase letters, numbers and symbols.For example: MyLib1731@!
+  #   validates :pin, :presence => true, format: { with: /\w/}, length: { in: 4..32, message: 'must be 4 to 32 characters.' }, on: :create
+  # else
+  #   validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
+  #   length: { is: 4, message: 'must be 4 digits.' }, on: :create
+  # end
 
-  validate :validate_pin_pattern, on: :create
+  # validate :validate_password_pattern, on: :create
+  # PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[[:^alnum:]])/x
   validate :validate_email_pattern, :on => :create
 
   has_many :holds
 
   belongs_to :school
 
-  # Set default password if one is not set
-  before_validation(on: :create) do
-    self.password ||= User.default_password
-    self.password_confirmation ||= User.default_password
-  end
+  # # Set default password if one is not set
+  # before_validation(on: :create) do
+  #   self.password ||= User.default_password
+  #   self.password_confirmation ||= User.default_password
+  # end
 
 
   STATUS_LABELS = {'barcode_pending' => 'barcode_pending', 'complete' => 'complete'}.freeze
+
 
   ## NOTE: Validation methods, including this one, are called twice when
   # making new user from the admin interface. While not a behavior we want,
   # it doesn't currently pose a problem.
   def validate_email_pattern
     if (!defined?(email) || email.blank? || !email.index('@'))
-      errors.add(:email, 'is required and should end in @schools.nyc.gov or another participating school address')
+      errors.add(:email, ' is required and should end in @schools.nyc.gov or another participating school address')
       return false
     end
     email.downcase.strip
@@ -69,7 +71,6 @@ class User < ActiveRecord::Base
       return false
     end
   end
-
 
   def barcode_found_in_sierra
     # Getter for flag that reflects whether there's a user or users in Sierra
@@ -213,17 +214,18 @@ class User < ActiveRecord::Base
   # error message if PIN is invalid:
   # "PIN is not valid : PIN is trivial"
 
-  def validate_pin_pattern
-    if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..+)\1{1,}/)&.empty? == true
-      true
-    else
-      msg = 'PIN does not meet our requirements. Please try again.'
-      return errors.add(:pin, msg) unless MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled') 
+  # Need to add password validation
+  # def validate_password_pattern
+  #   if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..+)\1{1,}/)&.empty? == true
+  #     true
+  #   else
+  #     msg = 'PIN does not meet our requirements. Please try again.'
+  #     return errors.add(:pin, msg) unless MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled') 
 
-      msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
-      errors.add(:pin, msg)
-    end
-  end
+  #     msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
+  #     errors.add(:pin, msg)
+  #   end
+  # end
 
 
   # Sends a request to the patron creator microservice.
@@ -232,10 +234,11 @@ class User < ActiveRecord::Base
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
   def send_request_to_patron_creator_service
+    # Sierra supporting pin as password
     query = {
       'names' => [last_name.upcase + ', ' + first_name.upcase],
       'emails' => [email],
-      'pin' => pin,
+      'pin' => password,
       'patronType' => patron_type,
       'patronCodes' => {
         'pcode1' => '-',
@@ -270,7 +273,6 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
-
     case response.code
     when 201
       LogWrapper.log('DEBUG', {
@@ -278,6 +280,13 @@ class User < ActiveRecord::Base
            successfully created from the micro-service!",
           'status' => response.code
         })
+    when 400
+      LogWrapper.log('ERROR', {
+        'message' => "An error has occured when sending a request to the patron creator service",
+        'status' => response.code,
+        'responseData' => response.body
+      })
+      raise Exceptions::InvalidResponse, response["message"]["description"]
     else
       LogWrapper.log('ERROR', {
           'message' => "An error has occured when sending a request to the patron creator service",

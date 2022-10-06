@@ -2,8 +2,11 @@
 
 class FaqsController < ApplicationController
 
-  def frequently_asked_questions
+  def show
+    if storable_location?
+      store_user_location!
+    end
     # Get all frequently asked questions by position ASC order.
-    Faq.get_faqs   
+    render json: { faqs: Faq.get_faqs }
   end
 end

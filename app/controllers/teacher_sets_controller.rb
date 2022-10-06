@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class TeacherSetsController < ApplicationController
-
   include TeacherSetsEsHelper
 
-  before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
+  #before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
 
   ##
   # GET /teacher_sets.json
@@ -18,13 +17,14 @@ class TeacherSetsController < ApplicationController
                               'method' => 'app/controllers/teacher_sets_controller.rb.index'})
   
       # Get teachersets and facets from elastic search
-      teacher_sets, @facets = ElasticSearch.new.get_teacher_sets_from_es(params)
+      teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
     else
       LogWrapper.log('INFO', {'message' => "Calling database to get teacher-sets", 
                               'method' => 'app/controllers/teacher_sets_controller.rb.index'})
       @teacher_sets = TeacherSet.for_query params
       @facets = TeacherSet.facets_for_query @teacher_sets
+      total_count =  @teacher_sets.length
     end
     # Determine what facets are selected based on query string
     @facets.each do |f|
@@ -33,13 +33,24 @@ class TeacherSetsController < ApplicationController
         v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)
       end
     end
+    facets = teacher_set_facets(params, @facets)
 
-    @facets = teacher_set_facets(params)
+    if facets.collect{|i| i[:items]}.flatten.empty?
+      custom_facets = input_param_facets(params)
+      facets = teacher_set_facets(params, custom_facets)
+    end
+
     # Attach custom :q param to each facet with query params to be applied to that link
+
+    per_page = 20;
+    total_pages = (total_count/per_page.to_f).ceil
+
+    no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
+
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: @facets }
+      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg}
     else
-      render json: { teacher_sets: @teacher_sets, facets: @facets }, serializer: SearchSerializer, include_books: false, include_contents: false
+      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages}, serializer: SearchSerializer, include_books: false, include_contents: false
     end
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
@@ -52,9 +63,31 @@ class TeacherSetsController < ApplicationController
   end
 
 
+  def input_param_facets(params)
+    facets = []
+    [
+      { :label => 'area of study', :column => 'area_of_study' },
+      { :label => 'subjects', :column => 'subjects'},
+      { :label => 'language', :column => :primary_language },
+      { :label => 'set type', :column => 'set_type' }
+    ].each do |config|
+          facets_group = {:label => config[:label], :items => []}
+           params.each { |key, value|
+              next if key != config[:label]
+              facets_group[:items] << {
+                :value => value.join(),
+                :label => value.join(),
+                :count => 0
+              }
+           }
+        facets << facets_group
+      end
+    facets
+  end
+
   # teacher set facets
-  def teacher_set_facets(params)
-    @facets.each do |f|
+  def teacher_set_facets(params, facets)
+    facets.each do |f|
       f[:items].each do |v|
         l = f[:label].underscore
         q = {}
@@ -84,6 +117,7 @@ class TeacherSetsController < ApplicationController
         v[:path] = teacher_sets_path(v[:q])
       end
     end
+    facets
   end
 
 
@@ -92,6 +126,7 @@ class TeacherSetsController < ApplicationController
     # Stores the current location in session, so if an un-authenticated user
     # tries to order this teacher set, we can ask the user to sign in, and
     # then redirect back to this teacher_set detail page.
+    
     if storable_location?
       store_user_location!
     end
@@ -127,8 +162,9 @@ class TeacherSetsController < ApplicationController
       active_hold: @active_hold,
       user: current_user,
       allowed_quantities: allowed_quantities,
-      books: ts_books
-    }, serializer: TeacherSetForUserSerializer, root: 'teacher_set'
+      books: ts_books,
+      teacher_set_notes: @set.teacher_set_notes
+    }
   end
 
 
@@ -139,9 +175,16 @@ class TeacherSetsController < ApplicationController
   end
 
 
+  def teacher_set_data
+  end
+
   # TODO: Fix: create currently fails our functional tests.
   def create
     TeacherSet.create(teacherset_params)
+  end
+
+
+  def teacher_set_details
   end
 
   private

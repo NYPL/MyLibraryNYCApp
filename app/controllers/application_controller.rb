@@ -1,9 +1,17 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-  protect_from_forgery
-  before_action :redirect_if_old_domain
 
+  protect_from_forgery only: [:update, :get, :put, :delete]
+
+  def logged_in?
+    if user_signed_in?
+      return true
+    else
+      return false
+    end
+  end
+  
   def append_info_to_payload(payload)
     super
     if ActiveRecord::Base.connected? && payload[:status].present?
@@ -22,7 +30,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
   ##
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
@@ -32,7 +39,7 @@ class ApplicationController < ActionController::Base
     # and store it in a local var before printing out or any other access
     redirect_url = stored_location_for(:user)
     unless redirect_url.present?
-      redirect_url = app_url
+      redirect_url = 'teacher_set_data'
     end
 
     # Redirect to admin dashboard if this is an admin login
@@ -44,10 +51,8 @@ class ApplicationController < ActionController::Base
     #   redirect_url = session[:redirect_after_login]
     #   session.delete(:redirect_after_login)
     # end
-
     redirect_url
   end
-
 
   # Is called by functionality that needs to make sure the user is authenticated,
   # s.a. making a teacher set order.  Takes the user to a login page.
@@ -58,17 +63,18 @@ class ApplicationController < ActionController::Base
         format.html {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = request.original_url
-          redirect_to new_user_session_path
+          #render json: {:redirect_to => new_user_session_path}
+          redirect_to "/signin"
         }
         format.json {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = "#{app_url}##{request.fullpath}".gsub! '.json', ''
-          render json: {:redirect_to => new_user_session_path}
+          #render json: {:redirect_to => new_user_session_path}
+          render json: {:redirect_to => "/signin"}
         }
       end
     end
   end
-
 
   def redirect_to_angular
     if request.format != "json"
@@ -88,6 +94,11 @@ class ApplicationController < ActionController::Base
   # So we must exclude the standard "is_navigational_format?" requirement.
   def storable_location?
     request.get? && !devise_controller? && !request.xhr?
+  end
+
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
   end
 
 
@@ -118,10 +129,31 @@ class ApplicationController < ActionController::Base
     originating_location = request.fullpath
     if originating_location.present?
       # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
-      originating_location = "#{app_url}##{originating_location}".gsub! '.json', ''
+      if params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
+        originating_location = "teacher_set_details/#{params["id"]}"
+      elsif originating_location == "/schools"
+        originating_location = "participating-schools"
+      elsif originating_location == "/faqs/show"
+        originating_location = "faq"
+      elsif originating_location == "/contacts"
+        originating_location = "contacts"
+      elsif params["controller"] == "books" && params["action"] == "show" && params["id"].present?
+        originating_location = "book_details/#{params["id"]}"
+      else
+        originating_location = "teacher_set_data"
+      end
     end
 
     # :user is the scope we are authenticating
     store_location_for(:user, originating_location)
+  end
+
+  private 
+              
+  def set_csrf_cookie
+     cookies["CSRF-TOKEN"] = {
+          value: form_authenticity_token,
+          domain: :all 
+      }
   end
 end

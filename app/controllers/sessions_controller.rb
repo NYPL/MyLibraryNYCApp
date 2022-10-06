@@ -1,13 +1,32 @@
 # frozen_string_literal: true
 
-class SessionsController < Devise::SessionsController
+class SessionsController < ApplicationController
   layout 'empty', :only => [ :timeout_check ]
 
-  ## The user has just (re)logged in.  Reflect the time in the user's DB record.
-  def create
-    super
-    current_user.last_sign_in_at = Time.zone.now
-    current_user.save
+  def is_logged_in?
+    if user_signed_in? && current_user
+      LogWrapper.log('INFO', {'message' => 'is_logged_in',
+                             'method' => "is_logged_in........ "})
+      render json: {
+        logged_in: true,
+        user: current_user
+      }
+    else
+      render json: {
+        logged_in: false,
+        message: 'no such user'
+      }
+    end
+  end
+
+  def delete
+    logout!
+    render json: {
+      status: 200,
+      logged_out: true,
+      root_path: root_path,
+      sign_out_msg: "Signed out successfully"
+    }
   end
 
 
@@ -29,7 +48,14 @@ class SessionsController < Devise::SessionsController
     end
   end
 
+
   private
+
+
+  def session_params
+    params.permit(:email)
+  end
+
 
   def max_session_duration
     8.hours

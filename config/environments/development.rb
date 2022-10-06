@@ -35,13 +35,20 @@ MyLibraryNYC::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-
   config.action_mailer.default_url_options = { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
   config.action_mailer.perform_deliveries = false
+
+  config.middleware.use ActionDispatch::Cookies
+  config.middleware.use ActionDispatch::Session::CookieStore
+  config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore)
+
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::DEBUG
   config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
-                  ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL']]
+                  ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL'],
+                  "http://my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com",
+                  "my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com"
+                ]
   config.eager_load = false
 end

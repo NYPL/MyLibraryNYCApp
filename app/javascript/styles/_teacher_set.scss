@@ -1,0 +1,67 @@
+.removelink {
+  text-decoration: none !important;
+}
+
+.tsDetails {
+  .list__definition-list {
+    border-bottom: 0px;
+  }
+
+  .list__definition-list dl {
+    grid-template-columns: 270px 1fr !important;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+.tsDeliveryNote {
+  font-size: 15px;
+  line-height: 20px;
+  margin: 0 0 2.5em !important;
+}
+
+.ts-details {
+  margin: 0 0 1em !important;
+}
+
+.order-list {
+  padding: 15px 22px 0px 15px;
+}
+
+.button-color {
+  background: #000000 !important;
+}
+
+.order-message {
+  line-height: 25.3px;
+  .notification {
+    margin: 0px;
+    background: #F9F9F9;
+    padding-bottom: 0px;
+  }
+
+  .notification__container {
+    margin-left: 60px;
+  }
+}
+
+#order-cancel-button {
+  a:hover {
+    color: #CCC;
+  }
+
+  .button {
+    display: inline !important;
+  }
+}
+
+
+.sign_in_help_text {
+  font-size: 12px;
+}
+
+.teachersetFacetsBorder {
+  border: 1px solid #F5F5F5;
+  padding: 15px;
+  background: #F5F5F5;
+}

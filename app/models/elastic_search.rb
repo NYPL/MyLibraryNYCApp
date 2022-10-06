@@ -77,16 +77,16 @@ class ElasticSearch
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
     query, agg_hash = teacher_sets_query_based_on_filters(params)
+    
     query[:from] = from
     query[:size] = @teachersets_per_page
     # Sorting teachersets based on availability and created_at values. 
     # Showing latest created teachersets.
-    query[:sort] = [{"_score": "desc", "availability.raw": "asc", "created_at": "desc", "_id": "asc"}]
+    query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
     query[:aggs] = agg_hash
-
     teacherset_docs = search_by_query(query)
     facets = facets_for_teacher_sets(teacherset_docs)
-    [teacherset_docs, facets]
+    [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   end
 
 
@@ -163,7 +163,8 @@ class ElasticSearch
   def group_by_facets_query(aggregation_hash)
     aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 100, :order => {:_key => "asc"} } }
     aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10, :order => {:_key => "asc"} } }
-    aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
+    # Remove Availability lable in facets.
+    # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
     aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
@@ -184,7 +185,7 @@ class ElasticSearch
 
     # Specify desired order of facets:
     facets.sort_by! do |f|
-      ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
+      ind = ['area of study', 'subjects', 'language','set type'].index f[:label]
       ind.nil? ? 1000 : ind
     end
 
@@ -200,7 +201,6 @@ class ElasticSearch
   def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets)
     [
       { :label => 'language', :column => :primary_language },
-      { :label => 'availability', :column => 'availability', :value_map => AVAILABILITY_LABELS},
       { :label => 'set type', :column => 'set_type' },
       { :label => 'area of study', :column => 'area_of_study' }
     ].each do |config|
@@ -267,6 +267,18 @@ class ElasticSearch
       area_of_study_data.include?(subject[:label])
     end
     subjects_facets
+  end
+
+
+  def teacher_sets_sort_order(sort_order=0)
+    if (sort_order == 2 || sort_order == 3)
+      sort_order = (sort_order == 2)? "asc" : (sort_order == 3) ? "desc" : "asc"
+      query = [{:"title.keyword" => {:order => sort_order }}]
+    elsif (sort_order == 0 || sort_order == 1)
+      sort_order = (sort_order == 0)? "desc" : (sort_order == 1) ? "asc" : "desc"
+      query = [{"_score": "desc", "availability.raw": "asc", "created_at": sort_order, "_id": "asc"}]
+    end
+    query
   end
 
   

@@ -39,6 +39,10 @@ MyLibraryNYC::Application.configure do
 
   config.action_mailer.default_url_options = { :host => "#{ENV['MLN_INFO_SITE_HOSTNAME']}:3000" }
   config.action_mailer.perform_deliveries = false
+  config.api_only = false
+  # config.middleware.use ActionDispatch::Cookies
+  # config.middleware.use ActionDispatch::Session::CookieStore
+  # config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore)
 
   config.logger = Logger.new(STDOUT)
   config.logger.level = Logger::DEBUG
