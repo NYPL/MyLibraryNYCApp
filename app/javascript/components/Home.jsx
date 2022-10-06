@@ -13,7 +13,7 @@ export default function Home(props) {
   const [keyword, setKeyWord] = useState("")
 
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
   }, []);
 
   const handleSubmit = event => {

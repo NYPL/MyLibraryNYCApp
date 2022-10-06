@@ -68,7 +68,7 @@ export default function SearchTeacherSets(props) {
   }
 
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
     const queryValue = new URLSearchParams(location.search)
     const values = []
     const tsfacets = {}

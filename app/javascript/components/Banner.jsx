@@ -10,6 +10,7 @@ function Banner() {
   const [bannerTextFound, setBannerTextFound] =  useState("")
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/mln_banner_message')
       .then(res => {
@@ -34,4 +35,3 @@ function Banner() {
   );
 }
 export default Banner;
-

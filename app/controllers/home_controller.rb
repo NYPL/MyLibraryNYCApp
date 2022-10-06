@@ -63,7 +63,12 @@ class HomeController < ApplicationController
 
   # Create news-letter confirmation email in google sheets
   def newsletter_confirmation
-    @is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
+    
+  end
+
+  def newsletter_confirmation_msg
+    is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
+    render json: { success: is_success }
   end
 
   def calendar_event_error

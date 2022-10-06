@@ -21,6 +21,7 @@ import TeacherSetOrder from "../components/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks";
 import CalendarEventError from "../components/CalendarEventError";
+import NewsletterConfirmation from "../components/NewsletterConfirmation";
 import { render, ReactDOM } from "react-dom";
 import { DSProvider, TemplateAppContainer } from '@nypl/design-system-react-components';
 import AccountDetailsSubMenu from "../components/AccountDetailsSubMenu";
@@ -55,7 +56,6 @@ export default function AppRoutes(props) {
   }
 
   const handleSignInMsg = (signInMsg, userSignedIn) => {
-    console.log(userSignedIn)
     setsignin_msg(signInMsg)
     setUserSignedIn(userSignedIn)
   }
@@ -67,7 +67,6 @@ export default function AppRoutes(props) {
   const hideSignInMessage = (hideSignInMessage) => {
     sethide_signin_msg(hideSignInMessage)
   }
-
 
   return (
     <DSProvider>
@@ -90,6 +89,7 @@ export default function AppRoutes(props) {
           <Route path='/holds/:id/cancel' element={ <CancelTeacherSetOrder /> } />
           <Route path='/book_details/:id' element={ <TeacherSetBooks /> } />
           <Route path='/home/calendar_event/error' element={ <CalendarEventError /> } />
+          <Route path='/newsletter_confirmation' element={ <NewsletterConfirmation /> } />
         </Routes>
         <footer className="footer"> <Footer /></footer>
       </Router>

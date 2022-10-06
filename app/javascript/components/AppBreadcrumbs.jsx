@@ -99,6 +99,8 @@ const HeroDataValue = (levelString) => {
       return 'Account';
     case 'home':
       return 'Calendar Event';
+    case 'newsletter_confirmation':
+      return 'Newsletter Confirmation'
     default:
       return levelString;
   }

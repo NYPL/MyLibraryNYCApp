@@ -19,7 +19,7 @@ export default function SignIn(props) {
 
 
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
     if(props.userSignedIn && location.pathname === "/signin") {
       navigate('/account_details')
       return false;
