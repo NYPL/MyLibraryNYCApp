@@ -1,16 +1,13 @@
-import PropTypes from 'prop-types';
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
-import Collapsible from 'react-collapsible';
 import {
-  Button, SearchBar, Select, TextInput, HelperErrorText, DSProvider, 
-  TemplateAppContainer, Icon, Notification, Card,
-  CardHeading, CardContent, Text, Form, FormField, FormRow, Heading, HorizontalRule, Link, Box, HStack
+  Button, TextInput, TemplateAppContainer, Icon, Notification,
+  Text, Heading, HorizontalRule, Link
 } from '@nypl/design-system-react-components';
 import validator from 'validator'
-import { BrowserRouter as Router, Link as ReactRouterLink, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function SignIn(props) {
   const navigate = useNavigate();
@@ -23,7 +20,7 @@ export default function SignIn(props) {
 
   useEffect(() => {
     window.scrollTo({ top: 10 });
-    if(props.userSignedIn && location.pathname == "/signin") {
+    if(props.userSignedIn && location.pathname === "/signin") {
       navigate('/account_details')
       return false;
     }
@@ -36,7 +33,7 @@ export default function SignIn(props) {
   }
 
   const handleValidation = () => {
-    if (email == "") {
+    if (email === "") {
       setInvalidEmailMsg("Please enter a valid email address")
       setIsInvalid(true)
       return false;
@@ -46,7 +43,7 @@ export default function SignIn(props) {
 
   const handleSubmit = event => {
     event.preventDefault();
-    if (email == "") {
+    if (email === "") {
       setInvalidEmailMsg("Please enter a valid email address")
       setIsInvalid(true)
       return false;

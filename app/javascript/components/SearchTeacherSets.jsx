@@ -1,16 +1,16 @@
-import React, { Component, useState, useEffect, useContext, useLayoutEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
 import { titleCase } from "title-case";
-import { Button, ButtonGroup, SearchBar, Select, Icon, HorizontalRule, Heading, Card, CardHeading, CardContent, Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Notification, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion, SkeletonLoader, useNYPLBreakpoints
+import { Button, ButtonGroup, SearchBar, Select, Icon, HorizontalRule, Heading, Card, CardHeading, CardContent, Pagination, Checkbox, TemplateAppContainer, Slider, CheckboxGroup, Flex, Spacer, Text, Box, Toggle, StatusBadge, Accordion, SkeletonLoader, useNYPLBreakpoints
 } from '@nypl/design-system-react-components';
 
-import { Link as ReactRouterLink, useSearchParams, useNavigate, createSearchParams, useLocation,  UNSAFE_NavigationContext } from "react-router-dom";
+import { Link as ReactRouterLink, useSearchParams, useNavigate, useLocation } from "react-router-dom";
+
 
 export default function SearchTeacherSets(props) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
   const queryParams = [];
 
   for(let entry of searchParams.entries()) {
@@ -23,11 +23,9 @@ export default function SearchTeacherSets(props) {
   const [facets, setFacets] = useState([])
   const [tsTotalCount, setTsTotalCount] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
-  const [pagination, setPagination] = useState("none")
   const [displayPagination, setDisplayPagination] = useState("none")
   const [keyword, setKeyWord] =  useState(searchParams.get("keyword") || "")
   const [selectedFacets, setSelectedFacets] = useState({})
-  const [checkedFacets, setCheckedFacets] = React.useState([false]);
   const [grade_begin, setGradeBegin] = useState(-1)
   const [grade_end, setGradeEnd] = useState(12)
   const [availableToggle, setAvailableToggle] = useState(false)
@@ -37,10 +35,9 @@ export default function SearchTeacherSets(props) {
   const [sort_order, setSortOrder] = useState("")
   const [computedCurrentPage, setComputedCurrentPage] = useState(1)
   const initialPage = 1;
-  const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
+  const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile } = useNYPLBreakpoints();
   const [selectedPage, setSelectedPage] =  useState(initialPage);
   const [rangeValues, setRangevalues] = useState([-1, 12])
-  const [checkBoxValues, setCheckBoxValues] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
@@ -61,16 +58,6 @@ export default function SearchTeacherSets(props) {
       clearInterval(timeoutId);
     };
   }, [isLoading]);
-
-  const queryParamsData = () => {
-    let array = queryParams,
-    grouped = Object.entries(array.reduce((r, o) => (
-                Object.entries(o).forEach(([k, v]) => (r[k] = r[k] || []).push(v)), r), Object.create(null)
-        ))
-        .map(([k, v]) => ({ [k]: v }));
-
-    return grouped
-  }
 
   const setGrades = (g_begin, g_end) => {
     if (g_begin && g_end){
@@ -203,7 +190,7 @@ export default function SearchTeacherSets(props) {
   }
 
   const availabilityStatusBadge = (ts) => {
-    return (ts.availability == "available") ? "medium" : "low"
+    return (ts.availability === "available") ? "medium" : "low"
   }
 
   const tsHorizontalRule = (index, arr) =>  {

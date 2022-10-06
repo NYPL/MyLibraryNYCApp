@@ -1,30 +1,24 @@
-import PropTypes from 'prop-types';
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
-import axios from 'axios';
-import {
-  Button, SearchBar, Select, TextInput, HelperErrorText, DSProvider, 
-  TemplateAppContainer, Text, FormField, Form, Notification
-} from '@nypl/design-system-react-components';
-import validator from 'validator'
+import { TemplateAppContainer } from '@nypl/design-system-react-components';
 
 export default function SignOut(props) {
 
-  const [logged_out, setLoggedOut] = useState("")
+  const [loggedOut, setLoggedOut] = useState("")
 
 
   const signOutMessage = () => {
-    if (logged_out) {
+    if (loggedOut) {
       return "Signed out successfully"
     }
   }
 
   return (
-        <TemplateAppContainer
-          breakout={<><AppBreadcrumbs />
-            {signOutMessage()}
-          </>}
-        />
+    <TemplateAppContainer
+      breakout={<><AppBreadcrumbs />
+        {signOutMessage()}
+      </>}
+    />
   )
   
 }

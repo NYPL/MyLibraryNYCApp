@@ -1,34 +1,22 @@
-import PropTypes from 'prop-types';
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 import {
   Button,
-  SearchBar,
-  Select,
-  Input,
-  SearchButton,
-  InputTypes,
-  Icon,
-  HelperErrorText,
-  LibraryExample,
-  Heading, TextInput, Form, FormField, FormRow, SimpleGrid, ButtonGroup, Text, Box, Center, ProgressIndicator, VStack, Stack, useNYPLBreakpoints
+  Heading, TextInput, Text, Box, ProgressIndicator, VStack, Stack, useNYPLBreakpoints
 } from '@nypl/design-system-react-components';
 
 
-
-export default function NewsLetter(props) {
+export default function NewsLetter() {
 
   const [message, setMessage] = useState("")
   const [error_msg, setErrorMsg] = useState({})
   const [email, setEmail] = useState("")
-  const [display_block, setDisplayBlock] = useState("block")
-  const [display_none, setDisplayNone] = useState("none")
   const [buttonDisabled, setButtonDisabled] = useState(false)
   const [isInvalid, setIsInvalid] = useState(false)
   const [successFullySignedUp, setSuccessFullySignedUp] = useState(false)
 
-  const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
+  const { isLargerThanMobile } = useNYPLBreakpoints();
 
   const handleNewsLetterEmail = (event) => {
     setEmail(event.target.value)
@@ -47,14 +35,14 @@ export default function NewsLetter(props) {
       .then(res => {
           setMessage(res.data.message)
 
-          if (res.data.status == "success") {
-            setDisplayNone("block")
-            setDisplayBlock("none")
+          if (res.data.status === "success") {
+            // setDisplayNone("block")
+            // setDisplayBlock("none")
             setIsInvalid(false)
             setSuccessFullySignedUp(true)
           } else {
-            setDisplayNone("none")
-            setDisplayBlock("block")
+            // setDisplayNone("none")
+            // setDisplayBlock("block")
             setIsInvalid(true)
             setButtonDisabled(false)
           }
