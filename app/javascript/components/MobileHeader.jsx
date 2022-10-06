@@ -1,18 +1,7 @@
-import PropTypes from 'prop-types';
-import React, { Component, useState } from 'react';
-import ReactTappable from 'react-tappable';
-import FocusTrap from 'focus-trap-react';
-import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
-import Vector from '../images/Vector.png'
+import React, { useState } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Redirect, Link as ReactRouterLink, useNavigate } from "react-router-dom";
-
-import { Link, Flex, Icon, HStack, Image, List, Spacer, HorizontalRule, Center, Box, Logo, Square} from "@nypl/design-system-react-components";
-
-import { LionLogoIcon, LocatorIcon, MenuIcon, 
-         LoginIcon, LoginIconSolid, SearchIcon, XIcon } from '@nypl/dgx-svg-icons';
-import { extend as _extend } from 'underscore';
-import mlnLogoRed1 from '../images/MLN_Logo_red.png'
+import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
+import { Link, Flex, Icon, List, Spacer, HorizontalRule, Center, Box, Logo, Square} from "@nypl/design-system-react-components";
 
 
 export default function MobileHeader(props) {
@@ -38,7 +27,7 @@ export default function MobileHeader(props) {
   function mobileSignOut(){
     axios.delete('/users/logout')
       .then(res => {
-        if (res.data.status == 200 && res.data.logged_out == true) {
+        if (res.data.status === 200 && res.data.logged_out === true) {
           props.details.handleLogout(false)
           props.details.handleSignOutMsg(res.data.sign_out_msg, false)
           props.details.hideSignUpMessage(false)
@@ -54,14 +43,14 @@ export default function MobileHeader(props) {
   const navMenuSignInAccountDetails = () => {
     if (props.details.userSignedIn) {
       return <li> 
-              <ReactRouterLink className="mobileSubmenu" onClick={mobileSignOut}>Sign Out</ReactRouterLink>
-              <HorizontalRule align="right" className="mobileHorizontalRule"/>
-            </li>
+        <ReactRouterLink className="mobileSubmenu" onClick={mobileSignOut}>Sign Out</ReactRouterLink>
+        <HorizontalRule align="right" className="mobileHorizontalRule"/>
+      </li>
     } else {
         return <li>
-                  <Link className="mobileSubmenu" href="/signin">Sign In</Link>
-                  <HorizontalRule align="right" className="mobileHorizontalRule"/>
-                </li>
+        <Link className="mobileSubmenu" href="/signin">Sign In</Link>
+        <HorizontalRule align="right" className="mobileHorizontalRule"/>
+      </li>
     }
   }
 

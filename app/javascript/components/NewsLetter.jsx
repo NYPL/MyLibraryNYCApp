@@ -10,7 +10,6 @@ import {
 export default function NewsLetter() {
 
   const [message, setMessage] = useState("")
-  const [error_msg, setErrorMsg] = useState({})
   const [email, setEmail] = useState("")
   const [buttonDisabled, setButtonDisabled] = useState(false)
   const [isInvalid, setIsInvalid] = useState(false)
@@ -36,13 +35,9 @@ export default function NewsLetter() {
           setMessage(res.data.message)
 
           if (res.data.status === "success") {
-            // setDisplayNone("block")
-            // setDisplayBlock("none")
             setIsInvalid(false)
             setSuccessFullySignedUp(true)
           } else {
-            // setDisplayNone("none")
-            // setDisplayBlock("block")
             setIsInvalid(true)
             setButtonDisabled(false)
           }

@@ -1,13 +1,10 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import HaveQuestions from "./HaveQuestions";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
-import {
-  Input, TextInput, List, DSProvider, TemplateAppContainer, Text, Heading, HorizontalRule, Link, SkeletonLoader, Icon, Button
+import { TextInput, List, TemplateAppContainer, Text, Heading, HorizontalRule, Link, SkeletonLoader, Icon, Button
 } from '@nypl/design-system-react-components';
-
-
 
 export default class ParticipatingSchools extends Component {
 
@@ -33,7 +30,7 @@ export default class ParticipatingSchools extends Component {
         if (school_anchors.includes(anchor)) {
           return <Link marginRight="xs" style={{"textDecoration": "none"}} fontWeight="bold" href={"#" + anchor}> {anchor} </Link>
         } else {
-          if (anchor != '#') {
+          if (anchor !== '#') {
             return <a style={{"textDecoration": "none", "fontWeight": "bold", "color": "var(--nypl-colors-ui-gray-medium)", "marginRight": "8px"}}>{anchor}</a>
           }
         }
