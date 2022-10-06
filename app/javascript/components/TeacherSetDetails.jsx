@@ -34,7 +34,7 @@ export default function TeacherSetDetails(props) {
   const { isLargerThanMobile } = useNYPLBreakpoints();
 
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     axios.get('/teacher_sets/'+ params["id"])
       .then(res => {

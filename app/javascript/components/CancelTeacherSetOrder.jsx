@@ -19,7 +19,7 @@ export default function TeacherSetOrder() {
   const [comment, setComment] = useState("")
 
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
     axios({method: 'get', url: '/holds/'+ params["id"] + '/cancel_details'}).then(res => {
       setTeacherSet(res.data.teacher_set)
       setHold(res.data.hold)

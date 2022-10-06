@@ -5,9 +5,9 @@ import HaveQuestions from "./HaveQuestions";
 import { TemplateAppContainer, Heading, Table, Text, Link} from '@nypl/design-system-react-components';
 
 function Contacts() {
-  
+
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
   }, []);
 
   return (

@@ -21,7 +21,7 @@ export default function TeacherSetBooks(props) {
   const [bookImageWidth, setBookImageWidth] = useState([])
 
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
     axios.get('/books/'+ params["id"])
       .then(res => {
         setTeacherSets(res.data.teacher_sets)

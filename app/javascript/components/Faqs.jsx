@@ -11,7 +11,7 @@ export default function Faqs(props) {
   const [faqs, setFaqs] = useState([])
 
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
     axios.get('/faqs/show').then(res => {
         setFaqs(res.data.faqs)
       })
