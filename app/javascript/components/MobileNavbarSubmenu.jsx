@@ -1,11 +1,8 @@
 import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  BrowserRouter as Router,
-  Link as ReactRouterLink,
-} from "react-router-dom";
-import { Link, Icon, List, VStack, HorizontalRule } from "@nypl/design-system-react-components";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { Link, Icon, List, HorizontalRule } from "@nypl/design-system-react-components";
 
 
 export default class MobileNavbarSubmenu extends Component {
@@ -19,8 +16,6 @@ export default class MobileNavbarSubmenu extends Component {
   }
 
   render() {
-    const mobileActiveClass = this.props.mobileActive ? 'mobileActive' : '';
-
     return (
         <div className="navMenu-wrapper">
           <List type="ul" noStyling marginLeft="s" marginBottom="s">
@@ -57,17 +52,3 @@ export default class MobileNavbarSubmenu extends Component {
     );
   }
 }
-
-MobileNavbarSubmenu.propTypes = {
-  lang: PropTypes.string,
-  className: PropTypes.string,
-  urlType: PropTypes.string,
-  mobileActive: PropTypes.bool,
-};
-
-MobileNavbarSubmenu.defaultProps = {
-  lang: 'en',
-  className: 'navMenu',
-  urlType: 'relative',
-  mobileActive: false,
-};

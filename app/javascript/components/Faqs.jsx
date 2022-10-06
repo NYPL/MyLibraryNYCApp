@@ -1,11 +1,10 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import SignedInMsg from "./SignedInMsg";
 import axios from 'axios';
-import { Accordion, Link, List, DSProvider, TemplateAppContainer, SkeletonLoader } from '@nypl/design-system-react-components';
+import { Accordion, TemplateAppContainer } from '@nypl/design-system-react-components';
 import HTMLReactParser from 'html-react-parser';
-
 
 export default function Faqs(props) {
 

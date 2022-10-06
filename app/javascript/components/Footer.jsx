@@ -1,14 +1,8 @@
 import React from "react";
-
-import { Link, DSProvider, TemplateAppContainer, Image, Logo, Center, useNYPLBreakpoints, VStack, HStack} from '@nypl/design-system-react-components';
-
-import nyplLogo from '../images/nypl.png'
-import brooklynLibraryLogo from '../images/brooklyn_public_library.png'
-import queensLibraryLogo from '../images/queens_public_library_v2.png'
-import doeLogo from '../images/doe.png'
+import { Link, Logo, Center, useNYPLBreakpoints, VStack, HStack} from '@nypl/design-system-react-components';
 
 function Footer() {
-  const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile, isLargerThanLarge, isLargerThanXLarge } = useNYPLBreakpoints();
+  const { isLargerThanMobile } = useNYPLBreakpoints();
 
   const footerLinks = () => {
     return <>

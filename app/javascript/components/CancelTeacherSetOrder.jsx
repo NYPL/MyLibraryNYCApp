@@ -1,18 +1,15 @@
-import PropTypes from 'prop-types';
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import TeacherSetOrderDetails from "./TeacherSetOrderDetails";
 import axios from 'axios';
 import {
-  Button,
-  SearchBar, Select, Input, SearchButton, Heading, Image, List, Link, TextInput, Label, DSProvider, HStack,
-  TemplateAppContainer, Text, HorizontalRule
+  Button, Heading, Link, TextInput, Label, HStack,
+  TemplateAppContainer, HorizontalRule
 } from '@nypl/design-system-react-components';
 import {useParams, useNavigate} from "react-router-dom";
 
-
-export default function TeacherSetOrder(props) {
+export default function TeacherSetOrder() {
 
   const params = useParams();
   const navigate = useNavigate();
@@ -40,7 +37,7 @@ export default function TeacherSetOrder(props) {
     event.preventDefault();
     axios.put('/holds/'+ access_key, { hold_change: { status: 'cancelled', comment: comment } 
      }).then(res => {
-        if (res.request.responseURL == "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
+        if (res.request.responseURL === "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin") {
           window.location = res.request.responseURL;
           return false;
         } else {
@@ -68,22 +65,20 @@ export default function TeacherSetOrder(props) {
     }
   }
 
-
-
-    return (
-      <TemplateAppContainer
-        breakout={<AppBreadcrumbs />}
-        contentPrimary={
-          <>
-            <Heading id="ts-cancellation-confirmation-text" level="two" size="secondary" text="Cancel Order" />
-            <HorizontalRule id="ts-cancel-order-horizontal=line" className="teacherSetHorizontal" />
-            <div>Review your order details below and verify this is the order you would like cancel.</div>
-            <TeacherSetOrderDetails  teacherSetDetails={teacher_set} orderDetails={hold}/>
-            {cancelConfirmation()}
-          </>
-        }
-        contentSidebar={<div><HaveQuestions /></div>}
-        sidebar="right"
-      />
+  return (
+    <TemplateAppContainer
+      breakout={<AppBreadcrumbs />}
+      contentPrimary={
+        <>
+          <Heading id="ts-cancellation-confirmation-text" level="two" size="secondary" text="Cancel Order" />
+          <HorizontalRule id="ts-cancel-order-horizontal=line" className="teacherSetHorizontal" />
+          <div>Review your order details below and verify this is the order you would like cancel.</div>
+          <TeacherSetOrderDetails  teacherSetDetails={teacher_set} orderDetails={hold}/>
+          {cancelConfirmation()}
+        </>
+      }
+      contentSidebar={<div><HaveQuestions /></div>}
+      sidebar="right"
+    />
   )
 }

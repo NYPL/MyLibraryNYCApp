@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, { useEffect } from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 
-import { DSProvider, TemplateAppContainer, Heading, Flex, HStack, Table, Text, Link} from '@nypl/design-system-react-components';
+import { TemplateAppContainer, Heading, Table, Text, Link} from '@nypl/design-system-react-components';
 
-function Contacts(props) {
+function Contacts() {
+  
   useEffect(() => {
     window.scrollTo({ top: 10 });
   }, []);

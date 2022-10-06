@@ -1,11 +1,7 @@
 import React  from 'react';
-import { Link as ReactRouterLink } from "react-router-dom";
+import { Link, Heading} from "@nypl/design-system-react-components";
 
-import { Link, Heading, VStack, Grid, GridItem, HStack } from "@nypl/design-system-react-components";
-
-
-export default function HaveQuestions(props) {
-
+export default function HaveQuestions() {
   return (
     <>
       <Heading id="heading-tertiary" level="two" size="tertiary" text="Have Questions?" />

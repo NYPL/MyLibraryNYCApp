@@ -1,11 +1,8 @@
 import React from 'react';
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
-import { Link, Icon, List, Image, Flex, Spacer, HStack, Logo} from "@nypl/design-system-react-components";
-import mlnLogoRed from '../images/MyLibrary_NYC_Red.png'
-import Vector from '../images/Vector.png'
+import { Link, Icon, List, Flex, Spacer, Logo} from "@nypl/design-system-react-components";
 
 import AccountDetailsSubMenu from "./AccountDetailsSubMenu";
-
 
 export default function Navbar(props) {
 
@@ -16,13 +13,8 @@ export default function Navbar(props) {
     navigate('/')
   }
 
-  const redirectToTeacherSetPage = () => {
-    navigate('teacher_set_data')
-  }
-
   const hideSignInMsg = () => {
     props.hideSignInMessage(true)
-    //redirectToTeacherSetPage()
   }
 
   return (

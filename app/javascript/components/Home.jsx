@@ -3,20 +3,13 @@ import HaveQuestions from "./HaveQuestions";
 import AccessDigitalResources from "./AccessDigitalResources";
 import CalendarOfEvents from "./CalendarOfEvents";
 import NewsLetter from "./NewsLetter";
-import heroCampaignBg from '../images/hero_campaign_bg.jpg'
-import heroCampaignLeft from '../images/hero_campaign_left.jpg'
 import homeBgImg from '../images/mln-homepage-background.jpg'
 import homeFgImg from '../images/mln-homepage-foreground.jpg'
-
-import axios from 'axios';
-import {useParams, useNavigate} from "react-router-dom";
-import { Hero, SearchBar, Icon, HorizontalRule, Heading, TemplateAppContainer, Notification, Text, Link } from '@nypl/design-system-react-components';
+import { useNavigate } from "react-router-dom";
+import { Hero, SearchBar, Icon, HorizontalRule, Heading, TemplateAppContainer, Notification, Text, Link } from '@nypl/design-system-react-components'; 
 
 export default function Home(props) {
   const navigate = useNavigate();
-  const [userSignedIn, setUserSignedIn] = useState(props.userSignedIn)
-  const [teacherSets, setTeacherSets] = useState([])
-  const [email, setEmail] = useState("")
   const [keyword, setKeyWord] = useState("")
 
   useEffect(() => {
