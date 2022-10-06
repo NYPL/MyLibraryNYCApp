@@ -51,7 +51,7 @@ deploy:
   bucket_path: my-library-nyc-app-react-dev-18
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: react-on-rails-aug-30-branch # need to update
+    branch: development
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
@@ -63,7 +63,7 @@ deploy:
   bucket_path: my-library-nyc-app-qa25
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: qa
+    branch: qa-old
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
@@ -75,7 +75,7 @@ deploy:
   bucket_path: my-library-nyc-app-react-qa-27
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: react-on-rails-aug-30-branch # need to update
+    branch: qa
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_PRODUCTION"
