@@ -31,7 +31,6 @@ export default function SignUp(props) {
   const [schoolErrorMsg, setSchoolErrorMsg] = useState("")
   const [emailIsInvalid, setEmailIsInvalid] = useState(false)
   const [altEmailIsvalid, setAltEmailIsvalid] = useState(false)
-  const [messages, setMessages] = useState({})
   const [news_letter_error, setNewsLetterError] = useState("")
   const [show_news_letter_error, setShowNewsLetterError] = useState(false)
   const [isCheckedVal, setIsCheckedVal] = useState(false)
@@ -66,7 +65,7 @@ export default function SignUp(props) {
                   last_name: last_name, password: password, school_id: school_id, news_letter_email: alt_email || email }
        }).then(res => {
 
-          if (res.data.status == "created") {
+          if (res.data.status === "created") {
             setSignUpmsg(res.data.message)
             props.handleLogin(true)
             redirectToTeacherSetPage()
@@ -196,7 +195,7 @@ export default function SignUp(props) {
       setFirstNameErrorMsg("First name can not be empty")
     }
 
-    if (first_name && typeof first_name == "string") {
+    if (first_name && typeof first_name === "string") {
       if (!first_name.match(/^[a-z ,.'()-]+$/i)) {
         formIsValid = false;
         setFirstNameIsValid(true)
@@ -212,7 +211,7 @@ export default function SignUp(props) {
       setLastNameErrorMsg("Last name can not be empty")
     }
 
-    if (last_name && typeof last_name == "string") {
+    if (last_name && typeof last_name === "string") {
       if (!last_name.match(/^[a-z ,.'()-]+$/i)) {
         formIsValid = false;
         setLastNameIsValid(true)
@@ -228,7 +227,7 @@ export default function SignUp(props) {
       setPasswordErrorMsg("Password can not be empty")
     }
 
-    if (password && typeof password == "string" ) {
+    if (password && typeof password === "string" ) {
       if (!isStrongPassword(password)) {
         formIsValid = false;
         setPasswordIsValid(true)
@@ -353,7 +352,7 @@ export default function SignUp(props) {
     // If alternate email is present in sign-up page take alternate-email to send news-letters other-wise DOE email.
     const news_letter_email = alt_email || email
 
-    if (event.target.value == 1 && news_letter_email == undefined) {
+    if (event.target.value === 1 && news_letter_email === undefined) {
       setNewsLetterError("Please enter a valid email address")
       setShowNewsLetterError(true)
       setIsDisabled(true)
@@ -366,11 +365,11 @@ export default function SignUp(props) {
 
     if (news_letter_email !== undefined) {
       axios.post('/news_letter/validate_news_letter_email_from_user_sign_up_page',  { email: news_letter_email }).then(res => {
-        if (event.target.value == 1 && res.data["error"] !== undefined) {
+        if (event.target.value === 1 && res.data["error"] !== undefined) {
           setNewsLetterError(res.data["error"])
           setShowNewsLetterError(true)
           setIsCheckedVal(false)          
-        } else if (event.target.value == 1 && res.data["success"] !== undefined) {
+        } else if (event.target.value === 1 && res.data["success"] !== undefined) {
           setNewsLetterError("")
           setShowNewsLetterError(false)
           setIsDisabled(false)

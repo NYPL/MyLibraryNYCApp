@@ -60,7 +60,7 @@ export default function SearchTeacherSets(props) {
   }, [isLoading]);
 
   const setGrades = (g_begin, g_end) => {
-    if (g_begin && g_end){
+    if (g_begin && g_end) {
       setGradeBegin(parseInt(g_begin))
       setGradeEnd(parseInt(g_end))
       setRangevalues([parseInt(g_begin), parseInt(g_end)])

@@ -1,35 +1,17 @@
-import PropTypes from 'prop-types';
-import React, { Component, useState } from 'react';
-import { Route, BrowserRouter as Router, Switch , Redirect, Link as ReactRouterLink, 
-  useLocation,
-  useParams, useNavigate} from "react-router-dom";
-
+import React, { useState } from 'react';
+import { Link as ReactRouterLink, useParams, useNavigate} from "react-router-dom";
 import axios from 'axios';
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import Home from "./Home";
 import {
-  Input, TextInput, List, Icon, Form, Button, FormRow, InputTypes, Label, FormField, 
-  DSProvider, TemplateAppContainer, Select, Heading, Link, LinkTypes, Box, HStack
+  List, Icon, Button, Link, Box
 } from '@nypl/design-system-react-components';
 
 function AccountDetailsSubMenu(props) {
-  const params = useParams();
   const navigate = useNavigate();
   const [user_signed_in, setUserSignedIn] = useState(props.userSignedIn)
   const [showAboutMenu, setShowAboutMenu] = useState(false)
 
-  const signInAccountLinks = () => {
-    if (!props.userSignedIn) {
-      return <li className="nav__submenu-item"> <ReactRouterLink to="/signin"> <Button className="signin_nav_button" buttonType="noBrand">Sign In</Button> </ReactRouterLink> </li>
-    }
-  }
-
-  const handleHover = (event) => {
+  const handleHover = () => {
     setShowAboutMenu(true)
-  };
-
-  const handleLeave = (event) => {
-    setShowAboutMenu(false)
   };
 
   const showAccountSigninLink = () => {
@@ -64,14 +46,13 @@ function AccountDetailsSubMenu(props) {
   const signOut = event => {
     axios.delete('/users/logout', { headers: {"Content-Type": "application/json", 'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute("content") } })
       .then(res => {
-        if (res.data.status == 200 && res.data.logged_out == true) {
+        if (res.data.status === 200 && res.data.logged_out === true) {
           props.handleLogout(false)
           setUserSignedIn(false)
           setShowAboutMenu(false)
           props.handleSignOutMsg(res.data.sign_out_msg, false)
           props.hideSignUpMessage(false)
           navigate('/')
-          //redirectToHome()  - need to fix asap       
         }
       })
       .catch(function (error) {

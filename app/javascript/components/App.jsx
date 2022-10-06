@@ -1,11 +1,8 @@
-import { DSProvider } from '@nypl/design-system-react-components';
-import React, { Component, useState, useEffect } from 'react';
-import { useLocation } from 'react-router';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AppRoutes from "../routes/AppRoutes";
-import { useNavigate } from 'react-router-dom';
 
-export default function App(props) {
+export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {

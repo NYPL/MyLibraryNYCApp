@@ -1,13 +1,9 @@
-import React, { Component, useState, useEffect } from 'react';
-import HaveQuestions from "./HaveQuestions";
-import AccessDigitalResources from "./AccessDigitalResources";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { HorizontalRule, Button, HStack, Accordion, Link, List, ButtonGroup } from '@nypl/design-system-react-components';
-import ReactOnRails from 'react-on-rails';
-import { BrowserRouter as Router, Link as ReactRouterLink } from "react-router-dom";
+import { Button, Link, ButtonGroup } from '@nypl/design-system-react-components';
+import { BrowserRouter as Router } from "react-router-dom";
 
-
-function CalendarOfEvents(props) {
+function CalendarOfEvents() {
 
   const [calendarFileName, setCalendarFileName] = useState("")
   const [menuOfServicesFileName, setMenuOfServicesFileName] = useState("")

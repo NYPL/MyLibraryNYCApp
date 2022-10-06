@@ -1,8 +1,7 @@
-import React, { Component, useState, useEffect } from 'react';
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../styles/application.scss"
-import { Notification, Link } from '@nypl/design-system-react-components';
+import { Notification } from '@nypl/design-system-react-components';
 import ReactParser from 'html-react-parser';
 
 function Banner() {
@@ -35,3 +34,4 @@ function Banner() {
   );
 }
 export default Banner;
+
