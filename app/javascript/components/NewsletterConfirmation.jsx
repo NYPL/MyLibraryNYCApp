@@ -8,6 +8,7 @@ const NewsletterConfirmation = () =>  {
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     axios.get('/home/newsletter_confirmation_msg')
       .then(res => {
         setSuccess(res.data.success);

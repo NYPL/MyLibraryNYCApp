@@ -16,7 +16,7 @@ export default function TeacherSetOrder(props) {
   const [teacherSet, setTeacherSet] = useState(props.teachersetdetails)
 
   useEffect(() => {
-    window.scrollTo({ top: 10 });
+    window.scrollTo(0, 0);
     
     if (typeof hold === 'string') {
       axios.get('/holds/' + params["access_key"])

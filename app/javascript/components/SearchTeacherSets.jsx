@@ -208,7 +208,7 @@ export default function SearchTeacherSets(props) {
       return <div id={"teacher-set-results-" + i}>
           <Card id={"ts-details-" + i} layout="row" aspectratio="square" size="xxsmall">
             <CardHeading marginBottom="xs" level="three" id={"ts-order-details-" + i}>
-              <ReactRouterLink to={"/teacher_set_details/" + ts.id} onClick={ () => window.scrollTo({ top: 10 })} >{ts.title}</ReactRouterLink>
+              <ReactRouterLink to={"/teacher_set_details/" + ts.id} onClick={ () => window.scrollTo(0, 0)} >{ts.title}</ReactRouterLink>
             </CardHeading>
             <CardContent marginBottom="xs" id={"ts-suitabilities-"+ i}>{ts.suitabilities_string}</CardContent>
             <CardContent marginBottom="s" id={"ts-availability-"+ i}>
@@ -422,7 +422,7 @@ export default function SearchTeacherSets(props) {
                 </Button>
               </ButtonGroup>
               <Spacer />
-              <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo({ top: 10 }) } className="teacher_set_pagination" onPageChange={onPageChange} pageCount={totalPages} /></div>
+              <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo(0, 0) } className="teacher_set_pagination" onPageChange={onPageChange} pageCount={totalPages} /></div>
             </Flex>
           </div>
       </>

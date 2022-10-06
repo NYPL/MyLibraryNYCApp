@@ -15,6 +15,7 @@ export default class ParticipatingSchools extends Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0);
     axios.get('/schools')
       .then(res => {
         this.setState({ schools: res.data.schools, anchor_tags: res.data.anchor_tags, schoolNotFound: res.data.school_not_found });
