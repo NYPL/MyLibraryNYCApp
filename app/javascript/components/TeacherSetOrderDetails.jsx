@@ -86,7 +86,5 @@ export default function TeacherSetOrderDetails(props) {
       </List>
   }
 
-  return (
-    teacherSetOrderDetails()
-  )
+  return teacherSetOrderDetails();
 }
