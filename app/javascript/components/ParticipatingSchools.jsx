@@ -46,10 +46,10 @@ export default class ParticipatingSchools extends Component {
   }
 
   AnchorTags() {
-    let school_anchors = this.state.schools.map((school, i) => {
+    let school_anchors = this.state.schools.map((school) => {
       return school["alphabet_anchor"];
     });
-    return this.state.anchor_tags.map((anchor, i) => {
+    return this.state.anchor_tags.map((anchor) => {
       if (school_anchors.includes(anchor)) {
         return (
           <Link
@@ -97,7 +97,7 @@ export default class ParticipatingSchools extends Component {
   }
 
   Schools() {
-    this.state.isInvalid = false;
+    this.setState({ isInvalid: false });
     let schoolsCount = 0;
 
     let schoolsData = this.state.schools.map((data, i) => {

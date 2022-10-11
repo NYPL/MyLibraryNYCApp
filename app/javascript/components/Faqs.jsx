@@ -25,7 +25,7 @@ export default function Faqs(props) {
   }, []);
 
   const FrequentlyAskedQuestions = () => {
-    return faqs.map((data, i) => {
+    return faqs.map((data) => {
       return {
         label: (
           <div className="hrefLink">{HTMLReactParser(data["question"])}</div>

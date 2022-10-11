@@ -36,8 +36,14 @@ function Contacts() {
             useRowHeaders
             tableData={[
               [
-                <Text noSpace>General Information</Text>,
-                <Link id="mln-help-email" href="mailto:help@mylibrarynyc.org">
+                <Text key="general-ino" noSpace>
+                  General Information
+                </Text>,
+                <Link
+                  key="mln-help-email-key"
+                  id="mln-help-email"
+                  href="mailto:help@mylibrarynyc.org"
+                >
                   help@mylibrarynyc.org
                 </Link>,
               ],

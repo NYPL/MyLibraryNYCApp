@@ -18,7 +18,7 @@ import { useParams, useNavigate } from "react-router-dom";
 export default function TeacherSetOrder() {
   const params = useParams();
   const navigate = useNavigate();
-  const [access_key, setAccessKey] = useState(params["id"]);
+  const [access_key] = useState(params["id"]);
   const [hold, setHold] = useState("");
   const [teacher_set, setTeacherSet] = useState("");
   const [comment, setComment] = useState("");

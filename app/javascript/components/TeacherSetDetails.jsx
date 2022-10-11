@@ -66,6 +66,7 @@ export default function TeacherSetDetails(props) {
       })
       .catch(function (error) {
         console.log(error);
+        console.error(error);
       });
   }, []);
 
@@ -205,7 +206,11 @@ export default function TeacherSetDetails(props) {
 
   const TeacherSetNotesContent = () => {
     return teacherSetNotes.map((note, i) => {
-      return <div id={"ts-notes-content-" + i}>{note.content}</div>;
+      return (
+        <div key={i} id={"ts-notes-content-" + i}>
+          {note.content}
+        </div>
+      );
     });
   };
 
@@ -417,7 +422,7 @@ export default function TeacherSetDetails(props) {
               textAlign="center"
               size="callout"
               level="four"
-              text={AvailableCopies()}
+              text={"" + AvailableCopies()}
             />
             {OrderTeacherSets()}
           </Box>
@@ -504,7 +509,7 @@ export default function TeacherSetDetails(props) {
             marginTop="s"
             size="callout"
             level="four"
-            text={BooksCount()}
+            text={"" + BooksCount()}
           />
           <SimpleGrid
             id="ts-page-books-panel"
@@ -580,7 +585,7 @@ export default function TeacherSetDetails(props) {
               noSpace
               level="two"
               size="secondary"
-              text={teacherSetTitle()}
+              text={"" + teacherSetTitle()}
             />
             <Spacer />
             {teacherSetAvailability()}

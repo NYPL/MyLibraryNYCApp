@@ -33,7 +33,6 @@ import {
 import {
   Link as ReactRouterLink,
   useSearchParams,
-  useNavigate,
   useLocation,
 } from "react-router-dom";
 
@@ -60,19 +59,16 @@ export default function SearchTeacherSets(props) {
   const [availability, setAvailability] = useState("");
   const [sortTitleValue, setSortTitleValue] = useState(0);
   const [noTsResultsFound, setNoTsResultsFound] = useState("");
-  const [sort_order, setSortOrder] = useState("");
   const [computedCurrentPage, setComputedCurrentPage] = useState(1);
-  const initialPage = 1;
-  const { isLargerThanSmall, isLargerThanMedium, isLargerThanMobile } =
-    useNYPLBreakpoints();
-  const [selectedPage, setSelectedPage] = useState(initialPage);
+  // const initialPage = 1;
+  const { isLargerThanMedium } = useNYPLBreakpoints();
+  // const [selectedPage, setSelectedPage] = useState(initialPage);
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
     setIsLoading(true);
-    setSelectedPage(1);
   }, [facets, teacherSets, tsTotalCount, noTsResultsFound]);
 
   useEffect(() => {
@@ -98,10 +94,9 @@ export default function SearchTeacherSets(props) {
   useEffect(() => {
     window.scrollTo(0, 0);
     const queryValue = new URLSearchParams(location.search);
-    const values = [];
     const tsfacets = {};
 
-    let facetsdata = queryParams.map((ts, i) => {
+    queryParams.map((ts) => {
       if (ts.subjects) {
         tsfacets["subjects"] = ts.subjects.split(",");
       } else if (ts["area of study"]) {
@@ -177,6 +172,7 @@ export default function SearchTeacherSets(props) {
       })
       .catch(function (error) {
         console.log(error);
+        console.error(error);
       });
   };
 
@@ -311,28 +307,13 @@ export default function SearchTeacherSets(props) {
     return ts.availability === "available" ? "medium" : "low";
   };
 
-  const tsHorizontalRule = (index, arr) => {
-    if (index === arr.length - 1) {
-      <></>;
-    } else {
-      return (
-        <HorizontalRule
-          marginTop="l"
-          marginBottom="l"
-          id={"ts-horizontal-rule-" + index}
-          align="left"
-          className="tsDetailHorizontalLine"
-        />
-      );
-    }
-  };
-
   const teacherSetDetails = () => {
-    return teacherSets.map((ts, i, arr) => {
-      let availability_status_badge =
-        ts.availability === "available" ? "medium" : "low";
+    return teacherSets.map((ts, i) => {
       return (
-        <div id={"teacher-set-results-" + i}>
+        <div
+          key={"teacher-set-results-key-" + i}
+          id={"teacher-set-results-" + i}
+        >
           <Card
             id={"ts-details-" + i}
             layout="row"
@@ -418,13 +399,11 @@ export default function SearchTeacherSets(props) {
       setAvailability("");
       searchParams.delete("availability");
       setSearchParams(searchParams);
-      //getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: "", page: computedCurrentPage}, selectedFacets))
     } else {
       setAvailableToggle(true);
       searchParams.set("availability", ["available"]);
       setSearchParams(searchParams);
       setAvailability(["available"]);
-      //getTeacherSets(Object.assign({ keyword: keyword, grade_begin: grade_begin, grade_end: grade_end, sort_order: sortTitleValue, availability: ["available"], page: computedCurrentPage}, selectedFacets))
     }
   };
 
@@ -433,7 +412,6 @@ export default function SearchTeacherSets(props) {
     searchParams.set("grade_begin", gradeBeginVal);
     searchParams.set("grade_end", gradeEndVal);
     setSearchParams(searchParams);
-    //getTeacherSets(Object.assign({ keyword: keyword, sort_order: sortTitleValue, availability: availability, grade_begin: gradeBeginVal, grade_end: gradeEndVal, page: computedCurrentPage}, selectedFacets))
   };
 
   const TeacherSetGradesSlider = () => {
@@ -504,10 +482,12 @@ export default function SearchTeacherSets(props) {
   const tsRefineResultsHeading = () => {
     if (isLargerThanMedium) {
       return (
-        <Heading id="refine-results" size="tertiary" level="three">
-          {" "}
-          Refine Results{" "}
-        </Heading>
+        <Heading
+          id="refine-results"
+          size="tertiary"
+          level="three"
+          text={" " + "Refine Results" + " "}
+        />
       );
     }
   };
@@ -702,6 +682,7 @@ export default function SearchTeacherSets(props) {
         >
           {tsItems.map((item, index) => (
             <Checkbox
+              key={"ts-checkbox-key-" + index}
               id={"ts-checkbox-" + index}
               value={item["value"].toString()}
               labelText={
@@ -730,10 +711,10 @@ export default function SearchTeacherSets(props) {
     return facets.map((ts, i) => {
       return (
         <Accordion
+          key={"ts-facets-key-" + i}
           id={"ts-facets-accordian-" + i}
           backgroundColor="var(--nypl-colors-ui-white)"
           marginTop="m"
-          id={"ts-facet-label-" + i}
           panelMaxHeight="400px"
           accordionData={[
             {
@@ -746,7 +727,6 @@ export default function SearchTeacherSets(props) {
             },
           ]}
           isDefaultOpen={isAccordionOpen(ts)}
-          //isAlwaysRendered
         />
       );
     });

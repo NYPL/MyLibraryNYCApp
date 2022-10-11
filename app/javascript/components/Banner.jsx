@@ -35,7 +35,6 @@ function Banner() {
           isCentered
           showIcon={false}
           dismissible
-          notificationType="standard"
           notificationContent={
             <div className="hrefLink">{ReactParser(bannerText)}</div>
           }

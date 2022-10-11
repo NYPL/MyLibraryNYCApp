@@ -20,7 +20,7 @@ import {
 } from "@nypl/design-system-react-components";
 import mlnImage from "../images/mln.svg";
 
-export default function TeacherSetBooks(props) {
+export default function TeacherSetBooks() {
   const params = useParams();
   const [book, setBook] = useState("");
   const [teacherSets, setTeacherSets] = useState([]);
@@ -89,7 +89,7 @@ export default function TeacherSetBooks(props) {
           ts.availability === "available" ? "medium" : "low";
         let availability = ts.availability !== undefined ? ts.availability : "";
         return (
-          <div>
+          <div key={"ts-books-div-" + index}>
             <Card id="book-page-ts-card-details" layout="row">
               <CardHeading
                 level="four"

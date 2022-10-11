@@ -1,10 +1,9 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from "axios";
 import {
   TemplateAppContainer,
   Text,
-  Heading,
 } from "@nypl/design-system-react-components";
 
 const NewsletterConfirmation = () => {

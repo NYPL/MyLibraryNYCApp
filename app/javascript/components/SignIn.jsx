@@ -21,7 +21,6 @@ export default function SignIn(props) {
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [invali_email_msg, setInvalidEmailMsg] = useState("");
-  const [user_signed_in, setUserSignedIn] = useState(props.userSignedIn);
   const [isInvalid, setIsInvalid] = useState(false);
 
   useEffect(() => {
@@ -35,14 +34,6 @@ export default function SignIn(props) {
   const handleEmail = (event) => {
     setEmail(event.target.value);
     setIsInvalid(false);
-  };
-
-  const handleValidation = () => {
-    if (email === "") {
-      setInvalidEmailMsg("Please enter a valid email address");
-      setIsInvalid(true);
-      return false;
-    }
   };
 
   const handleSubmit = (event) => {
@@ -66,7 +57,6 @@ export default function SignIn(props) {
       .post("/users/login", { user: { email: email } })
       .then((res) => {
         if (res.data.logged_in) {
-          setUserSignedIn(true);
           props.handleLogin(true);
           props.handleSignInMsg(res.data.sign_in_msg, true);
           props.hideSignInMessage(false);
@@ -144,7 +134,6 @@ export default function SignIn(props) {
             icon={
               <Icon
                 align="right"
-                name="ui.black"
                 iconRotation="rotate0"
                 name="actionHelpOutline"
                 size="medium"

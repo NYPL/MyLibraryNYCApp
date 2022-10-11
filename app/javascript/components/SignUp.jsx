@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 import axios from "axios";
@@ -17,10 +17,9 @@ import {
   ButtonGroup,
 } from "@nypl/design-system-react-components";
 import validator from "validator";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp(props) {
-  const params = useParams();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [errorEmailMsg, setErrorEmailMsg] = useState("");
@@ -44,11 +43,9 @@ export default function SignUp(props) {
   const [news_letter_error, setNewsLetterError] = useState("");
   const [show_news_letter_error, setShowNewsLetterError] = useState(false);
   const [isCheckedVal, setIsCheckedVal] = useState(false);
-  const [signUpmsg, setSignUpmsg] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [serverError, setServerError] = useState("");
   const [serverErrorIsValid, setServerErrorIsValid] = useState(false);
-  const [userSignedIn, setUserSignedIn] = useState(props.userSignedIn);
   const [allowed_email_patterns, setAllowedEmailPatterns] = useState([]);
 
   useEffect(() => {
@@ -88,8 +85,8 @@ export default function SignUp(props) {
         })
         .then((res) => {
           if (res.data.status === "created") {
-            setSignUpmsg(res.data.message);
             props.handleLogin(true);
+            props.handleSignedUpMsg(res.data.message);
             redirectToTeacherSetPage();
             return false;
           } else {
@@ -153,7 +150,6 @@ export default function SignUp(props) {
         .catch(function (error) {
           console.log(error);
         });
-    } else {
     }
   };
 
@@ -348,23 +344,6 @@ export default function SignUp(props) {
     setIsDisabled(false);
   };
 
-  const handlePasswordvas = (field, value) => {
-    if (
-      validator.isStrongPassword(value, {
-        minLength: 8,
-        minLowercase: 1,
-        maxLength: 32,
-        minUppercase: 1,
-        minNumbers: 1,
-        minSymbols: 1,
-      })
-    ) {
-      console.log("Is Strong Password");
-    } else {
-      console.log("Is Not Strong Password");
-    }
-  };
-
   const handleSchool = (field, e) => {
     setSchoolIsValid(false);
     setIsDisabled(false);
@@ -381,7 +360,7 @@ export default function SignUp(props) {
     let schools = Object.entries(
       Object.assign({ "-- Select A School -- ": "" }, active_schools)
     );
-    return schools.map((school, i) => {
+    return schools.map((school) => {
       return (
         <option key={school[1]} value={school[1]}>
           {school[0]}
@@ -414,7 +393,6 @@ export default function SignUp(props) {
       serverError
       ? "block"
       : "none";
-    //return this.state.errors["email"] || this.state.errors["alt_email"] || this.state.errors["first_name"] || this.state.errors["last_name"] || this.state.errors["password"] || this.state.errors["serverError"] ? 'block' : 'none'
   };
 
   const showErrorMessage = () => {
@@ -432,7 +410,6 @@ export default function SignUp(props) {
     const initial_check = isCheckedVal;
 
     setIsCheckedVal(!initial_check);
-    // If alternate email is present in sign-up page take alternate-email to send news-letters other-wise DOE email.
     const news_letter_email = alt_email || email;
 
     if (event.target.value === 1 && news_letter_email === undefined) {
@@ -479,9 +456,9 @@ export default function SignUp(props) {
       password.length >= 8 &&
       password.match(/[a-z]/g) &&
       password.match(/[A-Z]/g) &&
-      !password.match(/[\.\s]/g) &&
+      !password.match(/[.\s]/g) &&
       password.match(/[0-9]/g) &&
-      password.match(/[^a-zA-Z\.\d]/g) &&
+      password.match(/[^a-zA-Z.\d]/g) &&
       !password.match(/(.)\1{2,}/g) &&
       !password.match(/(..+)\1{1,}/g)
     ) {
@@ -565,7 +542,6 @@ export default function SignUp(props) {
             <FormField>
               <TextInput
                 id="sign-up-first-name"
-                showOptReqLabel={false}
                 isRequired
                 showOptReqLabel={true}
                 labelText="First Name"
@@ -578,7 +554,6 @@ export default function SignUp(props) {
             <FormField>
               <TextInput
                 id="sign-up-last-name"
-                showOptReqLabel={false}
                 isRequired
                 showOptReqLabel={true}
                 labelText="Last Name"

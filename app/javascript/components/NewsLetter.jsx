@@ -54,7 +54,7 @@ export default function NewsLetter() {
       });
   };
 
-  const newLetterSignup = (event) => {
+  const newLetterSignup = () => {
     if (successFullySignedUp) {
       return (
         <VStack justifyContent="center">

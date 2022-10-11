@@ -137,7 +137,6 @@ export default function MobileHeader(props) {
             color="ui.black"
             decorative
             iconRotation="rotate0"
-            id="icon-id"
             name="utilityHamburger"
             size="large"
             type="default"

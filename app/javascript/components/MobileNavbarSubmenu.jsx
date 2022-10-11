@@ -1,6 +1,4 @@
-import React, { Component, useState } from "react";
-import PropTypes from "prop-types";
-
+import React, { Component } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import {
   Link,

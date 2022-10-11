@@ -5325,6 +5325,11 @@
         }
       }
     },
+    "channels": {
+      "version": "0.0.4",
+      "resolved": "https://registry.npmjs.org/channels/-/channels-0.0.4.tgz",
+      "integrity": "sha512-4zRxUJ/sN+GmA0NeB1wIBA8xzU6C30FsGkSIWob7OLIQVwMKE/ct9n3RLfq8XiLUpafK5gWg7+HuUVzXMXYqVw=="
+    },
     "check-types": {
       "version": "8.0.3",
       "resolved": "https://registry.npmjs.org/check-types/-/check-types-8.0.3.tgz",
