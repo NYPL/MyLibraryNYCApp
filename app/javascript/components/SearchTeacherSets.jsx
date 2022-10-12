@@ -94,7 +94,7 @@ export default function SearchTeacherSets(props) {
     const availabilityval = queryValue.get('availability')?  [queryValue.get('availability')] : []
     const availableToggleVal = queryValue.get('availability')?  true : false
     const sortOrderVal = queryValue.get('sort_order')?  queryValue.get('sort_order') : ""
-    const pageNumber = queryValue.get('page')?  queryValue.get('page') : 1
+    const pageNumber = queryValue.get('page')?  parseInt(queryValue.get('page')) : 1
     
     setSelectedFacets(tsfacets)
     setGrades(queryValue.get('grade_begin'), queryValue.get('grade_end'))
@@ -240,6 +240,7 @@ export default function SearchTeacherSets(props) {
         setKeyWord(keyword)
         setTeacherSets(res.data.teacher_sets)
         setFacets(res.data.facets)
+        setTotalPages(res.data.total_pages)
         setTsTotalCount(res.data.total_count)
         setSortTitleValue(sortTitleValue)
         setAvailability(availability)
@@ -422,7 +423,7 @@ export default function SearchTeacherSets(props) {
                 </Button>
               </ButtonGroup>
               <Spacer />
-              <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo(0, 0) } className="teacher_set_pagination" onPageChange={onPageChange} pageCount={totalPages} /></div>
+              <div><Pagination id="ts-pagination" onClick={ () => window.scrollTo(0, 0) } className="teacher_set_pagination" onPageChange={onPageChange} initialPage={computedCurrentPage} currentPage={computedCurrentPage} pageCount={totalPages} /></div>
             </Flex>
           </div>
       </>
