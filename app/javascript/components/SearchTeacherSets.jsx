@@ -28,6 +28,9 @@ import {
   Accordion,
   SkeletonLoader,
   useNYPLBreakpoints,
+  TagSet,
+  VStack,
+  HStack,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -48,6 +51,9 @@ export default function SearchTeacherSets(props) {
 
   const [teacherSets, setTeacherSets] = useState([]);
   const [facets, setFacets] = useState([]);
+  // const [tagSets, setTagSets] = useState([]);
+  const [checkedItems, setCheckedItems] = React.useState([false, false]);
+  const [teacherSetArr, setTeacherSetArr] = useState([]);
   const [tsTotalCount, setTsTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [displayPagination, setDisplayPagination] = useState("none");
@@ -95,20 +101,40 @@ export default function SearchTeacherSets(props) {
     window.scrollTo(0, 0);
     const queryValue = new URLSearchParams(location.search);
     const tsfacets = {};
+    const tagSetsArr = [];
 
     queryParams.map((ts) => {
+      const tagSets = {};
       if (ts.subjects) {
         tsfacets["subjects"] = ts.subjects.split(",");
+        tagSets["label"] = ts.subjects.split(",");
+        tagSets["subjects"] = ts.subjects.split(",");
       } else if (ts["area of study"]) {
         tsfacets["area of study"] = [ts["area of study"]];
+        tagSets["label"] = ts["area of study"];
+        tagSets["area of study"] = [ts["area of study"]];
       } else if (ts["set type"]) {
         tsfacets["set type"] = [ts["set type"]];
+        tagSets["label"] = ts["set type"];
+        tagSets["set type"] = [ts["set type"]];
       } else if (ts["availability"]) {
         setAvailableToggle(true);
         tsfacets["availability"] = [ts["availability"]];
+        tagSets["label"] = "Available Now";
+        tagSets["availability"] = [ts["availability"]];
       } else if (ts["language"]) {
         tsfacets["language"] = [ts["language"]];
+        tagSets["label"] = ts["language"];
+        tagSets["language"] = [ts["language"]];
+      } else if (ts.keyword) {
+        tagSets["label"] = ts["keyword"];
+        tagSets["keyword"] = [ts["language"]];
+      } else if (ts.sort_order) {
+        tagSets["label"] = ts["sort_order"];
+      } else if (ts.page) {
+        tagSets["label"] = ts["page"];
       }
+      tagSetsArr.push(tagSets);
     });
 
     const keywordValue = queryValue.get("keyword")
@@ -136,6 +162,7 @@ export default function SearchTeacherSets(props) {
     setAvailableToggle(availableToggleVal);
     setSortTitleValue(sortOrderVal);
     setComputedCurrentPage(pageNumber);
+    setTeacherSetArr(tagSetsArr);
 
     const params = Object.assign(
       {
@@ -469,7 +496,6 @@ export default function SearchTeacherSets(props) {
                   panel: <div>{teacherSetSideBarResults()}</div>,
                 },
               ]}
-              // isAlwaysRendered
             />
           </>
         );
@@ -533,6 +559,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const tsSelectedFacets = (field, value) => {
+    //console.log(value)
     if (field === "area of study") {
       selectedFacets[field] = value;
     } else if (field === "availability") {
@@ -601,6 +628,56 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+  const closeTeacherSetTag = (value) => {
+    if (value === "clearFilters") {
+      setTeacherSetArr([]);
+      searchParams.delete("language");
+      searchParams.delete("area of study");
+      searchParams.delete("set type");
+      searchParams.delete("availability");
+      setSearchParams(searchParams);
+      const data = teacherSetArr.filter((element) => element.label !== value);
+    } else {
+      const data = teacherSetArr.filter((element) => element.label !== value);
+
+      const deleteQueryParams = teacherSetArr
+        .filter((element) => element.label === value)
+        .flatMap(Object.keys);
+
+      deleteQueryParams.map((item, index) => {
+        if (item === "language") {
+          searchParams.delete("language");
+          setSearchParams(searchParams);
+        } else if (item === "area of study") {
+          searchParams.delete("area of study");
+          setSearchParams(searchParams);
+        } else if (item === "availability") {
+          searchParams.delete("availability");
+          setSearchParams(searchParams);
+        } else if (item === "set type") {
+          searchParams.delete("set type");
+          setSearchParams(searchParams);
+        }
+      });
+      setTeacherSetArr(data);
+    }
+  };
+
+  const teacherSetFilterTags = () => {
+    if (queryParams.length > 0) {
+      return (
+        <TagSet
+          id="tagSet-id-filter"
+          isDismissible
+          onClick={closeTeacherSetTag}
+          tagSetData={teacherSetArr}
+          type="filter"
+          marginBottom="m"
+        />
+      );
+    }
+  };
+
   const tsDetails = () => {
     if (isLoading) {
       return (
@@ -617,9 +694,13 @@ export default function SearchTeacherSets(props) {
     } else {
       return (
         <>
+          <HStack align="stretch" gap="s" marginTop="m">
+            <Text isBold size="caption">Fiters Applied</Text><Text>{teacherSetFilterTags()}</Text>
+          </HStack>
           <div style={{ display: mobileSupport() }}>
             {resultsFoundMessage()}
           </div>
+
           <div>{teacherSetTitleOrder()}</div>
           <div id="teacher-set-results">{teacherSetDetails()}</div>
           <div style={{ display: displayPagination }}>
@@ -663,9 +744,17 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+  const checkedValue = (value) => {
+    if (value.length > 0) {
+      console.log(value)
+    }
+  };
+
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
+
     if (tsItems.length >= 1) {
+
       if (selectedFacets[ts.label] === undefined) {
         selectedFacets[ts.label] = [];
       }
@@ -685,6 +774,7 @@ export default function SearchTeacherSets(props) {
               key={"ts-checkbox-key-" + index}
               id={"ts-checkbox-" + index}
               value={item["value"].toString()}
+              //onChange={checkedValue(item["label"])}
               labelText={
                 <Flex>
                   <span>{item["label"]}</span>

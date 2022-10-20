@@ -26,6 +26,13 @@ class TeacherSetsController < ApplicationController
       @facets = TeacherSet.facets_for_query @teacher_sets
       total_count =  @teacher_sets.length
     end
+
+    if !@teacher_sets.present? && params["page"]
+      params["page"] = "1"
+      teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
+      @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
+    end
+
     # Determine what facets are selected based on query string
     @facets.each do |f|
       f[:items].each do |v|
