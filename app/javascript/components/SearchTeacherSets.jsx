@@ -71,6 +71,8 @@ export default function SearchTeacherSets(props) {
   // const [selectedPage, setSelectedPage] = useState(initialPage);
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
+  const [tsSubjects, setTsSubjects] = useState({});
+
   const location = useLocation();
 
   useEffect(() => {
@@ -133,9 +135,17 @@ export default function SearchTeacherSets(props) {
         tagSets["label"] = ts["sort_order"];
       } else if (ts.page) {
         tagSets["label"] = ts["page"];
+      } else if (ts.grade_begin) {
+        tagSets["label"] = parseInt(ts.grade_begin) === -1 ? "Pre-K" : parseInt(ts.grade_begin) === 0? "K" : ts.grade_begin;
+        tagSets["grade_begin"] = [parseInt(ts["grade_begin"])];
+      } else if (ts.grade_end) {
+        tagSets["label"] = parseInt(ts.grade_end) === -1 ? "Pre-K" : parseInt(ts.grade_end) === 0? "K" : ts.grade_end;
+        tagSets["grade_end"] = [parseInt(ts["grade_end"])];
       }
       tagSetsArr.push(tagSets);
     });
+
+
 
     const keywordValue = queryValue.get("keyword")
       ? queryValue.get("keyword")
@@ -185,11 +195,13 @@ export default function SearchTeacherSets(props) {
     axios
       .get("/teacher_sets", { params: params })
       .then((res) => {
+
         setTeacherSets(res.data.teacher_sets);
         setFacets(res.data.facets);
         setTsTotalCount(res.data.total_count);
         setTotalPages(res.data.total_pages);
         setNoTsResultsFound(res.data.no_results_found_msg);
+        setTsSubjects(res.data.tsSubjectsHash);
 
         if (res.data.teacher_sets.length > 0 && res.data.total_count > 20) {
           setDisplayPagination("block");
@@ -414,6 +426,7 @@ export default function SearchTeacherSets(props) {
         setGradeEnd(grade_end);
         setNoTsResultsFound(res.data.no_results_found_msg);
         setComputedCurrentPage(page);
+        setTsSubjects(res.data.tsSubjectsHash);
       })
       .catch(function (error) {
         console.log(error);
@@ -635,6 +648,9 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("area of study");
       searchParams.delete("set type");
       searchParams.delete("availability");
+      searchParams.delete("subjects");
+      searchParams.delete("grade_begin");
+      searchParams.delete("grade_end");
       setSearchParams(searchParams);
       const data = teacherSetArr.filter((element) => element.label !== value);
     } else {
@@ -657,6 +673,19 @@ export default function SearchTeacherSets(props) {
         } else if (item === "set type") {
           searchParams.delete("set type");
           setSearchParams(searchParams);
+        } else if (item === "subjects") {
+          searchParams.delete("subjects");
+          setSearchParams(searchParams);
+        } else if (item === "grade_begin") {
+          searchParams.delete("grade_begin");
+          setSearchParams(searchParams);
+          setGradeBegin(-1)
+          setRangevalues([-1, grade_end]);
+        } else if (item === "grade_end") {
+          searchParams.delete("grade_end");
+          setGradeEnd(12)
+          setRangevalues([grade_begin, 12]);
+          setSearchParams(searchParams);
         }
       });
       setTeacherSetArr(data);
@@ -665,6 +694,19 @@ export default function SearchTeacherSets(props) {
 
   const teacherSetFilterTags = () => {
     if (queryParams.length > 0) {
+      const arr = teacherSetArr
+      teacherSetArr.map((item, index) => {
+        if (item.subjects) {
+          item.subjects.map((value, index) => {
+            if (tsSubjects[value] !== undefined) {
+              item["label"] = tsSubjects[value]
+              item["subjects"] = [tsSubjects[value]]
+            }
+          })
+
+        }
+      })
+
       return (
         <TagSet
           id="tagSet-id-filter"
@@ -677,6 +719,15 @@ export default function SearchTeacherSets(props) {
       );
     }
   };
+
+
+  const tagSets = () => {
+    if (queryParams.length > 0) {
+      return <HStack align="stretch" gap="s" marginTop="m">
+        <Text isBold size="caption">Fiters Applied</Text><Text>{teacherSetFilterTags()}</Text>
+      </HStack>
+    }
+  }
 
   const tsDetails = () => {
     if (isLoading) {
@@ -694,9 +745,7 @@ export default function SearchTeacherSets(props) {
     } else {
       return (
         <>
-          <HStack align="stretch" gap="s" marginTop="m">
-            <Text isBold size="caption">Fiters Applied</Text><Text>{teacherSetFilterTags()}</Text>
-          </HStack>
+          {tagSets()}
           <div style={{ display: mobileSupport() }}>
             {resultsFoundMessage()}
           </div>

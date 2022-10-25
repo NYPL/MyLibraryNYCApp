@@ -40,7 +40,18 @@ class TeacherSetsController < ApplicationController
         v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)
       end
     end
+
     facets = teacher_set_facets(params, @facets)
+
+    subjectsHash = {}
+
+    facets.each do |facet|
+      if (facet[:label] === "subjects")
+        facet[:items].each do |item|
+          subjectsHash[item[:value]] = item[:label]
+        end
+      end
+    end
 
     if facets.collect{|i| i[:items]}.flatten.empty?
       custom_facets = input_param_facets(params)
@@ -55,7 +66,7 @@ class TeacherSetsController < ApplicationController
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
 
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg}
+      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash}
     else
       render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages}, serializer: SearchSerializer, include_books: false, include_contents: false
     end
