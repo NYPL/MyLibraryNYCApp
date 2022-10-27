@@ -109,8 +109,8 @@ export default function SearchTeacherSets(props) {
       const tagSets = {};
       if (ts.subjects) {
         tsfacets["subjects"] = ts.subjects.split(",");
-        tagSets["label"] = ts.subjects.split(",");
-        tagSets["subjects"] = ts.subjects.split(",");
+        // tagSets["label"] = ts.subjects.split(",");
+        // tagSets["subjects"] = ts.subjects.split(",");
       } else if (ts["area of study"]) {
         tsfacets["area of study"] = [ts["area of study"]];
         tagSets["label"] = ts["area of study"];
@@ -693,35 +693,47 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetFilterTags = () => {
-    if (queryParams.length > 0) {
-      const arr = teacherSetArr
-      teacherSetArr.map((item, index) => {
-        if (item.subjects) {
-          item.subjects.map((value, index) => {
-            if (tsSubjects[value] !== undefined) {
-              item["label"] = tsSubjects[value]
-              item["subjects"] = [tsSubjects[value]]
-            }
-          })
 
-        }
-      })
+    //queryParams.map((ts) => {
+      ;
+      console.log("8888888")
+      const subjects = new URLSearchParams(location.search).get("subjects")
 
-      return (
-        <TagSet
-          id="tagSet-id-filter"
-          isDismissible
-          onClick={closeTeacherSetTag}
-          tagSetData={teacherSetArr}
-          type="filter"
-          marginBottom="m"
-        />
-      );
-    }
-  };
+      if ( subjects !== undefined) {
+
+        var newArray = [];
+        var newArray = subjects.split(',').filter(function(elem, pos) {
+                return subjects.split(',').indexOf(elem) == pos;
+        });
+
+        const arr = []
+        newArray.map((value, index) => {
+          if (tsSubjects[value] !== undefined) {
+            const subjectsHash = {}
+            subjectsHash["label"] ||= tsSubjects[value]
+            subjectsHash["subjects"] ||= [tsSubjects[value]]
+            teacherSetArr.push(subjectsHash)
+          }
+        })
+      }
+    //})
+
+    console.log(teacherSetArr)
+
+    return (
+      <TagSet
+        id="tagSet-id-filter"
+        isDismissible
+        onClick={closeTeacherSetTag}
+        tagSetData={teacherSetArr.filter(value => Object.keys(value).length !== 0)}
+        type="filter"
+        marginBottom="m"
+      />
+    );
+  }
 
 
-  const tagSets = () => {
+  const tagSetsData = () => {
     if (queryParams.length > 0) {
       return <HStack align="stretch" gap="s" marginTop="m">
         <Text isBold size="caption">Fiters Applied</Text><Text>{teacherSetFilterTags()}</Text>
@@ -745,7 +757,7 @@ export default function SearchTeacherSets(props) {
     } else {
       return (
         <>
-          {tagSets()}
+          {tagSetsData()}
           <div style={{ display: mobileSupport() }}>
             {resultsFoundMessage()}
           </div>
