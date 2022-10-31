@@ -654,7 +654,10 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
       const data = teacherSetArr.filter((element) => element.label !== value);
     } else {
+
       const data = teacherSetArr.filter((element) => element.label !== value);
+
+      console.log(tsSubjects)
 
       const deleteQueryParams = teacherSetArr
         .filter((element) => element.label === value)
@@ -674,8 +677,10 @@ export default function SearchTeacherSets(props) {
           searchParams.delete("set type");
           setSearchParams(searchParams);
         } else if (item === "subjects") {
+
           searchParams.delete("subjects");
           setSearchParams(searchParams);
+
         } else if (item === "grade_begin") {
           searchParams.delete("grade_begin");
           setSearchParams(searchParams);
@@ -694,38 +699,34 @@ export default function SearchTeacherSets(props) {
 
   const teacherSetFilterTags = () => {
 
-    //queryParams.map((ts) => {
-      ;
-      console.log("8888888")
-      const subjects = new URLSearchParams(location.search).get("subjects")
-
-      if ( subjects !== undefined) {
-
-        var newArray = [];
-        var newArray = subjects.split(',').filter(function(elem, pos) {
-                return subjects.split(',').indexOf(elem) == pos;
-        });
-
-        const arr = []
-        newArray.map((value, index) => {
-          if (tsSubjects[value] !== undefined) {
-            const subjectsHash = {}
-            subjectsHash["label"] ||= tsSubjects[value]
-            subjectsHash["subjects"] ||= [tsSubjects[value]]
-            teacherSetArr.push(subjectsHash)
-          }
-        })
-      }
-    //})
+    const subjects = new URLSearchParams(location.search).get("subjects")
+    console.log(subjects)
+    console.log("subjects")
+    
+    if ( subjects !== null) {
+      subjects.split(',').map((value, index) => {
+        if (tsSubjects[value] !== undefined) {
+          const subjectsHash = {}
+          subjectsHash["label"] ||= tsSubjects[value]
+          subjectsHash["subjects"] ||= [tsSubjects[value]]
+          teacherSetArr.push(subjectsHash)
+        }
+      })
+    }
 
     console.log(teacherSetArr)
+
+    let result = teacherSetArr.filter(
+      (person, index) => index === teacherSetArr.findIndex(
+        other => person.label === other.label
+      ));
 
     return (
       <TagSet
         id="tagSet-id-filter"
         isDismissible
         onClick={closeTeacherSetTag}
-        tagSetData={teacherSetArr.filter(value => Object.keys(value).length !== 0)}
+        tagSetData={result.filter(value => Object.keys(value).length !== 0)}
         type="filter"
         marginBottom="m"
       />
