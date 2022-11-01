@@ -72,6 +72,7 @@ export default function SearchTeacherSets(props) {
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
+  
 
   const location = useLocation();
 
@@ -163,7 +164,7 @@ export default function SearchTeacherSets(props) {
     const sortOrderVal = queryValue.get("sort_order")
       ? queryValue.get("sort_order")
       : "";
-    const pageNumber = queryValue.get("page") ? queryValue.get("page") : 1;
+    const pageNumber = queryValue.get("page") ? parseInt(queryValue.get('page')) : 1
 
     setSelectedFacets(tsfacets);
     setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
@@ -284,13 +285,16 @@ export default function SearchTeacherSets(props) {
         />
       );
     } else if (tsTotalCount >= 1) {
+      const pageCount = 20;
+      const paginationData = parseInt(computedCurrentPage * pageCount);
+      const test = parseInt(paginationData) - 20
       return (
         <Heading
           id="ts-results-found-id"
           marginBottom="s"
           level="three"
           size="callout"
-          text={tsTotalCount + " results found"}
+          text={"Showing " + test + "-" +  + paginationData + " results"}
         />
       );
     }
@@ -419,6 +423,7 @@ export default function SearchTeacherSets(props) {
         setKeyWord(keyword);
         setTeacherSets(res.data.teacher_sets);
         setFacets(res.data.facets);
+        setTotalPages(res.data.total_pages)
         setTsTotalCount(res.data.total_count);
         setSortTitleValue(sortTitleValue);
         setAvailability(availability);
@@ -736,9 +741,12 @@ export default function SearchTeacherSets(props) {
 
   const tagSetsData = () => {
     if (queryParams.length > 0) {
-      return <HStack align="stretch" gap="s" marginTop="m">
-        <Text isBold size="caption">Fiters Applied</Text><Text>{teacherSetFilterTags()}</Text>
-      </HStack>
+      return <VStack align="stretch">
+        <div><HorizontalRule align="left" marginTop="0px"/></div>
+        <div><Text isBold size="caption">Fiters Applied</Text><Text>{teacherSetFilterTags()}</Text></div>
+        <div><HorizontalRule align="left" marginTop="0px"/></div>
+      </VStack>
+      
     }
   }
 
@@ -797,6 +805,8 @@ export default function SearchTeacherSets(props) {
                   className="teacher_set_pagination"
                   onPageChange={onPageChange}
                   pageCount={totalPages}
+                  initialPage={computedCurrentPage}
+                  currentPage={computedCurrentPage}
                 />
               </div>
             </Flex>
