@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-  #before_action :redirect_if_old_domain
+  before_action :redirect_if_old_domain
   protect_from_forgery only: [:update, :get, :put, :delete]
 
   def logged_in?
