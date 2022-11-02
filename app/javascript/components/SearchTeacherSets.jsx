@@ -136,16 +136,9 @@ export default function SearchTeacherSets(props) {
         tagSets["label"] = ts["sort_order"];
       } else if (ts.page) {
         tagSets["label"] = ts["page"];
-      } else if (ts.grade_begin) {
-        tagSets["label"] = parseInt(ts.grade_begin) === -1 ? "Pre-K" : parseInt(ts.grade_begin) === 0? "K" : ts.grade_begin;
-        tagSets["grade_begin"] = [parseInt(ts["grade_begin"])];
-      } else if (ts.grade_end) {
-        tagSets["label"] = parseInt(ts.grade_end) === -1 ? "Pre-K" : parseInt(ts.grade_end) === 0? "K" : ts.grade_end;
-        tagSets["grade_end"] = [parseInt(ts["grade_end"])];
       }
       tagSetsArr.push(tagSets);
     });
-
 
 
     const keywordValue = queryValue.get("keyword")
@@ -166,6 +159,24 @@ export default function SearchTeacherSets(props) {
       : "";
     const pageNumber = queryValue.get("page") ? parseInt(queryValue.get('page')) : 1
 
+    if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
+      const tagSetGradeBegin = parseInt(g_begin) === -1
+        ? "Pre-K"
+        : parseInt(g_begin) === 0
+        ? "K"
+        : parseInt(g_begin);
+
+      const tagSetGradeEnd =
+        parseInt(g_end) === -1
+          ? "Pre-K"
+          : parseInt(g_end) === 0
+          ? "K"
+        : parseInt(g_end);
+
+      const tagSetGrades = {"label": tagSetGradeBegin + " to " + tagSetGradeEnd, "grade_begin": [queryValue.get("grade_begin")], "grade_end": [queryValue.get("grade_end")]}
+      tagSetsArr.push(tagSetGrades)
+    }
+    
     setSelectedFacets(tsfacets);
     setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
     setKeyWord(keywordValue);
@@ -705,8 +716,7 @@ export default function SearchTeacherSets(props) {
   const teacherSetFilterTags = () => {
 
     const subjects = new URLSearchParams(location.search).get("subjects")
-    console.log(subjects)
-    console.log("subjects")
+
     
     if ( subjects !== null) {
       subjects.split(',').map((value, index) => {
@@ -719,7 +729,28 @@ export default function SearchTeacherSets(props) {
       })
     }
 
-    console.log(teacherSetArr)
+    // teacherSetArr.map((value, index) => {
+    //   //console.log(value["grade_begin"])
+
+    //   if (value["grade_begin"] !== undefined || value["grade_end"] !== undefined) {
+
+    //     if (value["grade_begin"] !== undefined) {
+    //       const g_begin =  value["label"]
+    //     }
+
+    //     if (value["grade_end"] !== undefined) {
+    //       const g_end =  value["label"]
+    //     }
+
+    //     value["label"] = "test"
+    //   }
+
+      
+    //   teacherSetArr.push(value)
+    // })
+
+    //console.log(teacherSetArr)
+
 
     let result = teacherSetArr.filter(
       (person, index) => index === teacherSetArr.findIndex(
@@ -743,8 +774,8 @@ export default function SearchTeacherSets(props) {
     if (queryParams.length > 0) {
       return <VStack align="stretch">
         <div><HorizontalRule align="left" marginTop="0px"/></div>
-        <div><Text isBold size="caption">Fiters Applied</Text><Text>{teacherSetFilterTags()}</Text></div>
-        <div><HorizontalRule align="left" marginTop="0px"/></div>
+        <div><Text noSpace size="caption">Fiters Applied{teacherSetFilterTags()}</Text></div>
+        <div><HorizontalRule align="left" className="paginationHR" /></div>
       </VStack>
       
     }
