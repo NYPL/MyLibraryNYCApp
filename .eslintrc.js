@@ -27,6 +27,7 @@ module.exports = {
         // disabling this bc it is checked by typescript so it is
         // redundant and doesn't function properly
         "react/prop-types": 0,
+        "no-unused-vars": "off",
         "prettier/prettier": "error",
         "@typescript-eslint/no-empty-interface": 0,
         "@typescript-eslint/no-use-before-define": [

@@ -5,7 +5,6 @@ import {
   Link,
   ButtonGroup,
 } from "@nypl/design-system-react-components";
-import { BrowserRouter as Router } from "react-router-dom";
 
 function CalendarOfEvents() {
   const [calendarFileName, setCalendarFileName] = useState("");

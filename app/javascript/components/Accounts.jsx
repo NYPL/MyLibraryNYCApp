@@ -24,7 +24,7 @@ import {
 
 export default function Accounts() {
   const [currentUser, setCurrentUser] = useState("");
-  const [school, setSchool] = useState("");
+  //const [school, setSchool] = useState("");
   const [altEmail, setAltEmail] = useState("");
   const [email, setEmail] = useState("");
   const [schools, setSchools] = useState("");
@@ -52,7 +52,7 @@ export default function Accounts() {
           return false;
         } else {
           let accountDetails = res.data.accountdetails;
-          setSchool(accountDetails.school);
+          //setSchool(accountDetails.school);
           setEmail(accountDetails.email);
           setAltEmail(accountDetails.alt_email);
           setSchools(accountDetails.schools);
@@ -98,12 +98,12 @@ export default function Accounts() {
   };
 
   const handleSchool = (event) => {
-    setSchool(event.target.value);
+    //setSchool(event.target.value);
     setSchoolId(event.target.value);
   };
 
   const Schools = () => {
-    return Object.entries(schools).map((school, i) => {
+    return Object.entries(schools).map((school, _i) => {
       return (
         <option key={school[1]} value={school[1]}>
           {school[0]}
@@ -155,40 +155,40 @@ export default function Accounts() {
     }
   };
 
-  const cancelOrder = (value, access_key, cancel_button_index) => {
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-      .querySelector("meta[name='csrf-token']")
-      .getAttribute("content");
-    axios
-      .put("/holds/" + access_key, { hold_change: { status: "cancelled" } })
-      .then((res) => {
-        if (
-          res.request.responseURL ===
-          "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
-        ) {
-          window.location = res.request.responseURL;
-          return false;
-        } else {
-          if (res.data.hold.status === "cancelled") {
-            let updatedHolds = holds.map((obj, index) => {
-              if (index === cancel_button_index) {
-                return Object.assign({}, obj, {
-                  status: "cancelled",
-                  status_label: "Cancelled",
-                });
-              }
-              return obj;
-            });
-            setHolds(updatedHolds);
-          }
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  // const cancelOrder = (value, access_key, cancel_button_index) => {
+  //   axios.defaults.headers.common["X-CSRF-TOKEN"] = document
+  //     .querySelector("meta[name='csrf-token']")
+  //     .getAttribute("content");
+  //   axios
+  //     .put("/holds/" + access_key, { hold_change: { status: "cancelled" } })
+  //     .then((res) => {
+  //       if (
+  //         res.request.responseURL ===
+  //         "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
+  //       ) {
+  //         window.location = res.request.responseURL;
+  //         return false;
+  //       } else {
+  //         if (res.data.hold.status === "cancelled") {
+  //           let updatedHolds = holds.map((obj, index) => {
+  //             if (index === cancel_button_index) {
+  //               return Object.assign({}, obj, {
+  //                 status: "cancelled",
+  //                 status_label: "Cancelled",
+  //               });
+  //             }
+  //             return obj;
+  //           });
+  //           setHolds(updatedHolds);
+  //         }
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
 
-  const orderCancelConfirmation = (hold, index) => {
+  const orderCancelConfirmation = (hold) => {
     return (
       <div id={"cancel_" + hold["access_key"]}>
         <ButtonGroup buttonWidth="full">
@@ -206,7 +206,7 @@ export default function Accounts() {
     );
   };
 
-  const orderTeacherSet = (hold, index) => {
+  const orderTeacherSet = (hold) => {
     return (
       <div id={"cancel_" + hold["access_key"]}>
         <ButtonGroup buttonWidth="full">
@@ -313,7 +313,7 @@ export default function Accounts() {
           return false;
         } else {
           let accountDetails = res.data.accountdetails;
-          setSchool(accountDetails.school);
+          //setSchool(accountDetails.school);
           setEmail(accountDetails.email);
           setAltEmail(accountDetails.alt_email);
           setSchools(accountDetails.schools);

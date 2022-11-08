@@ -2,12 +2,11 @@ import React from "react";
 import {
   Accordion,
   Link,
-  List,
   Heading,
   Text,
 } from "@nypl/design-system-react-components";
 
-export default function AccessDigitalResources(props) {
+export default function AccessDigitalResources() {
   return (
     <>
       <Heading

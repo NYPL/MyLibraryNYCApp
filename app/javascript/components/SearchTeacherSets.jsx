@@ -30,7 +30,6 @@ import {
   useNYPLBreakpoints,
   TagSet,
   VStack,
-  HStack,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -52,7 +51,6 @@ export default function SearchTeacherSets(props) {
   const [teacherSets, setTeacherSets] = useState([]);
   const [facets, setFacets] = useState([]);
   // const [tagSets, setTagSets] = useState([]);
-  const [checkedItems, setCheckedItems] = React.useState([false, false]);
   const [teacherSetArr, setTeacherSetArr] = useState([]);
   const [tsTotalCount, setTsTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -72,7 +70,6 @@ export default function SearchTeacherSets(props) {
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
-  
 
   const location = useLocation();
 
@@ -140,7 +137,6 @@ export default function SearchTeacherSets(props) {
       tagSetsArr.push(tagSets);
     });
 
-
     const keywordValue = queryValue.get("keyword")
       ? queryValue.get("keyword")
       : "";
@@ -157,26 +153,33 @@ export default function SearchTeacherSets(props) {
     const sortOrderVal = queryValue.get("sort_order")
       ? queryValue.get("sort_order")
       : "";
-    const pageNumber = queryValue.get("page") ? parseInt(queryValue.get('page')) : 1
+    const pageNumber = queryValue.get("page")
+      ? parseInt(queryValue.get("page"))
+      : 1;
 
     if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
-      const tagSetGradeBegin = parseInt(g_begin) === -1
-        ? "Pre-K"
-        : parseInt(g_begin) === 0
-        ? "K"
-        : parseInt(g_begin);
+      const tagSetGradeBegin =
+        parseInt(g_begin) === -1
+          ? "Pre-K"
+          : parseInt(g_begin) === 0
+          ? "K"
+          : parseInt(g_begin);
 
       const tagSetGradeEnd =
         parseInt(g_end) === -1
           ? "Pre-K"
           : parseInt(g_end) === 0
           ? "K"
-        : parseInt(g_end);
+          : parseInt(g_end);
 
-      const tagSetGrades = {"label": tagSetGradeBegin + " to " + tagSetGradeEnd, "grade_begin": [queryValue.get("grade_begin")], "grade_end": [queryValue.get("grade_end")]}
-      tagSetsArr.push(tagSetGrades)
+      const tagSetGrades = {
+        label: tagSetGradeBegin + " to " + tagSetGradeEnd,
+        grade_begin: [queryValue.get("grade_begin")],
+        grade_end: [queryValue.get("grade_end")],
+      };
+      tagSetsArr.push(tagSetGrades);
     }
-    
+
     setSelectedFacets(tsfacets);
     setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
     setKeyWord(keywordValue);
@@ -207,7 +210,6 @@ export default function SearchTeacherSets(props) {
     axios
       .get("/teacher_sets", { params: params })
       .then((res) => {
-
         setTeacherSets(res.data.teacher_sets);
         setFacets(res.data.facets);
         setTsTotalCount(res.data.total_count);
@@ -298,14 +300,22 @@ export default function SearchTeacherSets(props) {
     } else if (tsTotalCount >= 1) {
       const pageCount = 20;
       const paginationData = parseInt(computedCurrentPage * pageCount);
-      const test = parseInt(paginationData) - 20
+      const test = parseInt(paginationData) - 20;
       return (
         <Heading
           id="ts-results-found-id"
           marginBottom="s"
           level="three"
           size="callout"
-          text={"Showing " + test + "-" +  + paginationData + " results"}
+          text={
+            "Showing " +
+            test +
+            "-" +
+            paginationData +
+            " of " +
+            tsTotalCount +
+            " results found"
+          }
         />
       );
     }
@@ -434,7 +444,7 @@ export default function SearchTeacherSets(props) {
         setKeyWord(keyword);
         setTeacherSets(res.data.teacher_sets);
         setFacets(res.data.facets);
-        setTotalPages(res.data.total_pages)
+        setTotalPages(res.data.total_pages);
         setTsTotalCount(res.data.total_count);
         setSortTitleValue(sortTitleValue);
         setAvailability(availability);
@@ -668,18 +678,17 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("grade_begin");
       searchParams.delete("grade_end");
       setSearchParams(searchParams);
-      const data = teacherSetArr.filter((element) => element.label !== value);
+      //const data = teacherSetArr.filter((element) => element.label !== value);
     } else {
+      //const subjects = new URLSearchParams(location.search).get("subjects")
+      //console.log(subjects)
 
       const data = teacherSetArr.filter((element) => element.label !== value);
-
-      console.log(tsSubjects)
-
       const deleteQueryParams = teacherSetArr
         .filter((element) => element.label === value)
         .flatMap(Object.keys);
 
-      deleteQueryParams.map((item, index) => {
+      deleteQueryParams.map((item) => {
         if (item === "language") {
           searchParams.delete("language");
           setSearchParams(searchParams);
@@ -693,18 +702,38 @@ export default function SearchTeacherSets(props) {
           searchParams.delete("set type");
           setSearchParams(searchParams);
         } else if (item === "subjects") {
+          const subjects = new URLSearchParams(location.search).get("subjects");
+          const subArr = [];
 
-          searchParams.delete("subjects");
-          setSearchParams(searchParams);
+          // console.log(subjects)
+          if (subjects !== null) {
+            subjects.split(",").map((subId) => {
+              if (
+                tsSubjects[subId] !== undefined &&
+                tsSubjects[subId] !== value
+              ) {
+                subArr.push(subId);
+              }
+            });
 
+            searchParams.set("subjects", subArr);
+            setSearchParams(searchParams);
+
+            console.log(subjects.split(",").length);
+
+            if (subjects.split(",").length === 1) {
+              searchParams.delete("subjects");
+              setSearchParams(searchParams);
+            }
+          }
         } else if (item === "grade_begin") {
           searchParams.delete("grade_begin");
           setSearchParams(searchParams);
-          setGradeBegin(-1)
+          setGradeBegin(-1);
           setRangevalues([-1, grade_end]);
         } else if (item === "grade_end") {
           searchParams.delete("grade_end");
-          setGradeEnd(12)
+          setGradeEnd(12);
           setRangevalues([grade_begin, 12]);
           setSearchParams(searchParams);
         }
@@ -714,19 +743,17 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetFilterTags = () => {
+    const subjects = new URLSearchParams(location.search).get("subjects");
 
-    const subjects = new URLSearchParams(location.search).get("subjects")
-
-    
-    if ( subjects !== null) {
-      subjects.split(',').map((value, index) => {
+    if (subjects !== null) {
+      subjects.split(",").map((value) => {
         if (tsSubjects[value] !== undefined) {
-          const subjectsHash = {}
-          subjectsHash["label"] ||= tsSubjects[value]
-          subjectsHash["subjects"] ||= [tsSubjects[value]]
-          teacherSetArr.push(subjectsHash)
+          const subjectsHash = {};
+          subjectsHash["label"] ||= tsSubjects[value];
+          subjectsHash["subjects"] ||= [tsSubjects[value]];
+          teacherSetArr.push(subjectsHash);
         }
-      })
+      });
     }
 
     // teacherSetArr.map((value, index) => {
@@ -745,41 +772,48 @@ export default function SearchTeacherSets(props) {
     //     value["label"] = "test"
     //   }
 
-      
     //   teacherSetArr.push(value)
     // })
 
     //console.log(teacherSetArr)
 
-
     let result = teacherSetArr.filter(
-      (person, index) => index === teacherSetArr.findIndex(
-        other => person.label === other.label
-      ));
+      (person, index) =>
+        index ===
+        teacherSetArr.findIndex((other) => person.label === other.label)
+    );
 
     return (
       <TagSet
         id="tagSet-id-filter"
         isDismissible
         onClick={closeTeacherSetTag}
-        tagSetData={result.filter(value => Object.keys(value).length !== 0)}
+        tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
         type="filter"
         marginBottom="m"
       />
     );
-  }
-
+  };
 
   const tagSetsData = () => {
     if (queryParams.length > 0) {
-      return <VStack align="stretch">
-        <div><HorizontalRule align="left" marginTop="0px"/></div>
-        <div><Text noSpace size="caption">Fiters Applied{teacherSetFilterTags()}</Text></div>
-        <div><HorizontalRule align="left" className="paginationHR" /></div>
-      </VStack>
-      
+      return (
+        <VStack align="stretch">
+          <div>
+            <HorizontalRule align="left" marginTop="0px" />
+          </div>
+          <div>
+            <Text noSpace size="caption" fontWeight="heading.secondary">
+              Fiters Applied {teacherSetFilterTags()}
+            </Text>
+          </div>
+          <div>
+            <HorizontalRule align="left" className="paginationHR" />
+          </div>
+        </VStack>
+      );
     }
-  }
+  };
 
   const tsDetails = () => {
     if (isLoading) {
@@ -847,17 +881,10 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  const checkedValue = (value) => {
-    if (value.length > 0) {
-      console.log(value)
-    }
-  };
-
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
 
     if (tsItems.length >= 1) {
-
       if (selectedFacets[ts.label] === undefined) {
         selectedFacets[ts.label] = [];
       }

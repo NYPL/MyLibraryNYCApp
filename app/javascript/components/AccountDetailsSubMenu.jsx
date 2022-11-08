@@ -1,21 +1,11 @@
 import React, { useState } from "react";
-import {
-  Link as ReactRouterLink,
-  useParams,
-  useNavigate,
-} from "react-router-dom";
+import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {
-  List,
-  Icon,
-  Button,
-  Link,
-  Box,
-} from "@nypl/design-system-react-components";
+import { List, Icon, Link, Box } from "@nypl/design-system-react-components";
 
 function AccountDetailsSubMenu(props) {
   const navigate = useNavigate();
-  const [user_signed_in, setUserSignedIn] = useState(props.userSignedIn);
+  //const [user_signed_in, setUserSignedIn] = useState(props.userSignedIn);
   const [showAboutMenu, setShowAboutMenu] = useState(false);
 
   const handleHover = () => {
@@ -92,7 +82,7 @@ function AccountDetailsSubMenu(props) {
     }
   };
 
-  const signOut = (event) => {
+  const signOut = () => {
     axios
       .delete("/users/logout", {
         headers: {
@@ -105,7 +95,7 @@ function AccountDetailsSubMenu(props) {
       .then((res) => {
         if (res.data.status === 200 && res.data.logged_out === true) {
           props.handleLogout(false);
-          setUserSignedIn(false);
+          // setUserSignedIn(false);
           setShowAboutMenu(false);
           props.handleSignOutMsg(res.data.sign_out_msg, false);
           props.hideSignUpMessage(false);

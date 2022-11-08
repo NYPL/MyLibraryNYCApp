@@ -9,7 +9,7 @@ export default function App() {
     loginStatus();
   }, []);
 
-  const handleLogin = (data) => {
+  const handleLogin = () => {
     setIsLoggedIn(true);
   };
 

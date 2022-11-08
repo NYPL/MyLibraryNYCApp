@@ -48,8 +48,11 @@ function Contacts() {
                 </Link>,
               ],
               [
-                <Text noSpace>Delivery Questions</Text>,
+                <Text key="delivery-questions" noSpace>
+                  Delivery Questions
+                </Text>,
                 <Link
+                  key="delivery-questions-link"
                   id="mln-delivery-email"
                   href="mailto:delivery@mylibrarynyc.org"
                 >
@@ -74,14 +77,23 @@ function Contacts() {
             useRowHeaders
             tableData={[
               [
-                <Text noSpace>The Bronx, Manhattan and Staten Island</Text>,
-                <Link id="mln-nypl-email" href="mailto:mylibrarynyc@nypl.org">
+                <Text key="mln-nypl-email-text" noSpace>
+                  The Bronx, Manhattan and Staten Island
+                </Text>,
+                <Link
+                  key="mln-nypl-email-link"
+                  id="mln-nypl-email"
+                  href="mailto:mylibrarynyc@nypl.org"
+                >
                   mylibrarynyc@nypl.org
                 </Link>,
               ],
               [
-                <Text noSpace>Brooklyn</Text>,
+                <Text key="brooklyn-text" noSpace>
+                  Brooklyn
+                </Text>,
                 <Link
+                  key="mln-brooklyn-link"
                   id="mln-brooklyn-email"
                   href="mailto:mylibrarynyc@bklynlibrary.org"
                 >
@@ -90,8 +102,11 @@ function Contacts() {
               ],
 
               [
-                <Text noSpace>Queens</Text>,
+                <Text key="mln-queens-email-text" noSpace>
+                  Queens
+                </Text>,
                 <Link
+                  key="mln-queens-email-link"
                   id="mln-queens-email"
                   href="mailto:mylibrarynyc@queenslibrary.org"
                 >
@@ -146,10 +161,20 @@ function Contacts() {
             className="contactInfo"
             useRowHeaders
             tableData={[
-              [<Text noSpace>Phone</Text>, <Text>917-521-3734</Text>],
               [
-                <Text noSpace>Website</Text>,
-                <Link href="http://nycdoe.libguides.com/home">
+                <Text key="phone-text" noSpace>
+                  Phone
+                </Text>,
+                <Text key="phone-number">917-521-3734</Text>,
+              ],
+              [
+                <Text key="website-text" noSpace>
+                  Website
+                </Text>,
+                <Link
+                  key="doe-ofc-link"
+                  href="http://nycdoe.libguides.com/home"
+                >
                   DOE Office of Library Services
                 </Link>,
               ],
