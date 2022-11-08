@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import HaveQuestions from "./HaveQuestions";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
@@ -16,40 +16,33 @@ import {
   Button,
 } from "@nypl/design-system-react-components";
 
-export default class ParticipatingSchools extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      schools: [],
-      search_school: "",
-      anchor_tags: [],
-      schoolNotFound: "",
-      isInvalid: false,
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
+export default function ParticipatingSchools(props) {
+  const [schools, setSchools] = useState([]);
+  const [search_school, setSearchSchool] = useState("");
+  const [anchor_tags, setAnchorTags] = useState([]);
+  const [schoolNotFound, setSchoolNotFound] = useState("");
+  const [isInvalid, setIsInvalid] = useState(false);
 
-  componentDidMount() {
+  useEffect(() => {
     window.scrollTo(0, 0);
     axios
       .get("/schools")
       .then((res) => {
-        this.setState({
-          schools: res.data.schools,
-          anchor_tags: res.data.anchor_tags,
-          schoolNotFound: res.data.school_not_found,
-        });
+        setSchools(res.data.schools);
+        setAnchorTags(res.data.anchor_tags);
+        setSchoolNotFound(res.data.school_not_found);
       })
       .catch(function (error) {
         console.log(error);
       });
-  }
+  }, []);
 
-  AnchorTags() {
-    let school_anchors = this.state.schools.map((school) => {
+  const AnchorTags = () => {
+    let school_anchors = schools.map((school) => {
       return school["alphabet_anchor"];
     });
-    return this.state.anchor_tags.map((anchor) => {
+
+    return anchor_tags.map((anchor) => {
       if (school_anchors.includes(anchor)) {
         return (
           <Link
@@ -79,10 +72,10 @@ export default class ParticipatingSchools extends Component {
         }
       }
     });
-  }
+  };
 
-  schoolSkeletonLoader() {
-    if (this.state.schoolNotFound === "" && this.state.schools.length <= 0) {
+  const schoolSkeletonLoader = () => {
+    if (schoolNotFound === "" && schools.length <= 0) {
       return (
         <SkeletonLoader
           marginTop="s"
@@ -94,15 +87,15 @@ export default class ParticipatingSchools extends Component {
         />
       );
     }
-  }
+  };
 
-  Schools() {
-    this.setState({ isInvalid: false });
+  const Schools = () => {
     let schoolsCount = 0;
+    setIsInvalid(false);
 
-    let schoolsData = this.state.schools.map((data, i) => {
+    let schoolsData = schools.map((data, i) => {
       let filteredSchools = data["school_names"].filter((school) => {
-        let value = this.state.search_school.trim().toLowerCase();
+        let value = search_school.trim().toLowerCase();
         if (school.toLowerCase().indexOf(value) > -1) {
           schoolsCount++;
           return school.toLowerCase().indexOf(value) > -1;
@@ -167,6 +160,7 @@ export default class ParticipatingSchools extends Component {
         );
       }
     });
+
     if (schoolsCount === 0) {
       return (
         <Text
@@ -181,70 +175,68 @@ export default class ParticipatingSchools extends Component {
     } else {
       return schoolsData;
     }
-  }
-
-  handleChange = (event) => {
-    this.setState({ search_school: event.target.value });
   };
 
-  render() {
-    return (
-      <TemplateAppContainer
-        breakout={<AppBreadcrumbs />}
-        contentTop={<SignedInMsg signInDetails={this.props} />}
-        contentPrimary={
-          <>
-            <Heading
-              id="find-your-school"
-              level="two"
-              size="secondary"
-              text="Find Your School"
-            />
-            <HorizontalRule
-              id="ts-detail-page-horizontal-rulel"
-              className="teacherSetHorizontal"
-            />
-            <Heading
-              marginTop="l"
-              id="your-school-participate-in-mln"
-              level="three"
-              size="tertiary"
-              text="Does your school participate in MyLibraryNYC?"
-            />
+  const handleChange = (event) => {
+    setSearchSchool(event.target.value);
+  };
 
-            <TextInput
-              fontWeight="text.tag"
-              helperText="Start typing the name of your school."
-              attributes={{
-                "aria-describedby": "Choose wisely.",
-                "aria-label": "Enter school name",
-                pattern: "[a-z0-9]",
-                tabIndex: 0,
-              }}
-              onChange={this.handleChange}
-              id="participating-school"
-              labelText="Search by Name"
-              placeholder="School name"
-              isInvalid={this.state.isInvalid}
-              showLabel
-            />
-            <Text marginTop="l" size="default" fontWeight="medium">
-              Filter by Name
-            </Text>
-            {this.AnchorTags()}
-            <div id="participating-schools-list">
-              {this.schoolSkeletonLoader()}
-              {this.Schools()}
-            </div>
-          </>
-        }
-        contentSidebar={
-          <div>
-            <HaveQuestions />
+  return (
+    <TemplateAppContainer
+      breakout={<AppBreadcrumbs />}
+      contentTop={<SignedInMsg signInDetails={props} />}
+      contentPrimary={
+        <>
+          <Heading
+            id="find-your-school"
+            level="two"
+            size="secondary"
+            text="Find Your School"
+          />
+          <HorizontalRule
+            id="ts-detail-page-horizontal-rulel"
+            className="teacherSetHorizontal"
+          />
+          <Heading
+            marginTop="l"
+            id="your-school-participate-in-mln"
+            level="three"
+            size="tertiary"
+            text="Does your school participate in MyLibraryNYC?"
+          />
+
+          <TextInput
+            fontWeight="text.tag"
+            helperText="Start typing the name of your school."
+            attributes={{
+              "aria-describedby": "Choose wisely.",
+              "aria-label": "Enter school name",
+              pattern: "[a-z0-9]",
+              tabIndex: 0,
+            }}
+            onChange={handleChange}
+            id="participating-school"
+            labelText="Search by Name"
+            placeholder="School name"
+            isInvalid={isInvalid}
+            showLabel
+          />
+          <Text marginTop="l" size="default" fontWeight="medium">
+            Filter by Name
+          </Text>
+          {AnchorTags()}
+          <div id="participating-schools-list">
+            {schoolSkeletonLoader()}
+            {Schools()}
           </div>
-        }
-        sidebar="right"
-      />
-    );
-  }
+        </>
+      }
+      contentSidebar={
+        <div>
+          <HaveQuestions />
+        </div>
+      }
+      sidebar="right"
+    />
+  );
 }
