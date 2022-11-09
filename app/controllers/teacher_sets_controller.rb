@@ -60,7 +60,7 @@ class TeacherSetsController < ApplicationController
 
     # Attach custom :q param to each facet with query params to be applied to that link
 
-    per_page = 20;
+    per_page = 10;
     total_pages = (total_count/per_page.to_f).ceil
 
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""

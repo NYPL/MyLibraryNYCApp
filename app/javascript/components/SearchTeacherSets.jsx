@@ -219,7 +219,7 @@ export default function SearchTeacherSets(props) {
         setNoTsResultsFound(res.data.no_results_found_msg);
         setTsSubjects(res.data.tsSubjectsHash);
 
-        if (res.data.teacher_sets.length > 0 && res.data.total_count > 20) {
+        if (res.data.teacher_sets.length > 0 && res.data.total_count > 10) {
           setDisplayPagination("block");
         } else {
           setDisplayPagination("none");
@@ -300,29 +300,29 @@ export default function SearchTeacherSets(props) {
         />
       );
     } else if (tsTotalCount >= 1) {
-      const pageCount = 20;
+      const pageCount = 10;
       const paginationData = parseInt(computedCurrentPage * pageCount);
-      const test = parseInt(paginationData) - 20;
+      const test = parseInt(paginationData) - 10;
+      const perPageNumbers =
+        tsTotalCount < pageCount ? tsTotalCount : paginationData;
+
       return (
-        <Heading
+        <Text
+          marginTop="m"
           id="ts-results-found-id"
-          marginBottom="s"
-          level="three"
-          size="callout"
-          text={
-            "Showing " +
+          fontWeight="heading.callout"
+        >
+          {"Showing " +
             test +
             "-" +
-            paginationData +
+            perPageNumbers +
             " of " +
             tsTotalCount +
-            " results found"
-          }
-        />
+            " results"}
+        </Text>
       );
     }
   };
-  
 
   const teacherSetTitleOrder = () => {
     if (teacherSets.length >= 1) {
@@ -333,27 +333,27 @@ export default function SearchTeacherSets(props) {
         { sort_order: "Title: Z-A", value: 3 },
       ];
       return (
-        <Flex>
-          <Select
-            id="ts-sort-by-select"
-            name="sortBy"
-            selectType="default"
-            value={sortTitleValue}
-            onChange={sortTeacherSetTitle.bind(this)}
-            labelText="Sort By"
-            marginBottom="l"
-          >
-            {sortByOptions.map((s) => (
-              <option
-                id={"ts-sort-by-options-" + s.value}
-                key={s.value}
-                value={s.value}
-              >
-                {s.sort_order}
-              </option>
-            ))}
-          </Select>
-        </Flex>
+        <Select
+          id="ts-sort-by-select"
+          name="sortBy"
+          selectType="default"
+          value={sortTitleValue}
+          onChange={sortTeacherSetTitle.bind(this)}
+          labelText="Sort By"
+          labelPosition="inline"
+          className="selectSortOrder"
+          //marginTop="xs"
+        >
+          {sortByOptions.map((s) => (
+            <option
+              id={"ts-sort-by-options-" + s.value}
+              key={s.value}
+              value={s.value}
+            >
+              {s.sort_order}
+            </option>
+          ))}
+        </Select>
       );
     }
   };
@@ -386,6 +386,7 @@ export default function SearchTeacherSets(props) {
             layout="row"
             aspectratio="square"
             size="xxsmall"
+            marginTop="l"
           >
             <CardHeading
               marginBottom="xs"
@@ -680,6 +681,7 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("subjects");
       searchParams.delete("grade_begin");
       searchParams.delete("grade_end");
+      searchParams.delete("keyword");
       setSearchParams(searchParams);
       //const data = teacherSetArr.filter((element) => element.label !== value);
     } else {
@@ -700,6 +702,9 @@ export default function SearchTeacherSets(props) {
           setSearchParams(searchParams);
         } else if (item === "availability") {
           searchParams.delete("availability");
+          setSearchParams(searchParams);
+        } else if (item === "keyword") {
+          searchParams.delete("keyword");
           setSearchParams(searchParams);
         } else if (item === "set type") {
           searchParams.delete("set type");
@@ -799,7 +804,26 @@ export default function SearchTeacherSets(props) {
   };
 
   const tagSetsData = () => {
-    if (queryParams.length > 0) {
+    const queryValue = new URLSearchParams(location.search);
+    const areaOfStudy = queryValue.get("area of study");
+    const availability = queryValue.get("availability");
+    const language = queryValue.get("language");
+    const keyword = queryValue.get("keyword");
+    const subjects = queryValue.get("subjects");
+    const setType = queryValue.get("set type");
+    const gradeBegin = queryValue.get("grade_begin");
+    const gradeEnd = queryValue.get("grade_end");
+
+    if (
+      areaOfStudy !== null ||
+      availability !== null ||
+      language !== null ||
+      keyword !== null ||
+      subjects !== null ||
+      setType !== null ||
+      gradeBegin !== null ||
+      gradeEnd !== null
+    ) {
       return (
         <VStack align="stretch">
           <div>
@@ -808,9 +832,7 @@ export default function SearchTeacherSets(props) {
           <div>
             <Text noSpace size="caption" fontWeight="heading.secondary">
               <HStack mb="s" data-testid="tagSetResultsDisplay">
-                <span>
-                  Fiters Applied
-                </span>
+                <span>Fiters Applied</span>
                 {teacherSetFilterTags()}
               </HStack>
             </Text>
@@ -839,7 +861,6 @@ export default function SearchTeacherSets(props) {
     } else {
       return (
         <>
-          <div>{teacherSetTitleOrder()}</div>
           <div id="teacher-set-results">{teacherSetDetails()}</div>
           <div style={{ display: displayPagination }}>
             <Flex alignItems="baseline">
@@ -1001,7 +1022,11 @@ export default function SearchTeacherSets(props) {
         <>
           {tagSetsData()}
           <div style={{ display: mobileSupport() }}>
-            {resultsFoundMessage()}
+            <Flex alignItems="baseline">
+              {resultsFoundMessage()}
+              <Spacer />
+              {teacherSetTitleOrder()}
+            </Flex>
           </div>
           {tsDetails()}
         </>

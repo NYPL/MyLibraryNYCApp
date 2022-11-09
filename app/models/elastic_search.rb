@@ -20,7 +20,7 @@ class ElasticSearch
     @current_file = File.basename(__FILE__)
     @index = @es_config['index'] || 'teacherset'
     @type = @es_config['type'] || 'teacherset'
-    @teachersets_per_page = @es_config['teachersets_per_page'] || 20
+    @teachersets_per_page = @es_config['teachersets_per_page'] || 10
     @size = @es_config['size'] || 10000
   end
 
@@ -73,7 +73,7 @@ class ElasticSearch
 
   # Get teacher sets documents from elastic search.
   def get_teacher_sets_from_es(params)
-    # Per page showing 20 teachersets.
+    # Per page showing 10 teachersets.
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
     query, agg_hash = teacher_sets_query_based_on_filters(params)
