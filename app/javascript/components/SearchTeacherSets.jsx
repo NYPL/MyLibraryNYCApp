@@ -30,6 +30,7 @@ import {
   useNYPLBreakpoints,
   TagSet,
   VStack,
+  HStack,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -129,11 +130,12 @@ export default function SearchTeacherSets(props) {
       } else if (ts.keyword) {
         tagSets["label"] = ts["keyword"];
         tagSets["keyword"] = [ts["language"]];
-      } else if (ts.sort_order) {
-        tagSets["label"] = ts["sort_order"];
-      } else if (ts.page) {
-        tagSets["label"] = ts["page"];
       }
+      // else if (ts.sort_order) {
+      //   tagSets["label"] = ts["sort_order"];
+      // } else if (ts.page) {
+      //   tagSets["label"] = ts["page"];
+      // }
       tagSetsArr.push(tagSets);
     });
 
@@ -320,6 +322,7 @@ export default function SearchTeacherSets(props) {
       );
     }
   };
+  
 
   const teacherSetTitleOrder = () => {
     if (teacherSets.length >= 1) {
@@ -804,7 +807,12 @@ export default function SearchTeacherSets(props) {
           </div>
           <div>
             <Text noSpace size="caption" fontWeight="heading.secondary">
-              Fiters Applied {teacherSetFilterTags()}
+              <HStack mb="s" data-testid="tagSetResultsDisplay">
+                <span>
+                  Fiters Applied
+                </span>
+                {teacherSetFilterTags()}
+              </HStack>
             </Text>
           </div>
           <div>
@@ -831,11 +839,6 @@ export default function SearchTeacherSets(props) {
     } else {
       return (
         <>
-          {tagSetsData()}
-          <div style={{ display: mobileSupport() }}>
-            {resultsFoundMessage()}
-          </div>
-
           <div>{teacherSetTitleOrder()}</div>
           <div id="teacher-set-results">{teacherSetDetails()}</div>
           <div style={{ display: displayPagination }}>
@@ -994,7 +997,15 @@ export default function SearchTeacherSets(props) {
           />
         </>
       }
-      contentPrimary={tsDetails()}
+      contentPrimary={
+        <>
+          {tagSetsData()}
+          <div style={{ display: mobileSupport() }}>
+            {resultsFoundMessage()}
+          </div>
+          {tsDetails()}
+        </>
+      }
       contentSidebar={
         <>
           {skeletonLoader()}
