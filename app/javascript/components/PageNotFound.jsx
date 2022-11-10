@@ -21,8 +21,8 @@ export default function PageNotFound(props) {
       <Notification marginBottom="l" notificationType="warning" notificationContent={<>
         The page you are looking for does not exist.
       </>} />
-      <Text>We’re sorry, the page you requested may have moved or it no longer exists. Please make sure the link you are using is correct.</Text>
-      <Text>To continue using our site, you can:</Text>
+      <Text marginLeft="s">We’re sorry, the page you requested may have moved or it no longer exists. Please make sure the link you are using is correct.</Text>
+      <Text marginLeft="s">To continue using our site, you can:</Text>
       <List id="nypl-list" title="" type="ul">
         <li>
           Go to the <Link id="page-not-found-homepage-link" type="action" href="/">homepage</Link>
