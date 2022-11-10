@@ -18,6 +18,8 @@ import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks";
 import CalendarEventError from "../components/CalendarEventError";
 import NewsletterConfirmation from "../components/NewsletterConfirmation";
+import PageNotFound from "../components/PageNotFound";
+
 import { DSProvider } from '@nypl/design-system-react-components';
 
 export default function AppRoutes(props) {
@@ -76,7 +78,7 @@ export default function AppRoutes(props) {
         <Routes>
           <Route exact path='/' element={<Home userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />} />
           <Route path='/faq' element={<Faqs userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
-          <Route path='/contact' element={ <Contacts userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
+          <Route path='/contactwe' element={ <Contacts userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
           <Route path='/participating-schools' element={ <ParticipatingSchools userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
           <Route path='/signin' element={ <SignIn userSignedIn={userSignedIn} handleSignInMsg={handleSignInMsg} hideSignInMessage={hideSignInMessage} handleLogin={handleLogin} />} />
           <Route path='/signup' element={ <SignUp userSignedIn={userSignedIn} handleLogin={handleLogin} handleSignedUpMsg={handleSignedUpMsg} />} />
@@ -89,6 +91,7 @@ export default function AppRoutes(props) {
           <Route path='/book_details/:id' element={ <TeacherSetBooks /> } />
           <Route path='/home/calendar_event/error' element={ <CalendarEventError /> } />
           <Route path='/newsletter_confirmation' element={ <NewsletterConfirmation /> } />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <footer className="footer"> <Footer /></footer>
       </Router>

@@ -18,6 +18,7 @@ MyLibraryNYC::Application.routes.draw do
   get 'home/calendar_event', to: 'home#calendar_event'
   get 'home/newsletter_confirmation_msg', to: 'home#newsletter_confirmation_msg'
   get '/menu_of_services/:filename', to: 'home#menu_of_services'
+  get '*', :to => 'settings#page_not_found'
 
   resources :teacher_sets do
     resources :holds
