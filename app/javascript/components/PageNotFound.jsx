@@ -8,6 +8,9 @@ import {
   Notification,
   List,
   Link,
+  Breadcrumbs,
+  Hero,
+  Heading,
 } from "@nypl/design-system-react-components";
 
 
@@ -38,7 +41,34 @@ export default function PageNotFound(props) {
 
   return (
     <TemplateAppContainer
-      breakout={<AppBreadcrumbs />}
+      breakout={
+        <>
+          <Breadcrumbs
+            id={"mln-breadcrumbs-error-page"}
+            breadcrumbsData={[
+              { url: "//" + process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+              {
+                url: "//" + window.location.hostname + "/*",
+                text: "404 Error",
+              },
+            ]}
+            breadcrumbsType="booksAndMore"
+          />
+          <Hero
+            heroType="tertiary"
+            backgroundColor="var(--nypl-colors-brand-primary)"
+            heading={
+              <Heading
+                level="one"
+                id={
+                  "mln-404-error-page"
+                }
+                text="Page Not Found"
+              />
+            }
+          />
+        </>
+      }
       contentPrimary={pageNotFoundMsg()}
       contentSidebar={<HaveQuestions />}
       sidebar="right"
