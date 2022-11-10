@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-
+  before_action :redirect_if_old_domain
   protect_from_forgery only: [:update, :get, :put, :delete]
 
   def logged_in?
@@ -115,6 +115,7 @@ class ApplicationController < ActionController::Base
     elsif request.host == ENV['MLN_SETS_SITE_HOSTNAME']
       redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}#{request.fullpath}", :status => :moved_permanently 
     end
+
     if request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/contacts-links")
       redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/help", :status => :moved_permanently 
     elsif request.host == ENV['MLN_INFO_SITE_HOSTNAME'] && (request.fullpath == "/about/about-mylibrarynyc")

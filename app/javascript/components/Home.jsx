@@ -24,6 +24,7 @@ export default function Home(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    navigate("/")
   }, []);
 
   const handleSubmit = (event) => {
