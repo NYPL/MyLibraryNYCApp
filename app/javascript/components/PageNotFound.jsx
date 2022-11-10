@@ -29,7 +29,7 @@ export default function PageNotFound(props) {
         </li>
         <li>
           <Link id="page-not-found-contact-link" type="action" href="/contact">
-            Contact Us{" "}
+            Contact us{" "}
           </Link> if you need more help
         </li>
       </List>
