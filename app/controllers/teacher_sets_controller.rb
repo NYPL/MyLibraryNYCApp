@@ -42,11 +42,11 @@ class TeacherSetsController < ApplicationController
     end
 
     facets = teacher_set_facets(params, @facets)
-
+    
     subjectsHash = {}
 
     facets.each do |facet|
-      if (facet[:label] === "subjects")
+      if (facet[:label] === "subjects" && facet[:items].present?)
         facet[:items].each do |item|
           subjectsHash[item[:value]] = item[:label]
         end

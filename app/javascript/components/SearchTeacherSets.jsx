@@ -71,7 +71,6 @@ export default function SearchTeacherSets(props) {
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
-
   const location = useLocation();
 
   useEffect(() => {
@@ -98,19 +97,29 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+
   useEffect(() => {
     window.scrollTo(0, 0);
     const queryValue = new URLSearchParams(location.search);
     const tsfacets = {};
     const tagSetsArr = [];
+    setTsSubjects({})
 
     queryParams.map((ts) => {
       const tagSets = {};
+
       if (ts.subjects) {
         tsfacets["subjects"] = ts.subjects.split(",");
-        // tagSets["label"] = ts.subjects.split(",");
-        // tagSets["subjects"] = ts.subjects.split(",");
-      } else if (ts["area of study"]) {
+        ts.subjects.split(",").map((value) => {
+          if (tsSubjects[value] !== undefined) {
+            const subjectsHash = {};
+            subjectsHash["label"] = tsSubjects[value];
+            subjectsHash["subjects"] = [tsSubjects[value]];
+            tagSetsArr.push(subjectsHash);
+          }
+        });
+      }
+       else if (ts["area of study"]) {
         tsfacets["area of study"] = [ts["area of study"]];
         tagSets["label"] = ts["area of study"];
         tagSets["area of study"] = [ts["area of study"]];
@@ -131,11 +140,7 @@ export default function SearchTeacherSets(props) {
         tagSets["label"] = ts["keyword"];
         tagSets["keyword"] = [ts["language"]];
       }
-      // else if (ts.sort_order) {
-      //   tagSets["label"] = ts["sort_order"];
-      // } else if (ts.page) {
-      //   tagSets["label"] = ts["page"];
-      // }
+
       tagSetsArr.push(tagSets);
     });
 
@@ -620,6 +625,7 @@ export default function SearchTeacherSets(props) {
     } else {
       searchParams.delete(field);
     }
+
     setSelectedFacets(selectedFacets);
     setSearchParams(searchParams);
     if (keyword !== null) {
@@ -713,7 +719,6 @@ export default function SearchTeacherSets(props) {
           const subjects = new URLSearchParams(location.search).get("subjects");
           const subArr = [];
 
-          // console.log(subjects)
           if (subjects !== null) {
             subjects.split(",").map((subId) => {
               if (
@@ -726,8 +731,6 @@ export default function SearchTeacherSets(props) {
 
             searchParams.set("subjects", subArr);
             setSearchParams(searchParams);
-
-            console.log(subjects.split(",").length);
 
             if (subjects.split(",").length === 1) {
               searchParams.delete("subjects");
@@ -907,7 +910,7 @@ export default function SearchTeacherSets(props) {
 
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
-
+    
     if (tsItems.length >= 1) {
       if (selectedFacets[ts.label] === undefined) {
         selectedFacets[ts.label] = [];
@@ -943,6 +946,7 @@ export default function SearchTeacherSets(props) {
         </CheckboxGroup>
       );
     } else {
+
       return (
         <Text isItalic noSpace size="caption" id="accordion-no-results-found">
           No options available
