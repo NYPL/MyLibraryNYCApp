@@ -12,7 +12,8 @@ MyLibraryNYC::Application.configure do
   config.whiny_nils = true
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = false
+  config.action_dispatch.show_exceptions = true
   config.action_controller.perform_caching = false
 
   config.action_mailer.raise_delivery_errors = true
@@ -42,6 +43,9 @@ MyLibraryNYC::Application.configure do
   config.middleware.use ActionDispatch::Session::CookieStore
   config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore)
 
+  config.exceptions_app = lambda do |env|
+    ExceptionsController.action(:render_error).call(env)
+  end
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::DEBUG

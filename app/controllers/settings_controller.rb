@@ -17,6 +17,9 @@ class SettingsController < ApplicationController
     end
   end
 
+  def page_not_found
+  end
+
   def index
     unless logged_in?
       flash[:error] = "You must be logged in to access this page"
