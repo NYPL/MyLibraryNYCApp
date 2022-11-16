@@ -38,14 +38,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def update
     # Here Updates current user alt_email and schooid.
-    current_user.alt_email = user_params["alt_email"] if user_params["alt_email"].present? 
-    current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
-    current_user.save!
-
-    if current_user.save!
-      render json: { status: :updated, user: current_user, message: "Your account has been updated." }
-    else
-      render json: { message: error_msg_hash(current_user) }
+    # If Alt Email is not present use current user email
+    begin
+      current_user.alt_email = user_params["alt_email"].present? ? user_params["alt_email"] : current_user.email
+      current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
+      if current_user.save!
+        render json: { status: :updated, user: current_user, message: "Your account has been updated." }
+      end
+    rescue StandardError => e
+      render json: { status: 500, message: e.message }
     end
   end
 

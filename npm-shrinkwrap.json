@@ -1839,9 +1839,9 @@
           }
         },
         "@babel/runtime": {
-          "version": "7.19.0",
-          "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.0.tgz",
-          "integrity": "sha512-eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==",
+          "version": "7.19.4",
+          "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.4.tgz",
+          "integrity": "sha512-EXpLCrk55f+cYqmHsSR+yD/0gAIMxxA9QK9lnQWzhMCvt+YmoBN7Zx94s++Kv0+unHk39vxNO8t+CMA2WSS3wA==",
           "requires": {
             "regenerator-runtime": "^0.13.4"
           }
@@ -1933,9 +1933,9 @@
       },
       "dependencies": {
         "@babel/runtime": {
-          "version": "7.19.0",
-          "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.0.tgz",
-          "integrity": "sha512-eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==",
+          "version": "7.19.4",
+          "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.4.tgz",
+          "integrity": "sha512-EXpLCrk55f+cYqmHsSR+yD/0gAIMxxA9QK9lnQWzhMCvt+YmoBN7Zx94s++Kv0+unHk39vxNO8t+CMA2WSS3wA==",
           "requires": {
             "regenerator-runtime": "^0.13.4"
           }
@@ -1985,9 +1985,9 @@
       },
       "dependencies": {
         "@babel/runtime": {
-          "version": "7.19.0",
-          "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.0.tgz",
-          "integrity": "sha512-eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==",
+          "version": "7.19.4",
+          "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.4.tgz",
+          "integrity": "sha512-EXpLCrk55f+cYqmHsSR+yD/0gAIMxxA9QK9lnQWzhMCvt+YmoBN7Zx94s++Kv0+unHk39vxNO8t+CMA2WSS3wA==",
           "requires": {
             "regenerator-runtime": "^0.13.4"
           }
@@ -2213,9 +2213,9 @@
       }
     },
     "@nypl/design-system-react-components": {
-      "version": "1.1.2",
-      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.1.2.tgz",
-      "integrity": "sha512-ptNg7irbr4uoDrhdJO+d4gme+v1dZ1WCCqFYuamQiot+2G84mOiNl6dICMk+vW6gKoYjtpY1iA5t3GNm86USXg==",
+      "version": "1.2.0",
+      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.2.0.tgz",
+      "integrity": "sha512-WlhzbsBYy+zTXpbwc9O/RUevMOTlf+cP8MCdaY0R88gAUk9/SAq2JW2asmF9D3A+leTmzFwiPDvSG5++VZT+1A==",
       "requires": {
         "@chakra-ui/focus-lock": ">=1.2.6 <2.0.0",
         "@chakra-ui/react": ">=1.8.5 <=1.8.8",
@@ -2223,6 +2223,7 @@
         "@charlietango/use-native-lazy-loading": "1.10.0",
         "@emotion/react": ">=11.4.1",
         "@emotion/styled": ">=11.3.0",
+        "downshift": "^6.1.7",
         "framer-motion": "^4.1.17",
         "js-cookie": "3.0.1",
         "react-datepicker": "4.1.1",
@@ -5325,6 +5326,11 @@
         }
       }
     },
+    "channels": {
+      "version": "0.0.4",
+      "resolved": "https://registry.npmjs.org/channels/-/channels-0.0.4.tgz",
+      "integrity": "sha512-4zRxUJ/sN+GmA0NeB1wIBA8xzU6C30FsGkSIWob7OLIQVwMKE/ct9n3RLfq8XiLUpafK5gWg7+HuUVzXMXYqVw=="
+    },
     "check-types": {
       "version": "8.0.3",
       "resolved": "https://registry.npmjs.org/check-types/-/check-types-8.0.3.tgz",
@@ -7617,6 +7623,43 @@
       "integrity": "sha512-M3NhsLbV1i6HuGzBUH8vXrtxOk+tWmzWKDMbAVSUp3Zsjm7ywFeuwrUXhmhQyRK1q5B5GGy7hcXPbj3bnfZg2g==",
       "dev": true
     },
+    "downshift": {
+      "version": "6.1.12",
+      "resolved": "https://registry.npmjs.org/downshift/-/downshift-6.1.12.tgz",
+      "integrity": "sha512-7XB/iaSJVS4T8wGFT3WRXmSF1UlBHAA40DshZtkrIscIN+VC+Lh363skLxFTvJwtNgHxAMDGEHT4xsyQFWL+UA==",
+      "requires": {
+        "@babel/runtime": "^7.14.8",
+        "compute-scroll-into-view": "^1.0.17",
+        "prop-types": "^15.7.2",
+        "react-is": "^17.0.2",
+        "tslib": "^2.3.0"
+      },
+      "dependencies": {
+        "@babel/runtime": {
+          "version": "7.19.4",
+          "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.19.4.tgz",
+          "integrity": "sha512-EXpLCrk55f+cYqmHsSR+yD/0gAIMxxA9QK9lnQWzhMCvt+YmoBN7Zx94s++Kv0+unHk39vxNO8t+CMA2WSS3wA==",
+          "requires": {
+            "regenerator-runtime": "^0.13.4"
+          }
+        },
+        "compute-scroll-into-view": {
+          "version": "1.0.17",
+          "resolved": "https://registry.npmjs.org/compute-scroll-into-view/-/compute-scroll-into-view-1.0.17.tgz",
+          "integrity": "sha512-j4dx+Fb0URmzbwwMUrhqWM2BEWHdFGx+qZ9qqASHRPqvTYdqvWnHg0H1hIbcyLnvgnoNAVMlwkepyqM3DaIFUg=="
+        },
+        "react-is": {
+          "version": "17.0.2",
+          "resolved": "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz",
+          "integrity": "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w=="
+        },
+        "tslib": {
+          "version": "2.4.0",
+          "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz",
+          "integrity": "sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ=="
+        }
+      }
+    },
     "duplexer": {
       "version": "0.1.2",
       "resolved": "https://registry.npmjs.org/duplexer/-/duplexer-0.1.2.tgz",
@@ -8731,6 +8774,15 @@
         }
       }
     },
+    "eslint-plugin-prettier": {
+      "version": "4.2.1",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-prettier/-/eslint-plugin-prettier-4.2.1.tgz",
+      "integrity": "sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==",
+      "dev": true,
+      "requires": {
+        "prettier-linter-helpers": "^1.0.0"
+      }
+    },
     "eslint-plugin-react": {
       "version": "7.30.0",
       "resolved": "https://registry.npmjs.org/eslint-plugin-react/-/eslint-plugin-react-7.30.0.tgz",
@@ -9250,6 +9302,12 @@
       "version": "3.1.3",
       "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
       "integrity": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q=="
+    },
+    "fast-diff": {
+      "version": "1.2.0",
+      "resolved": "https://registry.npmjs.org/fast-diff/-/fast-diff-1.2.0.tgz",
+      "integrity": "sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==",
+      "dev": true
     },
     "fast-glob": {
       "version": "3.2.11",
@@ -18358,6 +18416,21 @@
       "resolved": "https://registry.npmjs.org/preserve/-/preserve-0.2.0.tgz",
       "integrity": "sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks="
     },
+    "prettier": {
+      "version": "2.7.1",
+      "resolved": "https://registry.npmjs.org/prettier/-/prettier-2.7.1.tgz",
+      "integrity": "sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==",
+      "dev": true
+    },
+    "prettier-linter-helpers": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/prettier-linter-helpers/-/prettier-linter-helpers-1.0.0.tgz",
+      "integrity": "sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==",
+      "dev": true,
+      "requires": {
+        "fast-diff": "^1.1.2"
+      }
+    },
     "private": {
       "version": "0.1.8",
       "resolved": "https://registry.npmjs.org/private/-/private-0.1.8.tgz",
@@ -18919,9 +18992,9 @@
       }
     },
     "react-remove-scroll-bar": {
-      "version": "2.3.3",
-      "resolved": "https://registry.npmjs.org/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.3.tgz",
-      "integrity": "sha512-i9GMNWwpz8XpUpQ6QlevUtFjHGqnPG4Hxs+wlIJntu/xcsZVEpJcIV71K3ZkqNy2q3GfgvkD7y6t/Sv8ofYSbw==",
+      "version": "2.3.4",
+      "resolved": "https://registry.npmjs.org/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.4.tgz",
+      "integrity": "sha512-63C4YQBUt0m6ALadE9XV56hV8BgJWDmmTPY758iIJjfQKt2nYwoUrPk0LXRXcB/yIj82T1/Ixfdpdk68LwIB0A==",
       "requires": {
         "react-style-singleton": "^2.2.1",
         "tslib": "^2.0.0"

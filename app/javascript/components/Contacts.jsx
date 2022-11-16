@@ -2,91 +2,190 @@ import React, { useEffect } from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import HaveQuestions from "./HaveQuestions";
 
-import { TemplateAppContainer, Heading, Table, Text, Link} from '@nypl/design-system-react-components';
+import {
+  TemplateAppContainer,
+  Heading,
+  Table,
+  Text,
+  Link,
+} from "@nypl/design-system-react-components";
 
 function Contacts() {
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-        <TemplateAppContainer
-          breakout={<AppBreadcrumbs />}
-          contentPrimary={
-            <div id="contacts-page">
-              <Heading id="general-information-heading" level="two" size="secondary" marginBottom="s" text="General Information"/>
-              <Text size="default" marginBottom="l">Have a question about library cards, your account or delivery?</Text>
-              <Table
-                  columnHeaders={["Information", "Contact Emails"]}
-                  className="contactInfo"
-                  useRowHeaders
-                  tableData={[
-                    [
-                      <Text noSpace>General Information</Text>,
-                      <Link id="mln-help-email" href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</Link>,
-                    ],
-                    [ 
-                      <Text noSpace>Delivery Questions</Text>,
-                      <Link id="mln-delivery-email" href="mailto:delivery@mylibrarynyc.org">delivery@mylibrarynyc.org</Link>
-                    ]
-                  ]}
-              />
+    <TemplateAppContainer
+      breakout={<AppBreadcrumbs />}
+      contentPrimary={
+        <div id="contacts-page">
+          <Heading
+            id="general-information-heading"
+            level="two"
+            size="secondary"
+            marginBottom="s"
+            text="General Information"
+          />
+          <Text size="default" marginBottom="l">
+            Have a question about library cards, your account or delivery?
+          </Text>
+          <Table
+            columnHeaders={["Information", "Contact Emails"]}
+            className="contactInfo"
+            useRowHeaders
+            tableData={[
+              [
+                <Text key="general-ino" noSpace>
+                  General Information
+                </Text>,
+                <Link
+                  key="mln-help-email-key"
+                  id="mln-help-email"
+                  href="mailto:help@mylibrarynyc.org"
+                >
+                  help@mylibrarynyc.org
+                </Link>,
+              ],
+              [
+                <Text key="delivery-questions" noSpace>
+                  Delivery Questions
+                </Text>,
+                <Link
+                  key="delivery-questions-link"
+                  id="mln-delivery-email"
+                  href="mailto:delivery@mylibrarynyc.org"
+                >
+                  delivery@mylibrarynyc.org
+                </Link>,
+              ],
+            ]}
+          />
+          <Heading
+            id="library-cards-account"
+            marginTop="xl"
+            level="two"
+            size="secondary"
+            text="Professional Development"
+          />
+          <Text marginTop="s" marginBottom="l" size="default">
+            Want to find out about library staff visiting your school?
+          </Text>
+          <Table
+            columnHeaders={["Information", "Contact Emails"]}
+            className="contactInfo"
+            useRowHeaders
+            tableData={[
+              [
+                <Text key="mln-nypl-email-text" noSpace>
+                  The Bronx, Manhattan and Staten Island
+                </Text>,
+                <Link
+                  key="mln-nypl-email-link"
+                  id="mln-nypl-email"
+                  href="mailto:mylibrarynyc@nypl.org"
+                >
+                  mylibrarynyc@nypl.org
+                </Link>,
+              ],
+              [
+                <Text key="brooklyn-text" noSpace>
+                  Brooklyn
+                </Text>,
+                <Link
+                  key="mln-brooklyn-link"
+                  id="mln-brooklyn-email"
+                  href="mailto:mylibrarynyc@bklynlibrary.org"
+                >
+                  mylibrarynyc@bklynlibrary.org
+                </Link>,
+              ],
 
-              <Heading id="library-cards-account" marginTop="xl" level="two" size="secondary" text="Professional Development"/>
-              <Text marginTop="s" marginBottom="l" size="default">Want to find out about library staff visiting your school?</Text>
-              <Table
-                  columnHeaders={["Information", "Contact Emails"]}
-                  className="contactInfo"
-                  useRowHeaders
-                  tableData={[
-                    [
-                      <Text noSpace>The Bronx, Manhattan and Staten Island</Text>,
-                      <Link id="mln-nypl-email" href="mailto:mylibrarynyc@nypl.org">mylibrarynyc@nypl.org</Link>
-                    ],
-                    [
-                      <Text noSpace>Brooklyn</Text>,
-                      <Link id="mln-brooklyn-email" href="mailto:mylibrarynyc@bklynlibrary.org">mylibrarynyc@bklynlibrary.org</Link>
-                    ],
-
-                    [
-                      <Text noSpace>Queens</Text>,
-                      <Link id="mln-queens-email" href="mailto:mylibrarynyc@queenslibrary.org">mylibrarynyc@queenslibrary.org</Link>
-                    ]
-                  ]}
-              />
-
-              <Heading id="my-library-nyc-questions" level="two" marginTop="xl" size="secondary" text="Joining MyLibraryNYC"/>
-              <Text marginTop="s" marginBottom="l" size="default">Do you have questions about MyLibraryNYC or how to join?</Text>
-            
-              <Heading id="my-library-nyc-questions" level="three" size="tertiary" text="Find Your School"/>
-              <Text marginTop="s" marginBottom="l" size="default">Search our list of schools to see if your school already participates.</Text>
-              <Link id="mln-ps-link" href="http://www.mylibrarynyc.org/schools">Participating schools</Link>
-
-              <Heading id="eligibility" marginTop="l" level="three" size="tertiary" text="Eligibility"/>
-              To find out if your school is eligible to participate in the program next year Call the 
-              <Link marginTop="s" marginBottom="l" id="eligible-to-participate-in-program" href="https://nycdoe.libguides.com/home"> DOE Office of Library Services</Link>
-              <Table
-                columnHeaders={["Information", "Contact Number"]}
-                className="contactInfo"
-                useRowHeaders
-                tableData={[
-                  [
-                    <Text noSpace>Phone</Text>,
-                    <Text>917-521-3734</Text>
-                  ],
-                  [
-                    <Text noSpace>Website</Text>,
-                    <Link href="http://nycdoe.libguides.com/home">DOE Office of Library Services</Link>
-                  ]
-                ]}
-              />              
-            </div>
-          }
-          contentSidebar={<HaveQuestions />}
-          sidebar="right"          
-        />
-  )
+              [
+                <Text key="mln-queens-email-text" noSpace>
+                  Queens
+                </Text>,
+                <Link
+                  key="mln-queens-email-link"
+                  id="mln-queens-email"
+                  href="mailto:mylibrarynyc@queenslibrary.org"
+                >
+                  mylibrarynyc@queenslibrary.org
+                </Link>,
+              ],
+            ]}
+          />
+          <Heading
+            id="my-library-nyc-questions"
+            level="two"
+            marginTop="xl"
+            size="secondary"
+            text="Joining MyLibraryNYC"
+          />
+          <Text marginTop="s" marginBottom="l" size="default">
+            Do you have questions about MyLibraryNYC or how to join?
+          </Text>
+          <Heading
+            id="my-library-nyc-questions"
+            level="three"
+            size="tertiary"
+            text="Find Your School"
+          />
+          <Text marginTop="s" marginBottom="l" size="default">
+            Search our list of schools to see if your school already
+            participates.
+          </Text>
+          <Link id="mln-ps-link" href="http://www.mylibrarynyc.org/schools">
+            Participating schools
+          </Link>
+          <Heading
+            id="eligibility"
+            marginTop="l"
+            level="three"
+            size="tertiary"
+            text="Eligibility"
+          />
+          To find out if your school is eligible to participate in the program
+          next year Call the
+          <Link
+            marginTop="s"
+            marginBottom="l"
+            id="eligible-to-participate-in-program"
+            href="https://nycdoe.libguides.com/home"
+          >
+            {" "}
+            DOE Office of Library Services
+          </Link>
+          <Table
+            columnHeaders={["Information", "Contact Number"]}
+            className="contactInfo"
+            useRowHeaders
+            tableData={[
+              [
+                <Text key="phone-text" noSpace>
+                  Phone
+                </Text>,
+                <Text key="phone-number">917-521-3734</Text>,
+              ],
+              [
+                <Text key="website-text" noSpace>
+                  Website
+                </Text>,
+                <Link
+                  key="doe-ofc-link"
+                  href="http://nycdoe.libguides.com/home"
+                >
+                  DOE Office of Library Services
+                </Link>,
+              ],
+            ]}
+          />
+        </div>
+      }
+      contentSidebar={<HaveQuestions />}
+      sidebar="right"
+    />
+  );
 }
 
 export default Contacts;

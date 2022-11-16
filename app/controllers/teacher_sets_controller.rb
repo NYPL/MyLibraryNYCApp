@@ -26,6 +26,13 @@ class TeacherSetsController < ApplicationController
       @facets = TeacherSet.facets_for_query @teacher_sets
       total_count =  @teacher_sets.length
     end
+
+    if !@teacher_sets.present? && params["page"]
+      params["page"] = "1"
+      teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
+      @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
+    end
+
     # Determine what facets are selected based on query string
     @facets.each do |f|
       f[:items].each do |v|
@@ -33,7 +40,18 @@ class TeacherSetsController < ApplicationController
         v[:selected] = params.keys.include?(k) && params[k].include?(v[:value].to_s)
       end
     end
+
     facets = teacher_set_facets(params, @facets)
+    
+    subjectsHash = {}
+
+    facets.each do |facet|
+      if (facet[:label] === "subjects" && facet[:items].present?)
+        facet[:items].each do |item|
+          subjectsHash[item[:value]] = item[:label]
+        end
+      end
+    end
 
     if facets.collect{|i| i[:items]}.flatten.empty?
       custom_facets = input_param_facets(params)
@@ -42,13 +60,13 @@ class TeacherSetsController < ApplicationController
 
     # Attach custom :q param to each facet with query params to be applied to that link
 
-    per_page = 20;
+    per_page = 10;
     total_pages = (total_count/per_page.to_f).ceil
 
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
 
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg}
+      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash}
     else
       render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages}, serializer: SearchSerializer, include_books: false, include_contents: false
     end
