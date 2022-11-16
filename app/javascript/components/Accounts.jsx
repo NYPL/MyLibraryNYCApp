@@ -4,10 +4,11 @@ import HaveQuestions from "./HaveQuestions";
 import axios from 'axios';
 
 import {
-  TextInput, Form, Button, FormField, 
-  TemplateAppContainer, Select, Heading, Link, Table, Notification, Pagination, Icon, ButtonGroup, Text, SkeletonLoader, HorizontalRule
+  TextInput, Form, Button, FormField, VStack,
+  TemplateAppContainer, Select, Heading, Link, Table, Notification, Pagination, Icon, ButtonGroup, Text, SkeletonLoader, HorizontalRule, Label, Stack
 } from '@nypl/design-system-react-components';
 
+import validator from 'validator'
 export default function Accounts() {
 
   const [currentUser, setCurrentUser] = useState("")
@@ -21,6 +22,10 @@ export default function Accounts() {
   const [message, setMessage] = useState("")
   const [totalPages, setTotalPages] = useState("")
   const [ordersNotPresentMsg, setOrdersNotPresentMsg] = useState("")
+  const [altEmailIsvalid, setAltEmailIsvalid] = useState(false)
+  const [notificationType, setNotificationType] = useState("announcement")
+  const [notificationIcon, setNotificationIcon] = useState("actionCheckCircle")
+  const [notificationIconColor, setNotificationIconColor] = useState("ui.black")
 
 
   useEffect(() => {
@@ -55,17 +60,33 @@ export default function Accounts() {
 
   const handleSubmit = () => {
     event.preventDefault();
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-    axios.put('/users/', {
-        user: { alt_email: altEmail, school_id: schoolId, current_password: password }
-     }).then(res => {
-        if (res.data.status === "updated") {
-          setMessage(res.data.message)
-        }
+
+    if (altEmail !== "" && !validator.isEmail(altEmail)) {
+      setAltEmailIsvalid(true)
+      return
+    }
+    else {
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+      axios.put('/users/', {
+          user: { alt_email: altEmail, school_id: schoolId, current_password: password }
+       }).then(res => {
+          if (res.data.status === "updated") {
+            setAltEmailIsvalid(false)
+            setMessage(res.data.message)
+            setNotificationType("announcement")
+            setNotificationIcon("actionCheckCircle")
+            setNotificationIconColor('ui.black')
+          } else {
+            setNotificationType("warning")
+            setMessage(res.data.message)
+            setNotificationIcon("errorFilled")
+            setNotificationIconColor('brand.primary')
+          }
+        })
+        .catch(function (error) {
+         console.log(error)
       })
-      .catch(function (error) {
-       console.log(error)
-    })
+    }
   }
 
   const handleAltEmail = (event) => {
@@ -161,8 +182,8 @@ export default function Accounts() {
     if (message !== "") {
       return <Notification ariaLabel="Account Notification" id="account-details-notification"
         className="accountNotificationMsg"
-        notificationType="announcement"
-        icon={<Icon color="ui.black" iconRotation="rotate0" name="actionCheckCircle" size="small"/>}
+        notificationType={notificationType}
+        icon={<Icon color={notificationIconColor} iconRotation="rotate0" name={notificationIcon} size="small"/>}
         notificationContent={message}
       />
     }  
@@ -242,14 +263,32 @@ export default function Accounts() {
       breakout={<><AppBreadcrumbs />{ AccountUpdatedMessage() }</>}
       contentPrimary={
         <>
-          <Heading id="account-user-name" level="three" text={'Hello, ' + userFirstName() } />
+          <Heading id="account-user-name" level="three" className="doeEmailAddress" text={'Hello, ' + userFirstName()} />
           <Form id="account-details-form">
             <FormField>
+              <Stack spacing="xxs" direction="column">
+                <Label
+                  id="doe-email-address-text"
+                  fontWeight="bold"
+                >
+                  Your DOE Email Address
+                </Label>
+                <Label
+                  id="doe-email-address-id"
+                  fontWeight="text.tag"
+                >
+                  {email}
+                </Label>
+              </Stack>
+            </FormField>
+            <FormField>
               <TextInput
-                labelText="Your DOE Email Address"
+                labelText="Preferred email address for reservation notifications:"
                 id="account-details-input"
-                value={altEmail || email}
+                value={altEmail}
                 onChange={handleAltEmail}
+                invalidText="Preferred email address is not valid"
+                isInvalid={altEmailIsvalid}
               />
             </FormField>
             <FormField>
