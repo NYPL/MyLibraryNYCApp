@@ -380,7 +380,7 @@ export default function Accounts() {
           <Form id="account-details-form">
             <FormField>
               <Stack spacing="0" direction="column">
-                <Label id="doe-email-address-text" >
+                <Label id="doe-email-address-text">
                   Your DOE Email Address
                 </Label>
                 <Text id="doe-email-address-id" size="caption" marginTop="xs">
