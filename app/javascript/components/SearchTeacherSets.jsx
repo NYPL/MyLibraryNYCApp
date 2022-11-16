@@ -987,6 +987,7 @@ export default function SearchTeacherSets(props) {
     return isLargerThanMedium ? "block" : "none";
   };
 
+  //{tagSetsData()}
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
@@ -1021,7 +1022,6 @@ export default function SearchTeacherSets(props) {
       }
       contentPrimary={
         <>
-          {tagSetsData()}
           <div style={{ display: mobileSupport() }}>
             <Flex alignItems="baseline">
               {resultsFoundMessage()}
