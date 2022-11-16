@@ -119,6 +119,9 @@ export default function Accounts() {
 
   const handleAltEmail = (event) => {
     setAltEmail(event.target.value);
+    if (event.target.value === "") {
+      setAltEmailIsvalid(false);
+    }
   };
 
   const handleSchool = (event) => {
@@ -373,26 +376,25 @@ export default function Accounts() {
             id="account-user-name"
             level="three"
             text={"Hello, " + userFirstName()}
-            className="doeEmailAddress"
           />
           <Form id="account-details-form">
             <FormField>
-              <Stack spacing="xxs" direction="column">
-                <Label id="doe-email-address-text" fontWeight="bold">
+              <Stack spacing="0" direction="column">
+                <Label id="doe-email-address-text" >
                   Your DOE Email Address
                 </Label>
-                <Label id="doe-email-address-id" fontWeight="text.tag">
+                <Text id="doe-email-address-id" size="caption" marginTop="xs">
                   {email}
-                </Label>
+                </Text>
               </Stack>
             </FormField>
             <FormField>
               <TextInput
-                labelText="Preferred email address for reservation notifications:"
+                labelText="Preferred Email Address for Reservation Notifications"
                 id="account-details-input"
                 value={altEmail}
                 onChange={handleAltEmail}
-                invalidText="Preferred email address is not valid"
+                invalidText="Please enter a valid preferred email address"
                 isInvalid={altEmailIsvalid}
               />
             </FormField>
