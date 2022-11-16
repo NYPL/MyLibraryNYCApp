@@ -293,14 +293,31 @@ export default function SearchTeacherSets(props) {
         />
       );
     } else if (tsTotalCount === 1) {
+      const pageCount = 10;
+      const paginationData = parseInt(computedCurrentPage * pageCount);
+      const test =
+        tsTotalCount < parseInt(paginationData) - 10
+          ? 0
+          : parseInt(paginationData) - 10;
+      const perPageNumbers =
+        tsTotalCount < pageCount || tsTotalCount < paginationData
+          ? tsTotalCount
+          : paginationData;
+
       return (
-        <Heading
+        <Text
+          marginTop="m"
           id="ts-result-found-id"
-          marginBottom="s"
-          level="three"
-          size="callout"
-          text={tsTotalCount + " result found"}
-        />
+          fontWeight="heading.callout"
+        >
+          {"Showing " +
+            test +
+            "-" +
+            perPageNumbers +
+            " of " +
+            tsTotalCount +
+            " result"}
+        </Text>
       );
     } else if (tsTotalCount >= 1) {
       const pageCount = 10;
@@ -310,7 +327,9 @@ export default function SearchTeacherSets(props) {
           ? 0
           : parseInt(paginationData) - 10;
       const perPageNumbers =
-        tsTotalCount < pageCount ? tsTotalCount : paginationData;
+        tsTotalCount < pageCount || tsTotalCount < paginationData
+          ? tsTotalCount
+          : paginationData;
 
       return (
         <Text
