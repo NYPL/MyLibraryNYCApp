@@ -305,7 +305,10 @@ export default function SearchTeacherSets(props) {
     } else if (tsTotalCount >= 1) {
       const pageCount = 10;
       const paginationData = parseInt(computedCurrentPage * pageCount);
-      const test = parseInt(paginationData) - 10;
+      const test =
+        tsTotalCount < parseInt(paginationData) - 10
+          ? 0
+          : parseInt(paginationData) - 10;
       const perPageNumbers =
         tsTotalCount < pageCount ? tsTotalCount : paginationData;
 
