@@ -376,7 +376,6 @@ export default function Accounts() {
             id="account-user-name"
             level="three"
             text={"Hello, " + userFirstName()}
-            //className="doeEmailAddress"
           />
           <Form id="account-details-form">
             <FormField>
