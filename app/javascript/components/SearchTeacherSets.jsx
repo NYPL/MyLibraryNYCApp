@@ -97,13 +97,12 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-
   useEffect(() => {
     window.scrollTo(0, 0);
     const queryValue = new URLSearchParams(location.search);
     const tsfacets = {};
     const tagSetsArr = [];
-    setTsSubjects({})
+    setTsSubjects({});
 
     queryParams.map((ts) => {
       const tagSets = {};
@@ -118,8 +117,7 @@ export default function SearchTeacherSets(props) {
             tagSetsArr.push(subjectsHash);
           }
         });
-      }
-       else if (ts["area of study"]) {
+      } else if (ts["area of study"]) {
         tsfacets["area of study"] = [ts["area of study"]];
         tagSets["label"] = ts["area of study"];
         tagSets["area of study"] = [ts["area of study"]];
@@ -910,7 +908,7 @@ export default function SearchTeacherSets(props) {
 
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
-    
+
     if (tsItems.length >= 1) {
       if (selectedFacets[ts.label] === undefined) {
         selectedFacets[ts.label] = [];
@@ -946,7 +944,6 @@ export default function SearchTeacherSets(props) {
         </CheckboxGroup>
       );
     } else {
-
       return (
         <Text isItalic noSpace size="caption" id="accordion-no-results-found">
           No options available
