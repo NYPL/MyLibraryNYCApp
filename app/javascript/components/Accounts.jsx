@@ -28,7 +28,6 @@ import validator from "validator";
 
 export default function Accounts() {
   const [currentUser, setCurrentUser] = useState("");
-  //const [school, setSchool] = useState("");
   const [altEmail, setAltEmail] = useState("");
   const [email, setEmail] = useState("");
   const [schools, setSchools] = useState("");
@@ -43,7 +42,7 @@ export default function Accounts() {
   const [notificationIcon, setNotificationIcon] = useState("actionCheckCircle");
   const [notificationIconColor, setNotificationIconColor] =
     useState("ui.black");
-
+  const [displayNotification, setDisplayNotification] = useState("block");
   useEffect(() => {
     window.scrollTo(0, 0);
     axios.defaults.headers.common["X-CSRF-TOKEN"] = document
@@ -61,7 +60,6 @@ export default function Accounts() {
           return false;
         } else {
           let accountDetails = res.data.accountdetails;
-          //setSchool(accountDetails.school);
           setEmail(accountDetails.email);
           setAltEmail(accountDetails.alt_email);
           setSchools(accountDetails.schools);
@@ -84,6 +82,7 @@ export default function Accounts() {
 
     if (altEmail !== "" && !validator.isEmail(altEmail)) {
       setAltEmailIsvalid(true);
+      setDisplayNotification("none");
       return;
     } else {
       axios.defaults.headers.common["X-CSRF-TOKEN"] = document
@@ -98,15 +97,18 @@ export default function Accounts() {
           },
         })
         .then((res) => {
+          setMessage(res.data.message);
+          setDisplayNotification("block");
           if (res.data.status === "updated") {
             setAltEmailIsvalid(false);
-            setMessage(res.data.message);
             setNotificationType("announcement");
             setNotificationIcon("actionCheckCircle");
             setNotificationIconColor("ui.black");
+            if (altEmail === "") {
+              setAltEmail(res.data.user.alt_email);
+            }
           } else {
             setNotificationType("warning");
-            setMessage(res.data.message);
             setNotificationIcon("errorFilled");
             setNotificationIconColor("brand.primary");
           }
@@ -125,7 +127,6 @@ export default function Accounts() {
   };
 
   const handleSchool = (event) => {
-    //setSchool(event.target.value);
     setSchoolId(event.target.value);
   };
 
@@ -182,39 +183,6 @@ export default function Accounts() {
     }
   };
 
-  // const cancelOrder = (value, access_key, cancel_button_index) => {
-  //   axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-  //     .querySelector("meta[name='csrf-token']")
-  //     .getAttribute("content");
-  //   axios
-  //     .put("/holds/" + access_key, { hold_change: { status: "cancelled" } })
-  //     .then((res) => {
-  //       if (
-  //         res.request.responseURL ===
-  //         "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
-  //       ) {
-  //         window.location = res.request.responseURL;
-  //         return false;
-  //       } else {
-  //         if (res.data.hold.status === "cancelled") {
-  //           let updatedHolds = holds.map((obj, index) => {
-  //             if (index === cancel_button_index) {
-  //               return Object.assign({}, obj, {
-  //                 status: "cancelled",
-  //                 status_label: "Cancelled",
-  //               });
-  //             }
-  //             return obj;
-  //           });
-  //           setHolds(updatedHolds);
-  //         }
-  //       }
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // };
-
   const orderCancelConfirmation = (hold) => {
     return (
       <div id={"cancel_" + hold["access_key"]}>
@@ -259,21 +227,24 @@ export default function Accounts() {
   const AccountUpdatedMessage = () => {
     if (message !== "") {
       return (
-        <Notification
-          ariaLabel="Account Notification"
-          id="account-details-notification"
-          className="accountNotificationMsg"
-          notificationType={notificationType}
-          icon={
-            <Icon
-              color={notificationIconColor}
-              iconRotation="rotate0"
-              name={notificationIcon}
-              size="small"
-            />
-          }
-          notificationContent={message}
-        />
+        <div>
+          <Notification
+            style={{ display: displayNotification }}
+            ariaLabel="Account Notification"
+            id="account-details-notification"
+            className="accountNotificationMsg"
+            notificationType={notificationType}
+            icon={
+              <Icon
+                color={notificationIconColor}
+                iconRotation="rotate0"
+                name={notificationIcon}
+                size="small"
+              />
+            }
+            notificationContent={message}
+          />
+        </div>
       );
     }
   };
@@ -340,7 +311,6 @@ export default function Accounts() {
           return false;
         } else {
           let accountDetails = res.data.accountdetails;
-          //setSchool(accountDetails.school);
           setEmail(accountDetails.email);
           setAltEmail(accountDetails.alt_email);
           setSchools(accountDetails.schools);
