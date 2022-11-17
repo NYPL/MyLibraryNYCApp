@@ -21,7 +21,6 @@ export default function ParticipatingSchools(props) {
   const [search_school, setSearchSchool] = useState("");
   const [anchor_tags, setAnchorTags] = useState([]);
   const [schoolNotFound, setSchoolNotFound] = useState("");
-  const [isInvalid, setIsInvalid] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -91,7 +90,6 @@ export default function ParticipatingSchools(props) {
 
   const Schools = () => {
     let schoolsCount = 0;
-    setIsInvalid(false);
 
     let schoolsData = schools.map((data, i) => {
       let filteredSchools = data["school_names"].filter((school) => {
@@ -218,7 +216,6 @@ export default function ParticipatingSchools(props) {
             id="participating-school"
             labelText="Search by Name"
             placeholder="School name"
-            isInvalid={isInvalid}
             showLabel
           />
           <Text marginTop="l" size="default" fontWeight="medium">
