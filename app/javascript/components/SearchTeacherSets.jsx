@@ -297,8 +297,8 @@ export default function SearchTeacherSets(props) {
       const paginationData = parseInt(computedCurrentPage * pageCount);
       const test =
         tsTotalCount < parseInt(paginationData) - 10
-          ? 0
-          : parseInt(paginationData) - 10;
+          ? 1
+          : parseInt(paginationData) + 1 - 10;
       const perPageNumbers =
         tsTotalCount < pageCount || tsTotalCount < paginationData
           ? tsTotalCount
@@ -322,11 +322,11 @@ export default function SearchTeacherSets(props) {
     } else if (tsTotalCount >= 1) {
       const pageCount = 10;
       const paginationData = parseInt(computedCurrentPage * pageCount);
-      const test =
+      const fromResults =
         tsTotalCount < parseInt(paginationData) - 10
-          ? 0
-          : parseInt(paginationData) - 10;
-      const perPageNumbers =
+          ? 1
+          : parseInt(paginationData) + 1 - 10;
+      const toResults =
         tsTotalCount < pageCount || tsTotalCount < paginationData
           ? tsTotalCount
           : paginationData;
@@ -338,9 +338,9 @@ export default function SearchTeacherSets(props) {
           fontWeight="heading.callout"
         >
           {"Showing " +
-            test +
+            fromResults +
             "-" +
-            perPageNumbers +
+            toResults +
             " of " +
             tsTotalCount +
             " results"}
