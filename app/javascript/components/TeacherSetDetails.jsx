@@ -422,7 +422,7 @@ export default function TeacherSetDetails(props) {
               textAlign="center"
               size="callout"
               level="four"
-              text={"" + AvailableCopies()}
+              text={AvailableCopies()}
             />
             {OrderTeacherSets()}
           </Box>
@@ -509,7 +509,7 @@ export default function TeacherSetDetails(props) {
             marginTop="s"
             size="callout"
             level="four"
-            text={"" + BooksCount()}
+            text={BooksCount()}
           />
           <SimpleGrid
             id="ts-page-books-panel"
@@ -585,7 +585,7 @@ export default function TeacherSetDetails(props) {
               noSpace
               level="two"
               size="secondary"
-              text={"" + teacherSetTitle()}
+              text={teacherSetTitle()}
             />
             <Spacer />
             {teacherSetAvailability()}
