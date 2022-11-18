@@ -77,7 +77,7 @@ when 'production'
 
   ENV['RACK_ENV'] = 'production'
   ENV['RAILS_ENV'] = 'production'
-  ENV['MLN_INFO_SITE_HOSTNAME'] = "new-www.mylibrarynyc.org"
+  ENV['MLN_INFO_SITE_HOSTNAME'] = "www.mylibrarynyc.org"
   ENV['MLN_SETS_SITE_HOSTNAME'] = "sets.mylibrarynyc.org"
   # production db
   ENV['DATABASE_URL'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAPMwgfAGCSqGSIb3DQEHBqCB4jCB3wIBADCB2QYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyzTdVMhyqutO/fsX4CARCAgasVxmddpYC6YWNc39najXv2cf8cH0M5LsSaJKdeNR5CifdfFzre9dr5E0GiXj++koZgnYVQ2ObcmWGyv197K8/tqL8J9KGzjmNH0X/wzGRa/+QvU6JaESQFvjvRUV0QPdna3w6Q9X1RzwPt38zhFBy2Fs8WrZdfTh38QlNYb3993F86AT/Qz7at14AXUCPqdB+9QmoJxVNlQdbdkjqb7xStKSVhwK/mL3zc+Mk=")
