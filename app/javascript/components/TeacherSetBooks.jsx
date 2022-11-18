@@ -203,7 +203,7 @@ export default function TeacherSetBooks() {
               noSpace
               level="two"
               size="secondary"
-              text={"" + bookTitle}
+              text={bookTitle}
             />
           </Flex>
 
