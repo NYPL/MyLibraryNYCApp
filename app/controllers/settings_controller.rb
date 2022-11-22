@@ -20,6 +20,11 @@ class SettingsController < ApplicationController
   def page_not_found
   end
 
+
+  def activeadmin_logout_redirect
+    redirect_to "/admin/login"
+  end
+
   def index
     unless logged_in?
       flash[:error] = "You must be logged in to access this page"
