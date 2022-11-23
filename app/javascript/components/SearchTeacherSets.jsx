@@ -108,6 +108,7 @@ export default function SearchTeacherSets(props) {
       const tagSets = {};
 
       if (ts.subjects) {
+        setComputedCurrentPage(1)
         tsfacets["subjects"] = ts.subjects.split(",");
         ts.subjects.split(",").map((value) => {
           if (tsSubjects[value] !== undefined) {
@@ -118,23 +119,28 @@ export default function SearchTeacherSets(props) {
           }
         });
       } else if (ts["area of study"]) {
+        setComputedCurrentPage(1)
         tsfacets["area of study"] = [ts["area of study"]];
         tagSets["label"] = ts["area of study"];
         tagSets["area of study"] = [ts["area of study"]];
       } else if (ts["set type"]) {
+        setComputedCurrentPage(1)
         tsfacets["set type"] = [ts["set type"]];
         tagSets["label"] = ts["set type"];
         tagSets["set type"] = [ts["set type"]];
       } else if (ts["availability"]) {
+        setComputedCurrentPage(1)
         setAvailableToggle(true);
         tsfacets["availability"] = [ts["availability"]];
         tagSets["label"] = "Available Now";
         tagSets["availability"] = [ts["availability"]];
       } else if (ts["language"]) {
+        setComputedCurrentPage(1)
         tsfacets["language"] = [ts["language"]];
         tagSets["label"] = ts["language"];
         tagSets["language"] = [ts["language"]];
       } else if (ts.keyword) {
+        setComputedCurrentPage(1)
         tagSets["label"] = ts["keyword"];
         tagSets["keyword"] = [ts["language"]];
       }
