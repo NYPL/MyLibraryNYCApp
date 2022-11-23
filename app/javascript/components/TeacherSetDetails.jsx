@@ -119,13 +119,6 @@ export default function TeacherSetDetails(props) {
 
   const bookImageDimensions = ({target: img }) => {
 
-    const timer = setTimeout(() => {
-      console.log("ooooo")
-      setSrcToUse(mlnImage)
-    }, 500)
-
-
-
     if ((img.offsetHeight === 1) || (img.offsetWidth === 1)) {
       setBookImageHeight(img.offsetHeight)
       setbookImageWidth(img.offsetWidth)
@@ -140,11 +133,15 @@ export default function TeacherSetDetails(props) {
       if (bookImageHeight === 1 && bookImageWidth === 1) {
         return <Image title={data.title} src={mlnImage} aspectRatio="square" size="default" alt={data.title} className="bookImageTop"/>
 
-      } else if (bookImageHeight === 189 && bookImageWidth === 189){
+      } else if (bookImageHeight === 189 && bookImageWidth === 189) {
         return <Image title={data.title} id={"ts-books-" + data.id} src={data.cover_uri} className="bookImageTop" aspectRatio="square" size="default" alt={data.title}/>
       } else {
-        return <img onLoad={bookImageDimensions} src={data.cover_uri} />
+        return <img onLoad={() => {
+          bookImageDimensions();
+          imgLoadedOnInitSrc.current = true;
+        } } src={data.cover_uri} />
       }
+      <ImageWithFallback />
     } else {
       return <Image title={data.title} id={"ts-books-" + data.id} src={mlnImage} className="bookImageTop" aspectRatio="square" size="default" alt={data.title}/>
     }
