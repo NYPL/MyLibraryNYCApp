@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import HaveQuestions from "./HaveQuestions";
 import { Link as ReactRouterLink, useParams, useNavigate} from "react-router-dom";
 import { titleCase } from "title-case";
@@ -32,6 +32,21 @@ export default function TeacherSetDetails(props) {
   const [bookImageHeight, setBookImageHeight] = useState("")
   const [bookImageWidth, setbookImageWidth] = useState("")
   const { isLargerThanMobile } = useNYPLBreakpoints();
+  const [imgTimeout, setImgTimeout] = useState(false)
+  const imgLoadedOnInitSrc = useRef(false)
+
+
+   useEffect(() => {
+      const timer = setTimeout(() => {
+        console.log(imgLoadedOnInitSrc.current)
+        if (!imgLoadedOnInitSrc.current) {
+          setImgTimeout(true)
+        }
+      }, 100)
+
+      return () => clearTimeout(timer)
+   }, [])
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -100,7 +115,17 @@ export default function TeacherSetDetails(props) {
     })
   }
 
+
+
   const bookImageDimensions = ({target: img }) => {
+
+    const timer = setTimeout(() => {
+      console.log("ooooo")
+      setSrcToUse(mlnImage)
+    }, 500)
+
+
+
     if ((img.offsetHeight === 1) || (img.offsetWidth === 1)) {
       setBookImageHeight(img.offsetHeight)
       setbookImageWidth(img.offsetWidth)
