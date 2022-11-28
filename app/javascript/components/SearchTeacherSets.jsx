@@ -267,6 +267,7 @@ export default function SearchTeacherSets(props) {
     if (event.target.value === "") {
       setKeyWord("");
       searchParams.delete("keyword");
+      searchParams.delete("page")
       setSearchParams(searchParams);
       getTeacherSets(
         Object.assign(
@@ -501,7 +502,7 @@ export default function SearchTeacherSets(props) {
     } else {
       setAvailableToggle(true);
       setComputedCurrentPage(1)
-      searchParams.set("page", 1);
+      searchParams.delete("page");
       setSearchParams(searchParams);
       searchParams.set("availability", ["available"]);
       setSearchParams(searchParams);
