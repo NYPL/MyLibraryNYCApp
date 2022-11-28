@@ -19,7 +19,12 @@ function Footer() {
           href="http://nypl.org"
           attributes={{ target: "_blank" }}
         >
-          Deepika
+          <Logo
+            decorative
+            id="nypl-footer-logo-id"
+            name="nyplFullBlack"
+            size="small"
+          />
         </a>
 
         <Link
