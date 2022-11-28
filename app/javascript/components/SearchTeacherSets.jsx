@@ -158,6 +158,7 @@ export default function SearchTeacherSets(props) {
     const sortOrderVal = queryValue.get("sort_order")
       ? queryValue.get("sort_order")
       : "";
+      
     const pageNumber = queryValue.get("page")
       ? parseInt(queryValue.get("page"))
       : 1;
@@ -635,29 +636,34 @@ export default function SearchTeacherSets(props) {
   const tsSelectedFacets = (field, value) => {
     //console.log(value)
     if (field === "area of study") {
-      setComputedCurrentPage(1)
-      searchParams.set("page", 1);
+      //searchParams.set("page", 1);
+      searchParams.delete("page")
       setSearchParams(searchParams);
+      setComputedCurrentPage(1)
       selectedFacets[field] = value;
     } else if (field === "availability") {
-      setComputedCurrentPage(1)
-      searchParams.set("page", 1);
+      //searchParams.set("page", 1);
+      searchParams.delete("page")
       setSearchParams(searchParams);
+      setComputedCurrentPage(1)
       selectedFacets[field] = value;
     } else if (field === "set type") {
-      setComputedCurrentPage(1)
-      searchParams.set("page", 1);
+      //searchParams.set("page", 1);
+      searchParams.delete("page")
       setSearchParams(searchParams);
+      setComputedCurrentPage(1)
       selectedFacets[field] = value;
     } else if (field === "language") {
-      setComputedCurrentPage(1)
-      searchParams.set("page", 1);
+      //searchParams.set("page", 1);
+      searchParams.delete("page")
       setSearchParams(searchParams);
+      setComputedCurrentPage(1)
       selectedFacets[field] = value;
     } else if (field === "subjects") {
-      setComputedCurrentPage(1)
-      searchParams.set("page", 1);
+      //searchParams.set("page", 1);
+      searchParams.delete("page")
       setSearchParams(searchParams);
+      setComputedCurrentPage(1)
       selectedFacets[field] = value;
     }
 
