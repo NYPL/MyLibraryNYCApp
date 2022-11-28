@@ -108,7 +108,6 @@ export default function SearchTeacherSets(props) {
       const tagSets = {};
 
       if (ts.subjects) {
-        setComputedCurrentPage(1)
         tsfacets["subjects"] = ts.subjects.split(",");
         ts.subjects.split(",").map((value) => {
           if (tsSubjects[value] !== undefined) {
@@ -119,28 +118,23 @@ export default function SearchTeacherSets(props) {
           }
         });
       } else if (ts["area of study"]) {
-        setComputedCurrentPage(1)
         tsfacets["area of study"] = [ts["area of study"]];
         tagSets["label"] = ts["area of study"];
         tagSets["area of study"] = [ts["area of study"]];
       } else if (ts["set type"]) {
-        setComputedCurrentPage(1)
         tsfacets["set type"] = [ts["set type"]];
         tagSets["label"] = ts["set type"];
         tagSets["set type"] = [ts["set type"]];
       } else if (ts["availability"]) {
-        setComputedCurrentPage(1)
         setAvailableToggle(true);
         tsfacets["availability"] = [ts["availability"]];
         tagSets["label"] = "Available Now";
         tagSets["availability"] = [ts["availability"]];
       } else if (ts["language"]) {
-        setComputedCurrentPage(1)
         tsfacets["language"] = [ts["language"]];
         tagSets["label"] = ts["language"];
         tagSets["language"] = [ts["language"]];
       } else if (ts.keyword) {
-        setComputedCurrentPage(1)
         tagSets["label"] = ts["keyword"];
         tagSets["keyword"] = [ts["language"]];
       }
@@ -247,6 +241,9 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("keyword");
     } else {
       searchParams.set("keyword", keyword);
+      setSearchParams(searchParams);
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
       setSearchParams(searchParams);
     }
 
@@ -502,6 +499,9 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
     } else {
       setAvailableToggle(true);
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       searchParams.set("availability", ["available"]);
       setSearchParams(searchParams);
       setAvailability(["available"]);
@@ -635,14 +635,29 @@ export default function SearchTeacherSets(props) {
   const tsSelectedFacets = (field, value) => {
     //console.log(value)
     if (field === "area of study") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     } else if (field === "availability") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     } else if (field === "set type") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     } else if (field === "language") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     } else if (field === "subjects") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     }
 

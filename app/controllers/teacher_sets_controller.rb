@@ -27,7 +27,7 @@ class TeacherSetsController < ApplicationController
       total_count =  @teacher_sets.length
     end
 
-    if ((!@teacher_sets.present? && params["page"]) || (params["keyword"].present? || params["grade_begin"].present? || params["grade_end"].present? || params["language"].present? || params['set type'].present? || params['availability'].present? || params['subjects'].present? || params['area of study'].present?))
+    if (!@teacher_sets.present? && params["page"])
       params["page"] = "1"
       teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
