@@ -242,6 +242,9 @@ export default function SearchTeacherSets(props) {
     } else {
       searchParams.set("keyword", keyword);
       setSearchParams(searchParams);
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
     }
 
     const params = Object.assign(
@@ -496,6 +499,9 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
     } else {
       setAvailableToggle(true);
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       searchParams.set("availability", ["available"]);
       setSearchParams(searchParams);
       setAvailability(["available"]);
@@ -629,14 +635,29 @@ export default function SearchTeacherSets(props) {
   const tsSelectedFacets = (field, value) => {
     //console.log(value)
     if (field === "area of study") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     } else if (field === "availability") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     } else if (field === "set type") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     } else if (field === "language") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     } else if (field === "subjects") {
+      setComputedCurrentPage(1)
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
       selectedFacets[field] = value;
     }
 
