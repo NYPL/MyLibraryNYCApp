@@ -203,7 +203,7 @@ function AccountDetailsSubMenu(props) {
             <li className="nav__submenu-item">
               <Link
                 className="navBarDropDown textDecorationNone"
-                href="/signin"
+                href="/signin?settingType=account"
               >
                 <Icon
                   className="navBarIcon"

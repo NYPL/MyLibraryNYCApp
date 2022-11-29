@@ -51,13 +51,13 @@ export default function Navbar(props) {
           </li>
 
           <li id="mln-navbar-contacts-link">
-            <ReactRouterLink
-              to="/contact"
+            <Link
+              href="/contact"
               onClick={hideSignInMsg}
               className="nav-link-colors"
             >
               Contact
-            </ReactRouterLink>
+            </Link>
           </li>
 
           <li id="mln-navbar-faq-link">
