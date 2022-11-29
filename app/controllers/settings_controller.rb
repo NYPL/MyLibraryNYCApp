@@ -3,6 +3,9 @@
 class SettingsController < ApplicationController
 
   def signin
+    if params["settingType"] == "account"
+      store_location_for(:user, "account_details")
+    end
   end
 
   def signup

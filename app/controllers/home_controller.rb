@@ -45,10 +45,8 @@ class HomeController < ApplicationController
   def digital_resources; end
 
 
-  def help; 
-    if storable_location?
-      store_user_location!
-    end
+  def help;
+    store_location_for(:user, "contact")
   end
 
 
