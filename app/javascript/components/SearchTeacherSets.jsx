@@ -285,7 +285,7 @@ export default function SearchTeacherSets(props) {
       return <Slider marginTop="s" marginBottom="l"
         id="ts-slider-range"
         isRangeSlider
-        labelText={"Grades " + g_begin + " To " + g_end}
+        labelText={"Grades " + g_begin + " to " + g_end}
         min={-1}
         max={12}
         defaultValue={[parseInt(grade_begin), parseInt(grade_end)]}
