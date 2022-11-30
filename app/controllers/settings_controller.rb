@@ -25,7 +25,12 @@ class SettingsController < ApplicationController
 
 
   def activeadmin_logout_redirect
-    redirect_to "/admin/login"
+    if Devise.sign_out_all_scopes
+      sign_out
+      redirect_to "/admin/login"
+    else
+      redirect_to "/admin/dashboard"
+    end 
   end
 
   def index
