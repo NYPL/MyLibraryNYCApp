@@ -98,7 +98,6 @@ export default function SearchTeacherSets(props) {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     const queryValue = new URLSearchParams(location.search);
     const tsfacets = {};
     const tagSetsArr = [];
@@ -184,6 +183,7 @@ export default function SearchTeacherSets(props) {
         grade_end: [queryValue.get("grade_end")],
       };
       tagSetsArr.push(tagSetGrades);
+      window.scrollTo({ top: 10, behavior: "smooth", })
     }
 
     setSelectedFacets(tsfacets);
@@ -642,29 +642,34 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
       setComputedCurrentPage(1)
       selectedFacets[field] = value;
+      window.scrollTo({ top: 10, behavior: "smooth", })
     } else if (field === "availability") {
       //searchParams.set("page", 1);
       searchParams.delete("page")
       setSearchParams(searchParams);
       setComputedCurrentPage(1)
       selectedFacets[field] = value;
+      window.scrollTo({ top: 10, behavior: "smooth", })
     } else if (field === "set type") {
       //searchParams.set("page", 1);
       searchParams.delete("page")
       setSearchParams(searchParams);
-      setComputedCurrentPage(1)
+      setComputedCurrentPage(1);
+      window.scrollTo({ top: 10, behavior: "smooth", })
       selectedFacets[field] = value;
     } else if (field === "language") {
       //searchParams.set("page", 1);
       searchParams.delete("page")
       setSearchParams(searchParams);
       setComputedCurrentPage(1)
+      window.scrollTo({ top: 10, behavior: "smooth", })
       selectedFacets[field] = value;
     } else if (field === "subjects") {
       //searchParams.set("page", 1);
       searchParams.delete("page")
       setSearchParams(searchParams);
       setComputedCurrentPage(1)
+      window.scrollTo({ top: 10, behavior: "smooth", })
       selectedFacets[field] = value;
     }
 
