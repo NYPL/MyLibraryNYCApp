@@ -81,13 +81,13 @@ export default function Home(props) {
               <Heading
                 level="one"
                 id="mln-campaign-hero"
-                text="Welcome To MyLibrary NYC"
+                text="Welcome To MyLibraryNYC"
               />
             }
             subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 6,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities."
             backgroundImageSrc={homeBgImg}
             imageProps={{
-              alt: "Book highlights from MyLibrary NYC",
+              alt: "Book highlights from MyLibraryNYC",
               src: homeFgImg,
               id: "mln-hero-image",
             }}
