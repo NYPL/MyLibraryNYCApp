@@ -235,12 +235,6 @@ export default function SearchTeacherSets(props) {
         } else {
           setDisplayPagination("none");
         }
-
-        if (window.pageYOffset > 0) {
-          setTimeout(() => {
-            window.scrollTo({ top: 300, behavior: "smooth" });
-          }, 500);
-        }
       })
       .catch(function (error) {
         console.log(error);
@@ -674,30 +668,55 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
+      if (window.pageYOffset > 0) {
+        setTimeout(() => {
+          window.scrollTo({ top: 300, behavior: "smooth" });
+        }, 500);
+      }
     } else if (field === "availability") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
+      if (window.pageYOffset > 0) {
+        setTimeout(() => {
+          window.scrollTo({ top: 300, behavior: "smooth" });
+        }, 500);
+      }
     } else if (field === "set type") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
+      if (window.pageYOffset > 0) {
+        setTimeout(() => {
+          window.scrollTo({ top: 300, behavior: "smooth" });
+        }, 500);
+      }
     } else if (field === "language") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
+      if (window.pageYOffset > 0) {
+        setTimeout(() => {
+          window.scrollTo({ top: 300, behavior: "smooth" });
+        }, 500);
+      }
     } else if (field === "subjects") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
+      if (window.pageYOffset > 0) {
+        setTimeout(() => {
+          window.scrollTo({ top: 300, behavior: "smooth" });
+        }, 500);
+      }
     }
 
     if (value.length > 0) {
