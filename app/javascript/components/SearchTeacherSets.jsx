@@ -183,7 +183,6 @@ export default function SearchTeacherSets(props) {
         grade_end: [queryValue.get("grade_end")],
       };
       tagSetsArr.push(tagSetGrades);
-      window.scrollTo({ top: 10, behavior: "smooth", })
     }
 
     setSelectedFacets(tsfacets);
@@ -228,6 +227,12 @@ export default function SearchTeacherSets(props) {
         } else {
           setDisplayPagination("none");
         }
+
+        setTimeout(() => {
+          window.scrollTo({ top: 10, behavior: "smooth", })
+        }, 500);
+        
+
       })
       .catch(function (error) {
         console.log(error);
@@ -642,34 +647,29 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
       setComputedCurrentPage(1)
       selectedFacets[field] = value;
-      window.scrollTo({ top: 10, behavior: "smooth", })
     } else if (field === "availability") {
       //searchParams.set("page", 1);
       searchParams.delete("page")
       setSearchParams(searchParams);
       setComputedCurrentPage(1)
       selectedFacets[field] = value;
-      window.scrollTo({ top: 10, behavior: "smooth", })
     } else if (field === "set type") {
       //searchParams.set("page", 1);
       searchParams.delete("page")
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
-      window.scrollTo({ top: 10, behavior: "smooth", })
       selectedFacets[field] = value;
     } else if (field === "language") {
       //searchParams.set("page", 1);
       searchParams.delete("page")
       setSearchParams(searchParams);
       setComputedCurrentPage(1)
-      window.scrollTo({ top: 10, behavior: "smooth", })
       selectedFacets[field] = value;
     } else if (field === "subjects") {
       //searchParams.set("page", 1);
       searchParams.delete("page")
       setSearchParams(searchParams);
       setComputedCurrentPage(1)
-      window.scrollTo({ top: 10, behavior: "smooth", })
       selectedFacets[field] = value;
     }
 
@@ -832,8 +832,6 @@ export default function SearchTeacherSets(props) {
         if (value["grade_end"] !== undefined) {
           const g_end =  value["label"]
         }
-
-        value["label"] = "test"
       }
 
       teacherSetArr.push(value)
