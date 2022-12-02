@@ -27,8 +27,10 @@ class TeacherSetsController < ApplicationController
       total_count =  @teacher_sets.length
     end
 
+    resetPageNumber = ""
     if (!@teacher_sets.present? && params["page"])
       params["page"] = "1"
+      resetPageNumber = "1"
       teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
     end
@@ -66,7 +68,7 @@ class TeacherSetsController < ApplicationController
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
 
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash}
+      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash, resetPageNumber: resetPageNumber}
     else
       render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages}, serializer: SearchSerializer, include_books: false, include_contents: false
     end
