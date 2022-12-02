@@ -71,6 +71,7 @@ export default function SearchTeacherSets(props) {
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
+  const [resetPageNumber, setResetPageNumber] = useState("");
   const location = useLocation();
 
   useEffect(() => {
@@ -88,6 +89,12 @@ export default function SearchTeacherSets(props) {
       clearInterval(timeoutId);
     };
   }, [isLoading]);
+
+  useEffect(() => {
+    if (resetPageNumber !== "") {
+      setComputedCurrentPage(1);
+    }
+  });
 
   const setGrades = (g_begin, g_end) => {
     if (g_begin && g_end) {
@@ -157,7 +164,7 @@ export default function SearchTeacherSets(props) {
     const sortOrderVal = queryValue.get("sort_order")
       ? queryValue.get("sort_order")
       : "";
-      
+
     const pageNumber = queryValue.get("page")
       ? parseInt(queryValue.get("page"))
       : 1;
@@ -221,6 +228,7 @@ export default function SearchTeacherSets(props) {
         setTotalPages(res.data.total_pages);
         setNoTsResultsFound(res.data.no_results_found_msg);
         setTsSubjects(res.data.tsSubjectsHash);
+        setResetPageNumber(res.data.resetPageNumber);
 
         if (res.data.teacher_sets.length > 0 && res.data.total_count > 10) {
           setDisplayPagination("block");
@@ -228,11 +236,11 @@ export default function SearchTeacherSets(props) {
           setDisplayPagination("none");
         }
 
-        setTimeout(() => {
-          window.scrollTo({ top: 10, behavior: "smooth", })
-        }, 500);
-        
-
+        if (window.pageYOffset > 0) {
+          setTimeout(() => {
+            window.scrollTo({ top: 350, behavior: "smooth" });
+          }, 500);
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -248,7 +256,7 @@ export default function SearchTeacherSets(props) {
     } else {
       searchParams.set("keyword", keyword);
       setSearchParams(searchParams);
-      setComputedCurrentPage(1)
+      setComputedCurrentPage(1);
       searchParams.set("page", 1);
       setSearchParams(searchParams);
     }
@@ -272,7 +280,7 @@ export default function SearchTeacherSets(props) {
     if (event.target.value === "") {
       setKeyWord("");
       searchParams.delete("keyword");
-      searchParams.delete("page")
+      searchParams.delete("page");
       setSearchParams(searchParams);
       getTeacherSets(
         Object.assign(
@@ -287,6 +295,21 @@ export default function SearchTeacherSets(props) {
           selectedFacets
         )
       );
+    }
+  };
+
+  const toResults = (
+    pageCount,
+    tsTotalCount,
+    paginationData,
+    resetpage_number
+  ) => {
+    if (resetpage_number !== "") {
+      return pageCount * resetpage_number;
+    } else {
+      return tsTotalCount < pageCount || tsTotalCount < paginationData
+        ? tsTotalCount
+        : paginationData;
     }
   };
 
@@ -332,14 +355,18 @@ export default function SearchTeacherSets(props) {
     } else if (tsTotalCount >= 1) {
       const pageCount = 10;
       const paginationData = parseInt(computedCurrentPage * pageCount);
+
       const fromResults =
         tsTotalCount < parseInt(paginationData) - 10
           ? 1
           : parseInt(paginationData) + 1 - 10;
-      const toResults =
-        tsTotalCount < pageCount || tsTotalCount < paginationData
-          ? tsTotalCount
-          : paginationData;
+
+      const toresults = toResults(
+        pageCount,
+        tsTotalCount,
+        paginationData,
+        resetPageNumber
+      );
 
       return (
         <Text
@@ -350,7 +377,7 @@ export default function SearchTeacherSets(props) {
           {"Showing " +
             fromResults +
             "-" +
-            toResults +
+            toresults +
             " of " +
             tsTotalCount +
             " results"}
@@ -506,7 +533,7 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams);
     } else {
       setAvailableToggle(true);
-      setComputedCurrentPage(1)
+      setComputedCurrentPage(1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       searchParams.set("availability", ["available"]);
@@ -643,33 +670,33 @@ export default function SearchTeacherSets(props) {
     //console.log(value)
     if (field === "area of study") {
       //searchParams.set("page", 1);
-      searchParams.delete("page")
+      searchParams.delete("page");
       setSearchParams(searchParams);
-      setComputedCurrentPage(1)
+      setComputedCurrentPage(1);
       selectedFacets[field] = value;
     } else if (field === "availability") {
       //searchParams.set("page", 1);
-      searchParams.delete("page")
+      searchParams.delete("page");
       setSearchParams(searchParams);
-      setComputedCurrentPage(1)
+      setComputedCurrentPage(1);
       selectedFacets[field] = value;
     } else if (field === "set type") {
       //searchParams.set("page", 1);
-      searchParams.delete("page")
+      searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
     } else if (field === "language") {
       //searchParams.set("page", 1);
-      searchParams.delete("page")
+      searchParams.delete("page");
       setSearchParams(searchParams);
-      setComputedCurrentPage(1)
+      setComputedCurrentPage(1);
       selectedFacets[field] = value;
     } else if (field === "subjects") {
       //searchParams.set("page", 1);
-      searchParams.delete("page")
+      searchParams.delete("page");
       setSearchParams(searchParams);
-      setComputedCurrentPage(1)
+      setComputedCurrentPage(1);
       selectedFacets[field] = value;
     }
 
@@ -820,22 +847,24 @@ export default function SearchTeacherSets(props) {
       });
     }
 
-    teacherSetArr.map((value, index) => {
-      //console.log(value["grade_begin"])
+    // teacherSetArr.map((value) => {
+    //   //console.log(value["grade_begin"])
 
-      if (value["grade_begin"] !== undefined || value["grade_end"] !== undefined) {
+    //   if (
+    //     value["grade_begin"] !== undefined ||
+    //     value["grade_end"] !== undefined
+    //   ) {
+    //     if (value["grade_begin"] !== undefined) {
+    //       const g_begin = value["label"];
+    //     }
 
-        if (value["grade_begin"] !== undefined) {
-          const g_begin =  value["label"]
-        }
+    //     if (value["grade_end"] !== undefined) {
+    //       const g_end = value["label"];
+    //     }
+    //   }
 
-        if (value["grade_end"] !== undefined) {
-          const g_end =  value["label"]
-        }
-      }
-
-      teacherSetArr.push(value)
-    })
+    //   teacherSetArr.push(value);
+    // });
 
     //console.log(teacherSetArr)
 
@@ -1076,7 +1105,6 @@ export default function SearchTeacherSets(props) {
       contentPrimary={
         <>
           <div style={{ display: mobileSupport() }}>
-            {tagSetsData()}
             <Flex alignItems="baseline">
               {resultsFoundMessage()}
               <Spacer />
