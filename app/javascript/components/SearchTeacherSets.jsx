@@ -238,7 +238,7 @@ export default function SearchTeacherSets(props) {
 
         if (window.pageYOffset > 0) {
           setTimeout(() => {
-            window.scrollTo({ top: 350, behavior: "smooth" });
+            window.scrollTo({ top: 300, behavior: "smooth" });
           }, 500);
         }
       })
