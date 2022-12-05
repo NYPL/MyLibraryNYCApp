@@ -10,6 +10,9 @@ class TeacherSetsController < ApplicationController
   # Called on loading the teacher set list page and when the user selects
   # a facet to filter by.
   def index
+    if storable_location?
+      store_user_location!
+    end
     # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' means gets teacher-set documents from elastic search.
     # teacherset.data.from.elasticsearch.enabled = false means gets teacher-set data from database.
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
