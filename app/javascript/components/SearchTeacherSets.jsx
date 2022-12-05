@@ -661,62 +661,36 @@ export default function SearchTeacherSets(props) {
   };
 
   const tsSelectedFacets = (field, value) => {
-    //console.log(value)
     if (field === "area of study") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
-      if (window.pageYOffset > 0) {
-        setTimeout(() => {
-          window.scrollTo({ top: 300, behavior: "smooth" });
-        }, 500);
-      }
     } else if (field === "availability") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
-      if (window.pageYOffset > 0) {
-        setTimeout(() => {
-          window.scrollTo({ top: 300, behavior: "smooth" });
-        }, 500);
-      }
     } else if (field === "set type") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
-      if (window.pageYOffset > 0) {
-        setTimeout(() => {
-          window.scrollTo({ top: 300, behavior: "smooth" });
-        }, 500);
-      }
     } else if (field === "language") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
-      if (window.pageYOffset > 0) {
-        setTimeout(() => {
-          window.scrollTo({ top: 300, behavior: "smooth" });
-        }, 500);
-      }
     } else if (field === "subjects") {
       //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
-      if (window.pageYOffset > 0) {
-        setTimeout(() => {
-          window.scrollTo({ top: 300, behavior: "smooth" });
-        }, 500);
-      }
     }
 
     if (value.length > 0) {
@@ -1007,6 +981,15 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+
+  const accordionDataScrolltoTop = () => {
+    if (window.pageYOffset > 0) {
+      window.scrollTo({ top: 265, behavior: "smooth" })
+    } else {
+      window.scrollTo({ top: 10, behavior: "smooth" })
+    }
+  }
+
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
 
@@ -1024,6 +1007,7 @@ export default function SearchTeacherSets(props) {
           name={ts.label}
           onChange={tsSelectedFacets.bind(this, ts.label)}
           value={selectedFacets[ts.label]}
+          onClick={accordionDataScrolltoTop}
         >
           {tsItems.map((item, index) => (
             <Checkbox
