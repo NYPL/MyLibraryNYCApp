@@ -54,6 +54,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
         render json: { status: :updated, user: current_user, message: "Your account has been updated." }
       end
     rescue StandardError => e
+      LogWrapper.log('ERROR', {'message' => 'ERRorERRorERRorERRorERRorERRor',
+                             'method' => "#{current_user.alt_email}  ERRorERRorERRorERRorERRor #{current_user.email} ERRorERRorERRorERRorERRor #{e.backtrace}"})
+
       render json: { status: 500, message: e.message }
     end
   end
