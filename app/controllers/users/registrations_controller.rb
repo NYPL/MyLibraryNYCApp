@@ -42,9 +42,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
     begin
       puts "#{current_user.alt_email}"
       puts "#333333333333333333333"
+      LogWrapper.log('INFO', {'message' => '333333333333333333333',
+                             'method' => "#{current_user.alt_email}"})
       current_user.alt_email = user_params["alt_email"].present? ? user_params["alt_email"] : current_user.email
       current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
-      puts "#{current_user.alt_email}"
+      
+      LogWrapper.log('INFO', {'message' => '333333333333333333333',
+                             'method' => "#{current_user.alt_email}  333333333333333333333 #{current_user.email}"})
+
       if current_user.save!
         render json: { status: :updated, user: current_user, message: "Your account has been updated." }
       end
