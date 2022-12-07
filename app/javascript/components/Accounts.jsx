@@ -364,7 +364,7 @@ export default function Accounts() {
                 id="account-details-input"
                 value={altEmail}
                 onChange={handleAltEmail}
-                invalidText="Please enter a valid preferred email address"
+                invalidText="Please either enter a valid email address, or leave this field empty"
                 isInvalid={altEmailIsvalid}
               />
             </FormField>
