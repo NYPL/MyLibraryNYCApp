@@ -976,7 +976,6 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-
   const accordionDataScrolltoTop = () => {
     if (window.pageYOffset > 0) {
       window.scrollTo({ top: 265, behavior: "smooth" })
@@ -988,10 +987,6 @@ export default function SearchTeacherSets(props) {
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
     
-    // if (tsItems.length < 1) {
-     
-    // }
-
     if (tsItems.length >= 1) {
 
       if (selectedFacets[ts.label] === undefined) {
@@ -1029,22 +1024,22 @@ export default function SearchTeacherSets(props) {
         </CheckboxGroup>
       );
     } else {
-
-      if (selectedFacets[ts.label]) {
-        if (ts.label == "subjects") {
-          searchParams.delete("subjects");
-          setSearchParams(searchParams);
-        } else if (ts.label == "area of study") {
-          searchParams.delete("area of study");
-          setSearchParams(searchParams);
-        } else if (ts.label == "language") {
-          searchParams.delete("language");
-          setSearchParams(searchParams);
-        } else if (ts.label == "set type") {
-          searchParams.delete("set type");
-          setSearchParams(searchParams);
-        }
-      }
+      console.log(ts.label)
+      // if (selectedFacets[ts.label]) {
+      //   if (ts.label === "subjects") {
+      //     searchParams.delete("subjects");
+      //     setSearchParams(searchParams);
+      //   } else if (ts.label === "area of study") {
+      //     searchParams.delete("area of study");
+      //     setSearchParams(searchParams);
+      //   } else if (ts.label === "language") {
+      //     searchParams.delete("language");
+      //     setSearchParams(searchParams);
+      //   } else if (ts.label === "set type") {
+      //     searchParams.delete("set type");
+      //     setSearchParams(searchParams);
+      //   }
+      // }
 
       // console.log(selectedFacets)
       // if (selectedFacets[ts.label] == "subjects") {
@@ -1140,7 +1135,6 @@ export default function SearchTeacherSets(props) {
       }
       contentPrimary={
         <>
-          {tagSetsData()}
           <div style={{ display: mobileSupport() }}>
             <Flex alignItems="baseline">
               {resultsFoundMessage()}
