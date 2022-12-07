@@ -40,24 +40,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
     # Here Updates current user alt_email and schooid.
     # If Alt Email is not present use current user email
     begin
-      puts "#{current_user.alt_email}"
-      puts "#333333333333333333333"
-      LogWrapper.log('INFO', {'message' => '333333333333333333333',
-                             'method' => "#{current_user.alt_email}"})
       current_user.alt_email = user_params["alt_email"].present? ? user_params["alt_email"] : current_user.email
       current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
       
-      LogWrapper.log('INFO', {'message' => '333333333333333333333',
-                             'method' => "#{current_user.alt_email}  333333333333333333333 #{current_user.email}"})
-
       if current_user.save!
         render json: { status: :updated, user: current_user, message: "Your account has been updated." }
       end
     rescue StandardError => e
-      LogWrapper.log('ERROR', {'message' => 'ERRorERRorERRorERRorERRorERRor',
-                             'method' => "#{current_user.alt_email}  ERRorERRorERRorERRorERRor #{current_user.email} ERRorERRorERRorERRorERRor #{e.backtrace}"})
-
-      render json: { status: 500, message: e.message }
+       if e.message == "Validation failed: Alt email has already been taken"
+        render json: { status: 404, message: "Preferred email address has already been taken" }
+      else
+        render json: { status: 500, message: e.message }
+      end
     end
   end
 
