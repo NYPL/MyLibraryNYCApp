@@ -30,7 +30,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  ##
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
     LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
