@@ -662,31 +662,26 @@ export default function SearchTeacherSets(props) {
 
   const tsSelectedFacets = (field, value) => {
     if (field === "area of study") {
-      //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
     } else if (field === "availability") {
-      //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
     } else if (field === "set type") {
-      //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
     } else if (field === "language") {
-      //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
       selectedFacets[field] = value;
     } else if (field === "subjects") {
-      //searchParams.set("page", 1);
       searchParams.delete("page");
       setSearchParams(searchParams);
       setComputedCurrentPage(1);
@@ -992,12 +987,17 @@ export default function SearchTeacherSets(props) {
 
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
+    
+    // if (tsItems.length < 1) {
+     
+    // }
 
     if (tsItems.length >= 1) {
+
       if (selectedFacets[ts.label] === undefined) {
         selectedFacets[ts.label] = [];
       }
-
+      
       return (
         <CheckboxGroup
           isFullWidth
@@ -1029,6 +1029,39 @@ export default function SearchTeacherSets(props) {
         </CheckboxGroup>
       );
     } else {
+
+      if (selectedFacets[ts.label]) {
+        if (ts.label == "subjects") {
+          searchParams.delete("subjects");
+          setSearchParams(searchParams);
+        } else if (ts.label == "area of study") {
+          searchParams.delete("area of study");
+          setSearchParams(searchParams);
+        } else if (ts.label == "language") {
+          searchParams.delete("language");
+          setSearchParams(searchParams);
+        } else if (ts.label == "set type") {
+          searchParams.delete("set type");
+          setSearchParams(searchParams);
+        }
+      }
+
+      // console.log(selectedFacets)
+      // if (selectedFacets[ts.label] == "subjects") {
+        //searchParams.delete("subjects");
+        //setSearchParams(searchParams);
+      // } else if (selectedFacets[ts.label] == "area of study") {
+
+      //   searchParams.delete("area of study");
+      //   setSearchParams(searchParams);
+      // } else if (selectedFacets[ts.label] == "language") {
+      //   searchParams.delete("language");
+      //   setSearchParams(searchParams);
+      // } else if (selectedFacets[ts.label] == "set type") {
+      //   searchParams.delete("set type");
+      //   setSearchParams(searchParams);
+      // }
+
       return (
         <Text isItalic noSpace size="caption" id="accordion-no-results-found">
           No options available
@@ -1107,6 +1140,7 @@ export default function SearchTeacherSets(props) {
       }
       contentPrimary={
         <>
+          {tagSetsData()}
           <div style={{ display: mobileSupport() }}>
             <Flex alignItems="baseline">
               {resultsFoundMessage()}

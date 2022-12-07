@@ -42,11 +42,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
     begin
       current_user.alt_email = user_params["alt_email"].present? ? user_params["alt_email"] : current_user.email
       current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
+      
       if current_user.save!
         render json: { status: :updated, user: current_user, message: "Your account has been updated." }
       end
     rescue StandardError => e
-      render json: { status: 500, message: e.message }
+       if e.message == "Validation failed: Alt email has already been taken"
+        render json: { status: 404, message: "Preferred email address has already been taken" }
+      else
+        render json: { status: 500, message: e.message }
+      end
     end
   end
 
