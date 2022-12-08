@@ -3,7 +3,7 @@ MyLibraryNYC
 
 My Library NYC Mobile Pilot
 
-For a description of what this is, check the [wiki](https://confluence.nypl.org/display/WT/My+Library+NYC).
+For a description, check the [wiki](https://confluence.nypl.org/display/WT/My+Library+NYC).
 
 
 Data
@@ -318,7 +318,7 @@ Note: Rails, Ruby and Node installation is required to run project in local.
 
  Step1: Clone git project https://github.com/NYPL/MyLibraryNYCApp.git
 
- Step2: Go to project path than run "bundle install"
+ Step2: Go to project path then run "bundle install"
 
  Step3: Configure aws credentials in local
         Go to  aws-configure file and update credentials: ~/.aws/credentials
