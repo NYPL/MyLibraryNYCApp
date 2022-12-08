@@ -308,11 +308,12 @@ Example1: pg_restore --verbose --host localhost --dbname qa_new_name1 qa-new_nam
 Example2: psql --host localhost --dbname latest_qa1 -f qa-new_name.out
 
 
-``` 
-
 ```
+
 MylibaryNYC application local setup
 ===================================
+
+```
 Note: Rails, Ruby and Node installation is required to create project setup.
 
  Step1: Clone git project https://github.com/NYPL/MyLibraryNYCApp.git
@@ -397,10 +398,9 @@ Note: Rails, Ruby and Node installation is required to create project setup.
         end
 
         create_teacherset_document_in_es
-```
 
 Setp5: Run below commands to start server
         
         npm i channels
         RAILS_ENV=local rails s
-
+```
