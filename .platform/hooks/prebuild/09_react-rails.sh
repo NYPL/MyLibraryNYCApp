@@ -19,11 +19,5 @@ YARN=$(which yarn)
 
 $YARN
 
-08_install_weback:
-command: "sudo npm install --save-dev webpack"
-09_install_babel:
-command: "sudo npm install --save-dev babel-loader"
-10_webpack:
-command: "bundle exec rails webpacker:install"
-11_asset_precompile:
-command: "bin/webpack"
+#webpack install
+/usr/bin/yum -y install webpack
