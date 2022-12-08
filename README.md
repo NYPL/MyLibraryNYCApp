@@ -314,7 +314,7 @@ MylibaryNYC application local setup
 ===================================
 
 ```
-Note: Rails, Ruby and Node installation is required to create project setup.
+Note: Rails, Ruby and Node installation is required to run project in local.
 
  Step1: Clone git project https://github.com/NYPL/MyLibraryNYCApp.git
 
