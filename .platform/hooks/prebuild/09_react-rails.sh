@@ -18,5 +18,3 @@ echo "Installing Yarn"
 YARN=$(which yarn)
 
 $YARN
-
-		
