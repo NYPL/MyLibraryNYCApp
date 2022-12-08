@@ -1,3 +1,0 @@
-commands:
-  01_install_webpack:
-    command: "bundle exec rails webpacker:install"
