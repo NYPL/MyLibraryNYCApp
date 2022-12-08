@@ -40,7 +40,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     # Here Updates current user alt_email and schooid.
     # If Alt Email is not present use current user email
     begin
-      current_user.alt_email = user_params["alt_email"].present? ? user_params["alt_email"] : current_user.email
+      current_user.alt_email = user_params["alt_email"].present? ? user_params["alt_email"] : ""
       current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
       
       if current_user.save!
