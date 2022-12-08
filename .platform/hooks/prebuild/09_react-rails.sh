@@ -18,6 +18,3 @@ echo "Installing Yarn"
 YARN=$(which yarn)
 
 $YARN
-
-#webpack install
-/usr/bin/yum -y install webpack
