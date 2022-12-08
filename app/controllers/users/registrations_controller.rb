@@ -67,7 +67,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def error_msg_hash(user)
     error_msg_hash = {}
     if user.errors.messages[:alt_email].present?
-      error_msg_hash[:alt_email] = user.errors.messages[:alt_email] #['Alt Email '.concat(alt_email)]
+      if user.errors.messages[:alt_email][0] == "has already been taken"
+        error_msg_hash[:alt_email] = ["Preferred email address has already been taken"] #['Alt Email '.concat(alt_email)]
+      else
+        error_msg_hash[:alt_email] = user.errors.messages[:alt_email]
+      end
     end
 
     if user.errors.messages[:email].present?
