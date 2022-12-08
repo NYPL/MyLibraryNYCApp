@@ -3,7 +3,7 @@ MyLibraryNYC
 
 My Library NYC Mobile Pilot
 
-For a description of what this is, check the [wiki](https://confluence.nypl.org/display/WT/My+Library+NYC).
+For a description, check the [wiki](https://confluence.nypl.org/display/WT/My+Library+NYC).
 
 
 Data
