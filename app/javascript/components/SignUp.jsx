@@ -197,7 +197,7 @@ export default function SignUp(props) {
 
   const validateAltEmailDomain = (alt_email) => {
     if (alt_email && !validator.isEmail(alt_email)) {
-      let msg = "Alternate email address is invalid";
+      let msg = "Preferred email address is invalid";
       setAltEmailErrorMsg(msg);
       setAltEmailIsvalid(true);
       setIsDisabled(true);
@@ -530,9 +530,9 @@ export default function SignUp(props) {
             </FormField>
             <FormField>
               <TextInput
-                id="sign-up-alt-email"
+                id="sign-up-preferred-email"
                 showOptReqLabel={true}
-                labelText="Alternate email address"
+                labelText="Preferred email address"
                 value={alt_email}
                 invalidText={errorAltEmailMsg}
                 isInvalid={altEmailIsvalid}
