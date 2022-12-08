@@ -342,7 +342,7 @@ Note: Rails, Ruby and Node installation is required to create project setup.
         psql -d mylibnyc_local
         psql --host localhost --dbname mylibnyc_local -f qa-new_name.out
 
-        Rub below command in project path to create databse tables
+        Rub below command in project path to create database tables
 
         RAILS_ENV=local rake db:create
         RAILS_ENV=local rake db:migrate
