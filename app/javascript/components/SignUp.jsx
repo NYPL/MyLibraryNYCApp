@@ -525,7 +525,7 @@ export default function SignUp(props) {
                 onChange={handleEmail.bind(this, "email")}
                 invalidText={errorEmailMsg}
                 isInvalid={emailIsInvalid}
-                helperText="Email not formatted correctly. Email address must end with @schools.nyc.gov or a participating school domain."
+                helperText="Email address must end with @schools.nyc.gov or a participating school domain."
               />
             </FormField>
             <FormField>
