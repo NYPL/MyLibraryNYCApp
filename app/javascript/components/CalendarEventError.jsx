@@ -13,7 +13,6 @@ const CalendarEventError = () => {
     axios
       .get("/home/calendar_event")
       .then((res) => {
-        console.log(res.data.calendar_event);
         setMlnCalendarEvent(res.data.calendar_event);
       })
       .catch(function (error) {
