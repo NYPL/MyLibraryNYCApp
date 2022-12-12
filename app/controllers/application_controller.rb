@@ -30,7 +30,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  ##
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
     LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
@@ -140,6 +139,31 @@ class ApplicationController < ActionController::Base
         originating_location = "contacts"
       elsif params["controller"] == "books" && params["action"] == "show" && params["id"].present?
         originating_location = "book_details/#{params["id"]}"
+      elsif params["controller"] == "teacher_sets" && params["action"] == "index"
+        query_params = request.query_parameters
+        if params["grade_begin"] == "-1" && params["grade_end"] == "12" && params["grade_begin"] == "-1" && params["keyword"] == "" && params["sort_order"] == ""
+          query_params.delete("grade_begin")
+          query_params.delete("grade_end")
+          query_params.delete("keyword")
+          query_params.delete("sort_order")
+        end
+        if query_params['language']
+          query_params['language'] = query_params['language'].join
+        end
+
+        if query_params['area of study']
+          query_params['area of study'] = query_params['area of study'].join
+        end
+
+        if query_params['set type']
+          query_params['set type'] = query_params['set type'].join
+        end
+
+        if query_params['subjects']
+          query_params['subjects'] = query_params['subjects'].join(",")
+        end
+
+        originating_location = "teacher_set_data?#{query_params.to_query}"
       else
         originating_location = "teacher_set_data"
       end

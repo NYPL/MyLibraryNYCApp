@@ -18,6 +18,7 @@ MyLibraryNYC::Application.routes.draw do
   get 'home/calendar_event', to: 'home#calendar_event'
   get 'home/newsletter_confirmation_msg', to: 'home#newsletter_confirmation_msg'
   get '/menu_of_services/:filename', to: 'home#menu_of_services'
+  get '*', :to => 'settings#page_not_found'
 
   resources :teacher_sets do
     resources :holds
@@ -26,6 +27,8 @@ MyLibraryNYC::Application.routes.draw do
   resources :schools, :only => [:index, :create]
   resources :faqs
 
+  # Active-Admin logout redirect to login page.
+  match '/users/logout' => 'settings#activeadmin_logout_redirect', via: [:get, :delete]
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
   match 'teacher_set_details/:id' => 'teacher_sets#teacher_set_details', via: [:get]
   match 'book_details/:id' => 'books#book_details', via: [:get]

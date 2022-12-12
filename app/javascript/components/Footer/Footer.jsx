@@ -14,7 +14,7 @@ function Footer() {
   const footerLinks = () => {
     return (
       <>
-        <Link
+        <a
           id="nypl-footer-logo-link"
           href="http://nypl.org"
           attributes={{ target: "_blank" }}
@@ -25,7 +25,7 @@ function Footer() {
             name="nyplFullBlack"
             size="small"
           />
-        </Link>
+        </a>
 
         <Link
           id="brooklyn-foooter-logo-link"

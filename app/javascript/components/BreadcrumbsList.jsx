@@ -2,26 +2,25 @@ import React from "react";
 
 const BreadcrumbsList = (levelString) => {
   switch (levelString) {
-    case 'participating-schools':
-      return 'Participating schools';
-    case 'faq':
-      return 'Frequently Asked Questions';
-    case 'critical':
+    case "participating-schools":
+      return "Participating schools";
+    case "faq":
+      return "Frequently Asked Questions";
+    case "critical":
       return 2;
-    case 'error':
+    case "error":
       return 3;
-    case 'warning':
+    case "warning":
       return 4;
-    case 'notice':
+    case "notice":
       return 5;
-    case 'info':
+    case "info":
       return 6;
-    case 'debug':
+    case "debug":
       return 7;
     default:
-      return 'n/a';
+      return "n/a";
   }
 };
-
 
 export default BreadcrumbsList;

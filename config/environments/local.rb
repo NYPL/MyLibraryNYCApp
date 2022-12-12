@@ -13,7 +13,8 @@ MyLibraryNYC::Application.configure do
   config.whiny_nils = true
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = false
+
   config.action_controller.perform_caching = false
 
   config.action_mailer.raise_delivery_errors = true
@@ -53,4 +54,8 @@ MyLibraryNYC::Application.configure do
   config.eager_load = false
 
   config.active_job.queue_adapter = :delayed_job
+
+  config.exceptions_app = lambda do |env|
+    ExceptionsController.action(:render_error).call(env)
+  end
 end

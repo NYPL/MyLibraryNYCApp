@@ -3,6 +3,9 @@
 class SettingsController < ApplicationController
 
   def signin
+    if params["settingType"] == "account"
+      store_location_for(:user, "account_details")
+    end
   end
 
   def signup
@@ -15,6 +18,19 @@ class SettingsController < ApplicationController
     if ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.downcase == "true" && ENV['MAINTENANCE_BANNER_TEXT'].present?
       render json: { bannerText: ENV['MAINTENANCE_BANNER_TEXT'].html_safe, bannerTextFound: true }
     end
+  end
+
+  def page_not_found
+  end
+
+
+  def activeadmin_logout_redirect
+    if Devise.sign_out_all_scopes
+      sign_out
+      redirect_to "/admin/login"
+    else
+      redirect_to "/admin/dashboard"
+    end 
   end
 
   def index

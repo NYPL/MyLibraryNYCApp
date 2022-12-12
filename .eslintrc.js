@@ -21,12 +21,15 @@ module.exports = {
     "plugins": [
         "react",
         "@typescript-eslint",
+        "prettier"
     ],
     "rules": {
         // disabling this bc it is checked by typescript so it is
         // redundant and doesn't function properly
         "react/prop-types": 0,
-        "@typescript-eslint/rule-name": "error",
+        "no-unused-vars": "off",
+        "prettier/prettier": "error",
+        "@typescript-eslint/no-empty-interface": 0,
         "@typescript-eslint/no-use-before-define": [
           "error",
           { functions: false, variables: false },
@@ -41,6 +44,12 @@ module.exports = {
             argsIgnorePattern: "^_.*",
             varsIgnorePattern: "^jsx$|^React$|^_.*",
             ignoreRestSiblings: true,
+          },
+        ],
+        "react/no-unescaped-entities": [
+          "error",
+          {
+            forbid: [">", "}"],
           },
         ],
         // disable this rule because it is unnecessarily strict for TS
