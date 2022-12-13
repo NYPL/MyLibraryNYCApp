@@ -1024,22 +1024,7 @@ export default function SearchTeacherSets(props) {
         </CheckboxGroup>
       );
     } else {
-      console.log(ts.label)
-      // if (selectedFacets[ts.label]) {
-      //   if (ts.label === "subjects") {
-      //     searchParams.delete("subjects");
-      //     setSearchParams(searchParams);
-      //   } else if (ts.label === "area of study") {
-      //     searchParams.delete("area of study");
-      //     setSearchParams(searchParams);
-      //   } else if (ts.label === "language") {
-      //     searchParams.delete("language");
-      //     setSearchParams(searchParams);
-      //   } else if (ts.label === "set type") {
-      //     searchParams.delete("set type");
-      //     setSearchParams(searchParams);
-      //   }
-      // }
+      
 
       // console.log(selectedFacets)
       // if (selectedFacets[ts.label] == "subjects") {
@@ -1100,7 +1085,7 @@ export default function SearchTeacherSets(props) {
     return isLargerThanMedium ? "block" : "none";
   };
 
-  //{tagSetsData()}
+  // {tagSetsData()}
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
