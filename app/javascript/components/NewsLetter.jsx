@@ -65,7 +65,6 @@ export default function NewsLetter() {
             noSpace
             textAlign="center"
           >
-            {" "}
             Thank you for signing up to the MyLibraryNYC Newsletter!
           </Heading>
           <Text noSpace>
