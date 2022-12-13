@@ -1120,7 +1120,6 @@ export default function SearchTeacherSets(props) {
       }
       contentPrimary={
         <>
-          {tagSetsData()}
           <div style={{ display: mobileSupport() }}>
             <Flex alignItems="baseline">
               {resultsFoundMessage()}
