@@ -45,6 +45,7 @@ export default function ParticipatingSchools(props) {
       if (school_anchors.includes(anchor)) {
         return (
           <Link
+            id="ps-school-link-id"
             marginRight="xs"
             style={{ textDecoration: "none" }}
             fontWeight="bold"
@@ -109,7 +110,7 @@ export default function ParticipatingSchools(props) {
             >
               <li
                 id={"ps-name-" + data["alphabet_anchor"]}
-                key={i}
+                key={"ps-list-"+ i}
                 className="schoolList alphabet_anchor"
               >
                 <a
@@ -135,8 +136,9 @@ export default function ParticipatingSchools(props) {
             </List>
             <Button
               id="ps-scroll-to-top"
-              buttonType="link"
-              className="backToTop"
+              buttonType="text"
+              className="backToTop psBackToTopButton"
+              marginLeft="s"
               onClick={() =>
                 window.scrollTo({
                   top: 10,
