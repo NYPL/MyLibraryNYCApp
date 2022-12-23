@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import HaveQuestions from "./../HaveQuestions";
 
 import {
   TemplateAppContainer,
@@ -10,9 +10,11 @@ import {
   Link,
 } from "@nypl/design-system-react-components";
 
-function Contacts() {
+function Contact() {
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (process.env.NODE_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   return (
@@ -116,7 +118,7 @@ function Contacts() {
             ]}
           />
           <Heading
-            id="my-library-nyc-questions"
+            id="my-library-nyc-questions-secondary"
             level="two"
             marginTop="xl"
             size="secondary"
@@ -126,7 +128,7 @@ function Contacts() {
             Do you have questions about MyLibraryNYC or how to join?
           </Text>
           <Heading
-            id="my-library-nyc-questions"
+            id="my-library-nyc-questions-tertiary"
             level="three"
             size="tertiary"
             text="Find Your School"
@@ -188,4 +190,4 @@ function Contacts() {
   );
 }
 
-export default Contacts;
+export default Contact;
