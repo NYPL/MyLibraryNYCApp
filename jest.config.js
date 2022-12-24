@@ -19,7 +19,7 @@ module.exports = {
     ],
     moduleNameMapper: {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/app/javascript/components/__tests__/fileMock.ts",
+        "<rootDir>/app/javascript/components/Home/Home.test.tsx",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
     }
 }

@@ -4,7 +4,7 @@ import {
   Heading,
   Hero,
 } from "@nypl/design-system-react-components";
-//import "../styles/application.scss";
+
 
 export default class AppBreadcrumbs extends Component {
   constructor(props) {

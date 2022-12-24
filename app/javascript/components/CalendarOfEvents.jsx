@@ -21,7 +21,6 @@ function CalendarOfEvents() {
           "Content-Type": "application/json",
           "X-CSRF-Token": document
             .querySelector("meta[name='csrf-token']")
-            .getAttribute("content"),
         },
       })
       .then((res) => {
