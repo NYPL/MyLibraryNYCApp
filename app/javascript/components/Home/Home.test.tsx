@@ -12,6 +12,12 @@ describe("Home ", () => {
     // render the component on virtual dom
     const { container } = render(<Router><Home /></Router>,);
     //select the elements you want to interact with
+
+    const JoiningMln = screen.getByText("Welcome To MyLibraryNYC");
+    expect(JoiningMln).toBeInTheDocument();
+
+    const searchForTs = screen.getByText("Search For Teacher Sets");
+    expect(searchForTs).toBeInTheDocument();
     
   });
 });
