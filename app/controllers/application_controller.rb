@@ -11,6 +11,13 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
+
+  def authenticate_admin_user!
+    if !current_admin_user.present?
+      #check for current_admin_user if not then redirect to login
+      redirect_to "/admin/login"
+    end
+  end
   
   def append_info_to_payload(payload)
     super
