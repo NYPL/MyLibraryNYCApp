@@ -353,9 +353,9 @@ export default function Accounts() {
                 <Label id="doe-email-address-text">
                   Your DOE Email Address
                 </Label>
-                <Text id="doe-email-address-id" size="caption" marginTop="xs">
+                {email && <Text id="doe-email-address-id" size="caption" marginTop="xs">
                   {email}
-                </Text>
+                </Text>}
               </Stack>
             </FormField>
             <FormField>

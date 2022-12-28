@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_admin_user!
     if !current_admin_user.present?
-      #check for current_admin_user if not then redirect to login
+      # check for current_admin_user if not then redirect to login
       redirect_to "/admin/login"
     end
   end

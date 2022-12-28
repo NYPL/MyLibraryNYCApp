@@ -5564,7 +5564,7 @@
     "axios-mock-adapter": {
       "version": "1.7.1",
       "resolved": "https://registry.npmjs.org/axios-mock-adapter/-/axios-mock-adapter-1.7.1.tgz",
-      "integrity": "sha1-Mli4x3blbNqUdS1VAkAeFERLrb4=",
+      "integrity": "sha512-cg3rdaAvXbxmnnRsBxfhnf+qO4tbCqULK7Nwje/PeqYTuUGlotyFNJfys4XWtlMHOCMzmaL/YfcLNJg+OM6bxQ==",
       "dev": true,
       "requires": {
         "deep-equal": "^1.0.1"

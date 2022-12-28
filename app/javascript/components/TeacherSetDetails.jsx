@@ -107,20 +107,40 @@ export default function TeacherSetDetails(props) {
   };
 
   const TeacherSetDescription = () => {
-    return (
-      <Text noSpace marginTop="xs" id="ts-page-desc">
-        {teacherSet["description"]}
-      </Text>
-    );
+    if (teacherSet["description"]) {
+      return (
+        <Text noSpace marginTop="xs" id="ts-page-desc">
+          {teacherSet["description"]}
+        </Text>
+      );
+    } else {
+      return (<></>)
+    }
   };
+
+  const ACopies = () => {
+    if (teacherSet["available_copies"] !== undefined) {
+      return teacherSet["available_copies"]
+    } else {
+      return ""
+    }
+  }
+
+  const TotalCopies = () => {
+    if (teacherSet["total_copies"] !== undefined) {
+      return teacherSet["total_copies"]
+    } else {
+      return ""
+    }
+  }
 
   const AvailableCopies = () => {
     return (
       <div color="var(--nypl-colors-ui-black)">
-        {teacherSet["available_copies"]} of {teacherSet["total_copies"]}{" "}
+        {ACopies()} of {TotalCopies()}{" "}
         Available
       </div>
-    );
+    );          
   };
 
   const BooksCount = () => {
@@ -143,6 +163,7 @@ export default function TeacherSetDetails(props) {
             onClick={() => window.scrollTo(0, 0)}
             id={"ts-books-" + i}
             to={"/book_details/" + data.id}
+            key={"ts-books-key-" + i.toString()}
           >
             {BookImage(data)}
           </ReactRouterLink>
@@ -207,7 +228,7 @@ export default function TeacherSetDetails(props) {
   const TeacherSetNotesContent = () => {
     return teacherSetNotes.map((note, i) => {
       return (
-        <div key={i} id={"ts-notes-content-" + i}>
+        <div id={"ts-notes-content-" + i}>
           {note.content}
         </div>
       );
@@ -432,6 +453,32 @@ export default function TeacherSetDetails(props) {
     }
   };
 
+  const teacherSetListDetails = (teacherSet) => {
+    return <List id="ts-list-details" type="dl" title="Details" marginTop="l" key="ts-list-details-key">
+      <dt id="ts-suggested-grade-range-text">Suggested Grade Range</dt>
+      <dd id="ts-page-suitabilities">
+        {teacherSet.suitabilities_string}
+      </dd>
+
+      <dt id="ts-page-primary-language-text">Primary Language</dt>
+      <dd id="ts-page-primary-language">{teacherSet.primary_language}</dd>
+
+      <dt id="ts-page-set-type-text">Type</dt>
+      <dd id="ts-page-set-type">{teacherSet.set_type}</dd>
+
+      <dt id="ts-page-physical-desc-text">Physical Description</dt>
+      <dd id="ts-page-physical-desc">
+        {teacherSet.physical_description}
+      </dd>
+
+      <dt id="ts-page-notes-content-text">Notes</dt>
+      <dd id="ts-page-notes-content">{TeacherSetNotesContent()}</dd>
+
+      <dt id="ts-page-call-number-text">Call Number</dt>
+      <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
+    </List>
+  }
+
   const mobileTeacherSetOrderButton = () => {
     if (!isLargerThanMobile) {
       if (teacherSet && teacherSet.available_copies <= 0) {
@@ -613,30 +660,7 @@ export default function TeacherSetDetails(props) {
           />
           {TeacherSetDescription()}
           {displayTeacherSetBooks()}
-
-          <List id="ts-list-details" type="dl" title="Details" marginTop="l">
-            <dt id="ts-suggested-grade-range-text">Suggested Grade Range</dt>
-            <dd id="ts-page-suitabilities">
-              {teacherSet.suitabilities_string}
-            </dd>
-
-            <dt id="ts-page-primary-language-text">Primary Language</dt>
-            <dd id="ts-page-primary-language">{teacherSet.primary_language}</dd>
-
-            <dt id="ts-page-set-type-text">Type</dt>
-            <dd id="ts-page-set-type">{teacherSet.set_type}</dd>
-
-            <dt id="ts-page-physical-desc-text">Physical Description</dt>
-            <dd id="ts-page-physical-desc">
-              {teacherSet.physical_description}
-            </dd>
-
-            <dt id="ts-page-notes-content-text">Notes</dt>
-            <dd id="ts-page-notes-content">{TeacherSetNotesContent()}</dd>
-
-            <dt id="ts-page-call-number-text">Call Number</dt>
-            <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
-          </List>
+          {teacherSetListDetails(teacherSet)}
           <Link
             href={legacyDetailUrl()}
             id="ts-page-details_url"

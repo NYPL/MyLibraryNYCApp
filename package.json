@@ -7,7 +7,7 @@
     "@testing-library/react": "^12.1.5",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
-    "axios-mock-adapter": "1.7.1",
+    "axios-mock-adapter": "^1.7.1",
     "babel-core": "^7.0.0-bridge.0",
     "breakpoint-sass": "^2.7.1",
     "chai": "3.5.0",

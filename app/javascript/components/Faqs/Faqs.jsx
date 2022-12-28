@@ -10,6 +10,7 @@ import {
 import HTMLReactParser from "html-react-parser";
 
 export default function Faqs(props) {
+  
   const [faqs, setFaqs] = useState([]);
 
   useEffect(() => {

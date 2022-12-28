@@ -76,9 +76,10 @@ export default function TeacherSetOrder() {
             id="ts-cancel-order-button"
             labelText="Reason for cancelling order (optional)"
             type="textarea"
-            value={comment}
+            defaultValue={comment}
             showLabel
             showRequiredLabel={false}
+            textInputType="default"
             onChange={handleCancelComment}
           />
           <Label
