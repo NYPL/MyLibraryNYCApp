@@ -156,18 +156,16 @@ export default function TeacherSetDetails(props) {
   };
 
   const TeacherSetBooks = () => {
-    return books.map((data, i) => {
+    return books.map((data, index) => {
       return (
-        <>
-          <ReactRouterLink
-            onClick={() => window.scrollTo(0, 0)}
-            id={"ts-books-" + i}
-            to={"/book_details/" + data.id}
-            key={"ts-books-key-" + i.toString()}
-          >
-            {BookImage(data)}
-          </ReactRouterLink>
-        </>
+        <ReactRouterLink
+          onClick={() => window.scrollTo(0, 0)}
+          id={"ts-books-" + index}
+          key={"ts-books-key-" + index}
+          to={"/book_details/" + data.id}
+        >
+          {BookImage(data)}
+        </ReactRouterLink>
       );
     });
   };
@@ -228,7 +226,7 @@ export default function TeacherSetDetails(props) {
   const TeacherSetNotesContent = () => {
     return teacherSetNotes.map((note, i) => {
       return (
-        <div id={"ts-notes-content-" + i}>
+        <div id={"ts-notes-content-" + i} key={"ts-notes-content-key-" + i}>
           {note.content}
         </div>
       );
@@ -304,7 +302,7 @@ export default function TeacherSetDetails(props) {
               >
                 {allowedQuantities.map((item, i) => {
                   return (
-                    <option id={"ts-quantity-" + i} key={i} value={item}>
+                    <option id={"ts-quantity-" + i} key={"ts-quantity-key-" + i} value={item}>
                       {item}
                     </option>
                   );
