@@ -41,10 +41,12 @@ export default function ParticipatingSchools(props) {
       return school["alphabet_anchor"];
     });
 
-    return anchor_tags.map((anchor) => {
+    return anchor_tags.map((anchor, index) => {
       if (school_anchors.includes(anchor)) {
         return (
           <Link
+            id={"ps-school-link-id-" + index}
+            key={"ps-school-link-key-" + index}
             marginRight="xs"
             style={{ textDecoration: "none" }}
             fontWeight="bold"
@@ -57,7 +59,8 @@ export default function ParticipatingSchools(props) {
       } else {
         if (anchor !== "#") {
           return (
-            <a
+            <span
+              key={"ps-school-link-key-" + index}
               style={{
                 textDecoration: "none",
                 fontWeight: "bold",
@@ -66,7 +69,7 @@ export default function ParticipatingSchools(props) {
               }}
             >
               {anchor}
-            </a>
+            </span>
           );
         }
       }
@@ -104,16 +107,18 @@ export default function ParticipatingSchools(props) {
         return (
           <>
             <List
+              key={"participating-schools-list-key-" + data["alphabet_anchor"]}
               id={"participating-schools-list-" + data["alphabet_anchor"]}
               noStyling
             >
               <li
                 id={"ps-name-" + data["alphabet_anchor"]}
-                key={i}
+                key={"ps-name-key-" + data["alphabet_anchor"]}
                 className="schoolList alphabet_anchor"
               >
                 <a
                   id={"ps-name-link-" + data["alphabet_anchor"]}
+                  key={"ps-name-link-key" + data["alphabet_anchor"]}
                   className="alphabet_anchor"
                   name={data["alphabet_anchor"]}
                 >
@@ -126,7 +131,7 @@ export default function ParticipatingSchools(props) {
                 <li
                   fontWeight="heading.callout"
                   id={"ps-name-" + data["alphabet_anchor"] + "-" + index}
-                  key={index}
+                  key={"ps-name-" + data["alphabet_anchor"] + "-key-" + index}
                 >
                   {school}
                   <br />
@@ -135,8 +140,10 @@ export default function ParticipatingSchools(props) {
             </List>
             <Button
               id="ps-scroll-to-top"
-              buttonType="link"
-              className="backToTop"
+              key={"ps-scroll-to-top-" + i}
+              buttonType="text"
+              className="backToTop backToTopButton"
+              marginLeft="s"
               onClick={() =>
                 window.scrollTo({
                   top: 10,

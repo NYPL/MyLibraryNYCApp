@@ -39,8 +39,8 @@ export default function TeacherSetOrderDetails(props) {
           <Card
             id="book-page-ts-card-details"
             layout="row"
-            imageAlt="Alt text"
-            aspectRatio="square"
+            imagealt="Alt text"
+            aspectratio="square"
             size="xxsmall"
           >
             <CardHeading level="four" id="ts-order-details">
@@ -87,6 +87,7 @@ export default function TeacherSetOrderDetails(props) {
       <List
         marginTop="l"
         id="order-confirmation-list-details"
+        key="order-confirmation-list-details-key"
         title="Order Details"
         type="dl"
       >

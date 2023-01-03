@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions";
-import SignedInMsg from "./SignedInMsg";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import HaveQuestions from "./../HaveQuestions";
+import SignedInMsg from "./../SignedInMsg";
 import axios from "axios";
 import {
   Accordion,
@@ -10,10 +10,14 @@ import {
 import HTMLReactParser from "html-react-parser";
 
 export default function Faqs(props) {
+  
   const [faqs, setFaqs] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (process.env.NODE_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
+
     axios
       .get("/faqs/show")
       .then((res) => {

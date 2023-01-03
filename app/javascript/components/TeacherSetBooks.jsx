@@ -250,6 +250,7 @@ export default function TeacherSetBooks() {
 
           <List
             id="book-page-list-details"
+            key="book-page-list-details-key"
             type="dl"
             title="Details"
             marginTop="l"
