@@ -1,6 +1,6 @@
 {
   // see https://www.typescriptlang.org/tsconfig to better understand tsconfigs
-  "include": ["src", "types", "tsd.d.ts"],
+  "include": ["src", "types", "tsd.d.ts", "<rootDir>/jest.setup.js"],
   "exclude": ["node_modules", "lib"],
   "compilerOptions": {
     "module": "esnext",

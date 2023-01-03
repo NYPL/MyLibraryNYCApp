@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import App from "../components/App";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import ReactOnRails from 'react-on-rails';
 import Header from '../components/Header';
 import ReactDOM from 'react-dom';
