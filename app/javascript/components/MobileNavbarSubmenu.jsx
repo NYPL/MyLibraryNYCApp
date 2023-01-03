@@ -19,7 +19,13 @@ export default class MobileNavbarSubmenu extends Component {
   render() {
     return (
       <div className="navMenu-wrapper">
-        <List type="ul" noStyling marginLeft="s" marginBottom="s" key="mobile-navbar-list-key">
+        <List
+          type="ul"
+          noStyling
+          marginLeft="s"
+          marginBottom="s"
+          key="mobile-navbar-list-key"
+        >
           <li marginTop="s">
             <ReactRouterLink className="mobileSubmenu" to="/signin">
               Sign In

@@ -114,33 +114,32 @@ export default function TeacherSetDetails(props) {
         </Text>
       );
     } else {
-      return (<></>)
+      return <></>;
     }
   };
 
   const ACopies = () => {
     if (teacherSet["available_copies"] !== undefined) {
-      return teacherSet["available_copies"]
+      return teacherSet["available_copies"];
     } else {
-      return ""
+      return "";
     }
-  }
+  };
 
   const TotalCopies = () => {
     if (teacherSet["total_copies"] !== undefined) {
-      return teacherSet["total_copies"]
+      return teacherSet["total_copies"];
     } else {
-      return ""
+      return "";
     }
-  }
+  };
 
   const AvailableCopies = () => {
     return (
       <div color="var(--nypl-colors-ui-black)">
-        {ACopies()} of {TotalCopies()}{" "}
-        Available
+        {ACopies()} of {TotalCopies()} Available
       </div>
-    );          
+    );
   };
 
   const BooksCount = () => {
@@ -302,7 +301,11 @@ export default function TeacherSetDetails(props) {
               >
                 {allowedQuantities.map((item, i) => {
                   return (
-                    <option id={"ts-quantity-" + i} key={"ts-quantity-key-" + i} value={item}>
+                    <option
+                      id={"ts-quantity-" + i}
+                      key={"ts-quantity-key-" + i}
+                      value={item}
+                    >
                       {item}
                     </option>
                   );
@@ -452,30 +455,34 @@ export default function TeacherSetDetails(props) {
   };
 
   const teacherSetListDetails = (teacherSet) => {
-    return <List id="ts-list-details" type="dl" title="Details" marginTop="l" key="ts-list-details-key">
-      <dt id="ts-suggested-grade-range-text">Suggested Grade Range</dt>
-      <dd id="ts-page-suitabilities">
-        {teacherSet.suitabilities_string}
-      </dd>
+    return (
+      <List
+        id="ts-list-details"
+        type="dl"
+        title="Details"
+        marginTop="l"
+        key="ts-list-details-key"
+      >
+        <dt id="ts-suggested-grade-range-text">Suggested Grade Range</dt>
+        <dd id="ts-page-suitabilities">{teacherSet.suitabilities_string}</dd>
 
-      <dt id="ts-page-primary-language-text">Primary Language</dt>
-      <dd id="ts-page-primary-language">{teacherSet.primary_language}</dd>
+        <dt id="ts-page-primary-language-text">Primary Language</dt>
+        <dd id="ts-page-primary-language">{teacherSet.primary_language}</dd>
 
-      <dt id="ts-page-set-type-text">Type</dt>
-      <dd id="ts-page-set-type">{teacherSet.set_type}</dd>
+        <dt id="ts-page-set-type-text">Type</dt>
+        <dd id="ts-page-set-type">{teacherSet.set_type}</dd>
 
-      <dt id="ts-page-physical-desc-text">Physical Description</dt>
-      <dd id="ts-page-physical-desc">
-        {teacherSet.physical_description}
-      </dd>
+        <dt id="ts-page-physical-desc-text">Physical Description</dt>
+        <dd id="ts-page-physical-desc">{teacherSet.physical_description}</dd>
 
-      <dt id="ts-page-notes-content-text">Notes</dt>
-      <dd id="ts-page-notes-content">{TeacherSetNotesContent()}</dd>
+        <dt id="ts-page-notes-content-text">Notes</dt>
+        <dd id="ts-page-notes-content">{TeacherSetNotesContent()}</dd>
 
-      <dt id="ts-page-call-number-text">Call Number</dt>
-      <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
-    </List>
-  }
+        <dt id="ts-page-call-number-text">Call Number</dt>
+        <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
+      </List>
+    );
+  };
 
   const mobileTeacherSetOrderButton = () => {
     if (!isLargerThanMobile) {

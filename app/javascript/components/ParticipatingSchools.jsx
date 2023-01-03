@@ -45,13 +45,12 @@ export default function ParticipatingSchools(props) {
       if (school_anchors.includes(anchor)) {
         return (
           <Link
-            id={"ps-school-link-id-"+index}
-            key={"ps-school-link-key-"+index}
+            id={"ps-school-link-id-" + index}
+            key={"ps-school-link-key-" + index}
             marginRight="xs"
             style={{ textDecoration: "none" }}
             fontWeight="bold"
             href={"#" + anchor}
-
           >
             {" "}
             {anchor}{" "}
@@ -60,8 +59,8 @@ export default function ParticipatingSchools(props) {
       } else {
         if (anchor !== "#") {
           return (
-            <span 
-              key={"ps-school-link-key-"+index}
+            <span
+              key={"ps-school-link-key-" + index}
               style={{
                 textDecoration: "none",
                 fontWeight: "bold",
@@ -100,7 +99,7 @@ export default function ParticipatingSchools(props) {
         let value = search_school.trim().toLowerCase();
         if (school.toLowerCase().indexOf(value) > -1) {
           schoolsCount++;
-          return school.toLowerCase().indexOf(value) > -1
+          return school.toLowerCase().indexOf(value) > -1;
         }
       });
 

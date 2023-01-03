@@ -5,7 +5,6 @@ import {
   Hero,
 } from "@nypl/design-system-react-components";
 
-
 export default class AppBreadcrumbs extends Component {
   constructor(props) {
     super(props);

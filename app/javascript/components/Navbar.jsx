@@ -1,5 +1,5 @@
 import React from "react";
-import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Link,
   Icon,
@@ -38,7 +38,13 @@ export default function Navbar(props) {
 
         <Spacer />
 
-        <List id="mln-navbar-list" type="ul" inline noStyling key="mln-navbar-list-key">
+        <List
+          id="mln-navbar-list"
+          type="ul"
+          inline
+          noStyling
+          key="mln-navbar-list-key"
+        >
           <li id="mln-navbar-ts-link">
             <Link
               marginRight="m"

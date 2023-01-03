@@ -901,12 +901,10 @@ export default function SearchTeacherSets(props) {
             <HorizontalRule align="left" marginTop="0px" />
           </div>
           <div>
-            <Text noSpace size="caption" fontWeight="heading.secondary">
-              <HStack mb="s" data-testid="tagSetResultsDisplay">
-                <span>Fiters Applied</span>
-                {teacherSetFilterTags()}
-              </HStack>
-            </Text>
+            <HStack mb="s" data-testid="tagSetResultsDisplay">
+              <span>Fiters Applied</span>
+              {teacherSetFilterTags()}
+            </HStack>
           </div>
           <div>
             <HorizontalRule align="left" className="paginationHR" />
@@ -978,21 +976,20 @@ export default function SearchTeacherSets(props) {
 
   const accordionDataScrolltoTop = () => {
     if (window.pageYOffset > 0) {
-      window.scrollTo({ top: 265, behavior: "smooth" })
+      window.scrollTo({ top: 265, behavior: "smooth" });
     } else {
-      window.scrollTo({ top: 10, behavior: "smooth" })
+      window.scrollTo({ top: 10, behavior: "smooth" });
     }
-  }
+  };
 
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
-    
-    if (tsItems.length >= 1) {
 
+    if (tsItems.length >= 1) {
       if (selectedFacets[ts.label] === undefined) {
         selectedFacets[ts.label] = [];
       }
-      
+
       return (
         <CheckboxGroup
           isFullWidth
@@ -1024,12 +1021,10 @@ export default function SearchTeacherSets(props) {
         </CheckboxGroup>
       );
     } else {
-      
-
       // console.log(selectedFacets)
       // if (selectedFacets[ts.label] == "subjects") {
-        //searchParams.delete("subjects");
-        //setSearchParams(searchParams);
+      //searchParams.delete("subjects");
+      //setSearchParams(searchParams);
       // } else if (selectedFacets[ts.label] == "area of study") {
 
       //   searchParams.delete("area of study");
@@ -1120,7 +1115,6 @@ export default function SearchTeacherSets(props) {
       }
       contentPrimary={
         <>
-          {tagSetsData()}
           <div style={{ display: mobileSupport() }}>
             <Flex alignItems="baseline">
               {resultsFoundMessage()}

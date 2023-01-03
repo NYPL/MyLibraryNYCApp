@@ -469,25 +469,27 @@ export default function SignUp(props) {
   };
 
   const showNotificationContent = () => {
-    return <div style={{ display: showErrorMessage() }}>
-      <Notification
-        ariaLabel="Signup Error Notifications"
-        id="sign-up-error-notifications"
-        className={showNotifications()}
-        notificationType="warning"
-        notificationContent={
-          <Text
-            id="sign-up-error-notifications-text"
-            noSpace
-            className="signUpMessage"
-          >
-            {" "}
-            {showCommonErrorMsg()}{" "}
-          </Text>
-        }
-      />
-    </div>
-  }
+    return (
+      <div style={{ display: showErrorMessage() }}>
+        <Notification
+          ariaLabel="Signup Error Notifications"
+          id="sign-up-error-notifications"
+          className={showNotifications()}
+          notificationType="warning"
+          notificationContent={
+            <Text
+              id="sign-up-error-notifications-text"
+              noSpace
+              className="signUpMessage"
+            >
+              {" "}
+              {showCommonErrorMsg()}{" "}
+            </Text>
+          }
+        />
+      </div>
+    );
+  };
 
   const showCommonErrorMsg = () => {
     if (serverErrorIsValid && serverError) {
@@ -496,7 +498,6 @@ export default function SignUp(props) {
       return "Some of your information needs to be updated before your account can be created. See the fields highlighted below.";
     }
   };
-
 
   return (
     <TemplateAppContainer
