@@ -33,6 +33,11 @@ class SettingsController < ApplicationController
     end 
   end
 
+  def reset_admin_password
+    flash[:notice] = "You will receive an email with instructions about how to reset your password in a few minutes."
+    redirect_to "/admin/login"
+  end
+
   def index
     unless logged_in?
       flash[:error] = "You must be logged in to access this page"
