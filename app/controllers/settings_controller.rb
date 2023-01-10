@@ -38,8 +38,8 @@ class SettingsController < ApplicationController
       flash[:notice] = "You will receive an email with instructions about how to reset your password in a few minutes."
       redirect_to "/admin/login"
     else
-      redirect_to "/admin/password/new"
       flash[:error] = "Email can not be blank"
+      redirect_to "/admin/password/new"
     end
   end
 
