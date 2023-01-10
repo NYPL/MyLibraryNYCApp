@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import HaveQuestions from "./../HaveQuestions";
 import axios from "axios";
 import {
   Button,
@@ -49,7 +49,9 @@ export default function SignUp(props) {
   const [allowed_email_patterns, setAllowedEmailPatterns] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (process.env.NODE_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     axios
       .get("/sign_up_details")
       .then((res) => {

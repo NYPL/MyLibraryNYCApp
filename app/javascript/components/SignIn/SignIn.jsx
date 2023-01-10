@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import HaveQuestions from "./../HaveQuestions";
 import axios from "axios";
 import {
   Button,
@@ -24,7 +24,9 @@ export default function SignIn(props) {
   const [isInvalid, setIsInvalid] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (process.env.NODE_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     if (props.userSignedIn && location.pathname === "/signin") {
       navigate("/account_details");
       return false;
