@@ -2,15 +2,11 @@ import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import axios from "axios";
 import {
-  useParams,
-} from "react-router-dom";
-import {
   TemplateAppContainer,
   Text,
 } from "@nypl/design-system-react-components";
 
 const NewsletterConfirmation = () => {
-  const params = useParams();
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
