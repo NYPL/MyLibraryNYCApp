@@ -195,7 +195,7 @@ function AccountDetailsSubMenu(props) {
             <li className="nav__submenu-item">
               <Link
                 href="/signin"
-                type="button"
+                type="buttonPrimary"
                 className="textDecorationNone signin_nav_button"
               >
                 Sign In
