@@ -17,7 +17,10 @@ import {
   Link,
   Icon,
   Breadcrumbs,
+  Box,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components";
+import ImageWithFallback from "./ImageWithFallback"
 import mlnImage from "../images/mln.svg";
 
 export default function TeacherSetBooks() {
@@ -26,6 +29,23 @@ export default function TeacherSetBooks() {
   const [teacherSets, setTeacherSets] = useState([]);
   const [bookImageHeight, setBookImageHeight] = useState([]);
   const [bookImageWidth, setBookImageWidth] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [book.cover_uri]);
+
+  useEffect(() => {
+    let timeoutId = "";
+    if (isLoading) {
+      timeoutId = setInterval(() => {
+        setIsLoading(false);
+      }, 10000);
+    }
+    return () => {
+      clearInterval(timeoutId);
+    };
+  }, [isLoading]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -121,43 +141,40 @@ export default function TeacherSetBooks() {
     }
   };
 
+  const fallBackImageData = (book, fallbackImg) => {
+    return <ImageWithFallback book={book} src={book.cover_uri} fallbackImage={fallbackImg} />
+  }
+
+  const fallbackImg = (book) => {
+    return <Box bg="var(--nypl-colors-ui-gray-x-light-cool)" width="189px" height="189px" >{book.title}</Box>
+  }
+
   const BookImage = (data) => {
-    if (data.cover_uri) {
-      if (bookImageHeight === 1 && bookImageWidth === 1) {
+    if (isLoading) {
+      return (<SkeletonLoader
+        className="teacher-set-details-skeleton-loader"
+        contentSize={0}
+        headingSize={0}
+        imageAspectRatio="square"
+        layout="column"
+        showImage
+        width="189px"
+      />)
+    } else {
+      if (data.cover_uri) {
+        return fallBackImageData(data, fallbackImg(data))
+      } else {
         return (
           <Image
             title={data.title}
+            id={"ts-books-" + data.id}
             src={mlnImage}
             aspectRatio="original"
             size="medium"
             alt={data.title}
           />
         );
-      } else if (bookImageHeight === 189 && bookImageWidth === 189) {
-        return (
-          <Image
-            title={data.title}
-            id={"ts-books-" + data.id}
-            src={data.cover_uri}
-            aspectRatio="original"
-            size="medium"
-            alt={data.title}
-          />
-        );
-      } else {
-        return <img onLoad={bookImageDimensions} src={data.cover_uri} />;
       }
-    } else {
-      return (
-        <Image
-          title={data.title}
-          id={"ts-books-" + data.id}
-          src={mlnImage}
-          aspectRatio="original"
-          size="medium"
-          alt={data.title}
-        />
-      );
     }
   };
 
@@ -171,7 +188,6 @@ export default function TeacherSetBooks() {
     }
   };
 
-  // let book = this.state.book;
   let bookTitle = book.title ? book.title : "Book Title";
   let legacyDetailUrl =
     "http://legacycatalog.nypl.org/record=" + book.bnumber + "~S1";

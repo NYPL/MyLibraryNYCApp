@@ -7,12 +7,13 @@ import {
 } from "@nypl/design-system-react-components";
 
 const NewsletterConfirmation = () => {
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
+    const key = new URLSearchParams(location.search).get("key");
     window.scrollTo(0, 0);
     axios
-      .get("/home/newsletter_confirmation_msg")
+      .get("/home/newsletter_confirmation_msg/", { params: { key: key } })
       .then((res) => {
         setSuccess(res.data.success);
       })
@@ -22,32 +23,38 @@ const NewsletterConfirmation = () => {
   }, []);
 
   const NewsletterConfirmationMsg = () => {
-    if (success) {
-      return (
-        <>
-          <Text isBold size="default">
-            MyLibraryNYC Newsletter Subscription Confirmed
-          </Text>
-          <Text>
-            Thank you for subscribing to the MyLibraryNYC newsletter. Your email
-            has been confirmed.
-          </Text>
-        </>
-      );
+    if (success !== "") {
+      if (success) {
+        return (
+          <>
+            <Text isBold size="default">
+              MyLibraryNYC Newsletter Subscription Confirmed
+            </Text>
+            <Text>
+              Thank you for subscribing to the MyLibraryNYC newsletter. Your
+              email has been confirmed.
+            </Text>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Text isBold size="default">
+              MyLibraryNYC Newsletter Subscription Unsuccessful
+            </Text>
+            <Text>
+              Unfortunately there was a problem subscribing to the MyLibraryNYC
+              Newsletter. Please try subscribing again at{" "}
+              <a href="https://www.mylibrarynyc.org/">www.mylibrarynyc.org</a>{" "}
+              or contact{" "}
+              <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
+            </Text>
+          </>
+        );
+      }
     } else {
       return (
-        <>
-          <Text isBold size="default">
-            MyLibraryNYC Newsletter Subscription Unsuccessful
-          </Text>
-          <Text>
-            Unfortunately there was a problem subscribing to the MyLibraryNYC
-            Newsletter. Please try subscribing again at{" "}
-            <a href="https://www.mylibrarynyc.org/">www.mylibrarynyc.org</a> or
-            contact{" "}
-            <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
-          </Text>
-        </>
+        <></>
       );
     }
   };
