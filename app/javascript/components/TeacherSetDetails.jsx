@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HaveQuestions from "./HaveQuestions";
+import ImageWithFallback from "./ImageWithFallback"
 import {
   Link as ReactRouterLink,
   useParams,
@@ -34,6 +35,7 @@ import {
   Notification,
   useNYPLBreakpoints,
   Accordion,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components";
 
 import mlnImage from "../images/mln.svg";
@@ -50,6 +52,23 @@ export default function TeacherSetDetails(props) {
   const [bookImageHeight, setBookImageHeight] = useState("");
   const [bookImageWidth, setbookImageWidth] = useState("");
   const { isLargerThanMobile } = useNYPLBreakpoints();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [books.cover_uri]);
+
+  useEffect(() => {
+    let timeoutId = "";
+    if (isLoading) {
+      timeoutId = setInterval(() => {
+        setIsLoading(false);
+      }, 10000);
+    }
+    return () => {
+      clearInterval(timeoutId);
+    };
+  }, [isLoading]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -154,59 +173,50 @@ export default function TeacherSetDetails(props) {
     );
   };
 
+  const updateImageState = (book) => {
+    setImage(book.cover_uri);
+  }
+
   const TeacherSetBooks = () => {
     return books.map((data, index) => {
+      if (isLoading) {
+        return (<SkeletonLoader
+          className="teacher-set-details-skeleton-loader"
+          contentSize={0}
+          headingSize={0}
+          imageAspectRatio="square"
+          layout="column"
+          showImage
+          width="189px"
+          key={"ts-books-skeletonLoader-"+index}
+        />)
+      } else {
       return (
         <ReactRouterLink
           onClick={() => window.scrollTo(0, 0)}
           id={"ts-books-" + index}
           key={"ts-books-key-" + index}
           to={"/book_details/" + data.id}
+          style={{"display": "grid"}}
         >
           {BookImage(data)}
         </ReactRouterLink>
       );
+    }
     });
   };
 
-  const bookImageDimensions = ({ target: img }) => {
-    if (img.offsetHeight === 1 || img.offsetWidth === 1) {
-      setBookImageHeight(img.offsetHeight);
-      setbookImageWidth(img.offsetWidth);
-    } else {
-      setBookImageHeight(189);
-      setbookImageWidth(189);
-    }
-  };
+  const fallBackImageData = (book, fallbackImg) => {
+    return <ImageWithFallback book={book} src={book.cover_uri} fallbackImage={fallbackImg} />
+  }
+
+  const fallbackImg = (book) => {
+    return <Box bg="var(--nypl-colors-ui-gray-x-light-cool)" width="189px" height="189px" >{book.title}</Box>
+  }
 
   const BookImage = (data) => {
     if (data.cover_uri) {
-      if (bookImageHeight === 1 && bookImageWidth === 1) {
-        return (
-          <Image
-            title={data.title}
-            src={mlnImage}
-            aspectRatio="square"
-            size="default"
-            alt={data.title}
-            className="bookImageTop"
-          />
-        );
-      } else if (bookImageHeight === 189 && bookImageWidth === 189) {
-        return (
-          <Image
-            title={data.title}
-            id={"ts-books-" + data.id}
-            src={data.cover_uri}
-            className="bookImageTop"
-            aspectRatio="square"
-            size="default"
-            alt={data.title}
-          />
-        );
-      } else {
-        return <img onLoad={bookImageDimensions} src={data.cover_uri} />;
-      }
+      return fallBackImageData(data, fallbackImg(data)) //<img onLoad={bookImageDimensions} src={data.cover_uri} />;
     } else {
       return (
         <Image
