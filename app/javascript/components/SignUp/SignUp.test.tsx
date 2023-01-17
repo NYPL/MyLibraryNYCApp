@@ -10,5 +10,10 @@ describe("SignUp", () => {
   test("SignUp", () => {
     // render the component on virtual dom
     const { container } = render(<Router><SignUp /></Router>,);
+    console.log(screen)
+    expect(screen.getByLabelText("Signup Error Notifications")).toBeInTheDocument();
+    expect(screen.getByText("Some of your information needs to be updated before your account can be created. See the fields highlighted below.")).toBeInTheDocument();
+    expect(screen.getByLabelText("Your DOE Email Address")).toBeInTheDocument();
+    
   });
 });

@@ -40,7 +40,7 @@ export default function TeacherSetBooks() {
     if (isLoading) {
       timeoutId = setInterval(() => {
         setIsLoading(false);
-      }, 10000);
+      }, 500);
     }
     return () => {
       clearInterval(timeoutId);
