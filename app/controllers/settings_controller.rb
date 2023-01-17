@@ -35,8 +35,13 @@ class SettingsController < ApplicationController
 
   def reset_admin_password_message
     if params["admin_user"]["email"].present?
-      flash[:notice] = "You will receive an email with instructions about how to reset your password in a few minutes."
-      redirect_to "/admin/login"
+      if AdminUser.is_valid_email(params["admin_user"]["email"]).present?
+        flash[:notice] = "You will receive an email with instructions about how to reset your password in a few minutes."
+        redirect_to "/admin/login"
+      else
+        flash[:error] = "Invalid email"
+        redirect_to "/admin/password/new"
+      end
     else
       flash[:error] = "Email can not be blank"
       redirect_to "/admin/password/new"
