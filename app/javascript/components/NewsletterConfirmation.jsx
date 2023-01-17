@@ -7,7 +7,7 @@ import {
 } from "@nypl/design-system-react-components";
 
 const NewsletterConfirmation = () => {
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const key = new URLSearchParams(location.search).get("key");
@@ -23,38 +23,32 @@ const NewsletterConfirmation = () => {
   }, []);
 
   const NewsletterConfirmationMsg = () => {
-    if (success !== "") {
-      if (success) {
-        return (
-          <>
-            <Text isBold size="default">
-              MyLibraryNYC Newsletter Subscription Confirmed
-            </Text>
-            <Text>
-              Thank you for subscribing to the MyLibraryNYC newsletter. Your
-              email has been confirmed.
-            </Text>
-          </>
-        );
-      } else {
-        return (
-          <>
-            <Text isBold size="default">
-              MyLibraryNYC Newsletter Subscription Unsuccessful
-            </Text>
-            <Text>
-              Unfortunately there was a problem subscribing to the MyLibraryNYC
-              Newsletter. Please try subscribing again at{" "}
-              <a href="https://www.mylibrarynyc.org/">www.mylibrarynyc.org</a>{" "}
-              or contact{" "}
-              <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
-            </Text>
-          </>
-        );
-      }
+    if (success) {
+      return (
+        <>
+          <Text isBold size="default">
+            MyLibraryNYC Newsletter Subscription Confirmed
+          </Text>
+          <Text>
+            Thank you for subscribing to the MyLibraryNYC newsletter. Your email
+            has been confirmed.
+          </Text>
+        </>
+      );
     } else {
       return (
-        <></>
+        <>
+          <Text isBold size="default">
+            MyLibraryNYC Newsletter Subscription Unsuccessful
+          </Text>
+          <Text>
+            Unfortunately there was a problem subscribing to the MyLibraryNYC
+            Newsletter. Please try subscribing again at{" "}
+            <a href="https://www.mylibrarynyc.org/">www.mylibrarynyc.org</a> or
+            contact{" "}
+            <a href="mailto:help@mylibrarynyc.org">help@mylibrarynyc.org</a>.
+          </Text>
+        </>
       );
     }
   };
