@@ -10,9 +10,10 @@ const NewsletterConfirmation = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
+    const key = new URLSearchParams(location.search).get("key");
     window.scrollTo(0, 0);
     axios
-      .get("/home/newsletter_confirmation_msg")
+      .get("/home/newsletter_confirmation_msg/", { params: { key: key } })
       .then((res) => {
         setSuccess(res.data.success);
       })
