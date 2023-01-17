@@ -63,7 +63,7 @@ export default function TeacherSetDetails(props) {
     if (isLoading) {
       timeoutId = setInterval(() => {
         setIsLoading(false);
-      }, 10000);
+      }, 500);
     }
     return () => {
       clearInterval(timeoutId);
