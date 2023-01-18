@@ -61,7 +61,7 @@ export default function TeacherSetDetails(props) {
     if (isLoading) {
       timeoutId = setInterval(() => {
         setIsLoading(false);
-      }, 10000);
+      }, 500);
     }
     return () => {
       clearInterval(timeoutId);
@@ -193,7 +193,7 @@ export default function TeacherSetDetails(props) {
             id={"ts-books-" + index}
             key={"ts-books-key-" + index}
             to={"/book_details/" + data.id}
-            style={{ display: "grid" }}
+            style={{ display: "grid", backgroundColor: "#F5F5F5" }}
           >
             {BookImage(data)}
           </ReactRouterLink>

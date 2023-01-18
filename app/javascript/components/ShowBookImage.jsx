@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import mlnImage from "../images/mln.svg";
 import { Image, Box } from "@nypl/design-system-react-components";
 
 export default function ShowBookImage(props) {
@@ -20,16 +19,20 @@ export default function ShowBookImage(props) {
   }, []);
 
   const bookImages = () => {
-    if (bookImageHeight === 1 && bookImageWidth === 1) {
+    if (
+      (bookImageHeight === 1 && bookImageWidth === 1) ||
+      fallBackImageStatus === true
+    ) {
       return (
-        <Image
-          title={props.book.title}
-          src={mlnImage}
-          aspectRatio="square"
-          size="default"
-          alt={props.book.title}
-          className="bookImageTop"
-        />
+        <Box
+          bg="var(--nypl-colors-ui-gray-x-light-cool)"
+          paddingLeft="s"
+          padding="s"
+          width="189px"
+          height="189px"
+        >
+          {props.book.title}
+        </Box>
       );
     } else if (bookImageHeight === 189 && bookImageWidth === 189) {
       return (
@@ -41,18 +44,6 @@ export default function ShowBookImage(props) {
           alt={props.book.title}
           className="bookImageTop"
         />
-      );
-    } else if (fallBackImageStatus === true) {
-      return (
-        <Box
-          bg="var(--nypl-colors-ui-gray-x-light-cool)"
-          paddingLeft="s"
-          padding="s"
-          width="189px"
-          height="189px"
-        >
-          {props.book.title}
-        </Box>
       );
     } else {
       return (
