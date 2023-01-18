@@ -42,8 +42,6 @@ export default function ImageWithFallback(props) {
     }
     else if (fallBackImageStatus === true) {
       return <Box bg="var(--nypl-colors-ui-gray-x-light-cool)" paddingLeft="s" padding="s" width="189px" height="189px">{props.book.title}</Box>
-    } else if (timeOutImage === true) {
-      return <Box bg="var(--nypl-colors-ui-gray-x-light-cool)" paddingLeft="s" padding="s" width="189px" height="189px">{props.book.title}</Box>
     }
     else {
       return <img title={props.book.title} onLoad={bookImageDimensions} src={srcToUse} style={{ display: isLoading ? "block" : "none" }} />
