@@ -20,15 +20,13 @@ import {
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components";
-import ImageWithFallback from "./ImageWithFallback"
+import ShowBookImage from "./ShowBookImage";
 import mlnImage from "../images/mln.svg";
 
 export default function TeacherSetBooks() {
   const params = useParams();
   const [book, setBook] = useState("");
   const [teacherSets, setTeacherSets] = useState([]);
-  const [bookImageHeight, setBookImageHeight] = useState([]);
-  const [bookImageWidth, setBookImageWidth] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -142,27 +140,43 @@ export default function TeacherSetBooks() {
   };
 
   const fallBackImageData = (book, fallbackImg) => {
-    return <ImageWithFallback book={book} src={book.cover_uri} fallbackImage={fallbackImg} />
-  }
+    return (
+      <ShowBookImage
+        book={book}
+        src={book.cover_uri}
+        fallbackImage={fallbackImg}
+      />
+    );
+  };
 
   const fallbackImg = (book) => {
-    return <Box bg="var(--nypl-colors-ui-gray-x-light-cool)" width="189px" height="189px" >{book.title}</Box>
-  }
+    return (
+      <Box
+        bg="var(--nypl-colors-ui-gray-x-light-cool)"
+        width="189px"
+        height="189px"
+      >
+        {book.title}
+      </Box>
+    );
+  };
 
   const BookImage = (data) => {
     if (isLoading) {
-      return (<SkeletonLoader
-        className="teacher-set-details-skeleton-loader"
-        contentSize={0}
-        headingSize={0}
-        imageAspectRatio="square"
-        layout="column"
-        showImage
-        width="189px"
-      />)
+      return (
+        <SkeletonLoader
+          className="teacher-set-details-skeleton-loader"
+          contentSize={0}
+          headingSize={0}
+          imageAspectRatio="square"
+          layout="column"
+          showImage
+          width="189px"
+        />
+      );
     } else {
       if (data.cover_uri) {
-        return fallBackImageData(data, fallbackImg(data))
+        return fallBackImageData(data, fallbackImg(data));
       } else {
         return (
           <Image
@@ -175,16 +189,6 @@ export default function TeacherSetBooks() {
           />
         );
       }
-    }
-  };
-
-  const bookImageDimensions = ({ target: img }) => {
-    if (img.offsetHeight === 1 || img.offsetWidth === 1) {
-      setBookImageHeight(img.offsetHeight);
-      setBookImageWidth(img.offsetWidth);
-    } else {
-      setBookImageHeight(189);
-      setBookImageWidth(189);
     }
   };
 
