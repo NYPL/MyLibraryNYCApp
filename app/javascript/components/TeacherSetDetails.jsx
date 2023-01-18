@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import HaveQuestions from "./HaveQuestions";
-import ImageWithFallback from "./ImageWithFallback"
+import ShowBookImage from "./ShowBookImage";
 import {
   Link as ReactRouterLink,
   useParams,
@@ -49,8 +49,6 @@ export default function TeacherSetDetails(props) {
   const [quantity, setQuantity] = useState("1");
   const [teacherSetNotes, setTeacherSetNotes] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const [bookImageHeight, setBookImageHeight] = useState("");
-  const [bookImageWidth, setbookImageWidth] = useState("");
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -173,50 +171,62 @@ export default function TeacherSetDetails(props) {
     );
   };
 
-  const updateImageState = (book) => {
-    setImage(book.cover_uri);
-  }
-
   const TeacherSetBooks = () => {
     return books.map((data, index) => {
       if (isLoading) {
-        return (<SkeletonLoader
-          className="teacher-set-details-skeleton-loader"
-          contentSize={0}
-          headingSize={0}
-          imageAspectRatio="square"
-          layout="column"
-          showImage
-          width="189px"
-          key={"ts-books-skeletonLoader-"+index}
-        />)
+        return (
+          <SkeletonLoader
+            className="teacher-set-details-skeleton-loader"
+            contentSize={0}
+            headingSize={0}
+            imageAspectRatio="square"
+            layout="column"
+            showImage
+            width="189px"
+            key={"ts-books-skeletonLoader-" + index}
+          />
+        );
       } else {
-      return (
-        <ReactRouterLink
-          onClick={() => window.scrollTo(0, 0)}
-          id={"ts-books-" + index}
-          key={"ts-books-key-" + index}
-          to={"/book_details/" + data.id}
-          style={{"display": "grid"}}
-        >
-          {BookImage(data)}
-        </ReactRouterLink>
-      );
-    }
+        return (
+          <ReactRouterLink
+            onClick={() => window.scrollTo(0, 0)}
+            id={"ts-books-" + index}
+            key={"ts-books-key-" + index}
+            to={"/book_details/" + data.id}
+            style={{ display: "grid", backgroundColor: "#F5F5F5" }}
+          >
+            {BookImage(data)}
+          </ReactRouterLink>
+        );
+      }
     });
   };
 
   const fallBackImageData = (book, fallbackImg) => {
-    return <ImageWithFallback book={book} src={book.cover_uri} fallbackImage={fallbackImg} />
-  }
+    return (
+      <ShowBookImage
+        book={book}
+        src={book.cover_uri}
+        fallbackImage={fallbackImg}
+      />
+    );
+  };
 
   const fallbackImg = (book) => {
-    return <Box bg="var(--nypl-colors-ui-gray-x-light-cool)" width="189px" height="189px" >{book.title}</Box>
-  }
+    return (
+      <Box
+        bg="var(--nypl-colors-ui-gray-x-light-cool)"
+        width="189px"
+        height="189px"
+      >
+        {book.title}
+      </Box>
+    );
+  };
 
   const BookImage = (data) => {
     if (data.cover_uri) {
-      return fallBackImageData(data, fallbackImg(data)) //<img onLoad={bookImageDimensions} src={data.cover_uri} />;
+      return fallBackImageData(data, fallbackImg(data));
     } else {
       return (
         <Image
