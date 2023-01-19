@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
     # Redirect to admin dashboard if this is an admin login
     # Commenting this out due to inconsistency when demo-ing with account that are admins
     # (PB: Uncommenting this out because I can't find a login flow that it effects. I think observed issue may have been something else..)
-    redirect_url = admin_dashboard_path if !resource.nil? && resource.is_a?(AdminUser)
+    redirect_url = admin_dashboard_path if !redirect_url && !resource.nil? && resource.is_a?(AdminUser)
 
     # if session[:redirect_after_login]
     #   redirect_url = session[:redirect_after_login]
