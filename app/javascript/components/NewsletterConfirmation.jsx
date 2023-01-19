@@ -16,7 +16,7 @@ const NewsletterConfirmation = () => {
     if (isLoading) {
       timeoutId = setInterval(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 4000);
     }
     return () => {
       clearInterval(timeoutId);

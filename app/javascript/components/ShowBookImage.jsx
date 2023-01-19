@@ -13,7 +13,7 @@ export default function ShowBookImage(props) {
     const timer = setTimeout(() => {
       if (!imgLoadedOnInitSrc.current) setFallBackImageStatus(true);
       setIsLoading(true);
-    }, 10000);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, []);
