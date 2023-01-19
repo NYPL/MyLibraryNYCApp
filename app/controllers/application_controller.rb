@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_admin_user!
+    store_location_for(:user, request.fullpath)
     if !current_admin_user.present?
       # check for current_admin_user if not then redirect to login
       redirect_to "/admin/login"
