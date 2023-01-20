@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HaveQuestions from "./HaveQuestions";
+import ShowBookImage from "./ShowBookImage";
 import {
   Link as ReactRouterLink,
   useParams,
@@ -34,6 +35,7 @@ import {
   Notification,
   useNYPLBreakpoints,
   Accordion,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components";
 
 import mlnImage from "../images/mln.svg";
@@ -47,9 +49,24 @@ export default function TeacherSetDetails(props) {
   const [quantity, setQuantity] = useState("1");
   const [teacherSetNotes, setTeacherSetNotes] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const [bookImageHeight, setBookImageHeight] = useState("");
-  const [bookImageWidth, setbookImageWidth] = useState("");
   const { isLargerThanMobile } = useNYPLBreakpoints();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [books.cover_uri]);
+
+  useEffect(() => {
+    let timeoutId = "";
+    if (isLoading) {
+      timeoutId = setInterval(() => {
+        setIsLoading(false);
+      }, 500);
+    }
+    return () => {
+      clearInterval(timeoutId);
+    };
+  }, [isLoading]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -107,18 +124,37 @@ export default function TeacherSetDetails(props) {
   };
 
   const TeacherSetDescription = () => {
-    return (
-      <Text noSpace marginTop="xs" id="ts-page-desc">
-        {teacherSet["description"]}
-      </Text>
-    );
+    if (teacherSet["description"]) {
+      return (
+        <Text noSpace marginTop="xs" id="ts-page-desc">
+          {teacherSet["description"]}
+        </Text>
+      );
+    } else {
+      return <></>;
+    }
+  };
+
+  const ACopies = () => {
+    if (teacherSet["available_copies"] !== undefined) {
+      return teacherSet["available_copies"];
+    } else {
+      return "";
+    }
+  };
+
+  const TotalCopies = () => {
+    if (teacherSet["total_copies"] !== undefined) {
+      return teacherSet["total_copies"];
+    } else {
+      return "";
+    }
   };
 
   const AvailableCopies = () => {
     return (
       <div color="var(--nypl-colors-ui-black)">
-        {teacherSet["available_copies"]} of {teacherSet["total_copies"]}{" "}
-        Available
+        {ACopies()} of {TotalCopies()} Available
       </div>
     );
   };
@@ -136,59 +172,61 @@ export default function TeacherSetDetails(props) {
   };
 
   const TeacherSetBooks = () => {
-    return books.map((data, i) => {
-      return (
-        <>
+    return books.map((data, index) => {
+      if (isLoading) {
+        return (
+          <SkeletonLoader
+            className="teacher-set-details-skeleton-loader"
+            contentSize={0}
+            headingSize={0}
+            imageAspectRatio="square"
+            layout="column"
+            showImage
+            width="189px"
+            key={"ts-books-skeletonLoader-" + index}
+          />
+        );
+      } else {
+        return (
           <ReactRouterLink
             onClick={() => window.scrollTo(0, 0)}
-            id={"ts-books-" + i}
+            id={"ts-books-" + index}
+            key={"ts-books-key-" + index}
             to={"/book_details/" + data.id}
+            style={{ display: "grid", backgroundColor: "#F5F5F5" }}
           >
             {BookImage(data)}
           </ReactRouterLink>
-        </>
-      );
+        );
+      }
     });
   };
 
-  const bookImageDimensions = ({ target: img }) => {
-    if (img.offsetHeight === 1 || img.offsetWidth === 1) {
-      setBookImageHeight(img.offsetHeight);
-      setbookImageWidth(img.offsetWidth);
-    } else {
-      setBookImageHeight(189);
-      setbookImageWidth(189);
-    }
+  const fallBackImageData = (book, fallbackImg) => {
+    return (
+      <ShowBookImage
+        book={book}
+        src={book.cover_uri}
+        fallbackImage={fallbackImg}
+      />
+    );
+  };
+
+  const fallbackImg = (book) => {
+    return (
+      <Box
+        bg="var(--nypl-colors-ui-gray-x-light-cool)"
+        width="189px"
+        height="189px"
+      >
+        {book.title}
+      </Box>
+    );
   };
 
   const BookImage = (data) => {
     if (data.cover_uri) {
-      if (bookImageHeight === 1 && bookImageWidth === 1) {
-        return (
-          <Image
-            title={data.title}
-            src={mlnImage}
-            aspectRatio="square"
-            size="default"
-            alt={data.title}
-            className="bookImageTop"
-          />
-        );
-      } else if (bookImageHeight === 189 && bookImageWidth === 189) {
-        return (
-          <Image
-            title={data.title}
-            id={"ts-books-" + data.id}
-            src={data.cover_uri}
-            className="bookImageTop"
-            aspectRatio="square"
-            size="default"
-            alt={data.title}
-          />
-        );
-      } else {
-        return <img onLoad={bookImageDimensions} src={data.cover_uri} />;
-      }
+      return fallBackImageData(data, fallbackImg(data));
     } else {
       return (
         <Image
@@ -207,7 +245,7 @@ export default function TeacherSetDetails(props) {
   const TeacherSetNotesContent = () => {
     return teacherSetNotes.map((note, i) => {
       return (
-        <div key={i} id={"ts-notes-content-" + i}>
+        <div id={"ts-notes-content-" + i} key={"ts-notes-content-key-" + i}>
           {note.content}
         </div>
       );
@@ -283,7 +321,11 @@ export default function TeacherSetDetails(props) {
               >
                 {allowedQuantities.map((item, i) => {
                   return (
-                    <option id={"ts-quantity-" + i} key={i} value={item}>
+                    <option
+                      id={"ts-quantity-" + i}
+                      key={"ts-quantity-key-" + i}
+                      value={item}
+                    >
                       {item}
                     </option>
                   );
@@ -430,6 +472,36 @@ export default function TeacherSetDetails(props) {
         </VStack>
       );
     }
+  };
+
+  const teacherSetListDetails = (teacherSet) => {
+    return (
+      <List
+        id="ts-list-details"
+        type="dl"
+        title="Details"
+        marginTop="l"
+        key="ts-list-details-key"
+      >
+        <dt id="ts-suggested-grade-range-text">Suggested Grade Range</dt>
+        <dd id="ts-page-suitabilities">{teacherSet.suitabilities_string}</dd>
+
+        <dt id="ts-page-primary-language-text">Primary Language</dt>
+        <dd id="ts-page-primary-language">{teacherSet.primary_language}</dd>
+
+        <dt id="ts-page-set-type-text">Type</dt>
+        <dd id="ts-page-set-type">{teacherSet.set_type}</dd>
+
+        <dt id="ts-page-physical-desc-text">Physical Description</dt>
+        <dd id="ts-page-physical-desc">{teacherSet.physical_description}</dd>
+
+        <dt id="ts-page-notes-content-text">Notes</dt>
+        <dd id="ts-page-notes-content">{TeacherSetNotesContent()}</dd>
+
+        <dt id="ts-page-call-number-text">Call Number</dt>
+        <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
+      </List>
+    );
   };
 
   const mobileTeacherSetOrderButton = () => {
@@ -613,30 +685,7 @@ export default function TeacherSetDetails(props) {
           />
           {TeacherSetDescription()}
           {displayTeacherSetBooks()}
-
-          <List id="ts-list-details" type="dl" title="Details" marginTop="l">
-            <dt id="ts-suggested-grade-range-text">Suggested Grade Range</dt>
-            <dd id="ts-page-suitabilities">
-              {teacherSet.suitabilities_string}
-            </dd>
-
-            <dt id="ts-page-primary-language-text">Primary Language</dt>
-            <dd id="ts-page-primary-language">{teacherSet.primary_language}</dd>
-
-            <dt id="ts-page-set-type-text">Type</dt>
-            <dd id="ts-page-set-type">{teacherSet.set_type}</dd>
-
-            <dt id="ts-page-physical-desc-text">Physical Description</dt>
-            <dd id="ts-page-physical-desc">
-              {teacherSet.physical_description}
-            </dd>
-
-            <dt id="ts-page-notes-content-text">Notes</dt>
-            <dd id="ts-page-notes-content">{TeacherSetNotesContent()}</dd>
-
-            <dt id="ts-page-call-number-text">Call Number</dt>
-            <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
-          </List>
+          {teacherSetListDetails(teacherSet)}
           <Link
             href={legacyDetailUrl()}
             id="ts-page-details_url"

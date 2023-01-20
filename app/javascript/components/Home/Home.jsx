@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import HaveQuestions from "./HaveQuestions";
-import AccessDigitalResources from "./AccessDigitalResources";
-import CalendarOfEvents from "./CalendarOfEvents";
-import NewsLetter from "./NewsLetter";
-import homeBgImg from "../images/mln-homepage-background.jpg";
-import homeFgImg from "../images/mln-homepage-foreground.jpg";
+import HaveQuestions from "./../HaveQuestions";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import AccessDigitalResources from "./../AccessDigitalResources";
+import CalendarOfEvents from "./../CalendarOfEvents";
+import NewsLetter from "./../NewsLetter";
+import homeBgImg from "./../../images/mln-homepage-background.jpg";
+import homeFgImg from "./../../images/mln-homepage-foreground.jpg";
 import { useNavigate } from "react-router-dom";
+
 import {
   Hero,
   SearchBar,
@@ -23,7 +25,9 @@ export default function Home(props) {
   const [keyword, setKeyWord] = useState("");
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (process.env.NODE_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     navigate("/");
   }, []);
 

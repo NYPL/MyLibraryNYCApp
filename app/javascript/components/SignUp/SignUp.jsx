@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import HaveQuestions from "./../HaveQuestions";
 import axios from "axios";
 import {
   Button,
@@ -49,7 +49,9 @@ export default function SignUp(props) {
   const [allowed_email_patterns, setAllowedEmailPatterns] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (process.env.NODE_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     axios
       .get("/sign_up_details")
       .then((res) => {
@@ -468,6 +470,29 @@ export default function SignUp(props) {
     }
   };
 
+  const showNotificationContent = () => {
+    return (
+      <div style={{ display: showErrorMessage() }}>
+        <Notification
+          ariaLabel="Signup Error Notifications"
+          id="sign-up-error-notifications"
+          className={showNotifications()}
+          notificationType="warning"
+          notificationContent={
+            <Text
+              id="sign-up-error-notifications-text"
+              noSpace
+              className="signUpMessage"
+            >
+              {" "}
+              {showCommonErrorMsg()}{" "}
+            </Text>
+          }
+        />
+      </div>
+    );
+  };
+
   const showCommonErrorMsg = () => {
     if (serverErrorIsValid && serverError) {
       return "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance.";
@@ -494,24 +519,7 @@ export default function SignUp(props) {
           />
 
           <div style={{ display: showErrors() }}>
-            <Notification
-              ariaLabel="Signup Error Notifications"
-              id="sign-up-error-notifications"
-              className={showNotifications()}
-              notificationType="warning"
-              notificationContent={
-                <Text
-                  id="sign-up-error-notifications-text"
-                  noSpace
-                  className="signUpMessage"
-                >
-                  <div style={{ display: showErrorMessage() }}>
-                    {" "}
-                    {showCommonErrorMsg()}{" "}
-                  </div>
-                </Text>
-              }
-            />
+            {showNotificationContent()}
           </div>
           <Form id="sign-up-form">
             <FormField>
@@ -519,7 +527,7 @@ export default function SignUp(props) {
                 id="sign-up-email"
                 isRequired
                 marginTop="l"
-                showOptReqLabel={true}
+                showoptreqlabel="true"
                 labelText="Your DOE Email Address"
                 value={email}
                 onChange={handleEmail.bind(this, "email")}
@@ -531,7 +539,7 @@ export default function SignUp(props) {
             <FormField>
               <TextInput
                 id="sign-up-preferred-email"
-                showOptReqLabel={true}
+                showoptreqlabel="true"
                 labelText="Preferred email address"
                 value={alt_email}
                 invalidText={errorAltEmailMsg}
@@ -543,7 +551,7 @@ export default function SignUp(props) {
               <TextInput
                 id="sign-up-first-name"
                 isRequired
-                showOptReqLabel={true}
+                showoptreqlabel="true"
                 labelText="First Name"
                 value={first_name}
                 invalidText={firstNameErrorMsg}
@@ -555,7 +563,7 @@ export default function SignUp(props) {
               <TextInput
                 id="sign-up-last-name"
                 isRequired
-                showOptReqLabel={true}
+                showoptreqlabel="true"
                 labelText="Last Name"
                 value={last_name}
                 invalidText={lastNameErrorMsg}
@@ -570,7 +578,7 @@ export default function SignUp(props) {
                 value={school_id}
                 showLabel
                 isRequired
-                showOptReqLabel={true}
+                showoptreqlabel="true"
                 invalidText={schoolErrorMsg}
                 isInvalid={schoolIsValid}
                 onChange={handleSchool.bind(this, "school_id")}
@@ -582,7 +590,7 @@ export default function SignUp(props) {
               <TextInput
                 id="sign-up-password"
                 isRequired
-                showOptReqLabel={true}
+                showoptreqlabel="true"
                 labelText="Password"
                 value={password}
                 invalidText={passwordErrorMsg}
@@ -604,21 +612,18 @@ export default function SignUp(props) {
                 }
               />
             </FormField>
-
-            <div>
-              <Checkbox
-                id="news-letter-checkbox"
-                invalidText={news_letter_error}
-                isInvalid={show_news_letter_error}
-                labelText="Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)"
-                isChecked={isCheckedVal}
-                name="sign_up_page"
-                onChange={verifyNewsLetterEmailInSignUpPage}
-                showHelperInvalidText
-                showLabel
-                value="1"
-              />
-            </div>
+            <Checkbox
+              id="news-letter-checkbox"
+              invalidText={news_letter_error}
+              isInvalid={show_news_letter_error}
+              labelText="Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)"
+              isChecked={isCheckedVal}
+              name="sign_up_page"
+              onChange={verifyNewsLetterEmailInSignUpPage}
+              showHelperInvalidText
+              showLabel
+              value="1"
+            />
             <FormField>
               <ButtonGroup>
                 <Button

@@ -27,7 +27,13 @@ export default function PageNotFound() {
           exists. Please make sure the link you are using is correct.
         </Text>
         <Text marginLeft="s">To continue using our site, you can:</Text>
-        <List id="nypl-list" title="" type="ul">
+        <List
+          id="nypl-list"
+          id="nypl-list"
+          key="nypl-list-key"
+          title=""
+          type="ul"
+        >
           <li>
             Go to the{" "}
             <Link id="page-not-found-homepage-link" type="action" href="/">

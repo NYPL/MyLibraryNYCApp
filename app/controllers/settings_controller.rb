@@ -24,13 +24,28 @@ class SettingsController < ApplicationController
   end
 
 
-  def activeadmin_logout_redirect
+  def activeadmin_redirect_to_login
     if Devise.sign_out_all_scopes
       sign_out
       redirect_to "/admin/login"
     else
       redirect_to "/admin/dashboard"
     end 
+  end
+
+  def reset_admin_password_message
+    if params["admin_user"]["email"].present?
+      if AdminUser.is_valid_email(params["admin_user"]["email"]).present?
+        flash[:notice] = "You will receive an email with instructions about how to reset your password in a few minutes."
+        redirect_to "/admin/login"
+      else
+        flash[:error] = "Invalid email"
+        redirect_to "/admin/password/new"
+      end
+    else
+      flash[:error] = "Email can not be blank"
+      redirect_to "/admin/password/new"
+    end
   end
 
   def index

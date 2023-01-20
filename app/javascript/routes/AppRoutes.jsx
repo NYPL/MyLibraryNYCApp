@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Route, BrowserRouter as Router, Routes, Switch , Redirect, useNavigate} from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer/Footer";
-import Home from "../components/Home";
-import Faqs from "../components/Faqs";
-import Contacts from "../components/Contacts";
+import Home from "../components/Home/Home";
+import Faqs from "../components/Faqs/Faqs";
+import Contact from "../components/Contact/Contact";
 import Banner from "../components/Banner";
-import ParticipatingSchools from "../components/ParticipatingSchools";
-import SignIn from "../components/SignIn";
-import SignUp from "../components/SignUp";
+import ParticipatingSchools from "../components/ParticipatingSchools/ParticipatingSchools";
+import SignIn from "../components/SignIn/SignIn";
+import SignUp from "../components/SignUp/SignUp";
 import SearchTeacherSets from "../components/SearchTeacherSets";
 import Accounts from "../components/Accounts";
 import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
@@ -78,7 +78,7 @@ export default function AppRoutes(props) {
         <Routes>
           <Route exact path='/' element={<Home userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />} />
           <Route path='/faq' element={<Faqs userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
-          <Route path='/contact' element={ <Contacts userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
+          <Route path='/contact' element={ <Contact userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
           <Route path='/participating-schools' element={ <ParticipatingSchools userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
           <Route path='/signin' element={ <SignIn userSignedIn={userSignedIn} handleSignInMsg={handleSignInMsg} hideSignInMessage={hideSignInMessage} handleLogin={handleLogin} />} />
           <Route path='/signup' element={ <SignUp userSignedIn={userSignedIn} handleLogin={handleLogin} handleSignedUpMsg={handleSignedUpMsg} />} />

@@ -112,7 +112,8 @@ function AccountDetailsSubMenu(props) {
       return (
         <>
           <List
-            id="navbar-account-details"
+            id="navbar-account-details-user-signed-in"
+            key="navbar-account-details-user-signed-in-key"
             type="ol"
             inline={false}
             noStyling={false}
@@ -185,6 +186,7 @@ function AccountDetailsSubMenu(props) {
         <>
           <List
             id="navbar-account-details"
+            key="navbar-account-details-key"
             type="ol"
             inline={false}
             noStyling={false}
@@ -193,7 +195,7 @@ function AccountDetailsSubMenu(props) {
             <li className="nav__submenu-item">
               <Link
                 href="/signin"
-                type="button"
+                type="buttonPrimary"
                 className="textDecorationNone signin_nav_button"
               >
                 Sign In

@@ -19,9 +19,7 @@ function CalendarOfEvents() {
       .get("/home/get_mln_file_names", {
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": document
-            .querySelector("meta[name='csrf-token']")
-            .getAttribute("content"),
+          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']"),
         },
       })
       .then((res) => {

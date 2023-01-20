@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import HaveQuestions from "./HaveQuestions";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import SignedInMsg from "./SignedInMsg";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import HaveQuestions from "./../HaveQuestions";
+import SignedInMsg from "./../SignedInMsg";
 import axios from "axios";
 import {
   TextInput,
@@ -23,7 +23,9 @@ export default function ParticipatingSchools(props) {
   const [schoolNotFound, setSchoolNotFound] = useState("");
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (process.env.NODE_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     axios
       .get("/schools")
       .then((res) => {
@@ -41,10 +43,12 @@ export default function ParticipatingSchools(props) {
       return school["alphabet_anchor"];
     });
 
-    return anchor_tags.map((anchor) => {
+    return anchor_tags.map((anchor, index) => {
       if (school_anchors.includes(anchor)) {
         return (
           <Link
+            id={"ps-school-link-id-" + index}
+            key={"ps-school-link-key-" + index}
             marginRight="xs"
             style={{ textDecoration: "none" }}
             fontWeight="bold"
@@ -57,7 +61,8 @@ export default function ParticipatingSchools(props) {
       } else {
         if (anchor !== "#") {
           return (
-            <a
+            <span
+              key={"ps-school-link-key-" + index}
               style={{
                 textDecoration: "none",
                 fontWeight: "bold",
@@ -66,7 +71,7 @@ export default function ParticipatingSchools(props) {
               }}
             >
               {anchor}
-            </a>
+            </span>
           );
         }
       }
@@ -83,6 +88,7 @@ export default function ParticipatingSchools(props) {
           showContent={5}
           contentSize={4}
           showHeading={1}
+          key="not-found-key"
         />
       );
     }
@@ -92,28 +98,32 @@ export default function ParticipatingSchools(props) {
     let schoolsCount = 0;
 
     let schoolsData = schools.map((data, i) => {
-      let filteredSchools = data["school_names"].filter((school) => {
+      let filteredSchools = [];
+      data["school_names"].filter((school) => {
         let value = search_school.trim().toLowerCase();
+
         if (school.toLowerCase().indexOf(value) > -1) {
           schoolsCount++;
-          return school.toLowerCase().indexOf(value) > -1;
+          filteredSchools.push(school)
         }
       });
-
+      
       if (filteredSchools.length > 0) {
         return (
-          <>
+          <div key={"participating-schools-list-div-key-" + data["alphabet_anchor"] + '-' + i}>
             <List
-              id={"participating-schools-list-" + data["alphabet_anchor"]}
+              key={"participating-schools-list-key-" + data["alphabet_anchor"] + '-' + i}
+              id={"participating-schools-list-" + data["alphabet_anchor"] + '-' + i}
               noStyling
             >
               <li
-                id={"ps-name-" + data["alphabet_anchor"]}
-                key={i}
+                id={"ps-name-" + data["alphabet_anchor"] + '-' + i}
+                key={"ps-name-key-" + data["alphabet_anchor"] + '-' + i}
                 className="schoolList alphabet_anchor"
               >
                 <a
-                  id={"ps-name-link-" + data["alphabet_anchor"]}
+                  id={"ps-name-link-" + data["alphabet_anchor"] + '-' + i}
+                  key={"ps-name-link-key" + data["alphabet_anchor"] + '-' + i}
                   className="alphabet_anchor"
                   name={data["alphabet_anchor"]}
                 >
@@ -126,7 +136,7 @@ export default function ParticipatingSchools(props) {
                 <li
                   fontWeight="heading.callout"
                   id={"ps-name-" + data["alphabet_anchor"] + "-" + index}
-                  key={index}
+                  key={"ps-name-" + data["alphabet_anchor"] + "-key-" + index}
                 >
                   {school}
                   <br />
@@ -134,9 +144,11 @@ export default function ParticipatingSchools(props) {
               ))}
             </List>
             <Button
-              id="ps-scroll-to-top"
-              buttonType="link"
-              className="backToTop"
+              id={"ps-scroll-to-top-" + i}
+              key={"ps-scroll-to-top-key-" + i}
+              buttonType="text"
+              className="backToTop backToTopButton"
+              marginLeft="s"
               onClick={() =>
                 window.scrollTo({
                   top: 10,
@@ -154,7 +166,7 @@ export default function ParticipatingSchools(props) {
               />
               Back to Top
             </Button>
-          </>
+          </div>
         );
       }
     });
@@ -166,6 +178,7 @@ export default function ParticipatingSchools(props) {
           isItalic
           size="default"
           color="var(--nypl-colors-ui-error-primary)"
+          key="no-results-found-key"
         >
           There are no results that match your search criteria.
         </Text>

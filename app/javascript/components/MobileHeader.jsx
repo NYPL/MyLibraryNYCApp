@@ -108,6 +108,7 @@ export default function MobileHeader(props) {
       <Spacer />
       <List
         id="mobile-mln-navbar-list"
+        key="mobile-mln-navbar-list-key"
         type="ul"
         inline
         noStyling
@@ -143,6 +144,7 @@ export default function MobileHeader(props) {
           />
           <Box id="mobile-navbar-submenu-list">
             <List
+              key="mobile-navbar-submenu-list-key"
               noStyling
               type="ul"
               className={
