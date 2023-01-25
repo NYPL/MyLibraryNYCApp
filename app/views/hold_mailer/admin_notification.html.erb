@@ -1,9 +1,9 @@
 <p>
   <%= link_to @user.email, "mailto:#{@user.email}" %> has ordered <%= pluralize(@hold.quantity, 'copy') %> of the following teacher set:<br />
-  <%= link_to @teacher_set.title, "#{ENV['MLN_INFO_SITE_HOSTNAME']}/teacher_set_data/#{@teacher_set.id}" %>
+  <%= link_to @teacher_set.title, "/teacher_set_data/#{@teacher_set.id}" %>
 <p>
   Change this order's status here:<br />
-  <%= link_to "#{new_admin_hold_change_url(:hold => @hold)}", admin_hold_change_url(:id => @hold) %> 
+  <%= link_to "#{new_admin_hold_change_url(:hold => @hold)}", new_admin_hold_change_url(:hold => @hold) %> 
 </p>
 
 <% if @user.multiple_barcodes? %>
