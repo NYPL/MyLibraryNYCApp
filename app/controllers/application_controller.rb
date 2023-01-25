@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_admin_user!
-    store_location_for(:user, request.fullpath)
+    session[:redirect_after_login] = request.fullpath
     if !current_admin_user.present?
       # check for current_admin_user if not then redirect to login
       redirect_to "/admin/login"
@@ -52,8 +52,13 @@ class ApplicationController < ActionController::Base
     # Redirect to admin dashboard if this is an admin login
     # Commenting this out due to inconsistency when demo-ing with account that are admins
     # (PB: Uncommenting this out because I can't find a login flow that it effects. I think observed issue may have been something else..)
-    redirect_url = admin_dashboard_path if !redirect_url.present? && !resource.nil? && resource.is_a?(AdminUser)
-
+    if !resource.nil? && resource.is_a?(AdminUser)
+      if session[:redirect_after_login].present?
+        redirect_url = session[:redirect_after_login]
+      else
+        redirect_url = admin_dashboard_path
+      end
+    end
     # if session[:redirect_after_login]
     #   redirect_url = session[:redirect_after_login]
     #   session.delete(:redirect_after_login)
