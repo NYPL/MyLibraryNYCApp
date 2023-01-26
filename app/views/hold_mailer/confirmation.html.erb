@@ -3,13 +3,13 @@
 </p>
 <p>
   This is an automated email confirming that you have successfully requested <%=  pluralize(@hold.quantity, 'copy') %> of 
-  <%= link_to @teacher_set.title, "#{root_url}teacher_set_data/#{@teacher_set.id}" %>. A member of MyLibraryNYC staff will be processing your order
+  <%= link_to @teacher_set.title, "#{root_url}teacher_set_details/#{@teacher_set.id}" %>. A member of MyLibraryNYC staff will be processing your order
   and sending you a follow-up email shortly.
 </p>
 
 <p>
   For your records, your order ID is <strong><%= @hold.access_key %></strong>. You can view the details of your order here:<br />
-  <%= link_to "#{hold_url(@hold.access_key)}", hold_url(@hold.access_key) %> 
+  <%= link_to "#{hold_url(@hold.access_key)}", "#{root_url}ordered_holds/#{@hold.access_key}" %> 
 </p>
 
 <p>

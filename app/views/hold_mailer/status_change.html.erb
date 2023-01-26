@@ -1,53 +1,3 @@
-<p>
-  <%= link_to @user.email, "mailto:#{@user.email}" %> has ordered <%= pluralize(@hold.quantity, 'copy') %> of the following teacher set:<br />
-  <%= link_to @teacher_set.title, "#{root_url}teacher_set_data/#{@teacher_set.id}" %>
-<p>
-  Change this order's status here:<br />
-  <%= link_to "#{new_admin_hold_change_url(:hold => @hold)}", new_admin_hold_change_url(:hold => @hold) %> 
-</p>
-
-<% if @user.multiple_barcodes? %>
-  <p style="font-weight: bold; color: red;">Note: This user has multiple barcodes.</p>
-<% end %>
-
-<p>
-  Additional admin links:
-</p>
-
-<p>
-  Teacher: <%= link_to @user.email, admin_user_url(@user) %><br />
-  School: <%= link_to @user.school.name, admin_school_url(@user.school) %><br />
-  Order: <%= link_to @hold.access_key, admin_hold_url(@hold) %><br />
-  Teacher Set: <%= link_to @teacher_set.title, admin_teacher_set_url(@teacher_set) %>
-</p>
-=================
-<p>
-  Hi there!
-</p>
-<p>
-  This is an automated email confirming that you have successfully requested <%=  pluralize(@hold.quantity, 'copy') %> of 
-  <%= link_to @teacher_set.title, "#{root_url}teacher_set_data/#{@teacher_set.id}" %>. A member of MyLibraryNYC staff will be processing your order
-  and sending you a follow-up email shortly.
-</p>
-
-<p>
-  For your records, your order ID is <strong><%= @hold.access_key %></strong>. You can view the details of your order here:<br />
-  <%= link_to "#{hold_url(@hold.access_key)}", hold_url(@hold.access_key) %> 
-</p>
-
-<p>
-  If you would like to cancel your order, you can request a cancellation by clicking the link below<br />
-  <%#= link_to "Cancel Order", holds_cancel_url(@hold.access_key) %> 
-</p>
-
-<p>
-  Thank You,<br />
-  MyLibraryNYC<br />
-  <%= link_to "#{root_url}", root_url %> 
-</p>
-
-
-====================
 Your order status for <%= @teacher_set.title %> is <%= @hold.status %>.
 
 <% if @details.present? %>
@@ -55,6 +5,7 @@ Your order status for <%= @teacher_set.title %> is <%= @hold.status %>.
     Details: <%= @details %>
   </p>
 <% end %>
+
 <p>
   Your order ID is <strong><%= @hold.access_key %></strong>. You can view the details of your order here:<br />
   <%= link_to "#{hold_url(@hold.access_key)}", "#{root_url}ordered_holds/#{@hold.access_key}" %>
