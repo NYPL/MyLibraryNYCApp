@@ -3,7 +3,7 @@
 </p>
 <p>
   This is an automated email confirming that you have successfully requested <%=  pluralize(@hold.quantity, 'copy') %> of 
-  <%= link_to @teacher_set.title, teacher_set_url(@teacher_set) %>. A member of MyLibraryNYC staff will be processing your order
+  <%= link_to @teacher_set.title, "#{root_url}teacher_set_data/#{@teacher_set.id}" %>. A member of MyLibraryNYC staff will be processing your order
   and sending you a follow-up email shortly.
 </p>
 
@@ -14,7 +14,7 @@
 
 <p>
   If you would like to cancel your order, you can request a cancellation by clicking the link below<br />
-  <%= link_to "#{holds_cancel_url(@hold.access_key)}", holds_cancel_url(@hold.access_key) %> 
+  <%= link_to "Cancel Order", "#{root_url}holds/#{@hold.access_key}/cancel" %> 
 </p>
 
 <p>
