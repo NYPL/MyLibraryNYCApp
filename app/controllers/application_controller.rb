@@ -177,6 +177,8 @@ class ApplicationController < ActionController::Base
         end
 
         originating_location = "teacher_set_data?#{query_params.to_query}"
+      elsif params["controller"] == "holds" && params["action"] == "ordered_holds_details" && params["cache_key"].present?
+        originating_location = "ordered_holds/#{params["cache_key"]}"
       else
         originating_location = "teacher_set_data"
       end
