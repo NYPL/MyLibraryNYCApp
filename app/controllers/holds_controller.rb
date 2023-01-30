@@ -55,7 +55,12 @@ class HoldsController < ApplicationController
 
 
   def ordered_holds_details
-
+    unless logged_in?
+      if storable_location?
+        store_user_location!
+      end
+      redirect_to "/signin"
+    end
   end
   ##
   # Create holds and update quantity column in holds.
