@@ -622,6 +622,17 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+  const clearFilters = () => {
+    searchParams.delete("language");
+    searchParams.delete("area of study");
+    searchParams.delete("set type");
+    searchParams.delete("availability");
+    searchParams.delete("subjects");
+    searchParams.delete("grade_begin");
+    searchParams.delete("grade_end");
+    setSearchParams(searchParams);
+  }
+
   const teacherSetSideBarResults = () => {
     const bgColor = isLargerThanMedium
       ? "var(--nypl-colors-ui-gray-x-light-cool)"
@@ -639,6 +650,18 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
+        <div>
+          <Button buttonType="text"
+            id="clear-filters-button-id"
+            size="medium"
+            type="button"
+            marginTop="m"
+            marginLeft="xl"
+            onClick={clearFilters}
+          >
+            Clear Filters
+          </Button>
+        </div>
       </Box>
     );
   };
@@ -1081,6 +1104,10 @@ export default function SearchTeacherSets(props) {
   const mobileSupport = () => {
     return isLargerThanMedium ? "block" : "none";
   };
+
+  const clearSearchKeyword = () => {
+    console.log("test")
+  } 
 
   // {tagSetsData()}
   return (
