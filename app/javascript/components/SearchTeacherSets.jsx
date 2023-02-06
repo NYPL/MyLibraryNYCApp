@@ -541,7 +541,7 @@ export default function SearchTeacherSets(props) {
     searchParams.set("grade_begin", gradeBeginVal);
     searchParams.set("grade_end", gradeEndVal);
     setSearchParams(searchParams);
-    window.scrollTo(300, 300)
+    window.scrollTo(400, 400)
   };
 
   const TeacherSetGradesSlider = () => {
@@ -622,6 +622,17 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+  const clearFilters = () => {
+    searchParams.delete("language");
+    searchParams.delete("area of study");
+    searchParams.delete("set type");
+    searchParams.delete("availability");
+    searchParams.delete("subjects");
+    searchParams.delete("grade_begin");
+    searchParams.delete("grade_end");
+    setSearchParams(searchParams);
+  }
+
   const teacherSetSideBarResults = () => {
     const bgColor = isLargerThanMedium
       ? "var(--nypl-colors-ui-gray-x-light-cool)"
@@ -639,6 +650,18 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
+        <div>
+          <Button buttonType="text"
+            id="clear-filters-button-id"
+            size="medium"
+            type="button"
+            marginTop="m"
+            marginLeft="xl"
+            onClick={clearFilters}
+          >
+            Clear Filters
+          </Button>
+        </div>
       </Box>
     );
   };
@@ -978,7 +1001,7 @@ export default function SearchTeacherSets(props) {
 
   const accordionDataScrolltoTop = () => {
     if (window.pageYOffset > 0) {
-      window.scrollTo({ top: 265, behavior: "smooth" });
+      window.scrollTo({ top: 400, behavior: "smooth" });
     } else {
       window.scrollTo({ top: 10, behavior: "smooth" });
     }
@@ -1081,6 +1104,10 @@ export default function SearchTeacherSets(props) {
   const mobileSupport = () => {
     return isLargerThanMedium ? "block" : "none";
   };
+
+  const clearSearchKeyword = () => {
+    console.log("test")
+  } 
 
   // {tagSetsData()}
   return (
