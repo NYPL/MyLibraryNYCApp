@@ -541,7 +541,7 @@ export default function SearchTeacherSets(props) {
     searchParams.set("grade_begin", gradeBeginVal);
     searchParams.set("grade_end", gradeEndVal);
     setSearchParams(searchParams);
-    window.scrollTo(300, 300)
+    window.scrollTo(400, 400)
   };
 
   const TeacherSetGradesSlider = () => {
@@ -1001,7 +1001,7 @@ export default function SearchTeacherSets(props) {
 
   const accordionDataScrolltoTop = () => {
     if (window.pageYOffset > 0) {
-      window.scrollTo({ top: 265, behavior: "smooth" });
+      window.scrollTo({ top: 400, behavior: "smooth" });
     } else {
       window.scrollTo({ top: 10, behavior: "smooth" });
     }
