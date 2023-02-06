@@ -631,6 +631,7 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("grade_begin");
     searchParams.delete("grade_end");
     setSearchParams(searchParams);
+    window.scrollTo({ top: 400, behavior: "smooth" });
   }
 
   const teacherSetSideBarResults = () => {
