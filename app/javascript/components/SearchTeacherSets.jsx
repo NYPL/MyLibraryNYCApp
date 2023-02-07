@@ -66,7 +66,7 @@ export default function SearchTeacherSets(props) {
   const [noTsResultsFound, setNoTsResultsFound] = useState("");
   const [computedCurrentPage, setComputedCurrentPage] = useState(1);
   // const initialPage = 1;
-  const { isLargerThanMedium } = useNYPLBreakpoints();
+  const { isLargerThanMedium, isLargerThanMobile } = useNYPLBreakpoints();
   // const [selectedPage, setSelectedPage] = useState(initialPage);
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
@@ -640,6 +640,7 @@ export default function SearchTeacherSets(props) {
     const bgColor = isLargerThanMedium
       ? "var(--nypl-colors-ui-gray-x-light-cool)"
       : "";
+    const clearFilteMargin = isLargerThanMobile? "xl" : "84px"
     return (
       <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
         <div>{tsRefineResultsHeading()}</div>
@@ -659,7 +660,7 @@ export default function SearchTeacherSets(props) {
             size="medium"
             type="button"
             marginTop="m"
-            marginLeft="xl"
+            marginLeft={clearFilteMargin}
             onClick={clearFilters}
           >
             Clear Filters
