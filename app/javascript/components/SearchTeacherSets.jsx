@@ -538,6 +538,7 @@ export default function SearchTeacherSets(props) {
 
   const getGrades = (grades) => {
     const [gradeBeginVal, gradeEndVal] = grades;
+    setGrades(gradeBeginVal, gradeEndVal)
     searchParams.set("grade_begin", gradeBeginVal);
     searchParams.set("grade_end", gradeEndVal);
     setSearchParams(searchParams);
@@ -567,13 +568,13 @@ export default function SearchTeacherSets(props) {
         min={-1}
         max={12}
         defaultValue={[parseInt(grade_begin), parseInt(grade_end)]}
-        //onChange={getGrades}
+        onChange={getGrades}
         onChangeEnd={getGrades}
         showBoxes={false}
         showHelperInvalidText
         showLabel
         showValues={false}
-        //value={rangeValues}
+        value={rangeValues}
       />
     );
   };
@@ -630,6 +631,7 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("subjects");
     searchParams.delete("grade_begin");
     searchParams.delete("grade_end");
+    setGrades(-1, 12)
     setSearchParams(searchParams);
     window.scrollTo({ top: 400, behavior: "smooth" });
   }
