@@ -520,6 +520,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const availableResults = () => {
+    window.scrollTo(428, 428)
     if (availableToggle === true) {
       setAvailableToggle(false);
       setAvailability("");
@@ -542,7 +543,7 @@ export default function SearchTeacherSets(props) {
     searchParams.set("grade_begin", gradeBeginVal);
     searchParams.set("grade_end", gradeEndVal);
     setSearchParams(searchParams);
-    window.scrollTo(425, 425)
+    window.scrollTo(428, 428)
   };
 
   const TeacherSetGradesSlider = () => {
@@ -633,7 +634,7 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("grade_end");
     setGrades(-1, 12)
     setSearchParams(searchParams);
-    window.scrollTo({ top: 425, behavior: "smooth" });
+    window.scrollTo({ top: 428, behavior: "smooth" });
   }
 
   const teacherSetSideBarResults = () => {
@@ -1005,7 +1006,7 @@ export default function SearchTeacherSets(props) {
 
   const accordionDataScrolltoTop = () => {
     if (window.pageYOffset > 0) {
-      window.scrollTo({ top: 425, behavior: "smooth" });
+      window.scrollTo({ top: 428, behavior: "smooth" });
     } else {
       window.scrollTo({ top: 10, behavior: "smooth" });
     }
