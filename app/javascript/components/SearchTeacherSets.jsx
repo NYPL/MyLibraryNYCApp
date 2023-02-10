@@ -574,7 +574,7 @@ export default function SearchTeacherSets(props) {
         showHelperInvalidText
         showLabel
         showValues={false}
-        value={rangeValues}
+        //value={rangeValues}
       />
     );
   };
