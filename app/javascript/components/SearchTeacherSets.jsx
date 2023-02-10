@@ -542,7 +542,7 @@ export default function SearchTeacherSets(props) {
     searchParams.set("grade_begin", gradeBeginVal);
     searchParams.set("grade_end", gradeEndVal);
     setSearchParams(searchParams);
-    window.scrollTo(400, 400)
+    window.scrollTo(425, 425)
   };
 
   const TeacherSetGradesSlider = () => {
@@ -633,7 +633,7 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("grade_end");
     setGrades(-1, 12)
     setSearchParams(searchParams);
-    window.scrollTo({ top: 400, behavior: "smooth" });
+    window.scrollTo({ top: 425, behavior: "smooth" });
   }
 
   const teacherSetSideBarResults = () => {
@@ -1005,7 +1005,7 @@ export default function SearchTeacherSets(props) {
 
   const accordionDataScrolltoTop = () => {
     if (window.pageYOffset > 0) {
-      window.scrollTo({ top: 400, behavior: "smooth" });
+      window.scrollTo({ top: 425, behavior: "smooth" });
     } else {
       window.scrollTo({ top: 10, behavior: "smooth" });
     }
@@ -1110,7 +1110,9 @@ export default function SearchTeacherSets(props) {
   };
 
   const clearSearchKeyword = () => {
-    console.log("test")
+    setKeyWord("")
+    searchParams.delete("keyword");
+    setSearchParams(searchParams);
   } 
 
   // {tagSetsData()}
@@ -1142,6 +1144,8 @@ export default function SearchTeacherSets(props) {
               onChange: handleSearchKeyword,
               placeholder: "Enter a teacher set name",
               value: keyword,
+              isClearable: "true",
+              isClearableCallback: clearSearchKeyword
             }}
           />
         </>
