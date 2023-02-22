@@ -66,7 +66,7 @@ export default function SearchTeacherSets(props) {
   const [noTsResultsFound, setNoTsResultsFound] = useState("");
   const [computedCurrentPage, setComputedCurrentPage] = useState(1);
   // const initialPage = 1;
-  const { isLargerThanMedium } = useNYPLBreakpoints();
+  const { isLargerThanMedium, isLargerThanMobile } = useNYPLBreakpoints();
   // const [selectedPage, setSelectedPage] = useState(initialPage);
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
@@ -520,6 +520,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const availableResults = () => {
+    window.scrollTo(428, 428)
     if (availableToggle === true) {
       setAvailableToggle(false);
       setAvailability("");
@@ -538,9 +539,11 @@ export default function SearchTeacherSets(props) {
 
   const getGrades = (grades) => {
     const [gradeBeginVal, gradeEndVal] = grades;
+    setGrades(gradeBeginVal, gradeEndVal)
     searchParams.set("grade_begin", gradeBeginVal);
     searchParams.set("grade_end", gradeEndVal);
     setSearchParams(searchParams);
+    //window.scrollTo(428, 428)
   };
 
   const TeacherSetGradesSlider = () => {
@@ -567,6 +570,7 @@ export default function SearchTeacherSets(props) {
         max={12}
         defaultValue={[parseInt(grade_begin), parseInt(grade_end)]}
         onChange={getGrades}
+        //onChangeEnd={getGrades}
         showBoxes={false}
         showHelperInvalidText
         showLabel
@@ -620,10 +624,24 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+  const clearFilters = () => {
+    searchParams.delete("language");
+    searchParams.delete("area of study");
+    searchParams.delete("set type");
+    searchParams.delete("availability");
+    searchParams.delete("subjects");
+    searchParams.delete("grade_begin");
+    searchParams.delete("grade_end");
+    setGrades(-1, 12)
+    setSearchParams(searchParams);
+    window.scrollTo({ top: 428, behavior: "smooth" });
+  }
+
   const teacherSetSideBarResults = () => {
     const bgColor = isLargerThanMedium
       ? "var(--nypl-colors-ui-gray-x-light-cool)"
       : "";
+    const clearFilteMargin = isLargerThanMobile? "xl" : "84px"
     return (
       <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
         <div>{tsRefineResultsHeading()}</div>
@@ -637,6 +655,18 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
+{/*      <div>
+          <Button buttonType="text"
+            id="clear-filters-button-id"
+            size="medium"
+            type="button"
+            marginTop="m"
+            marginLeft={clearFilteMargin}
+            onClick={clearFilters}
+          >
+            Clear Filters
+          </Button>
+        </div>*/}
       </Box>
     );
   };
@@ -976,7 +1006,7 @@ export default function SearchTeacherSets(props) {
 
   const accordionDataScrolltoTop = () => {
     if (window.pageYOffset > 0) {
-      window.scrollTo({ top: 265, behavior: "smooth" });
+      window.scrollTo({ top: 428, behavior: "smooth" });
     } else {
       window.scrollTo({ top: 10, behavior: "smooth" });
     }
@@ -1080,6 +1110,12 @@ export default function SearchTeacherSets(props) {
     return isLargerThanMedium ? "block" : "none";
   };
 
+  const clearSearchKeyword = () => {
+    setKeyWord("")
+    searchParams.delete("keyword");
+    setSearchParams(searchParams);
+  } 
+
   // {tagSetsData()}
   return (
     <TemplateAppContainer
@@ -1109,6 +1145,8 @@ export default function SearchTeacherSets(props) {
               onChange: handleSearchKeyword,
               placeholder: "Enter a teacher set name",
               value: keyword,
+              isClearable: "true",
+              isClearableCallback: clearSearchKeyword
             }}
           />
         </>
