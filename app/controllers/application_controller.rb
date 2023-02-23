@@ -70,7 +70,7 @@ class ApplicationController < ActionController::Base
   # s.a. making a teacher set order.  Takes the user to a login page.
   def require_login
     unless user_signed_in?
-      flash[:error] = "Please sign in to complete your order!"
+      #flash[:error] = "Please sign in to complete your order!"
       respond_to do |format|
         format.html {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
