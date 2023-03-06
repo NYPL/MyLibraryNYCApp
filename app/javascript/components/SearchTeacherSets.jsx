@@ -31,6 +31,7 @@ import {
   TagSet,
   VStack,
   HStack,
+  Notification,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -72,6 +73,7 @@ export default function SearchTeacherSets(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
   const [resetPageNumber, setResetPageNumber] = useState("");
+  const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] = useState("");
   const location = useLocation();
 
   useEffect(() => {
@@ -229,7 +231,7 @@ export default function SearchTeacherSets(props) {
         setNoTsResultsFound(res.data.no_results_found_msg);
         setTsSubjects(res.data.tsSubjectsHash);
         setResetPageNumber(res.data.resetPageNumber);
-
+        setTeacherSetDataNotRetrievedMsg(res.data.errrorMessage);
         if (res.data.teacher_sets.length > 0 && res.data.total_count > 10) {
           setDisplayPagination("block");
         } else {
@@ -431,51 +433,55 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetDetails = () => {
-    return teacherSets.map((ts, i) => {
-      return (
-        <div
-          key={"teacher-set-results-key-" + i}
-          id={"teacher-set-results-" + i}
-        >
-          <Card
-            id={"ts-details-" + i}
-            layout="row"
-            aspectratio="square"
-            size="xxsmall"
-            marginTop="l"
+    if (teacherSets.length >= 0) {
+      return teacherSets.map((ts, i) => {
+        return (
+          <div
+            key={"teacher-set-results-key-" + i}
+            id={"teacher-set-results-" + i}
           >
-            <CardHeading
-              marginBottom="xs"
-              level="three"
-              id={"ts-order-details-" + i}
+            <Card
+              id={"ts-details-" + i}
+              layout="row"
+              aspectratio="square"
+              size="xxsmall"
+              marginTop="l"
             >
-              <ReactRouterLink
-                to={"/teacher_set_details/" + ts.id}
-                onClick={() => window.scrollTo(0, 0)}
+              <CardHeading
+                marginBottom="xs"
+                level="three"
+                id={"ts-order-details-" + i}
               >
-                {ts.title}
-              </ReactRouterLink>
-            </CardHeading>
-            <CardContent marginBottom="xs" id={"ts-suitabilities-" + i}>
-              {ts.suitabilities_string}
-            </CardContent>
-            <CardContent marginBottom="s" id={"ts-availability-" + i}>
-              {teacherSetAvailability(ts)}
-            </CardContent>
-            <CardContent id={"ts-description-" + i}>
-              {ts.description}
-            </CardContent>
-          </Card>
-          <HorizontalRule
-            marginTop="l"
-            marginBottom="l"
-            id={"ts-horizontal-rule-" + i}
-            align="left"
-            className="tsDetailHorizontalLine"
-          />
-        </div>
-      );
-    });
+                <ReactRouterLink
+                  to={"/teacher_set_details/" + ts.id}
+                  onClick={() => window.scrollTo(0, 0)}
+                >
+                  {ts.title}
+                </ReactRouterLink>
+              </CardHeading>
+              <CardContent marginBottom="xs" id={"ts-suitabilities-" + i}>
+                {ts.suitabilities_string}
+              </CardContent>
+              <CardContent marginBottom="s" id={"ts-availability-" + i}>
+                {teacherSetAvailability(ts)}
+              </CardContent>
+              <CardContent id={"ts-description-" + i}>
+                {ts.description}
+              </CardContent>
+            </Card>
+            <HorizontalRule
+              marginTop="l"
+              marginBottom="l"
+              id={"ts-horizontal-rule-" + i}
+              align="left"
+              className="tsDetailHorizontalLine"
+            />
+          </div>
+        );
+      });
+    } else {
+      return <></>
+    }
   };
 
   const onPageChange = (page) => {
@@ -1117,6 +1123,24 @@ export default function SearchTeacherSets(props) {
   } 
 
   // {tagSetsData()}
+
+  const tsDataNotRetrievedMsg = () => {
+    if (teacherSetDataNotRetrievedMsg !== "") {
+      return <Notification
+        marginTop="l"
+        icon={<Icon name="alertWarningFilled" color="ui.warning.primary" />}
+        ariaLabel="SignOut Notification"
+        id="sign-out-notification"
+        notificationType="announcement"
+        notificationContent={
+          teacherSetDataNotRetrievedMsg
+        }
+      />
+    } else {
+      return null;
+    }
+  }
+
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
@@ -1149,6 +1173,7 @@ export default function SearchTeacherSets(props) {
               isClearableCallback: clearSearchKeyword
             }}
           />
+          <div>{tsDataNotRetrievedMsg()}</div>
         </>
       }
       contentPrimary={
