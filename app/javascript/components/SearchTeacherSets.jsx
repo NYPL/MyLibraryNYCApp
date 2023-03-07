@@ -953,7 +953,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const tsDetails = () => {
-    if (isLoading) {
+    if (isLoading && teacherSetDataNotRetrievedMsg === "") {
       return (
         <SkeletonLoader
           className="teacher-set-details-skeleton-loader"
