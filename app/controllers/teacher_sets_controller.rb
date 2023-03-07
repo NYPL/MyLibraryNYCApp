@@ -2,6 +2,9 @@
 
 class TeacherSetsController < ApplicationController
   include TeacherSetsEsHelper
+  include MlnException
+  include MlnResponse
+  include MlnHelper
 
   #before_action :redirect_to_angular, only: [:index, :show] unless ENV['RAILS_ENV'] == 'test'
 
@@ -71,18 +74,19 @@ class TeacherSetsController < ApplicationController
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
 
     if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash, resetPageNumber: resetPageNumber}
+      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash, resetPageNumber: resetPageNumber, errrorMessage: "" }
     else
       render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages}, serializer: SearchSerializer, include_books: false, include_contents: false
     end
+  rescue ElasticsearchException => e
+    render json:  { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, facets: {} }
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
                              'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-    render json: {
-      errors: {error_message: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance."},
+    render json:  { errrorMessage: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance.",
       teacher_sets: {},
       facets: {}
-    }, serializer: SearchSerializer, include_books: false, include_contents: false
+    }
   end
 
 
