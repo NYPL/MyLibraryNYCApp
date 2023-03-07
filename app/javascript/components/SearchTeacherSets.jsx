@@ -663,7 +663,7 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
-{/*      <div>
+      <div>
           <Button buttonType="text"
             id="clear-filters-button-id"
             size="medium"
@@ -674,7 +674,7 @@ export default function SearchTeacherSets(props) {
           >
             Clear Filters
           </Button>
-        </div>*/}
+        </div>
       </Box>
     );
   };
