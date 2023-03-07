@@ -551,7 +551,7 @@ export default function SearchTeacherSets(props) {
     searchParams.set("grade_begin", gradeBeginVal);
     searchParams.set("grade_end", gradeEndVal);
     setSearchParams(searchParams);
-    window.scrollTo({ top: 428, behavior: "smooth" });
+    window.scrollTo(428, 428)
   };
 
   const TeacherSetGradesSlider = () => {
