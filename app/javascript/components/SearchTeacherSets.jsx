@@ -338,6 +338,7 @@ export default function SearchTeacherSets(props) {
           marginTop="m"
           id="ts-result-found-id"
           fontWeight="heading.callout"
+          aria-live="polite"
         >
           {"Showing " +
             test +
@@ -369,6 +370,7 @@ export default function SearchTeacherSets(props) {
           marginTop="m"
           id="ts-results-found-id"
           fontWeight="heading.callout"
+          aria-live="polite"
         >
           {"Showing " +
             fromResults +
