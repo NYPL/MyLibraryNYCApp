@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HaveQuestions from "./HaveQuestions";
+import HaveQuestions from "./../HaveQuestions";
 import { Link as ReactRouterLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { titleCase } from "title-case";
@@ -20,8 +20,9 @@ import {
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components";
-import ShowBookImage from "./ShowBookImage";
-import mlnImage from "../images/mln.svg";
+
+import ShowBookImage from "./../ShowBookImage";
+import mlnImage from "./../../images/mln.svg";
 
 export default function TeacherSetBooks() {
   const params = useParams();
@@ -46,7 +47,9 @@ export default function TeacherSetBooks() {
   }, [isLoading]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (process.env.NODE_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     axios
       .get("/books/" + params["id"])
       .then((res) => {
