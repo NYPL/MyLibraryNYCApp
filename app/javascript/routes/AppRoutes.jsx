@@ -13,12 +13,12 @@ import SearchTeacherSets from "../components/SearchTeacherSets";
 import Accounts from "../components/Accounts";
 import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
 import TeacherSetDetails from "../components/TeacherSetDetails";
-import TeacherSetOrder from "../components/TeacherSetOrder";
+import TeacherSetOrder from "../components/TeacherSetOrder/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
-import TeacherSetBooks from "../components/TeacherSetBooks";
+import TeacherSetBooks from "../components/TeacherSetBooks/TeacherSetBooks";
 import CalendarEventError from "../components/CalendarEventError";
 import NewsletterConfirmation from "../components/NewsletterConfirmation";
-import PageNotFound from "../components/PageNotFound";
+import PageNotFound from "../components/PageNotFound/PageNotFound";
 
 import { DSProvider } from '@nypl/design-system-react-components';
 
