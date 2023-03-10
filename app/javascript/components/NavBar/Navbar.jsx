@@ -9,7 +9,7 @@ import {
   Logo,
 } from "@nypl/design-system-react-components";
 
-import AccountDetailsSubMenu from "./AccountDetailsSubMenu";
+import AccountDetailsSubMenu from "./../AccountDetailsSubMenu";
 
 export default function Navbar(props) {
   const navigate = useNavigate();
