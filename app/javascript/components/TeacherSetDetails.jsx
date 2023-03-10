@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HaveQuestions from "./HaveQuestions";
+import HaveQuestions from "./HaveQuestions/HaveQuestions";
 import ShowBookImage from "./ShowBookImage";
 import {
   Link as ReactRouterLink,
