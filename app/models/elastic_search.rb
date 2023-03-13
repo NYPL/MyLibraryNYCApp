@@ -3,6 +3,9 @@ require "aws_decrypt.rb"
 
 class ElasticSearch
 
+  include MlnException
+  include MlnResponse
+
   AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}.freeze
   SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}.freeze
 
@@ -73,20 +76,24 @@ class ElasticSearch
 
   # Get teacher sets documents from elastic search.
   def get_teacher_sets_from_es(params)
-    # Per page showing 10 teachersets.
-    page = params["page"].present? ? params["page"].to_i - 1 : 0
-    from = page.to_i * @teachersets_per_page.to_i
-    query, agg_hash = teacher_sets_query_based_on_filters(params)
-    
-    query[:from] = from
-    query[:size] = @teachersets_per_page
-    # Sorting teachersets based on availability and created_at values. 
-    # Showing latest created teachersets.
-    query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
-    query[:aggs] = agg_hash
-    teacherset_docs = search_by_query(query)
-    facets = facets_for_teacher_sets(teacherset_docs)
-    [teacherset_docs, facets, teacherset_docs[:totalMatches]]
+    begin
+      # Per page showing 10 teachersets.
+      page = params["page"].present? ? params["page"].to_i - 1 : 0
+      from = page.to_i * @teachersets_per_page.to_i
+      query, agg_hash = teacher_sets_query_based_on_filters(params)
+      
+      query[:from] = from
+      query[:size] = @teachersets_per_page
+      # Sorting teachersets based on availability and created_at values. 
+      # Showing latest created teachersets.
+      query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
+      query[:aggs] = agg_hash
+      teacherset_docs = search_by_query(query)
+      facets = facets_for_teacher_sets(teacherset_docs)
+      [teacherset_docs, facets, teacherset_docs[:totalMatches]]
+    rescue StandardError => e
+      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
+    end
   end
 
 

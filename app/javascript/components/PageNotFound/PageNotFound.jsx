@@ -1,5 +1,5 @@
 import React from "react";
-import HaveQuestions from "./HaveQuestions";
+import HaveQuestions from "./../HaveQuestions";
 import {
   TemplateAppContainer,
   Text,
@@ -22,11 +22,10 @@ export default function PageNotFound() {
             <>The page you are looking for does not exist.</>
           }
         />
-        <Text marginLeft="s">
-          We’re sorry, the page you requested may have moved or it no longer
-          exists. Please make sure the link you are using is correct.
+        <Text marginLeft="s" data-testid="page-not-found-error-msg-1">
+          We’re sorry, the page you requested may have moved or it no longer exists. Please make sure the link you are using is correct.
         </Text>
-        <Text marginLeft="s">To continue using our site, you can:</Text>
+        <Text marginLeft="s" data-testid="page-not-found-error-msg-2">To continue using our site, you can:</Text>
         <List
           id="nypl-list"
           id="nypl-list"

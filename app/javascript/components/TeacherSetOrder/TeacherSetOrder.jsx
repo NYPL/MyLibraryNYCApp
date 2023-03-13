@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions";
-import TeacherSetOrderDetails from "./TeacherSetOrderDetails";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import HaveQuestions from "./../HaveQuestions";
+import TeacherSetOrderDetails from "./../TeacherSetOrderDetails";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
