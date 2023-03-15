@@ -146,67 +146,6 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
-
-  def check_barcode_found_in_sierra(barcode_to_check)
-    # Ask the platform microservice api to ask Sierra if there is already a user
-    # with the passed-in barcode.
-    # Most users will have an equivalent user record in Sierra, if set up correctly.
-    # New users and users whose records have been purged from Sierra might not.
-    # Return "true" if a user is found, false otherwise.  Default to "false".
-    # Throw an exception if called with malformed data.
-
-    if barcode_to_check.blank?
-      return false
-    end
-
-    @barcode_found_in_sierra = false
-
-    response = HTTParty.get(
-      ENV['PATRON_MICROSERVICE_URL_V01'] + "?barcode=#{barcode_to_check}",
-      headers:
-        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
-          'Content-Type' => 'application/json' },
-      timeout: 10
-    )
-
-    case response.code
-    when 200
-      @barcode_found_in_sierra = true
-      LogWrapper.log('DEBUG', {
-          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service found user(#{barcode_to_check}) in Sierra",
-          'status' => response.code
-        })
-    when 404
-      LogWrapper.log('DEBUG', {
-          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service did not find user(#{barcode_to_check}) in Sierra",
-          'status' => response.code
-        })
-    when 409
-      # Duplicate patrons found for query.  This is a data cleanliness/sync problem
-      # but for the purpose of this method, we just care that the barcode is taken.
-      @barcode_found_in_sierra = true
-      LogWrapper.log('INFO', {
-          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service found multiple user(#{barcode_to_check}) records in Sierra",
-          'status' => response.code
-        })
-    else
-      # Includes response of 500.  Be liberal and assume the barcode is free.
-      LogWrapper.log('ERROR', {
-          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service threw error while looking for user(#{barcode_to_check}) in Sierra",
-          'status' => response.code,
-          'responseData' => response.body
-        })
-      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
-    end
-
-    return @barcode_found_in_sierra
-  end
-
-
   # Checks pin patterns against
   # the following examples:
   # 1111, 2929, 0003, 5999, abcabc, abab, "aaabb111333444", "@@>>@@>>abc123".
