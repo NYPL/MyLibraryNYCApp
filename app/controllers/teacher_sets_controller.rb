@@ -16,22 +16,12 @@ class TeacherSetsController < ApplicationController
     if storable_location?
       store_user_location!
     end
-    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true' means gets teacher-set documents from elastic search.
-    # teacherset.data.from.elasticsearch.enabled = false means gets teacher-set data from database.
-    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      LogWrapper.log('INFO', {'message' => "Calling elastic search to get teacher-sets", 
-                              'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-  
-      # Get teachersets and facets from elastic search
-      teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
-      @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
-    else
-      LogWrapper.log('INFO', {'message' => "Calling database to get teacher-sets", 
-                              'method' => 'app/controllers/teacher_sets_controller.rb.index'})
-      @teacher_sets = TeacherSet.for_query params
-      @facets = TeacherSet.facets_for_query @teacher_sets
-      total_count =  @teacher_sets.length
-    end
+    LogWrapper.log('INFO', {'message' => "Calling elastic search to get teacher-sets", 
+                            'method' => 'app/controllers/teacher_sets_controller.rb.index'})
+
+    # Get teachersets and facets from elastic search
+    teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
+    @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
 
     resetPageNumber = ""
     if (!@teacher_sets.present? && params["page"])
@@ -73,11 +63,8 @@ class TeacherSetsController < ApplicationController
 
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
 
-    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash, resetPageNumber: resetPageNumber, errrorMessage: "" }
-    else
-      render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages}, serializer: SearchSerializer, include_books: false, include_contents: false
-    end
+    render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash, resetPageNumber: resetPageNumber, errrorMessage: "" }
+
   rescue ElasticsearchException => e
     render json:  { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, facets: {} }
   rescue StandardError => e
