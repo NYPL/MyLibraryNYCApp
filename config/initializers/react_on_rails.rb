@@ -4,7 +4,7 @@
 # for many more options.
 
 ReactOnRails.configure do |config|
-  config.webpack_generated_files = %w[ index.js ]
+  config.webpack_generated_files = %w[index.js]
   # This configures the script to run to build the production assets by webpack. Set this to nil
   # if you don't want react_on_rails building this file for you.
   # If nil, then the standard rails/webpacker assets:precompile will run
@@ -42,7 +42,7 @@ ReactOnRails.configure do |config|
   # different. You should have ONE server bundle which can create all of your server rendered
   # React components.
   #
-  #config.server_bundle_js_file = "hello-world-bundle.js"
+  # config.server_bundle_js_file = "hello-world-bundle.js"
   config.server_bundle_js_file = "index.js"
 
 end

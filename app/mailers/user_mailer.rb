@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UserMailer < ActionMailer::Base
+class UserMailer < ApplicationMailer
   include LogWrapper
   LOG_TAG = "UserMailer"
 
@@ -13,11 +13,11 @@ class UserMailer < ActionMailer::Base
     begin
       @user = user
       mail(:to => @user.contact_email, :subject => "You have now unsubscribed from MyLibraryNyc.")
-    rescue => exception
+    rescue => e
       # something went wrong.  perhaps the user isn't set properly, or maybe the email couldn't be sent out.
       Rails.logger.error("#{LOG_TAG}.unsubscribe: ")
       LogWrapper.log('ERROR', {
-        'message' => "Cannot send unsubscribe confirmation email.  Backtrace=#{exception.backtrace}.",
+        'message' => "Cannot send unsubscribe confirmation email.  Backtrace=#{e.backtrace}.",
         'method' => 'UserMailer unsubscribe'
       })
       raise

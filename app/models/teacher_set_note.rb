@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TeacherSetNote < ActiveRecord::Base
+class TeacherSetNote < ApplicationRecord
   belongs_to :book_set
   # attr_accessible :content, :teacher_set_id
 

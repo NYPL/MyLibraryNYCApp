@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
-class TeacherSet < ActiveRecord::Base
+class TeacherSet < ApplicationRecord
   include CatalogItemMethods
   include LogWrapper
   include TeacherSetsHelper
@@ -27,7 +27,7 @@ class TeacherSet < ActiveRecord::Base
 
   validates_associated :books
 
-  validates_uniqueness_of :bnumber
+  validates :bnumber, uniqueness: true
 
   before_create :make_slug
 
@@ -199,7 +199,7 @@ class TeacherSet < ActiveRecord::Base
       teacher_set = self.delete_teacher_set(bib_id, req_body["suppressed"])
       if teacher_set.destroyed?
         LogWrapper.log('INFO', {message: "message: #{BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:msg]}",
-                       method: __method__, bib_id: bib_id, teacher_set_id: teacher_set.id, suppressed: req_body["suppressed"]})
+                                method: __method__, bib_id: bib_id, teacher_set_id: teacher_set.id, suppressed: req_body["suppressed"]})
         raise SuppressedBibRecordException.new(BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:code], BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:msg])
       end
     end
@@ -285,7 +285,7 @@ class TeacherSet < ActiveRecord::Base
   def self.delete_teacher_set(bib_id, suppressed=false)
     # Get teacher-set record by bib_id
     teacher_set = self.get_teacher_set_by_bnumber(bib_id)
-    unless teacher_set.present?
+    if teacher_set.blank?
       if suppressed
         raise SuppressedBibRecordException.new(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:code],BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:msg])
       else
@@ -339,19 +339,19 @@ class TeacherSet < ActiveRecord::Base
       end
     end
     {title: self.title, description: self.description, contents: self.contents, 
-      id: self.id.to_i, details_url: self.details_url, grade_end: self.grade_end, 
-      grade_begin: self.grade_begin, availability: availability, total_copies: self.total_copies,
-      call_number: self.call_number, language: self.language, physical_description: self.physical_description,
-      primary_language: self.primary_language, created_at: created_at, updated_at: updated_at,
-      available_copies: self.available_copies, bnumber: self.bnumber, set_type: self.set_type,
-      area_of_study: self.area_of_study, subjects: subjects_arr }
+     id: self.id.to_i, details_url: self.details_url, grade_end: self.grade_end, 
+     grade_begin: self.grade_begin, availability: availability, total_copies: self.total_copies,
+     call_number: self.call_number, language: self.language, physical_description: self.physical_description,
+     primary_language: self.primary_language, created_at: created_at, updated_at: updated_at,
+     available_copies: self.available_copies, bnumber: self.bnumber, set_type: self.set_type,
+     area_of_study: self.area_of_study, subjects: subjects_arr }
   end
 
 
   def self.for_query(params)
     sets = self.paginate(:page => params[:page])
 
-    unless params[:keyword].nil? || params[:keyword].empty?
+    if params[:keyword].present?
       # sets = sets.where("title ILIKE ?", "%#{params[:keyword]}%")
       # sets = sets.where("to_tsvector('simple', #{cols}) @@ to_tsquery(?)", "%#{params[:keyword].gsub(/\ /, '|')}%")
       # TODO: This should really be a fulltext search index, but ran out of time
@@ -397,7 +397,7 @@ class TeacherSet < ActiveRecord::Base
       params[:subjects].each_with_index do |s, i|
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
-        next unless s.match /^[0-9]+$/
+        next unless s.match? /^[0-9]+$/
 
         sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND \
                           #{join_alias}.subject_id=#{s}")
@@ -417,14 +417,14 @@ class TeacherSet < ActiveRecord::Base
     if params[:language].present?
       sets = sets.where("language IN (?) OR primary_language IN (?)", params[:language], params[:language])
     end
-    if !params[:availability].nil? && !params[:availability].empty?
+    if params[:availability].present?
       sets = sets.where("availability IN (?)", params[:availability])
     end
 
     # Sort most available first with id as tie breaker to ensure consistent sorts
-    sets = sets.order('availability ASC, available_copies DESC, id DESC')
+    sets.order('availability ASC, available_copies DESC, id DESC')
 
-    sets
+    
   end
 
 
@@ -433,7 +433,7 @@ class TeacherSet < ActiveRecord::Base
     cache_key = Digest::MD5.hexdigest cache_key.parameterize
     # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
     # TODO: take this cache expiration timeout constant out into a properties file.
-    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
+    Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hours do
       facets = []
 
       # Facets for language, availability, type, and subject are pretty basic GROUPBYs:
@@ -512,7 +512,7 @@ class TeacherSet < ActiveRecord::Base
       facets
     end
 
-    facets
+    
   end
 
 
@@ -534,7 +534,7 @@ class TeacherSet < ActiveRecord::Base
   def self.upsert_from_catalog_item(item)
     # book = self.find_or_initialize_by_details_url item['details_url']
     book = self.find_or_initialize_by_id item['id'].to_i
-    puts "  New Set!: #{book.id}" unless book.persisted?
+    Rails.logger.debug "  New Set!: #{book.id}" unless book.persisted?
     book.update_from_catalog_item item
     book
   end
@@ -561,11 +561,11 @@ class TeacherSet < ActiveRecord::Base
       :contents => item['contents'].join("\n")
     })
 
-    self.update :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
+    self.update :isbn => item['isbns'].first if item['isbns'].present?
     self.update :language => item['languages'].first['name'] if !item['languages'].empty?
     self.update :physical_description => item['physical_description'].first if !item['physical_description'].empty?
     self.update :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
-    self.update :series => item['series'].first['name'] if !item['series'].nil? && !item['series'].empty?
+    self.update :series => item['series'].first['name'] if item['series'].present?
 
     grade_begin = nil
     grade_end = nil
@@ -591,7 +591,7 @@ class TeacherSet < ActiveRecord::Base
     self.update :grade_begin => grade_begin, :grade_end => grade_end
 
     lang = nil
-    unless item['primary_language'].nil? || item['primary_language'].empty?
+    if item['primary_language'].present?
       lang = item['primary_language']['name']
       lang = nil if ['Undetermined'].include? lang
     end
@@ -606,12 +606,12 @@ class TeacherSet < ActiveRecord::Base
       url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=c&searcharg=#{URI::encode(self.call_number)}"
       # TODO: take the 1.day constant out into a properties file.
       # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
-      content = self.class.scrape_content url, 8.hour
+      content = self.class.scrape_content url, 8.hours
       # puts "  Getting by call num: #{url}"
       # sleep 0.5
       doc = Nokogiri::HTML(content)
 
-      puts "    Getting bnumber from #{url}"
+      Rails.logger.debug "    Getting bnumber from #{url}"
 
       permalink = doc.at_css('a:contains("Permanent link for this record")')
 
@@ -620,35 +620,35 @@ class TeacherSet < ActiveRecord::Base
         if !(item_links = doc.css('.briefcitItems a')).empty?
           # puts "  parsing as: 2"
           item_links = item_links.select { |l| l.text.include? 'View Full Record' }
-          item_url = 'http://' + CATALOG_DOMAIN + item_links.first[:href] unless item_links.empty?
+          item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
 
         # If that fails, look for "Teacher Set ..." links
         # if item_url.nil? && !(item_links = doc.css('.browseEntryData a')).empty?
         elsif !(item_links = doc.css('.bibItemsEntry a', '.browseEntryData a')).empty?
           # puts "  parsing as: 3"
           item_links = item_links.select { |l| l.text.include? 'Teacher Set' }
-          item_url = 'http://' + CATALOG_DOMAIN + item_links.first[:href] unless item_links.empty?
+          item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
         end
 
         # If an item_url found, follow it to find the permalink
         unless item_url.nil?
           # puts "    falling back in item url: #{item_url}"
-          doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minute))
+          doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minutes))
           permalink = doc.at_css('a:contains("Permanent link for this record")')
 
           # Item page doen't have a permalink? Must be a weird search result. Follow first View Full Record link and look for permalink there..
           if permalink.nil? && !(item_links = doc.css('.briefcitItems a:contains("View Full Record")')).empty?
             # puts "  parsing as: 2"
-            item_url = 'http://' + CATALOG_DOMAIN + item_links.first[:href] unless item_links.empty?
+            item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
             # puts "!!! third fetch... #{item_url}"
-            doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minute))
+            doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minutes))
             permalink = doc.at_css('a:contains("Permanent link for this record")')
           end
         end
       end
 
       if permalink.nil?
-        puts "    BNUMBER NOT FOUND"
+        Rails.logger.debug "    BNUMBER NOT FOUND"
 
       elsif (p = permalink[:href].match(/record=(b[0-9]+)/)) && p.size == 2
         bnumber = p[1]
@@ -666,12 +666,12 @@ class TeacherSet < ActiveRecord::Base
 
     if self.bnumber
       scrape_url = "http://#{CATALOG_DOMAIN}/search~S1?/.#{bnumber}/.#{bnumber}/1,1,1,B/holdings"
-      content = self.class.scrape_content scrape_url, 30.minute
+      content = self.class.scrape_content scrape_url, 30.minutes
 
       doc = Nokogiri::HTML(content)
-      puts "  Availability parsed from #{scrape_url}"
+      Rails.logger.debug "  Availability parsed from #{scrape_url}"
       doc.css('.bibItemsEntry').each do |availability_row|
-        avail = availability_row.css('td').select { |td| td.text.strip.downcase.sub(/^\W+/,'') == 'available' }.size == 1
+        avail = availability_row.css('td').count { |td| td.text.strip.downcase.sub(/^\W+/,'') == 'available' } == 1
 
         total_copies += 1
         available_copies += 1 if avail
@@ -684,7 +684,7 @@ class TeacherSet < ActiveRecord::Base
       :total_copies => total_copies
     })
 
-    puts "Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} \
+    Rails.logger.debug "Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} \
           avail with #{self.new_or_pending_holds.count} open holds"
     # Update availability status string
     self.recalculate_availability
@@ -1004,7 +1004,7 @@ class TeacherSet < ActiveRecord::Base
     return if isbns.empty?
 
     self.teacher_set_books.each do |teacher_set_book|
-      if !teacher_set_book.book || (teacher_set_book.book.isbn.present? && !isbns.include?(teacher_set_book.book.isbn))
+      if !teacher_set_book.book || (teacher_set_book.book.isbn.present? && isbns.exclude?(teacher_set_book.book.isbn))
         teacher_set_book.destroy
       end
     end
@@ -1013,7 +1013,7 @@ class TeacherSet < ActiveRecord::Base
     # Associate the book to the teacher set by creating a TeacherSetBook record if one does not yet exist.
     # Update all books in the teacher set.
     isbns.each do |isbn|
-      book = Book.find_by_isbn(isbn) || Book.create(isbn: isbn)
+      book = Book.find_by(isbn: isbn) || Book.create(isbn: isbn)
       TeacherSetBook.where(teacher_set_id: self.id, book_id: book.id).first_or_create
       book.update_from_isbn
     end
@@ -1075,7 +1075,7 @@ class TeacherSet < ActiveRecord::Base
     new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
 
     # If new_subject_string is empty, return nil, else return new_subject_string.
-    return unless new_subject_string.present?
+    return if new_subject_string.blank?
 
     return new_subject_string 
   end
@@ -1115,7 +1115,7 @@ class TeacherSet < ActiveRecord::Base
   def update_available_and_total_count(bibid)
     response = get_items_info_from_bibs_service(bibid)
     self.update(total_copies: response[:total_count], available_copies: response[:available_count],
-      availability: response[:availability_string])
+                availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
   end
 
@@ -1139,7 +1139,7 @@ class TeacherSet < ActiveRecord::Base
     total_count = 0
     response['data'].each do |item|
       total_count += 1 unless (item['status']['code'].present? && ['w', 'm', 'k', 'u'].include?(item['status']['code']))
-      available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
+      available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (item['status']['duedate'].blank?)
     end
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
     return total_count, available_count
@@ -1217,7 +1217,7 @@ class TeacherSet < ActiveRecord::Base
   def send_request_to_bibs_microservice(bibid)
     bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
     response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 
-      'Content-Type' => 'application/json' }, timeout: 10)
+                                                                                            'Content-Type' => 'application/json' }, timeout: 10)
 
     if response.code == 200
       LogWrapper.log('DEBUG', {

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def update_teacher_set_real_time_available_total_count
-  start_time = Time.now
+  start_time = Time.zone.now
   failure_bib_ids = []
   not_found_ids = []
   success_bib_ids = []
@@ -18,16 +18,16 @@ def update_teacher_set_real_time_available_total_count
       else
         not_found_ids << bib_id
       end
-    rescue => exception
-      error_messages << "Error occured. #{exception.message}"
-      LogWrapper.log('INFO','message' => exception.message)
+    rescue => e
+      error_messages << "Error occured. #{e.message}"
+      LogWrapper.log('INFO','message' => e.message)
       failure_bib_ids << bib_id
       sleep(5)
       next
     end
   end
 
-  total_time = Time.now - start_time
+  total_time = Time.zone.now - start_time
   puts "TotalteachersetsCountFromDB: #{TeacherSet.count}"
   puts "successIdsCount: #{success_bib_ids.count}", "failureIds: #{failure_bib_ids}", "failureIdsCount: #{failure_bib_ids.count}", 
        "notFoundIds: #{not_found_ids}", "notFoundIdsCount: #{not_found_ids.count}", "totalTime: #{total_time}"

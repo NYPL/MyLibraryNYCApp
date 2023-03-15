@@ -12,7 +12,7 @@ class SchoolsController < ApplicationController
     schools_arr = []
     anchor_tags = ["#"] + ('A'..'Z').to_a
     group_by_schools.each do |alphabet_anchor, school_objects|
-      next unless alphabet_anchor.present?
+      next if alphabet_anchor.blank?
       
       school_hash = {}
       # If school name starts with alphabet letter, school names will display under aplhabet anchor eg: 'A' Academy for Careers (12), Academy(22).
@@ -21,7 +21,7 @@ class SchoolsController < ApplicationController
       
 
       school_hash['school_names'] = school_objects.collect do |school|
-        code = school.code.present? ? school.code[1..-1].upcase : ""
+        code = school.code.present? ? school.code[1..].upcase : ""
         "#{school.name} (#{code})"
       end
       schools_arr << school_hash
@@ -30,8 +30,8 @@ class SchoolsController < ApplicationController
     render json: { schools: schools_arr, anchor_tags: anchor_tags, school_not_found: school_not_found }
   end
 
-  def participating_schools_data
-  end
+
+  def participating_schools_data; end
   
   
   def create

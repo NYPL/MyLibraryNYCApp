@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AdminUser < ActiveRecord::Base
+class AdminUser < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
@@ -12,6 +12,7 @@ class AdminUser < ActiveRecord::Base
   def name
     email
   end
+
 
   def self.is_valid_email(email)
     AdminUser.where(email: email)

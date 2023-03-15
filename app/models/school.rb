@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class School < ActiveRecord::Base
+class School < ApplicationRecord
   include CatalogItemMethods
 
   has_paper_trail
@@ -29,7 +29,7 @@ class School < ActiveRecord::Base
   # This looks up a SierraCodeZcodeMatch by the school's zcode (ie "zk003")
   # and returns the sierra_code Sierra uses to lookup a zcode (ie "1")
   def sierra_code
-    match = SierraCodeZcodeMatch.find_by_zcode(code)
+    match = SierraCodeZcodeMatch.find_by(zcode: code)
     return nil if !match
 
     return match.sierra_code
@@ -50,7 +50,7 @@ class School < ActiveRecord::Base
 
 
   def school_code
-    code.present? ? " (#{code[1..-1].upcase})" : ""
+    code.present? ? " (#{code[1..].upcase})" : ""
   end
 
 end

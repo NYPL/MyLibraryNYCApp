@@ -21,11 +21,11 @@ class SchoolsTest < ActionController::TestCase
 
   test 'activate' do
     assert_routing({ method: 'put', path: "/admin/schools/#{@school.id}/activate" }, { controller: 'admin/schools', 
-      action: 'activate', id: @school.id.to_s })
+                                                                                       action: 'activate', id: @school.id.to_s })
   end
 
   test 'in-activate' do
     assert_routing({ method: 'put', path: "/admin/schools/#{@school.id}/inactivate" }, { controller: 'admin/schools', 
-      action: 'inactivate', id: @school.id.to_s })
+                                                                                         action: 'inactivate', id: @school.id.to_s })
   end
 end

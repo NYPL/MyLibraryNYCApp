@@ -8,7 +8,7 @@
 #
 # The email masks stored in this table will be used to restrict the email addresses that site
 # users (teachers) can sign up for MLN accounts with.
-class AllowedUserEmailMasks < ActiveRecord::Base
+class AllowedUserEmailMasks < ApplicationRecord
   # Setup accessible (or protected) attributes for your model
   # attr_accessible :email_pattern, :active, :created_at, :updated_at
 

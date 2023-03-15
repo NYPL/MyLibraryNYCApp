@@ -1,4 +1,6 @@
-require "aws_decrypt.rb"
+# frozen_string_literal: true
+
+require "aws_decrypt"
 # frozen_string_literal: true
 
 class ElasticSearch
@@ -30,12 +32,12 @@ class ElasticSearch
   
   # Decode aws elastic-search url
   def es_host(config)
-    return if !config['host'].present? || ENV['RAILS_ENV'] == "test"
+    return if config['host'].blank? || ENV['RAILS_ENV'] == "test"
 
     return config['host'] if ENV['RAILS_ENV'] == "local"
 
     es_host = AwsDecrypt.decrypt_kms(config['host'])
-    return unless es_host.present?
+    return if es_host.blank?
     
     "https://#{es_host}"
   end
@@ -76,24 +78,24 @@ class ElasticSearch
 
   # Get teacher sets documents from elastic search.
   def get_teacher_sets_from_es(params)
-    begin
-      # Per page showing 10 teachersets.
-      page = params["page"].present? ? params["page"].to_i - 1 : 0
-      from = page.to_i * @teachersets_per_page.to_i
-      query, agg_hash = teacher_sets_query_based_on_filters(params)
-      
-      query[:from] = from
-      query[:size] = @teachersets_per_page
-      # Sorting teachersets based on availability and created_at values. 
-      # Showing latest created teachersets.
-      query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
-      query[:aggs] = agg_hash
-      teacherset_docs = search_by_query(query)
-      facets = facets_for_teacher_sets(teacherset_docs)
-      [teacherset_docs, facets, teacherset_docs[:totalMatches]]
-    rescue StandardError => e
-      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
-    end
+    
+    # Per page showing 10 teachersets.
+    page = params["page"].present? ? params["page"].to_i - 1 : 0
+    from = page.to_i * @teachersets_per_page.to_i
+    query, agg_hash = teacher_sets_query_based_on_filters(params)
+    
+    query[:from] = from
+    query[:size] = @teachersets_per_page
+    # Sorting teachersets based on availability and created_at values. 
+    # Showing latest created teachersets.
+    query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
+    query[:aggs] = agg_hash
+    teacherset_docs = search_by_query(query)
+    facets = facets_for_teacher_sets(teacherset_docs)
+    [teacherset_docs, facets, teacherset_docs[:totalMatches]]
+  rescue StandardError => e
+    raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
+    
   end
 
 
@@ -159,7 +161,7 @@ class ElasticSearch
     # subjects mapping are stored in nested format in elastic search. 
     if subjects.present?
       query[:query][:bool][:must] << {:nested => {:path => "subjects", 
-                                      :query => {:bool => {:must => [{:terms => {"subjects.id" => params["subjects"]}}]}}}}
+                                                  :query => {:bool => {:must => [{:terms => {"subjects.id" => params["subjects"]}}]}}}}
     end
     aggregation_hash = group_by_facets_query(aggregation_hash)
     [query, aggregation_hash]
@@ -175,8 +177,8 @@ class ElasticSearch
     aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
-    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
-                                                                               {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
+                                    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+                                                                                                               {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
     aggregation_hash
   end
   
@@ -278,12 +280,20 @@ class ElasticSearch
   end
 
 
-  def teacher_sets_sort_order(sort_order=0)
-    if (sort_order == 2 || sort_order == 3)
-      sort_order = (sort_order == 2)? "asc" : (sort_order == 3) ? "desc" : "asc"
+  def teacher_sets_sort_order(sort_order = 0)
+    if [2, 3].include?(sort_order)
+      sort_order = if sort_order == 2
+                     "asc"
+                   else
+                     sort_order == 3 ? "desc" : "asc"
+                   end
       query = [{:"title.keyword" => {:order => sort_order }}]
-    elsif (sort_order == 0 || sort_order == 1)
-      sort_order = (sort_order == 0)? "desc" : (sort_order == 1) ? "asc" : "desc"
+    elsif [0, 1].include?(sort_order)
+      sort_order = if sort_order.zero?
+                     "desc"
+                   else
+                     sort_order == 1 ? "asc" : "desc"
+                   end
       query = [{"_score": "desc", "availability.raw": "asc", "created_at": sort_order, "_id": "asc"}]
     end
     query
@@ -330,7 +340,7 @@ class ElasticSearch
 
   # Delete elastic search document by body.Eg: body: {id: "1234567", title: "test"}
   def delete_by_query(query)
-    response = @client.delete_by_query(index: @index, body: query)
-    response
+    @client.delete_by_query(index: @index, body: query)
+    
   end
 end

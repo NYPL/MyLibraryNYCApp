@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Subject < ActiveRecord::Base
+class Subject < ApplicationRecord
   # attr_accessible :title
 
   has_many :subject_teacher_sets, dependent: :delete_all

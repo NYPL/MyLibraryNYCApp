@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AdminMailer < ActionMailer::Base
+class AdminMailer < ApplicationMailer
   include LogWrapper
   LOG_TAG = "AdminMailer"
   default :from => '"MyLibraryNYC Admin" <no-reply@mylibrarynyc.org>'
@@ -14,12 +14,12 @@ class AdminMailer < ActionMailer::Base
       @error_code_and_message = error_code_and_message
       emails = AdminUser.where(email_notifications:true).pluck(:email)
       mail(:to => emails, :subject => "Problem occurred updating bib from Sierra")
-    rescue => exception
+    rescue => e
       LogWrapper.log('ERROR', {
-        'message' => "Cannot send failed_bibs_controller_api_request notification email.  Backtrace=#{exception.backtrace}.",
+        'message' => "Cannot send failed_bibs_controller_api_request notification email.  Backtrace=#{e.backtrace}.",
         'method' => 'AdminMailer.failed_bibs_controller_api_request'
       })
-      raise exception
+      raise e
     end
   end
 
@@ -32,12 +32,12 @@ class AdminMailer < ActionMailer::Base
       @physical_description = physical_description
       emails = AdminUser.where(email_notifications:true).pluck(:email)
       mail(:to => emails, :subject => "New teacher set bib in Sierra is missing required fields")
-    rescue => exception
+    rescue => e
       LogWrapper.log('ERROR', {
-        'message' => "Cannot send failed_bibs_controller_api_request notification email.  Backtrace=#{exception.backtrace}.",
+        'message' => "Cannot send failed_bibs_controller_api_request notification email.  Backtrace=#{e.backtrace}.",
         'method' => 'AdminMailer teacher_set_update_missing_required_fields'
       })
-      raise exception
+      raise e
     end
   end
 
@@ -47,12 +47,12 @@ class AdminMailer < ActionMailer::Base
     begin
       emails = AdminUser.where(email_notifications:true).pluck(:email)
       mail(:to => emails, :subject => "Problem occurred updating bib availability")
-    rescue => exception
+    rescue => e
       LogWrapper.log('ERROR', {
-        'message' => "Cannot send failed_items_controller_api_request notification email.  Backtrace=#{exception.backtrace}.",
+        'message' => "Cannot send failed_items_controller_api_request notification email.  Backtrace=#{e.backtrace}.",
         'method' => 'AdminMailer.failed_items_controller_api_request'
       })
-      raise exception
+      raise e
     end
   end
 
@@ -63,12 +63,12 @@ class AdminMailer < ActionMailer::Base
       @encrypt_email = encrypt_email
       attachments.inline['news-letter-email-logo.png'] = File.read(Rails.root.join("app/assets/images/news-letter-email-logo.png"))
       mail(to: [email], :subject => "MyLibraryNYC Newsletter - confirmation requested")
-    rescue => exception
+    rescue => e
       LogWrapper.log('ERROR', {
-        'message' => "Cannot send send news letter confirmation email. Error message:#{exception.message},
-          backtrace=#{exception.backtrace}.", 'method' => 'AdminMailer.send_news_letter_confirmation_email'
+        'message' => "Cannot send send news letter confirmation email. Error message:#{e.message},
+          backtrace=#{e.backtrace}.", 'method' => 'AdminMailer.send_news_letter_confirmation_email'
       })
-      raise exception.message
+      raise e.message
     end
   end
 end

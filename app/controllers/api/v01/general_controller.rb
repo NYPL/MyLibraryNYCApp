@@ -4,7 +4,7 @@ class Api::V01::GeneralController < ApplicationController
   include LogWrapper
 
   def unauthorized
-    render json: { 'message': 'Unauthorized message from MLN Api::V01::GeneralController' }, status: 401
+    render json: { 'message': 'Unauthorized message from MLN Api::V01::GeneralController' }, status: :unauthorized
   end
 
   private
@@ -24,7 +24,7 @@ class Api::V01::GeneralController < ApplicationController
   def validate_request
     if @parsing_error
       return [400, "Parsing error: #{@parsing_error}"]
-    elsif !@request_body || @request_body.empty?
+    elsif @request_body.blank?
       return [400, 'Request body is empty.']
     end
 
@@ -38,7 +38,7 @@ class Api::V01::GeneralController < ApplicationController
     LogWrapper.log('DEBUG', {
         'message' => "Request sent to #{params['controller']}Controller#validate_source_of_request",
         'method' => 'validate_source_of_request',
-        'status' => "start, Rails.env=#{Rails.env}, (Rails.env.test? || Rails.env.local?)=#{(Rails.env.test? || Rails.env.local?)}",
+        'status' => "start, Rails.env=#{Rails.env}, (Rails.env.test? || Rails.env.local?)=#{Rails.env.test? || Rails.env.local?}",
         'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
       })
 
@@ -63,7 +63,7 @@ class Api::V01::GeneralController < ApplicationController
       method = "#{controller_name or 'unknown_controller'}##{action_name or 'unknown_action'}"
     end
 
-    message = (exception && exception&.message ? exception.message[0..200] : 'exception or exception message missing')
+    message = (exception&.message ? exception.message[0..200] : 'exception or exception message missing')
     backtrace = (exception ? exception.backtrace : 'exception missing')
     LogWrapper.log('ERROR', {
       'message' => "#{message}...\nBacktrace=#{backtrace}.",

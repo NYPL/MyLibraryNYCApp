@@ -12,9 +12,9 @@ module Oauth
     when 200
       LogWrapper.log('INFO', {
         'message' => 'Token successfully received',
-        'status'=> response.code,
+        'status' => response.code,
         })
-      return JSON.parse(response.body)['access_token']
+      JSON.parse(response.body)['access_token']
     else
      LogWrapper.log('ERROR', {
        'message' => 'Error in receiving response from ISSO NYPL TOKEN SERVICE',

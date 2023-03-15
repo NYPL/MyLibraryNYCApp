@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ExceptionsController < ActionController::Base
+class ExceptionsController < ApplicationController
   layout 'application'
 
   def render_error

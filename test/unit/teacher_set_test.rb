@@ -209,8 +209,8 @@ class TeacherSetTest < ActiveSupport::TestCase
   describe 'create_or_update_teacherset ' do
     it 'test create or update teacherset' do
       resp = nil
-      es_resp = {"_index"=>"teacherset", "_type"=>"teacherset", "_id"=>914202741, "_version"=>11, 
-                 "result"=>"updated", "_shards"=>{"total"=>0, "successful"=>1, "failed"=>0}}
+      es_resp = {"_index" => "teacherset", "_type"=>"teacherset", "_id"=>914202741, "_version"=>11, 
+                 "result" => "updated", "_shards"=>{"total"=>0, "successful"=>1, "failed"=>0}}
 
       SIERRA_USER["data"][0]['id'] = rand.to_s[3..8]
       bib_id = SIERRA_USER["data"][0]['id']
@@ -265,14 +265,14 @@ class TeacherSetTest < ActiveSupport::TestCase
   describe '#test create or update teacherset' do
     before do
       @es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-                "_id" => 8888, "_version" => 11, "result" => "updated", 
-                "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
-      @expected_resp = {:title=>"title",:description=>"desc",
-                        :contents=>nil,:id=>8888,:details_url=>nil,:grade_end=>nil,
-                        :grade_begin=>nil,:availability=>"unavailable",:total_copies=>nil,:call_number=>nil,
-                        :language=>nil,:physical_description=>nil,:primary_language=>nil,
-                        :created_at=>nil,:updated_at=>nil,:available_copies=>nil,:bnumber=>"bnumber",
-                        :set_type=>nil,:area_of_study=>nil,:subjects=>[]}
+                 "_id" => 8888, "_version" => 11, "result" => "updated", 
+                 "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
+      @expected_resp = {:title => "title",:description=>"desc",
+                        :contents => nil,:id=>8888,:details_url=>nil,:grade_end=>nil,
+                        :grade_begin => nil,:availability=>"unavailable",:total_copies=>nil,:call_number=>nil,
+                        :language => nil,:physical_description=>nil,:primary_language=>nil,
+                        :created_at => nil,:updated_at=>nil,:available_copies=>nil,:bnumber=>"bnumber",
+                        :set_type => nil,:area_of_study=>nil,:subjects=>[]}
     end
 
     it 'update teacher-set document in ElasticSearch' do
@@ -393,7 +393,7 @@ class TeacherSetTest < ActiveSupport::TestCase
   describe 'recalculate teacher-set availability column' do
     it 'test recalculate_availability method' do
       resp = @teacher_set3.recalculate_availability
-      assert_equal(true, resp)
+      assert(resp)
     end
   end
 
@@ -436,7 +436,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       # After creation of hold, available_copies is zero and availability changed to 'unavailable'
       assert_equal("unavailable", @teacher_set7.availability)
       assert_equal(0, @teacher_set7.available_copies)
-      assert_equal(true, resp)
+      assert(resp)
     end
 
     it 'update teacher-set availability while cancellation of hold ' do
@@ -448,7 +448,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       # After cancellation of hold available_copies count increased and availability status changed to 'available'
       assert_equal(2, @teacher_set8.available_copies)
       assert_equal('available', @teacher_set8.availability)
-      assert_equal(true, resp)
+      assert(resp)
     end
 
   end

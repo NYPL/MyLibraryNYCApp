@@ -29,7 +29,7 @@ ActiveAdmin.register Faq do
       end
       if controller.action_methods.include?('destroy') 
         links += link_to I18n.t('active_admin.delete'), resource_path(resource), :method => :delete, 
-        data: { confirm: 'Are you sure you want to delete this Content?' }, :class => "member_link delete_link"
+                                                                                 data: { confirm: 'Are you sure you want to delete this Content?' }, :class => "member_link delete_link"
       end
       links
     end
@@ -43,7 +43,7 @@ ActiveAdmin.register Faq do
     f.actions
   end
   
-  show do |faq|
+  show do |_faq|
     attributes_table do
       row :question
       row :answer

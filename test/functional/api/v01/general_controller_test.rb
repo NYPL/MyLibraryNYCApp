@@ -50,7 +50,7 @@ class Api::GeneralControllerTest < MiniTest::Test
     it 'test log error' do
       exception = OpenStruct.new(message: 'error occured', backtrace: 'error' ) 
       resp = @controller.log_error(__method__, exception)
-      assert_equal(true, resp)
+      assert(resp)
     end
   end
 end

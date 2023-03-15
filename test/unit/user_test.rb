@@ -19,7 +19,7 @@ class UserTest < ActiveSupport::TestCase
       mock_check_barcode_request(barcode, '200')
       response = @user.check_barcode_found_in_sierra(barcode)
       user_would_be_unique_in_sierra = false
-      assert response == !user_would_be_unique_in_sierra
+      assert_equal response, !user_would_be_unique_in_sierra
     end
   end
 
@@ -29,7 +29,7 @@ class UserTest < ActiveSupport::TestCase
       mock_check_barcode_request(barcode, '404')
       response = @user.check_barcode_found_in_sierra(barcode)
       user_would_be_unique_in_sierra = true
-      assert response == !user_would_be_unique_in_sierra
+      assert_equal response, !user_would_be_unique_in_sierra
     end
   end
 
@@ -39,7 +39,7 @@ class UserTest < ActiveSupport::TestCase
       mock_check_barcode_request(barcode, '409')
       response = @user.check_barcode_found_in_sierra(barcode)
       user_would_be_unique_in_sierra = false
-      assert response == !user_would_be_unique_in_sierra
+      assert_equal response, !user_would_be_unique_in_sierra
     end
   end
 
@@ -150,7 +150,7 @@ class UserTest < ActiveSupport::TestCase
   test 'user method get_oauth_token is giving back an access token from
     ISSO NYPL service' do
     token = Oauth.get_oauth_token
-    assert !token.nil?
+    assert_not token.nil?
     assert token.present?
   end
 
@@ -166,7 +166,7 @@ class UserTest < ActiveSupport::TestCase
           'error' => [],
           'debugInfo' => []
         }
-        assert response == expected_response
+        assert_equal response, expected_response
       end
   end
 
@@ -191,25 +191,25 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "Queens patron's patron_type is set based on their school's borough" do
-    assert(@user.patron_type == 149)
+    assert_equal(@user.patron_type, 149)
   end
 
   test "Bronx patron's patron_type is set based on their school's borough" do
-    assert(crank(:bronx_user).patron_type == 151)
+    assert_equal(crank(:bronx_user).patron_type, 151)
   end
 
   test "Queens patron's pcode3 is set based on their school's borough" do
-    assert(crank(:queens_user).pcode3 == 5)
+    assert_equal(crank(:queens_user).pcode3, 5)
   end
 
   test "Bronx patron's pcode3 is set based on their school's borough" do
-    assert(crank(:bronx_user).pcode3 == 1)
+    assert_equal(crank(:bronx_user).pcode3, 1)
   end
 
   test "Patron's pcode4 is set based on their school's sierra_code" do
     user = crank(:bronx_user)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
-    assert(user.pcode4 == user.school.sierra_code)
+    assert_equal(user.pcode4, user.school.sierra_code)
   end
 
 

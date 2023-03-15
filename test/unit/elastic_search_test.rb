@@ -12,11 +12,11 @@ class ElasticSearchTest < MiniTest::Test
     @mintest_mock2 = MiniTest::Mock.new
     # models the format of the ES query terms, the structure we'll be sending our search requests in
     @agg_hash = {"language" => {:terms => {:field => "primary_language", :size => 100, :order => {:_key => "asc"}}},
-        "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},
-        "availability" => {:terms => {:field => "availability.raw", :size => 10, :order => {:_key => "asc"}}},
-        "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
-        "subjects" =>  {:nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000, 
-          :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+                 "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},
+                 "availability" => {:terms => {:field => "availability.raw", :size => 10, :order => {:_key => "asc"}}},
+                 "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
+                 "subjects" => {:nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000, 
+                                                                                                                 :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
                        {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}}
   end
 
@@ -25,7 +25,7 @@ class ElasticSearchTest < MiniTest::Test
   describe "test_teacher_sets_input_params" do
     it 'teacher sets input params' do
       params = {"keyword" => "test", "grade_begin" => 1, "grade_end" => 2, "language" => "english", 
-        "set type" => "type", "availability" => "availability", "area of study" => "area of study", "subjects" => ["123"]}
+                "set type" => "type", "availability" => "availability", "area of study" => "area of study", "subjects" => ["123"]}
       resp = @es_model.teacher_sets_input_params(params)
       assert_equal(params.values, resp)
     end
@@ -59,7 +59,7 @@ class ElasticSearchTest < MiniTest::Test
                      "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
                      "subjects" => 
                       { :nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000,
-                        :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+                                                                                                         :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
                                      {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}}]
 
 
@@ -158,7 +158,7 @@ class ElasticSearchTest < MiniTest::Test
       @mintest_mock1.expect(:call, [nil, nil, nil, nil, nil, nil, nil, ['123']], [params])
       @mintest_mock2.expect(:call, @agg_hash, [{}])
       expected_resp = [{:query => {:bool => {:must => [{:nested => {:path => "subjects", 
-                        :query => {:bool => {:must => [{:terms => {"subjects.id" => ["123"]}}]}}}}]}}}] << @agg_hash
+                                                                    :query => {:bool => {:must => [{:terms => {"subjects.id" => ["123"]}}]}}}}]}}}] << @agg_hash
       resp = nil
       @es_model.stub :teacher_sets_input_params, @mintest_mock1 do
         @es_model.stub :group_by_facets_query, @mintest_mock2 do
@@ -299,7 +299,7 @@ class ElasticSearchTest < MiniTest::Test
      :aggregations => 
       {"set type" => {"doc_count_error_upper_bound" => 0, "sum_other_doc_count" => 0, "buckets" => [{"key" => "multi", "doc_count" => 1}]},
        "area of study" => {"doc_count_error_upper_bound" => 0, "sum_other_doc_count" => 0, "buckets" => [{"key" => "Arabic Language Arts.", 
-        "doc_count" => 1}]},
+                                                                                                          "doc_count" => 1}]},
        "subjects" => {"doc_count" => 0, "subjects" => {"buckets" => [{"key" => {"id" => "123", "title" => "subject"}, "doc_count" => 5}]}},
        "language" => {"doc_count_error_upper_bound" => 0, "sum_other_doc_count" => 0, "buckets" => [{"key" => "English", "doc_count" => 1}]},
        "availability" => {"doc_count_error_upper_bound" => 0, "sum_other_doc_count" => 0, "buckets" => [{"key" => "available", "doc_count" => 1}]}}}

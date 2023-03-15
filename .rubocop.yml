@@ -1,23 +1,28 @@
 # This is the configuration used to check the rubocop source code.
 inherit_from: .rubocop_todo.yml
 
+require:
+  - rubocop-performance
+  - rubocop-minitest
+  - rubocop-rails
+
 Documentation:
   Description: "Document classes and non-namespace modules."
   Enabled: false
 
-Layout/AlignHash:
+Layout/ParameterAlignment:
   Enabled: false
 
-Layout/IndentHash:
+Layout/FirstHashElementIndentation:
   Enabled: false
 
 Layout/TrailingEmptyLines:
   Enabled: false
 
-Style/BracesAroundHashParameters:
-  Enabled: false
+# Style/BracesAroundHashParameters:
+#   Enabled: false
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   SupportedStyles:
     - with_first_parameter
     - with_fixed_indentation  

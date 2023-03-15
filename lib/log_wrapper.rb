@@ -17,7 +17,7 @@ module LogWrapper
       'UNKNOWN' => 5
     }
 
-    message['timestamp'] = Time.now.strftime("%Y-%m-%dT%H:%M:%S.%L%z")
+    message['timestamp'] = Time.zone.now.strftime("%Y-%m-%dT%H:%M:%S.%L%z")
     message['level'] = level
 
     Rails.logger.add(severity_levels[level], message.to_json)

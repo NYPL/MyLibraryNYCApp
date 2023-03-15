@@ -22,7 +22,7 @@ class MlnHelperTest < MiniTest::Test
     it 'test validate json ' do
       str = {data: 123}.to_json
       resp = json_valid?(str)
-      assert_equal(true, resp)
+      assert(resp)
     end
   end
 end
