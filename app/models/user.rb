@@ -24,15 +24,6 @@ class User < ActiveRecord::Base
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
 
-  
-  # if MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled')
-  #   # pin allows mix of uppercase, lowercase letters, numbers and symbols.For example: MyLib1731@!
-  #   validates :pin, :presence => true, format: { with: /\w/}, length: { in: 4..32, message: 'must be 4 to 32 characters.' }, on: :create
-  # else
-  #   validates :pin, :presence => true, format: { with: /\A\d+\z/, message: "may only contain numbers" },
-  #   length: { is: 4, message: 'must be 4 digits.' }, on: :create
-  # end
-
   # validate :validate_password_pattern, on: :create
   # PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[[:^alnum:]])/x
   validate :validate_email_pattern, :on => :create
@@ -146,86 +137,6 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
-
-  def check_barcode_found_in_sierra(barcode_to_check)
-    # Ask the platform microservice api to ask Sierra if there is already a user
-    # with the passed-in barcode.
-    # Most users will have an equivalent user record in Sierra, if set up correctly.
-    # New users and users whose records have been purged from Sierra might not.
-    # Return "true" if a user is found, false otherwise.  Default to "false".
-    # Throw an exception if called with malformed data.
-
-    if barcode_to_check.blank?
-      return false
-    end
-
-    @barcode_found_in_sierra = false
-
-    response = HTTParty.get(
-      ENV['PATRON_MICROSERVICE_URL_V01'] + "?barcode=#{barcode_to_check}",
-      headers:
-        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
-          'Content-Type' => 'application/json' },
-      timeout: 10
-    )
-
-    case response.code
-    when 200
-      @barcode_found_in_sierra = true
-      LogWrapper.log('DEBUG', {
-          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service found user(#{barcode_to_check}) in Sierra",
-          'status' => response.code
-        })
-    when 404
-      LogWrapper.log('DEBUG', {
-          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service did not find user(#{barcode_to_check}) in Sierra",
-          'status' => response.code
-        })
-    when 409
-      # Duplicate patrons found for query.  This is a data cleanliness/sync problem
-      # but for the purpose of this method, we just care that the barcode is taken.
-      @barcode_found_in_sierra = true
-      LogWrapper.log('INFO', {
-          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service found multiple user(#{barcode_to_check}) records in Sierra",
-          'status' => response.code
-        })
-    else
-      # Includes response of 500.  Be liberal and assume the barcode is free.
-      LogWrapper.log('ERROR', {
-          'method' => "#{model_name}.check_barcode_uniqueness_with_sierra",
-          'message' => "patron service threw error while looking for user(#{barcode_to_check}) in Sierra",
-          'status' => response.code,
-          'responseData' => response.body
-        })
-      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
-    end
-
-    return @barcode_found_in_sierra
-  end
-
-
-  # Checks pin patterns against
-  # the following examples:
-  # 1111, 2929, 0003, 5999, abcabc, abab, "aaabb111333444", "@@>>@@>>abc123".
-  # Sierra will return the following
-  # error message if PIN is invalid:
-  # "PIN is not valid : PIN is trivial"
-
-  # Need to add password validation
-  # def validate_password_pattern
-  #   if pin && pin&.scan(/(.)\1{2,}/)&.empty? && pin.scan(/(..+)\1{1,}/)&.empty? == true
-  #     true
-  #   else
-  #     msg = 'PIN does not meet our requirements. Please try again.'
-  #     return errors.add(:pin, msg) unless MlnConfigurationController.new.feature_flag_config('signup.pin_password.enabled') 
-
-  #     msg = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
-  #     errors.add(:pin, msg)
-  #   end
-  # end
 
 
   # Sends a request to the patron creator microservice.

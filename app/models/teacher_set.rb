@@ -223,12 +223,8 @@ class TeacherSet < ActiveRecord::Base
     # Create/Update all books.
     teacher_set.update_included_book_list(req_body)
 
-    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
-    # If feature flag is enabled create/update data in elasticsearch.
-    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      # When ever there is a create/update on bib than need to create/update the data in elastic search document.
-      teacher_set.create_or_update_teacherset_document_in_es
-    end
+    # When ever there is a create/update on bib than need to create/update the data in elastic search document.
+    teacher_set.create_or_update_teacherset_document_in_es
     teacher_set
   end
 
@@ -299,12 +295,8 @@ class TeacherSet < ActiveRecord::Base
     
     # Delete teacher-set record
     resp = teacher_set.destroy
-    # Feature flag: 'teacherset.data.from.elasticsearch.enabled = true'.
-    # If feature flag is enabled delete data from elasticsearch.
-    if MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      # After deletion of teacherset data from db than delete teacherset doc from elastic search
-      teacher_set.delete_teacherset_record_from_es if resp.destroyed?
-    end
+    # After deletion of teacherset data from db than delete teacherset doc from elastic search
+    teacher_set.delete_teacherset_record_from_es if resp.destroyed?
     teacher_set
   end
 
@@ -1033,15 +1025,6 @@ class TeacherSet < ActiveRecord::Base
   # create new records (and subjects if they do not exist) in that join table.
   def update_subjects_via_api(subject_name_array)
     return if subject_name_array.blank?
-
-    # If Elastic search feature-flag is enabled, teacher-set data saves in elastic-search cluster.
-    # Other wise teacher-set data saves in database and rails cache.
-    # If Elastic search feature-flag is enabled no need to clear the rails cache.
-    unless MlnConfigurationController.new.feature_flag_config('teacherset.data.from.elasticsearch.enabled')
-      # teacher_set.rb facets_for_query uses cached results of each query
-      Rails.cache.clear unless Rails.env.test?
-    end
-
 
     # record the list of current teacher set <--> subject associations,
     # so we can prune the subjects later.
