@@ -3403,9 +3403,9 @@
       }
     },
     "@nypl/design-system-react-components": {
-      "version": "1.4.2",
-      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.4.2.tgz",
-      "integrity": "sha512-SkGOmyYd+dtQx/nYVhxa/dTxgKbmiEoekR1cwH8Aj4kUmuWi5aDCoXpdfRbZo6+ZQFE4tO8jtuvBm+ru06FtEA==",
+      "version": "1.4.1",
+      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.4.1.tgz",
+      "integrity": "sha512-k9bZeCfhShnuIrnwqJVd+6JB+obgeqZb1D3cj9Ej270/uc/jsOZU6Tv2vFeixZeTJcWcrT7CZYj6Q4dAbnurFg==",
       "requires": {
         "@chakra-ui/focus-lock": ">=1.2.6 <2.0.0",
         "@chakra-ui/react": ">=1.8.5 <=1.8.8",
