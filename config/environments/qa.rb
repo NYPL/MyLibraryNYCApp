@@ -17,7 +17,8 @@ MyLibraryNYC::Application.configure do
                   ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL'],
                   "http://my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com",
                   "my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com",
-                  "qa-new-www.mylibrarynyc.org"
+                  "qa-new-www.mylibrarynyc.org",
+                  "mylibrarynycapp-qa-456976389.us-east-1.elb.amazonaws.com"
                 ]
   config.eager_load = true
 end

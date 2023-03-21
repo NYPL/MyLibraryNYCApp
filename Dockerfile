@@ -1,7 +1,6 @@
 FROM phusion/passenger-ruby27:2.0.1 AS production
 
 # set env vars
-ENV HOME /root
 ENV RUBY_VERSION=2.7.4
 ENV APP_HOME /home/app/MyLibraryNYCApp
 
@@ -14,6 +13,7 @@ RUN cat /dev/null > /etc/apt/sources.list.d/passenger.list
 
 RUN apt-get update -qq \
     && apt-get install -y \
+    npm \
     git
 
 # set up app files
@@ -22,16 +22,26 @@ COPY Gemfile $APP_HOME
 COPY Gemfile.lock $APP_HOME
 WORKDIR $APP_HOME
 
+RUN npm install --global yarn \
+    npm i webpack-dev-server
+
 ## bundle
-RUN gem install bundler -v '2.2.28' 
+RUN gem install bundler
 RUN bash -lc "rvm use ruby-$RUBY_VERSION --default"
-#RUN bash -lc "rvm install ruby-$RUBY_VERSION && rvm use ruby-$RUBY_VERSION --default"
+
 RUN bundle config --global github.https true \
     && bundle install
+
+RUN bundle exec rails webpacker:install
+#RUN bundle exec rails webpacker:install:react
+#RUN bundle exec rails webpacker:compile
+
+yarn add @rails/webpacker
+
 
 FROM production AS development
 
 RUN apt-get install -y postgresql-client
 
 EXPOSE 3000
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
