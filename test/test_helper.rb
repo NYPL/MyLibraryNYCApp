@@ -182,7 +182,9 @@ MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
           "subfields": [
             {
               "tag": "a",
-              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been anything but terminal, but when Augustus Waters suddenly appears at the Cancer Kid Support Group, Hazels story is about to be rewritten."
+              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been
+               anything but terminal, but when Augustus Waters suddenly appears at the Cancer Kid Support Group,
+                Hazels story is about to be rewritten."
             }
           ]
         },
@@ -736,7 +738,9 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures --
+             The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat --
+              Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -749,7 +753,9 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing
+             in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of
+              Education NYC Reads 365 list."
           }
         ]
       },
@@ -921,7 +927,8 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "9781896580601 9781896580602 9781896580603 9781896580604 9781896580605 9781896580606 9781896580607 9781896580608 9781896580609 9781896580610"
+            "content": "9781896580601 9781896580602 9781896580603 9781896580604 9781896580605 9781896580606
+             9781896580607 9781896580608 9781896580609 9781896580610"
           }
         ]
       },
@@ -1140,7 +1147,9 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures --
+             The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat
+              -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -1153,7 +1162,8 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom
+             - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -1325,7 +1335,8 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "9781896580611 9781896580612 9781896580613 9781896580614 9781896580615 9781896580616 9781896580617 9781896580618 9781896580619 9781896580620"
+            "content": "9781896580611 9781896580612 9781896580613 9781896580614 9781896580615 9781896580616 9781896580617
+             9781896580618 9781896580619 9781896580620"
           }
         ]
       },
@@ -1547,7 +1558,9 @@ ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures --
+             The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat --
+              Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -1560,7 +1573,8 @@ ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom -
+             grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -1770,7 +1784,9 @@ JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG = '{
         "code": "fre",
         "name": "French"
       },
-      "title": "Title is intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
+      "title": "Title is intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+       123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+        123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
       "author": "Arrighi, Olivier.",
       "materialType": {
         "code": "a",
@@ -1789,7 +1805,9 @@ JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG = '{
       "normTitle": "pasé on bel nwel lieutenant simeoni roman policier",
       "normAuthor": "arrighi olivier",
       "standardNumbers": [
-        "This ISBN intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
+        "This ISBN intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+         123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+          123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
         "2917623268"
       ],
       "controlNumber": "696084229",
@@ -1890,7 +1908,8 @@ JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG = '{
           "subfields": [
             {
               "tag": "a",
-              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been anything but terminal, but when Augustus Waters suddenly appears at the Cancer Kid Support Group, Hazels story is about to be rewritten."
+              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been anything but terminal,
+               but when Augustus Waters suddenly appears at the Cancer Kid Support Group, Hazels story is about to be rewritten."
             }
           ]
         },
@@ -2458,7 +2477,8 @@ TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit --
+             The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -2471,7 +2491,8 @@ TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - 
+            grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -2879,7 +2900,8 @@ TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit --
+             The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -2892,7 +2914,8 @@ TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2. 
+            These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -3286,7 +3309,8 @@ TEACHER_SET_WITH_TITLE_MISSING = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- 
+            The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -3299,7 +3323,8 @@ TEACHER_SET_WITH_TITLE_MISSING = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.
+            These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -3837,7 +3862,8 @@ class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
         :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
-        :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123, :mock_item_response_with_empty_bib, :mock_google_address
+        :mock_send_request_to_bib_service, :mock_items_response_with7899158, :mock_bib_response_with123, :mock_item_response_with_empty_bib, 
+        :mock_google_address
         
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
@@ -4050,7 +4076,7 @@ class ActiveSupport::TestCase
         }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
   end
 
-  def mock_items_response_with_7899158
+  def mock_items_response_with7899158
     stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=7899158&limit=25&offset=0").
       with(
         headers: {
@@ -4063,7 +4089,7 @@ class ActiveSupport::TestCase
   end
 
 
-  def mock_bib_response_with_123
+  def mock_bib_response_with123
     stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=123&nyplSource=sierra-nypl").
       with(
         headers: {
@@ -4093,7 +4119,13 @@ class ActiveSupport::TestCase
   def mock_es_doc
     stub_request(:get, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/_search").
       with(
-        body: "{\"query\":{\"bool\":{\"must\":[]}},\"from\":0,\"size\":20,\"sort\":[{\"_score\":\"desc\",\"availability.raw\":\"asc\",\"created_at\":\"desc\",\"_id\":\"asc\"}],\"aggs\":{\"language\":{\"terms\":{\"field\":\"primary_language\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},\"set type\":{\"terms\":{\"field\":\"set_type\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},\"availability\":{\"terms\":{\"field\":\"availability.raw\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},\"area of study\":{\"terms\":{\"field\":\"area_of_study\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},\"subjects\":{\"nested\":{\"path\":\"subjects\"},\"aggregations\":{\"subjects\":{\"composite\":{\"size\":3000,\"sources\":[{\"id\":{\"terms\":{\"field\":\"subjects.id\"}}},{\"title\":{\"terms\":{\"field\":\"subjects.title\"}}}]}}}}}}",
+        body: "{\"query\":{\"bool\":{\"must\":[]}},\"from\":0,\"size\":20,\"sort\":[{\"_score\":\"desc\",\"availability.raw\":\"asc\",
+        \"created_at\":\"desc\",\"_id\":\"asc\"}],\"aggs\":{\"language\":{\"terms\":{\"field\":\"primary_language\",\"size\":100,
+        \"order\":{\"_key\":\"asc\"}}},\"set type\":{\"terms\":{\"field\":\"set_type\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},
+        \"availability\":{\"terms\":{\"field\":\"availability.raw\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},
+        \"area of study\":{\"terms\":{\"field\":\"area_of_study\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},
+        \"subjects\":{\"nested\":{\"path\":\"subjects\"},\"aggregations\":{\"subjects\":{\"composite\":{\"size\":3000,
+        \"sources\":[{\"id\":{\"terms\":{\"field\":\"subjects.id\"}}},{\"title\":{\"terms\":{\"field\":\"subjects.title\"}}}]}}}}}}",
         headers: {
         'Accept' => '*/*',
         'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',

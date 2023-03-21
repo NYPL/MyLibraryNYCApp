@@ -15,9 +15,9 @@ class ElasticSearchTest < MiniTest::Test
                  "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},
                  "availability" => {:terms => {:field => "availability.raw", :size => 10, :order => {:_key => "asc"}}},
                  "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
-                 "subjects" => {:nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000, 
-                                                                                                                 :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
-                       {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}}
+                 "subjects" => {:nested => {:path => "subjects"}, :aggregations => {:subjects => 
+                  {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}},
+                    {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}}
   end
 
 
@@ -59,7 +59,8 @@ class ElasticSearchTest < MiniTest::Test
                      "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
                      "subjects" => 
                       { :nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000,
-                                                                                                         :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+                                                                                                         :sources => [{:id => 
+                                                                                                          {:terms => {:field => "subjects.id"}}}, 
                                      {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}}]
 
 
@@ -158,7 +159,8 @@ class ElasticSearchTest < MiniTest::Test
       @mintest_mock1.expect(:call, [nil, nil, nil, nil, nil, nil, nil, ['123']], [params])
       @mintest_mock2.expect(:call, @agg_hash, [{}])
       expected_resp = [{:query => {:bool => {:must => [{:nested => {:path => "subjects", 
-                                                                    :query => {:bool => {:must => [{:terms => {"subjects.id" => ["123"]}}]}}}}]}}}] << @agg_hash
+                                                                    :query => {:bool => 
+                                                                      {:must => [{:terms => {"subjects.id" => ["123"]}}]}}}}]}}}] << @agg_hash
       resp = nil
       @es_model.stub :teacher_sets_input_params, @mintest_mock1 do
         @es_model.stub :group_by_facets_query, @mintest_mock2 do

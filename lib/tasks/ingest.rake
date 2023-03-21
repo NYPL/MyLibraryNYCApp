@@ -148,7 +148,8 @@ namespace :ingest do
       end
     end
 
-    # Don't touch these records: select id, email, school_id FROM users where updated_at > '2014-02-7' OR email ILIKE '@nypl.org' OR id in (SELECT user_id FROM holds);
+    # Don't touch these records: select id, email, school_id FROM users where updated_at > '2014-02-7' OR email ILIKE '@nypl.org'
+    # OR id in (SELECT user_id FROM holds);
     delete = User.where("id NOT IN (SELECT user_id FROM holds) AND email NOT ILIKE '%nypl.org' AND updated_at <= '2014-02-7'")
     puts "Create #{create_users.size} users"
     puts "Update #{update_users.size} users"
@@ -203,7 +204,9 @@ namespace :ingest do
 
       user.school = u[:school]
       puts " user has custom school: #{user.school}" if user.school != u[:school]
-      user.update_attribute :alt_email, alt_email unless alt_email.nil? or !user.alt_email.empty?
+      unless alt_email.nil? or !user.alt_email.empty?
+        user.update({:alt_email, alt_email})
+      end
 
       user.save
       puts "save user: #{email} exists ? #{user.persisted?}" if !user.persisted?
@@ -286,7 +289,8 @@ namespace :ingest do
       end
     end
 
-    # Don't touch these records: select id, email, school_id FROM users where updated_at > '2014-02-7' OR email ILIKE '@nypl.org' OR id in (SELECT user_id FROM holds);
+    # Don't touch these records: select id, email, school_id FROM users where updated_at > '2014-02-7'
+    # OR email ILIKE '@nypl.org' OR id in (SELECT user_id FROM holds);
     delete = User.where("id NOT IN (SELECT user_id FROM holds) AND email NOT ILIKE '%nypl.org' AND updated_at <= '2014-02-7'")
     puts "Create #{create_users.size} users"
     puts "Delete #{delete.count} users"
@@ -417,7 +421,8 @@ namespace :ingest do
         school.phone_number = principal_phone_number if principal_phone_number.present?
 
         if row_hash['Location 1'].present?
-          address_line_2 = row_hash['Location 1'].split("\n")[0].strip # sometimes the latitude and longitude are on the second line of the cell in CSV
+          # sometimes the latitude and longitude are on the second line of the cell in CSV
+          address_line_2 = row_hash['Location 1'].split("\n")[0].strip
           school.address_line_2 = address_line_2 if address_line_2.present?
           school.borough = borough(address_line_2) if borough(address_line_2).present?
           school.postal_code = address_line_2[-5..] if address_line_2[-5..].present?
@@ -467,15 +472,20 @@ namespace :ingest do
         zcode = row_hash['zcode'].strip
         puts "Creating sierra code #{sierra_code}"
         ['sierra_code', 'zcode'].each do |column_header_name|
-          raise "The #{column_header_name} column is mislabeled or missing from the CSV." if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
+          if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
+            raise "The #{column_header_name} column is mislabeled or missing from the CSV."
+          end
         end
         puts "No need to raise an error.  FYI, the zcode of #{zcode} is in Sierra but not in MLN." unless School.find_by(code: zcode)
         SierraCodeZcodeMatch.create!(sierra_code: sierra_code, zcode: zcode)
       end
       School.all.each do |school|
         # Then ensure all schools have a SierraCodeZcodeMatch by raising the error below
-        # to prevent a teacher signing up for a school that isn't represented in Sierra's lookup table (would cause an error when they place a hold on a book)
-        raise "A SierraCodeZcodeMatch is missing for school ##{school.id} #{school.name} with this zcode: #{school.code}" unless school.code == 'MLNSTAFF' || SierraCodeZcodeMatch.find_by(zcode: school.code) || Rails.env.test?
+        # to prevent a teacher signing up for a school that isn't represented in Sierra's lookup table (would cause an error when they place
+        # a hold on a book)
+        unless school.code == 'MLNSTAFF' || SierraCodeZcodeMatch.find_by(zcode: school.code) || Rails.env.test?
+          raise "A SierraCodeZcodeMatch is missing for school ##{school.id} #{school.name} with this zcode: #{school.code}"
+        end
       end
     end
   end
@@ -540,7 +550,8 @@ namespace :ingest do
     puts "Total new schools added and active: #{new_schools.size}"
   end
 
-  desc "Import full set of schools from three boroughs, regardless of whether or not they're participating (run activate_schools to selectively activate)"
+  desc "Import full set of schools from three boroughs, regardless of whether or not they're participating
+        (run activate_schools to selectively activate)"
   task :schools , [] => :environment do |t, args|
 
     dumps_base = 'db/schools'
@@ -576,7 +587,7 @@ namespace :ingest do
     end
 
   end
-
+end
 
 
 =begin
@@ -703,6 +714,3 @@ namespace :ingest do
   end
 =end
 
-
-
-end

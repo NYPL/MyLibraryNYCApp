@@ -1192,3 +1192,20 @@ Metrics/LineLength:
   - 'lib/tasks/*.rake'
   - 'config/routes.rb'
   - 'config/initializers/*.rb'
+
+Rails/ReversibleMigration:
+  Exclude:
+  - 'db/migrate/*.rb'
+Naming/VariableNumber:
+  Exclude:
+  - 'db/migrate/*.rb'
+  - 'test/factories/school_factory.rb'
+  - 'app/admin/schools.rb'
+Rails/CreateTableWithTimestamps:
+  Exclude:
+  - 'db/migrate/20200813141524_create_faq.rb'
+  - 'db/migrate/20140128191653_add_schools_table.rb'
+  - 'db/migrate/20140108212758_initial_schema.rb'
+  - 'db/migrate/20140116211501_create_subjects_teacher_sets_table.rb'
+
+

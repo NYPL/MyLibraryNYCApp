@@ -45,10 +45,10 @@ ActiveAdmin.register User do
       f.input :first_name
       f.input :last_name
       f.input :email
-      f.input :alt_email, label: raw('Preferred Email')
+      f.input :alt_email, label: 'Preferred Email'
 
       if f.object.new_record?
-        f.input :barcode, label: raw('Barcode<br>(leave blank to auto-assign)')
+        f.input :barcode, label: 'Barcode<br>(leave blank to auto-assign)'.html_safe
       else
         f.input :barcode
       end

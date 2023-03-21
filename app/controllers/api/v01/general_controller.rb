@@ -38,7 +38,7 @@ class Api::V01::GeneralController < ApplicationController
     LogWrapper.log('DEBUG', {
         'message' => "Request sent to #{params['controller']}Controller#validate_source_of_request",
         'method' => 'validate_source_of_request',
-        'status' => "start, Rails.env=#{Rails.env}, (Rails.env.test? || Rails.env.local?)=#{Rails.env.test? || Rails.env.local?}",
+        'status' => "start #{Rails.env}",
         'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
       })
 

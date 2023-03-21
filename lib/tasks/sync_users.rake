@@ -36,9 +36,12 @@ namespace :sync_users do
       next if (csv_start.positive? && $. < csv_start)
       break if (csv_limit.positive? && $. >= (csv_start + csv_limit))
 
-      # "P BARCODE"|"EMAIL ADDR"|"PIN"|"EXP DATE"|"PCODE3"|"P TYPE"|"TOT CHKOUT"|"HOME LIBR"|"MBLOCK"|"PCODE4"|"PATRN NAME"|"ADDRESS"|"CREATED(PATRON)"|"UPDATED(PATRON)"
-      # Example:  "23333106701234"|"name@gmail.com"|"Tn/jC7sHXQpfw"|"10-01-2018"|"1"|"153"|"4"|"ea   "|"-"|"895"|"LASTNAME, FIRSTNAME"|"123 MAIN ST, NY 10001"|"05-20-2009 15:23"|"07-02-2018"
-      (barcode, email, pin, expiration, pcode3, ptype, total_checkouts, home_library, manual_block, pcode4, name, address, sierra_created, sierra_updated) = line
+      # "P BARCODE"|"EMAIL ADDR"|"PIN"|"EXP DATE"|"PCODE3"|"P TYPE"|"TOT CHKOUT"|"HOME LIBR"|"MBLOCK"|"PCODE4"|"PATRN NAME"|
+      # "ADDRESS"|"CREATED(PATRON)"|"UPDATED(PATRON)"
+      # Example:  "23333106701234"|"name@gmail.com"|"Tn/jC7sHXQpfw"|"10-01-2018"|"1"|"153"|"4"|"ea   "|"-"|"895"|"LASTNAME, 
+      # FIRSTNAME"|"123 MAIN ST, NY 10001"|"05-20-2009 15:23"|"07-02-2018"
+      (barcode, email, pin, expiration, pcode3, ptype, total_checkouts, home_library, manual_block, pcode4, name,
+        address, sierra_created, sierra_updated) = line
 
       # inore bad data, and move on to the next line
       next if (barcode.nil?)
@@ -64,7 +67,8 @@ namespace :sync_users do
 
           # was the user created before a month ago in Sierra?
           if (date_sierra_created < 1.month.ago)
-            puts "manually repaired user=#{barcode}, mln_user.id=#{mln_user.id}, mln_user.created_at=#{mln_user.created_at}, mln_user.updated_at=#{mln_user.updated_at}, sierra_created=#{sierra_created}, sierra_updated=#{sierra_updated}"
+            puts "manually repaired user=#{barcode}, mln_user.id=#{mln_user.id}, mln_user.created_at=#{mln_user.created_at},
+            mln_user.updated_at=#{mln_user.updated_at}, sierra_created=#{sierra_created}, sierra_updated=#{sierra_updated}"
           end
         rescue => e
           puts "broke: #{e}"
@@ -82,7 +86,8 @@ namespace :sync_users do
   # For each user, see if they exist in the MLN database.
   # If they do not, then output the user, so we can review them later.
   # TODO:  later functionality -- write to db a new user.
-  # call like this:  RAILS_ENV=local rake sync_users:ingest_mismatched_sierra_users['data/private/20181128_sierra_mln_user_accounts.csv',2,1,'23333090060508']
+  # call like this:  RAILS_ENV=local rake sync_users:ingest_mismatched_sierra_users
+  # ['data/private/20181128_sierra_mln_user_accounts.csv',2,1,'23333090060508']
   # @param safetyoff -- manually set this in the task call, to really truly write to the DB (a destructive change)
   desc "Check and Automatically Fix Sierra-MLN mismatch"
   task :ingest_mismatched_sierra_users, [:file_name, :start, :limit, :barcode, :safetyoff] => :environment do |t, args|
@@ -115,9 +120,12 @@ namespace :sync_users do
       next if (csv_start.positive? && $. < csv_start)
       break if (csv_limit.positive? && $. >= (csv_start + csv_limit))
 
-      # "P BARCODE"|"EMAIL ADDR"|"PIN"|"EXP DATE"|"PCODE3"|"P TYPE"|"TOT CHKOUT"|"HOME LIBR"|"MBLOCK"|"PCODE4"|"PATRN NAME"|"ADDRESS"|"CREATED(PATRON)"|"UPDATED(PATRON)"
-      # Example:  "23333106701234"|"name@gmail.com"|"Tn/jC7sHXQpfw"|"10-01-2018"|"1"|"153"|"4"|"ea   "|"-"|"895"|"LASTNAME, FIRSTNAME"|"123 MAIN ST, NY 10001"|"05-20-2009 15:23"|"07-02-2018"
-      (barcode, email, pin, expiration, pcode3, ptype, total_checkouts, home_library, manual_block, pcode4, name, address, sierra_created, sierra_updated) = line
+      # "P BARCODE"|"EMAIL ADDR"|"PIN"|"EXP DATE"|"PCODE3"|"P TYPE"|"TOT CHKOUT"|"HOME LIBR"|"MBLOCK"|"PCODE4"|"PATRN NAME"|
+      # "ADDRESS"|"CREATED(PATRON)"|"UPDATED(PATRON)"
+      # Example:  "23333106701234"|"name@gmail.com"|"Tn/jC7sHXQpfw"|"10-01-2018"|"1"|"153"|"4"|"ea   "|"-"|"895"|"LASTNAME, 
+      # FIRSTNAME"|"123 MAIN ST, NY 10001"|"05-20-2009 15:23"|"07-02-2018"
+      (barcode, email, pin, expiration, pcode3, ptype, total_checkouts, home_library, manual_block, pcode4, name, address,
+        sierra_created, sierra_updated) = line
 
       # inore bad data, and move on to the next line
       next if (barcode.nil?)

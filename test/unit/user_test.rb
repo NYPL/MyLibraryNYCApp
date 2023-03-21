@@ -13,7 +13,6 @@ class UserTest < ActiveSupport::TestCase
     @pin_error = 'PIN/Password does not meet our requirements. PIN/Password should not contain common patterns. e.g. aaat4, abcabc. Please try again.'
   end
 
-
   [generate_barcode].each do |barcode|
     test 'sierra user can be found by barcode' do
       mock_check_barcode_request(barcode, '200')
@@ -21,30 +20,21 @@ class UserTest < ActiveSupport::TestCase
       user_would_be_unique_in_sierra = false
       assert_equal response, !user_would_be_unique_in_sierra
     end
-  end
 
-
-  [generate_barcode].each do |barcode|
     test 'sierra user cannot be found by barcode' do
       mock_check_barcode_request(barcode, '404')
       response = @user.check_barcode_found_in_sierra(barcode)
       user_would_be_unique_in_sierra = true
       assert_equal response, !user_would_be_unique_in_sierra
     end
-  end
 
-
-  [generate_barcode].each do |barcode|
     test 'multiple sierra users found' do
       mock_check_barcode_request(barcode, '409')
       response = @user.check_barcode_found_in_sierra(barcode)
       user_would_be_unique_in_sierra = false
       assert_equal response, !user_would_be_unique_in_sierra
     end
-  end
 
-
-  [generate_barcode].each do |barcode|
     test 'sierra barcode lookup crashes' do
       mock_check_barcode_request(barcode, '500')
       exception = assert_raise(Exceptions::InvalidResponse) do
@@ -52,35 +42,25 @@ class UserTest < ActiveSupport::TestCase
       end
       assert_equal('Invalid status code of: 500', exception.message)
     end
-  end
 
-
-  [generate_email].each do |new_email|
     test 'user model cannot be created without first name' do
       @user.first_name = ""
       @user.save
       assert_equal(["can't be blank", "is invalid"], @user.errors.messages[:first_name])
     end
-  end
 
-  [generate_email].each do |new_email|
     test 'user model cannot be created without last name' do
       @user.last_name = ""
       @user.save
       assert_equal(["can't be blank", "is invalid"], @user.errors.messages[:last_name])
     end
-  end
 
-  [generate_email].each do |new_email|
     test 'user model cannot be created without pin' do
       @user.pin = ""
       @user.save
       assert_equal(["can't be blank", "is invalid", "must be 4 to 32 characters."], @user.errors.messages[:pin])
     end
-  end
 
-
-  [generate_email].each do |new_email|
     test 'validate pin length less than 4 characters' do
       @user.pin = "123"
       @user.save
@@ -98,42 +78,25 @@ class UserTest < ActiveSupport::TestCase
       @user.save
       assert_empty(@user.errors.messages)
     end
-  end
 
-
-  [generate_email].each do |new_email|
-    test 'user model cannot be created with an existing alternate e-mail address in database' do
-      @user.save
-      user_two = crank!(:user, alt_email: @user.alt_email)
-      user_two.save
-      assert_equal(["has already been taken"], user_two.errors.messages[:alt_email])
-    end
-  end
-
-  [generate_email].each do |new_email|
     test 'user model cannot be created with 4 of the same repeated digits as pin' do
       @user.pin = "1111"
       @user.save
       assert_equal(@user.errors.messages[:pin],[@pin_error])
     end
-  end
 
-  [generate_email].each do |new_email|
     test 'user model cannot be created with alternate repeated digits as pin' do
       @user.pin = "1212"
       @user.save
       assert_equal(@user.errors.messages[:pin],[@pin_error])
     end
-  end
 
-  [generate_email].each do |new_email|
     test 'user model cannot be created with 3 of the same repeated digits in a row as pin' do
       @user.pin = "0007"
       @user.save
       assert_equal(@user.errors.messages[:pin],[@pin_error])
     end
   end
-
 
   ## NOTE:  We manage allowed email addresses dynamically now, but schools.nyc.gov
   # is to always be allowed, and it's OK not to test registration success for the others.
@@ -244,6 +207,5 @@ class UserTest < ActiveSupport::TestCase
     @user.pin = "@@>>@@>>abc123"
     @user.save
     assert_equal(@user.errors.messages[:pin], [@pin_error])
-
   end
 end

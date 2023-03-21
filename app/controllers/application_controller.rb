@@ -155,7 +155,8 @@ class ApplicationController < ActionController::Base
         originating_location = "book_details/#{params['id']}"
       elsif params["controller"] == "teacher_sets" && params["action"] == "index"
         query_params = request.query_parameters
-        if params["grade_begin"] == "-1" && params["grade_end"] == "12" && params["grade_begin"] == "-1" && params["keyword"] == "" && params["sort_order"] == ""
+        if params["grade_begin"] == "-1" && params["grade_end"] == "12" && params["grade_begin"] == "-1" && params["keyword"] == "" && 
+           params["sort_order"] == ""
           query_params.delete("grade_begin")
           query_params.delete("grade_end")
           query_params.delete("keyword")

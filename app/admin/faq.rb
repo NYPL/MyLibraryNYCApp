@@ -28,8 +28,9 @@ ActiveAdmin.register Faq do
         links += link_to I18n.t('active_admin.edit'), edit_resource_path(resource), :class => "member_link edit_link"
       end
       if controller.action_methods.include?('destroy') 
-        links += link_to I18n.t('active_admin.delete'), resource_path(resource), :method => :delete, 
-                                                                                 data: { confirm: 'Are you sure you want to delete this Content?' }, :class => "member_link delete_link"
+        links += link_to I18n.t('active_admin.delete'), resource_path(resource), :method => :delete,
+                                                                                 data: { confirm: 'Are you sure you want to delete this Content?' }, 
+                                                                                 :class => "member_link delete_link"
       end
       links
     end

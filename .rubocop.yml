@@ -53,3 +53,11 @@ Metrics/AbcSize:
   
 Style/SymbolProc:
   Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - qa
+    - development
+    - test
+    - local
