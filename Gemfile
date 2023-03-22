@@ -53,13 +53,13 @@ gem 'paper_trail', '~> 11.1'
 gem 'pg', '~> 1.2'
 gem 'rack-cors'
 gem 'rails-controller-testing'
-gem 'rubocop','~> 0.59.1', require: false
+gem 'rubocop', '~> 1.48', '>= 1.48.1'
 gem 'test-unit'
 gem 'travis'
 gem 'will_paginate', '~> 3.0'
 gem 'webmock'
 gem 'yaml_db'
-gem 'rexml', '~> 3.2'
+gem 'rexml', '~> 3.2', '>= 3.2.5'
 gem 'thread_safe', '~> 0.3.6'
 gem "react_on_rails", "12.0.0"
 gem "webpacker", "~> 5"
@@ -72,6 +72,7 @@ gem 'activeadmin_addons', '~> 1.9'
 gem 'turbolinks', '~> 5.2.0'
 gem 'rack', '~> 2.2.4'
 gem "jsonapi-serializer"
+gem 'rubocop-performance', '~> 1.16'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'

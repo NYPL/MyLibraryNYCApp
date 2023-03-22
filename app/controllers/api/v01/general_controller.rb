@@ -38,7 +38,7 @@ class Api::V01::GeneralController < ApplicationController
     LogWrapper.log('DEBUG', {
         'message' => "Request sent to #{params['controller']}Controller#validate_source_of_request",
         'method' => 'validate_source_of_request',
-        'status' => "start, Rails.env=#{Rails.env}, (Rails.env.test? || Rails.env.local?)=#{(Rails.env.test? || Rails.env.local?)}",
+        'status' => "start, Rails.env=#{Rails.env}, (Rails.env.test? || Rails.env.local?)=#{Rails.env.test? || Rails.env.local?}",
         'dataSent' => "request.headers['X-API-Key']:#{request.headers['X-API-Key']}"
       })
 
@@ -63,7 +63,7 @@ class Api::V01::GeneralController < ApplicationController
       method = "#{controller_name or 'unknown_controller'}##{action_name or 'unknown_action'}"
     end
 
-    message = (exception && exception&.message ? exception.message[0..200] : 'exception or exception message missing')
+    message = (exception&.message ? exception.message[0..200] : 'exception or exception message missing')
     backtrace = (exception ? exception.backtrace : 'exception missing')
     LogWrapper.log('ERROR', {
       'message' => "#{message}...\nBacktrace=#{backtrace}.",

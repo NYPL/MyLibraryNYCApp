@@ -1,5 +1,5 @@
 # frozen_string_literal: false
 
-class RegistrationsController <  ApplicationController
+class RegistrationsController < ApplicationController
 end
 

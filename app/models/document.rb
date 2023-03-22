@@ -34,8 +34,8 @@ class Document < ActiveRecord::Base
     # document_id = 1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U
     document_id = URI.split(url)[5].split('/')[3]
     GoogleApiClient.export_file(document_id, "application/pdf")
-  rescue StandardError => error
-    errors.add(:url, google_client_error_message(error))
+  rescue StandardError => e
+    errors.add(:url, google_client_error_message(e))
   end
 
 

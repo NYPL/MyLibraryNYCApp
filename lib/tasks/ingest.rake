@@ -103,7 +103,8 @@ namespace :ingest do
             if !distinct_emails.include? email
               distinct_emails << email
               puts "Couldn't find user: #{email} [#{line}]"
-              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: barcode.strip, school_code: school_code.strip, school: school}
+              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: barcode.strip, school_code: school_code.strip, 
+school: school}
             else
               duplicate_emails << email
               alt_barcode = create_users.find {|user| user[:email] == email}[:barcode]
@@ -112,7 +113,8 @@ namespace :ingest do
               duplicate_barcode = "#{barcode};#{alt_barcode}"
 
               puts "Duplicate email for new user: #{email}, updating alt_barcode"
-              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: duplicate_barcode.strip, school_code: school_code.strip, school: school}
+              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: duplicate_barcode.strip, 
+school_code: school_code.strip, school: school}
             end
 
           else
@@ -159,7 +161,7 @@ namespace :ingest do
       home_library = u[:school_code]
 
       if (names = name.split(';')).size >= 2
-        name = names.select {|n| !n.index(',').nil? }.first
+        name = names.find {|n| !n.index(',').nil? }
         puts " mult names: #{names.size}: #{names.select {|n| !n.index(',').nil? }}"
         name = names.first if name.nil?
       end
@@ -303,7 +305,7 @@ namespace :ingest do
       home_library = u[:school_code]
 
       if (names = name.split(';')).size >= 2
-        name = names.select {|n| !n.index(',').nil? }.first
+        name = names.find {|n| !n.index(',').nil? }
         puts " mult names: #{names.size}: #{names.select {|n| !n.index(',').nil? }}"
         name = names.first if name.nil?
       end
@@ -418,7 +420,7 @@ namespace :ingest do
           address_line_2 = row_hash['Location 1'].split("\n")[0].strip # sometimes the latitude and longitude are on the second line of the cell in CSV
           school.address_line_2 = address_line_2 if address_line_2.present?
           school.borough = borough(address_line_2) if borough(address_line_2).present?
-          school.postal_code = address_line_2[-5..-1] if address_line_2[-5..-1].present?
+          school.postal_code = address_line_2[-5..] if address_line_2[-5..].present?
         end
 
         if school.id.nil?
