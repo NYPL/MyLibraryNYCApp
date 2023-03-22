@@ -120,7 +120,7 @@ class ElasticSearch
       [
         {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["title^10", "description^2", "contents"]}},
         {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}},
-        subjects_query, {:term => {:"title.keyword" => {:value => keyword}}}
+        subjects_query, {:term => {:'title.keyword' => {:value => keyword}}}
       ]}}
     end
 
@@ -170,15 +170,18 @@ class ElasticSearch
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 100, :order => {:_key => "asc"} } }
-    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10, :order => {:_key => "asc"} } }
+    aggregation_hash["language"] = { terms: { field: "primary_language", :size => 100, :order => {:_key => "asc"} } }
+    aggregation_hash["set type"] = { terms: { field: "set_type", :size => 10, :order => {:_key => "asc"} } }
     # Remove Availability lable in facets.
     # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
-    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 100, :order => {:_key => "asc"} } }
+    aggregation_hash["area of study"] = { terms: { field: "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
-                                    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
-                                                                                                               {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
+                                    :aggregations => {:subjects => {:composite => {:size => 3000, 
+                                                                                   :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+                                                                                                {:title => 
+                                                                                                  {:terms => 
+                                                                                                    {:field => "subjects.title.keyword"}}}]}}}}
     aggregation_hash
   end
   
@@ -243,21 +246,22 @@ class ElasticSearch
   # facets eg: [ {:label=>"language", :items=> [{:value=>"Chinese", :label=>"Chinese", :count=>34}]},
   # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable", 
   # :label=>"Checked Out", :count=>32}]},
-  # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
+  # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", 
+  #  :count=>276}]},
   # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
   def get_subject_facets(teacherset_docs, facets)
     area_of_study_data = []
     # Collect area_of_study data for restricting subjects
     # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
     unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
-      area_of_study_data = subjects_facet.first[:items].map { |s| s[:label] }
+      area_of_study_data = subjects_facet.first[:items].pluck(:label)
     end
 
     subjects_facets = {:label => 'subjects', :items => []}
 
     sub_aggs = teacherset_docs[:aggregations]["subjects"]
 
-    if sub_aggs.present? || sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?
+    if sub_aggs.present? || (sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?)
       sub_aggs["subjects"]["buckets"].each do |agg_val|
         # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
@@ -287,14 +291,14 @@ class ElasticSearch
                    else
                      sort_order == 3 ? "desc" : "asc"
                    end
-      query = [{:"title.keyword" => {:order => sort_order }}]
+      query = [{:'title.keyword' => {:order => sort_order }}]
     elsif [0, 1].include?(sort_order)
       sort_order = if sort_order.zero?
                      "desc"
                    else
                      sort_order == 1 ? "asc" : "desc"
                    end
-      query = [{"_score": "desc", "availability.raw": "asc", "created_at": sort_order, "_id": "asc"}]
+      query = [{_score: "desc", 'availability.raw': "asc", created_at: sort_order, _id: "asc"}]
     end
     query
   end

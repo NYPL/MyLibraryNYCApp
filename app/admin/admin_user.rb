@@ -5,7 +5,7 @@ ActiveAdmin.register AdminUser do
 
   member_action :enable_or_disable, :method => :put do
     admin_user = AdminUser.find(params[:id])
-    admin_user.email_notifications = admin_user.email_notifications? ? false : true
+    admin_user.email_notifications = !admin_user.email_notifications?
     admin_user.save
     flash[:notice] = "E-mail notification change made!"
     redirect_to :action => :index

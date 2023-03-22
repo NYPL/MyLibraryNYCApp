@@ -78,22 +78,22 @@ class Book < ApplicationRecord
     cover_uri.sub /Type=L/, "Type=#{deriv}"
   end
 
+  # Unused method
+  # def update_from_catalog_item(item)
+  #   self.update :details_url => item['details_url']
 
-  def update_from_catalog_item(item)
-    self.update :details_url => item['details_url']
+  #   self.update :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
+  #               :call_number => item['call_number'], :description => item['description'], 
+  #               :statement_of_responsibility => item['statement_of_responsibility']
 
-    self.update :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
-                :call_number => item['call_number'], :description => item['description'], 
-                :statement_of_responsibility => item['statement_of_responsibility']
-
-    self.update :format => item['format']['name'] unless item['format'].nil?
-    self.update :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
-    self.update :notes => item['notes'].join(';') unless item['notes'].nil?
-    url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
-    self.update :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
-    self.update :isbn => item['isbns'].first if item['isbns'].present?
-    self
-  end
+  #   self.update :format => item['format']['name'] unless item['format'].nil?
+  #   self.update :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
+  #   self.update :notes => item['notes'].join(';') unless item['notes'].nil?
+  #   url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
+  #   self.update :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
+  #   self.update :isbn => item['isbns'].first if item['isbns'].present?
+  #   self
+  # end
 
 
   def self.catalog_item(id)
@@ -141,19 +141,19 @@ class Book < ApplicationRecord
   #   return resp['titles'] if resp.keys.include? 'titles'
   # end
 
+  # Old and Unused method
+  # def self.update_by_catalog_id(id)
+  #   item = self.catalog_item id
+  #   Book.upsert_from_catalog_item item
+  # end
 
-  def self.update_by_catalog_id(id)
-    item = self.catalog_item id
-    Book.upsert_from_catalog_item item
-  end
 
+  # def self.upsert_from_catalog_item(item)
+  #   book = Book.find_or_initialize_by_details_url item['details_url']
+  #   book.update_from_catalog_item item
 
-  def self.upsert_from_catalog_item(item)
-    book = Book.find_or_initialize_by_details_url item['details_url']
-    book.update_from_catalog_item item
-
-    book
-  end
+  #   book
+  # end
 
 
   def create_teacher_set_version_on_update
@@ -196,7 +196,7 @@ class Book < ApplicationRecord
   # Sends a request to the bibs microservice.
   def send_request_to_bibs_microservice
     response = HTTParty.get(
-      ENV['BIBS_MICROSERVICE_URL_V01'] + "?standardNumber=#{isbn}",
+      ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil) + "?standardNumber=#{isbn}",
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
           'Content-Type' => 'application/json' },
@@ -231,7 +231,7 @@ class Book < ApplicationRecord
   
   def var_field(book_attributes, marcTag)
     begin
-      book_attributes['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].map{ |x| x['content']}.join(', ')
+      book_attributes['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].pluck('content').join(', ')
     rescue
       return nil
     end

@@ -12,7 +12,7 @@ MyLibraryNYC::Application.routes.draw do
 
   get 'timeout_check' => 'sessions#timeout_check'
   get 'timeout' => 'sessions#timeout'
-  get '/logged_in', to: 'sessions#is_logged_in?'
+  get '/logged_in', to: 'sessions#logged_in?'
   get 'extend_session_iframe' => 'home#extend_session_iframe'
   get 'home/calendar_event/:filename', to: 'home#mln_calendar'
   get 'home/calendar_event/error', to: 'home#calendar_event_error'
@@ -32,9 +32,9 @@ MyLibraryNYC::Application.routes.draw do
   match '/users/logout' => 'settings#activeadmin_redirect_to_login', via: [:get, :delete]
   # match '/admin/password' => 'settings#reset_admin_password_message', via: [:get, :delete, :post, :put]
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
-  match 'teacher_set_details/:id' => 'teacher_sets#teacher_set_details', via: [:get]
-  match 'book_details/:id' => 'books#book_details', via: [:get]
-  match 'ordered_holds/:cache_key' => 'holds#ordered_holds_details', via: [:get]
+  get 'teacher_set_details/:id' => 'teacher_sets#teacher_set_details'
+  get 'book_details/:id' => 'books#book_details'
+  get 'ordered_holds/:cache_key' => 'holds#ordered_holds_details'
   match 'holds/:id/cancel' => 'holds#holds_cancel_details', via: [:get, :post]
   match 'holds/:id/cancel_details' => 'holds#cancel_details', via: [:get, :post]
 
@@ -48,8 +48,8 @@ MyLibraryNYC::Application.routes.draw do
   match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post, :put]
   match '/news_letter/index' => 'news_letter#index', via: [:get, :post]
 
-  match '/home/get_mln_file_names' => 'home#mln_file_names', via: [:get]
-  match '/secondary_menu' => 'home#secondary_menu', via: [:get]
+  get '/home/get_mln_file_names' => 'home#mln_file_names'
+  get '/secondary_menu' => 'home#secondary_menu'
 
   match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page', 
         via: [:get, :post]
@@ -61,14 +61,14 @@ MyLibraryNYC::Application.routes.draw do
   match '/account_details' => 'settings#acccount_details', via: [:get, :post]
   match '/signin' => 'settings#signin', via: [:get, :post]
   match '/signup' => 'settings#signup', via: [:get, :post]
-  match '/sign_up_details' => 'settings#sign_up_details', via: [:get]
+  get '/sign_up_details' => 'settings#sign_up_details'
 
   root :to => 'home#index'
-  match '/participating-schools' => 'schools#participating_schools_data', via: [:get]
-  match '/contact' => 'home#help', via: [:get]
-  match '/faq' => 'home#faq_data', via: [:get]
+  get '/participating-schools' => 'schools#participating_schools_data'
+  get '/contact' => 'home#help'
+  get '/faq' => 'home#faq_data'
   match '/newsletter_confirmation' => 'home#newsletter_confirmation', via: [:get, :post]
-  match '/help/access-digital-resources' => 'home#digital_resources', via: [:get]
+  get '/help/access-digital-resources' => 'home#digital_resources'
 
   get 'app', to: redirect('/')
 

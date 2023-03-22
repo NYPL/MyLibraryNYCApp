@@ -28,7 +28,7 @@ Layout/ParameterAlignment:
     - with_fixed_indentation  
 
 Metrics/MethodLength:
-  Max: 40
+  Max: 45
 
 Metrics/ClassLength:
   Max: 800
@@ -61,3 +61,4 @@ Rails/UnknownEnv:
     - development
     - test
     - local
+

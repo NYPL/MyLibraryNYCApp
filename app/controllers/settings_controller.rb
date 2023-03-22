@@ -17,7 +17,10 @@ class SettingsController < ApplicationController
 
 
   def mln_banner_message
-    return unless ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.casecmp("true").zero? && ENV['MAINTENANCE_BANNER_TEXT'].present?
+    unless ENV.fetch('SHOW_MAINTENANCE_BANNER', 
+                     nil) && ENV['SHOW_MAINTENANCE_BANNER'].to_s.casecmp("true").zero? && ENV['MAINTENANCE_BANNER_TEXT'].present?
+      return
+    end
 
     render json: { bannerText: ENV['MAINTENANCE_BANNER_TEXT'].html_safe, bannerTextFound: true }
     
@@ -39,7 +42,7 @@ class SettingsController < ApplicationController
 
   def reset_admin_password_message
     if params["admin_user"]["email"].present?
-      if AdminUser.is_valid_email(params["admin_user"]["email"]).present?
+      if AdminUser.valid_email?(params["admin_user"]["email"]).present?
         flash[:notice] = "You will receive an email with instructions about how to reset your password in a few minutes."
         redirect_to "/admin/login"
       else
@@ -80,7 +83,6 @@ class SettingsController < ApplicationController
       @contact_email = current_user.contact_email
       @school = current_user.school
       per_page = 15
-      offset = 0
       offset = params[:page].present? ? params[:page].to_i - 1 : 0
       request_offset = per_page.to_i * offset.to_i
 
@@ -89,13 +91,18 @@ class SettingsController < ApplicationController
       #If school is inactive for current user still need to show in school drop down.
       @schools << @school.name_id unless @school.active
 
-      resp = {:id => current_user.id, current_user: current_user, :contact_email => @contact_email, :school => @school, :email => @email, :alt_email => @alt_email, :schools => @schools.to_h, :total_pages => (current_user.holds.length / per_page.to_f).ceil,
-              :holds => @holds.map do |i|
-                          [created_at: i["created_at"].strftime("%b %-d, %Y"), quantity: i["quantity"], access_key: i["access_key"], title: i.teacher_set.title, status_label: i.status_label, status: i.status, teacher_set_id: i.teacher_set_id] if i.teacher_set.present?
-                        end.compact.flatten, :current_password => User.default_password.to_s}
+      resp = {:id => current_user.id, current_user: current_user, :contact_email => @contact_email, :school => @school, :email => @email,
+              :alt_email => @alt_email, :schools => @schools.to_h, :total_pages => (current_user.holds.length / per_page.to_f).ceil,
+              :holds => @holds.filter_map do |i|
+                          next if i.teacher_set.blank?
+
+                          [created_at: i["created_at"].strftime("%b %-d, %Y"), quantity: i["quantity"],
+                           access_key: i["access_key"], title: i.teacher_set.title, status_label: i.status_label, status: i.status,
+                           teacher_set_id: i.teacher_set_id]
+                        end.flatten, :current_password => User.default_password.to_s}
     end
-    ordersNotPresentMsg = @holds.length <= 0 ? "You have not yet placed any orders." : ""
-    render json: { accountdetails: resp, ordersNotPresentMsg: ordersNotPresentMsg }
+    orders_not_present_msg = @holds.length <= 0 ? "You have not yet placed any orders." : ""
+    render json: { accountdetails: resp, ordersNotPresentMsg: orders_not_present_msg }
   end
 
 

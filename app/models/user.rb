@@ -83,7 +83,7 @@ class User < ApplicationRecord
   end
 
 
-  def name(full=false)
+  def name(full: false)
     handle = self.email.sub /@.*/, ''
     name = self.first_name
     name += " #{self.last_name}" if full && !self.last_name.nil? && !self.last_name.empty?
@@ -158,26 +158,26 @@ class User < ApplicationRecord
         'pcode4' => pcode4
       },
       'barcodes' => [self.barcode.presence || self.assign_barcode.to_s],
-      'addresses': [
+      addresses: [
         {
-          'lines': [
+          lines: [
             "#{school.address_line_1}",
             "#{school.address_line_2}"
           ],
-          'type': 'a'
+          type: 'a'
         }
       ],
-      "phones": [{
-        "number": school.phone_number,
-        "type": "t"
+      phones: [{
+        number: school.phone_number,
+        type: "t"
       }],
-      "varFields": [{
-        "fieldTag": "o",
-        "content": school.name
+      varFields: [{
+        fieldTag: "o",
+        content: school.name
       }]
     }
     response = HTTParty.post(
-      ENV['PATRON_MICROSERVICE_URL_V02'],
+      ENV.fetch('PATRON_MICROSERVICE_URL_V02', nil),
       body: query.to_json,
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
@@ -218,7 +218,7 @@ class User < ApplicationRecord
     }
 
     response = HTTParty.get(
-      ENV['PATRON_MICROSERVICE_URL_V01'],
+      ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil),
       query: query,
       headers:
         {

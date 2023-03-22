@@ -7,14 +7,14 @@ module TeacherSetsHelper
   PREK_ARR = ['PRE K', 'PRE-K', 'PREK'].freeze
 
   
-  def var_field_data(marc_tag, merge = true)
+  def var_field_data(marc_tag, merge: true)
     var_field(@req_body, marc_tag, merge)
   end
 
 
-  def var_field(req_body, marc_tag, merge = true)
+  def var_field(req_body, marc_tag, merge: true)
     if merge == true
-      req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].map { |x| x['content'] }.join(', ')
+      req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].pluck('content').join(', ')
     else
       req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].detect { |hash| hash['tag'] == 'a' }['content']
     end
@@ -75,7 +75,7 @@ module TeacherSetsHelper
     grades_resp.each do |grade_or_lexile_json|
       
       if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
-        grade_or_lexile_json.delete('Lexile ').delete('L').split(' ')[0].split('-')
+        grade_or_lexile_json.delete('Lexile ').delete('L').split[0].split('-')
       elsif return_grade_or_lexile == 'grade' && grade_or_lexile_json.exclude?('L')
         if grade_or_lexile_json.upcase.include?('PRE')
           # Prek values: ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek'] - supporting these values only

@@ -41,7 +41,7 @@ class Document < ApplicationRecord
 
   def google_client_error_message(error)
     if error.status_code == 404
-      email = JSON.parse(ENV['MLN_GOOGLE_ACCCOUNT'])['client_email']
+      email = JSON.parse(ENV.fetch('MLN_GOOGLE_ACCCOUNT', nil))['client_email']
       "There was an error accessing this file. Please check this URL is valid, and that the document is shared with #{email}"
     else
       error.message

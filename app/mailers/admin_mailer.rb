@@ -61,7 +61,7 @@ class AdminMailer < ApplicationMailer
   def send_news_letter_confirmation_email(encrypt_email, email)
     begin
       @encrypt_email = encrypt_email
-      attachments.inline['news-letter-email-logo.png'] = File.read(Rails.root.join("app/assets/images/news-letter-email-logo.png"))
+      attachments.inline['news-letter-email-logo.png'] = Rails.root.join("app/assets/images/news-letter-email-logo.png").read
       mail(to: [email], :subject => "MyLibraryNYC Newsletter - confirmation requested")
     rescue => e
       LogWrapper.log('ERROR', {

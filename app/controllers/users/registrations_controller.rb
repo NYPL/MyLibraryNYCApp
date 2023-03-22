@@ -2,6 +2,9 @@
 
 module Users
   class RegistrationsController < Devise::RegistrationsController
+    def new
+      @user = User.new
+    end
     # before_action :configure_sign_up_params, only: [:create]
     # before_action :configure_account_update_params, only: [:update]
 
@@ -54,11 +57,6 @@ module Users
         render json: { status: 500, message: e.message }
       end
       
-    end
-
-
-    def new
-      @user = User.new
     end
 
 

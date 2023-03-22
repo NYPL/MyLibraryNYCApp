@@ -16,7 +16,7 @@ File.open 'db/seed-data.sql', 'r' do |f|
 
   statements = f.read.split(/;$/)
   statements.pop # the last empty statement
-  Rails.logger.debug "Seeding from #{statements.size} statement dump"
+  Rails.logger.debug { "Seeding from #{statements.size} statement dump" }
  
   ActiveRecord::Base.transaction do
     statements.each do |statement|

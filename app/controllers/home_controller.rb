@@ -103,7 +103,7 @@ class HomeController < ApplicationController
   def menu_of_services
     if params["filename"] == "menu_of_services"
       respond_to do |format|
-        file = URI.open(File.join(Rails.root, 'app/javascript/pdf/2021_2022_MyLibraryNYC_Menu_of_Services_for_Educators.pdf'))
+        file = URI.open(Rails.root.join('app/javascript/pdf/2021_2022_MyLibraryNYC_Menu_of_Services_for_Educators.pdf'))
         menu_of_services_pdf = file.read
         format.pdf do 
           send_data(menu_of_services_pdf, type: "application/pdf", disposition: :inline)

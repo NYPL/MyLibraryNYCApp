@@ -11,6 +11,7 @@ class TeacherSet < ApplicationRecord
 
   has_paper_trail
   before_save :disable_papertrail
+  before_create :make_slug
   before_update :enable_papertrail
   after_save :enable_papertrail
 
@@ -29,7 +30,6 @@ class TeacherSet < ApplicationRecord
 
   validates :bnumber, uniqueness: true
 
-  before_create :make_slug
 
   AVAILABLE = 'available'
   UNAVAILABLE = 'unavailable'
@@ -282,7 +282,7 @@ class TeacherSet < ApplicationRecord
 
 
   # Delete teacher-set record from db and elastic search.
-  def self.delete_teacher_set(bib_id, suppressed=false)
+  def self.delete_teacher_set(bib_id, suppressed: false)
     # Get teacher-set record by bib_id
     teacher_set = self.get_teacher_set_by_bnumber(bib_id)
     if teacher_set.blank?
@@ -406,19 +406,19 @@ class TeacherSet < ApplicationRecord
 
     # Internal name for "Subject" is area_of_study
     if params['area of study'].present?
-      sets = sets.where("area_of_study = ?", params['area of study'].join())
+      sets = sets.where(area_of_study: params['area of study'].join())
     end
 
     # Internal name for "set type" is set_type
     unless params['set type'].nil?
-      sets = sets.where("set_type = ?", params['set type'].join())
+      sets = sets.where(set_type: params['set type'].join())
     end
 
     if params[:language].present?
       sets = sets.where("language IN (?) OR primary_language IN (?)", params[:language], params[:language])
     end
     if params[:availability].present?
-      sets = sets.where("availability IN (?)", params[:availability])
+      sets = sets.where(availability: params[:availability])
     end
 
     # Sort most available first with id as tie breaker to ensure consistent sorts
@@ -476,12 +476,12 @@ class TeacherSet < ApplicationRecord
       primary_subjects = []
 
       unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
-        primary_subjects = subjects_facet.first[:items].map { |s| s[:label] }
+        primary_subjects = subjects_facet.first[:items].pluck(:label)
       end
 
       # Tags
       subjects_facets = {:label => 'subjects', :items => []}
-      _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id')
+      _qry = qry.joins(:subjects).where.not(subjects: { title: primary_subjects }).group('subjects.title', 'subjects.id')
       # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
       # but let's make it 5 consistently now.
       #if !_qry.to_sql.include?('JOIN subject_teacher_sets')
@@ -530,134 +530,134 @@ class TeacherSet < ApplicationRecord
   #   self.upsert_from_catalog_item item['title'] unless item.nil? || item['title'].nil?
   # end
 
+  # old and unused method
+  # def self.upsert_from_catalog_item(item)
+  #   # book = self.find_or_initialize_by_details_url item['details_url']
+  #   book = self.find_or_initialize_by_id item['id'].to_i
+  #   Rails.logger.debug "  New Set!: #{book.id}" unless book.persisted?
+  #   book.update_from_catalog_item item
+  #   book
+  # end
 
-  def self.upsert_from_catalog_item(item)
-    # book = self.find_or_initialize_by_details_url item['details_url']
-    book = self.find_or_initialize_by_id item['id'].to_i
-    Rails.logger.debug "  New Set!: #{book.id}" unless book.persisted?
-    book.update_from_catalog_item item
-    book
-  end
 
+  # def update_from_catalog_item(item)
+  #   # puts "create book: #{item['id']}:  #{id}"
+  #   # set = TeacherSet.find_or_initialize_by_id id
+  #   title = item['title']
+  #   title.sub! /\WGr\.\W[0-9kK]-[0-9]+/, ''
+  #   title.sub! /\W\(Teacher Set\)\W*$/, ''
 
-  def update_from_catalog_item(item)
-    # puts "create book: #{item['id']}:  #{id}"
-    # set = TeacherSet.find_or_initialize_by_id id
-    title = item['title']
-    title.sub! /\WGr\.\W[0-9kK]-[0-9]+/, ''
-    title.sub! /\W\(Teacher Set\)\W*$/, ''
+  #   # title.sub!
 
-    # title.sub!
+  #   self.update({
+  #     :title => title,
+  #     :call_number => item['call_number'],
+  #     :description => item['description'],
+  #     :details_url => item['details_url'],
+  #     :edition => item['edition'],
+  #     :publication_date => item['publication_date'],
+  #     :statement_of_responsibility => item['statement_of_responsibility'],
+  #     :sub_title => item['sub_title'],
+  #     :contents => item['contents'].join("\n")
+  #   })
 
-    self.update({
-      :title => title,
-      :call_number => item['call_number'],
-      :description => item['description'],
-      :details_url => item['details_url'],
-      :edition => item['edition'],
-      :publication_date => item['publication_date'],
-      :statement_of_responsibility => item['statement_of_responsibility'],
-      :sub_title => item['sub_title'],
-      :contents => item['contents'].join("\n")
-    })
+  #   self.update :isbn => item['isbns'].first if item['isbns'].present?
+  #   self.update :language => item['languages'].first['name'] if !item['languages'].empty?
+  #   self.update :physical_description => item['physical_description'].first if !item['physical_description'].empty?
+  #   self.update :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
+  #   self.update :series => item['series'].first['name'] if item['series'].present?
 
-    self.update :isbn => item['isbns'].first if item['isbns'].present?
-    self.update :language => item['languages'].first['name'] if !item['languages'].empty?
-    self.update :physical_description => item['physical_description'].first if !item['physical_description'].empty?
-    self.update :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
-    self.update :series => item['series'].first['name'] if item['series'].present?
+  #   grade_begin = nil
+  #   grade_end = nil
+  #   if item['suitabilities'].present?
+  #     item['suitabilities'].each do |suit|
+  #       # Parse grade suitablility (e.g. 4-12, 4-+)
+  #       # If grade_end is '+', store null
+  #       m = suit['name'].match /([0-9K]+)-([0-9+]+)/
+  #       unless m.nil?
+  #         # Apply values, making sure values are <= 12 (i.e. watch out for misentered lexiles)
+  #         if m[1].to_i <= 12
+  #           v = m[1].to_i
+  #           grade_begin = grade_begin.nil? ? v : [grade_begin, v].min
+  #         end
 
-    grade_begin = nil
-    grade_end = nil
-    if item['suitabilities'].present?
-      item['suitabilities'].each do |suit|
-        # Parse grade suitablility (e.g. 4-12, 4-+)
-        # If grade_end is '+', store null
-        m = suit['name'].match /([0-9K]+)-([0-9+]+)/
-        unless m.nil?
-          # Apply values, making sure values are <= 12 (i.e. watch out for misentered lexiles)
-          if m[1].to_i <= 12
-            v = m[1].to_i
-            grade_begin = grade_begin.nil? ? v : [grade_begin, v].min
-          end
+  #         if m[2].to_i <= 12
+  #           v = m[2].to_i
+  #           grade_end = grade_end.nil? ? v : [grade_end, v].max
+  #         end
+  #       end
+  #     end
+  #   end
+  #   self.update :grade_begin => grade_begin, :grade_end => grade_end
 
-          if m[2].to_i <= 12
-            v = m[2].to_i
-            grade_end = grade_end.nil? ? v : [grade_end, v].max
-          end
-        end
-      end
-    end
-    self.update :grade_begin => grade_begin, :grade_end => grade_end
+  #   lang = nil
+  #   if item['primary_language'].present?
+  #     lang = item['primary_language']['name']
+  #     lang = nil if ['Undetermined'].include? lang
+  #   end
+  #   self.update :primary_language => lang
 
-    lang = nil
-    if item['primary_language'].present?
-      lang = item['primary_language']['name']
-      lang = nil if ['Undetermined'].include? lang
-    end
-    self.update :primary_language => lang
+  #   self.teacher_set_notes.destroy_all
+  #   item['notes'].each do |n|
+  #     self.teacher_set_notes.push TeacherSetNote.new :content => n
+  #   end
 
-    self.teacher_set_notes.destroy_all
-    item['notes'].each do |n|
-      self.teacher_set_notes.push TeacherSetNote.new :content => n
-    end
+  #   if self.bnumber.nil?
+  #     url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=c&searcharg=#{URI::encode(self.call_number)}"
+  #     # TODO: take the 1.day constant out into a properties file.
+  #     # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
+  #     content = self.class.scrape_content url, 8.hours
+  #     # puts "  Getting by call num: #{url}"
+  #     # sleep 0.5
+  #     doc = Nokogiri::HTML(content)
 
-    if self.bnumber.nil?
-      url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=c&searcharg=#{URI::encode(self.call_number)}"
-      # TODO: take the 1.day constant out into a properties file.
-      # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
-      content = self.class.scrape_content url, 8.hours
-      # puts "  Getting by call num: #{url}"
-      # sleep 0.5
-      doc = Nokogiri::HTML(content)
+  #     Rails.logger.debug "    Getting bnumber from #{url}"
 
-      Rails.logger.debug "    Getting bnumber from #{url}"
+  #     permalink = doc.at_css('a:contains("Permanent link for this record")')
 
-      permalink = doc.at_css('a:contains("Permanent link for this record")')
+  #     if permalink.nil?
+  #       item_url = nil
+  #       if !(item_links = doc.css('.briefcitItems a')).empty?
+  #         # puts "  parsing as: 2"
+  #         item_links = item_links.select { |l| l.text.include? 'View Full Record' }
+  #         item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
 
-      if permalink.nil?
-        item_url = nil
-        if !(item_links = doc.css('.briefcitItems a')).empty?
-          # puts "  parsing as: 2"
-          item_links = item_links.select { |l| l.text.include? 'View Full Record' }
-          item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
+  #       # If that fails, look for "Teacher Set ..." links
+  #       # if item_url.nil? && !(item_links = doc.css('.browseEntryData a')).empty?
+  #       elsif !(item_links = doc.css('.bibItemsEntry a', '.browseEntryData a')).empty?
+  #         # puts "  parsing as: 3"
+  #         item_links = item_links.select { |l| l.text.include? 'Teacher Set' }
+  #         item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
+  #       end
 
-        # If that fails, look for "Teacher Set ..." links
-        # if item_url.nil? && !(item_links = doc.css('.browseEntryData a')).empty?
-        elsif !(item_links = doc.css('.bibItemsEntry a', '.browseEntryData a')).empty?
-          # puts "  parsing as: 3"
-          item_links = item_links.select { |l| l.text.include? 'Teacher Set' }
-          item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
-        end
+  #       # If an item_url found, follow it to find the permalink
+  #       unless item_url.nil?
+  #         # puts "    falling back in item url: #{item_url}"
+  #         doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minutes))
+  #         permalink = doc.at_css('a:contains("Permanent link for this record")')
 
-        # If an item_url found, follow it to find the permalink
-        unless item_url.nil?
-          # puts "    falling back in item url: #{item_url}"
-          doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minutes))
-          permalink = doc.at_css('a:contains("Permanent link for this record")')
+  #         # Item page doen't have a permalink? Must be a weird search result. Follow first View Full Record link and look for permalink there..
+  #         if permalink.nil? && !(item_links = doc.css('.briefcitItems a:contains("View Full Record")')).empty?
+  #           # puts "  parsing as: 2"
+  #           item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
+  #           # puts "!!! third fetch... #{item_url}"
+  #           doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minutes))
+  #           permalink = doc.at_css('a:contains("Permanent link for this record")')
+  #         end
+  #       end
+  #     end
 
-          # Item page doen't have a permalink? Must be a weird search result. Follow first View Full Record link and look for permalink there..
-          if permalink.nil? && !(item_links = doc.css('.briefcitItems a:contains("View Full Record")')).empty?
-            # puts "  parsing as: 2"
-            item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
-            # puts "!!! third fetch... #{item_url}"
-            doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minutes))
-            permalink = doc.at_css('a:contains("Permanent link for this record")')
-          end
-        end
-      end
+  #     if permalink.nil?
+  #       Rails.logger.debug "    BNUMBER NOT FOUND"
 
-      if permalink.nil?
-        Rails.logger.debug "    BNUMBER NOT FOUND"
+  #     elsif (p = permalink[:href].match(/record=(b[0-9]+)/)) && p.size == 2
+  #       bnumber = p[1]
+  #       ret = self.update :bnumber => bnumber
+  #       # puts "    BNUMBER: #{self.bnumber} saved? #{self.persisted?} errors? #{self.errors.full_messages}"
+  #     end
 
-      elsif (p = permalink[:href].match(/record=(b[0-9]+)/)) && p.size == 2
-        bnumber = p[1]
-        ret = self.update :bnumber => bnumber
-        # puts "    BNUMBER: #{self.bnumber} saved? #{self.persisted?} errors? #{self.errors.full_messages}"
-      end
-
-    end
-  end
+  #   end
+  # end
 
 
   def update_availability
@@ -669,7 +669,7 @@ class TeacherSet < ApplicationRecord
       content = self.class.scrape_content scrape_url, 30.minutes
 
       doc = Nokogiri::HTML(content)
-      Rails.logger.debug "  Availability parsed from #{scrape_url}"
+      Rails.logger.debug { "  Availability parsed from #{scrape_url}" }
       doc.css('.bibItemsEntry').each do |availability_row|
         avail = availability_row.css('td').count { |td| td.text.strip.downcase.sub(/^\W+/,'') == 'available' } == 1
 
@@ -684,8 +684,10 @@ class TeacherSet < ApplicationRecord
       :total_copies => total_copies
     })
 
-    Rails.logger.debug "Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} \
+    Rails.logger.debug do 
+      "Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} \
           avail with #{self.new_or_pending_holds.count} open holds"
+    end
     # Update availability status string
     self.recalculate_availability
   end
@@ -698,7 +700,7 @@ class TeacherSet < ApplicationRecord
     #Below code need to discuss with Darya.
     #copies -= self.new_or_pending_holds.count
     status = copies > 0 ? 'available' : 'unavailable'
-    self.update_attribute :availability, status
+    self.update(:availability, status)
   end
 
 
@@ -997,7 +999,7 @@ class TeacherSet < ApplicationRecord
       next unless var_field['marcTag'] == '944'
       next unless var_field['subfields'] && var_field['subfields'][0] && var_field['subfields'][0]['content']
 
-      isbns = var_field['subfields'][0]['content'].split(' ')
+      isbns = var_field['subfields'][0]['content'].split
     end
 
     # Delete teacher_set_books records for books with an ISBN that is not in the teacher_set's list of ISBNs.
@@ -1154,7 +1156,7 @@ class TeacherSet < ApplicationRecord
       resp["data"].each do |bib_record|
         set_type_marctag = bib_record['varFields'].detect { |hash| hash['marcTag'] == '526' }
         if set_type_marctag.present?
-          set_type = set_type_marctag['subfields'].map { |x| x['content']}.join(', ')
+          set_type = set_type_marctag['subfields'].pluck('content').join(', ')
         end
       end
     end
@@ -1177,7 +1179,7 @@ class TeacherSet < ApplicationRecord
       return items_hash, items_found
     else
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
-      response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params, headers: { 
+      response = HTTParty.get(ENV.fetch('ITEMS_MICROSERVICE_URL_V01', nil) + items_query_params, headers: { 
         'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
       
       if response.code == 200 || items_hash['data'].present?
@@ -1216,8 +1218,8 @@ class TeacherSet < ApplicationRecord
   # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
   def send_request_to_bibs_microservice(bibid)
     bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
-    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 
-                                                                                            'Content-Type' => 'application/json' }, timeout: 10)
+    response = HTTParty.get(ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil) + bib_query_params, headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 
+                                                                                                       'Content-Type' => 'application/json' }, timeout: 10)
 
     if response.code == 200
       LogWrapper.log('DEBUG', {

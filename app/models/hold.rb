@@ -5,7 +5,6 @@ class Hold < ApplicationRecord
   # add a quick filter scope to ActiveAdmin oldest unfulfilled hold orders first.
   scope :new_holds, -> { where(:status=>"new") }
 
-  validates :teacher_set_id, :user_id, presence: true
 
   belongs_to :teacher_set
   belongs_to :user
@@ -45,7 +44,7 @@ class Hold < ApplicationRecord
 
 
   def close!(by_whom)
-    Rails.logger.debug "closing hold: #{self.inspect}"
+    Rails.logger.debug { "closing hold: #{self.inspect}" }
     status = 'closed'
   end
 

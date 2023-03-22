@@ -15,10 +15,10 @@ class BookValidator
 
     elsif @book.details_url.nil?
       self.matching_api_items = @book.matching_api_items
-      Rails.logger.debug "should this pass validation? #{self.matching_api_items}"
+      Rails.logger.debug { "should this pass validation? #{self.matching_api_items}" }
       if self.matching_api_items.nil? || self.matching_api_items.size != 1
         # @book.errors[:base] << "#{self.matching_api_items.size} matching titles"
-        @book.errors[:base] << self #"#{self.matching_api_items.size} matching titles"
+        @book.errors.add(:base, self) #"#{self.matching_api_items.size} matching titles"
       end
     end
   end

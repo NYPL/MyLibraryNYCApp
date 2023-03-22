@@ -1201,6 +1201,8 @@ Naming/VariableNumber:
   - 'db/migrate/*.rb'
   - 'test/factories/school_factory.rb'
   - 'app/admin/schools.rb'
+  - 'app/controllers/schools_controller.rb'
+  - 'app/models/book.rb'
 Rails/CreateTableWithTimestamps:
   Exclude:
   - 'db/migrate/20200813141524_create_faq.rb'

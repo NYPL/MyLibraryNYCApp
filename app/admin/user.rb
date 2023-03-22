@@ -39,7 +39,7 @@ ActiveAdmin.register User do
   filter :barcode
 
   form do |f|
-    f.semantic_errors *f.object.errors.keys
+    f.semantic_errors *f.object.errors.attribute_names
     f.inputs "User Details" do
       f.input :school
       f.input :first_name
@@ -82,10 +82,10 @@ ActiveAdmin.register User do
         table_for user.holds do
           column 'Status ' do |h| link_to h.status, admin_hold_path(h) end
           column 'Set' do |h|
-            if !h.teacher_set.nil?
-              link_to h.teacher_set.title, admin_hold_path(h)
-            else
+            if h.teacher_set.nil?
               "This teacher set no longer exists."
+            else
+              link_to h.teacher_set.title, admin_hold_path(h)
             end
           end
           column 'Quantity' do |h| h.quantity end
