@@ -3,8 +3,8 @@
 module MlnException
   # Mln Application Exceptions
   class MlnException < StandardError
-    attr_accessor :code
-    attr_accessor :detailed_msg
+    attr_accessor :code, :detailed_msg
+
     def initialize(code, message, detailed_msg = nil)
       super(message)
       @code = code

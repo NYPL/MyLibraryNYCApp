@@ -16,7 +16,7 @@ module MlnHelper
   
   def parse_request_body(request)
     body = request.body.read
-    raise InvalidInputException.new(EMPTY_REQUEST_BODY[:code], EMPTY_REQUEST_BODY[:msg]) unless body.present?
+    raise InvalidInputException.new(EMPTY_REQUEST_BODY[:code], EMPTY_REQUEST_BODY[:msg]) if body.blank?
 
     raise InvalidInputException.new(MLN_INVALID_REQUEST_BODY[:code], MLN_INVALID_REQUEST_BODY[:msg]) unless json_valid?(body)
     

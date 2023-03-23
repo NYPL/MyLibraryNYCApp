@@ -4,7 +4,7 @@ class Api::V01::GeneralController < ApplicationController
   include LogWrapper
 
   def unauthorized
-    render json: { 'message': 'Unauthorized message from MLN Api::V01::GeneralController' }, status: 401
+    render json: { 'message': 'Unauthorized message from MLN Api::V01::GeneralController' }, status: :unauthorized
   end
 
   private
@@ -24,7 +24,7 @@ class Api::V01::GeneralController < ApplicationController
   def validate_request
     if @parsing_error
       return [400, "Parsing error: #{@parsing_error}"]
-    elsif !@request_body || @request_body.empty?
+    elsif @request_body.blank?
       return [400, 'Request body is empty.']
     end
 

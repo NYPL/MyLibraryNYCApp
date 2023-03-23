@@ -12,7 +12,7 @@ class SchoolsController < ApplicationController
     schools_arr = []
     anchor_tags = ["#"] + ('A'..'Z').to_a
     group_by_schools.each do |alphabet_anchor, school_objects|
-      next unless alphabet_anchor.present?
+      next if alphabet_anchor.blank?
       
       school_hash = {}
       # If school name starts with alphabet letter, school names will display under aplhabet anchor eg: 'A' Academy for Careers (12), Academy(22).

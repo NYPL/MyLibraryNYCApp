@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class HoldMailer < ActionMailer::Base
+class HoldMailer < ApplicationMailer
   include LogWrapper
   LOG_TAG = "HoldMailer"
   default :from => '"MyLibraryNYC Orders" <orders@mylibrarynyc.org>'

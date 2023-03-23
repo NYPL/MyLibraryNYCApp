@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Book < ActiveRecord::Base
+class Book < ApplicationRecord
 
   # NOTE: The ISBN field in the database refers to a standard number; sometimes this is an ISBN.
   include CatalogItemMethods
@@ -29,7 +29,7 @@ class Book < ActiveRecord::Base
   # after_save :populate_missing_data
   after_commit :create_teacher_set_version_on_update, on: :update
 
-  validates_uniqueness_of :bnumber, allow_blank: true
+  validates :bnumber, uniqueness: { allow_blank: true }
 
   # Unused method
   # def populate_missing_data
@@ -91,7 +91,7 @@ class Book < ActiveRecord::Base
     self.update :notes => item['notes'].join(';') unless item['notes'].nil?
     url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
     self.update :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
-    self.update :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
+    self.update :isbn => item['isbns'].first if item['isbns'].present?
     self
   end
 
@@ -157,7 +157,7 @@ class Book < ActiveRecord::Base
 
 
   def create_teacher_set_version_on_update
-    teacher_sets.all.each do |teacher_set|
+    teacher_sets.all.find_each do |teacher_set|
       teacher_set.update(last_book_change: "updated-#{self.id}-#{self.title}")
     end
   end

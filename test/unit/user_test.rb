@@ -150,7 +150,7 @@ class UserTest < ActiveSupport::TestCase
   test 'user method get_oauth_token is giving back an access token from
     ISSO NYPL service' do
     token = Oauth.get_oauth_token
-    assert !token.nil?
+    assert_not token.nil?
     assert token.present?
   end
 

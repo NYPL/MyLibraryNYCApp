@@ -59,7 +59,7 @@ namespace :ingest do
 
       # puts "#{call_number}"
 
-      teacherSet = TeacherSet.find_by_call_number call_number.strip
+      teacherSet = TeacherSet.find_by call_number: call_number.strip
 
       if teacherSet.nil?
         puts "    Teacher Set not found: #{call_number}"
@@ -93,17 +93,18 @@ namespace :ingest do
 
       puts "#{email}"
 
-      if !(school = School.find_by_code(school_code.strip.downcase)).nil?
+      if !(school = School.find_by(code: school_code.strip.downcase)).nil?
         if school.active?
 
           # Find the user by email
-          user = User.find_by_email email.downcase
+          user = User.find_by email: email.downcase
           if user.nil?
 
             if !distinct_emails.include? email
               distinct_emails << email
               puts "Couldn't find user: #{email} [#{line}]"
-              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: barcode.strip, school_code: school_code.strip, school: school}
+              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: barcode.strip, school_code: school_code.strip, 
+school: school}
             else
               duplicate_emails << email
               alt_barcode = create_users.find {|user| user[:email] == email}[:barcode]
@@ -112,7 +113,8 @@ namespace :ingest do
               duplicate_barcode = "#{barcode};#{alt_barcode}"
 
               puts "Duplicate email for new user: #{email}, updating alt_barcode"
-              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: duplicate_barcode.strip, school_code: school_code.strip, school: school}
+              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: duplicate_barcode.strip, 
+school_code: school_code.strip, school: school}
             end
 
           else
@@ -159,7 +161,7 @@ namespace :ingest do
       home_library = u[:school_code]
 
       if (names = name.split(';')).size >= 2
-        name = names.select {|n| !n.index(',').nil? }.first
+        name = names.find {|n| !n.index(',').nil? }
         puts " mult names: #{names.size}: #{names.select {|n| !n.index(',').nil? }}"
         name = names.first if name.nil?
       end
@@ -232,7 +234,7 @@ namespace :ingest do
         next
       end
 
-      user = User.find_by_email email.strip.downcase
+      user = User.find_by email: email.strip.downcase
       if user.nil?
         puts "Could not find user: #{email}"
         not_found_users << "#{email}"
@@ -270,7 +272,7 @@ namespace :ingest do
           (_number, _type, name, barcode, school_code, _n1, _n2, _d1, _d2, email) = line
           next if email.nil? || email.strip.empty?
 
-          user = User.find_by_email email.downcase
+          user = User.find_by email: email.downcase
           if user.nil?
             puts "couldn't find user: #{email} [#{line}]"
           end
@@ -303,7 +305,7 @@ namespace :ingest do
       home_library = u[:school_code]
 
       if (names = name.split(';')).size >= 2
-        name = names.select {|n| !n.index(',').nil? }.first
+        name = names.find {|n| !n.index(',').nil? }
         puts " mult names: #{names.size}: #{names.select {|n| !n.index(',').nil? }}"
         name = names.first if name.nil?
       end
@@ -359,7 +361,7 @@ namespace :ingest do
 
   end
 
-  task :backup do
+  task backup: :environment do
     sh 'rake db:data:dump_dir dir="backups/`date +"%Y%m%d"`"'
   end
 
@@ -370,7 +372,7 @@ namespace :ingest do
     CSV.foreach(path) do |line|
       (code, name) = line
       puts "#{code} - #{name}"
-      if !(school = School.find_by_code("z#{code}".downcase)).nil?
+      if !(school = School.find_by(code: "z#{code}".downcase)).nil?
         if school.name.strip.downcase != name.strip.downcase
           puts "Updating school name:"
           puts "  existing:   #{school.name}"
@@ -418,7 +420,7 @@ namespace :ingest do
           address_line_2 = row_hash['Location 1'].split("\n")[0].strip # sometimes the latitude and longitude are on the second line of the cell in CSV
           school.address_line_2 = address_line_2 if address_line_2.present?
           school.borough = borough(address_line_2) if borough(address_line_2).present?
-          school.postal_code = address_line_2[-5..-1] if address_line_2[-5..-1].present?
+          school.postal_code = address_line_2[-5..] if address_line_2[-5..].present?
         end
 
         if school.id.nil?
@@ -467,13 +469,13 @@ namespace :ingest do
         ['sierra_code', 'zcode'].each do |column_header_name|
           raise "The #{column_header_name} column is mislabeled or missing from the CSV." if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
         end
-        puts "No need to raise an error.  FYI, the zcode of #{zcode} is in Sierra but not in MLN." unless School.find_by_code(zcode)
+        puts "No need to raise an error.  FYI, the zcode of #{zcode} is in Sierra but not in MLN." unless School.find_by(code: zcode)
         SierraCodeZcodeMatch.create!(sierra_code: sierra_code, zcode: zcode)
       end
       School.all.each do |school|
         # Then ensure all schools have a SierraCodeZcodeMatch by raising the error below
         # to prevent a teacher signing up for a school that isn't represented in Sierra's lookup table (would cause an error when they place a hold on a book)
-        raise "A SierraCodeZcodeMatch is missing for school ##{school.id} #{school.name} with this zcode: #{school.code}" unless school.code == 'MLNSTAFF' || SierraCodeZcodeMatch.find_by_zcode(school.code) || Rails.env.test?
+        raise "A SierraCodeZcodeMatch is missing for school ##{school.id} #{school.name} with this zcode: #{school.code}" unless school.code == 'MLNSTAFF' || SierraCodeZcodeMatch.find_by(zcode: school.code) || Rails.env.test?
       end
     end
   end
@@ -486,7 +488,7 @@ namespace :ingest do
     CSV.foreach(path) do |line|
       (name, blank, code) = line
       puts "#{code.downcase}"
-      if !(school = School.find_by_code(code.strip.downcase)).nil?
+      if !(school = School.find_by(code: code.strip.downcase)).nil?
         dropped_schools << "#{code.downcase}"
         if school.active == true
           puts "School to remove from the participating list: #{code.downcase}"
@@ -505,7 +507,7 @@ namespace :ingest do
     path = 'db/final-schools-dump/School Names.csv'
     CSV.foreach(path) do |line|
       (code, name) = line
-      if !(school = School.find_by_code(code)).nil?
+      if !(school = School.find_by(code: code)).nil?
         if school.name.strip.downcase != name.strip.downcase
           puts "Warning: Mismatch when activating #{code}:"
           puts "  existing:   #{school.name}"

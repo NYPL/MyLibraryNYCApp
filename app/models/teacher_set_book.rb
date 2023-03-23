@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TeacherSetBook < ActiveRecord::Base
+class TeacherSetBook < ApplicationRecord
   belongs_to :book
   belongs_to :teacher_set
   # attr_accessible :book, :teacher_set, :rank

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def update_teacher_set_real_time_available_total_count
-  start_time = Time.now
+  start_time = Time.zone.now
   failure_bib_ids = []
   not_found_ids = []
   success_bib_ids = []
@@ -27,7 +27,7 @@ def update_teacher_set_real_time_available_total_count
     end
   end
 
-  total_time = Time.now - start_time
+  total_time = Time.zone.now - start_time
   puts "TotalteachersetsCountFromDB: #{TeacherSet.count}"
   puts "successIdsCount: #{success_bib_ids.count}", "failureIds: #{failure_bib_ids}", "failureIdsCount: #{failure_bib_ids.count}", 
        "notFoundIds: #{not_found_ids}", "notFoundIdsCount: #{not_found_ids.count}", "totalTime: #{total_time}"

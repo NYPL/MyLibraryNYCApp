@@ -30,16 +30,16 @@ class Api::V01::ItemsController < Api::V01::GeneralController
 
       t_set_bnumber, nypl_source = parse_item_bib_id_and_nypl_source(@request_body)
 
-      unless t_set_bnumber.present?
+      if t_set_bnumber.blank?
         render_error([404, "BIB id is empty."])
         return
       end
-      unless nypl_source.present?
+      if nypl_source.blank?
         render_error([404, "NYPL source is empty."])
         return
       end
-      teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
-      unless teacher_set.present?
+      teacher_set = TeacherSet.find_by(bnumber: "b#{t_set_bnumber}")
+      if teacher_set.blank?
         render_error([404, "BIB id not found in MLN DB."])
         return
       end

@@ -16,7 +16,7 @@ class BooksController < ApplicationController
     render json: {
       :book => @book.as_json,
       :teacher_sets => @book.teacher_sets.as_json,
-      :show_catalog_link => !%w[n e].include?(@book.bib_code_3)
+      :show_catalog_link => %w[n e].exclude?(@book.bib_code_3)
     }
   end
 

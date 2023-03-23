@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class Hold < ActiveRecord::Base
+class Hold < ApplicationRecord
 
   # add a quick filter scope to ActiveAdmin oldest unfulfilled hold orders first.
   scope :new_holds, -> { where(:status=>"new") }
 
-  validates_presence_of :teacher_set_id, :user_id
+  validates :teacher_set_id, :user_id, presence: true
 
   belongs_to :teacher_set
   belongs_to :user
@@ -45,7 +45,7 @@ class Hold < ActiveRecord::Base
 
 
   def close!(by_whom)
-    puts "closing hold: #{self.inspect}"
+    Rails.logger.debug "closing hold: #{self.inspect}"
     status = 'closed'
   end
 
@@ -112,7 +112,7 @@ class Hold < ActiveRecord::Base
 
 
   def overdue?
-    due_date_absolute < Time.now.strftime("%d %B %Y") && self.active == true
+    due_date_absolute < Time.zone.now.strftime("%d %B %Y") && self.active == true
   end
 
   
@@ -128,7 +128,7 @@ class Hold < ActiveRecord::Base
   
   def days_overdue
     # Calculate number of days over-due, multiply by overdue_rate
-    overdue_rate * ((Time.now - self.hold_end) / 1.days)
+    overdue_rate * ((Time.zone.now - self.hold_end) / 1.day)
   end
 
 =begin
