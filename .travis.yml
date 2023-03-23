@@ -75,7 +75,7 @@ deploy:
   bucket_path: my-library-nyc-app-react-qa-27
   on:
     repo: NYPL/MyLibraryNYCApp
-    branch: MLN-1104-rubocop-issues-latest1
+    branch: mln-rubocop-issues-latest2
 - provider: elasticbeanstalk
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_PRODUCTION"
