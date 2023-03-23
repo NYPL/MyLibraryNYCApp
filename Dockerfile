@@ -16,6 +16,12 @@ RUN apt-get update -qq \
 RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
 RUN apt-get -y install nodejs
 
+# set up app files
+COPY --chown=app:app . $APP_HOME
+COPY Gemfile $APP_HOME
+COPY Gemfile.lock $APP_HOME
+WORKDIR $APP_HOME
+
 ## bundle
 FROM ruby:2.7.4 as bundler
 WORKDIR /tmp
@@ -34,13 +40,13 @@ RUN npm install --global yarn
 RUN yarn config delete https-proxy && \
 			yarn config delete proxy
 
-## webpacker needs this which is super annoying!!
+## webpacker needs this which is super annoying!! 
 ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 RUN bundle exec rails webpacker:install
-# Overwrite /home/app/MyLibraryNYCApp/config/webpacker.yml? (enter "h" for help) [Ynaqdhm]
-# Overwrite /home/app/MyLibraryNYCApp/config/webpack/environment.js? (enter "h" for help) [Ynaqdhm]
-# Overwrite /home/app/MyLibraryNYCApp/babel.config.js?
+# Overwrite /home/app/MyLibraryNYCApp/config/webpacker.yml? (enter "h" for help) [Ynaqdhm] 
+# Overwrite /home/app/MyLibraryNYCApp/config/webpack/environment.js? (enter "h" for help) [Ynaqdhm] 
+# Overwrite /home/app/MyLibraryNYCApp/babel.config.js? 
 
 RUN bundle exec rails webpacker:compile
 
