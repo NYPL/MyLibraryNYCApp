@@ -397,7 +397,7 @@ class TeacherSet < ActiveRecord::Base
       params[:subjects].each_with_index do |s, i|
         # Each selected Subject facet requires its own join:
         join_alias = "S2T#{i}"
-        next unless s.match /^[0-9]+$/
+        next unless s.match? /^[0-9]+$/
 
         sets = sets.joins("INNER JOIN subject_teacher_sets #{join_alias} ON #{join_alias}.teacher_set_id=teacher_sets.id AND \
                           #{join_alias}.subject_id=#{s}")
@@ -422,9 +422,9 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Sort most available first with id as tie breaker to ensure consistent sorts
-    sets = sets.order('availability ASC, available_copies DESC, id DESC')
+    sets.order('availability ASC, available_copies DESC, id DESC')
 
-    sets
+    
   end
 
 
@@ -433,7 +433,7 @@ class TeacherSet < ActiveRecord::Base
     cache_key = Digest::MD5.hexdigest cache_key.parameterize
     # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
     # TODO: take this cache expiration timeout constant out into a properties file.
-    facets = Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
+    Rails.cache.fetch "facets-#{cache_key}", :expires_in => 8.hour do
       facets = []
 
       # Facets for language, availability, type, and subject are pretty basic GROUPBYs:
@@ -512,7 +512,7 @@ class TeacherSet < ActiveRecord::Base
       facets
     end
 
-    facets
+    
   end
 
 
@@ -620,14 +620,14 @@ class TeacherSet < ActiveRecord::Base
         if !(item_links = doc.css('.briefcitItems a')).empty?
           # puts "  parsing as: 2"
           item_links = item_links.select { |l| l.text.include? 'View Full Record' }
-          item_url = 'http://' + CATALOG_DOMAIN + item_links.first[:href] unless item_links.empty?
+          item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
 
         # If that fails, look for "Teacher Set ..." links
         # if item_url.nil? && !(item_links = doc.css('.browseEntryData a')).empty?
         elsif !(item_links = doc.css('.bibItemsEntry a', '.browseEntryData a')).empty?
           # puts "  parsing as: 3"
           item_links = item_links.select { |l| l.text.include? 'Teacher Set' }
-          item_url = 'http://' + CATALOG_DOMAIN + item_links.first[:href] unless item_links.empty?
+          item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
         end
 
         # If an item_url found, follow it to find the permalink
@@ -639,7 +639,7 @@ class TeacherSet < ActiveRecord::Base
           # Item page doen't have a permalink? Must be a weird search result. Follow first View Full Record link and look for permalink there..
           if permalink.nil? && !(item_links = doc.css('.briefcitItems a:contains("View Full Record")')).empty?
             # puts "  parsing as: 2"
-            item_url = 'http://' + CATALOG_DOMAIN + item_links.first[:href] unless item_links.empty?
+            item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
             # puts "!!! third fetch... #{item_url}"
             doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minute))
             permalink = doc.at_css('a:contains("Permanent link for this record")')
@@ -671,7 +671,7 @@ class TeacherSet < ActiveRecord::Base
       doc = Nokogiri::HTML(content)
       puts "  Availability parsed from #{scrape_url}"
       doc.css('.bibItemsEntry').each do |availability_row|
-        avail = availability_row.css('td').select { |td| td.text.strip.downcase.sub(/^\W+/,'') == 'available' }.size == 1
+        avail = availability_row.css('td').count { |td| td.text.strip.downcase.sub(/^\W+/,'') == 'available' } == 1
 
         total_copies += 1
         available_copies += 1 if avail
@@ -1115,7 +1115,7 @@ class TeacherSet < ActiveRecord::Base
   def update_available_and_total_count(bibid)
     response = get_items_info_from_bibs_service(bibid)
     self.update(total_copies: response[:total_count], available_copies: response[:available_count],
-      availability: response[:availability_string])
+                availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
   end
 

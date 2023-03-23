@@ -3,25 +3,28 @@
 class SettingsController < ApplicationController
 
   def signin
-    if params["settingType"] == "account"
-      store_location_for(:user, "account_details")
-    end
+    return unless params["settingType"] == "account"
+
+    store_location_for(:user, "account_details")
+    
   end
 
-  def signup
-  end
 
-  def signout
-  end
+  def signup; end
+
+
+  def signout; end
+
 
   def mln_banner_message
-    if ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.downcase == "true" && ENV['MAINTENANCE_BANNER_TEXT'].present?
-      render json: { bannerText: ENV['MAINTENANCE_BANNER_TEXT'].html_safe, bannerTextFound: true }
-    end
+    return unless ENV['SHOW_MAINTENANCE_BANNER'] && ENV['SHOW_MAINTENANCE_BANNER'].to_s.casecmp("true").zero? && ENV['MAINTENANCE_BANNER_TEXT'].present?
+
+    render json: { bannerText: ENV['MAINTENANCE_BANNER_TEXT'].html_safe, bannerTextFound: true }
+    
   end
 
-  def page_not_found
-  end
+
+  def page_not_found; end
 
 
   def activeadmin_redirect_to_login
@@ -32,6 +35,7 @@ class SettingsController < ApplicationController
       redirect_to "/admin/dashboard"
     end 
   end
+
 
   def reset_admin_password_message
     if params["admin_user"]["email"].present?
@@ -47,6 +51,7 @@ class SettingsController < ApplicationController
       redirect_to "/admin/password/new"
     end
   end
+
 
   def index
     unless logged_in?
@@ -84,24 +89,27 @@ class SettingsController < ApplicationController
       #If school is inactive for current user still need to show in school drop down.
       @schools << @school.name_id unless @school.active
 
-      resp = {:id => current_user.id, current_user: current_user, :contact_email => @contact_email, :school => @school, :email => @email, :alt_email => @alt_email, :schools => @schools.to_h, :total_pages => (current_user.holds.length/per_page.to_f).ceil,
-              :holds => @holds.map { |i| [created_at: i["created_at"].strftime("%b %-d, %Y"), quantity: i["quantity"], access_key: i["access_key"], title: i.teacher_set.title, status_label: i.status_label, status: i.status, teacher_set_id: i.teacher_set_id] if i.teacher_set.present? }.compact.flatten, :current_password => User.default_password.to_s}
+      resp = {:id => current_user.id, current_user: current_user, :contact_email => @contact_email, :school => @school, :email => @email, :alt_email => @alt_email, :schools => @schools.to_h, :total_pages => (current_user.holds.length / per_page.to_f).ceil,
+              :holds => @holds.map do |i|
+                          [created_at: i["created_at"].strftime("%b %-d, %Y"), quantity: i["quantity"], access_key: i["access_key"], title: i.teacher_set.title, status_label: i.status_label, status: i.status, teacher_set_id: i.teacher_set_id] if i.teacher_set.present?
+                        end.compact.flatten, :current_password => User.default_password.to_s}
     end
-    ordersNotPresentMsg = @holds.length <= 0? "You have not yet placed any orders." : ""
+    ordersNotPresentMsg = @holds.length <= 0 ? "You have not yet placed any orders." : ""
     render json: { accountdetails: resp, ordersNotPresentMsg: ordersNotPresentMsg }
   end
 
 
   def acccount_details
-    unless logged_in?
-      redirect_to "/signin"
-    end
+    return if logged_in?
+
+    redirect_to "/signin"
+    
   end
 
 
   def sign_up_details
     render json: { activeSchools: School.active_schools_data.to_h, 
-                   emailMasks: AllowedUserEmailMasks.where(active:true).pluck(:email_pattern) }
+                   emailMasks: AllowedUserEmailMasks.where(active: true).pluck(:email_pattern) }
   end
 
 end

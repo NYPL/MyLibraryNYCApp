@@ -26,8 +26,7 @@ class BooksController < ApplicationController
   end
 
 
-  def book_details
-  end
+  def book_details; end
 
   private
 

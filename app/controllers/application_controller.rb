@@ -6,19 +6,21 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     if user_signed_in?
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
+
   def authenticate_admin_user!
     session[:redirect_after_login] = request.fullpath
-    if !current_admin_user.present?
+    unless current_admin_user.present?
       # check for current_admin_user if not then redirect to login
       redirect_to "/admin/login"
     end
   end
+
   
   def append_info_to_payload(payload)
     super
@@ -38,6 +40,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
     LogWrapper.log('DEBUG', {'message' => 'after_sign_in_path_for.start',
@@ -53,11 +56,11 @@ class ApplicationController < ActionController::Base
     # Commenting this out due to inconsistency when demo-ing with account that are admins
     # (PB: Uncommenting this out because I can't find a login flow that it effects. I think observed issue may have been something else..)
     if !resource.nil? && resource.is_a?(AdminUser)
-      if session[:redirect_after_login].present?
-        redirect_url = session[:redirect_after_login]
-      else
-        redirect_url = admin_dashboard_path
-      end
+      redirect_url = if session[:redirect_after_login].present?
+                       session[:redirect_after_login]
+                     else
+                       admin_dashboard_path
+                     end
     end
     # if session[:redirect_after_login]
     #   redirect_url = session[:redirect_after_login]
@@ -66,27 +69,29 @@ class ApplicationController < ActionController::Base
     redirect_url
   end
 
+
   # Is called by functionality that needs to make sure the user is authenticated,
   # s.a. making a teacher set order.  Takes the user to a login page.
   def require_login
     unless user_signed_in?
-      #flash[:error] = "Please sign in to complete your order!"
+      # flash[:error] = "Please sign in to complete your order!"
       respond_to do |format|
         format.html {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = request.original_url
-          #render json: {:redirect_to => new_user_session_path}
+          # render json: {:redirect_to => new_user_session_path}
           redirect_to "/signin"
         }
         format.json {
           # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
           # session[:redirect_after_login] = "#{app_url}##{request.fullpath}".gsub! '.json', ''
-          #render json: {:redirect_to => new_user_session_path}
+          # render json: {:redirect_to => new_user_session_path}
           render json: {:redirect_to => "/signin"}
         }
       end
     end
   end
+
 
   def redirect_to_angular
     if request.format != "json"
@@ -143,7 +148,7 @@ class ApplicationController < ActionController::Base
     if originating_location.present?
       # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
       if params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
-        originating_location = "teacher_set_details/#{params["id"]}"
+        originating_location = "teacher_set_details/#{params['id']}"
       elsif originating_location == "/schools"
         originating_location = "participating-schools"
       elsif originating_location == "/faqs/show"
@@ -151,7 +156,7 @@ class ApplicationController < ActionController::Base
       elsif originating_location == "/contacts"
         originating_location = "contacts"
       elsif params["controller"] == "books" && params["action"] == "show" && params["id"].present?
-        originating_location = "book_details/#{params["id"]}"
+        originating_location = "book_details/#{params['id']}"
       elsif params["controller"] == "teacher_sets" && params["action"] == "index"
         query_params = request.query_parameters
         if params["grade_begin"] == "-1" && params["grade_end"] == "12" && params["grade_begin"] == "-1" && params["keyword"] == "" && params["sort_order"] == ""
@@ -178,7 +183,7 @@ class ApplicationController < ActionController::Base
 
         originating_location = "teacher_set_data?#{query_params.to_query}"
       elsif params["controller"] == "holds" && params["action"] == "ordered_holds_details" && params["cache_key"].present?
-        originating_location = "ordered_holds/#{params["cache_key"]}"
+        originating_location = "ordered_holds/#{params['cache_key']}"
       else
         originating_location = "teacher_set_data"
       end
@@ -191,9 +196,9 @@ class ApplicationController < ActionController::Base
   private 
               
   def set_csrf_cookie
-     cookies["CSRF-TOKEN"] = {
-          value: form_authenticity_token,
-          domain: :all 
-      }
+    cookies["CSRF-TOKEN"] = {
+         value: form_authenticity_token,
+         domain: :all 
+     }
   end
 end

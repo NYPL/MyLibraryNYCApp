@@ -13,7 +13,7 @@ ActiveAdmin.register HoldChange do
     def new
       @hold_change = HoldChange.new
       @hold_change.hold = Hold.find params[:hold]
-      @page_title= "New Hold Change for #{@hold_change.hold.teacher_set.title}"
+      @page_title = "New Hold Change for #{@hold_change.hold.teacher_set.title}"
       #set any other values you might want to initialize
     end
 

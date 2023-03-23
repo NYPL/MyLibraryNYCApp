@@ -60,6 +60,7 @@ gem 'will_paginate', '~> 3.0'
 gem 'webmock'
 gem 'yaml_db'
 gem 'rexml', '~> 3.2.5'
+gem 'rubocop-performance', '~> 1.16'
 gem 'thread_safe', '~> 0.3.6'
 gem "react_on_rails", "12.0.0"
 gem "webpacker", "~> 5"

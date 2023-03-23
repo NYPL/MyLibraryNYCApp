@@ -20,17 +20,17 @@ div class: "header", id: "header" do
         'Holds'
       end
     end
-    li id: "teacher_sets", class: "#{assigns[:versioned_object].class.name == 'TeacherSet' ? 'current' : ''}" do
+    li id: "teacher_sets", class: "#{assigns[:versioned_object].instance_of?(TeacherSet) ? 'current' : ''}" do
       a href: "/admin/teacher_sets" do
         'Teacher Set'
       end
     end
-    li id: "books", class: "#{assigns[:versioned_object].class.name == 'Book' ? 'current' : ''}" do
+    li id: "books", class: "#{assigns[:versioned_object].instance_of?(Book) ? 'current' : ''}" do
       a href: "/admin/books" do
         'Book'
       end
     end
-    li id: "schools", class: "#{assigns[:versioned_object].class.name == 'School' ? 'current' : ''}" do
+    li id: "schools", class: "#{assigns[:versioned_object].instance_of?(School) ? 'current' : ''}" do
       a href: "/admin/schools" do
         'School'
       end
@@ -78,11 +78,12 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
       # loop through each version to create a new row in the table
       tr do
         td do
-          if assigns[:versioned_object].class.name == 'TeacherSet'
+          case assigns[:versioned_object].class.name
+          when 'TeacherSet'
             link_to "Version #{version_number}", admin_teacher_set_path(assigns[:versioned_object], version: version_number)
-          elsif assigns[:versioned_object].class.name == 'Book'
+          when 'Book'
             link_to "Version #{version_number}", admin_book_path(assigns[:versioned_object], version: version_number)
-          elsif assigns[:versioned_object].class.name == 'School'
+          when 'School'
             link_to "Version #{version_number}", admin_school_path(assigns[:versioned_object], version: version_number)
           end
         end
@@ -95,7 +96,7 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
             # "Native American History Reference Collection 2"], "updated_at"=>["2018-09-25T18:33:52.245Z", "2018-09-25T19:51:55.739Z"]}
             
             versions[version_number - 2].changeset.each do |k, v|
-              # note that the contents of this block are duplicated below
+              # NOTE: that the contents of this block are duplicated below
               next if k == 'updated_at' # we don't need to show updated_at in this column
 
               if k == 'last_book_change'
@@ -129,11 +130,12 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
     tr do
       td do
         # always show the current version in the last-row
-        resource_name = if resource.class.name == 'TeacherSet'
+        resource_name = case resource.class.name
+                        when 'TeacherSet'
                           admin_teacher_set_path(assigns[:versioned_object])
-                        elsif resource.class.name == 'Book'
+                        when 'Book'
                           admin_book_path(assigns[:versioned_object])
-                        elsif resource.class.name == 'School'
+                        when 'School'
                           admin_school_path(assigns[:versioned_object])
                         end
         link_to "Current Version", resource_name
@@ -142,7 +144,7 @@ panel "&nbsp;&nbsp;#{assigns[:versioned_object].class.name.humanize} History: #{
         output = ''
         # always show the current version in the last row
         versions[-1].changeset.each do |k, v|
-          # note that the contents of this block are duplicated above
+          # NOTE: that the contents of this block are duplicated above
           next if k == 'updated_at' # we don't need to show updated_at in this column
 
           if k == 'last_book_change'

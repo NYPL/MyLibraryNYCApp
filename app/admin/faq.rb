@@ -43,7 +43,7 @@ ActiveAdmin.register Faq do
     f.actions
   end
   
-  show do |faq|
+  show do |_faq|
     attributes_table do
       row :question
       row :answer

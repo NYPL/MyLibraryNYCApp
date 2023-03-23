@@ -13,6 +13,7 @@ class Book < ActiveRecord::Base
   after_save :enable_papertrail
 
   attr_accessor :catalog_choice
+
   # attr_accessor :matching_api_items
 
   # has_and_belongs_to_many :authors
@@ -181,10 +182,10 @@ class Book < ActiveRecord::Base
         cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}",
         bib_code_3: fixed_field(book_attributes, '31', true)
       )
-    rescue => exception
+    rescue => e
       # catch any error such as string field is receiving more than 255 characters or an expected attribute is missing
       LogWrapper.log('ERROR', {
-        'message' => "#{exception.message[0..200]}...\nBacktrace=#{exception.backtrace}.",
+        'message' => "#{e.message[0..200]}...\nBacktrace=#{e.backtrace}.",
         'method' => 'method'
       })
     end
