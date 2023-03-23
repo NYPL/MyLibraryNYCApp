@@ -18,8 +18,8 @@ class HoldsController < ApplicationController
   # their holds history.  In routing terms, responds to a GET request on the
   # /holds/[hold id].json url.
   def show
-    @hold = Hold.find_by_access_key(params[:id])
-    head 401 if @hold.nil?
+    @hold = Hold.find_by(access_key: params[:id])
+    head :unauthorized if @hold.nil?
     render json: {
       hold: @hold.as_json,
       teacher_set: @hold.teacher_set.as_json,
@@ -41,8 +41,8 @@ class HoldsController < ApplicationController
 
   # GET /holds/1/cancel.json
   def cancel_details
-    @hold = Hold.find_by_access_key(params[:id])
-    head 401 if @hold.nil?
+    @hold = Hold.find_by(access_key: params[:id])
+    head :unauthorized if @hold.nil?
     render json: {
       hold: @hold.as_json,
       teacher_set: @hold.teacher_set.as_json,
@@ -128,7 +128,7 @@ class HoldsController < ApplicationController
   
   # Here calculate the teacher-set available_copies based on the current-user holds than saves in teacher-set table and cancel the current-user holds.
   def update
-    @hold = Hold.find_by_access_key(params[:id])
+    @hold = Hold.find_by(access_key: params[:id])
 
     if !(c = params[:hold_change]).nil? && (c[:status] == 'cancelled')
         teacher_set = @hold.teacher_set
@@ -160,7 +160,7 @@ class HoldsController < ApplicationController
   protected
 
   def check_ownership
-    @hold = Hold.find_by_access_key(params[:id])
+    @hold = Hold.find_by(access_key: params[:id])
     # user_signed_in?
     if not logged_in?
       require_login

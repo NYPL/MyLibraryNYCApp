@@ -138,7 +138,7 @@ ActiveAdmin.register TeacherSet do
     end
 
     attributes_table do
-      row 'Biblio page' do link_to(teacher_set_version.details_url, teacher_set_version.details_url, target:'_blank') end
+      row 'Biblio page' do link_to(teacher_set_version.details_url, teacher_set_version.details_url, target:'_blank', rel: 'noopener') end
       row 'Call Number' do teacher_set_version.call_number end
       row 'Description' do teacher_set_version.description end
       row 'Edition' do teacher_set_version.edition end

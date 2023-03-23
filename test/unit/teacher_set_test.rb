@@ -393,7 +393,7 @@ class TeacherSetTest < ActiveSupport::TestCase
   describe 'recalculate teacher-set availability column' do
     it 'test recalculate_availability method' do
       resp = @teacher_set3.recalculate_availability
-      assert_equal(true, resp)
+      assert(resp)
     end
   end
 
@@ -436,7 +436,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       # After creation of hold, available_copies is zero and availability changed to 'unavailable'
       assert_equal("unavailable", @teacher_set7.availability)
       assert_equal(0, @teacher_set7.available_copies)
-      assert_equal(true, resp)
+      assert(resp)
     end
 
     it 'update teacher-set availability while cancellation of hold ' do
@@ -448,7 +448,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       # After cancellation of hold available_copies count increased and availability status changed to 'available'
       assert_equal(2, @teacher_set8.available_copies)
       assert_equal('available', @teacher_set8.availability)
-      assert_equal(true, resp)
+      assert(resp)
     end
 
   end

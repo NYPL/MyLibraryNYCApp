@@ -8,7 +8,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     user_one = crank!(:user, barcode: 27777000000099)
     user_two = crank(:user)
     user_two.assign_barcode
-    assert(user_two.barcode == 27777000000100)
+    assert_equal(user_two.barcode, 27777000000100)
   end
 
   [generate_email].each do |new_email|

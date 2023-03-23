@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UserMailer < ActionMailer::Base
+class UserMailer < ApplicationMailer
   include LogWrapper
   LOG_TAG = "UserMailer"
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Document < ActiveRecord::Base
+class Document < ApplicationRecord
 
   validate :validate_event_type, :on => [:create, :update]
   validate :event_type_already_exist, :on => :create
@@ -19,7 +19,7 @@ class Document < ActiveRecord::Base
 
 
   def event_type_already_exist
-    return unless Document.where(event_type: event_type).present?
+    return if Document.where(event_type: event_type).blank?
 
     e_type = event_type.titleize
     error_msg = "#{e_type} type already created. Please use another type, or use the 'edit' link if you are trying to update #{e_type}"

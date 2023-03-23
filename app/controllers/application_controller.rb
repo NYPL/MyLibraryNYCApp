@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_admin_user!
     session[:redirect_after_login] = request.fullpath
-    unless current_admin_user.present?
+    if current_admin_user.blank?
       # check for current_admin_user if not then redirect to login
       redirect_to "/admin/login"
     end
@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
     # be careful -- after first access stored_location_for clears to a nil, so read it once
     # and store it in a local var before printing out or any other access
     redirect_url = stored_location_for(:user)
-    unless redirect_url.present?
+    if redirect_url.blank?
       redirect_url = 'teacher_set_data'
     end
 
@@ -56,11 +56,7 @@ class ApplicationController < ActionController::Base
     # Commenting this out due to inconsistency when demo-ing with account that are admins
     # (PB: Uncommenting this out because I can't find a login flow that it effects. I think observed issue may have been something else..)
     if !resource.nil? && resource.is_a?(AdminUser)
-      redirect_url = if session[:redirect_after_login].present?
-                       session[:redirect_after_login]
-                     else
-                       admin_dashboard_path
-                     end
+      redirect_url = (session[:redirect_after_login].presence || admin_dashboard_path)
     end
     # if session[:redirect_after_login]
     #   redirect_url = session[:redirect_after_login]

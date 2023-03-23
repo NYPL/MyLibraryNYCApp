@@ -26,7 +26,7 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
 
     it 'test var-field method with req_body nil' do
       self.instance_variable_set(:@req_body, nil)
-      assert_equal(nil, var_field_data('300'))
+      assert_nil(var_field_data('300'))
     end
   end
 

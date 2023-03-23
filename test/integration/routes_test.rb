@@ -25,7 +25,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
     resp = assert_raises ActionController::RoutingError do
       Rails.application.routes.recognize_path("http://#{ENV['MLN_SETS_SITE_HOSTNAME']}/about/participating-schools")
     end
-    assert_equal(true, resp.message.include?(NO_ROUTE_MATCHES))
+    assert_includes(resp.message, NO_ROUTE_MATCHES)
   end
 
   test "test for info-site about page" do
@@ -36,7 +36,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
     resp = assert_raises ActionController::RoutingError do
       Rails.application.routes.recognize_path("http://#{ENV['MLN_SETS_SITE_HOSTNAME']}/about/about-mylibrarynyc")
     end
-    assert_equal(true, resp.message.include?(NO_ROUTE_MATCHES))
+    assert_includes(resp.message, NO_ROUTE_MATCHES)
   end
 
   test "test for info-site contacts-links page" do
@@ -47,7 +47,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
     resp = assert_raises ActionController::RoutingError do
       Rails.application.routes.recognize_path("http://#{ENV['MLN_SETS_SITE_HOSTNAME']}/contacts-links")
     end
-    assert_equal(true, resp.message.include?(NO_ROUTE_MATCHES))
+    assert_includes(resp.message, NO_ROUTE_MATCHES)
   end
 
   test "test for info-ste digital resources page" do
@@ -58,7 +58,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
     resp = assert_raises ActionController::RoutingError do
       Rails.application.routes.recognize_path("http://#{ENV['MLN_SETS_SITE_HOSTNAME']}/help/access-digital-resources")
     end
-    assert_equal(true, resp.message.include?(NO_ROUTE_MATCHES))
+    assert_includes(resp.message, NO_ROUTE_MATCHES)
   end
 
   private

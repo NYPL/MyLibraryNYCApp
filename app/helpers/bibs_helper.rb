@@ -30,7 +30,7 @@ module BibsHelper
 
   # build saved_teacher_sets_json_array for the response body
   def bib_response(t_set)
-    return nil unless t_set.present?
+    return nil if t_set.blank?
 
     { id: t_set.id, bnumber: t_set.bnumber, title: t_set.title }
   end

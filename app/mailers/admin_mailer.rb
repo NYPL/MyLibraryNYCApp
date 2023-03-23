@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AdminMailer < ActionMailer::Base
+class AdminMailer < ApplicationMailer
   include LogWrapper
   LOG_TAG = "AdminMailer"
   default :from => '"MyLibraryNYC Admin" <no-reply@mylibrarynyc.org>'

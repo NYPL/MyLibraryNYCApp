@@ -41,7 +41,7 @@ class NewsLetterControllerUnitTest < MiniTest::Test
           resp = @nl_controller.create_news_letter_email_in_google_sheets(params)
         end
       end
-      assert_equal(true, resp)
+      assert(resp)
       @mintest_mock1.verify
     end
 
@@ -56,7 +56,7 @@ class NewsLetterControllerUnitTest < MiniTest::Test
           resp = @nl_controller.create_news_letter_email_in_google_sheets(params)
         end
       end
-      assert_equal(false, resp)
+      assert_not(resp)
       @mintest_mock1.verify
     end
 
@@ -78,7 +78,7 @@ class NewsLetterControllerUnitTest < MiniTest::Test
           end
         end
       end
-      assert_equal(true, resp)
+      assert(resp)
       @mintest_mock1.verify
       @mintest_mock2.verify
     end

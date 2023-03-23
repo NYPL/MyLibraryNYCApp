@@ -33,7 +33,7 @@ class BookUnitTest < MiniTest::Test
       response = @book_model.update_from_isbn
     end
     @mintest_mock1.verify
-    assert_equal(true, response)
+    assert(response)
   end
 
 

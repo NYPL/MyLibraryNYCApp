@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SubjectTeacherSet < ActiveRecord::Base
+class SubjectTeacherSet < ApplicationRecord
   # attr_accessible :subject_id, :teacher_set_id
 
   belongs_to :subject

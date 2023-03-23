@@ -10,7 +10,7 @@
 
   # Uncomment the following block if you want each input field to have the validation messages attached.
 
-  # Note: client_side_validation requires the error to be encapsulated within
+  # NOTE: client_side_validation requires the error to be encapsulated within
   # <label for="#{instance.send(:tag_id)}" class="message"></label>
 
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|

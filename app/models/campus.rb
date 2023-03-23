@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Campus < ActiveRecord::Base
+class Campus < ApplicationRecord
   self.table_name = "campuses"
 
   # attr_accessible :name

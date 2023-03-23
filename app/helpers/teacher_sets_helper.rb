@@ -39,11 +39,11 @@ module TeacherSetsHelper
       if grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
         grades_arr << grade
         return grades_arr
-      elsif !grades.include?(grade_arr[0]) && !grades.include?(grade_arr[1])
+      elsif grades.exclude?(grade_arr[0]) && grades.exclude?(grade_arr[1])
         prek_arr << TeacherSet::PRE_K_VAL
-      elsif grades.include?(grade_arr[0]) && !grades.include?(grade_arr[1])
+      elsif grades.include?(grade_arr[0]) && grades.exclude?(grade_arr[1])
         return [grade_arr[0]]
-      elsif !grades.include?(grade_arr[0]) && grades.include?(grade_arr[1])
+      elsif grades.exclude?(grade_arr[0]) && grades.include?(grade_arr[1])
         return [grade_arr[1]]
       else
         next
@@ -55,7 +55,7 @@ module TeacherSetsHelper
 
   # Grades = {Pre-K => -1, K => 0}
   def grade_val(val)
-    return unless val.present?
+    return if val.blank?
 
     if val == 'K'
       TeacherSet::K_VAL
@@ -76,7 +76,7 @@ module TeacherSetsHelper
       
       if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
         grade_or_lexile_json.delete('Lexile ').delete('L').split(' ')[0].split('-')
-      elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
+      elsif return_grade_or_lexile == 'grade' && grade_or_lexile_json.exclude?('L')
         if grade_or_lexile_json.upcase.include?('PRE')
           # Prek values: ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek'] - supporting these values only
           PREK_ARR.each do |val|

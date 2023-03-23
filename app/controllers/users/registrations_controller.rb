@@ -21,7 +21,7 @@ module Users
             sign_up(resource_name, resource)
             if params.require(:registration)["user"]['news_letter_email'].present?
               # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
-              email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
+              email = (user_params['alt_email'].presence || user_params['email'])
               NewsLetterController.new.send_news_letter_confirmation_email(email)
             end
             render json: { status: :created, user: resource, message: "Welcome! You have signed up successfully." }
@@ -41,7 +41,7 @@ module Users
       # Here Updates current user alt_email and schooid.
       # If Alt Email is not present use current user email
       
-      current_user.alt_email = user_params["alt_email"].present? ? user_params["alt_email"] : ""
+      current_user.alt_email = (user_params["alt_email"].presence || "")
       current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
       
       if current_user.save!

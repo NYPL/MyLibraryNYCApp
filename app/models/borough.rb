@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Borough < ActiveRecord::Base
+class Borough < ApplicationRecord
 
   # attr_accessible :name
 
