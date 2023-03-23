@@ -3,7 +3,7 @@
 class SessionsController < ApplicationController
   layout 'empty', :only => [ :timeout_check ]
 
-  def is_logged_in?
+  def logged_in?
     if user_signed_in? && current_user
       LogWrapper.log('INFO', {'message' => 'is_logged_in',
                              'method' => "is_logged_in........ "})

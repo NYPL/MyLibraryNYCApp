@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CustomFailureApp < Devise::FailureApp
   def redirect
     store_location!

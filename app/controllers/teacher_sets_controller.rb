@@ -23,10 +23,10 @@ class TeacherSetsController < ApplicationController
     teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
     @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
 
-    resetPageNumber = ""
+    reset_page_number = ""
     if !@teacher_sets.present? && params["page"]
       params["page"] = "1"
-      resetPageNumber = "1"
+      reset_page_number = "1"
       teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
     end
@@ -41,13 +41,13 @@ class TeacherSetsController < ApplicationController
 
     facets = teacher_set_facets(params, @facets)
     
-    subjectsHash = {}
+    subjects_hash = {}
 
     facets.each do |facet|
-      next unless facet[:label] === "subjects" && facet[:items].present?
+      next unless facet[:label] == "subjects" && facet[:items].present?
 
       facet[:items].each do |item|
-        subjectsHash[item[:value]] = item[:label]
+        subjects_hash[item[:value]] = item[:label]
       end
     end
 
@@ -64,7 +64,7 @@ class TeacherSetsController < ApplicationController
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
 
     render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, 
-no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash, resetPageNumber: resetPageNumber, errrorMessage: "" }
+no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjects_hash, resetPageNumber: reset_page_number, errrorMessage: "" }
   rescue ElasticsearchException => e
     render json: { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, 
 facets: {} }

@@ -10,7 +10,7 @@ class HomeController < ApplicationController
   end
 
 
-  def get_mln_file_names
+  def mln_file_names
     calendar_event = Document.calendar_of_events
     mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
     render json: { mln_calendar_file_name: mln_calendar_file_name, menu_of_services_file_name: "menu_of_services.pdf" }

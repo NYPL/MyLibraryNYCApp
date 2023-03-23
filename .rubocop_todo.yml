@@ -596,6 +596,11 @@ Naming/VariableName:
 Naming/VariableNumber:
   Exclude:
     - 'lib/tasks/ingest.rake'
+    - 'db/migrate/*.rb'
+    - 'test/factories/school_factory.rb'
+    - 'app/admin/schools.rb'
+    - 'app/controllers/schools_controller.rb'
+    - 'app/models/book.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -628,10 +633,10 @@ Performance/RedundantMerge:
 
 # Offense count: 3
 # Cop supports --auto-correct.
-Performance/Sample:
-  Exclude:
-    - 'test/factories/user_factory.rb'
-    - 'test/test_helper.rb'
+# Performance/Sample:
+#   Exclude:
+#     - 'test/factories/user_factory.rb'
+#     - 'test/test_helper.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -1185,10 +1190,20 @@ Style/WordArray:
 # Offense count: 785
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
-Metrics/LineLength:
-  Exclude:
-  - 'db/migrate/*.rb'
-  - 'test/test_helper.rb'
-  - 'lib/tasks/*.rake'
-  - 'config/routes.rb'
-  - 'config/initializers/*.rb'
+# Metrics/LineLength:
+#   Exclude:
+#   - 'db/migrate/*.rb'
+#   - 'test/test_helper.rb'
+#   - 'lib/tasks/*.rake'
+#   - 'config/routes.rb'
+#   - 'config/initializers/*.rb'
+
+# Rails/ReversibleMigration:
+#   Exclude:
+#   - 'db/migrate/*.rb'
+# Rails/CreateTableWithTimestamps:
+#   Exclude:
+#   - 'db/migrate/20200813141524_create_faq.rb'
+#   - 'db/migrate/20140128191653_add_schools_table.rb'
+#   - 'db/migrate/20140108212758_initial_schema.rb'
+#   - 'db/migrate/20140116211501_create_subjects_teacher_sets_table.rb'

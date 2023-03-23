@@ -282,7 +282,7 @@ class TeacherSet < ActiveRecord::Base
 
 
   # Delete teacher-set record from db and elastic search.
-  def self.delete_teacher_set(bib_id, suppressed=false)
+  def self.delete_teacher_set(bib_id, suppressed: false)
     # Get teacher-set record by bib_id
     teacher_set = self.get_teacher_set_by_bnumber(bib_id)
     unless teacher_set.present?
@@ -531,133 +531,133 @@ class TeacherSet < ActiveRecord::Base
   # end
 
 
-  def self.upsert_from_catalog_item(item)
-    # book = self.find_or_initialize_by_details_url item['details_url']
-    book = self.find_or_initialize_by_id item['id'].to_i
-    puts "  New Set!: #{book.id}" unless book.persisted?
-    book.update_from_catalog_item item
-    book
-  end
+  # def self.upsert_from_catalog_item(item)
+  #   # book = self.find_or_initialize_by_details_url item['details_url']
+  #   book = self.find_or_initialize_by_id item['id'].to_i
+  #   puts "  New Set!: #{book.id}" unless book.persisted?
+  #   book.update_from_catalog_item item
+  #   book
+  # end
 
 
-  def update_from_catalog_item(item)
-    # puts "create book: #{item['id']}:  #{id}"
-    # set = TeacherSet.find_or_initialize_by_id id
-    title = item['title']
-    title.sub! /\WGr\.\W[0-9kK]-[0-9]+/, ''
-    title.sub! /\W\(Teacher Set\)\W*$/, ''
+  # def update_from_catalog_item(item)
+  #   # puts "create book: #{item['id']}:  #{id}"
+  #   # set = TeacherSet.find_or_initialize_by_id id
+  #   title = item['title']
+  #   title.sub! /\WGr\.\W[0-9kK]-[0-9]+/, ''
+  #   title.sub! /\W\(Teacher Set\)\W*$/, ''
 
-    # title.sub!
+  #   # title.sub!
 
-    self.update({
-      :title => title,
-      :call_number => item['call_number'],
-      :description => item['description'],
-      :details_url => item['details_url'],
-      :edition => item['edition'],
-      :publication_date => item['publication_date'],
-      :statement_of_responsibility => item['statement_of_responsibility'],
-      :sub_title => item['sub_title'],
-      :contents => item['contents'].join("\n")
-    })
+  #   self.update({
+  #     :title => title,
+  #     :call_number => item['call_number'],
+  #     :description => item['description'],
+  #     :details_url => item['details_url'],
+  #     :edition => item['edition'],
+  #     :publication_date => item['publication_date'],
+  #     :statement_of_responsibility => item['statement_of_responsibility'],
+  #     :sub_title => item['sub_title'],
+  #     :contents => item['contents'].join("\n")
+  #   })
 
-    self.update :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
-    self.update :language => item['languages'].first['name'] if !item['languages'].empty?
-    self.update :physical_description => item['physical_description'].first if !item['physical_description'].empty?
-    self.update :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
-    self.update :series => item['series'].first['name'] if !item['series'].nil? && !item['series'].empty?
+  #   self.update :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
+  #   self.update :language => item['languages'].first['name'] if !item['languages'].empty?
+  #   self.update :physical_description => item['physical_description'].first if !item['physical_description'].empty?
+  #   self.update :publisher => item['publishers'].first['name'] if !item['publishers'].empty?
+  #   self.update :series => item['series'].first['name'] if !item['series'].nil? && !item['series'].empty?
 
-    grade_begin = nil
-    grade_end = nil
-    if item['suitabilities'].present?
-      item['suitabilities'].each do |suit|
-        # Parse grade suitablility (e.g. 4-12, 4-+)
-        # If grade_end is '+', store null
-        m = suit['name'].match /([0-9K]+)-([0-9+]+)/
-        unless m.nil?
-          # Apply values, making sure values are <= 12 (i.e. watch out for misentered lexiles)
-          if m[1].to_i <= 12
-            v = m[1].to_i
-            grade_begin = grade_begin.nil? ? v : [grade_begin, v].min
-          end
+  #   grade_begin = nil
+  #   grade_end = nil
+  #   if item['suitabilities'].present?
+  #     item['suitabilities'].each do |suit|
+  #       # Parse grade suitablility (e.g. 4-12, 4-+)
+  #       # If grade_end is '+', store null
+  #       m = suit['name'].match /([0-9K]+)-([0-9+]+)/
+  #       unless m.nil?
+  #         # Apply values, making sure values are <= 12 (i.e. watch out for misentered lexiles)
+  #         if m[1].to_i <= 12
+  #           v = m[1].to_i
+  #           grade_begin = grade_begin.nil? ? v : [grade_begin, v].min
+  #         end
 
-          if m[2].to_i <= 12
-            v = m[2].to_i
-            grade_end = grade_end.nil? ? v : [grade_end, v].max
-          end
-        end
-      end
-    end
-    self.update :grade_begin => grade_begin, :grade_end => grade_end
+  #         if m[2].to_i <= 12
+  #           v = m[2].to_i
+  #           grade_end = grade_end.nil? ? v : [grade_end, v].max
+  #         end
+  #       end
+  #     end
+  #   end
+  #   self.update :grade_begin => grade_begin, :grade_end => grade_end
 
-    lang = nil
-    unless item['primary_language'].nil? || item['primary_language'].empty?
-      lang = item['primary_language']['name']
-      lang = nil if ['Undetermined'].include? lang
-    end
-    self.update :primary_language => lang
+  #   lang = nil
+  #   unless item['primary_language'].nil? || item['primary_language'].empty?
+  #     lang = item['primary_language']['name']
+  #     lang = nil if ['Undetermined'].include? lang
+  #   end
+  #   self.update :primary_language => lang
 
-    self.teacher_set_notes.destroy_all
-    item['notes'].each do |n|
-      self.teacher_set_notes.push TeacherSetNote.new :content => n
-    end
+  #   self.teacher_set_notes.destroy_all
+  #   item['notes'].each do |n|
+  #     self.teacher_set_notes.push TeacherSetNote.new :content => n
+  #   end
 
-    if self.bnumber.nil?
-      url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=c&searcharg=#{URI::encode(self.call_number)}"
-      # TODO: take the 1.day constant out into a properties file.
-      # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
-      content = self.class.scrape_content url, 8.hour
-      # puts "  Getting by call num: #{url}"
-      # sleep 0.5
-      doc = Nokogiri::HTML(content)
+  #   if self.bnumber.nil?
+  #     url = "http://#{CATALOG_DOMAIN}/search~S1/?searchtype=c&searcharg=#{URI::encode(self.call_number)}"
+  #     # TODO: take the 1.day constant out into a properties file.
+  #     # NOTE: the expiry was 1.day, changing to 8.hour to see fixes in human-administered time.
+  #     content = self.class.scrape_content url, 8.hour
+  #     # puts "  Getting by call num: #{url}"
+  #     # sleep 0.5
+  #     doc = Nokogiri::HTML(content)
 
-      puts "    Getting bnumber from #{url}"
+  #     puts "    Getting bnumber from #{url}"
 
-      permalink = doc.at_css('a:contains("Permanent link for this record")')
+  #     permalink = doc.at_css('a:contains("Permanent link for this record")')
 
-      if permalink.nil?
-        item_url = nil
-        if !(item_links = doc.css('.briefcitItems a')).empty?
-          # puts "  parsing as: 2"
-          item_links = item_links.select { |l| l.text.include? 'View Full Record' }
-          item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
+  #     if permalink.nil?
+  #       item_url = nil
+  #       if !(item_links = doc.css('.briefcitItems a')).empty?
+  #         # puts "  parsing as: 2"
+  #         item_links = item_links.select { |l| l.text.include? 'View Full Record' }
+  #         item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
 
-        # If that fails, look for "Teacher Set ..." links
-        # if item_url.nil? && !(item_links = doc.css('.browseEntryData a')).empty?
-        elsif !(item_links = doc.css('.bibItemsEntry a', '.browseEntryData a')).empty?
-          # puts "  parsing as: 3"
-          item_links = item_links.select { |l| l.text.include? 'Teacher Set' }
-          item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
-        end
+  #       # If that fails, look for "Teacher Set ..." links
+  #       # if item_url.nil? && !(item_links = doc.css('.browseEntryData a')).empty?
+  #       elsif !(item_links = doc.css('.bibItemsEntry a', '.browseEntryData a')).empty?
+  #         # puts "  parsing as: 3"
+  #         item_links = item_links.select { |l| l.text.include? 'Teacher Set' }
+  #         item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
+  #       end
 
-        # If an item_url found, follow it to find the permalink
-        unless item_url.nil?
-          # puts "    falling back in item url: #{item_url}"
-          doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minute))
-          permalink = doc.at_css('a:contains("Permanent link for this record")')
+  #       # If an item_url found, follow it to find the permalink
+  #       unless item_url.nil?
+  #         # puts "    falling back in item url: #{item_url}"
+  #         doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minute))
+  #         permalink = doc.at_css('a:contains("Permanent link for this record")')
 
-          # Item page doen't have a permalink? Must be a weird search result. Follow first View Full Record link and look for permalink there..
-          if permalink.nil? && !(item_links = doc.css('.briefcitItems a:contains("View Full Record")')).empty?
-            # puts "  parsing as: 2"
-            item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
-            # puts "!!! third fetch... #{item_url}"
-            doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minute))
-            permalink = doc.at_css('a:contains("Permanent link for this record")')
-          end
-        end
-      end
+  #         # Item page doen't have a permalink? Must be a weird search result. Follow first View Full Record link and look for permalink there..
+  #         if permalink.nil? && !(item_links = doc.css('.briefcitItems a:contains("View Full Record")')).empty?
+  #           # puts "  parsing as: 2"
+  #           item_url = "http://#{CATALOG_DOMAIN}#{item_links.first[:href]}" unless item_links.empty?
+  #           # puts "!!! third fetch... #{item_url}"
+  #           doc = Nokogiri::HTML(self.class.scrape_content(item_url, 30.minute))
+  #           permalink = doc.at_css('a:contains("Permanent link for this record")')
+  #         end
+  #       end
+  #     end
 
-      if permalink.nil?
-        puts "    BNUMBER NOT FOUND"
+  #     if permalink.nil?
+  #       puts "    BNUMBER NOT FOUND"
 
-      elsif (p = permalink[:href].match(/record=(b[0-9]+)/)) && p.size == 2
-        bnumber = p[1]
-        ret = self.update :bnumber => bnumber
-        # puts "    BNUMBER: #{self.bnumber} saved? #{self.persisted?} errors? #{self.errors.full_messages}"
-      end
+  #     elsif (p = permalink[:href].match(/record=(b[0-9]+)/)) && p.size == 2
+  #       bnumber = p[1]
+  #       ret = self.update :bnumber => bnumber
+  #       # puts "    BNUMBER: #{self.bnumber} saved? #{self.persisted?} errors? #{self.errors.full_messages}"
+  #     end
 
-    end
-  end
+  #   end
+  # end
 
 
   def update_availability
