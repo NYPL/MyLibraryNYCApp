@@ -1,47 +1,48 @@
-FROM phusion/passenger-ruby27:2.0.1 AS production
+FROM ruby:2.7.4 AS builder
 
 # set env vars
-ENV RUBY_VERSION=2.7.4
 ENV APP_HOME /home/app/MyLibraryNYCApp
-
-# use baseimage-docker's init process.
-CMD ["/sbin/my_init"]
-
-# remove passenger apt repository from list
-# fixes this error - "The repository 'https://oss-binaries.phusionpassenger.com/apt/passenger bionic Release' does not have a Release file."
-RUN cat /dev/null > /etc/apt/sources.list.d/passenger.list
+ENV RAILS_ENV=qa
+ENV AWS_DEFAULT_REGION=us-east-1
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
 
 RUN apt-get update -qq \
     && apt-get install -y \
-    npm \
+    curl \
+    postgresql-client \
     git
 
-# set up app files
-COPY --chown=app:app . $APP_HOME
-COPY Gemfile $APP_HOME
-COPY Gemfile.lock $APP_HOME
-WORKDIR $APP_HOME
-
-RUN npm install --global yarn \
-    npm i webpack-dev-server
+RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
+RUN apt-get -y install nodejs
 
 ## bundle
+FROM ruby:2.7.4 as bundler
+WORKDIR /tmp
 RUN gem install bundler
-RUN bash -lc "rvm use ruby-$RUBY_VERSION --default"
-
+COPY Gemfile Gemfile.lock . /tmp
 RUN bundle config --global github.https true \
-    && bundle install
+    && bundle install --jobs 30
 
+FROM ruby:2.7.4 as app
+RUN mkdir -p /rails
+WORKDIR /rails
+COPY --from=bundler /usr/local/bundle /usr/local/bundle
+
+RUN npm install --global yarn
+
+RUN yarn config delete https-proxy && \
+			yarn config delete proxy
+
+## webpacker needs this which is super annoying!!
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 RUN bundle exec rails webpacker:install
-#RUN bundle exec rails webpacker:install:react
-#RUN bundle exec rails webpacker:compile
+# Overwrite /home/app/MyLibraryNYCApp/config/webpacker.yml? (enter "h" for help) [Ynaqdhm]
+# Overwrite /home/app/MyLibraryNYCApp/config/webpack/environment.js? (enter "h" for help) [Ynaqdhm]
+# Overwrite /home/app/MyLibraryNYCApp/babel.config.js?
 
-yarn add @rails/webpacker
-
-
-FROM production AS development
-
-RUN apt-get install -y postgresql-client
+RUN bundle exec rails webpacker:compile
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
