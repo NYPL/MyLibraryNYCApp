@@ -3885,14 +3885,14 @@ class ActiveSupport::TestCase
   # generate_email returns a string with 8 random characters concatenated with the current timestamp
   # and domain schools.nyc.gov
   def self.generate_email
-    return "#{('a'..'z').to_a.shuffle[0, 8].join}#{Time.now.to_i}@schools.nyc.gov"
+    return "#{('a'..'z').to_a.sample(8).join}#{Time.now.to_i}@schools.nyc.gov"
   end
 
 
   # generate_email returns a string with 8 random characters concatenated with the current timestamp
   # and domain gmail.com
   def self.generate_email_without_valid_domain
-    return "#{('a'..'z').to_a.shuffle[0, 8].join}#{Time.now.to_i}@gmail.com"
+    return "#{('a'..'z').to_a.sample(8).join}#{Time.now.to_i}@gmail.com"
   end
 
 

@@ -534,6 +534,8 @@ Metrics/AbcSize:
 # ExcludedMethods: refine
 Metrics/BlockLength:
   Max: 432
+  Exclude:
+    - 'lib/tasks/ingest.rake'
 
 # Offense count: 10
 # Configuration parameters: CountBlocks.
@@ -650,6 +652,7 @@ Performance/StringReplacement:
 Security/Open:
   Exclude:
     - 'lib/catalog_item_methods.rb'
+    - 'app/controllers/home_controller.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -1186,24 +1189,3 @@ Style/WordArray:
     - 'db/seeds.rb'
     - 'lib/tasks/cleanup.rake'
     - 'lib/tasks/ingest.rake'
-
-# Offense count: 785
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
-# URISchemes: http, https
-# Metrics/LineLength:
-#   Exclude:
-#   - 'db/migrate/*.rb'
-#   - 'test/test_helper.rb'
-#   - 'lib/tasks/*.rake'
-#   - 'config/routes.rb'
-#   - 'config/initializers/*.rb'
-
-# Rails/ReversibleMigration:
-#   Exclude:
-#   - 'db/migrate/*.rb'
-# Rails/CreateTableWithTimestamps:
-#   Exclude:
-#   - 'db/migrate/20200813141524_create_faq.rb'
-#   - 'db/migrate/20140128191653_add_schools_table.rb'
-#   - 'db/migrate/20140108212758_initial_schema.rb'
-#   - 'db/migrate/20140116211501_create_subjects_teacher_sets_table.rb'

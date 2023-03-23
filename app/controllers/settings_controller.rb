@@ -101,8 +101,8 @@ class SettingsController < ApplicationController
                            teacher_set_id: i.teacher_set_id]
                         end.flatten, :current_password => User.default_password.to_s}
     end
-    ordersNotPresentMsg = @holds.length <= 0 ? "You have not yet placed any orders." : ""
-    render json: { accountdetails: resp, ordersNotPresentMsg: ordersNotPresentMsg }
+    orders_not_present_msg = @holds.length <= 0 ? "You have not yet placed any orders." : ""
+    render json: { accountdetails: resp, ordersNotPresentMsg: orders_not_present_msg }
   end
 
 
