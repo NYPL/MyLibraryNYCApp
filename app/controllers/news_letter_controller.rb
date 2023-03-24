@@ -24,7 +24,7 @@ class NewsLetterController < ApplicationController
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
                              'method' => 'index'})
-    render json: { status: "error",  message: e.message[0..75]}
+    render json: { status: "error", message: e.message[0..75]}
   end
 
   

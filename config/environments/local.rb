@@ -45,7 +45,7 @@ MyLibraryNYC::Application.configure do
   # config.middleware.use ActionDispatch::Session::CookieStore
   # config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore)
 
-  config.logger = Logger.new(STDOUT)
+  config.logger = Logger.new($stdout)
   config.logger.level = Logger::DEBUG
 
   # Turn off asset pipline information showing in logs

@@ -50,7 +50,7 @@ class School < ActiveRecord::Base
 
 
   def school_code
-    code.present? ? " (#{code[1..-1].upcase})" : ""
+    code.present? ? " (#{code[1..].upcase})" : ""
   end
 
 end

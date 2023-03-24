@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'simplecov'
-# Note: minimum coverage config can also maybe happen outside, and before the start block.
+# NOTE: minimum coverage config can also maybe happen outside, and before the start block.
 SimpleCov.start 'rails' do
   add_filter '/bin/'
   add_filter '/db/'
@@ -182,7 +182,9 @@ MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268 = '{
           "subfields": [
             {
               "tag": "a",
-              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been anything but terminal, but when Augustus Waters suddenly appears at the Cancer Kid Support Group, Hazels story is about to be rewritten."
+              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been
+               anything but terminal, but when Augustus Waters suddenly appears at the Cancer Kid Support Group,
+                Hazels story is about to be rewritten."
             }
           ]
         },
@@ -736,7 +738,9 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures --
+             The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat --
+              Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -749,7 +753,9 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing
+             in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of
+              Education NYC Reads 365 list."
           }
         ]
       },
@@ -921,7 +927,8 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "9781896580601 9781896580602 9781896580603 9781896580604 9781896580605 9781896580606 9781896580607 9781896580608 9781896580609 9781896580610"
+            "content": "9781896580601 9781896580602 9781896580603 9781896580604 9781896580605 9781896580606
+             9781896580607 9781896580608 9781896580609 9781896580610"
           }
         ]
       },
@@ -1140,7 +1147,9 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures --
+             The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat
+              -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -1153,7 +1162,8 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom
+             - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -1325,7 +1335,8 @@ TWO_TEACHER_SETS_WITH_10_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "9781896580611 9781896580612 9781896580613 9781896580614 9781896580615 9781896580616 9781896580617 9781896580618 9781896580619 9781896580620"
+            "content": "9781896580611 9781896580612 9781896580613 9781896580614 9781896580615 9781896580616 9781896580617
+             9781896580618 9781896580619 9781896580620"
           }
         ]
       },
@@ -1547,7 +1558,9 @@ ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures --
+             The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat --
+              Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -1560,7 +1573,8 @@ ONE_TEACHER_SET_WITH_A_BOOK_ISBN_OF_300_CHARACTERS = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom -
+             grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -1770,7 +1784,9 @@ JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG = '{
         "code": "fre",
         "name": "French"
       },
-      "title": "Title is intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
+      "title": "Title is intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+       123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+        123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
       "author": "Arrighi, Olivier.",
       "materialType": {
         "code": "a",
@@ -1789,7 +1805,9 @@ JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG = '{
       "normTitle": "pasé on bel nwel lieutenant simeoni roman policier",
       "normAuthor": "arrighi olivier",
       "standardNumbers": [
-        "This ISBN intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
+        "This ISBN intentionally > 255 characters 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+         123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+          123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
         "2917623268"
       ],
       "controlNumber": "696084229",
@@ -1890,7 +1908,8 @@ JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG = '{
           "subfields": [
             {
               "tag": "a",
-              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been anything but terminal, but when Augustus Waters suddenly appears at the Cancer Kid Support Group, Hazels story is about to be rewritten."
+              "content": "Despite the medical miracle that has bought her a few more years, Hazel has never been anything but terminal,
+               but when Augustus Waters suddenly appears at the Cancer Kid Support Group, Hazels story is about to be rewritten."
             }
           ]
         },
@@ -2458,7 +2477,8 @@ TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit --
+             The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -2471,7 +2491,8 @@ TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - 
+            grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -2879,7 +2900,8 @@ TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit --
+             The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -2892,7 +2914,8 @@ TWO_TEACHER_SETS_WITH_3_ISBNS_EACH = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2. 
+            These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -3286,7 +3309,8 @@ TEACHER_SET_WITH_TITLE_MISSING = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
+            "content": "Anna carries water -- Monkey & Robot -- Mother Bruce -- The book with no pictures -- The day the crayons quit -- 
+            The scraps book : notes from a colorful life -- Three bears in a boat -- Blizzard -- Bright Sky, Starry City -- Hula-Hoopin Queen."
           }
         ]
       },
@@ -3299,7 +3323,8 @@ TEACHER_SET_WITH_TITLE_MISSING = [
         "subfields": [
           {
             "tag": "a",
-            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.  These titles were former selections from the NYC Department of Education NYC Reads 365 list."
+            "content": "Topic Set (20 books) - This set of titles are great for reading aloud and sharing in the classroom - grades 1 and grades 2.
+            These titles were former selections from the NYC Department of Education NYC Reads 365 list."
           }
         ]
       },
@@ -3754,64 +3779,64 @@ TWO_TEACHER_SETS_TO_DELETE = [{
     }
 ]
 
-SIERRA_USER = {"data"=>
-  [{"barCodes"=>["27777023005746"],
-    "id"=>'7899158',
-    "title"=>'title',
-    "updatedDate"=>"2020-07-28T23:24:45+00:00",
-    "createdDate"=>"2020-07-28T23:24:45+00:00",
-    "deleted"=>false,
-    "suppressed"=>false,
-    "names"=>["TESTER, QA"],
-    "barcodes"=>["27777023005746"],
-    "emails"=>["qa-tester-8132@rssnyc.org"],
-    "patronType"=>151,
-    "patronCodes"=>{"pcode1"=>"-", "pcode2"=>"-", "pcode3"=>2, "pcode4"=>585},
-    "homeLibraryCode"=>"mm",
-    "message"=>{"code"=>"-", "accountMessages"=>["qa-tester-8132@rssnyc.org"]},
-    "blockInfo"=>{"code"=>"-"},
-    "addresses"=>[{"lines"=>["443 WEST 135 STREET", "MANHATTAN, NY 10031"], "type"=>"a"}],
-    "phones"=>[{"number"=>"212-690-6800", "type"=>"t"}, {"number"=>"A. Philip Randolph Campus High School", "type"=>"o"}],
-    "moneyOwed"=>0.0,
-    "fixedFields"=>
-     {"44"=>{"label"=>"E-Communications", "value"=>"-", "display"=>"English"},
-      "45"=>{"label"=>"Education Level", "value"=>"-"},
-      "46"=>{"label"=>"Home Region", "value"=>"2"},
-      "47"=>{"label"=>"Patron Type", "value"=>"151"},
-      "48"=>{"label"=>"Total Checkouts", "value"=>"0"},
-      "49"=>{"label"=>"Total Renewals", "value"=>"0"},
-      "50"=>{"label"=>"Current Checkouts", "value"=>"0"},
-      "53"=>{"label"=>"Home Library", "value"=>"mm   "},
-      "54"=>{"label"=>"Patron Message", "value"=>"-"},
-      "55"=>{"label"=>"Highest Overdues", "value"=>"0"},
-      "56"=>{"label"=>"Manual Block", "value"=>"-"},
-      "80"=>{"label"=>"Record Type", "value"=>"p"},
-      "81"=>{"label"=>"Record Number", "value"=>"7899158"},
-      "83"=>{"label"=>"Created Date", "value"=>"2020-07-28T23:24:45Z"},
-      "84"=>{"label"=>"Updated Date", "value"=>"2020-07-28T23:24:45Z"},
-      "85"=>{"label"=>"No. of Revisions", "value"=>"1"},
-      "86"=>{"label"=>"Agency", "value"=>"1"},
-      "95"=>{"label"=>"Claims Returned", "value"=>"0"},
-      "96"=>{"label"=>"Money Owed", "value"=>0},
-      "98"=>{"label"=>"PDATE", "value"=>"2020-07-28T23:24:45Z"},
-      "99"=>{"label"=>"FIRM", "value"=>"     "},
-      "102"=>{"label"=>"Current Item A", "value"=>"0"},
-      "103"=>{"label"=>"Current Item B", "value"=>"0"},
-      "104"=>{"label"=>"PIUSE", "value"=>"0"},
-      "105"=>{"label"=>"Overdue Penalty", "value"=>"0"},
-      "122"=>{"label"=>"ILL Request", "value"=>"0"},
-      "123"=>{"label"=>"Debit Balance", "value"=>0},
-      "124"=>{"label"=>"Current Item C", "value"=>"0"},
-      "125"=>{"label"=>"Current Item D", "value"=>"0"},
-      "126"=>{"label"=>"School Code", "value"=>"585"},
-      "158"=>{"label"=>"Patron Agency", "value"=>"0"},
-      "263"=>{"label"=>"Preferred Language", "value"=>"eng"},
-      "268"=>{"label"=>"Notice Preference", "value"=>"-"},
-      "269"=>{"label"=>"Registrations on Record", "value"=>"0"},
-      "270"=>{"label"=>"Total Registrations", "value"=>"0"},
-      "271"=>{"label"=>"Total Programs Attended", "value"=>"0"},
-      "297"=>{"label"=>"Waitlists on Record", "value"=>"0"}},
-    "varFields"=>
+SIERRA_USER = {"data" =>
+  [{"barCodes" => ["27777023005746"],
+    "id" => '7899158',
+    "title" => 'title',
+    "updatedDate" => "2020-07-28T23:24:45+00:00",
+    "createdDate" => "2020-07-28T23:24:45+00:00",
+    "deleted" => false,
+    "suppressed" => false,
+    "names" => ["TESTER, QA"],
+    "barcodes" => ["27777023005746"],
+    "emails" => ["qa-tester-8132@rssnyc.org"],
+    "patronType" => 151,
+    "patronCodes" => {"pcode1"=>"-", "pcode2"=>"-", "pcode3"=>2, "pcode4"=>585},
+    "homeLibraryCode" => "mm",
+    "message" => {"code"=>"-", "accountMessages"=>["qa-tester-8132@rssnyc.org"]},
+    "blockInfo" => {"code"=>"-"},
+    "addresses" => [{"lines"=>["443 WEST 135 STREET", "MANHATTAN, NY 10031"], "type"=>"a"}],
+    "phones" => [{"number"=>"212-690-6800", "type"=>"t"}, {"number"=>"A. Philip Randolph Campus High School", "type"=>"o"}],
+    "moneyOwed" => 0.0,
+    "fixedFields" =>
+     {"44" => {"label"=>"E-Communications", "value"=>"-", "display"=>"English"},
+      "45" => {"label"=>"Education Level", "value"=>"-"},
+      "46" => {"label"=>"Home Region", "value"=>"2"},
+      "47" => {"label"=>"Patron Type", "value"=>"151"},
+      "48" => {"label"=>"Total Checkouts", "value"=>"0"},
+      "49" => {"label"=>"Total Renewals", "value"=>"0"},
+      "50" => {"label"=>"Current Checkouts", "value"=>"0"},
+      "53" => {"label"=>"Home Library", "value"=>"mm   "},
+      "54" => {"label"=>"Patron Message", "value"=>"-"},
+      "55" => {"label"=>"Highest Overdues", "value"=>"0"},
+      "56" => {"label"=>"Manual Block", "value"=>"-"},
+      "80" => {"label"=>"Record Type", "value"=>"p"},
+      "81" => {"label"=>"Record Number", "value"=>"7899158"},
+      "83" => {"label"=>"Created Date", "value"=>"2020-07-28T23:24:45Z"},
+      "84" => {"label"=>"Updated Date", "value"=>"2020-07-28T23:24:45Z"},
+      "85" => {"label"=>"No. of Revisions", "value"=>"1"},
+      "86" => {"label"=>"Agency", "value"=>"1"},
+      "95" => {"label"=>"Claims Returned", "value"=>"0"},
+      "96" => {"label"=>"Money Owed", "value"=>0},
+      "98" => {"label"=>"PDATE", "value"=>"2020-07-28T23:24:45Z"},
+      "99" => {"label"=>"FIRM", "value"=>"     "},
+      "102" => {"label"=>"Current Item A", "value"=>"0"},
+      "103" => {"label"=>"Current Item B", "value"=>"0"},
+      "104" => {"label"=>"PIUSE", "value"=>"0"},
+      "105" => {"label"=>"Overdue Penalty", "value"=>"0"},
+      "122" => {"label"=>"ILL Request", "value"=>"0"},
+      "123" => {"label"=>"Debit Balance", "value"=>0},
+      "124" => {"label"=>"Current Item C", "value"=>"0"},
+      "125" => {"label"=>"Current Item D", "value"=>"0"},
+      "126" => {"label"=>"School Code", "value"=>"585"},
+      "158" => {"label"=>"Patron Agency", "value"=>"0"},
+      "263" => {"label"=>"Preferred Language", "value"=>"eng"},
+      "268" => {"label"=>"Notice Preference", "value"=>"-"},
+      "269" => {"label"=>"Registrations on Record", "value"=>"0"},
+      "270" => {"label"=>"Total Registrations", "value"=>"0"},
+      "271" => {"label"=>"Total Programs Attended", "value"=>"0"},
+      "297" => {"label"=>"Waitlists on Record", "value"=>"0"}},
+    "varFields" =>
      [{"fieldTag"=>"=", "content"=>"$6$WuFQmJQ68AA65p/b$EgG1Jiq1yUGYqpryzsQu6EtAJczrNzWfn/IUv5w.o0xxmccep0t1/Rm5aGESFSpOSWqNoPXItH6jnYZlqfTF3."},
       {"fieldTag"=>"b", "content"=>"27777023005746"},
       {"fieldTag"=>"o", "content"=>"A. Philip Randolph Campus High School"},
@@ -3824,8 +3849,8 @@ SIERRA_USER = {"data"=>
       {"fieldTag"=>"n", "marcTag"=>"526", "ind1"=>" ", "ind2"=>" ", "content"=>"null", "subfields"=> [{"tag"=>"a", "content"=> "Topic Set"}]},
       {"fieldTag"=>"n", "marcTag"=>"521", "ind1"=>" ", "ind2"=>" ", "content"=>"null", "subfields"=> [{"tag"=>"a", "content"=> "3-8"}]},
       {"fieldTag"=>"t", "content"=>"212-690-6800"}]}],
- "count"=>1,
- "statusCode"=>200}
+               "count" => 1,
+               "statusCode" => 200}
 
 
 class ActionController::TestCase
@@ -3837,7 +3862,8 @@ class ActiveSupport::TestCase
   setup :mock_get_oauth_token_request, :mock_send_request_to_patron_creator_service, :send_request_to_bibs_microservice,
         :mock_send_request_to_items_microservice, :mock_send_request_to_s3_adapter, :mock_send_request_to_elastic_search_service,
         :mock_delete_request_from_elastic_search_service, :mock_security_credentials, :mock_aws_request, :mock_es_doc, :mock_delete_es_doc,
-        :mock_send_request_to_bib_service, :mock_items_response_with_7899158, :mock_bib_response_with_123, :mock_item_response_with_empty_bib, :mock_google_address
+        :mock_send_request_to_bib_service, :mock_items_response_with7899158, :mock_bib_response_with123, :mock_item_response_with_empty_bib, 
+        :mock_google_address
         
 
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
@@ -3859,14 +3885,14 @@ class ActiveSupport::TestCase
   # generate_email returns a string with 8 random characters concatenated with the current timestamp
   # and domain schools.nyc.gov
   def self.generate_email
-    return ('a'..'z').to_a.shuffle[0, 8].join + Time.now.to_i.to_s + '@schools.nyc.gov'
+    return "#{('a'..'z').to_a.sample(8).join}#{Time.now.to_i}@schools.nyc.gov"
   end
 
 
   # generate_email returns a string with 8 random characters concatenated with the current timestamp
   # and domain gmail.com
   def self.generate_email_without_valid_domain
-    return ('a'..'z').to_a.shuffle[0, 8].join + Time.now.to_i.to_s + '@gmail.com'
+    return "#{('a'..'z').to_a.sample(8).join}#{Time.now.to_i}@gmail.com"
   end
 
 
@@ -3885,8 +3911,8 @@ class ActiveSupport::TestCase
     if status_code == '404'
       stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
         .to_return(status: 404, body: {
-          "message"=>"Failed to retrieve patron record by barcode",
-          "statusCode"=>404
+          "message" => "Failed to retrieve patron record by barcode",
+          "statusCode" => 404
         }
         .to_json, headers: { 'Content-Type' => 'application/json' })
       return
@@ -3895,8 +3921,8 @@ class ActiveSupport::TestCase
     if status_code == '409'
       stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
         .to_return(status: 409, body: {
-          "message"=>"Multiple patron records found",
-          "statusCode"=>409
+          "message" => "Multiple patron records found",
+          "statusCode" => 409
         }
         .to_json, headers: { 'Content-Type' => 'application/json' })
       return
@@ -3905,8 +3931,8 @@ class ActiveSupport::TestCase
     if status_code == '500'
       stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
         .to_return(status: 500, body: {
-          "message"=>"Server error",
-          "statusCode"=>500
+          "message" => "Server error",
+          "statusCode" => 500
         }
         .to_json, headers: { 'Content-Type' => 'application/json' })
       return
@@ -3962,8 +3988,8 @@ class ActiveSupport::TestCase
   def mock_send_request_to_bib_service
     stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=998&nyplSource=sierra-nypl").
       with(headers: {
-        'content-Type'=>'application/json',
-        'Authorization'=>'Bearer testoken'
+        'content-Type' => 'application/json',
+        'Authorization' => 'Bearer testoken'
       }).to_return(status: 200, body: "", headers: {})
   end
   # mock_get_data_from_aws_s3_adapter
@@ -4017,15 +4043,15 @@ class ActiveSupport::TestCase
       stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=#{ 9781896580601 + x }").
         with(
           headers: {
-            'Authorization'=>'Bearer testoken',
-            'Content-Type'=>'application/json'
+            'Authorization' => 'Bearer testoken',
+            'Content-Type' => 'application/json'
           }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {})
     end
     stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=123456789").
       with(
         headers: {
-          'Authorization'=>'Bearer testoken',
-          'Content-Type'=>'application/json'
+          'Authorization' => 'Bearer testoken',
+          'Content-Type' => 'application/json'
         }).to_return(status: 200, body: JSON_FOR_BOOK_WITH_ISBN_AND_TITLE_TOO_LONG, headers: {})
   end
 
@@ -4037,50 +4063,50 @@ class ActiveSupport::TestCase
     stub_request(:get, "#{ENV['ITEMS_MICROSERVICE_URL_V01']}" + items_query_params).
       with(
         headers: {
-        'Authorization'=>'Bearer testoken',
-        'Content-Type'=>'application/json'
+        'Authorization' => 'Bearer testoken',
+        'Content-Type' => 'application/json'
         }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
 
     items_query_params = "?bibId=999&limit=25&offset=0"
     stub_request(:get, "#{ENV['ITEMS_MICROSERVICE_URL_V01']}" + items_query_params).
       with(
         headers: {
-        'Authorization'=>'Bearer testoken',
-        'Content-Type'=>'application/json'
+        'Authorization' => 'Bearer testoken',
+        'Content-Type' => 'application/json'
         }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
   end
 
-  def mock_items_response_with_7899158
+  def mock_items_response_with7899158
     stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=7899158&limit=25&offset=0").
       with(
         headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Authorization'=>'Bearer testoken',
-        'Content-Type'=>'application/json',
-        'User-Agent'=>'Ruby'
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization' => 'Bearer testoken',
+        'Content-Type' => 'application/json',
+        'User-Agent' => 'Ruby'
         }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
   end
 
 
-  def mock_bib_response_with_123
+  def mock_bib_response_with123
     stub_request(:get, "https://platform.nypl.org/api/v0.1/bibs?id=123&nyplSource=sierra-nypl").
       with(
         headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Authorization'=>'Bearer testoken',
-        'Content-Type'=>'application/json',
-        'User-Agent'=>'Ruby'
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization' => 'Bearer testoken',
+        'Content-Type' => 'application/json',
+        'User-Agent' => 'Ruby'
         }).to_return(status: 200, body: "", headers: {})
   end
 
   def mock_security_credentials
     stub_request(:get, "http://169.254.169.254/latest/meta-data/iam/security-credentials/").with(
       headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'User-Agent'=>'aws-sdk-ruby3/3.68.1'
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'User-Agent' => 'aws-sdk-ruby3/3.68.1'
         }).to_return(status: 200, body: "", headers: {})
   end
 
@@ -4093,12 +4119,18 @@ class ActiveSupport::TestCase
   def mock_es_doc
     stub_request(:get, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/_search").
       with(
-        body: "{\"query\":{\"bool\":{\"must\":[]}},\"from\":0,\"size\":20,\"sort\":[{\"_score\":\"desc\",\"availability.raw\":\"asc\",\"created_at\":\"desc\",\"_id\":\"asc\"}],\"aggs\":{\"language\":{\"terms\":{\"field\":\"primary_language\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},\"set type\":{\"terms\":{\"field\":\"set_type\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},\"availability\":{\"terms\":{\"field\":\"availability.raw\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},\"area of study\":{\"terms\":{\"field\":\"area_of_study\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},\"subjects\":{\"nested\":{\"path\":\"subjects\"},\"aggregations\":{\"subjects\":{\"composite\":{\"size\":3000,\"sources\":[{\"id\":{\"terms\":{\"field\":\"subjects.id\"}}},{\"title\":{\"terms\":{\"field\":\"subjects.title\"}}}]}}}}}}",
+        body: "{\"query\":{\"bool\":{\"must\":[]}},\"from\":0,\"size\":20,\"sort\":[{\"_score\":\"desc\",\"availability.raw\":\"asc\",
+        \"created_at\":\"desc\",\"_id\":\"asc\"}],\"aggs\":{\"language\":{\"terms\":{\"field\":\"primary_language\",\"size\":100,
+        \"order\":{\"_key\":\"asc\"}}},\"set type\":{\"terms\":{\"field\":\"set_type\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},
+        \"availability\":{\"terms\":{\"field\":\"availability.raw\",\"size\":10,\"order\":{\"_key\":\"asc\"}}},
+        \"area of study\":{\"terms\":{\"field\":\"area_of_study\",\"size\":100,\"order\":{\"_key\":\"asc\"}}},
+        \"subjects\":{\"nested\":{\"path\":\"subjects\"},\"aggregations\":{\"subjects\":{\"composite\":{\"size\":3000,
+        \"sources\":[{\"id\":{\"terms\":{\"field\":\"subjects.id\"}}},{\"title\":{\"terms\":{\"field\":\"subjects.title\"}}}]}}}}}}",
         headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Content-Type'=>'application/json',
-        'User-Agent'=>'Faraday v1.0.1'
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type' => 'application/json',
+        'User-Agent' => 'Faraday v1.0.1'
         }).
       to_return(status: 200, body: "", headers: {})
   end
@@ -4107,10 +4139,10 @@ class ActiveSupport::TestCase
     stub_request(:delete, "https://vpc-mylibrarynyc-development-yvrqkaicwhwb5tiz3n365a3xza.us-east-1.es.amazonaws.com/teacherset/teacherset/614468851").
       with(
         headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Content-Type'=>'application/json',
-        'User-Agent'=>'Faraday v1.0.1'
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type' => 'application/json',
+        'User-Agent' => 'Faraday v1.0.1'
         }).
       to_return(status: 200, body: "", headers: {})
   end
@@ -4119,11 +4151,11 @@ class ActiveSupport::TestCase
     stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=&limit=25&offset=0").
       with(
         headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Authorization'=>'Bearer testoken',
-        'Content-Type'=>'application/json',
-        'User-Agent'=>'Ruby'
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization' => 'Bearer testoken',
+        'Content-Type' => 'application/json',
+        'User-Agent' => 'Ruby'
         }).
       to_return(status: 200, body: "", headers: {})
   end
@@ -4133,10 +4165,10 @@ class ActiveSupport::TestCase
     stub_request(:get, "http://169.254.169.254/").
       with(
         headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Metadata-Flavor'=>'Google',
-        'User-Agent'=>'Faraday v0.17.4'
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Metadata-Flavor' => 'Google',
+        'User-Agent' => 'Faraday v0.17.4'
         }).
       to_return(status: 200, body: "", headers: {})
   end

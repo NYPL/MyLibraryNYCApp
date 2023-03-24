@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   # created on sign up. Does not occur when updating
   # the record.
   validates :first_name, :last_name, :presence => true
-  validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
+  validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
 
@@ -55,13 +55,14 @@ class User < ActiveRecord::Base
     allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern)
 
     index = email.index('@')
-    if (index && (allowed_email_patterns.include? email[index..-1]))
+    if (index && (allowed_email_patterns.include? email[index..]))
       return true
     else
       errors.add(:email, 'should end in @schools.nyc.gov or another participating school address')
       return false
     end
   end
+
 
   def barcode_found_in_sierra
     # Getter for flag that reflects whether there's a user or users in Sierra
@@ -82,7 +83,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def name(full=false)
+  def name(full: false)
     handle = self.email.sub /@.*/, ''
     name = self.first_name
     name += " #{self.last_name}" if full && !self.last_name.nil? && !self.last_name.empty?
@@ -138,7 +139,6 @@ class User < ActiveRecord::Base
   end
 
 
-
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -147,7 +147,7 @@ class User < ActiveRecord::Base
   def send_request_to_patron_creator_service
     # Sierra supporting pin as password
     query = {
-      'names' => [last_name.upcase + ', ' + first_name.upcase],
+      'names' => ["#{last_name.upcase}, #{first_name.upcase}"],
       'emails' => [email],
       'pin' => password,
       'patronType' => patron_type,

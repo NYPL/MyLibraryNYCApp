@@ -50,18 +50,21 @@ class HoldsController < ApplicationController
     }
   end
 
-  def holds_cancel_details
-  end
+
+  def holds_cancel_details; end
 
 
   def ordered_holds_details
-    unless logged_in?
+    return if logged_in?
+
       if storable_location?
         store_user_location!
       end
       redirect_to "/signin"
-    end
+    
   end
+
+
   ##
   # Create holds and update quantity column in holds.
   # Calculate available copies from quantity saves in teacherset table.
@@ -113,24 +116,21 @@ class HoldsController < ApplicationController
           #format.json { render json: @hold.errors, status: :unprocessable_entity }
         end
       end
-    rescue => exception
+    rescue => e
       render json: { status: :error, message: "We've encountered an error and were unable to confirm your order.\
-                           Please try again later or email help@mylibrarynyc.org for assistance.", rails_error_message: exception.message }
+                           Please try again later or email help@mylibrarynyc.org for assistance.", rails_error_message: e.message }
     end
   end
 
 
-  def error_message(exception)    
-    
-  end
+  def error_message(exception); end
 
   
   # Here calculate the teacher-set available_copies based on the current-user holds than saves in teacher-set table and cancel the current-user holds.
   def update
     @hold = Hold.find_by_access_key(params[:id])
 
-    unless (c = params[:hold_change]).nil?
-      if c[:status] == 'cancelled'
+    if !(c = params[:hold_change]).nil? && (c[:status] == 'cancelled')
         teacher_set = @hold.teacher_set
         
         LogWrapper.log('INFO', {message: 'Teacher-set hold is cancelled', method: __method__, 
@@ -141,7 +141,6 @@ class HoldsController < ApplicationController
         # Update teacher-set availability in elastic search document
         teacher_set.update_teacher_set_availability_in_elastic_search
         @hold.cancel! c[:comment]
-      end
     end
     params.permit!
 

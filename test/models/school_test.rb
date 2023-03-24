@@ -17,7 +17,7 @@ class SchoolTest < ActionController::TestCase
 
   test 'test inactive school' do
     resp = @school4.name_id
-    assert_equal("[INACTIVE] #{@school4.name} (#{@school4.code[1..-1].upcase})", resp[0])
+    assert_equal("[INACTIVE] #{@school4.name} (#{@school4.code[1..].upcase})", resp[0])
     assert_equal(@school4.id, resp[1])
   end
 
