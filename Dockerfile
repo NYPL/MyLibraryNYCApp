@@ -17,28 +17,17 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
 RUN apt-get -y install nodejs
 
 # set up app files
-COPY --chown=app:app . $APP_HOME
+COPY . $APP_HOME
 COPY Gemfile $APP_HOME
 COPY Gemfile.lock $APP_HOME
 WORKDIR $APP_HOME
 
 ## bundle
-FROM ruby:2.7.4 as bundler
-WORKDIR /tmp
 RUN gem install bundler
-COPY Gemfile Gemfile.lock . /tmp
 RUN bundle config --global github.https true \
     && bundle install --jobs 30
 
-FROM ruby:2.7.4 as app
-RUN mkdir -p /rails
-WORKDIR /rails
-COPY --from=bundler /usr/local/bundle /usr/local/bundle
-
 RUN npm install --global yarn
-
-RUN yarn config delete https-proxy && \
-			yarn config delete proxy
 
 ## webpacker needs this which is super annoying!! 
 ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
