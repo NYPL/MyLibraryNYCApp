@@ -39,5 +39,10 @@ RUN bundle exec rails webpacker:install
 
 RUN bundle exec rails webpacker:compile
 
+# webpack overwrites these files
+COPY config/webpacker.yml $APP_HOME/config/
+COPY config/webpack/environment.js $APP_HOME/config/webpack
+COPY babel.config.js $APP_HOME
+
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
