@@ -577,8 +577,8 @@ export default function SearchTeacherSets(props) {
         min={-1}
         max={12}
         defaultValue={[parseInt(grade_begin), parseInt(grade_end)]}
-        onChange={getGrades}
-        //onChangeEnd={getGrades}
+        //onChange={getGrades}
+        onChangeEnd={getGrades}
         showBoxes={false}
         showHelperInvalidText
         showLabel
@@ -663,7 +663,7 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
-      {/* <div>
+      <div>
           <Button buttonType="text"
             id="clear-filters-button-id"
             size="medium"
@@ -674,7 +674,7 @@ export default function SearchTeacherSets(props) {
           >
             Clear Filters
           </Button>
-        </div> */}
+        </div>
       </Box>
     );
   };

@@ -3403,9 +3403,9 @@
       }
     },
     "@nypl/design-system-react-components": {
-      "version": "1.4.1",
-      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.4.1.tgz",
-      "integrity": "sha512-k9bZeCfhShnuIrnwqJVd+6JB+obgeqZb1D3cj9Ej270/uc/jsOZU6Tv2vFeixZeTJcWcrT7CZYj6Q4dAbnurFg==",
+      "version": "1.5.1",
+      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.5.1.tgz",
+      "integrity": "sha512-Ma9P6OxjzQRgvJuxlz4Nvl6t7hVut2h0Txy8IP+KI/knwZT6PNEJGoSdTBg4ZjHynmhCIORB64KafcqssnNMXA==",
       "requires": {
         "@chakra-ui/focus-lock": ">=1.2.6 <2.0.0",
         "@chakra-ui/react": ">=1.8.5 <=1.8.8",
@@ -3447,9 +3447,9 @@
       "integrity": "sha512-5grNReXumLM1+zj5lnZJx5h8KEk1Aa2/tyogTiLAhB06RrpaH83WbINhzL1eJeMbz4h/NFWrj8SUIoqLPHM9tA=="
     },
     "@popperjs/core": {
-      "version": "2.11.6",
-      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz",
-      "integrity": "sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw=="
+      "version": "2.11.7",
+      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.7.tgz",
+      "integrity": "sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw=="
     },
     "@rails/activestorage": {
       "version": "7.0.3",
@@ -25057,9 +25057,9 @@
       "integrity": "sha1-57N4gXcIXbYzeNnzvOvhmNxR0vo="
     },
     "react-onclickoutside": {
-      "version": "6.12.2",
-      "resolved": "https://registry.npmjs.org/react-onclickoutside/-/react-onclickoutside-6.12.2.tgz",
-      "integrity": "sha512-NMXGa223OnsrGVp5dJHkuKxQ4czdLmXSp5jSV9OqiCky9LOpPATn3vLldc+q5fK3gKbEHvr7J1u0yhBh/xYkpA=="
+      "version": "6.13.0",
+      "resolved": "https://registry.npmjs.org/react-onclickoutside/-/react-onclickoutside-6.13.0.tgz",
+      "integrity": "sha512-ty8So6tcUpIb+ZE+1HAhbLROvAIJYyJe/1vRrrcmW+jLsaM+/powDRqxzo6hSh9CuRZGSL1Q8mvcF5WRD93a0A=="
     },
     "react-popper": {
       "version": "2.3.0",

@@ -2,7 +2,8 @@
 
 MyLibraryNYC::Application.routes.draw do
 
-  devise_for :users, :path => "users", :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }, :controllers => { :registrations => 'users/registrations', :sessions => 'users/sessions' }
+  devise_for :users, :path => "users", :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }, 
+:controllers => { :registrations => 'users/registrations', :sessions => 'users/sessions' }
 
   get 'hello_world', to: 'hello_world#index'
   get 'teacher_set_data', to: 'teacher_sets#teacher_set_data'
@@ -11,7 +12,7 @@ MyLibraryNYC::Application.routes.draw do
 
   get 'timeout_check' => 'sessions#timeout_check'
   get 'timeout' => 'sessions#timeout'
-  get '/logged_in', to: 'sessions#is_logged_in?'
+  get '/logged_in', to: 'sessions#logged_in?'
   get 'extend_session_iframe' => 'home#extend_session_iframe'
   get 'home/calendar_event/:filename', to: 'home#mln_calendar'
   get 'home/calendar_event/error', to: 'home#calendar_event_error'
@@ -29,7 +30,7 @@ MyLibraryNYC::Application.routes.draw do
 
   # Active-Admin redirect to login page.
   match '/users/logout' => 'settings#activeadmin_redirect_to_login', via: [:get, :delete]
- # match '/admin/password' => 'settings#reset_admin_password_message', via: [:get, :delete, :post, :put]
+  # match '/admin/password' => 'settings#reset_admin_password_message', via: [:get, :delete, :post, :put]
   match 'teacher_sets/:id/teacher_set_holds' => 'teacher_sets#teacher_set_holds', via: [:get, :patch, :post]
   match 'teacher_set_details/:id' => 'teacher_sets#teacher_set_details', via: [:get]
   match 'book_details/:id' => 'books#book_details', via: [:get]
@@ -47,10 +48,11 @@ MyLibraryNYC::Application.routes.draw do
   match 'account' => 'settings#index', :as => :account, via: [:get, :patch, :post, :put]
   match '/news_letter/index' => 'news_letter#index', via: [:get, :post]
 
-  match '/home/get_mln_file_names' => 'home#get_mln_file_names', via: [:get]
+  match '/home/get_mln_file_names' => 'home#mln_file_names', via: [:get]
   match '/secondary_menu' => 'home#secondary_menu', via: [:get]
 
-  match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page', via: [:get, :post]
+  match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page', 
+        via: [:get, :post]
   match '/news_letter/news_letter_email_is_valid' => 'news_letter#news_letter_email_is_valid', via: [:get, :post]
 
   get '/docs/mylibrarynyc', to: 'home#swagger_docs'

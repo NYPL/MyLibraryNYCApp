@@ -48,14 +48,14 @@ class Api::V01::ItemsController < Api::V01::GeneralController
         response = teacher_set.update_available_and_total_count(t_set_bnumber)
         http_status = response[:bibs_resp]['statusCode']
         http_response = {message: response[:bibs_resp]['message'] || 'OK'}
-      rescue => exception
-        error_message = "Error while getting item records via API: #{exception.message[0..200]}, Bnumber: #{t_set_bnumber}"
+      rescue => e
+        error_message = "Error while getting item records via API: #{e.message[0..200]}, Bnumber: #{t_set_bnumber}"
         AdminMailer.failed_items_controller_api_request(error_message).deliver
         render_error([500, error_message])
         return
       end
-    rescue => exception
-      render_error([500, "Error occured: #{exception.message[0..200]}, Bnumber: #{t_set_bnumber}"])
+    rescue => e
+      render_error([500, "Error occured: #{e.message[0..200]}, Bnumber: #{t_set_bnumber}"])
       return
     end
     LogWrapper.log('INFO','message' => "Items availability successfully updated. Bnumber: #{t_set_bnumber}")

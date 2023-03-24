@@ -18,9 +18,9 @@ def update_teacher_set_real_time_available_total_count
       else
         not_found_ids << bib_id
       end
-    rescue => exception
-      error_messages << "Error occured. #{exception.message}"
-      LogWrapper.log('INFO','message' => exception.message)
+    rescue => e
+      error_messages << "Error occured. #{e.message}"
+      LogWrapper.log('INFO','message' => e.message)
       failure_bib_ids << bib_id
       sleep(5)
       next

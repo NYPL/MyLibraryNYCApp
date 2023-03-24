@@ -16,7 +16,7 @@ Bundler/OrderedGems:
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Layout/AlignArray:
+Layout/ArrayAlignment:
   Exclude:
     - 'test/test_helper.rb'
     - 'test/unit/*.rb'
@@ -88,7 +88,7 @@ Layout/ExtraSpacing:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
-Layout/IndentHash:
+Layout/FirstHashElementIndentation:
   Exclude:
     - 'app/controllers/api/v01/general_controller.rb'
     - 'app/controllers/settings_controller.rb'
@@ -144,7 +144,7 @@ Layout/InitialIndentation:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Layout/LeadingBlankLines:
+Layout/LeadingEmptyLines:
   Exclude:
     - 'app/models/allowed_user_email_masks.rb'
 
@@ -357,7 +357,7 @@ Layout/SpaceInsideStringInterpolation:
 # Offense count: 73
 # Cop supports --auto-correct.
 # Configuration parameters: IndentationWidth.
-Layout/Tab:
+Layout/IndentationStyle:
   Exclude:
     - 'Gemfile'
     - 'app/controllers/books_controller.rb'
@@ -375,7 +375,7 @@ Layout/Tab:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: final_newline, final_blank_line
-Layout/TrailingBlankLines:
+Layout/TrailingEmptyLines:
   Exclude:
     - 'app/controllers/api/v01/items_controller.rb'
     - 'app/controllers/registrations_controller.rb'
@@ -428,7 +428,7 @@ Lint/DuplicateMethods:
     - 'app/models/teacher_set.rb'
 
 # Offense count: 3
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - 'app/admin/books.rb'
     - 'app/views/admin/_history.html.arb'
@@ -468,7 +468,7 @@ Lint/ShadowingOuterLocalVariable:
 
 # Offense count: 3
 # Cop supports --auto-correct.
-Lint/StringConversionInInterpolation:
+Lint/RedundantStringCoercion:
   Exclude:
     - 'app/models/teacher_set.rb'
     - 'lib/catalog_item_methods.rb'
@@ -534,6 +534,8 @@ Metrics/AbcSize:
 # ExcludedMethods: refine
 Metrics/BlockLength:
   Max: 432
+  Exclude:
+    - 'lib/tasks/ingest.rake'
 
 # Offense count: 10
 # Configuration parameters: CountBlocks.
@@ -576,7 +578,7 @@ Naming/PredicateName:
 # Offense count: 5
 # Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
 # AllowedNames: io, id, to, by, on, in, at, ip, db
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Exclude:
     - 'app/controllers/api/v01/bibs_controller.rb'
     - 'app/models/book.rb'
@@ -596,6 +598,11 @@ Naming/VariableName:
 Naming/VariableNumber:
   Exclude:
     - 'lib/tasks/ingest.rake'
+    - 'db/migrate/*.rb'
+    - 'test/factories/school_factory.rb'
+    - 'app/admin/schools.rb'
+    - 'app/controllers/schools_controller.rb'
+    - 'app/models/book.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -628,10 +635,10 @@ Performance/RedundantMerge:
 
 # Offense count: 3
 # Cop supports --auto-correct.
-Performance/Sample:
-  Exclude:
-    - 'test/factories/user_factory.rb'
-    - 'test/test_helper.rb'
+# Performance/Sample:
+#   Exclude:
+#     - 'test/factories/user_factory.rb'
+#     - 'test/test_helper.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -645,6 +652,7 @@ Performance/StringReplacement:
 Security/Open:
   Exclude:
     - 'lib/catalog_item_methods.rb'
+    - 'app/controllers/home_controller.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -707,8 +715,8 @@ Style/BlockDelimiters:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Enabled: false
+# Style/BracesAroundHashParameters:
+#   Enabled: false
 
 # Offense count: 13
 # Cop supports --auto-correct.
@@ -1142,13 +1150,13 @@ Style/UnlessElse:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/UnneededCondition:
+Style/RedundantCondition:
   Exclude:
     - 'app/controllers/holds_controller.rb'
 
 # Offense count: 26
 # Cop supports --auto-correct.
-Style/UnneededInterpolation:
+Style/RedundantInterpolation:
   Exclude:
     - 'app/models/teacher_set.rb'
     - 'app/models/user.rb'
@@ -1181,14 +1189,3 @@ Style/WordArray:
     - 'db/seeds.rb'
     - 'lib/tasks/cleanup.rake'
     - 'lib/tasks/ingest.rake'
-
-# Offense count: 785
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
-# URISchemes: http, https
-Metrics/LineLength:
-  Exclude:
-  - 'db/migrate/*.rb'
-  - 'test/test_helper.rb'
-  - 'lib/tasks/*.rake'
-  - 'config/routes.rb'
-  - 'config/initializers/*.rb'

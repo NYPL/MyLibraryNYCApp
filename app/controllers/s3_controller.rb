@@ -3,6 +3,7 @@
 class S3Controller < ApplicationController
 
   def initialize
+    super
     @current_file = File.basename(__FILE__)
     @s3_client = create_client
   end
