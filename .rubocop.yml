@@ -52,9 +52,6 @@ Metrics/AbcSize:
 Style/SymbolProc:
   Enabled: false
 
-AllCops:
-  SuggestExtensions: false
-
 Layout/SpaceBeforeBrackets:
   Enabled: true
 
@@ -315,7 +312,7 @@ Lint/UnmodifiedReduceAccumulator:
 Gemspec/DeprecatedAttributeAssignment:
   Enabled: true
 
-Gemspec/DevelopmentDependencies: 4
+Gemspec/DevelopmentDependencies:
   Enabled: true
 
 Gemspec/RequireMFA:
@@ -350,3 +347,13 @@ Lint/DuplicateMagicComment:
 
 Lint/DuplicateRegexpCharacterClassElement:
   Enabled: true
+
+AllCops:
+  NewCops: disable
+  SuggestExtensions: false
+
+Lint/EmptyBlock:
+  Enabled: false
+
+Lint/UselessRescue:
+  Enabled: false
