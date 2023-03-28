@@ -1095,8 +1095,9 @@ class TeacherSet < ActiveRecord::Base
   def parse_items_available_and_total_count(response)
     available_count = 0
     total_count = 0
+    item_status_codes = ['w', 'm', 'k', 'u']
     response['data'].each do |item|
-      total_count += 1 unless (item['status']['code'].present? && ['w', 'm', 'k', 'u'].include?(item['status']['code']))
+      total_count += 1 unless (item['status']['code'].present? && item_status_codes.include?(item['status']['code']))
       available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
     end
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
