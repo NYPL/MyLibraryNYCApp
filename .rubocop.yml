@@ -348,6 +348,9 @@ Lint/DuplicateMagicComment:
 Lint/DuplicateRegexpCharacterClassElement:
   Enabled: true
 
+Style/OptionalBooleanParameter:
+  Enabled: false
+
 AllCops:
   NewCops: disable
   SuggestExtensions: false
