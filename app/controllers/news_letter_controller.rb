@@ -4,7 +4,7 @@ class NewsLetterController < ApplicationController
   include EncryptDecryptString
   include GoogleApiClient
 
-  GOOGLE_SPREAD_SHEET_ID = ENV['NEWS_LETTER_GOOGLE_SPREAD_SHEET_ID']
+  GOOGLE_SPREAD_SHEET_ID = ENV.fetch('NEWS_LETTER_GOOGLE_SPREAD_SHEET_ID', nil)
   RANGE = "Sheet1!A1:B"
 
   def index

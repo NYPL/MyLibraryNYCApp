@@ -195,7 +195,7 @@ class Book < ActiveRecord::Base
   # Sends a request to the bibs microservice.
   def send_request_to_bibs_microservice
     response = HTTParty.get(
-      ENV['BIBS_MICROSERVICE_URL_V01'] + "?standardNumber=#{isbn}",
+      ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil) + "?standardNumber=#{isbn}",
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
           'Content-Type' => 'application/json' },
