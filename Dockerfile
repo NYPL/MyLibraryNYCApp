@@ -4,8 +4,8 @@ FROM ruby:2.7.4 AS builder
 ENV APP_HOME /home/app/MyLibraryNYCApp
 ARG RAILS_ENV
 ENV RAILS_ENV=${RAILS_ENV}
-
 ENV AWS_DEFAULT_REGION=us-east-1
+
 ARG AWS_ACCESS_KEY_ID
 ARG AWS_SECRET_ACCESS_KEY
 
@@ -41,6 +41,9 @@ RUN bundle exec rails webpacker:compile
 COPY config/webpacker.yml $APP_HOME/config/
 COPY config/webpack/environment.js $APP_HOME/config/webpack
 COPY babel.config.js $APP_HOME
+
+RUN unset AWS_ACCESS_KEY_ID && \
+    unset AWS_SECRET_ACCESS_KEY
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]

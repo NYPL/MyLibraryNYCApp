@@ -3,18 +3,24 @@ language: minimal
 services:
 - docker
 
+branches:
+  only:
+  - qa
+  - production
+  - SEB-2614/docker_ecs
+
 jobs:
   include:
     - stage: docker build
-      if: branch = SEB-2614/docker_ecs or production
+      if: (branch = SEB-2614/docker_ecs or branch = production)
       before_install:
-      - if [[ $TRAVIS_BRANCH == "SEB-2614/docker_ecs" ]];
+      - if [[ $TRAVIS_BRANCH == "qa" ]];
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_QA};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_QA};
           export ENV="qa";
         fi
-      - if [[ "$TRAVIS_BRANCH" == "production" ]];
+      - if [[ "$TRAVIS_BRANCH" == "SEB-2614/docker_ecs" ]];
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_PRODUCTION};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_PRODUCTION};
@@ -26,24 +32,46 @@ jobs:
       - AWS_REGION=us-east-1 
       install:
         - pip install --user awscli
-        - export LOCAL_TAG_NAME="${ENV}-$TRAVIS_BUILD_NUMBER" 
-        - echo "$LOCAL_TAG_NAME"
+        - export LOCAL_TAG_NAME="${ENV}-unset-aws-prod"
+        - echo "$ENV"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
         - docker build -t "$LOCAL_TAG_NAME" --build-arg AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" --build-arg AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" --build-arg RAILS_ENV="${ENV}" .
-        - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$ENV-latest"
+        - echo "$LOCAL_TAG_NAME"
+        - docker images
+        - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
+        - docker push "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
-        - |
-            MANIFEST=$(aws ecr batch-get-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
-            aws ecr put-image --repository-name my-library-nyc-app --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
-        - docker push "$ECR_URL:$ENV-latest"
+        #- |
+        #    MANIFEST=$(aws ecr batch-get-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
+        #    aws ecr batch-delete-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-previous" || true
+        #    aws ecr put-image --repository-name my-library-nyc-app --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
 
-after_success:
-  - if [ "$TRAVIS_BRANCH" = "SEB-2614/docker_ecs" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-      echo we did it;
-      export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA;
-      export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA;
-    fi;
+    - stage: deploy qa
+      if: branch IN (qa) AND type != pull_request
+      env:
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
+      - AWS_DEFAULT_REGION=us-east-1 
+      - AWS_REGION=us-east-1 
+      - CLUSTER_NAME=mylibrarynycapp-qa
+      install:
+      - pip install --user awscli
+      script:
+      - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
+
+    - stage: deploy production
+      if: branch IN (production) AND type != pull_request
+      env:
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PRODUCTION
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PRODUCTION
+      - AWS_DEFAULT_REGION=us-east-1 
+      - AWS_REGION=us-east-1 
+      - CLUSTER_NAME=mylibrarynycapp-production
+      install:
+      - pip install --user awscli
+      script:
+      - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
 
 env:
   global:
