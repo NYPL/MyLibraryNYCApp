@@ -21,39 +21,29 @@ jobs:
           export ENV="production";
         fi
       env:
-      - LOCAL_TAG_NAME="${ENV}-$TRAVIS_BUILD_NUMBER"
       - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/my-library-nyc-app
+      - AWS_DEFAULT_REGION=us-east-1 
+      - AWS_REGION=us-east-1 
       install:
         - pip install --user awscli
         - export LOCAL_TAG_NAME="${ENV}-$TRAVIS_BUILD_NUMBER" 
-        - echo $LOCAL_TAG_NAME
         - echo "$LOCAL_TAG_NAME"
-        - echo '$LOCAL_TAG_NAME'
-        - echo "{$LOCAL_TAG_NAME}"
-
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
         - docker build -t "$LOCAL_TAG_NAME" --build-arg AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" --build-arg AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" --build-arg RAILS_ENV="${ENV}" .
-        - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
-        - docker push "$ECR_URL:$LOCAL_TAG_NAME"
+        - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$ENV-latest"
+        # Re-tag last latest image just in case
+        - |
+            MANIFEST=$(aws ecr batch-get-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
+            aws ecr put-image --repository-name my-library-nyc-app --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
+        - docker push "$ECR_URL:$ENV-latest"
 
 after_success:
-####
-#  Is this better than the deploy: block? 
-##
-- |
-  if [ "${TRAVIS_BRANCH}" = "SEB-2614/docker_ecs" -a "${TRAVIS_PULL_REQUEST}" == "false"]; then 
+  - if [ "$TRAVIS_BRANCH" = "SEB-2614/docker_ecs" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      echo we did it;
       export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA;
       export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA;
-    #- aws ecs update-service --cluster $CLUSTER_NAME -cluster $CLUSTER_NAME --force-new-deployment
-      echo "we did it"
-  fi
-- |
-  if [ "${TRAVIS_BRANCH}" = "production" -a "${TRAVIS_PULL_REQUEST}" == "false"]; then 
-      export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID_QA";
-      export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY_QA";
-    #- aws ecs update-service --cluster $CLUSTER_NAME -cluster $CLUSTER_NAME --force-new-deployment
-  fi
+    fi;
 
 env:
   global:
