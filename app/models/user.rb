@@ -63,7 +63,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
   def barcode_found_in_sierra
     # Getter for flag that reflects whether there's a user or users in Sierra
     # that correspond(s) to this user object in MLN db.
@@ -76,12 +75,10 @@ class User < ActiveRecord::Base
     return @barcode_found_in_sierra
   end
 
-
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
     "mylibrarynyc"
   end
-
 
   def name(full: false)
     handle = self.email.sub /@.*/, ''
@@ -90,11 +87,9 @@ class User < ActiveRecord::Base
     name.nil? ? handle : name
   end
 
-
   def contact_email
     !self.alt_email.nil? && !self.alt_email.empty? ? self.alt_email : self.email
   end
-
 
   # Enable login by either email or alt_email (DOE email and contact email, respectively)
   def self.find_first_by_auth_conditions(warden_conditions)
@@ -106,16 +101,13 @@ class User < ActiveRecord::Base
     end
   end
 
-
   def multiple_barcodes?
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
 
-
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
-
 
   def assign_barcode
     LogWrapper.log('DEBUG', {
@@ -137,7 +129,6 @@ class User < ActiveRecord::Base
       })
     return self.barcode
   end
-
 
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
@@ -208,7 +199,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
   # 404 - no records with the same e-mail were found
   # 409 - more then 1 record with the same e-mail was found
   # 200 - 1 record with the same e-mail was found
@@ -257,11 +247,9 @@ class User < ActiveRecord::Base
       return response
   end
 
-
   def patron_type
     school.borough == 'QUEENS' ? 149 : 151
   end
-
 
   def pcode3
     return 1 if school.borough == 'BRONX'
@@ -270,7 +258,6 @@ class User < ActiveRecord::Base
     return 4 if school.borough == 'BROOKLYN'
     return 5 if school.borough == 'QUEENS'
   end
-
 
   # This returns the sierra code, not the school's zcode
   def pcode4

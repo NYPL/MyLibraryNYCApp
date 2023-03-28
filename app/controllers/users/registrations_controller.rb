@@ -36,7 +36,6 @@ module Users
       end
     end
 
-
     def update
       # Here Updates current user alt_email and schooid.
       # If Alt Email is not present use current user email
@@ -56,11 +55,9 @@ module Users
       
     end
 
-
     def new
       @user = User.new
     end
-
 
     # Below code for custom error messages. 
     # Because Devise gem display same attributes from database.

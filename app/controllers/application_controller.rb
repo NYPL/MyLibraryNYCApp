@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
   def authenticate_admin_user!
     session[:redirect_after_login] = request.fullpath
     unless current_admin_user.present?
@@ -20,7 +19,6 @@ class ApplicationController < ActionController::Base
       redirect_to "/admin/login"
     end
   end
-
   
   def append_info_to_payload(payload)
     super
@@ -39,7 +37,6 @@ class ApplicationController < ActionController::Base
       payload
     end
   end
-
 
   # Decides where to take the user who has just successfully logged in.
   def after_sign_in_path_for(resource)
@@ -69,7 +66,6 @@ class ApplicationController < ActionController::Base
     redirect_url
   end
 
-
   # Is called by functionality that needs to make sure the user is authenticated,
   # s.a. making a teacher set order.  Takes the user to a login page.
   def require_login
@@ -92,7 +88,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
   def redirect_to_angular
     if request.format != "json"
       redirect_to "#{app_url}##{request.fullpath}"
@@ -113,11 +108,9 @@ class ApplicationController < ActionController::Base
     request.get? && !devise_controller? && !request.xhr?
   end
 
-
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
   end
-
 
   # If it is old domain redirect to new domain
   # eg: https://www.mylibrarynyc.org/about/participating-schools -> https://www.mylibrarynyc.org/schools
@@ -141,7 +134,6 @@ class ApplicationController < ActionController::Base
       redirect_to "#{request.protocol}#{ENV['MLN_INFO_SITE_HOSTNAME']}/schools", :status => :moved_permanently
     end
   end
-
 
   def store_user_location!
     originating_location = request.fullpath

@@ -19,7 +19,6 @@ class SessionsController < ApplicationController
     end
   end
 
-
   def delete
     logout!
     render json: {
@@ -29,7 +28,6 @@ class SessionsController < ApplicationController
       sign_out_msg: "Signed out successfully"
     }
   end
-
 
   ## Checks if the user's session has been timed out.
   # If yes, then gives a visual notification to the user.
@@ -57,21 +55,17 @@ class SessionsController < ApplicationController
     params.permit(:email)
   end
 
-
   def max_session_duration
     8.hours
   end
-
 
   def timeout_warning_duration
     10.minutes
   end
 
-
   def timeout_timestamp
     session["warden.user.user.session"]["last_request_at"] + max_session_duration
   end
-
 
   def timeout_warning_timestamp
     timeout_timestamp - timeout_warning_duration

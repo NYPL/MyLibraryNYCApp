@@ -51,22 +51,18 @@ class TeacherSet < ActiveRecord::Base
     holds.where(:status => ['new','pending'])
   end
 
-
   def held_by?(user)
     pending_holds_for_user(user).count > 0
   end
 
-
   def availability_string
     AVAILABILITY_LABELS[self.availability]
   end
-
   
   # Get teacher-set record by bib_id
   def self.get_teacher_set_by_bnumber(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first
   end
-
 
   def pending_holds_for_user(user)
     if user
@@ -75,7 +71,6 @@ class TeacherSet < ActiveRecord::Base
       []
     end
   end
-
   
   # Get all teacher-set status holds except for cancelled and closed.
   def ts_holds_count
@@ -83,13 +78,11 @@ class TeacherSet < ActiveRecord::Base
     ts_holds.present? ? ts_holds.sum(:quantity) : nil
   end
 
-
   # Current user Teacher set holds count
   def holds_count_for_user(user, hold_id=nil)
     holds = holds_for_user(user, hold_id)
     holds.present? ? holds.sum(:quantity) : nil
   end
-
 
   # Current user Teacher set holds
   def holds_for_user(user, hold_id)
@@ -101,12 +94,10 @@ class TeacherSet < ActiveRecord::Base
       ts_holds_by_user(user)
     end
   end
-
   
   def availability
     self.available_copies.to_i > 0 ? AVAILABLE : UNAVAILABLE
   end
-
 
   # calculate teacher-set available copies while creating/cancelling the hold
   # quantity = No.of holds requested while creation of hold.
@@ -120,14 +111,12 @@ class TeacherSet < ActiveRecord::Base
     available_copies
   end
 
-
   def update_teacher_set_availability_in_db(status, quantity=nil, current_user=nil, hold_id=nil)
     available_copies = calculate_available_copies(status, quantity, current_user, hold_id)
     self.available_copies = available_copies
     self.availability = availability
     self.save!
   end
-
 
   # Update teacher-set availability while creation/cancellation of hold.
   def update_teacher_set_availability_in_elastic_search
@@ -138,18 +127,15 @@ class TeacherSet < ActiveRecord::Base
     ElasticSearch.new.update_document_by_id(self.id, body)
   end
 
-
   # Get teacher-set holds by user and hold_id
   def ts_holds_by_user_and_hold_id(user, hold_id)
     holds.where(:user_id => user.id, :id => hold_id).where.not(status: ['cancelled', 'closed'])
   end
-
   
   # Get teacher-set holds by user.
   def ts_holds_by_user(user)
     holds.where(:user_id => user.id).where.not(status: ['cancelled', 'closed'])
   end
-
   
   def make_slug
     # check for nil title otherwise parameterize will fail
@@ -157,39 +143,32 @@ class TeacherSet < ActiveRecord::Base
     self.slug ||= [parameterized_title, rand(36**6).to_s(36)].join("-")
   end
 
-
   # Poor man's subject... TODO: replace with column in DB
   def subject
     area_of_study
   end
-
 
   def has_subject(title)
     # puts "subjects for #{title}: #{self.subjects.select { |s| puts "'#{s.title}' == '#{title}'";  s.title == title }.inspect}"
     !self.subjects.select { |s| s.title == title }.empty?
   end
 
-
   def subject_key
     subject.parameterize if subject.present?
   end
-
 
   def suitabilities_string
     suitabilities.join('; ')
   end
 
-
   # Fetch first book cover uri, with size = (:small|:medium|:large)
   def image_uri(size = :small)
     books.first.image_uri(size) if !books.empty?
   end
-
   
   def self.initialize_teacher_set(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
   end
-
     
   def self.create_or_update_teacher_set(req_body)
     bib_id = req_body['id']
@@ -228,7 +207,6 @@ class TeacherSet < ActiveRecord::Base
     teacher_set
   end
 
-
   # Update teacher-set table from bib request body.
   def update_teacher_set_attributes_from_bib_request(ts_items_info)
     self.update(
@@ -255,7 +233,6 @@ class TeacherSet < ActiveRecord::Base
     )
     self
   end
-
   
   # Create or update teacherset document in elastic search.
   def create_or_update_teacherset_document_in_es
@@ -280,7 +257,6 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
-
   # Delete teacher-set record from db and elastic search.
   def self.delete_teacher_set(bib_id, suppressed: false)
     # Get teacher-set record by bib_id
@@ -300,7 +276,6 @@ class TeacherSet < ActiveRecord::Base
     teacher_set
   end
 
-
   # When Delete request comes from sierra, than delete teacher set document in elastic search.
   def delete_teacherset_record_from_es
     ts_id = self.id
@@ -312,7 +287,6 @@ class TeacherSet < ActiveRecord::Base
                              'method' => __method__})
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
   end
-
   
   # Make request input body to create teacherset document in elastic search.
   # Input param ts_obj eg: <TeacherSet:0x00007fd79383a640 id: 350, title: "Step",call_number: "Teacher",
@@ -346,7 +320,6 @@ class TeacherSet < ActiveRecord::Base
       available_copies: self.available_copies, bnumber: self.bnumber, set_type: self.set_type,
       area_of_study: self.area_of_study, subjects: subjects_arr }
   end
-
 
   def self.for_query(params)
     sets = self.paginate(:page => params[:page])
@@ -426,7 +399,6 @@ class TeacherSet < ActiveRecord::Base
 
     
   end
-
 
   def self.facets_for_query(qry)
     cache_key = qry.to_sql.sub /\ LIMIT.*/, ''
@@ -514,7 +486,6 @@ class TeacherSet < ActiveRecord::Base
 
     
   end
-
 
   def as_json(options = { })
     h = super(options)
@@ -689,7 +660,6 @@ class TeacherSet < ActiveRecord::Base
     # Update availability status string
     self.recalculate_availability
   end
-
 
   # Called any time availability totals change due to newly scraped data or newly added holds
   # to update the availability string to 'Available' or 'All copies in use'
@@ -938,7 +908,6 @@ class TeacherSet < ActiveRecord::Base
     raise DBException.new(TEACHERSET_SETTYPE_ERROR[:code], TEACHERSET_SETTYPE_ERROR[:msg])
   end
 
-
   def update_set_type(set_type_val)
     begin
       set_type = derive_set_type(set_type_val)
@@ -951,7 +920,6 @@ class TeacherSet < ActiveRecord::Base
     end
     set_type
   end
-
 
   # Set type value varFields entry with the marcTag=526
   # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
@@ -969,7 +937,6 @@ class TeacherSet < ActiveRecord::Base
       return BOOK_CLUB_SET
     end
   end
-
   
   # Update teacher sets set-type nil to value from sierra
   def update_set_type_from_nil_to_value
@@ -983,7 +950,6 @@ class TeacherSet < ActiveRecord::Base
       teacher_set.update_set_type(set_type)
     end
   end
-
   
   # Receive JSON related to a teacher_set.
   # For each ISBN, ensure there is an associated book.
@@ -1019,7 +985,6 @@ class TeacherSet < ActiveRecord::Base
     end
   end
 
-
   # This is called from the bibs_controller.
   # Delete all records for a teacher set in the join table SubjectTeacherSet, then
   # create new records (and subjects if they do not exist) in that join table.
@@ -1050,7 +1015,6 @@ class TeacherSet < ActiveRecord::Base
     prune_subjects(old_subjects)
   end
 
-
   # Clean up the area_of_study field to match the subjects table title string rules.
   # We do this, because there's some filtering that goes on, matching the teacher_set.area_of_study
   # to the subjects.title, and we want to make sure the string follow some conventions.
@@ -1058,7 +1022,6 @@ class TeacherSet < ActiveRecord::Base
     self.area_of_study = self.clean_subject_string(self.area_of_study)
     self.save
   end
-
 
   # Any text massaging, such as constraining word length,
   # trimming, etc. go here.
@@ -1079,7 +1042,6 @@ class TeacherSet < ActiveRecord::Base
 
     return new_subject_string 
   end
-
   
   # Delete old subjects that do not have any records in the join table,
   # because they are not associated with any teacher sets.
@@ -1091,7 +1053,6 @@ class TeacherSet < ActiveRecord::Base
       end
     end
   end
-
   
   # This is called from the bibs_controller.
   # Delete all records for a teacher set in the table TeacherSetNotes, then
@@ -1106,7 +1067,6 @@ class TeacherSet < ActiveRecord::Base
   rescue StandardError => e
     raise TeacherSetNoteException.new(TEACHER_SET_NOTE_EXCEPTION[:code], TEACHER_SET_NOTE_EXCEPTION[:msg])
   end
-
   
   # Calls Bib service for items.
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
@@ -1118,7 +1078,6 @@ class TeacherSet < ActiveRecord::Base
                 availability: response[:availability_string])
     return {bibs_resp: response[:bibs_resp]}
   end
-
   
   # Calls Bib service for items.
   def get_items_info_from_bibs_service(bibid)
@@ -1129,7 +1088,6 @@ class TeacherSet < ActiveRecord::Base
     availability_string = (available_count.to_i > 0) ? AVAILABLE : UNAVAILABLE
     return {bibs_resp: bibs_resp, total_count: total_count, available_count: available_count, availability_string: availability_string}
   end
-
   
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items in the list, the number of items that are
@@ -1144,7 +1102,6 @@ class TeacherSet < ActiveRecord::Base
     LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
     return total_count, available_count
   end
-
 
   # Call sierra bib api to get set_type value
   def get_set_type_value_from_bib_response(bibid)
@@ -1210,7 +1167,6 @@ class TeacherSet < ActiveRecord::Base
     #Recursive call
     send(__method__, bibid, offset, response, items_hash)
   end
-
 
   # Sends a request to the bibs microservice.(Get bib response by bibid)
   # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"

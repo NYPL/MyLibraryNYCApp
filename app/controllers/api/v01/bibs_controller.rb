@@ -49,7 +49,6 @@ class Api::V01::BibsController < Api::V01::GeneralController
     api_response_builder(http_status, response)
   end
 
-
   def delete_teacher_set
     begin
       http_status = 200

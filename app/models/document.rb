@@ -17,7 +17,6 @@ class Document < ActiveRecord::Base
     errors.add(:event_type, 'Please select event_type') if event_type.to_s == "0"
   end
 
-
   def event_type_already_exist
     return unless Document.where(event_type: event_type).present?
 
@@ -25,7 +24,6 @@ class Document < ActiveRecord::Base
     error_msg = "#{e_type} type already created. Please use another type, or use the 'edit' link if you are trying to update #{e_type}"
     errors.add(:event_type, error_msg)
   end
-
 
   # Call GoogleApiClient to export google document.
   def google_document
@@ -37,7 +35,6 @@ class Document < ActiveRecord::Base
   rescue StandardError => e
     errors.add(:url, google_client_error_message(e))
   end
-
 
   def google_client_error_message(error)
     if error.status_code == 404
