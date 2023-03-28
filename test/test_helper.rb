@@ -3909,7 +3909,7 @@ class ActiveSupport::TestCase
   # Returns the passed in response status code, and an appropriate response body to match it.
   def mock_check_barcode_request(barcode, status_code)
     if status_code == '404'
-      stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
+      stub_request(:get, "#{ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil)}?barcode=" + barcode)
         .to_return(status: 404, body: {
           "message" => "Failed to retrieve patron record by barcode",
           "statusCode" => 404
@@ -3919,7 +3919,7 @@ class ActiveSupport::TestCase
     end
 
     if status_code == '409'
-      stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
+      stub_request(:get, "#{ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil)}?barcode=" + barcode)
         .to_return(status: 409, body: {
           "message" => "Multiple patron records found",
           "statusCode" => 409
@@ -3929,7 +3929,7 @@ class ActiveSupport::TestCase
     end
 
     if status_code == '500'
-      stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
+      stub_request(:get, "#{ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil)}?barcode=" + barcode)
         .to_return(status: 500, body: {
           "message" => "Server error",
           "statusCode" => 500
@@ -3939,7 +3939,7 @@ class ActiveSupport::TestCase
     end
 
     # return a successful 200 "single unique user found" response
-    stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?barcode=" + barcode)
+    stub_request(:get, "#{ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil)}?barcode=" + barcode)
       .to_return(status: 200,
                  body: SIERRA_USER.to_json,
                  headers: { 'Content-Type' => 'application/json' })
@@ -3951,7 +3951,7 @@ class ActiveSupport::TestCase
   # 404 statusCode if the e-mail hasn't been created in Sierra.
   # TODO: Need to add 200 if the e-mail has been created
   def mock_check_email_request(email)
-    stub_request(:get, "#{ENV['PATRON_MICROSERVICE_URL_V01']}?email=" + email)
+    stub_request(:get, "#{ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil)}?email=" + email)
       .to_return(status: 200, body: {
         'status' => 404,
         'type' => 'exception',
@@ -3967,7 +3967,7 @@ class ActiveSupport::TestCase
   # to 'https://qa-platform.nypl.org/api/v0.2/patrons' and returns a
   # status of success if Sierra API created a patron record.
   def mock_send_request_to_patron_creator_service
-    stub_request(:post, ENV['PATRON_MICROSERVICE_URL_V02'])
+    stub_request(:post, ENV.fetch('PATRON_MICROSERVICE_URL_V02', nil))
       .to_return(
         {
           status: 201,
@@ -4040,14 +4040,14 @@ class ActiveSupport::TestCase
   # status of success if Sierra API finds the bib record.
   def send_request_to_bibs_microservice
     20.times do |x|
-      stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=#{ 9781896580601 + x }").
+      stub_request(:get, "#{ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil)}?standardNumber=#{ 9781896580601 + x }").
         with(
           headers: {
             'Authorization' => 'Bearer testoken',
             'Content-Type' => 'application/json'
           }).to_return(status: 200, body: MODIFIED_BOOK_JSON_FOR_ISBN_9782917623268, headers: {})
     end
-    stub_request(:get, "#{ENV['BIBS_MICROSERVICE_URL_V01']}?standardNumber=123456789").
+    stub_request(:get, "#{ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil)}?standardNumber=123456789").
       with(
         headers: {
           'Authorization' => 'Bearer testoken',
@@ -4060,7 +4060,7 @@ class ActiveSupport::TestCase
   # status of success if Sierra API finds the bib record.
   def mock_send_request_to_items_microservice
     items_query_params = "?bibId=998&limit=25&offset=0"
-    stub_request(:get, "#{ENV['ITEMS_MICROSERVICE_URL_V01']}" + items_query_params).
+    stub_request(:get, "#{ENV.fetch('ITEMS_MICROSERVICE_URL_V01', nil)}" + items_query_params).
       with(
         headers: {
         'Authorization' => 'Bearer testoken',
@@ -4068,7 +4068,7 @@ class ActiveSupport::TestCase
         }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
 
     items_query_params = "?bibId=999&limit=25&offset=0"
-    stub_request(:get, "#{ENV['ITEMS_MICROSERVICE_URL_V01']}" + items_query_params).
+    stub_request(:get, "#{ENV.fetch('ITEMS_MICROSERVICE_URL_V01', nil)}" + items_query_params).
       with(
         headers: {
         'Authorization' => 'Bearer testoken',

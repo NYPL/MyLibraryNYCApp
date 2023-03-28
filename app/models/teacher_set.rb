@@ -1135,7 +1135,7 @@ class TeacherSet < ActiveRecord::Base
       return items_hash, items_found
     else
       items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
-      response = HTTParty.get(ENV['ITEMS_MICROSERVICE_URL_V01'] + items_query_params, headers: { 
+      response = HTTParty.get(ENV.fetch('ITEMS_MICROSERVICE_URL_V01', nil) + items_query_params, headers: { 
         'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
       
       if response.code == 200 || items_hash['data'].present?
@@ -1173,8 +1173,11 @@ class TeacherSet < ActiveRecord::Base
   # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
   def send_request_to_bibs_microservice(bibid)
     bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
-    response = HTTParty.get(ENV['BIBS_MICROSERVICE_URL_V01'] + bib_query_params, headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}", 
-      'Content-Type' => 'application/json' }, timeout: 10)
+    response = HTTParty.get(
+      ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil) + bib_query_params, 
+      headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",'Content-Type' => 'application/json' }, 
+      timeout: 10
+    )
 
     if response.code == 200
       LogWrapper.log('DEBUG', {
