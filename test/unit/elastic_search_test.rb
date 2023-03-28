@@ -52,7 +52,7 @@ class ElasticSearchTest < MiniTest::Test
                       :query => 
                        [{:multi_match => {:query => "test", :type => "phrase_prefix", :boost => 3, :fields => ["subjects.title^3"]}}, 
                         {:multi_match => {:query => "test", :fuzziness => 1, :fields => ["subjects.title^3"]}}]}},
-                   {:term => {:"title.keyword" => {:value => "test"}}}]}}]}}},
+                   {:term => {:'title.keyword' => {:value => "test"}}}]}}]}}},
                     {"language" => {:terms => {:field => "primary_language", :size => 100, :order => {:_key => "asc"}}},
                      "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},
                      "availability" => {:terms => {:field => "availability.raw", :size => 10, :order => {:_key => "asc"}}},

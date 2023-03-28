@@ -158,13 +158,13 @@ class User < ActiveRecord::Base
           'type': 'a'
         }
       ],
-      "phones": [{
-        "number": school.phone_number,
-        "type": "t"
+      'phones': [{
+        'number': school.phone_number,
+        'type': "t"
       }],
-      "varFields": [{
-        "fieldTag": "o",
-        "content": school.name
+      'varFields': [{
+        'fieldTag': "o",
+        'content': school.name
       }]
     }
     response = HTTParty.post(
