@@ -1,27 +1,26 @@
-FROM ruby:2.7.4-alpine AS builder
+FROM ruby:2.7.4 AS builder
 
+# set env vars
 ENV APP_HOME /home/app/MyLibraryNYCApp
 ENV BUNDLE_APP_CONFIG="$APP_HOME/.bundle"
+ENV AWS_DEFAULT_REGION=us-east-1
+
 ARG RAILS_ENV
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
+
 WORKDIR $APP_HOME
 
-# workaround for therubyracer <> alpine 
-RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
-RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk
-RUN apk add glibc-2.35-r0.apk
-
 # install packages
-RUN apk add --update --no-cache \
-    git \
-    libxml2-dev \
-    libxslt-dev \
-    postgresql-dev\
-    nodejs \
-    tzdata \
-    yarn \
+RUN apt-get update -qq \
+    && apt-get install -y \
     curl \
-    tzdata \
-    build-base
+    postgresql-client \
+    git
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash - \
+    && apt-get -y install nodejs \
+    && npm install --global yarn
 
 # bundle 
 COPY . $APP_HOME
@@ -35,6 +34,10 @@ RUN bundle config --global github.https true \
     #&& find vendor/bundle/ruby/2.7.4/gems/ -name "*.c" -delete \
     #&& find vendor/bundle/ruby/2.7.4/gems/ -name "*.o" -delete
 
+## webpacker needs this which is super annoying!! 
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
 RUN bundle exec rails webpacker:install
 RUN bundle exec rails webpacker:compile
 
@@ -42,7 +45,7 @@ RUN bundle exec rails webpacker:compile
 RUN rm -rf node_modules tmp/cache test
 
 # Copy app files into a fresh new image 
-FROM ruby:2.7.4-alpine
+FROM ruby:2.7.4
 
 ENV APP_HOME /home/app/MyLibraryNYCApp
 ENV BUNDLE_APP_CONFIG="$APP_HOME/.bundle"
@@ -51,6 +54,14 @@ ARG RAILS_ENV
 WORKDIR $APP_HOME
 
 # install packages
+RUN apt-get update -qq \
+    && apt-get install -y \
+    curl \
+    postgresql-client \
+    git
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
+RUN apt-get -y install nodejs
 
 COPY --from=builder $APP_HOME $APP_HOME
 
