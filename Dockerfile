@@ -3,9 +3,11 @@ FROM ruby:2.7.4 AS builder
 # set env vars
 ENV APP_HOME /home/app/MyLibraryNYCApp
 ARG RAILS_ENV
+ENV RAILS_ENV=${RAILS_ENV}
+
+ENV AWS_DEFAULT_REGION=us-east-1
 ARG AWS_ACCESS_KEY_ID
 ARG AWS_SECRET_ACCESS_KEY
-ENV AWS_DEFAULT_REGION=us-east-1
 
 RUN apt-get update -qq \
     && apt-get install -y \
@@ -33,7 +35,6 @@ RUN npm install --global yarn
 ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 RUN bundle exec rails webpacker:install
-
 RUN bundle exec rails webpacker:compile
 
 # webpack overwrites these files

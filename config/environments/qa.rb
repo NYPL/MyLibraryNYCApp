@@ -15,6 +15,7 @@ MyLibraryNYC::Application.configure do
 
   config.hosts = [ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil), ENV.fetch('MLN_SETS_SITE_HOSTNAME', nil),
                   ENV.fetch('MLN_ENVIRONMENT_URL', nil), ENV.fetch('MLN_API_GATEWAY_URL', nil),
+                  IPAddr.new('10.227.0.0/16'), # connection on private network for ECS target health check
                   "http://my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com",
                   "my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com",
                   "qa-new-www.mylibrarynyc.org",

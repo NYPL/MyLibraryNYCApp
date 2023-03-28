@@ -2,7 +2,6 @@ FROM ruby:2.7.4 AS builder
 
 # set env vars
 ENV APP_HOME /home/app/MyLibraryNYCApp
-ENV BUNDLE_APP_CONFIG="$APP_HOME/.bundle"
 ENV AWS_DEFAULT_REGION=us-east-1
 
 ARG RAILS_ENV
@@ -26,10 +25,10 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash - \
 COPY . $APP_HOME
 COPY Gemfile $APP_HOME
 COPY Gemfile.lock $APP_HOME
-RUN gem install bundler
 
+RUN gem install bundler
 RUN bundle config --global github.https true \
-    && bundle install --jobs 30 --path=vendor/bundle
+    && bundle install --jobs 30
     #&& rm -rf vendor/bundle/ruby/2.7.4/cache/*.gem \
     #&& find vendor/bundle/ruby/2.7.4/gems/ -name "*.c" -delete \
     #&& find vendor/bundle/ruby/2.7.4/gems/ -name "*.o" -delete
@@ -48,13 +47,11 @@ COPY babel.config.js $APP_HOME
 
 # Remove unneeded in resulting image
 RUN rm -rf node_modules tmp/cache test
-# RUN rm -rf app/assets vendor/assets
 
 # Copy app files into a fresh new image 
 FROM ruby:2.7.4
 
 ENV APP_HOME /home/app/MyLibraryNYCApp
-ENV BUNDLE_APP_CONFIG="$APP_HOME/.bundle"
 ARG RAILS_ENV
 
 WORKDIR $APP_HOME
@@ -71,6 +68,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash - \
     && npm install --global yarn
 
 COPY --from=builder $APP_HOME $APP_HOME
+COPY --from=builder $APP_HOME/vendor/bundle/ruby/2.7.0/gems $APP_HOME/vendor/bundle/ruby/2.7.0/gems
 
 ENV RAILS_ENV=${RAILS_ENV}
 EXPOSE 3000
