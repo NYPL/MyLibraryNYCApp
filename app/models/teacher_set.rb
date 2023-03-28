@@ -258,7 +258,7 @@ class TeacherSet < ActiveRecord::Base
   end
 
   # Delete teacher-set record from db and elastic search.
-  def self.delete_teacher_set(bib_id, suppressed: false)
+  def self.delete_teacher_set(bib_id, suppressed = false)
     # Get teacher-set record by bib_id
     teacher_set = self.get_teacher_set_by_bnumber(bib_id)
     unless teacher_set.present?

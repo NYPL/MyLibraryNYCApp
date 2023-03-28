@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
     "mylibrarynyc"
   end
 
-  def name(full: false)
+  def name(full = false)
     handle = self.email.sub /@.*/, ''
     name = self.first_name
     name += " #{self.last_name}" if full && !self.last_name.nil? && !self.last_name.empty?
