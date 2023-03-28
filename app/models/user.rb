@@ -149,22 +149,22 @@ class User < ActiveRecord::Base
         'pcode4' => pcode4
       },
       'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode.to_s],
-      'addresses': [
+      addresses: [
         {
-          'lines': [
+          lines: [
             "#{school.address_line_1}",
             "#{school.address_line_2}"
           ],
-          'type': 'a'
+          type: 'a'
         }
       ],
-      'phones': [{
-        'number': school.phone_number,
-        'type': "t"
+      phones: [{
+        number: school.phone_number,
+        type: "t"
       }],
-      'varFields': [{
-        'fieldTag': "o",
-        'content': school.name
+      varFields: [{
+        fieldTag: "o",
+        content: school.name
       }]
     }
     response = HTTParty.post(

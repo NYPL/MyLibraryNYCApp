@@ -22,6 +22,6 @@ class BibsControllerTest < MiniTest::Test
   end
 
   def delete_teacher_set_response
-    { 'teacher_sets': [{ 'id': 733, 'bnumber': "b998", 'title': "QA Teacher Set for MLN-662  AC#4" }] }
+    { teacher_sets: [{ id: 733, bnumber: "b998", title: "QA Teacher Set for MLN-662  AC#4" }] }
   end
 end

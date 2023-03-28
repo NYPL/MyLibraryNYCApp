@@ -129,92 +129,224 @@ Performance/CollectionLiteralInLoop:
 
 Performance/ConcurrentMonotonicTime:
   Enabled: true
-Style/NumberedParametersLimit: # new in 1.22
+
+Style/NumberedParametersLimit:
   Enabled: true
-Style/ObjectThen: # new in 1.28
+
+Style/ObjectThen:
   Enabled: true
-Style/OpenStructUse: # new in 1.23
+
+Style/OpenStructUse:
   Enabled: true
-Style/OperatorMethodCall: # new in 1.37
+
+Style/OperatorMethodCall:
   Enabled: true
-Style/QuotedSymbols: # new in 1.16
+
+Style/QuotedSymbols:
   Enabled: true
-Style/RedundantArgument: # new in 1.4
+
+Style/RedundantArgument: 
   Enabled: true
-Style/RedundantConstantBase: # new in 1.40
+
+Style/RedundantConstantBase:
   Enabled: true
-Style/RedundantDoubleSplatHashBraces: # new in 1.41
+
+Style/RedundantDoubleSplatHashBraces:
   Enabled: true
-Style/RedundantEach: # new in 1.38
+
+Style/RedundantEach:
   Enabled: true
-Style/RedundantHeredocDelimiterQuotes: # new in 1.45
+
+Style/RedundantHeredocDelimiterQuotes:
   Enabled: true
-Style/RedundantInitialize: # new in 1.27
+
+Style/RedundantInitialize:
   Enabled: true
 
 Style/FileRead:
   Enabled: true
+
 Style/FileWrite:
   Enabled: true
-Style/HashConversion: # new in 1.10
+
+Style/HashConversion:
   Enabled: true
-Style/HashExcept: # new in 1.7
+
+Style/HashExcept:
   Enabled: true
-Style/IfWithBooleanLiteralBranches: # new in 1.9
+
+Style/IfWithBooleanLiteralBranches:
   Enabled: true
-Style/InPatternThen: # new in 1.16
+
+Style/InPatternThen:
   Enabled: true
-Style/MagicCommentFormat: # new in 1.35
+
+Style/MagicCommentFormat:
   Enabled: true
-Style/MapCompactWithConditionalBlock: # new in 1.30
+
+Style/MapCompactWithConditionalBlock:
   Enabled: true
 Style/MapToHash:
   Enabled: true
-Style/MapToSet: # new in 1.42
+
+Style/MapToSet:
   Enabled: true
-Style/MinMaxComparison: # new in 1.42
+
+Style/MinMaxComparison:
   Enabled: true
-Style/MultilineInPatternThen: # new in 1.16
+
+Style/MultilineInPatternThen:
   Enabled: true
-Style/NegatedIfElseCondition: # new in 1.2
+
+Style/NegatedIfElseCondition:
   Enabled: true
-Style/NestedFileDirname: # new in 1.26
+
+Style/NestedFileDirname:
   Enabled: true
-Style/NilLambda: # new in 1.3
+
+Style/NilLambda:
   Enabled: true
-Style/NumberedParameters: # new in 1.22
+
+Style/NumberedParameters:
   Enabled: true
-Lint/UselessRuby2Keywords: # new in 1.23
+
+Lint/UselessRuby2Keywords:
   Enabled: true
-Metrics/CollectionLiteralLength: # new in 1.47
+
+Metrics/CollectionLiteralLength:
   Enabled: true
-Naming/BlockForwarding: # new in 1.24
+
+Naming/BlockForwarding:
   Enabled: true
-Security/CompoundHash: # new in 1.28
+
+Security/CompoundHash:
   Enabled: true
-Security/IoMethods: # new in 1.22
+
+Security/IoMethods:
   Enabled: true
-Style/ArgumentsForwarding: # new in 1.1
+
+Style/ArgumentsForwarding:
   Enabled: true
-Style/ArrayIntersect: # new in 1.40
+
+Style/ArrayIntersect:
   Enabled: true
-Style/CollectionCompact: # new in 1.2
+
+Style/CollectionCompact:
   Enabled: true
-Style/ComparableClamp: # new in 1.44
+
+Style/ComparableClamp:
   Enabled: true
-Style/ConcatArrayLiterals: # new in 1.41
+
+Style/ConcatArrayLiterals:
   Enabled: true
-Style/DirEmpty: # new in 1.48
+
+Style/DirEmpty:
   Enabled: true
-Style/DocumentDynamicEvalDefinition: # new in 1.1
+
+Style/DocumentDynamicEvalDefinition:
   Enabled: true
-Style/EmptyHeredoc: # new in 1.32
+
+Style/EmptyHeredoc:
   Enabled: true
-Style/EndlessMethod: # new in 1.8
+
+Style/EndlessMethod:
   Enabled: true
-Style/EnvHome: # new in 1.29
+
+Style/EnvHome:
   Enabled: true
-Style/FetchEnvVar: # new in 1.28
+
+Style/FetchEnvVar:
   Enabled: true
-Style/FileEmpty: # new in 1.48
+
+Style/FileEmpty:
+  Enabled: true
+
+Lint/EmptyClass:
+  Enabled: true
+
+Lint/EmptyInPattern:
+  Enabled: true
+
+Lint/IncompatibleIoSelectWithFiberScheduler:
+  Enabled: true
+
+Lint/LambdaWithoutLiteralBlock:
+  Enabled: true
+
+Lint/NoReturnInBeginEndBlocks:
+  Enabled: true
+
+Lint/NonAtomicFileOperation:
+  Enabled: true
+
+Lint/NumberedParameterAssignment:
+  Enabled: true
+
+Lint/OrAssignmentToConstant:
+  Enabled: true
+
+Lint/RedundantDirGlobSort:
+  Enabled: true
+
+Lint/RefinementImportMethods:
+  Enabled: true
+
+Lint/RequireRangeParentheses:
+  Enabled: true
+
+Lint/RequireRelativeSelfPath:
+  Enabled: true
+
+Lint/SymbolConversion:
+  Enabled: true
+
+Lint/ToEnumArguments:
+  Enabled: true
+
+Lint/TripleQuotes:
+  Enabled: true
+
+Lint/UnexpectedBlockArity:
+  Enabled: true
+
+Lint/UnmodifiedReduceAccumulator:
+  Enabled: true
+
+Gemspec/DeprecatedAttributeAssignment:
+  Enabled: true
+
+Gemspec/DevelopmentDependencies: 4
+  Enabled: true
+
+Gemspec/RequireMFA:
+  Enabled: true
+
+Layout/LineContinuationSpacing:
+  Enabled: true
+
+Layout/LineEndStringConcatenationIndentation:
+  Enabled: true
+
+Lint/AmbiguousAssignment:
+  Enabled: true
+
+Lint/AmbiguousOperatorPrecedence:
+  Enabled: true
+
+Lint/AmbiguousRange:
+  Enabled: true
+
+Lint/ConstantOverwrittenInRescue:
+  Enabled: true
+
+Lint/DeprecatedConstants:
+  Enabled: true
+
+Lint/DuplicateBranch:
+  Enabled: true
+
+Lint/DuplicateMagicComment:
+  Enabled: true
+
+Lint/DuplicateRegexpCharacterClassElement:
   Enabled: true
