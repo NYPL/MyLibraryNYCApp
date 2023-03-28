@@ -168,7 +168,7 @@ class User < ActiveRecord::Base
       }]
     }
     response = HTTParty.post(
-      ENV['PATRON_MICROSERVICE_URL_V02'],
+      ENV.fetch('PATRON_MICROSERVICE_URL_V02', nil),
       body: query.to_json,
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
@@ -208,7 +208,7 @@ class User < ActiveRecord::Base
     }
 
     response = HTTParty.get(
-      ENV['PATRON_MICROSERVICE_URL_V01'],
+      ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil),
       query: query,
       headers:
         {
