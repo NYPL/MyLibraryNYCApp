@@ -15,11 +15,9 @@ class TeacherSetSerializer < ActiveModel::Serializer
     @options[:include_books].nil? ? true : @options[:include_books]
   end
 
-
   def include_contents?
     @options[:include_contents].nil? ? true : @options[:include_contents]
   end
-
   
   # Can't just delegate cache_key to object because some serializations have books & some don't
   def cache_key

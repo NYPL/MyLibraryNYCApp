@@ -24,7 +24,6 @@ class School < ActiveRecord::Base
     n += "#{delim}#{borough}" if !borough.nil?
     n
   end
-
   
   # This looks up a SierraCodeZcodeMatch by the school's zcode (ie "zk003")
   # and returns the sierra_code Sierra uses to lookup a zcode (ie "1")
@@ -34,20 +33,17 @@ class School < ActiveRecord::Base
 
     return match.sierra_code
   end
-
   
   # Get all active schools
   def self.active_schools_data
     active.map(&:name_id)
   end
 
-
   # Parse schoool name and id
   def name_id
     status_label = active ? "" : "[INACTIVE] "
     ["#{status_label}#{name + school_code}", id]
   end
-
 
   def school_code
     code.present? ? " (#{code[1..].upcase})" : ""

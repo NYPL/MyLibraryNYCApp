@@ -165,7 +165,6 @@ class Api::ItemsControllerTest < MiniTest::Test
       },
     } ]
   end
-
   
   def bibid_missing_req_body_for_item
     [ 
@@ -179,8 +178,7 @@ class Api::ItemsControllerTest < MiniTest::Test
         },
       } 
     ]
-  end
-  
+  end  
 
   def nypl_source_missing_req_body_for_item
     [ 

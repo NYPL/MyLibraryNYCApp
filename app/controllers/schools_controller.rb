@@ -30,9 +30,7 @@ class SchoolsController < ApplicationController
     render json: { schools: schools_arr, anchor_tags: anchor_tags, school_not_found: school_not_found }
   end
 
-
-  def participating_schools_data; end
-  
+  def participating_schools_data; end  
   
   def create
     School.create(school_params)

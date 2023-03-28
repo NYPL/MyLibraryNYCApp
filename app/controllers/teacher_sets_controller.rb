@@ -75,7 +75,6 @@ class TeacherSetsController < ApplicationController
       teacher_sets: {}, facets: {}}
   end
 
-
   def input_param_facets(params)
     facets = []
     [
@@ -98,7 +97,6 @@ class TeacherSetsController < ApplicationController
     end
     facets
   end
-
 
   # teacher set facets
   def teacher_set_facets(params, facets)
@@ -134,7 +132,6 @@ class TeacherSetsController < ApplicationController
     end
     facets
   end
-
 
   # GET /teacher_sets/1.json
   def show
@@ -182,22 +179,18 @@ class TeacherSetsController < ApplicationController
     }
   end
 
-
   # Gets current user teacherset holds from database.
   def teacher_set_holds
     @set = TeacherSet.find(params[:id])
     @holds = @set.holds_for_user(current_user)
   end
 
-
   def teacher_set_data; end
-
 
   # TODO: Fix: create currently fails our functional tests.
   def create
     TeacherSet.create(teacherset_params)
   end
-
 
   def teacher_set_details; end
 

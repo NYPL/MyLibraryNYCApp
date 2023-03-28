@@ -24,7 +24,6 @@ class HoldMailer < ActionMailer::Base
     end
   end
 
-
   ##
   # Sends an email to the teacher, confirming that their request of
   # a teacher set has been received.
@@ -43,7 +42,6 @@ class HoldMailer < ActionMailer::Base
     end
   end
 
-
   def status_change(hold, status, details)
     begin
       @hold = hold
@@ -59,7 +57,6 @@ class HoldMailer < ActionMailer::Base
       })
     end
   end
-
   
   def teacher_set_deleted_notification(hold, status, details)
     begin

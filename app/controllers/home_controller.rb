@@ -9,28 +9,23 @@ class HomeController < ApplicationController
     
   end
 
-
   def mln_file_names
     calendar_event = Document.calendar_of_events
     mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
     render json: { mln_calendar_file_name: mln_calendar_file_name, menu_of_services_file_name: "menu_of_services.pdf" }
   end
 
-
   def swagger_docs
   	render :json => File.read("app/controllers/api/swagger/swaggerDoc.json")
   end 
-
   
   def secondary_menu
   end
-
   
   # for timing out sessions, this method reloads a hidden iframe so that the user's session["warden.user.user.session"]["last_request_at"] updates
   def extend_session_iframe
     user_signed_in?
   end
-
 
   # Display's mylibrarynyc information
   def about; end
@@ -46,43 +41,35 @@ class HomeController < ApplicationController
 
   def digital_resources; end
 
-
   def help
     store_location_for(:user, "contact")
   end
-
 
   def faq
     faqs = FaqsController.new.frequently_asked_questions
     render json: { faqs: faqs }
   end
 
-
   def faq_data
     
   end
-
 
   # Create news-letter confirmation email in google sheets
   def newsletter_confirmation
     
   end
 
-
   def newsletter_confirmation_msg
     is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
     render json: { success: is_success }
   end
 
-
   def calendar_event_error
   end
-
 
   def calendar_event
     render json: { calendar_event: Document.calendar_of_events }
   end
-
 
   # Read MylibraryNyc calendar pdf from document table and display's in home page.
   def mln_calendar
@@ -98,7 +85,6 @@ class HomeController < ApplicationController
       redirect_to root_url
     end
   end
-
 
   def menu_of_services
     if params["filename"] == "menu_of_services"

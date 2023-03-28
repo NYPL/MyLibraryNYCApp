@@ -35,7 +35,7 @@ Metrics/ModuleLength:
   Max: 400
 
 Layout/EmptyLineBetweenDefs:
-  NumberOfEmptyLines: 2
+  NumberOfEmptyLines: 1
 
 Metrics/LineLength:
   Max: 150

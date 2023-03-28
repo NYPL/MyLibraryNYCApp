@@ -12,7 +12,6 @@ module MlnHelper
       raise InvalidInputException.new(INVALID_INPUT[:code], INVALID_INPUT[:msg], input[:error_msg])
     end
   end
-
   
   def parse_request_body(request)
     body = request.body.read
@@ -22,7 +21,6 @@ module MlnHelper
     
     JSON.parse body
   end
-
 
   def json_valid?(str)
     JSON.parse(str)

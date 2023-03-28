@@ -8,7 +8,6 @@ class S3Controller < ApplicationController
     @s3_client = create_client
   end
 
-
   # Read AWS s3 bucket config files
   def get_s3_file(bucket, file)
     begin

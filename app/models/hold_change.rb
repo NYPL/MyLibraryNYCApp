@@ -19,18 +19,15 @@ class HoldChange < ActiveRecord::Base
       send_teacher_set_deleted_email
     end
   end
-
   
   def send_change_status_email
     # deliver email if status has been changed to error, pending, closed, or cancelled
     HoldMailer.status_change(hold, status, comment).deliver if ['error', 'pending', 'closed', 'cancelled'].include? status
   end
 
-
   def send_teacher_set_deleted_email
     HoldMailer.teacher_set_deleted_notification(hold, status, comment).deliver if ['closed', 'cancelled'].include? status
-  end
-  
+  end  
 
   def update_hold
     # puts "updating hold status: ", hold.status, status

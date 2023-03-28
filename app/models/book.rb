@@ -162,7 +162,6 @@ class Book < ActiveRecord::Base
     end
   end
 
-
   def update_from_isbn
     response = send_request_to_bibs_microservice
     return if !@book_found
@@ -227,7 +226,6 @@ class Book < ActiveRecord::Base
 
     return response
   end
-
   
   def var_field(book_attributes, marcTag)
     begin
@@ -236,7 +234,6 @@ class Book < ActiveRecord::Base
       return nil
     end
   end
-
 
   # This method returns Fixed Field values from bib response
   # eg: book_attributes = "fixedFields"=> {"24"=>{"label"=>"Language", "value"=>"eng", "display"=>"English"}

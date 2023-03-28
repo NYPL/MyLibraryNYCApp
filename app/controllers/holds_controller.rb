@@ -12,7 +12,6 @@ class HoldsController < ApplicationController
     redirect_to root_url
   end
 
-
   # Performs the action of showing the detail of a single hold record, including
   # its date, status, and teacher set.  Is usually called by the teacher when checking
   # their holds history.  In routing terms, responds to a GET request on the
@@ -27,7 +26,6 @@ class HoldsController < ApplicationController
     }
   end
 
-
   # GET /holds/new.json
   def new
     @hold = Hold.new
@@ -37,7 +35,6 @@ class HoldsController < ApplicationController
       teacher_set: @hold.teacher_set
     }
   end
-
 
   # GET /holds/1/cancel.json
   def cancel_details
@@ -50,9 +47,7 @@ class HoldsController < ApplicationController
     }
   end
 
-
   def holds_cancel_details; end
-
 
   def ordered_holds_details
     return if logged_in?
@@ -63,7 +58,6 @@ class HoldsController < ApplicationController
       redirect_to "/signin"
     
   end
-
 
   ##
   # Create holds and update quantity column in holds.
@@ -122,9 +116,7 @@ class HoldsController < ApplicationController
     end
   end
 
-
   def error_message(exception); end
-
   
   # Here calculate the teacher-set available_copies based on the current-user holds than saves in teacher-set table and cancel the current-user holds.
   def update
