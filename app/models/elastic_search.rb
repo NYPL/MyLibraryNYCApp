@@ -163,11 +163,11 @@ class ElasticSearch
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-    aggregation_hash["language"] = { 'terms': { 'field': "primary_language", :size => 100, :order => {:_key => "asc"} } }
-    aggregation_hash["set type"] = { 'terms': { 'field': "set_type", :size => 10, :order => {:_key => "asc"} } }
+    aggregation_hash["language"] = { terms: { field: "primary_language", :size => 100, :order => {:_key => "asc"} } }
+    aggregation_hash["set type"] = { terms: { field: "set_type", :size => 10, :order => {:_key => "asc"} } }
     # Remove Availability lable in facets.
     # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
-    aggregation_hash["area of study"] = { 'terms': { 'field': "area_of_study", :size => 100, :order => {:_key => "asc"} } }
+    aggregation_hash["area of study"] = { terms: { field: "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
     :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
@@ -247,7 +247,7 @@ class ElasticSearch
 
     sub_aggs = teacherset_docs[:aggregations]["subjects"]
 
-    if sub_aggs.present? || sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?
+    if sub_aggs.present? || (sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?)
       sub_aggs["subjects"]["buckets"].each do |agg_val|
         # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
@@ -283,7 +283,7 @@ class ElasticSearch
                    else
                      sort_order == 1 ? "asc" : "desc"
                    end
-      query = [{'_score': "desc", 'availability.raw': "asc", 'created_at': sort_order, '_id': "asc"}]
+      query = [{_score: "desc", 'availability.raw': "asc", created_at: sort_order, _id: "asc"}]
     end
     query
   end
