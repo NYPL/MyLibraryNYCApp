@@ -9,12 +9,10 @@ class SettingsController < ApplicationController
     
   end
 
-
   def signup; end
 
 
   def signout; end
-
 
   def mln_banner_message
     unless ENV.fetch('SHOW_MAINTENANCE_BANNER', 
@@ -26,9 +24,7 @@ class SettingsController < ApplicationController
     
   end
 
-
   def page_not_found; end
-
 
   def activeadmin_redirect_to_login
     if Devise.sign_out_all_scopes
@@ -38,7 +34,6 @@ class SettingsController < ApplicationController
       redirect_to "/admin/dashboard"
     end 
   end
-
 
   def reset_admin_password_message
     if params["admin_user"]["email"].present?
@@ -54,7 +49,6 @@ class SettingsController < ApplicationController
       redirect_to "/admin/password/new"
     end
   end
-
 
   def index
     unless logged_in?
@@ -105,14 +99,12 @@ class SettingsController < ApplicationController
     render json: { accountdetails: resp, ordersNotPresentMsg: orders_not_present_msg }
   end
 
-
   def acccount_details
     return if logged_in?
 
     redirect_to "/signin"
     
   end
-
 
   def sign_up_details
     render json: { activeSchools: School.active_schools_data.to_h, 

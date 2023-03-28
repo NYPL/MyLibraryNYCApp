@@ -11,7 +11,6 @@ module TeacherSetsHelper
     var_field(@req_body, marc_tag, merge)
   end
 
-
   def var_field(req_body, marc_tag, merge: true)
     if merge == true
       req_body['varFields'].detect { |hash| hash['marcTag'] == marc_tag }['subfields'].map { |x| x['content'] }.join(', ')
@@ -21,7 +20,6 @@ module TeacherSetsHelper
   rescue StandardError
     nil
   end
-
   
   # "marc_tag": "521" {"tag": "a", "content": "11-12" } if field does not match with grades returns 'Pre-K +'.
   # eg: ["dd", "11-444", "Z", "1130L"] -  only 11 is matched with supporting grades. It returns 11 +
@@ -52,7 +50,6 @@ module TeacherSetsHelper
     prek_arr.uniq
   end
 
-
   # Grades = {Pre-K => -1, K => 0}
   def grade_val(val)
     return unless val.present?
@@ -66,7 +63,6 @@ module TeacherSetsHelper
     end
   end
 
-
   def grade_or_lexile_array(return_grade_or_lexile)
     grade_and_lexile_json = all_var_fields('521')
     return '' if grade_and_lexile_json.blank?
@@ -75,7 +71,7 @@ module TeacherSetsHelper
     grades_resp.each do |grade_or_lexile_json|
       
       if return_grade_or_lexile == 'lexile' && grade_or_lexile_json.include?('L')
-        grade_or_lexile_json.delete('Lexile ').delete('L').split(' ')[0].split('-')
+        grade_or_lexile_json.delete('Lexile ').delete('L').split[0].split('-')
       elsif return_grade_or_lexile == 'grade' && !grade_or_lexile_json.include?('L')
         if grade_or_lexile_json.upcase.include?('PRE')
           # Prek values: ['PRE K', 'pre k', 'PRE-K', 'pre-k', 'Pre-K', 'Pre K', 'PreK', 'prek'] - supporting these values only
@@ -103,13 +99,11 @@ module TeacherSetsHelper
     end
   end
 
-
   def all_var_fields(marc_tag)
     @req_body['varFields'].select { |hash| hash['marcTag'] == marc_tag }.map { |x| x['subfields'][0]['content'] }
   rescue StandardError
     nil
   end
-
 
   def fixed_field(marc_tag)
     @req_body['fixedFields'][marc_tag]['display']

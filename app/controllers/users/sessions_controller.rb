@@ -28,7 +28,6 @@ module Users
       end
     end
 
-
     # DELETE /resource/sign_out
     def destroy
       signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
@@ -42,7 +41,6 @@ module Users
       }
       
     end
-
 
     ## Checks if the user's session has been timed out.
     # If yes, then gives a visual notification to the user.
@@ -68,7 +66,6 @@ module Users
       { scope: resource_name, recall: "#{controller_path}#new" }
     end
 
-
     # If you have extra params to permit, append them to the sanitizer.
     def configure_sign_in_params
       devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
@@ -81,16 +78,13 @@ module Users
       8.hours
     end
 
-
     def timeout_warning_duration
       10.minutes
     end
 
-
     def timeout_timestamp
       session["warden.user.user.session"]["last_request_at"] + max_session_duration
     end
-
 
     def timeout_warning_timestamp
       timeout_timestamp - timeout_warning_duration

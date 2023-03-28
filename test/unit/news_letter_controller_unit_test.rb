@@ -64,8 +64,8 @@ class NewsLetterControllerUnitTest < MiniTest::Test
     it 'Test successfully create the news letter email in google sheets method' do
       email = 'test@ss1.com'
       params = {key: "edededede"}
-      google_sheet = OpenStruct.new
-      google_sheet.updates = OpenStruct.new
+      google_sheet = Struct.new
+      google_sheet.updates = Struct.new
       google_sheet.updates.spreadsheet_id = "wed11"
       @mintest_mock1.expect(:call, ['test@ss.com'])
       @mintest_mock2.expect(:call, google_sheet, [email])

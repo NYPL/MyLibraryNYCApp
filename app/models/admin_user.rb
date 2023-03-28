@@ -13,7 +13,6 @@ class AdminUser < ActiveRecord::Base
     email
   end
 
-
   def self.valid_email?(email)
     AdminUser.where(email: email)
   end

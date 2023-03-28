@@ -31,24 +31,20 @@ class Hold < ActiveRecord::Base
     STATUS_LABEL[self.status]
   end
 
-
   def change_status(status, comment)
     if status != self.status
       hold_changes.new(:status => status, :comment => comment)
     end
   end
 
-
   def cancel!(reason)
     self.change_status('cancelled', reason)
   end
-
 
   def close!(by_whom)
     puts "closing hold: #{self.inspect}"
     status = 'closed'
   end
-
 
   def do_after_create
     generate_access_key
@@ -57,13 +53,11 @@ class Hold < ActiveRecord::Base
     recalculate_set_availability
   end
 
-
   def name
     if !teacher_set.nil?
       "Hold for #{teacher_set.title}"
     end
   end
-
 
   # After hold is created, recalculate teacher_set availability string in case
   # this hold was placed on last avail copy
@@ -82,20 +76,17 @@ class Hold < ActiveRecord::Base
     end
   end
 
-
   # Generate unique 20 digit code, prefixed with id, to allow cancellation without signing in
   def generate_access_key
     self.access_key = [id.to_s, SecureRandom.hex(10)].join
     save!
   end
 
-
   # Should be placed in email communication for reference.
   # TODO: Does this actually get used?  Look into
   def order_number
     "#{self.created_at.strftime('%Y%m%d')}.#{self.id}"
   end
-
 
   # Asks the hold_mailer to send a notificaion email to BookOps.
   def send_admin_notification_email
@@ -104,27 +95,22 @@ class Hold < ActiveRecord::Base
     HoldMailer.admin_notification(self).deliver
   end
 
-
   # Asks the hold_mailer to send a notification email to the teacher ordering the dataset.
   def send_confirmation_email
     HoldMailer.confirmation(self).deliver
   end
 
-
   def overdue?
     due_date_absolute < Time.now.strftime("%d %B %Y") && self.active == true
   end
-
   
   def due_date_absolute
     self.hold_end.strftime("%d %B %Y")
   end
-
   
   def overdue_rate
     1
   end
-
   
   def days_overdue
     # Calculate number of days over-due, multiply by overdue_rate

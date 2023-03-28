@@ -469,7 +469,8 @@ school_code: school_code.strip, school: school}
         sierra_code = row_hash['sierra_code'].strip
         zcode = row_hash['zcode'].strip
         puts "Creating sierra code #{sierra_code}"
-        ['sierra_code', 'zcode'].each do |column_header_name|
+        sierra_data = ['sierra_code', 'zcode']
+        sierra_data.each do |column_header_name|
           if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
             raise "The #{column_header_name} column is mislabeled or missing from the CSV."
           end
@@ -559,8 +560,8 @@ school_code: school_code.strip, school: school}
       next if m.nil?
 
       borough_name = m[1].underscore.split('_').map(&:capitalize).join(' ')
-
-      next if ['Brooklyn','Queens'].include? borough_name
+      school_names = ['Brooklyn','Queens']
+      next if school_names.include? borough_name
 
       borough = Borough.find_or_create_by_name borough_name
 

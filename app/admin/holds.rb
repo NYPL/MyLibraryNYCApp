@@ -40,7 +40,7 @@ ActiveAdmin.register Hold do
       column prop
     end
 
-    column 'Call Number', :sortable => :"teacher_sets.call_number" do |h|
+    column 'Call Number', :sortable => :'teacher_sets.call_number' do |h|
       if !h.teacher_set.nil?
         link_to h.teacher_set.call_number, admin_hold_path(h)
       end
@@ -54,7 +54,7 @@ ActiveAdmin.register Hold do
       end
     end
 
-    column 'Requester Barcode', :sortable => :"users.barcode" do |h|
+    column 'Requester Barcode', :sortable => :'users.barcode' do |h|
       if !h.user.nil?
         link_to h.user.barcode, admin_hold_path(h)
       else

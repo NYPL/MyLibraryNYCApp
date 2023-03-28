@@ -18,7 +18,6 @@ class Api::V01::GeneralController < ApplicationController
       @parsing_error = e
     end
   end
-
   
   # this validates that the request is in the correct format
   def validate_request
@@ -30,7 +29,6 @@ class Api::V01::GeneralController < ApplicationController
 
     return []
   end
-
   
   # Requests to the MLN teacher set-updating api must come from our verified lambdas,
   # unless are being tested or developed.
@@ -44,7 +42,6 @@ class Api::V01::GeneralController < ApplicationController
 
     redirect_to '/api/unauthorized' unless Rails.env.test? || Rails.env.local? || request.headers['X-API-Key'] == ENV['API_GATEWAY_HEADER_KEY']
   end
-
   
   # log the error and render it back to the lambda
   def render_error(error_code_and_message)
@@ -55,7 +52,6 @@ class Api::V01::GeneralController < ApplicationController
     })
     return api_response_builder(error_code_and_message[0], {message: error_code_and_message[1]}.to_json)
   end
-
   
   # Prepare and write an error message to the application log.
   def log_error(method, exception)
@@ -70,7 +66,6 @@ class Api::V01::GeneralController < ApplicationController
       'method' => method
     })
   end
-
   
   def api_response_builder(http_status, http_response=nil)
     render status: http_status, json: http_response

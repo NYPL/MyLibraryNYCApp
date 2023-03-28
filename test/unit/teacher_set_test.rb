@@ -378,7 +378,8 @@ class TeacherSetTest < ActiveSupport::TestCase
 
     it 'get set_type value from bib_response' do
       bib_id = 7899158
-      expected_resp = OpenStruct.new(data: SIERRA_USER["data"], code: 200)
+      expected_resp = Struct.new(:data, :code).new(SIERRA_USER["data"], 200)
+
       @mintest_mock1.expect(:call, expected_resp, [bib_id])
       resp = nil
       @teacher_set3.stub :send_request_to_bibs_microservice, @mintest_mock1 do

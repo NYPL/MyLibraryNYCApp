@@ -12,11 +12,9 @@ class TeacherSetBook < ActiveRecord::Base
     teacher_set.update(last_book_change: "added-#{self.book.id}-#{self.book.title}")
   end
 
-
   def create_teacher_set_version_on_destroy
     teacher_set.update(last_book_change: "removed-#{self.book.id}-#{self.book.title}")
   end
-
 
   def self.destroy_for_set(set_id)
     self.delete_all(:teacher_set_id => set_id)
