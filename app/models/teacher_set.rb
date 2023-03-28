@@ -963,7 +963,7 @@ class TeacherSet < ActiveRecord::Base
       next unless var_field['marcTag'] == '944'
       next unless var_field['subfields'] && var_field['subfields'][0] && var_field['subfields'][0]['content']
 
-      isbns = var_field['subfields'][0]['content'].split(' ')
+      isbns = var_field['subfields'][0]['content'].split
     end
 
     # Delete teacher_set_books records for books with an ISBN that is not in the teacher_set's list of ISBNs.

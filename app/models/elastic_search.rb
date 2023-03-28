@@ -114,7 +114,7 @@ class ElasticSearch
       [
         {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["title^10", "description^2", "contents"]}},
         {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}},
-        subjects_query, {:term => {:"title.keyword" => {:value => keyword}}}
+        subjects_query, {:term => {:'title.keyword' => {:value => keyword}}}
       ]}}
     end
 
@@ -163,11 +163,11 @@ class ElasticSearch
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 100, :order => {:_key => "asc"} } }
-    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10, :order => {:_key => "asc"} } }
+    aggregation_hash["language"] = { 'terms': { 'field': "primary_language", :size => 100, :order => {:_key => "asc"} } }
+    aggregation_hash["set type"] = { 'terms': { 'field': "set_type", :size => 10, :order => {:_key => "asc"} } }
     # Remove Availability lable in facets.
     # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
-    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 100, :order => {:_key => "asc"} } }
+    aggregation_hash["area of study"] = { 'terms': { 'field': "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
     :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
@@ -276,14 +276,14 @@ class ElasticSearch
                    else
                      sort_order == 3 ? "desc" : "asc"
                    end
-      query = [{:"title.keyword" => {:order => sort_order }}]
+      query = [{:'title.keyword' => {:order => sort_order }}]
     elsif [0, 1].include?(sort_order)
       sort_order = if sort_order.zero?
                      "desc"
                    else
                      sort_order == 1 ? "asc" : "desc"
                    end
-      query = [{"_score": "desc", "availability.raw": "asc", "created_at": sort_order, "_id": "asc"}]
+      query = [{'_score': "desc", 'availability.raw': "asc", 'created_at': sort_order, '_id': "asc"}]
     end
     query
   end

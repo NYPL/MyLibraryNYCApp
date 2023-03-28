@@ -5,7 +5,7 @@ namespace :cleanup do
   # Use it like this with one or more arguments: `rake cleanup:bib_records['book teacher_set']` or `rake cleanup:bib_records['book']`
   desc "cleanup books or teacher sets"
   task :bib_records, [:model_names] => :environment do |t, args|
-    args.model_names.split(' ').each do |model_name|
+    args.model_names.split.each do |model_name|
       puts "Starting rake task to clean up #{model_name.humanize.pluralize}"
       ActiveRecord::Base.transaction do
         ids_with_duplicate_bibs = []

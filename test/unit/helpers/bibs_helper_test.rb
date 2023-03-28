@@ -48,7 +48,7 @@ class BibsHelperTest < MiniTest::Test
 
   describe 'test api bib_response' do
     it 'test api bib response method' do
-      t_set = OpenStruct.new(bnumber: 123, id: 1, title: "23")
+      t_set = Struct.new(:bnumber, :id, :title).new(123, 1, "23")
       resp = bib_response(t_set)
       assert_equal(t_set.id, resp[:id])
       assert_equal(t_set.bnumber, resp[:bnumber])
