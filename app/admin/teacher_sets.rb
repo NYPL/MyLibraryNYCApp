@@ -161,10 +161,10 @@ ActiveAdmin.register TeacherSet do
         table_for teacher_set.holds do
           column 'Status ' do |hold| link_to hold.status, admin_hold_path(hold) end
           column 'Teacher' do |hold|
-            if !hold.user.nil?
-              link_to hold.user.email, admin_hold_path(hold)
-            else
+            if hold.user.nil?
               "Missing user data"
+            else
+              link_to hold.user.email, admin_hold_path(hold)
             end
           end
           column 'Quantity' do |hold| hold.quantity end

@@ -93,58 +93,56 @@ namespace :ingest do
 
       puts "#{email}"
 
-      if !(school = School.find_by_code(school_code.strip.downcase)).nil?
-        if school.active?
-
-          # Find the user by email
-          user = User.find_by_email email.downcase
-          if user.nil?
-
-            if !distinct_emails.include? email
-              distinct_emails << email
-              puts "Couldn't find user: #{email} [#{line}]"
-              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: barcode.strip, school_code: school_code.strip, 
-school: school}
-            else
-              duplicate_emails << email
-              alt_barcode = create_users.find {|user| user[:email] == email}[:barcode]
-              create_users.delete_if {|user| user[:email] == email}
-
-              duplicate_barcode = "#{barcode};#{alt_barcode}"
-
-              puts "Duplicate email for new user: #{email}, updating alt_barcode"
-              create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: duplicate_barcode.strip, 
-school_code: school_code.strip, school: school}
-            end
-
-          else
-            update_users << "#{email}"
-            puts "Updating existing user: #{email}"
-
-            alt_barcodes = nil
-            if user.barcode != barcode.to_i
-              # Update alt_barcodes
-              if user.alt_barcodes.nil?
-                alt_barcodes = "#{user.barcode}"
-              else
-                alt_barcodes = "#{user.alt_barcodes};#{user.barcode}"
-              end
-              puts "barcode: #{barcode}, alt: #{alt_barcodes}"
-            end
-
-            user.home_library = school_code.strip.downcase
-            user.update({
-              :first_name => first_name,
-              :last_name => last_name,
-              :barcode => barcode.to_i,
-              :alt_barcodes => alt_barcodes
-            })
-
-            user.save
-          end
-        end
-      else
+      if (school = School.find_by_code(school_code.strip.downcase)).nil?
         puts "school not found '#{school_code}'"
+      elsif school.active?
+        user = User.find_by_email email.downcase
+        if user.nil?
+
+          if distinct_emails.include? email
+            duplicate_emails << email
+            alt_barcode = create_users.find {|user| user[:email] == email}[:barcode]
+            create_users.delete_if {|user| user[:email] == email}
+
+            duplicate_barcode = "#{barcode};#{alt_barcode}"
+
+            puts "Duplicate email for new user: #{email}, updating alt_barcode"
+            create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: duplicate_barcode.strip, 
+school_code: school_code.strip, school: school}
+          else
+            distinct_emails << email
+            puts "Couldn't find user: #{email} [#{line}]"
+            create_users << {email: email.strip, name: "#{last_name}, #{first_name}", barcode: barcode.strip, school_code: school_code.strip, 
+school: school}
+          end
+
+        else
+          update_users << "#{email}"
+          puts "Updating existing user: #{email}"
+
+          alt_barcodes = nil
+          if user.barcode != barcode.to_i
+            # Update alt_barcodes
+            if user.alt_barcodes.nil?
+              alt_barcodes = "#{user.barcode}"
+            else
+              alt_barcodes = "#{user.alt_barcodes};#{user.barcode}"
+            end
+            puts "barcode: #{barcode}, alt: #{alt_barcodes}"
+          end
+
+          user.home_library = school_code.strip.downcase
+          user.update({
+            :first_name => first_name,
+            :last_name => last_name,
+            :barcode => barcode.to_i,
+            :alt_barcodes => alt_barcodes
+          })
+
+          user.save
+        end
+
+        # Find the user by email
       end
     end
 
@@ -374,7 +372,14 @@ school_code: school_code.strip, school: school}
     CSV.foreach(path) do |line|
       (code, name) = line
       puts "#{code} - #{name}"
-      if !(school = School.find_by_code("z#{code}".downcase)).nil?
+      if (school = School.find_by_code("z#{code}".downcase)).nil?
+        puts "Adding new school, code: #{code}"
+        puts "  #{name}"
+        new_school = School.find_or_create_by_name name
+        new_school.code = "z#{code}".downcase
+        new_school.active = true
+        new_school.save
+      else
         if school.name.strip.downcase != name.strip.downcase
           puts "Updating school name:"
           puts "  existing:   #{school.name}"
@@ -384,13 +389,6 @@ school_code: school_code.strip, school: school}
 
         school.active = true
         school.save
-      else
-        puts "Adding new school, code: #{code}"
-        puts "  #{name}"
-        new_school = School.find_or_create_by_name name
-        new_school.code = "z#{code}".downcase
-        new_school.active = true
-        new_school.save
       end
     end
   end
