@@ -32,13 +32,11 @@ jobs:
       - AWS_REGION=us-east-1 
       install:
         - pip install --user awscli
-        - export LOCAL_TAG_NAME="${ENV}-unset-aws-prod"
         - echo "$ENV"
+        - export LOCAL_TAG_NAME="${ENV}-latest"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
         - docker build -t "$LOCAL_TAG_NAME" --build-arg AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" --build-arg AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" --build-arg RAILS_ENV="${ENV}" .
-        - echo "$LOCAL_TAG_NAME"
-        - docker images
         - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case

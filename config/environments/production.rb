@@ -72,10 +72,10 @@ MyLibraryNYC::Application.configure do
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
-<<<<<<< HEAD
   config.hosts = [ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil), ENV.fetch('MLN_SETS_SITE_HOSTNAME', nil),
                   ENV.fetch('MLN_ENVIRONMENT_URL', nil), ENV.fetch('MLN_API_GATEWAY_URL', nil)]
-                  IPAddr.new("10.229.0.0/16") # connection on private network for ECS target health check
+                  IPAddr.new("10.229.0.0/16"), # connection on private network for ECS target health check
+                  "mylibrarynycapp-production-1686255819.us-east-1.elb.amazonaws.com"
 
   config.eager_load = true
 end
