@@ -21,5 +21,7 @@ MyLibraryNYC::Application.configure do
                   "qa-new-www.mylibrarynyc.org",
                   "mylibrarynycapp-qa-456976389.us-east-1.elb.amazonaws.com"
                 ]
+
+
   config.eager_load = true
 end

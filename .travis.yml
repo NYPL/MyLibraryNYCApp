@@ -12,7 +12,7 @@ branches:
 jobs:
   include:
     - stage: docker build
-      if: (branch = SEB-2614/docker_ecs or branch = production)
+      if: (branch = qa or branch = production)
       before_install:
       - if [[ $TRAVIS_BRANCH == "qa" ]];
         then
@@ -20,7 +20,7 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_QA};
           export ENV="qa";
         fi
-      - if [[ "$TRAVIS_BRANCH" == "SEB-2614/docker_ecs" ]];
+      - if [[ "$TRAVIS_BRANCH" == "production" ]];
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_PRODUCTION};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_PRODUCTION};
@@ -38,12 +38,12 @@ jobs:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
         - docker build -t "$LOCAL_TAG_NAME" --build-arg AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" --build-arg AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" --build-arg RAILS_ENV="${ENV}" .
         - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
-        - docker push "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
-        #- |
-        #    MANIFEST=$(aws ecr batch-get-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
-        #    aws ecr batch-delete-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-previous" || true
-        #    aws ecr put-image --repository-name my-library-nyc-app --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
+        - |
+            MANIFEST=$(aws ecr batch-get-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
+            aws ecr batch-delete-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-previous" || true
+            aws ecr put-image --repository-name my-library-nyc-app --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
+        - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
     - stage: deploy qa
       if: branch IN (qa) AND type != pull_request
