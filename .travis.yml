@@ -5,26 +5,17 @@ services:
 
 branches:
   only:
-  - qa
-  - production
-  - SEB-2614/docker_ecs
+  - test-docker-multistage
 
 jobs:
   include:
     - stage: docker build
-      if: (branch = qa or branch = production)
       before_install:
-      - if [[ $TRAVIS_BRANCH == "qa" ]];
+      - if [[ $TRAVIS_BRANCH == "test-docker-multistage" ]];
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_QA};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_QA};
           export ENV="qa";
-        fi
-      - if [[ "$TRAVIS_BRANCH" == "production" ]];
-        then
-          export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_PRODUCTION};
-          export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_PRODUCTION};
-          export ENV="production";
         fi
       env:
       - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/my-library-nyc-app
@@ -32,44 +23,17 @@ jobs:
       - AWS_REGION=us-east-1 
       install:
         - pip install --user awscli
-        - echo "$ENV"
-        - export LOCAL_TAG_NAME="${ENV}-latest"
+      before_script:
+      - mkdir ~/.aws;
+	      echo "[default]" > ~/.aws/credentials;
+	      echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials;
+	      echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials;
+	      echo "region = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials;
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
-        - docker build -t "$LOCAL_TAG_NAME" --build-arg AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" --build-arg AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" --build-arg RAILS_ENV="${ENV}" .
-        - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
-        # Re-tag last latest image just in case
-        - |
-            MANIFEST=$(aws ecr batch-get-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
-            aws ecr batch-delete-image --repository-name my-library-nyc-app --image-ids imageTag="$ENV-previous" || true
-            aws ecr put-image --repository-name my-library-nyc-app --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
-        - docker push "$ECR_URL:$LOCAL_TAG_NAME"
-
-    - stage: deploy qa
-      if: branch IN (qa) AND type != pull_request
-      env:
-      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
-      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
-      - AWS_DEFAULT_REGION=us-east-1 
-      - AWS_REGION=us-east-1 
-      - CLUSTER_NAME=mylibrarynycapp-qa
-      install:
-      - pip install --user awscli
-      script:
-      - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
-
-    - stage: deploy production
-      if: branch IN (production) AND type != pull_request
-      env:
-      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PRODUCTION
-      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PRODUCTION
-      - AWS_DEFAULT_REGION=us-east-1 
-      - AWS_REGION=us-east-1 
-      - CLUSTER_NAME=mylibrarynycapp-production
-      install:
-      - pip install --user awscli
-      script:
-      - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
+        - docker buildx build -t test-docker-multistage -f Dockerfile.multistage --secret id=aws,src=$HOME/.aws/credentials --build-arg RAILS_ENV="${ENV}" .
+        - docker tag test-docker-multistage "$ECR_URL:test-docker-multistage"
+        - docker push "$ECR_URL:test-docker-multistage"
 
 env:
   global:
