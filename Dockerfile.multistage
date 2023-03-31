@@ -1,0 +1,79 @@
+FROM ruby:2.7.4 AS builder
+
+# set env vars
+ENV APP_HOME /home/app/MyLibraryNYCApp
+ENV AWS_DEFAULT_REGION=us-east-1
+
+ARG RAILS_ENV
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
+
+WORKDIR $APP_HOME
+
+# install packages
+RUN apt-get update -qq \
+    && apt-get install -y \
+    curl \
+    postgresql-client \
+    git
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash - \
+    && apt-get -y install nodejs \
+    && npm install --global yarn
+
+# bundle 
+COPY . $APP_HOME
+COPY Gemfile $APP_HOME
+COPY Gemfile.lock $APP_HOME
+
+RUN gem install bundler
+RUN bundle config --global github.https true \
+    && bundle install --jobs 30
+    #&& rm -rf vendor/bundle/ruby/2.7.4/cache/*.gem \
+    #&& find vendor/bundle/ruby/2.7.4/gems/ -name "*.c" -delete \
+    #&& find vendor/bundle/ruby/2.7.4/gems/ -name "*.o" -delete
+
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+ENV RAILS_ENV=${RAILS_ENV}
+
+RUN bundle exec rails webpacker:install
+RUN bundle exec rails webpacker:compile
+
+# webpack overwrites these files
+COPY config/webpacker.yml $APP_HOME/config/
+COPY config/webpack/environment.js $APP_HOME/config/webpack
+COPY babel.config.js $APP_HOME
+
+# Remove unneeded in resulting image
+RUN rm -rf node_modules tmp/cache test
+
+# Copy app files into a fresh new image 
+FROM ruby:2.7.4
+
+ENV APP_HOME /home/app/MyLibraryNYCApp
+ENV AWS_DEFAULT_REGION=us-east-1
+ARG RAILS_ENV
+
+WORKDIR $APP_HOME
+
+# install packages
+RUN apt-get update -qq \
+    && apt-get install -y \
+    curl \
+    postgresql-client \
+    git
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash - \
+    && apt-get -y install nodejs \
+    && npm install --global yarn
+
+COPY --from=builder $APP_HOME $APP_HOME
+COPY --from=builder /usr/local/bundle /usr/local/bundle
+
+RUN bundle config set --global path /usr/local/bundle/gems
+RUN bundle update --source logstash
+
+ENV RAILS_ENV=${RAILS_ENV}
+EXPOSE 3000
+CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
