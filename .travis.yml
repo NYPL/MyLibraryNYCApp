@@ -31,7 +31,7 @@ jobs:
         echo "region = ${AWS_DEFAULT_REGION}" >> $HOME/.aws/credentials;
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
-        - DOCKER_BUILDKIT=1 docker build -t test-docker-multistage -f Dockerfile.multistage --secret id=aws,src=$HOME/.aws/credentials --build-arg RAILS_ENV="${ENV}" .
+        - DOCKER_BUILDKIT=1 docker build -t test-docker-multistage -f Dockerfile.multistage --secret id=AWS_ACCESS_KEY_ID --secret id=AWS_SECRET_ACCESS_KEY --build-arg RAILS_ENV="${ENV}" .
         - docker tag test-docker-multistage "$ECR_URL:test-docker-multistage"
         - docker push "$ECR_URL:test-docker-multistage"
 
