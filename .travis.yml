@@ -7,7 +7,6 @@ branches:
   only:
   - qa
   - production
-  - SEB-2614/docker_ecs
 
 jobs:
   include:
@@ -32,11 +31,10 @@ jobs:
       - AWS_REGION=us-east-1 
       install:
         - pip install --user awscli
-        - echo "$ENV"
         - export LOCAL_TAG_NAME="${ENV}-latest"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
-        - docker build -t "$LOCAL_TAG_NAME" --build-arg AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" --build-arg AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" --build-arg RAILS_ENV="${ENV}" .
+        - DOCKER_BUILDKIT=1 docker build -t "$LOCAL_TAG_NAME" --secret id=AWS_ACCESS_KEY_ID --secret id=AWS_SECRET_ACCESS_KEY --build-arg RAILS_ENV="${ENV}" .
         - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
         - |
@@ -50,8 +48,8 @@ jobs:
       env:
       - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
       - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
-      - AWS_DEFAULT_REGION=us-east-1 
-      - AWS_REGION=us-east-1 
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_REGION=us-east-1
       - CLUSTER_NAME=mylibrarynycapp-qa
       install:
       - pip install --user awscli
@@ -63,8 +61,8 @@ jobs:
       env:
       - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PRODUCTION
       - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PRODUCTION
-      - AWS_DEFAULT_REGION=us-east-1 
-      - AWS_REGION=us-east-1 
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_REGION=us-east-1
       - CLUSTER_NAME=mylibrarynycapp-production
       install:
       - pip install --user awscli
