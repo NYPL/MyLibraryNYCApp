@@ -5,13 +5,13 @@ services:
 
 branches:
   only:
-  - test-docker-multistage
+  - cleanup-aws-creds-in-dockerfile
 
 jobs:
   include:
     - stage: docker build
       before_install:
-      - if [[ $TRAVIS_BRANCH == "test-docker-multistage" ]];
+      - if [[ $TRAVIS_BRANCH == "cleanup-aws-creds-in-dockerfile" ]];
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_QA};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_QA};
@@ -23,17 +23,37 @@ jobs:
       - AWS_REGION=us-east-1 
       install:
         - pip install --user awscli
-      before_script:
-      - mkdir ~/.aws;
-        echo "[default]" > $HOME/.aws/credentials;
-        echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >> $HOME/.aws/credentials;
-        echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >> $HOME/.aws/credentials;
-        echo "region = ${AWS_DEFAULT_REGION}" >> $HOME/.aws/credentials;
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
-        - DOCKER_BUILDKIT=1 docker build -t test-docker-multistage -f Dockerfile.multistage --secret id=AWS_ACCESS_KEY_ID --secret id=AWS_SECRET_ACCESS_KEY --build-arg RAILS_ENV="${ENV}" .
-        - docker tag test-docker-multistage "$ECR_URL:test-docker-multistage"
-        - docker push "$ECR_URL:test-docker-multistage"
+        - DOCKER_BUILDKIT=1 docker build -t test-docker-secrets --secret id=AWS_ACCESS_KEY_ID --secret id=AWS_SECRET_ACCESS_KEY --build-arg RAILS_ENV="${ENV}" .
+        - docker tag test-docker-secrets "$ECR_URL:test-docker-secrets"
+        - docker push "$ECR_URL:test-docker-secrets"
+
+    - stage: deploy qa
+      if: branch IN (qa) AND type != pull_request
+      env:
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_REGION=us-east-1
+      - CLUSTER_NAME=mylibrarynycapp-qa
+      install:
+      - pip install --user awscli
+      script:
+      - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
+
+    - stage: deploy production
+      if: branch IN (production) AND type != pull_request
+      env:
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PRODUCTION
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PRODUCTION
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_REGION=us-east-1
+      - CLUSTER_NAME=mylibrarynycapp-production
+      install:
+      - pip install --user awscli
+      script:
+      - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
 
 env:
   global:
