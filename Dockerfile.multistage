@@ -32,13 +32,13 @@ RUN gem install bundler
 RUN bundle config --global github.https true \
     && bundle install --jobs 30
 
-RUN bundle exec rails webpacker:install
-RUN bundle exec rails webpacker:compile
+#RUN bundle exec rails webpacker:install
+#RUN bundle exec rails webpacker:compile
 
 # webpack overwrites these files
-COPY config/webpacker.yml $APP_HOME/config/
-COPY config/webpack/environment.js $APP_HOME/config/webpack
-COPY babel.config.js $APP_HOME
+#COPY config/webpacker.yml $APP_HOME/config/
+#COPY config/webpack/environment.js $APP_HOME/config/webpack
+#COPY babel.config.js $APP_HOME
 
 # rm mounted AWS creds
 #RUN rm -f /root/.aws/credentials
