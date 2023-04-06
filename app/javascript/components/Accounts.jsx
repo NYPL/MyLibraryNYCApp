@@ -22,6 +22,8 @@ import {
   HorizontalRule,
   Label,
   Stack,
+  useColorModeValue,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 
 import validator from "validator";
@@ -43,6 +45,16 @@ export default function Accounts() {
   const [notificationIconColor, setNotificationIconColor] =
     useState("ui.black");
   const [displayNotification, setDisplayNotification] = useState("block");
+  const tableHeaderBgColor = useColorModeValue(
+    "ui.bg.default",
+    "dark.ui.bg.default"
+  );
+  const tableHeaderColor = useColorModeValue(
+    "var(--nypl-colors-ui-black)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
+  const { colorMode } = useColorMode();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     axios.defaults.headers.common["X-CSRF-TOKEN"] = document
@@ -212,7 +224,7 @@ export default function Accounts() {
           >
             <Link
               id="account-page-order-link"
-              className="accountPageTeacherSetOrder"
+              className={`${colorMode} accountPageTeacherSetOrder`}
               href={"/teacher_set_details/" + hold.teacher_set_id}
             >
               {" "}
@@ -261,8 +273,8 @@ export default function Accounts() {
             "Action",
           ]}
           showRowDividers={true}
-          columnHeadersBackgroundColor="var(--nypl-colors-ui-gray-x-light-cool)"
-          columnHeadersTextColor="var(--nypl-colors-ui-black)"
+          columnHeadersBackgroundColor={tableHeaderBgColor}
+          columnHeadersTextColor={tableHeaderColor}
           tableData={HoldsDetails()}
           id="ts-order-details-list"
         />

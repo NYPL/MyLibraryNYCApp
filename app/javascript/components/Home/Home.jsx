@@ -18,11 +18,13 @@ import {
   Notification,
   Text,
   Link,
+  useColorModeValue,
 } from "@nypl/design-system-react-components";
 
 export default function Home(props) {
   const navigate = useNavigate();
   const [keyword, setKeyWord] = useState("");
+  const heroBgColor = useColorModeValue("var(--nypl-colors-brand-primary)", "#2C1414");
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "test") {
@@ -95,7 +97,7 @@ export default function Home(props) {
               src: homeFgImg,
               id: "mln-hero-image",
             }}
-            backgroundColor="var(--nypl-colors-brand-primary)"
+            backgroundColor={heroBgColor}
           />
         </>
       }

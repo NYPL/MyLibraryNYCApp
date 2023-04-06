@@ -11,6 +11,7 @@ import {
   VStack,
   Stack,
   useNYPLBreakpoints,
+  useColorModeValue,
 } from "@nypl/design-system-react-components";
 
 export default function NewsLetter() {
@@ -19,8 +20,8 @@ export default function NewsLetter() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
   const [successFullySignedUp, setSuccessFullySignedUp] = useState(false);
-
   const { isLargerThanMobile } = useNYPLBreakpoints();
+  const newsLetterbg = useColorModeValue("ui.bg.default", "dark.ui.bg.default");
 
   const handleNewsLetterEmail = (event) => {
     setEmail(event.target.value);
@@ -142,7 +143,7 @@ export default function NewsLetter() {
   };
 
   return (
-    <Box bg="ui.bg.default" p="l">
+    <Box bg={newsLetterbg} p="l">
       {newLetterSignup()}
     </Box>
   );

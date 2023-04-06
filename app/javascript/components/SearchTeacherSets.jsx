@@ -29,9 +29,8 @@ import {
   SkeletonLoader,
   useNYPLBreakpoints,
   TagSet,
-  VStack,
-  HStack,
   Notification,
+  useColorModeValue,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -49,6 +48,11 @@ export default function SearchTeacherSets(props) {
     queryParamsHash[entry[0]] = entry[1];
     queryParams.push(queryParamsHash);
   }
+
+  const facetBoxColor = useColorModeValue(
+    "var(--nypl-colors-ui-black)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
 
   const [teacherSets, setTeacherSets] = useState([]);
   const [facets, setFacets] = useState([]);
@@ -73,7 +77,8 @@ export default function SearchTeacherSets(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
   const [resetPageNumber, setResetPageNumber] = useState("");
-  const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] = useState("");
+  const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] =
+    useState("");
   const location = useLocation();
 
   useEffect(() => {
@@ -146,7 +151,6 @@ export default function SearchTeacherSets(props) {
         tagSets["label"] = ts["keyword"];
         tagSets["keyword"] = [ts["language"]];
       }
-
       tagSetsArr.push(tagSets);
     });
 
@@ -482,7 +486,7 @@ export default function SearchTeacherSets(props) {
         );
       });
     } else {
-      return <></>
+      return <></>;
     }
   };
 
@@ -528,7 +532,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const availableResults = () => {
-    window.scrollTo(428, 428)
+    window.scrollTo(428, 428);
     if (availableToggle === true) {
       setAvailableToggle(false);
       setAvailability("");
@@ -554,7 +558,7 @@ export default function SearchTeacherSets(props) {
       searchParams.set("grade_begin", gradeBeginVal);
       searchParams.set("grade_end", gradeEndVal);
       setSearchParams(searchParams);
-      window.scrollTo(428, 428)
+      window.scrollTo(428, 428);
     }
   };
 
@@ -587,7 +591,7 @@ export default function SearchTeacherSets(props) {
         showHelperInvalidText
         showLabel
         showValues={false}
-        value={rangeValues}
+        value={[parseInt(grade_begin), parseInt(grade_end)]}
       />
     );
   };
@@ -644,16 +648,16 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("subjects");
     searchParams.delete("grade_begin");
     searchParams.delete("grade_end");
-    setGrades(-1, 12)
     setSearchParams(searchParams);
+    setGradeBegin(-1);
+    setGradeEnd(12);
+    setRangevalues([-1, 12]);
     window.scrollTo({ top: 428, behavior: "smooth" });
-  }
+  };
 
   const teacherSetSideBarResults = () => {
-    const bgColor = isLargerThanMedium
-      ? "var(--nypl-colors-ui-gray-x-light-cool)"
-      : "";
-    const clearFilteMargin = isLargerThanMobile? "xl" : "84px"
+    const bgColor = isLargerThanMedium ? { facetBoxColor } : "";
+    const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
     return (
       <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
         <div>{tsRefineResultsHeading()}</div>
@@ -667,8 +671,9 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
-      <div>
-          <Button buttonType="text"
+        <div>
+          <Button
+            buttonType="text"
             id="clear-filters-button-id"
             size="medium"
             type="button"
@@ -863,19 +868,19 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  const teacherSetFilterTags = () => {
-    const subjects = new URLSearchParams(location.search).get("subjects");
+  // const teacherSetFilterTags = () => {
+  //   const subjects = new URLSearchParams(location.search).get("subjects");
 
-    if (subjects !== null) {
-      subjects.split(",").map((value) => {
-        if (tsSubjects[value] !== undefined) {
-          const subjectsHash = {};
-          subjectsHash["label"] ||= tsSubjects[value];
-          subjectsHash["subjects"] ||= [tsSubjects[value]];
-          teacherSetArr.push(subjectsHash);
-        }
-      });
-    }
+  //   if (subjects !== null) {
+  //     subjects.split(",").map((value) => {
+  //       if (tsSubjects[value] !== undefined) {
+  //         const subjectsHash = {};
+  //         subjectsHash["label"] ||= tsSubjects[value];
+  //         subjectsHash["subjects"] ||= [tsSubjects[value]];
+  //         teacherSetArr.push(subjectsHash);
+  //       }
+  //     });
+  //   }
 
     // teacherSetArr.map((value) => {
     //   //console.log(value["grade_begin"])
@@ -916,45 +921,46 @@ export default function SearchTeacherSets(props) {
     );
   };
 
-  const tagSetsData = () => {
-    const queryValue = new URLSearchParams(location.search);
-    const areaOfStudy = queryValue.get("area of study");
-    const availability = queryValue.get("availability");
-    const language = queryValue.get("language");
-    const keyword = queryValue.get("keyword");
-    const subjects = queryValue.get("subjects");
-    const setType = queryValue.get("set type");
-    const gradeBegin = queryValue.get("grade_begin");
-    const gradeEnd = queryValue.get("grade_end");
+  // This code is useful when tagSet enabled.
+  // const tagSetsData = () => {
+  //   const queryValue = new URLSearchParams(location.search);
+  //   const areaOfStudy = queryValue.get("area of study");
+  //   const availability = queryValue.get("availability");
+  //   const language = queryValue.get("language");
+  //   const keyword = queryValue.get("keyword");
+  //   const subjects = queryValue.get("subjects");
+  //   const setType = queryValue.get("set type");
+  //   const gradeBegin = queryValue.get("grade_begin");
+  //   const gradeEnd = queryValue.get("grade_end");
 
-    if (
-      areaOfStudy !== null ||
-      availability !== null ||
-      language !== null ||
-      keyword !== null ||
-      subjects !== null ||
-      setType !== null ||
-      gradeBegin !== null ||
-      gradeEnd !== null
-    ) {
-      return (
-        <VStack align="stretch">
-          <div>
-            <HorizontalRule align="left" marginTop="0px" />
-          </div>
-          <div>
-            <HStack mb="s" data-testid="tagSetResultsDisplay">
-              <span>Fiters Applied</span>
-              {teacherSetFilterTags()}
-            </HStack>
-          </div>
-          <div>
-            <HorizontalRule align="left" className="paginationHR" />
-          </div>
-        </VStack>
-      );
-    }
-  };
+  //   if (
+  //     areaOfStudy !== null ||
+  //     availability !== null ||
+  //     language !== null ||
+  //     keyword !== null ||
+  //     subjects !== null ||
+  //     setType !== null ||
+  //     gradeBegin !== null ||
+  //     gradeEnd !== null
+  //   ) {
+  //     return (
+  //       <VStack align="stretch">
+  //         <div>
+  //           <HorizontalRule align="left" marginTop="0px" />
+  //         </div>
+  //         <div>
+  //           <HStack mb="s" data-testid="tagSetResultsDisplay">
+  //             <span>Fiters Applied</span>
+  //             {teacherSetFilterTags()}
+  //           </HStack>
+  //         </div>
+  //         <div>
+  //           <HorizontalRule align="left" className="paginationHR" />
+  //         </div>
+  //       </VStack>
+  //     );
+  //   }
+  // };
 
   const tsDetails = () => {
     if (isLoading && teacherSetDataNotRetrievedMsg === "") {
@@ -1123,29 +1129,29 @@ export default function SearchTeacherSets(props) {
   };
 
   const clearSearchKeyword = () => {
-    setKeyWord("")
+    setKeyWord("");
     searchParams.delete("keyword");
     setSearchParams(searchParams);
-  } 
+  };
 
   // {tagSetsData()}
 
   const tsDataNotRetrievedMsg = () => {
     if (teacherSetDataNotRetrievedMsg !== "") {
-      return <Notification
-        marginTop="l"
-        icon={<Icon name="alertWarningFilled" color="ui.warning.primary" />}
-        ariaLabel="SignOut Notification"
-        id="sign-out-notification"
-        notificationType="announcement"
-        notificationContent={
-          teacherSetDataNotRetrievedMsg
-        }
-      />
+      return (
+        <Notification
+          marginTop="l"
+          icon={<Icon name="alertWarningFilled" color="ui.warning.primary" />}
+          ariaLabel="SignOut Notification"
+          id="sign-out-notification"
+          notificationType="announcement"
+          notificationContent={teacherSetDataNotRetrievedMsg}
+        />
+      );
     } else {
       return null;
     }
-  }
+  };
 
   return (
     <TemplateAppContainer
@@ -1176,7 +1182,7 @@ export default function SearchTeacherSets(props) {
               placeholder: "Enter a teacher set name",
               value: keyword,
               isClearable: "true",
-              isClearableCallback: clearSearchKeyword
+              isClearableCallback: clearSearchKeyword,
             }}
           />
           <div>{tsDataNotRetrievedMsg()}</div>

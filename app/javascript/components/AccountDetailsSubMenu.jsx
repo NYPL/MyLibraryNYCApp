@@ -1,16 +1,34 @@
 import React, { useState } from "react";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { List, Icon, Link, Box } from "@nypl/design-system-react-components";
+import {
+  List,
+  Icon,
+  Link,
+  Box,
+  useColorMode,
+  useColorModeValue,
+} from "@nypl/design-system-react-components";
 
 function AccountDetailsSubMenu(props) {
   const navigate = useNavigate();
+  const { colorMode } = useColorMode();
   //const [user_signed_in, setUserSignedIn] = useState(props.userSignedIn);
   const [showAboutMenu, setShowAboutMenu] = useState(false);
 
   const handleHover = () => {
     setShowAboutMenu(true);
   };
+
+  const signInIconColor = useColorModeValue(
+    "var(--nypl-colors-ui-black)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
+
+  const accountIconColor = useColorModeValue(
+    "var(--nypl-colors-ui-gray-dark)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
 
   const showAccountSigninLink = () => {
     if (props.userSignedIn) {
@@ -19,13 +37,13 @@ function AccountDetailsSubMenu(props) {
           <Link
             href="/account_details"
             marginRight="m"
-            className="nav-link-colors navBarDropDown"
+            className={`${colorMode} nav-link-colors navBarDropDown`}
             onMouseEnter={handleHover}
           >
             <Icon
               className="navBarIcon"
               align="right"
-              color="ui.black"
+              color={signInIconColor}
               decorative
               iconRotation="rotate0"
               id="icon-id"
@@ -38,6 +56,7 @@ function AccountDetailsSubMenu(props) {
               id="account-arrow-drop-down"
               size="small"
               className="navBarIcon"
+              color={signInIconColor}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                 <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
@@ -52,13 +71,13 @@ function AccountDetailsSubMenu(props) {
           <Link
             href="/signin"
             marginRight="m"
-            className="nav-link-colors navBarDropDown"
+            className={`${colorMode} nav-link-colors navBarDropDown`}
             onMouseEnter={handleHover}
           >
             <Icon
-              className="navBarIcon"
+              className={`${colorMode} navBarIcon`}
               align="right"
-              color="ui.black"
+              color={signInIconColor}
               decorative
               iconRotation="rotate0"
               id="icon-id"
@@ -70,7 +89,8 @@ function AccountDetailsSubMenu(props) {
             <Icon
               id="signin-arrow-drop-down"
               size="small"
-              className="navBarIcon"
+              color={signInIconColor}
+              className={`${colorMode} navBarIcon`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                 <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
@@ -117,17 +137,17 @@ function AccountDetailsSubMenu(props) {
             type="ol"
             inline={false}
             noStyling={false}
-            className="nav__submenu account_details"
+            className={`${colorMode} nav__submenu account_details`}
           >
-            <li className="nav__submenu-item">
+            <li className={`${colorMode} nav__submenu-item`}>
               <Link
-                className="navBarDropDown textDecorationNone"
+                className={`${colorMode} textDecorationNone navBarDropDown`}
                 href="/account_details"
               >
                 <Icon
                   align="right"
                   className="navBarIcon"
-                  color="var(--nypl-colors-ui-gray-dark)"
+                  color={accountIconColor}
                   decorative
                   iconRotation="rotate0"
                   id="icon-id"
@@ -139,15 +159,15 @@ function AccountDetailsSubMenu(props) {
               </Link>
             </li>
 
-            <li className="nav__submenu-item">
+            <li className={`${colorMode} nav__submenu-item`}>
               <Link
-                className="navBarDropDown textDecorationNone"
+                className={`${colorMode} textDecorationNone navBarDropDown`}
                 href="/account_details"
               >
                 <Icon
                   align="right"
                   className="navBarIcon"
-                  color="var(--nypl-colors-ui-gray-dark)"
+                  color={accountIconColor}
                   decorative
                   iconRotation="rotate0"
                   id="icon-id"
@@ -159,15 +179,15 @@ function AccountDetailsSubMenu(props) {
               </Link>
             </li>
 
-            <li className="nav__submenu-item">
+            <li className={`${colorMode} nav__submenu-item`}>
               <ReactRouterLink
-                className="navBarDropDown textDecorationNone"
+                className={`${colorMode} textDecorationNone navBarDropDown`}
                 onClick={signOut}
               >
                 <Icon
                   align="right"
                   className="navBarIcon"
-                  color="var(--nypl-colors-ui-gray-dark)"
+                  color={accountIconColor}
                   decorative
                   iconRotation="rotate0"
                   id="icon-id"
@@ -190,27 +210,27 @@ function AccountDetailsSubMenu(props) {
             type="ol"
             inline={false}
             noStyling={false}
-            className="nav__submenu signin_details"
+            className={`${colorMode} nav__submenu signin_details`}
           >
-            <li className="nav__submenu-item">
+            <li className={`${colorMode} nav__submenu-item`}>
               <Link
                 href="/signin"
                 type="buttonPrimary"
-                className="textDecorationNone signin_nav_button"
+                className={`${colorMode} textDecorationNone signin_nav_button`}
               >
                 Sign In
               </Link>
             </li>
 
-            <li className="nav__submenu-item">
+            <li className={`${colorMode} nav__submenu-item`}>
               <Link
-                className="navBarDropDown textDecorationNone"
+                className={`${colorMode} navBarDropDown textDecorationNone`}
                 href="/signin?settingType=account"
               >
                 <Icon
                   className="navBarIcon"
                   align="right"
-                  color="var(--nypl-colors-ui-gray-dark)"
+                  color={accountIconColor}
                   decorative
                   iconRotation="rotate0"
                   id="icon-id"
@@ -221,15 +241,15 @@ function AccountDetailsSubMenu(props) {
                 My Account
               </Link>
             </li>
-            <li className="nav__submenu-item">
+            <li className={`${colorMode} nav__submenu-item`}>
               <Link
-                className="navBarDropDown textDecorationNone"
+                className={`${colorMode} navBarDropDown textDecorationNone`}
                 href="/signup"
               >
                 <Icon
                   className="navBarIcon"
                   align="right"
-                  color="var(--nypl-colors-ui-gray-dark)"
+                  color={accountIconColor}
                   decorative
                   iconRotation="rotate0"
                   id="icon-id"

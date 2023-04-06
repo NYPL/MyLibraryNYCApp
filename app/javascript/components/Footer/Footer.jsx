@@ -6,10 +6,13 @@ import {
   useNYPLBreakpoints,
   VStack,
   HStack,
+  useColorModeValue,
+  Box,
 } from "@nypl/design-system-react-components";
 
 function Footer() {
   const { isLargerThanMobile } = useNYPLBreakpoints();
+  const footerBgColor = useColorModeValue("ui.bg.default", "dark.ui.bg.default");
 
   const footerLinks = () => {
     return (
@@ -196,7 +199,7 @@ function Footer() {
   };
 
   return (
-    <div className="app-footer">
+    <Box className="app-footer" bg={footerBgColor}>
       <Center id="mln-footer-data" paddingTop="xxl">
         {footerData()}
       </Center>
@@ -221,7 +224,7 @@ function Footer() {
           Privacy Policy
         </Link>
       </Center>
-    </div>
+    </Box>
   );
 }
 

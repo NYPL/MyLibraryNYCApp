@@ -12,6 +12,7 @@ import {
   HStack,
   TemplateAppContainer,
   HorizontalRule,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -22,6 +23,7 @@ export default function TeacherSetOrder() {
   const [hold, setHold] = useState("");
   const [teacher_set, setTeacherSet] = useState("");
   const [comment, setComment] = useState("");
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -104,7 +106,7 @@ export default function TeacherSetOrder() {
               buttonType="secondary"
             >
               <Link
-                className="cancelOrderButton"
+                className={`${colorMode} cancelOrderButton`}
                 href={"/ordered_holds/" + access_key}
               >
                 {" "}

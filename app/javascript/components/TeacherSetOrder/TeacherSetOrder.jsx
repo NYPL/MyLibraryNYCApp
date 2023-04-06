@@ -12,6 +12,7 @@ import {
   Icon,
   TemplateAppContainer,
   HorizontalRule,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 
 export default function TeacherSetOrder(props) {
@@ -19,6 +20,7 @@ export default function TeacherSetOrder(props) {
   const navigate = useNavigate();
   const [hold, setHold] = useState(props.holddetails);
   const [teacherSet, setTeacherSet] = useState(props.teachersetdetails);
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -67,7 +69,7 @@ export default function TeacherSetOrder(props) {
           onClick={() => window.scrollTo({ top: 10 })}
         >
           <Link
-            className="cancelOrderButton"
+            className={`${colorMode} cancelOrderButton`}
             href={"/holds/" + params["access_key"] + "/cancel"}
           >
             {" "}
