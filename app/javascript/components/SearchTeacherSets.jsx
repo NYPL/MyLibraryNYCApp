@@ -31,6 +31,7 @@ import {
   TagSet,
   Notification,
   useColorModeValue,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -50,10 +51,11 @@ export default function SearchTeacherSets(props) {
   }
 
   const facetBoxColor = useColorModeValue(
-    "var(--nypl-colors-ui-black)",
-    "var(--nypl-colors-dark-ui-typography-heading)"
+    "var(--nypl-colors-ui-gray-x-light-cool)",
+    "var(--nypl-colors-dark-ui-bg-page)"
   );
 
+  const { colorMode } = useColorMode();
   const [teacherSets, setTeacherSets] = useState([]);
   const [facets, setFacets] = useState([]);
   // const [tagSets, setTagSets] = useState([]);
@@ -480,7 +482,7 @@ export default function SearchTeacherSets(props) {
               marginBottom="l"
               id={"ts-horizontal-rule-" + i}
               align="left"
-              className="tsDetailHorizontalLine"
+              className={`${colorMode} tsDetailHorizontalLine`}
             />
           </div>
         );
@@ -656,10 +658,11 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetSideBarResults = () => {
-    const bgColor = isLargerThanMedium ? { facetBoxColor } : "";
+    const bgColor = isLargerThanMedium ? facetBoxColor : "";
     const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
     return (
-      <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
+      <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)"
+      className={`${colorMode} tsFacetsBorderColor`}>
         <div>{tsRefineResultsHeading()}</div>
         <Toggle
           id="toggle"
@@ -882,44 +885,44 @@ export default function SearchTeacherSets(props) {
   //     });
   //   }
 
-    // teacherSetArr.map((value) => {
-    //   //console.log(value["grade_begin"])
+  // teacherSetArr.map((value) => {
+  //   //console.log(value["grade_begin"])
 
-    //   if (
-    //     value["grade_begin"] !== undefined ||
-    //     value["grade_end"] !== undefined
-    //   ) {
-    //     if (value["grade_begin"] !== undefined) {
-    //       const g_begin = value["label"];
-    //     }
+  //   if (
+  //     value["grade_begin"] !== undefined ||
+  //     value["grade_end"] !== undefined
+  //   ) {
+  //     if (value["grade_begin"] !== undefined) {
+  //       const g_begin = value["label"];
+  //     }
 
-    //     if (value["grade_end"] !== undefined) {
-    //       const g_end = value["label"];
-    //     }
-    //   }
+  //     if (value["grade_end"] !== undefined) {
+  //       const g_end = value["label"];
+  //     }
+  //   }
 
-    //   teacherSetArr.push(value);
-    // });
+  //   teacherSetArr.push(value);
+  // });
 
-    //console.log(teacherSetArr)
+  //console.log(teacherSetArr)
 
-    let result = teacherSetArr.filter(
-      (person, index) =>
-        index ===
-        teacherSetArr.findIndex((other) => person.label === other.label)
-    );
+  //   let result = teacherSetArr.filter(
+  //     (person, index) =>
+  //       index ===
+  //       teacherSetArr.findIndex((other) => person.label === other.label)
+  //   );
 
-    return (
-      <TagSet
-        id="tagSet-id-filter"
-        isDismissible
-        onClick={closeTeacherSetTag}
-        tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
-        type="filter"
-        marginBottom="m"
-      />
-    );
-  };
+  //   return (
+  //     <TagSet
+  //       id="tagSet-id-filter"
+  //       isDismissible
+  //       onClick={closeTeacherSetTag}
+  //       tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
+  //       type="filter"
+  //       marginBottom="m"
+  //     />
+  //   );
+  // };
 
   // This code is useful when tagSet enabled.
   // const tagSetsData = () => {
@@ -1167,7 +1170,7 @@ export default function SearchTeacherSets(props) {
           />
           <HorizontalRule
             id="ts-horizontal-rule"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
           <SearchBar
             id="ts-search"
@@ -1176,10 +1179,10 @@ export default function SearchTeacherSets(props) {
             onSubmit={(event) => handleSubmit(event)}
             textInputProps={{
               id: "search-teacher-set",
-              labelText: "Enter a teacher set name",
+              labelText: "Enter search terms",
               name: "TeacherSetInputName",
               onChange: handleSearchKeyword,
-              placeholder: "Enter a teacher set name",
+              placeholder: "Enter search terms",
               value: keyword,
               isClearable: "true",
               isClearableCallback: clearSearchKeyword,

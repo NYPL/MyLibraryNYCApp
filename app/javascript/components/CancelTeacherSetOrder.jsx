@@ -132,7 +132,7 @@ export default function TeacherSetOrder() {
           />
           <HorizontalRule
             id="ts-cancel-order-horizontal=line"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
           <div>
             Review your order details below and verify this is the order you

@@ -565,6 +565,11 @@ ul.list li:before {
   height: 3px !important;
 }
 
+.dark.teacherSetHorizontal {
+  background-color: var(--nypl-colors-dark-brand-primary) !important;
+  height: 3px !important;
+}
+
 .cardImage {
   width: 56px;
   height: 40px;
@@ -822,7 +827,7 @@ $submenu-width: 245px;
   background-color: var(--nypl-colors-dark-ui-bg-default);
   font-weight: 300;
   text-transform: none;
-  display: none;
+ // display: none;
   position: absolute;
   min-width: $submenu-width;
   z-index: 1;
@@ -873,6 +878,10 @@ $submenu-width: 245px;
   color: var(--nypl-colors-dark-ui-typography-heading) !important;
 }
 
+.signinNavArrow {
+  margin-bottom: 3px;
+}
+
 .teacher_set_pagination {
   justify-content: center;
 }
@@ -907,12 +916,27 @@ $submenu-width: 245px;
   color: #000000 !important;
 }
 
+.navBarSignIn {
+  align-items: center;
+  color: #000000 !important;
+}
+
+.dark.navBarSignIn {
+  align-items: center;
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
 .dark.navBarDropDown {
   color: var(--nypl-colors-dark-ui-typography-heading) !important;
 }
 
 .tsDetailHorizontalLine {
-  color: var(--nypl-colors-ui-gray-light-cool);
+  background-color: #D23B42 !important;
+  height: 1px;
+}
+
+.dark.tsDetailHorizontalLine {
+  background-color: var(--nypl-colors-dark-brand-primary) !important;
   height: 1px;
 }
 
@@ -1012,12 +1036,6 @@ $submenu-width: 245px;
   margin-bottom: 0px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .visitOurText {
-    color: var(--nypl-colors-ui-black) !important;
-  }
-}
-
 .accountPageCancelOrder {
   text-decoration: none !important;
   color: var(--nypl-colors-ui-white) !important;
@@ -1061,6 +1079,12 @@ $submenu-width: 245px;
   }
 }
 
+.dark.hrefLink {
+  a {
+    color: var(--nypl-colors-dark-ui-link-primary) !important;
+  }
+}
+
 .paginationHR {
   margin-top: -10px !important;
 }
@@ -1077,4 +1101,16 @@ $submenu-width: 245px;
   margin-left: -20px !important;
   text-decoration: underline !important;
   font-size: 16px !important;
+}
+
+.tsFacetsBorderColor {
+  border: none;
+}
+
+.dark.tsFacetsBorderColor {
+  border: 1px solid #E9E9E9;
+}
+
+#mln-navbar-list {
+  align-items: center;
 }

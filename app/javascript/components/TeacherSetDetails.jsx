@@ -474,7 +474,7 @@ export default function TeacherSetDetails(props) {
                 noSpace
                 level="two"
                 size="secondary"
-                text="Order Set!"
+                text="Order Set"
               />
               <Heading
                 id="ts-available-copies"
@@ -683,7 +683,7 @@ export default function TeacherSetDetails(props) {
           <HorizontalRule
             marginTop="s"
             id="ts-detail-page-horizontal-rule-id"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
 
           <Flex alignItems="baseline">

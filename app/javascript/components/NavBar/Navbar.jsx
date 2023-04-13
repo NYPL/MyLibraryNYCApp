@@ -18,6 +18,7 @@ import AccountDetailsSubMenu from "./../AccountDetailsSubMenu";
 export default function Navbar(props) {
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
+  const mlnLogo = useColorModeValue("mlnColor", "mlnWhite");
 
   const socialMediaIconColor = useColorModeValue(
     "var(--nypl-colors-ui-black)",
@@ -41,7 +42,7 @@ export default function Navbar(props) {
             id="mln-nav-bar-header-logo"
             marginLeft="m"
             decorative
-            name="mlnColor"
+            name={mlnLogo}
             size="small"
           />
         </Link>

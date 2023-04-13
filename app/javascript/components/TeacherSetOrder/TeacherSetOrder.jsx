@@ -99,7 +99,7 @@ export default function TeacherSetOrder(props) {
           />
           <HorizontalRule
             id="ts-detail-page-horizontal-rulel"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
           {OrderMessage()}
           <TeacherSetOrderDetails
