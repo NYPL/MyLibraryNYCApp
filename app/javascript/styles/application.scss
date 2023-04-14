@@ -207,6 +207,10 @@ $nypl-breakpoint-xxlarge: 1600px;
   font-weight: 500;
 }
 
+.dark.nav-link-colors {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
 .nav-links {
   margin-left: 1.2em;
 }
@@ -544,7 +548,6 @@ ul.list li:before {
   color: #000000;
 }
 
-
 .faq_list {
   padding: 25px 0px;
 }
@@ -559,6 +562,11 @@ ul.list li:before {
 
 .teacherSetHorizontal {
   background-color: #D23B42 !important;
+  height: 3px !important;
+}
+
+.dark.teacherSetHorizontal {
+  background-color: var(--nypl-colors-dark-brand-primary) !important;
   height: 3px !important;
 }
 
@@ -701,6 +709,11 @@ ul.list li:before {
   text-decoration: underline;
 }
 
+.dark.hrefBlackColor {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+  text-decoration: underline;
+}
+
 .footerImage {
   margin: 0 5px;
 }
@@ -785,6 +798,19 @@ $submenu-width: 245px;
   }
 }
 
+.dark.nav__menu-item {
+  display: inline-block;
+  position: relative;
+
+  &:hover {
+    background-color: var(--nypl-colors-dark-ui-bg-default);
+    .dark.nav__submenu {
+      display: block;
+      background-color: var(--nypl-colors-dark-ui-bg-default);
+    }
+  }
+}
+
 .nav__submenu {
   font-weight: 300;
   text-transform: none;
@@ -792,6 +818,18 @@ $submenu-width: 245px;
   position: absolute;
   min-width: $submenu-width;
   background: #FFFFFF;
+  z-index: 1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+}
+
+.dark.nav__submenu {
+  background-color: var(--nypl-colors-dark-ui-bg-default);
+  font-weight: 300;
+  text-transform: none;
+ // display: none;
+  position: absolute;
+  min-width: $submenu-width;
   z-index: 1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
@@ -820,9 +858,28 @@ $submenu-width: 245px;
   }
 }
 
+.dark.nav__submenu-item {
+  color: var(--nypl-colors-dark-ui-typography-heading);
+  margin-bottom: 16px;
+  margin-top: 16px !important;
+  padding-right: 20px;
+  &:hover {
+    background: hsba(0, 0%, 0%, 0.25);
+    /*text-decoration: underline;*/
+  }
+}
+
 .signin_nav_button {
   width: 100% !important;
   background-color: var(--nypl-colors-ui-black) !important;
+}
+
+.dark.signin_nav_button {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
+.signinNavArrow {
+  margin-bottom: 3px;
 }
 
 .teacher_set_pagination {
@@ -859,8 +916,27 @@ $submenu-width: 245px;
   color: #000000 !important;
 }
 
+.navBarSignIn {
+  align-items: center;
+  color: #000000 !important;
+}
+
+.dark.navBarSignIn {
+  align-items: center;
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
+.dark.navBarDropDown {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
 .tsDetailHorizontalLine {
-  color: var(--nypl-colors-ui-gray-light-cool);
+  background-color: #D23B42 !important;
+  height: 1px;
+}
+
+.dark.tsDetailHorizontalLine {
+  background-color: var(--nypl-colors-dark-brand-primary) !important;
   height: 1px;
 }
 
@@ -947,6 +1023,11 @@ $submenu-width: 245px;
   color: var(--nypl-colors-ui-black) !important;
 }
 
+.dark.cancelOrderButton {
+  text-decoration: none !important;
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
 .cancelOrderDate {
   display: "none";
 }
@@ -963,6 +1044,11 @@ $submenu-width: 245px;
 .accountPageTeacherSetOrder {
   text-decoration: none !important;
   color: var(--nypl-colors-ui-black) !important;
+}
+
+.dark.accountPageTeacherSetOrder {
+  text-decoration: none !important;
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
 }
 
 .maxContent {
@@ -993,6 +1079,12 @@ $submenu-width: 245px;
   }
 }
 
+.dark.hrefLink {
+  a {
+    color: var(--nypl-colors-dark-ui-link-primary) !important;
+  }
+}
+
 .paginationHR {
   margin-top: -10px !important;
 }
@@ -1009,4 +1101,16 @@ $submenu-width: 245px;
   margin-left: -20px !important;
   text-decoration: underline !important;
   font-size: 16px !important;
+}
+
+.tsFacetsBorderColor {
+  border: none;
+}
+
+.dark.tsFacetsBorderColor {
+  border: 1px solid #E9E9E9;
+}
+
+#mln-navbar-list {
+  align-items: center;
 }

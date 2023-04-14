@@ -29,9 +29,9 @@ import {
   SkeletonLoader,
   useNYPLBreakpoints,
   TagSet,
-  VStack,
-  HStack,
   Notification,
+  useColorModeValue,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -50,6 +50,12 @@ export default function SearchTeacherSets(props) {
     queryParams.push(queryParamsHash);
   }
 
+  const facetBoxColor = useColorModeValue(
+    "var(--nypl-colors-ui-gray-x-light-cool)",
+    "var(--nypl-colors-dark-ui-bg-page)"
+  );
+
+  const { colorMode } = useColorMode();
   const [teacherSets, setTeacherSets] = useState([]);
   const [facets, setFacets] = useState([]);
   // const [tagSets, setTagSets] = useState([]);
@@ -73,7 +79,8 @@ export default function SearchTeacherSets(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
   const [resetPageNumber, setResetPageNumber] = useState("");
-  const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] = useState("");
+  const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] =
+    useState("");
   const location = useLocation();
 
   useEffect(() => {
@@ -146,7 +153,6 @@ export default function SearchTeacherSets(props) {
         tagSets["label"] = ts["keyword"];
         tagSets["keyword"] = [ts["language"]];
       }
-
       tagSetsArr.push(tagSets);
     });
 
@@ -476,13 +482,13 @@ export default function SearchTeacherSets(props) {
               marginBottom="l"
               id={"ts-horizontal-rule-" + i}
               align="left"
-              className="tsDetailHorizontalLine"
+              className={`${colorMode} tsDetailHorizontalLine`}
             />
           </div>
         );
       });
     } else {
-      return <></>
+      return <></>;
     }
   };
 
@@ -528,7 +534,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const availableResults = () => {
-    window.scrollTo(428, 428)
+    window.scrollTo(428, 428);
     if (availableToggle === true) {
       setAvailableToggle(false);
       setAvailability("");
@@ -554,7 +560,7 @@ export default function SearchTeacherSets(props) {
       searchParams.set("grade_begin", gradeBeginVal);
       searchParams.set("grade_end", gradeEndVal);
       setSearchParams(searchParams);
-      window.scrollTo(428, 428)
+      window.scrollTo(428, 428);
     }
   };
 
@@ -587,7 +593,7 @@ export default function SearchTeacherSets(props) {
         showHelperInvalidText
         showLabel
         showValues={false}
-        value={rangeValues}
+        value={[parseInt(grade_begin), parseInt(grade_end)]}
       />
     );
   };
@@ -644,18 +650,23 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("subjects");
     searchParams.delete("grade_begin");
     searchParams.delete("grade_end");
-    setGrades(-1, 12)
     setSearchParams(searchParams);
+    setGradeBegin(-1);
+    setGradeEnd(12);
+    setRangevalues([-1, 12]);
     window.scrollTo({ top: 428, behavior: "smooth" });
-  }
+  };
 
   const teacherSetSideBarResults = () => {
-    const bgColor = isLargerThanMedium
-      ? "var(--nypl-colors-ui-gray-x-light-cool)"
-      : "";
-    const clearFilteMargin = isLargerThanMobile? "xl" : "84px"
+    const bgColor = isLargerThanMedium ? facetBoxColor : "";
+    const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
     return (
-      <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)">
+      <Box
+        id="ts-all-facets"
+        bg={bgColor}
+        padding="var(--nypl-space-s)"
+        className={`${colorMode} tsFacetsBorderColor`}
+      >
         <div>{tsRefineResultsHeading()}</div>
         <Toggle
           id="toggle"
@@ -667,8 +678,9 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
-      <div>
-          {/* <Button buttonType="text"
+        {/* <div>
+          <Button
+            buttonType="text"
             id="clear-filters-button-id"
             size="medium"
             type="button"
@@ -677,8 +689,8 @@ export default function SearchTeacherSets(props) {
             onClick={clearFilters}
           >
             Clear Filters
-          </Button> */}
-        </div>
+          </Button>
+        </div> */}
       </Box>
     );
   };
@@ -787,174 +799,175 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  const closeTeacherSetTag = (value) => {
-    if (value === "clearFilters") {
-      setTeacherSetArr([]);
-      searchParams.delete("language");
-      searchParams.delete("area of study");
-      searchParams.delete("set type");
-      searchParams.delete("availability");
-      searchParams.delete("subjects");
-      searchParams.delete("grade_begin");
-      searchParams.delete("grade_end");
-      searchParams.delete("keyword");
-      setSearchParams(searchParams);
-      //const data = teacherSetArr.filter((element) => element.label !== value);
-    } else {
-      //const subjects = new URLSearchParams(location.search).get("subjects")
-      //console.log(subjects)
+  // const closeTeacherSetTag = (value) => {
+  //   if (value === "clearFilters") {
+  //     setTeacherSetArr([]);
+  //     searchParams.delete("language");
+  //     searchParams.delete("area of study");
+  //     searchParams.delete("set type");
+  //     searchParams.delete("availability");
+  //     searchParams.delete("subjects");
+  //     searchParams.delete("grade_begin");
+  //     searchParams.delete("grade_end");
+  //     searchParams.delete("keyword");
+  //     setSearchParams(searchParams);
+  //     //const data = teacherSetArr.filter((element) => element.label !== value);
+  //   } else {
+  //     //const subjects = new URLSearchParams(location.search).get("subjects")
+  //     //console.log(subjects)
 
-      const data = teacherSetArr.filter((element) => element.label !== value);
-      const deleteQueryParams = teacherSetArr
-        .filter((element) => element.label === value)
-        .flatMap(Object.keys);
+  //     const data = teacherSetArr.filter((element) => element.label !== value);
+  //     const deleteQueryParams = teacherSetArr
+  //       .filter((element) => element.label === value)
+  //       .flatMap(Object.keys);
 
-      deleteQueryParams.map((item) => {
-        if (item === "language") {
-          searchParams.delete("language");
-          setSearchParams(searchParams);
-        } else if (item === "area of study") {
-          searchParams.delete("area of study");
-          setSearchParams(searchParams);
-        } else if (item === "availability") {
-          searchParams.delete("availability");
-          setSearchParams(searchParams);
-        } else if (item === "keyword") {
-          searchParams.delete("keyword");
-          setSearchParams(searchParams);
-        } else if (item === "set type") {
-          searchParams.delete("set type");
-          setSearchParams(searchParams);
-        } else if (item === "subjects") {
-          const subjects = new URLSearchParams(location.search).get("subjects");
-          const subArr = [];
+  //     deleteQueryParams.map((item) => {
+  //       if (item === "language") {
+  //         searchParams.delete("language");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "area of study") {
+  //         searchParams.delete("area of study");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "availability") {
+  //         searchParams.delete("availability");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "keyword") {
+  //         searchParams.delete("keyword");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "set type") {
+  //         searchParams.delete("set type");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "subjects") {
+  //         const subjects = new URLSearchParams(location.search).get("subjects");
+  //         const subArr = [];
 
-          if (subjects !== null) {
-            subjects.split(",").map((subId) => {
-              if (
-                tsSubjects[subId] !== undefined &&
-                tsSubjects[subId] !== value
-              ) {
-                subArr.push(subId);
-              }
-            });
+  //         if (subjects !== null) {
+  //           subjects.split(",").map((subId) => {
+  //             if (
+  //               tsSubjects[subId] !== undefined &&
+  //               tsSubjects[subId] !== value
+  //             ) {
+  //               subArr.push(subId);
+  //             }
+  //           });
 
-            searchParams.set("subjects", subArr);
-            setSearchParams(searchParams);
+  //           searchParams.set("subjects", subArr);
+  //           setSearchParams(searchParams);
 
-            if (subjects.split(",").length === 1) {
-              searchParams.delete("subjects");
-              setSearchParams(searchParams);
-            }
-          }
-        } else if (item === "grade_begin") {
-          searchParams.delete("grade_begin");
-          setSearchParams(searchParams);
-          setGradeBegin(-1);
-          setRangevalues([-1, grade_end]);
-        } else if (item === "grade_end") {
-          searchParams.delete("grade_end");
-          setGradeEnd(12);
-          setRangevalues([grade_begin, 12]);
-          setSearchParams(searchParams);
-        }
-      });
-      setTeacherSetArr(data);
-    }
-  };
+  //           if (subjects.split(",").length === 1) {
+  //             searchParams.delete("subjects");
+  //             setSearchParams(searchParams);
+  //           }
+  //         }
+  //       } else if (item === "grade_begin") {
+  //         searchParams.delete("grade_begin");
+  //         setSearchParams(searchParams);
+  //         setGradeBegin(-1);
+  //         setRangevalues([-1, grade_end]);
+  //       } else if (item === "grade_end") {
+  //         searchParams.delete("grade_end");
+  //         setGradeEnd(12);
+  //         setRangevalues([grade_begin, 12]);
+  //         setSearchParams(searchParams);
+  //       }
+  //     });
+  //     setTeacherSetArr(data);
+  //   }
+  // };
 
-  const teacherSetFilterTags = () => {
-    const subjects = new URLSearchParams(location.search).get("subjects");
+  // const teacherSetFilterTags = () => {
+  //   const subjects = new URLSearchParams(location.search).get("subjects");
 
-    if (subjects !== null) {
-      subjects.split(",").map((value) => {
-        if (tsSubjects[value] !== undefined) {
-          const subjectsHash = {};
-          subjectsHash["label"] ||= tsSubjects[value];
-          subjectsHash["subjects"] ||= [tsSubjects[value]];
-          teacherSetArr.push(subjectsHash);
-        }
-      });
-    }
+  //   if (subjects !== null) {
+  //     subjects.split(",").map((value) => {
+  //       if (tsSubjects[value] !== undefined) {
+  //         const subjectsHash = {};
+  //         subjectsHash["label"] ||= tsSubjects[value];
+  //         subjectsHash["subjects"] ||= [tsSubjects[value]];
+  //         teacherSetArr.push(subjectsHash);
+  //       }
+  //     });
+  //   }
 
-    // teacherSetArr.map((value) => {
-    //   //console.log(value["grade_begin"])
+  // teacherSetArr.map((value) => {
+  //   //console.log(value["grade_begin"])
 
-    //   if (
-    //     value["grade_begin"] !== undefined ||
-    //     value["grade_end"] !== undefined
-    //   ) {
-    //     if (value["grade_begin"] !== undefined) {
-    //       const g_begin = value["label"];
-    //     }
+  //   if (
+  //     value["grade_begin"] !== undefined ||
+  //     value["grade_end"] !== undefined
+  //   ) {
+  //     if (value["grade_begin"] !== undefined) {
+  //       const g_begin = value["label"];
+  //     }
 
-    //     if (value["grade_end"] !== undefined) {
-    //       const g_end = value["label"];
-    //     }
-    //   }
+  //     if (value["grade_end"] !== undefined) {
+  //       const g_end = value["label"];
+  //     }
+  //   }
 
-    //   teacherSetArr.push(value);
-    // });
+  //   teacherSetArr.push(value);
+  // });
 
-    //console.log(teacherSetArr)
+  //console.log(teacherSetArr)
 
-    let result = teacherSetArr.filter(
-      (person, index) =>
-        index ===
-        teacherSetArr.findIndex((other) => person.label === other.label)
-    );
+  //   let result = teacherSetArr.filter(
+  //     (person, index) =>
+  //       index ===
+  //       teacherSetArr.findIndex((other) => person.label === other.label)
+  //   );
 
-    return (
-      <TagSet
-        id="tagSet-id-filter"
-        isDismissible
-        onClick={closeTeacherSetTag}
-        tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
-        type="filter"
-        marginBottom="m"
-      />
-    );
-  };
+  //   return (
+  //     <TagSet
+  //       id="tagSet-id-filter"
+  //       isDismissible
+  //       onClick={closeTeacherSetTag}
+  //       tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
+  //       type="filter"
+  //       marginBottom="m"
+  //     />
+  //   );
+  // };
 
-  const tagSetsData = () => {
-    const queryValue = new URLSearchParams(location.search);
-    const areaOfStudy = queryValue.get("area of study");
-    const availability = queryValue.get("availability");
-    const language = queryValue.get("language");
-    const keyword = queryValue.get("keyword");
-    const subjects = queryValue.get("subjects");
-    const setType = queryValue.get("set type");
-    const gradeBegin = queryValue.get("grade_begin");
-    const gradeEnd = queryValue.get("grade_end");
+  // This code is useful when tagSet enabled.
+  // const tagSetsData = () => {
+  //   const queryValue = new URLSearchParams(location.search);
+  //   const areaOfStudy = queryValue.get("area of study");
+  //   const availability = queryValue.get("availability");
+  //   const language = queryValue.get("language");
+  //   const keyword = queryValue.get("keyword");
+  //   const subjects = queryValue.get("subjects");
+  //   const setType = queryValue.get("set type");
+  //   const gradeBegin = queryValue.get("grade_begin");
+  //   const gradeEnd = queryValue.get("grade_end");
 
-    if (
-      areaOfStudy !== null ||
-      availability !== null ||
-      language !== null ||
-      keyword !== null ||
-      subjects !== null ||
-      setType !== null ||
-      gradeBegin !== null ||
-      gradeEnd !== null
-    ) {
-      return (
-        <VStack align="stretch">
-          <div>
-            <HorizontalRule align="left" marginTop="0px" />
-          </div>
-          <div>
-            <HStack mb="s" data-testid="tagSetResultsDisplay">
-              <span>Fiters Applied</span>
-              {teacherSetFilterTags()}
-            </HStack>
-          </div>
-          <div>
-            <HorizontalRule align="left" className="paginationHR" />
-          </div>
-        </VStack>
-      );
-    }
-  };
+  //   if (
+  //     areaOfStudy !== null ||
+  //     availability !== null ||
+  //     language !== null ||
+  //     keyword !== null ||
+  //     subjects !== null ||
+  //     setType !== null ||
+  //     gradeBegin !== null ||
+  //     gradeEnd !== null
+  //   ) {
+  //     return (
+  //       <VStack align="stretch">
+  //         <div>
+  //           <HorizontalRule align="left" marginTop="0px" />
+  //         </div>
+  //         <div>
+  //           <HStack mb="s" data-testid="tagSetResultsDisplay">
+  //             <span>Fiters Applied</span>
+  //             {teacherSetFilterTags()}
+  //           </HStack>
+  //         </div>
+  //         <div>
+  //           <HorizontalRule align="left" className="paginationHR" />
+  //         </div>
+  //       </VStack>
+  //     );
+  //   }
+  // };
 
   const tsDetails = () => {
     if (isLoading && teacherSetDataNotRetrievedMsg === "") {
@@ -1123,29 +1136,29 @@ export default function SearchTeacherSets(props) {
   };
 
   const clearSearchKeyword = () => {
-    setKeyWord("")
+    setKeyWord("");
     searchParams.delete("keyword");
     setSearchParams(searchParams);
-  } 
+  };
 
   // {tagSetsData()}
 
   const tsDataNotRetrievedMsg = () => {
     if (teacherSetDataNotRetrievedMsg !== "") {
-      return <Notification
-        marginTop="l"
-        icon={<Icon name="alertWarningFilled" color="ui.warning.primary" />}
-        ariaLabel="SignOut Notification"
-        id="sign-out-notification"
-        notificationType="announcement"
-        notificationContent={
-          teacherSetDataNotRetrievedMsg
-        }
-      />
+      return (
+        <Notification
+          marginTop="l"
+          icon={<Icon name="alertWarningFilled" color="ui.warning.primary" />}
+          ariaLabel="SignOut Notification"
+          id="sign-out-notification"
+          notificationType="announcement"
+          notificationContent={teacherSetDataNotRetrievedMsg}
+        />
+      );
     } else {
       return null;
     }
-  }
+  };
 
   return (
     <TemplateAppContainer
@@ -1161,7 +1174,7 @@ export default function SearchTeacherSets(props) {
           />
           <HorizontalRule
             id="ts-horizontal-rule"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
           <SearchBar
             id="ts-search"
@@ -1170,13 +1183,13 @@ export default function SearchTeacherSets(props) {
             onSubmit={(event) => handleSubmit(event)}
             textInputProps={{
               id: "search-teacher-set",
-              labelText: "Enter a teacher set name",
+              labelText: "Enter search terms",
               name: "TeacherSetInputName",
               onChange: handleSearchKeyword,
-              placeholder: "Enter a teacher set name",
+              placeholder: "Enter search terms",
               value: keyword,
               isClearable: "true",
-              isClearableCallback: clearSearchKeyword
+              isClearableCallback: clearSearchKeyword,
             }}
           />
           <div>{tsDataNotRetrievedMsg()}</div>

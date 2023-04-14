@@ -36,6 +36,8 @@ import {
   useNYPLBreakpoints,
   Accordion,
   SkeletonLoader,
+  useColorModeValue,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 
 import mlnImage from "../images/mln.svg";
@@ -51,6 +53,19 @@ export default function TeacherSetDetails(props) {
   const [errorMessage, setErrorMessage] = useState("");
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const [isLoading, setIsLoading] = useState(true);
+  const heroBgColor = useColorModeValue(
+    "var(--nypl-colors-brand-primary)",
+    "var(--nypl-colors-dark-ui-bg-hover)"
+  );
+  const tsOrderBoxBgColor = useColorModeValue(
+    "var(--nypl-colors-ui-gray-x-light-cool)",
+    "var(--nypl-colors-dark.ui.bg.default)"
+  );
+  const tsOrderTextColor = useColorModeValue(
+    "var(--nypl-colors-ui-black)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     setIsLoading(true);
@@ -254,7 +269,7 @@ export default function TeacherSetDetails(props) {
 
   const teacherSetUnAvailableMsg = () => {
     return (
-      <Text width="m" size="caption">
+      <Text width="m" size="caption" color={tsOrderTextColor}>
         <b>This Teacher Set is unavailable.</b>{" "}
         <i>
           As it is currently being used by other educators, please allow 60 days
@@ -264,7 +279,7 @@ export default function TeacherSetDetails(props) {
         <Link
           type="action"
           target="_blank"
-          className="hrefBlackColor"
+          className={`${colorMode} hrefBlackColor`}
           href="mailto:help@mylibrarynyc.org"
         >
           help@mylibrarynyc.org.
@@ -280,7 +295,7 @@ export default function TeacherSetDetails(props) {
         <i>
           You have{" "}
           <Link
-            className="hrefBlackColor"
+            className={`${colorMode} hrefBlackColor`}
             href="/account_details"
             id="ts-page-account-details-link"
             type="action"
@@ -295,7 +310,7 @@ export default function TeacherSetDetails(props) {
           type="action"
           target="_blank"
           href="mailto:help@mylibrarynyc.org"
-          className="hrefBlackColor"
+          className={`${colorMode} hrefBlackColor`}
         >
           help@mylibrarynyc.org.
         </Link>
@@ -341,16 +356,17 @@ export default function TeacherSetDetails(props) {
               </Button>
             </FormField>
           </Form>
-          <Text isItalic size="caption" marginTop="s">
+          <Text isItalic size="caption" marginTop="s" color={tsOrderTextColor}>
             Note: Available Teacher Sets will deliver to your school within 2
             weeks. For Teacher Sets that are currently in use by other
             educators, please allow 60 days or more for delivery. If you need
             materials right away, contact us at{" "}
             <a
-              className="hrefBlackColor"
+              className={`${colorMode} hrefBlackColor`}
               target="_blank"
               href="mailto:help@mylibrarynyc.org"
               rel="noreferrer"
+              color={tsOrderTextColor}
             >
               help@mylibrarynyc.org.
             </a>
@@ -440,36 +456,38 @@ export default function TeacherSetDetails(props) {
         allowedQuantities.length > 0)
     ) {
       return (
-        <VStack align="left">
-          <Box
-            id="teacher-set-details-order-page"
-            bg="var(--nypl-colors-ui-gray-x-light-cool)"
-            color="var(--nypl-colors-ui-black)"
-            padding="m"
-            borderWidth="1px"
-            borderRadius="sm"
-            overflow="hidden"
-            marginBottom="l"
-          >
-            <Heading
-              id="ts-order-set"
-              textAlign="center"
-              noSpace
-              level="two"
-              size="secondary"
-              text="Order Set!"
-            />
-            <Heading
-              id="ts-available-copies"
-              textAlign="center"
-              size="callout"
-              level="four"
-              text={AvailableCopies()}
-            />
-            {OrderTeacherSets()}
-          </Box>
-          <HaveQuestions />
-        </VStack>
+        <Box>
+          <VStack align="left">
+            <Box
+              id="teacher-set-details-order-page"
+              bg={tsOrderBoxBgColor}
+              color="var(--nypl-colors-ui-black)"
+              padding="m"
+              borderWidth="1px"
+              borderRadius="sm"
+              overflow="hidden"
+              marginBottom="l"
+            >
+              <Heading
+                id="ts-order-set"
+                textAlign="center"
+                noSpace
+                level="two"
+                size="secondary"
+                text="Order Set"
+              />
+              <Heading
+                id="ts-available-copies"
+                textAlign="center"
+                size="callout"
+                level="four"
+                text={AvailableCopies()}
+              />
+              {OrderTeacherSets()}
+            </Box>
+            <HaveQuestions />
+          </VStack>
+        </Box>
       );
     }
   };
@@ -635,7 +653,7 @@ export default function TeacherSetDetails(props) {
           />
           <Hero
             heroType="tertiary"
-            backgroundColor="var(--nypl-colors-brand-primary)"
+            backgroundColor={heroBgColor}
             heading={
               <Heading
                 level="one"
@@ -665,7 +683,7 @@ export default function TeacherSetDetails(props) {
           <HorizontalRule
             marginTop="s"
             id="ts-detail-page-horizontal-rule-id"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
 
           <Flex alignItems="baseline">

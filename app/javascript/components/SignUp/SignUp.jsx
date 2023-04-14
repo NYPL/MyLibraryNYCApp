@@ -15,6 +15,7 @@ import {
   HorizontalRule,
   Heading,
   ButtonGroup,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
@@ -47,7 +48,8 @@ export default function SignUp(props) {
   const [serverError, setServerError] = useState("");
   const [serverErrorIsValid, setServerErrorIsValid] = useState(false);
   const [allowed_email_patterns, setAllowedEmailPatterns] = useState([]);
-
+  const { colorMode } = useColorMode();
+  
   useEffect(() => {
     if (process.env.NODE_ENV !== "test") {
       window.scrollTo(0, 0);
@@ -515,7 +517,7 @@ export default function SignUp(props) {
           <HorizontalRule
             id="ts-detail-page-horizontal-rulel"
             marginTop="s"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
 
           <div style={{ display: showErrors() }}>

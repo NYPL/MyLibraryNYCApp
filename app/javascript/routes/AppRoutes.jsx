@@ -20,7 +20,7 @@ import CalendarEventError from "../components/CalendarEventError";
 import NewsletterConfirmation from "../components/NewsletterConfirmation";
 import PageNotFound from "../components/PageNotFound/PageNotFound";
 
-import { DSProvider } from '@nypl/design-system-react-components';
+import { DSProvider, ColorModeScript } from '@nypl/design-system-react-components';
 
 export default function AppRoutes(props) {
   const [hold, setHold] = useState("")
@@ -71,30 +71,33 @@ export default function AppRoutes(props) {
   }
 
   return (
-    <DSProvider>
-      <Router>
-        <Banner />
-        <Header userSignedIn={userSignedIn} handleSignOutMsg={handleSignOutMsg} hideSignUpMessage={hideSignUpMessage} hideSignInMessage={hideSignInMessage} handleLogout={handleLogout} />
-        <Routes>
-          <Route exact path='/' element={<Home userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />} />
-          <Route path='/faq' element={<Faqs userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
-          <Route path='/contact' element={ <Contact userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
-          <Route path='/participating-schools' element={ <ParticipatingSchools userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
-          <Route path='/signin' element={ <SignIn userSignedIn={userSignedIn} handleSignInMsg={handleSignInMsg} hideSignInMessage={hideSignInMessage} handleLogin={handleLogin} />} />
-          <Route path='/signup' element={ <SignUp userSignedIn={userSignedIn} handleLogin={handleLogin} handleSignedUpMsg={handleSignedUpMsg} />} />
-          <Route path='/teacher_set_data' element={ <SearchTeacherSets userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} signedUpMessage={signedUpMessage}/>} />
-          <Route path='/secondary_menu' element={ <MobileNavbarSubmenu />} />
-          <Route path='/account_details' element={ <Accounts />} />
-          <Route path='/teacher_set_details/:id' element={ <TeacherSetDetails handleTeacherSetOrderedData={handleTeacherSetOrderedData}/>} />
-          <Route path='/ordered_holds/:access_key' element={ <TeacherSetOrder holddetails={hold} teachersetdetails={teacher_set} statusLabel={status_label}/>} />
-          <Route path='/holds/:id/cancel' element={ <CancelTeacherSetOrder /> } />
-          <Route path='/book_details/:id' element={ <TeacherSetBooks /> } />
-          <Route path='/home/calendar_event/error' element={ <CalendarEventError /> } />
-          <Route path='/newsletter_confirmation' element={ <NewsletterConfirmation /> } />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-        <footer className="footer"> <Footer /></footer>
-      </Router>
-    </DSProvider>
+    <>
+      <ColorModeScript initialColorMode={"light" | "dark" | "system"} />
+      <DSProvider>
+        <Router>
+          <Banner />
+          <Header userSignedIn={userSignedIn} handleSignOutMsg={handleSignOutMsg} hideSignUpMessage={hideSignUpMessage} hideSignInMessage={hideSignInMessage} handleLogout={handleLogout} />
+          <Routes>
+            <Route exact path='/' element={<Home userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />} />
+            <Route path='/faq' element={<Faqs userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
+            <Route path='/contact' element={ <Contact userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
+            <Route path='/participating-schools' element={ <ParticipatingSchools userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
+            <Route path='/signin' element={ <SignIn userSignedIn={userSignedIn} handleSignInMsg={handleSignInMsg} hideSignInMessage={hideSignInMessage} handleLogin={handleLogin} />} />
+            <Route path='/signup' element={ <SignUp userSignedIn={userSignedIn} handleLogin={handleLogin} handleSignedUpMsg={handleSignedUpMsg} />} />
+            <Route path='/teacher_set_data' element={ <SearchTeacherSets userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} signedUpMessage={signedUpMessage}/>} />
+            <Route path='/secondary_menu' element={ <MobileNavbarSubmenu />} />
+            <Route path='/account_details' element={ <Accounts />} />
+            <Route path='/teacher_set_details/:id' element={ <TeacherSetDetails handleTeacherSetOrderedData={handleTeacherSetOrderedData}/>} />
+            <Route path='/ordered_holds/:access_key' element={ <TeacherSetOrder holddetails={hold} teachersetdetails={teacher_set} statusLabel={status_label}/>} />
+            <Route path='/holds/:id/cancel' element={ <CancelTeacherSetOrder /> } />
+            <Route path='/book_details/:id' element={ <TeacherSetBooks /> } />
+            <Route path='/home/calendar_event/error' element={ <CalendarEventError /> } />
+            <Route path='/newsletter_confirmation' element={ <NewsletterConfirmation /> } />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+          <footer className="footer"> <Footer /></footer>
+        </Router>
+      </DSProvider>
+    </>
   )
 }
