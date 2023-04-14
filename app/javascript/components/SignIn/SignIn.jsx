@@ -12,6 +12,8 @@ import {
   Heading,
   HorizontalRule,
   Link,
+  useColorModeValue,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 import validator from "validator";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -22,6 +24,12 @@ export default function SignIn(props) {
   const [email, setEmail] = useState("");
   const [invali_email_msg, setInvalidEmailMsg] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
+  const { colorMode } = useColorMode();
+  
+  const actionHelpOutlineColor = useColorModeValue(
+    "var(--nypl-colors-ui-black)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "test") {
@@ -92,7 +100,7 @@ export default function SignIn(props) {
           <HorizontalRule
             id="ts-detail-page-horizontal-rule-id"
             marginTop="s"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
 
           <TextInput
@@ -135,6 +143,7 @@ export default function SignIn(props) {
             notificationType="announcement"
             icon={
               <Icon
+                color={actionHelpOutlineColor}
                 align="right"
                 iconRotation="rotate0"
                 name="actionHelpOutline"

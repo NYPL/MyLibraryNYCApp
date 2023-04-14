@@ -1922,9 +1922,9 @@
       }
     },
     "@emotion/cache": {
-      "version": "11.10.5",
-      "resolved": "https://registry.npmjs.org/@emotion/cache/-/cache-11.10.5.tgz",
-      "integrity": "sha512-dGYHWyzTdmK+f2+EnIGBpkz1lKc4Zbj2KHd4cX3Wi8/OWr5pKslNjc3yABKH4adRGCvSX4VDC0i04mrrq0aiRA==",
+      "version": "11.10.7",
+      "resolved": "https://registry.npmjs.org/@emotion/cache/-/cache-11.10.7.tgz",
+      "integrity": "sha512-VLl1/2D6LOjH57Y8Vem1RoZ9haWF4jesHDGiHtKozDQuBIkJm2gimVo0I02sWCuzZtVACeixTVB4jeE8qvCBoQ==",
       "requires": {
         "@emotion/memoize": "^0.8.0",
         "@emotion/sheet": "^1.2.1",
@@ -3403,9 +3403,9 @@
       }
     },
     "@nypl/design-system-react-components": {
-      "version": "1.5.1",
-      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.5.1.tgz",
-      "integrity": "sha512-Ma9P6OxjzQRgvJuxlz4Nvl6t7hVut2h0Txy8IP+KI/knwZT6PNEJGoSdTBg4ZjHynmhCIORB64KafcqssnNMXA==",
+      "version": "1.5.2",
+      "resolved": "https://registry.npmjs.org/@nypl/design-system-react-components/-/design-system-react-components-1.5.2.tgz",
+      "integrity": "sha512-aPpaktHBTCu14Tcn5qlJCsIT9mW5tgd/XSbJjgMRdJVE7Zw39N496abGGOtd5YNiIs4DaziH/gM1Pag2pKPG1Q==",
       "requires": {
         "@chakra-ui/focus-lock": ">=1.2.6 <2.0.0",
         "@chakra-ui/react": ">=1.8.5 <=1.8.8",
@@ -4357,9 +4357,9 @@
       "integrity": "sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ=="
     },
     "@types/lodash": {
-      "version": "4.14.191",
-      "resolved": "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.191.tgz",
-      "integrity": "sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ=="
+      "version": "4.14.192",
+      "resolved": "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.192.tgz",
+      "integrity": "sha512-km+Vyn3BYm5ytMO13k9KTp27O75rbQ0NFw+U//g+PX7VZyjCioXaRFisqSIJRECljcTv73G3i6BpglNGHgUQ5A=="
     },
     "@types/lodash.mergewith": {
       "version": "4.6.6",

@@ -14,6 +14,7 @@ import {
   SkeletonLoader,
   Icon,
   Button,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 
 export default function ParticipatingSchools(props) {
@@ -21,6 +22,7 @@ export default function ParticipatingSchools(props) {
   const [search_school, setSearchSchool] = useState("");
   const [anchor_tags, setAnchorTags] = useState([]);
   const [schoolNotFound, setSchoolNotFound] = useState("");
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "test") {
@@ -206,7 +208,7 @@ export default function ParticipatingSchools(props) {
           />
           <HorizontalRule
             id="ts-detail-page-horizontal-rulel"
-            className="teacherSetHorizontal"
+            className={`${colorMode} tsDetailHorizontalLine`}
           />
           <Heading
             marginTop="l"

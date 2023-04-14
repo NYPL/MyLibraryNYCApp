@@ -7,12 +7,24 @@ import {
   Flex,
   Spacer,
   Logo,
+  Box,
+  useColorMode,
+  useColorModeValue,
 } from "@nypl/design-system-react-components";
+// Below component only for testing
+// import DarkModeToggle from "./../DarkModeToggle/DarkModeToggle";
 
 import AccountDetailsSubMenu from "./../AccountDetailsSubMenu";
 
 export default function Navbar(props) {
   const navigate = useNavigate();
+  const { colorMode } = useColorMode();
+  const mlnLogo = useColorModeValue("mlnColor", "mlnWhite");
+
+  const socialMediaIconColor = useColorModeValue(
+    "var(--nypl-colors-ui-black)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
 
   const hideHomeSignUpMsg = () => {
     props.hideSignUpMessage(true);
@@ -31,7 +43,7 @@ export default function Navbar(props) {
             id="mln-nav-bar-header-logo"
             marginLeft="m"
             decorative
-            name="mlnColor"
+            name={mlnLogo}
             size="small"
           />
         </Link>
@@ -50,7 +62,7 @@ export default function Navbar(props) {
               marginRight="m"
               href="/teacher_set_data"
               onClick={hideSignInMsg}
-              className="nav-link-colors"
+              className={`${colorMode} nav-link-colors`}
             >
               Search Teacher Sets
             </Link>
@@ -60,7 +72,7 @@ export default function Navbar(props) {
             <Link
               href="/contact"
               onClick={hideSignInMsg}
-              className="nav-link-colors"
+              className={`${colorMode} nav-link-colors`}
             >
               Contact
             </Link>
@@ -72,7 +84,7 @@ export default function Navbar(props) {
               marginRight="m"
               href="/faq"
               onClick={hideSignInMsg}
-              className="nav-link-colors"
+              className={`${colorMode} nav-link-colors`}
             >
               FAQ
             </Link>
@@ -83,13 +95,13 @@ export default function Navbar(props) {
               marginRight="m"
               href="/participating-schools"
               onClick={hideSignInMsg}
-              className="nav-link-colors"
+              className={`${colorMode} nav-link-colors`}
             >
               Participating Schools
             </Link>
           </li>
 
-          <li id="mln-navbar-ad-link" className="nav__menu-item">
+          <li id="mln-navbar-ad-link" className={`${colorMode} nav__menu-item`}>
             <AccountDetailsSubMenu
               userSignedIn={props.userSignedIn}
               handleSignOutMsg={props.handleSignOutMsg}
@@ -100,7 +112,7 @@ export default function Navbar(props) {
 
           <li
             id="mln-navbar-social-media-link"
-            className="nav__menu-item nav-link-colors socialMediaIcon"
+            className={`${colorMode} nav-link-colors nav__menu-item socialMediaIcon`}
           >
             <Link
               marginRight="xs"
@@ -110,7 +122,7 @@ export default function Navbar(props) {
             >
               <Icon
                 align="right"
-                color="ui.black"
+                color={socialMediaIconColor}
                 className="navBarIcon"
                 decorative
                 iconRotation="rotate0"
@@ -128,7 +140,7 @@ export default function Navbar(props) {
             >
               <Icon
                 align="right"
-                color="ui.black"
+                color={socialMediaIconColor}
                 className="navBarIcon"
                 decorative
                 iconRotation="rotate0"
@@ -141,6 +153,19 @@ export default function Navbar(props) {
           </li>
         </List>
       </Flex>
+
+      <Box
+        position="fixed"
+        bottom={{ base: "xs", md: "auto" }}
+        left={{ base: "xs", md: "auto" }}
+        right={{ base: "xs", md: "xs" }}
+        top={{ base: "auto", md: "xs" }}
+        zIndex="2"
+        display="flex"
+        flexDir="column"
+      >
+        {/* <DarkModeToggle /> */}
+      </Box>
     </div>
   );
 }

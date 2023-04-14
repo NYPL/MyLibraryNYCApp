@@ -19,6 +19,7 @@ import {
   Breadcrumbs,
   Box,
   SkeletonLoader,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 
 import ShowBookImage from "./../ShowBookImage";
@@ -29,6 +30,7 @@ export default function TeacherSetBooks() {
   const [book, setBook] = useState("");
   const [teacherSets, setTeacherSets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     setIsLoading(true);
@@ -233,7 +235,7 @@ export default function TeacherSetBooks() {
           <HorizontalRule
             id="ts-book-details-horizontal-rule"
             marginTop="s"
-            className="teacherSetHorizontal"
+            className={`${colorMode} teacherSetHorizontal`}
           />
 
           <Card
