@@ -661,8 +661,12 @@ export default function SearchTeacherSets(props) {
     const bgColor = isLargerThanMedium ? facetBoxColor : "";
     const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
     return (
-      <Box id="ts-all-facets" bg={bgColor} padding="var(--nypl-space-s)"
-      className={`${colorMode} tsFacetsBorderColor`}>
+      <Box
+        id="ts-all-facets"
+        bg={bgColor}
+        padding="var(--nypl-space-s)"
+        className={`${colorMode} tsFacetsBorderColor`}
+      >
         <div>{tsRefineResultsHeading()}</div>
         <Toggle
           id="toggle"
@@ -795,81 +799,81 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  const closeTeacherSetTag = (value) => {
-    if (value === "clearFilters") {
-      setTeacherSetArr([]);
-      searchParams.delete("language");
-      searchParams.delete("area of study");
-      searchParams.delete("set type");
-      searchParams.delete("availability");
-      searchParams.delete("subjects");
-      searchParams.delete("grade_begin");
-      searchParams.delete("grade_end");
-      searchParams.delete("keyword");
-      setSearchParams(searchParams);
-      //const data = teacherSetArr.filter((element) => element.label !== value);
-    } else {
-      //const subjects = new URLSearchParams(location.search).get("subjects")
-      //console.log(subjects)
+  // const closeTeacherSetTag = (value) => {
+  //   if (value === "clearFilters") {
+  //     setTeacherSetArr([]);
+  //     searchParams.delete("language");
+  //     searchParams.delete("area of study");
+  //     searchParams.delete("set type");
+  //     searchParams.delete("availability");
+  //     searchParams.delete("subjects");
+  //     searchParams.delete("grade_begin");
+  //     searchParams.delete("grade_end");
+  //     searchParams.delete("keyword");
+  //     setSearchParams(searchParams);
+  //     //const data = teacherSetArr.filter((element) => element.label !== value);
+  //   } else {
+  //     //const subjects = new URLSearchParams(location.search).get("subjects")
+  //     //console.log(subjects)
 
-      const data = teacherSetArr.filter((element) => element.label !== value);
-      const deleteQueryParams = teacherSetArr
-        .filter((element) => element.label === value)
-        .flatMap(Object.keys);
+  //     const data = teacherSetArr.filter((element) => element.label !== value);
+  //     const deleteQueryParams = teacherSetArr
+  //       .filter((element) => element.label === value)
+  //       .flatMap(Object.keys);
 
-      deleteQueryParams.map((item) => {
-        if (item === "language") {
-          searchParams.delete("language");
-          setSearchParams(searchParams);
-        } else if (item === "area of study") {
-          searchParams.delete("area of study");
-          setSearchParams(searchParams);
-        } else if (item === "availability") {
-          searchParams.delete("availability");
-          setSearchParams(searchParams);
-        } else if (item === "keyword") {
-          searchParams.delete("keyword");
-          setSearchParams(searchParams);
-        } else if (item === "set type") {
-          searchParams.delete("set type");
-          setSearchParams(searchParams);
-        } else if (item === "subjects") {
-          const subjects = new URLSearchParams(location.search).get("subjects");
-          const subArr = [];
+  //     deleteQueryParams.map((item) => {
+  //       if (item === "language") {
+  //         searchParams.delete("language");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "area of study") {
+  //         searchParams.delete("area of study");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "availability") {
+  //         searchParams.delete("availability");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "keyword") {
+  //         searchParams.delete("keyword");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "set type") {
+  //         searchParams.delete("set type");
+  //         setSearchParams(searchParams);
+  //       } else if (item === "subjects") {
+  //         const subjects = new URLSearchParams(location.search).get("subjects");
+  //         const subArr = [];
 
-          if (subjects !== null) {
-            subjects.split(",").map((subId) => {
-              if (
-                tsSubjects[subId] !== undefined &&
-                tsSubjects[subId] !== value
-              ) {
-                subArr.push(subId);
-              }
-            });
+  //         if (subjects !== null) {
+  //           subjects.split(",").map((subId) => {
+  //             if (
+  //               tsSubjects[subId] !== undefined &&
+  //               tsSubjects[subId] !== value
+  //             ) {
+  //               subArr.push(subId);
+  //             }
+  //           });
 
-            searchParams.set("subjects", subArr);
-            setSearchParams(searchParams);
+  //           searchParams.set("subjects", subArr);
+  //           setSearchParams(searchParams);
 
-            if (subjects.split(",").length === 1) {
-              searchParams.delete("subjects");
-              setSearchParams(searchParams);
-            }
-          }
-        } else if (item === "grade_begin") {
-          searchParams.delete("grade_begin");
-          setSearchParams(searchParams);
-          setGradeBegin(-1);
-          setRangevalues([-1, grade_end]);
-        } else if (item === "grade_end") {
-          searchParams.delete("grade_end");
-          setGradeEnd(12);
-          setRangevalues([grade_begin, 12]);
-          setSearchParams(searchParams);
-        }
-      });
-      setTeacherSetArr(data);
-    }
-  };
+  //           if (subjects.split(",").length === 1) {
+  //             searchParams.delete("subjects");
+  //             setSearchParams(searchParams);
+  //           }
+  //         }
+  //       } else if (item === "grade_begin") {
+  //         searchParams.delete("grade_begin");
+  //         setSearchParams(searchParams);
+  //         setGradeBegin(-1);
+  //         setRangevalues([-1, grade_end]);
+  //       } else if (item === "grade_end") {
+  //         searchParams.delete("grade_end");
+  //         setGradeEnd(12);
+  //         setRangevalues([grade_begin, 12]);
+  //         setSearchParams(searchParams);
+  //       }
+  //     });
+  //     setTeacherSetArr(data);
+  //   }
+  // };
 
   // const teacherSetFilterTags = () => {
   //   const subjects = new URLSearchParams(location.search).get("subjects");

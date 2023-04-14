@@ -11,7 +11,8 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@nypl/design-system-react-components";
-import DarkModeToggle from "./../DarkModeToggle/DarkModeToggle";
+// Below component only for testing
+// import DarkModeToggle from "./../DarkModeToggle/DarkModeToggle";
 
 import AccountDetailsSubMenu from "./../AccountDetailsSubMenu";
 
@@ -163,7 +164,7 @@ export default function Navbar(props) {
         display="flex"
         flexDir="column"
       >
-        <DarkModeToggle />
+        {/* <DarkModeToggle /> */}
       </Box>
     </div>
   );
