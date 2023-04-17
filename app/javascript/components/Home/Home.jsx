@@ -113,9 +113,9 @@ export default function Home(props) {
             noBrandButtonType
             onSubmit={handleSubmit}
             textInputProps={{
-              labelText: "Teacherset Search label",
+              labelText: "Enter search terms",
               name: "teacherSetInputName",
-              placeholder: "Enter teacher-set",
+              placeholder: "Enter search terms",
               onChange: handleSearchKeyword,
             }}
           />
