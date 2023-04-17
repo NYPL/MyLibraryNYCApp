@@ -14,7 +14,7 @@ export default function HaveQuestions() {
         <p className="visitOurText">
           Visit Our{" "}
           <Link id="home-faq-link" type="action" href="/faq">
-            Faq Page
+            FAQ Page
           </Link>
         </p>
         <p>
