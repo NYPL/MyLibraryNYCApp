@@ -23,10 +23,10 @@ class TeacherSetsController < ApplicationController
     teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
     @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
 
-    resetPageNumber = ""
-    if (!@teacher_sets.present? && params["page"])
+    reset_page_number = ""
+    if !@teacher_sets.present? && params["page"]
       params["page"] = "1"
-      resetPageNumber = "1"
+      reset_page_number = "1"
       teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
     end
@@ -41,41 +41,39 @@ class TeacherSetsController < ApplicationController
 
     facets = teacher_set_facets(params, @facets)
     
-    subjectsHash = {}
+    subjects_hash = {}
 
     facets.each do |facet|
-      if (facet[:label] === "subjects" && facet[:items].present?)
-        facet[:items].each do |item|
-          subjectsHash[item[:value]] = item[:label]
-        end
+      next unless facet[:label] == "subjects" && facet[:items].present?
+
+      facet[:items].each do |item|
+        subjects_hash[item[:value]] = item[:label]
       end
     end
 
-    if facets.collect{|i| i[:items]}.flatten.empty?
+    if facets.collect { |i| i[:items] }.flatten.empty?
       custom_facets = input_param_facets(params)
       facets = teacher_set_facets(params, custom_facets)
     end
 
     # Attach custom :q param to each facet with query params to be applied to that link
 
-    per_page = 10;
-    total_pages = (total_count/per_page.to_f).ceil
+    per_page = 10
+    total_pages = (total_count / per_page.to_f).ceil
 
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
 
-    render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjectsHash, resetPageNumber: resetPageNumber, errrorMessage: "" }
-
+    render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, 
+                   no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjects_hash, resetPageNumber: reset_page_number, errrorMessage: "" }
   rescue ElasticsearchException => e
-    render json:  { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, facets: {} }
+    render json: { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, 
+                   facets: {} }
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
                              'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     render json:  { errrorMessage: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance.",
-      teacher_sets: {},
-      facets: {}
-    }
+      teacher_sets: {}, facets: {}}
   end
-
 
   def input_param_facets(params)
     facets = []
@@ -85,17 +83,18 @@ class TeacherSetsController < ApplicationController
       { :label => 'language', :column => :primary_language },
       { :label => 'set type', :column => 'set_type' }
     ].each do |config|
-          facets_group = {:label => config[:label], :items => []}
-           params.each { |key, value|
-              next if key != config[:label]
-              facets_group[:items] << {
-                :value => value.join(),
-                :label => value.join(),
-                :count => 0
-              }
-           }
-        facets << facets_group
+      facets_group = {:label => config[:label], :items => []}
+      params.each do |key, value|
+        next if key != config[:label]
+
+        facets_group[:items] << {
+          :value => value.join,
+          :label => value.join,
+          :count => 0
+        }
       end
+      facets << facets_group
+    end
     facets
   end
 
@@ -133,7 +132,6 @@ class TeacherSetsController < ApplicationController
     end
     facets
   end
-
 
   # GET /teacher_sets/1.json
   def show
@@ -181,25 +179,20 @@ class TeacherSetsController < ApplicationController
     }
   end
 
-
   # Gets current user teacherset holds from database.
   def teacher_set_holds
     @set = TeacherSet.find(params[:id])
     @holds = @set.holds_for_user(current_user)
   end
 
-
-  def teacher_set_data
-  end
+  def teacher_set_data; end
 
   # TODO: Fix: create currently fails our functional tests.
   def create
     TeacherSet.create(teacherset_params)
   end
 
-
-  def teacher_set_details
-  end
+  def teacher_set_details; end
 
   private
 

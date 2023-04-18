@@ -17,7 +17,6 @@ class Document < ActiveRecord::Base
     errors.add(:event_type, 'Please select event_type') if event_type.to_s == "0"
   end
 
-
   def event_type_already_exist
     return unless Document.where(event_type: event_type).present?
 
@@ -26,7 +25,6 @@ class Document < ActiveRecord::Base
     errors.add(:event_type, error_msg)
   end
 
-
   # Call GoogleApiClient to export google document.
   def google_document
     # Eg: url = https://docs.google.com/document/d/1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U/edit
@@ -34,14 +32,13 @@ class Document < ActiveRecord::Base
     # document_id = 1iBzIYM_GG5OCXkuF4vKwSYRFaH3gd8Q_kuDrqT7Iu4U
     document_id = URI.split(url)[5].split('/')[3]
     GoogleApiClient.export_file(document_id, "application/pdf")
-  rescue StandardError => error
-    errors.add(:url, google_client_error_message(error))
+  rescue StandardError => e
+    errors.add(:url, google_client_error_message(e))
   end
-
 
   def google_client_error_message(error)
     if error.status_code == 404
-      email = JSON.parse(ENV['MLN_GOOGLE_ACCCOUNT'])['client_email']
+      email = JSON.parse(ENV.fetch('MLN_GOOGLE_ACCCOUNT', nil))['client_email']
       "There was an error accessing this file. Please check this URL is valid, and that the document is shared with #{email}"
     else
       error.message

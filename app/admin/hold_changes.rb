@@ -2,9 +2,6 @@
 
 ActiveAdmin.register HoldChange do
   
-  CANCELLED = 'cancelled'
-  CLOSED = 'closed'
-
   actions :all, except: [:edit, :destroy] #just show
   menu false
 
@@ -13,15 +10,14 @@ ActiveAdmin.register HoldChange do
     def new
       @hold_change = HoldChange.new
       @hold_change.hold = Hold.find params[:hold]
-      @page_title= "New Hold Change for #{@hold_change.hold.teacher_set.title}"
+      @page_title = "New Hold Change for #{@hold_change.hold.teacher_set.title}"
       #set any other values you might want to initialize
     end
-
     
     def create
       params[:hold_change].merge!({ admin_user_id: current_admin_user.id })
       # Update teacher-set available copies while cancel or closed the hold.
-      if [CANCELLED, CLOSED].include?(params[:hold_change]['status'])
+      if ['cancelled', 'closed'].include?(params[:hold_change]['status'])
         hold = Hold.find(params[:hold_change]['hold_id'])
         teacher_set = TeacherSet.where(id: hold.teacher_set_id).first
         if teacher_set.present?

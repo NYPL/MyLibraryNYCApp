@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'open-uri'
 
 class HomeController < ApplicationController
@@ -8,8 +9,7 @@ class HomeController < ApplicationController
     
   end
 
-
-  def get_mln_file_names
+  def mln_file_names
     calendar_event = Document.calendar_of_events
     mln_calendar_file_name = calendar_event.present? ? "#{calendar_event.file_name}.pdf" : "error"
     render json: { mln_calendar_file_name: mln_calendar_file_name, menu_of_services_file_name: "menu_of_services.pdf" }
@@ -18,17 +18,14 @@ class HomeController < ApplicationController
   def swagger_docs
   	render :json => File.read("app/controllers/api/swagger/swaggerDoc.json")
   end 
-
   
   def secondary_menu
   end
-
   
   # for timing out sessions, this method reloads a hidden iframe so that the user's session["warden.user.user.session"]["last_request_at"] updates
   def extend_session_iframe
     user_signed_in?
   end
-
 
   # Display's mylibrarynyc information
   def about; end
@@ -44,11 +41,9 @@ class HomeController < ApplicationController
 
   def digital_resources; end
 
-
-  def help;
+  def help
     store_location_for(:user, "contact")
   end
-
 
   def faq
     faqs = FaqsController.new.frequently_asked_questions
@@ -80,6 +75,7 @@ class HomeController < ApplicationController
   def mln_calendar
     @calendar_event = Document.calendar_of_events
     return @calendar_event if @calendar_event.nil? && params["filename"] == "error"
+
     file = @calendar_event.present? && @calendar_event.file.present? ? @calendar_event.file : nil
     if params["filename"] != "error"
       respond_to do |format|
@@ -95,9 +91,9 @@ class HomeController < ApplicationController
       respond_to do |format|
         file = URI.open(File.join(Rails.root, 'app/javascript/pdf/2021_2022_MyLibraryNYC_Menu_of_Services_for_Educators.pdf'))
         menu_of_services_pdf = file.read
-        format.pdf { 
+        format.pdf do 
           send_data(menu_of_services_pdf, type: "application/pdf", disposition: :inline)
-        }
+        end
       end
     else
       redirect_to root_url

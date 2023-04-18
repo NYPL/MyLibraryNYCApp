@@ -1,4 +1,6 @@
-require "aws_decrypt.rb"
+# frozen_string_literal: true
+
+require "aws_decrypt"
 # frozen_string_literal: true
 
 class ElasticSearch
@@ -26,7 +28,6 @@ class ElasticSearch
     @teachersets_per_page = @es_config['teachersets_per_page'] || 10
     @size = @es_config['size'] || 10000
   end
-
   
   # Decode aws elastic-search url
   def es_host(config)
@@ -39,7 +40,6 @@ class ElasticSearch
     
     "https://#{es_host}"
   end
-
   
   # Create elastic search document by id and body. Eg: id: "1234567", body: {id: "1234567", title: "test"}
   def create_document(id, body)
@@ -49,7 +49,6 @@ class ElasticSearch
     response
   end
 
-
   # Delete elastic search document by id. Eg: id: "1234567"
   def delete_document_by_id(id)
     response = @client.delete index: @index, type: @type, id: id
@@ -58,7 +57,6 @@ class ElasticSearch
 
     response
   end
-
   
   # Teacher set filter params
   def teacher_sets_input_params(params)
@@ -73,29 +71,27 @@ class ElasticSearch
     [keyword, grade_begin, grade_end, language, set_type, availability, area_of_study, subjects]
   end
 
-
   # Get teacher sets documents from elastic search.
   def get_teacher_sets_from_es(params)
-    begin
-      # Per page showing 10 teachersets.
-      page = params["page"].present? ? params["page"].to_i - 1 : 0
-      from = page.to_i * @teachersets_per_page.to_i
-      query, agg_hash = teacher_sets_query_based_on_filters(params)
-      
-      query[:from] = from
-      query[:size] = @teachersets_per_page
-      # Sorting teachersets based on availability and created_at values. 
-      # Showing latest created teachersets.
-      query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
-      query[:aggs] = agg_hash
-      teacherset_docs = search_by_query(query)
-      facets = facets_for_teacher_sets(teacherset_docs)
-      [teacherset_docs, facets, teacherset_docs[:totalMatches]]
-    rescue StandardError => e
-      raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
-    end
+    
+    # Per page showing 10 teachersets.
+    page = params["page"].present? ? params["page"].to_i - 1 : 0
+    from = page.to_i * @teachersets_per_page.to_i
+    query, agg_hash = teacher_sets_query_based_on_filters(params)
+    
+    query[:from] = from
+    query[:size] = @teachersets_per_page
+    # Sorting teachersets based on availability and created_at values. 
+    # Showing latest created teachersets.
+    query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
+    query[:aggs] = agg_hash
+    teacherset_docs = search_by_query(query)
+    facets = facets_for_teacher_sets(teacherset_docs)
+    [teacherset_docs, facets, teacherset_docs[:totalMatches]]
+  rescue StandardError => e
+    raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
+    
   end
-
 
   # Get elastic serach queries based on input filter params.
   def teacher_sets_query_based_on_filters(params)
@@ -118,7 +114,7 @@ class ElasticSearch
       [
         {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["title^10", "description^2", "contents"]}},
         {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}},
-        subjects_query, {:term => {:"title.keyword" => {:value => keyword}}}
+        subjects_query, {:term => {:'title.keyword' => {:value => keyword}}}
       ]}}
     end
 
@@ -165,21 +161,19 @@ class ElasticSearch
     [query, aggregation_hash]
   end
 
-
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-    aggregation_hash["language"] = { "terms": { "field": "primary_language", :size => 100, :order => {:_key => "asc"} } }
-    aggregation_hash["set type"] = { "terms": { "field": "set_type", :size => 10, :order => {:_key => "asc"} } }
+    aggregation_hash["language"] = { terms: { field: "primary_language", :size => 100, :order => {:_key => "asc"} } }
+    aggregation_hash["set type"] = { terms: { field: "set_type", :size => 10, :order => {:_key => "asc"} } }
     # Remove Availability lable in facets.
     # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
-    aggregation_hash["area of study"] = { "terms": { "field": "area_of_study", :size => 100, :order => {:_key => "asc"} } }
+    aggregation_hash["area of study"] = { terms: { field: "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
     :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
                                                                                {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
     aggregation_hash
-  end
-  
+  end  
   
   # Get teacher set facets
   def facets_for_teacher_sets(teacher_sets_docs)
@@ -202,7 +196,6 @@ class ElasticSearch
     end
     facets
   end
-
  
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study) 
   def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets)
@@ -236,7 +229,6 @@ class ElasticSearch
     facets
   end
 
-
   # Get subject facets
   # facets eg: [ {:label=>"language", :items=> [{:value=>"Chinese", :label=>"Chinese", :count=>34}]},
   # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable", 
@@ -255,7 +247,7 @@ class ElasticSearch
 
     sub_aggs = teacherset_docs[:aggregations]["subjects"]
 
-    if sub_aggs.present? || sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?
+    if sub_aggs.present? || (sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?)
       sub_aggs["subjects"]["buckets"].each do |agg_val|
         # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
@@ -277,18 +269,24 @@ class ElasticSearch
     subjects_facets
   end
 
-
-  def teacher_sets_sort_order(sort_order=0)
-    if (sort_order == 2 || sort_order == 3)
-      sort_order = (sort_order == 2)? "asc" : (sort_order == 3) ? "desc" : "asc"
-      query = [{:"title.keyword" => {:order => sort_order }}]
-    elsif (sort_order == 0 || sort_order == 1)
-      sort_order = (sort_order == 0)? "desc" : (sort_order == 1) ? "asc" : "desc"
-      query = [{"_score": "desc", "availability.raw": "asc", "created_at": sort_order, "_id": "asc"}]
+  def teacher_sets_sort_order(sort_order = 0)
+    if [2, 3].include?(sort_order)
+      sort_order = if sort_order == 2
+                     "asc"
+                   else
+                     sort_order == 3 ? "desc" : "asc"
+                   end
+      query = [{:'title.keyword' => {:order => sort_order }}]
+    elsif [0, 1].include?(sort_order)
+      sort_order = if sort_order.zero?
+                     "desc"
+                   else
+                     sort_order == 1 ? "asc" : "desc"
+                   end
+      query = [{_score: "desc", 'availability.raw': "asc", created_at: sort_order, _id: "asc"}]
     end
     query
   end
-
   
   # Search elastic documents based on the query.Eg: body: {id: "1234567", title: "test"}
   def search_by_query(body)
@@ -309,7 +307,6 @@ class ElasticSearch
     results
   end
 
-
   # Get elastic search document by id. Eg: id: "1234567"
   def get_document_by_id(id)
     response = @client.get index: @index, type: @type, id: id
@@ -317,7 +314,6 @@ class ElasticSearch
                              'method' => 'get_document_by_id'})
     response
   end
-
 
   # Update elastic search document by id and body. Eg: id: "1234567", body: {id: "1234567", title: "test"}
   def update_document_by_id(id, query)
@@ -327,10 +323,9 @@ class ElasticSearch
     response
   end
 
-
   # Delete elastic search document by body.Eg: body: {id: "1234567", title: "test"}
   def delete_by_query(query)
-    response = @client.delete_by_query(index: @index, body: query)
-    response
+    @client.delete_by_query(index: @index, body: query)
+    
   end
 end

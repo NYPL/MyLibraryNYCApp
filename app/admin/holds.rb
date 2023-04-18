@@ -40,25 +40,25 @@ ActiveAdmin.register Hold do
       column prop
     end
 
-    column 'Call Number', :sortable => :"teacher_sets.call_number" do |h|
+    column 'Call Number', :sortable => :'teacher_sets.call_number' do |h|
       if !h.teacher_set.nil?
         link_to h.teacher_set.call_number, admin_hold_path(h)
       end
     end
 
     column 'User' do |h|
-      if !h.user.nil?
-        link_to h.user.email, admin_hold_path(h)
-      else
+      if h.user.nil?
         "Missing user data"
+      else
+        link_to h.user.email, admin_hold_path(h)
       end
     end
 
-    column 'Requester Barcode', :sortable => :"users.barcode" do |h|
-      if !h.user.nil?
-        link_to h.user.barcode, admin_hold_path(h)
-      else
+    column 'Requester Barcode', :sortable => :'users.barcode' do |h|
+      if h.user.nil?
         "Missing user data"
+      else
+        link_to h.user.barcode, admin_hold_path(h)
       end
     end
 
@@ -94,31 +94,31 @@ ActiveAdmin.register Hold do
 
     attributes_table do
       row :requester do |ad|
-        if !ad.user.nil?
-          link_to ad.user.name(true), admin_user_path(ad.user)
-        else
+        if ad.user.nil?
           "Missing user data"
+        else
+          link_to ad.user.name(true), admin_user_path(ad.user)
         end
       end
       row :requester_barcode do |ad|
-        if !ad.user.nil?
-          link_to ad.user.barcode, admin_user_path(ad.user)
-        else
+        if ad.user.nil?
           "Missing user data"
+        else
+          link_to ad.user.barcode, admin_user_path(ad.user)
         end
       end
       row :requester_school do |ad|
-        if !ad.user.nil?
-          link_to "#{ad.user.school.code}: #{ad.user.school.name}", admin_user_path(ad.user)
-        else
+        if ad.user.nil?
           "Missing user data"
+        else
+          link_to "#{ad.user.school.code}: #{ad.user.school.name}", admin_user_path(ad.user)
         end
       end
       row :teacher_set do |ad|
-        if !ad.teacher_set.nil?
-          link_to "#{ad.teacher_set.call_number}: #{ad.teacher_set.title}", admin_teacher_set_path(ad.teacher_set)
-        else
+        if ad.teacher_set.nil?
           "Teacher set deleted. Please cancel the hold."
+        else
+          link_to "#{ad.teacher_set.call_number}: #{ad.teacher_set.title}", admin_teacher_set_path(ad.teacher_set)
         end
       end
 
@@ -175,18 +175,18 @@ ActiveAdmin.register Hold do
     end
 
     column 'User' do |h|
-      if !h.user.nil?
-        h.user.email
-      else
+      if h.user.nil?
         "Missing user data"
+      else
+        h.user.email
       end
     end
 
     column 'Requester Barcode' do |h|
-      if !h.user.nil?
-        h.user.barcode
-      else
+      if h.user.nil?
         "Missing user data"
+      else
+        h.user.barcode
       end
     end
   end

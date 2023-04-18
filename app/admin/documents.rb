@@ -15,7 +15,6 @@ ActiveAdmin.register Document do
         render :new
       end
     end
-
     
     def document_attributes
       attrs = params[:document]
@@ -28,7 +27,6 @@ ActiveAdmin.register Document do
       @document[:file] = @document.google_document
       @document
     end
-
 
     def update
       @document = Document.where(id: params[:id]).first

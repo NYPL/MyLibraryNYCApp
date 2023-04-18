@@ -19,8 +19,11 @@ namespace :ingest_sierra_data do
         sierra_code = row_hash['sierra_code'].strip
         zcode = row_hash['zcode'].strip
         puts "Creating sierra code #{sierra_code}"
-        %w[sierra_code zcode].each do |column_header_name|
-          raise "The #{column_header_name} column is mislabeled or missing from the CSV." if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
+        sierra_data = %w[sierra_code zcode]
+        sierra_data.each do |column_header_name|
+          if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
+            raise "The #{column_header_name} column is mislabeled or missing from the CSV."
+          end
         end
         SierraCodeZcodeMatch.create!(sierra_code: sierra_code, zcode: zcode)
       end

@@ -27,7 +27,6 @@ module BibsHelper
     validate_empty_values(req_body_params) if req_body_params.present?
   end
 
-
   # build saved_teacher_sets_json_array for the response body
   def bib_response(t_set)
     return nil unless t_set.present?

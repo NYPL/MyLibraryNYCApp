@@ -68,12 +68,15 @@ MyLibraryNYC::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_url_options = { :host => ENV['MLN_INFO_SITE_HOSTNAME'] }
+  config.action_mailer.default_url_options = { :host => ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil) }
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger.level = Logger::INFO
-  config.hosts = [ENV['MLN_INFO_SITE_HOSTNAME'], ENV['MLN_SETS_SITE_HOSTNAME'],
-                  ENV['MLN_ENVIRONMENT_URL'], ENV['MLN_API_GATEWAY_URL']]
+  config.hosts = [ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil), ENV.fetch('MLN_SETS_SITE_HOSTNAME', nil),
+                  ENV.fetch('MLN_ENVIRONMENT_URL', nil), ENV.fetch('MLN_API_GATEWAY_URL', nil),
+                  IPAddr.new("10.229.0.0/16"), # connection on private network for ECS target health check
+                  "mylibrarynycapp-production-1686255819.us-east-1.elb.amazonaws.com"
+                ]
 
 
   config.eager_load = true

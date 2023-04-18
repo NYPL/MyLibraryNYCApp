@@ -5,7 +5,6 @@ class BooksController < ApplicationController
   def index
     @books = Book.paginate(:page => params[:page])
   end
-
   
   def show
     if storable_location?
@@ -20,14 +19,11 @@ class BooksController < ApplicationController
     }
   end
 
-
   def create
     Book.create(book_params)
   end
 
-
-  def book_details
-  end
+  def book_details; end
 
   private
 

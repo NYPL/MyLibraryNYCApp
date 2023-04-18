@@ -47,7 +47,8 @@ class Api::ItemsControllerTest < MiniTest::Test
       error_resp = [status: error_message[0], json: { message: error_message[1]}]
 
       resp = nil
-      mail_resp = OpenStruct.new(Message: '123', Multipart: false)
+      mail_resp = Struct.new(:Message, :Multipart).new('123', false)
+
       @mintest_mock1.expect(:call, error_message)
       @controller.stub :validate_request, @mintest_mock1 do
         @controller.stub :render_error, [error_message[0], error_message[1]], [error_message] do
@@ -165,7 +166,6 @@ class Api::ItemsControllerTest < MiniTest::Test
       },
     } ]
   end
-
   
   def bibid_missing_req_body_for_item
     [ 
@@ -179,8 +179,7 @@ class Api::ItemsControllerTest < MiniTest::Test
         },
       } 
     ]
-  end
-  
+  end  
 
   def nypl_source_missing_req_body_for_item
     [ 

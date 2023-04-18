@@ -21,7 +21,7 @@ class SchoolsController < ApplicationController
       
 
       school_hash['school_names'] = school_objects.collect do |school|
-        code = school.code.present? ? school.code[1..-1].upcase : ""
+        code = school.code.present? ? school.code[1..].upcase : ""
         "#{school.name} (#{code})"
       end
       schools_arr << school_hash
@@ -30,9 +30,7 @@ class SchoolsController < ApplicationController
     render json: { schools: schools_arr, anchor_tags: anchor_tags, school_not_found: school_not_found }
   end
 
-  def participating_schools_data
-  end
-  
+  def participating_schools_data; end  
   
   def create
     School.create(school_params)

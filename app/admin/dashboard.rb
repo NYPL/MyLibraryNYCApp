@@ -114,10 +114,10 @@ ActiveAdmin.register_page "Dashboard" do
             end
 
             column 'Set', sortable: :set do |h|
-              if !h.teacher_set.nil?
-                link_to h.teacher_set.title, admin_hold_path(h)
-              else
+              if h.teacher_set.nil?
                 "This teacher set no longer exists."
+              else
+                link_to h.teacher_set.title, admin_hold_path(h)
               end
             end
 
@@ -134,26 +134,26 @@ ActiveAdmin.register_page "Dashboard" do
             end
 
             column 'User', sortable: :user do |h|
-              if !h.user.nil?
-                link_to h.user.email, admin_hold_path(h)
-              else
+              if h.user.nil?
                 "Missing user data"
+              else
+                link_to h.user.email, admin_hold_path(h)
               end
             end
 
             column 'Requester Barcode', sortable: :barcode do |h|
-              if !h.user.nil?
-                link_to h.user.barcode, admin_hold_path(h)
-              else
+              if h.user.nil?
                 "Missing user data"
+              else
+                link_to h.user.barcode, admin_hold_path(h)
               end
             end
 
             column 'Date', sortable: :created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
+              if h.nil?
                 "Missing hold data"
+              else
+                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               end
             end
 
@@ -189,10 +189,10 @@ ActiveAdmin.register_page "Dashboard" do
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
+              if h.nil?
                 "Missing hold data"
+              else
+                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               end
             end
           end
@@ -227,10 +227,10 @@ ActiveAdmin.register_page "Dashboard" do
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
+              if h.nil?
                 "Missing hold data"
+              else
+                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               end
             end
           end
@@ -265,10 +265,10 @@ ActiveAdmin.register_page "Dashboard" do
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
+              if h.nil?
                 "Missing hold data"
+              else
+                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               end
             end
           end
@@ -303,10 +303,10 @@ ActiveAdmin.register_page "Dashboard" do
             column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|
-              if !h.nil?
-                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
-              else
+              if h.nil?
                 "Missing hold data"
+              else
+                link_to h.created_at.strftime("%m/%d/%Y"), admin_hold_path(h)
               end
             end
           end

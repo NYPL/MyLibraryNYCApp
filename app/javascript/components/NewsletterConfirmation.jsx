@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
+import { useColorModeValue } from "@nypl/design-system-react-components";
 import axios from "axios";
 import {
   TemplateAppContainer,
   Text,
   SkeletonLoader,
+  Box,
 } from "@nypl/design-system-react-components";
 
 const NewsletterConfirmation = () => {
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+
+  const newsLetterbg = useColorModeValue("ui.bg.default", "dark.ui.bg.default");
 
   useEffect(() => {
     let timeoutId = "";
@@ -90,7 +94,9 @@ const NewsletterConfirmation = () => {
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
-      contentPrimary={NewsletterConfirmationMsg()}
+      contentPrimary={
+        <Box bg={newsLetterbg}>{NewsletterConfirmationMsg()}</Box>
+      }
       contentSidebar={<></>}
       sidebar="right"
     />

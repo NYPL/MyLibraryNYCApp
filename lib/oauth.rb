@@ -2,10 +2,10 @@
 
 module Oauth
   def self.get_oauth_token
-    response = HTTParty.post(ENV['ISSO_OAUTH_TOKEN_URL'], body: {
+    response = HTTParty.post(ENV.fetch('ISSO_OAUTH_TOKEN_URL', nil), body: {
         grant_type: 'client_credentials',
-        client_id: ENV['ISSO_CLIENT_ID'],
-        client_secret: ENV['ISSO_CLIENT_SECRET']
+        client_id: ENV.fetch('ISSO_CLIENT_ID', nil),
+        client_secret: ENV.fetch('ISSO_CLIENT_SECRET', nil)
       })
 
     case response.code
@@ -14,7 +14,7 @@ module Oauth
         'message' => 'Token successfully received',
         'status'=> response.code,
         })
-      return JSON.parse(response.body)['access_token']
+      JSON.parse(response.body)['access_token']
     else
      LogWrapper.log('ERROR', {
        'message' => 'Error in receiving response from ISSO NYPL TOKEN SERVICE',

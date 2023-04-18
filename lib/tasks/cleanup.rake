@@ -5,7 +5,7 @@ namespace :cleanup do
   # Use it like this with one or more arguments: `rake cleanup:bib_records['book teacher_set']` or `rake cleanup:bib_records['book']`
   desc "cleanup books or teacher sets"
   task :bib_records, [:model_names] => :environment do |t, args|
-    args.model_names.split(' ').each do |model_name|
+    args.model_names.split.each do |model_name|
       puts "Starting rake task to clean up #{model_name.humanize.pluralize}"
       ActiveRecord::Base.transaction do
         ids_with_duplicate_bibs = []
@@ -29,8 +29,9 @@ namespace :cleanup do
             # skip the first duplicate so that we do not delete it or shift its holds and other associated models
             next if duplicate_record == first_duplicate_record
 
+            data_array = ['hold', 'subjects_teacher_set', 'teacher_set_book', 'teacher_set_note']
             if model_name == 'teacher_set'
-              ['hold', 'subjects_teacher_set', 'teacher_set_book', 'teacher_set_note'].each do |associated_model_name|
+              data_array.each do |associated_model_name|
                 associated_records_for_associated_model = associated_model_name.camelize.constantize.where(teacher_set_id: duplicate_record.id)
                 puts "There are #{associated_records_for_associated_model} associated #{associated_model_name}s to update."
                 associated_records_for_associated_model.each do |associated_record_for_associated_model|
@@ -43,7 +44,8 @@ namespace :cleanup do
                 associated_model_name.camelize.constantize.where(teacher_set_id: first_duplicate_record.id).first.destroy
               end
             elsif model_name == 'book'
-              ['teacher_set_book'].each do |associated_model_name|
+              ts_book = ['teacher_set_book']
+              ts_book.each do |associated_model_name|
                 associated_records_for_associated_model = associated_model_name.camelize.constantize.where(book_id: duplicate_record.id)
                 "There are #{associated_records_for_associated_model} associated #{associated_model_name}s to update."
                 associated_records_for_associated_model.each do |associated_record_for_associated_model|

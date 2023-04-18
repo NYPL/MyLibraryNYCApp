@@ -82,10 +82,10 @@ ActiveAdmin.register User do
         table_for user.holds do
           column 'Status ' do |h| link_to h.status, admin_hold_path(h) end
           column 'Set' do |h|
-            if !h.teacher_set.nil?
-              link_to h.teacher_set.title, admin_hold_path(h)
-            else
+            if h.teacher_set.nil?
               "This teacher set no longer exists."
+            else
+              link_to h.teacher_set.title, admin_hold_path(h)
             end
           end
           column 'Quantity' do |h| h.quantity end
@@ -100,8 +100,7 @@ ActiveAdmin.register User do
   controller do
     def edit # the edit page title has to be handled this way, source: https://github.com/activeadmin/activeadmin/wiki/Set-page-title
       @page_title = resource.name(true)
-    end
-    
+    end    
     
     # Setting up Strong Parameters
     # You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.

@@ -6,8 +6,7 @@ class BookValidator
 
   def initialize(book)
     @book = book
-  end
- 
+  end 
   
   def validate
     if !@book.catalog_choice.nil? && !@book.catalog_choice.empty? 
@@ -22,12 +21,10 @@ class BookValidator
       end
     end
   end
-
   
   def to_s
     "#{self.matching_api_items.nil? ? 'None' : self.matching_api_items.size} matching titles. Please choose one."
   end
-
   
   def empty?
     false

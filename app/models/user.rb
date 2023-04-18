@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   # created on sign up. Does not occur when updating
   # the record.
   validates :first_name, :last_name, :presence => true
-  validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#\$%\^&*+_=\x00-\x19]+\z/
+  validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
 
@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
     allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern)
 
     index = email.index('@')
-    if (index && (allowed_email_patterns.include? email[index..-1]))
+    if (index && (allowed_email_patterns.include? email[index..]))
       return true
     else
       errors.add(:email, 'should end in @schools.nyc.gov or another participating school address')
@@ -75,25 +75,21 @@ class User < ActiveRecord::Base
     return @barcode_found_in_sierra
   end
 
-
   # We don't require passwords, so just create a generic one, yay!
   def self.default_password
     "mylibrarynyc"
   end
 
-
-  def name(full=false)
+  def name(full = false)
     handle = self.email.sub /@.*/, ''
     name = self.first_name
     name += " #{self.last_name}" if full && !self.last_name.nil? && !self.last_name.empty?
     name.nil? ? handle : name
   end
 
-
   def contact_email
     !self.alt_email.nil? && !self.alt_email.empty? ? self.alt_email : self.email
   end
-
 
   # Enable login by either email or alt_email (DOE email and contact email, respectively)
   def self.find_first_by_auth_conditions(warden_conditions)
@@ -105,16 +101,13 @@ class User < ActiveRecord::Base
     end
   end
 
-
   def multiple_barcodes?
     !self.alt_barcodes.nil? && !self.alt_barcodes.empty?
   end
 
-
   def send_unsubscribe_notification_email
     UserMailer.unsubscribe(self).deliver
   end
-
 
   def assign_barcode
     LogWrapper.log('DEBUG', {
@@ -137,8 +130,6 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
-
-
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -147,7 +138,7 @@ class User < ActiveRecord::Base
   def send_request_to_patron_creator_service
     # Sierra supporting pin as password
     query = {
-      'names' => [last_name.upcase + ', ' + first_name.upcase],
+      'names' => ["#{last_name.upcase}, #{first_name.upcase}"],
       'emails' => [email],
       'pin' => password,
       'patronType' => patron_type,
@@ -158,26 +149,26 @@ class User < ActiveRecord::Base
         'pcode4' => pcode4
       },
       'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode.to_s],
-      'addresses': [
+      addresses: [
         {
-          'lines': [
+          lines: [
             "#{school.address_line_1}",
             "#{school.address_line_2}"
           ],
-          'type': 'a'
+          type: 'a'
         }
       ],
-      "phones": [{
-        "number": school.phone_number,
-        "type": "t"
+      phones: [{
+        number: school.phone_number,
+        type: "t"
       }],
-      "varFields": [{
-        "fieldTag": "o",
-        "content": school.name
+      varFields: [{
+        fieldTag: "o",
+        content: school.name
       }]
     }
     response = HTTParty.post(
-      ENV['PATRON_MICROSERVICE_URL_V02'],
+      ENV.fetch('PATRON_MICROSERVICE_URL_V02', nil),
       body: query.to_json,
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
@@ -208,7 +199,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
   # 404 - no records with the same e-mail were found
   # 409 - more then 1 record with the same e-mail was found
   # 200 - 1 record with the same e-mail was found
@@ -218,7 +208,7 @@ class User < ActiveRecord::Base
     }
 
     response = HTTParty.get(
-      ENV['PATRON_MICROSERVICE_URL_V01'],
+      ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil),
       query: query,
       headers:
         {
@@ -257,11 +247,9 @@ class User < ActiveRecord::Base
       return response
   end
 
-
   def patron_type
     school.borough == 'QUEENS' ? 149 : 151
   end
-
 
   def pcode3
     return 1 if school.borough == 'BRONX'
@@ -270,7 +258,6 @@ class User < ActiveRecord::Base
     return 4 if school.borough == 'BROOKLYN'
     return 5 if school.borough == 'QUEENS'
   end
-
 
   # This returns the sierra code, not the school's zcode
   def pcode4

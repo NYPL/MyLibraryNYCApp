@@ -6,12 +6,14 @@ import axios from "axios";
 import {
   Accordion,
   TemplateAppContainer,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 import HTMLReactParser from "html-react-parser";
 
 export default function Faqs(props) {
   
   const [faqs, setFaqs] = useState([]);
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "test") {
@@ -32,10 +34,10 @@ export default function Faqs(props) {
     return faqs.map((data) => {
       return {
         label: (
-          <div className="hrefLink">{HTMLReactParser(data["question"])}</div>
+          <div className={`${colorMode} hrefLink`}>{HTMLReactParser(data["question"])}</div>
         ),
         panel: (
-          <div className="hrefLink">{HTMLReactParser(data["answer"])}</div>
+          <div className={`${colorMode} hrefLink`}>{HTMLReactParser(data["answer"])}</div>
         ),
       };
     });

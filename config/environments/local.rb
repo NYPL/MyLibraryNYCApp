@@ -38,14 +38,14 @@ MyLibraryNYC::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.action_mailer.default_url_options = { :host => "#{ENV['MLN_INFO_SITE_HOSTNAME']}:3000" }
+  config.action_mailer.default_url_options = { :host => "#{ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil)}:3000" }
   config.action_mailer.perform_deliveries = false
   config.api_only = false
   # config.middleware.use ActionDispatch::Cookies
   # config.middleware.use ActionDispatch::Session::CookieStore
   # config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore)
 
-  config.logger = Logger.new(STDOUT)
+  config.logger = Logger.new($stdout)
   config.logger.level = Logger::DEBUG
 
   # Turn off asset pipline information showing in logs

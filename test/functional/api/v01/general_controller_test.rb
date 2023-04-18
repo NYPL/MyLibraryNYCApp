@@ -12,7 +12,7 @@ class Api::GeneralControllerTest < MiniTest::Test
     @mintest_mock1 = MiniTest::Mock.new
     body = StringIO.new
     body.puts "#{{:test=>"test1"}}"
-    @request = OpenStruct.new(key: '1234', body: body )
+    @request = Struct.new(:key, :body).new('1234', body)
   end
 
 
@@ -48,7 +48,7 @@ class Api::GeneralControllerTest < MiniTest::Test
 
   describe '#log error' do
     it 'test log error' do
-      exception = OpenStruct.new(message: 'error occured', backtrace: 'error' ) 
+      exception = Struct.new(:message, :backtrace).new('error occured', 'error')
       resp = @controller.log_error(__method__, exception)
       assert_equal(true, resp)
     end

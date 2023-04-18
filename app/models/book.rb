@@ -13,6 +13,7 @@ class Book < ActiveRecord::Base
   after_save :enable_papertrail
 
   attr_accessor :catalog_choice
+
   # attr_accessor :matching_api_items
 
   # has_and_belongs_to_many :authors
@@ -78,21 +79,21 @@ class Book < ActiveRecord::Base
   end
 
 
-  def update_from_catalog_item(item)
-    self.update :details_url => item['details_url']
+  # def update_from_catalog_item(item)
+  #   self.update :details_url => item['details_url']
 
-    self.update :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
-                :call_number => item['call_number'], :description => item['description'], 
-                :statement_of_responsibility => item['statement_of_responsibility']
+  #   self.update :title => item['title'], :sub_title => item['sub_title'], :publication_date => item['publication_date'], 
+  #               :call_number => item['call_number'], :description => item['description'], 
+  #               :statement_of_responsibility => item['statement_of_responsibility']
 
-    self.update :format => item['format']['name'] unless item['format'].nil?
-    self.update :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
-    self.update :notes => item['notes'].join(';') unless item['notes'].nil?
-    url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
-    self.update :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
-    self.update :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
-    self
-  end
+  #   self.update :format => item['format']['name'] unless item['format'].nil?
+  #   self.update :physical_description => item['physical_description'].join(';') unless item['physical_description'].nil?
+  #   self.update :notes => item['notes'].join(';') unless item['notes'].nil?
+  #   url_path = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value='
+  #   self.update :cover_uri => url_path + item['isbns'].first unless item['isbns'].nil?
+  #   self.update :isbn => item['isbns'].first if !item['isbns'].nil? && !item['isbns'].empty?
+  #   self
+  # end
 
 
   def self.catalog_item(id)
@@ -140,19 +141,19 @@ class Book < ActiveRecord::Base
   #   return resp['titles'] if resp.keys.include? 'titles'
   # end
 
+  # Unused method
+  # def self.update_by_catalog_id(id)
+  #   item = self.catalog_item id
+  #   Book.upsert_from_catalog_item item
+  # end
 
-  def self.update_by_catalog_id(id)
-    item = self.catalog_item id
-    Book.upsert_from_catalog_item item
-  end
+  # Unused method
+  # def self.upsert_from_catalog_item(item)
+  #   book = Book.find_or_initialize_by_details_url item['details_url']
+  #   book.update_from_catalog_item item
 
-
-  def self.upsert_from_catalog_item(item)
-    book = Book.find_or_initialize_by_details_url item['details_url']
-    book.update_from_catalog_item item
-
-    book
-  end
+  #   book
+  # end
 
 
   def create_teacher_set_version_on_update
@@ -160,7 +161,6 @@ class Book < ActiveRecord::Base
       teacher_set.update(last_book_change: "updated-#{self.id}-#{self.title}")
     end
   end
-
 
   def update_from_isbn
     response = send_request_to_bibs_microservice
@@ -181,10 +181,10 @@ class Book < ActiveRecord::Base
         cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}",
         bib_code_3: fixed_field(book_attributes, '31', true)
       )
-    rescue => exception
+    rescue => e
       # catch any error such as string field is receiving more than 255 characters or an expected attribute is missing
       LogWrapper.log('ERROR', {
-        'message' => "#{exception.message[0..200]}...\nBacktrace=#{exception.backtrace}.",
+        'message' => "#{e.message[0..200]}...\nBacktrace=#{e.backtrace}.",
         'method' => 'method'
       })
     end
@@ -195,7 +195,7 @@ class Book < ActiveRecord::Base
   # Sends a request to the bibs microservice.
   def send_request_to_bibs_microservice
     response = HTTParty.get(
-      ENV['BIBS_MICROSERVICE_URL_V01'] + "?standardNumber=#{isbn}",
+      ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil) + "?standardNumber=#{isbn}",
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
           'Content-Type' => 'application/json' },
@@ -226,7 +226,6 @@ class Book < ActiveRecord::Base
 
     return response
   end
-
   
   def var_field(book_attributes, marcTag)
     begin
@@ -235,7 +234,6 @@ class Book < ActiveRecord::Base
       return nil
     end
   end
-
 
   # This method returns Fixed Field values from bib response
   # eg: book_attributes = "fixedFields"=> {"24"=>{"label"=>"Language", "value"=>"eng", "display"=>"English"}

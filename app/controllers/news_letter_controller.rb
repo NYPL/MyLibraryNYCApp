@@ -4,7 +4,7 @@ class NewsLetterController < ApplicationController
   include EncryptDecryptString
   include GoogleApiClient
 
-  GOOGLE_SPREAD_SHEET_ID = ENV['NEWS_LETTER_GOOGLE_SPREAD_SHEET_ID']
+  GOOGLE_SPREAD_SHEET_ID = ENV.fetch('NEWS_LETTER_GOOGLE_SPREAD_SHEET_ID', nil)
   RANGE = "Sheet1!A1:B"
 
   def index
@@ -24,9 +24,8 @@ class NewsLetterController < ApplicationController
   rescue StandardError => e
     LogWrapper.log('ERROR', {'message' => "Error occcured while calling the google sheets. #{e.message}",
                              'method' => 'index'})
-    render json: { status: "error",  message: e.message[0..75]}
+    render json: { status: "error", message: e.message[0..75]}
   end
-
   
   # Validate news-letter email from user-signup page.
   def validate_news_letter_email_from_user_sign_up_page
@@ -45,7 +44,6 @@ class NewsLetterController < ApplicationController
                              'method' => 'validate_news_letter_email'})
     render json: { error: e.message[0..75] }
   end
-
   
   # Validate news-letter email is valid or not.
   # This below method allows these formats only. eg: test@dd.com, test@com.
@@ -57,14 +55,12 @@ class NewsLetterController < ApplicationController
     raise "Please enter a valid email address" unless is_valid
   end
 
-
   # sends news-letter confirmation email link to news-letter subscriber.
   # confirmation email should be an encryted format. Eg: "key=YHY7878999"
   def send_news_letter_confirmation_email(email)
     encrypt_email = EncryptDecryptString.encrypt_string(email)
     AdminMailer.send_news_letter_confirmation_email(encrypt_email, email).deliver
   end
-
 
   # Checking here input email already in google sheets or not.
   def email_already_in_google_sheets?(emails_arr, email)
@@ -75,7 +71,6 @@ class NewsLetterController < ApplicationController
                              'method' => 'email_already_in_google_sheets'})
     raise 'That email is already subscribed to the MyLibraryNYC newsletter.' 
   end
-
   
   # Connect's to google client and get all news-letter emails
   def news_letter_google_spread_sheet_emails
@@ -84,14 +79,12 @@ class NewsLetterController < ApplicationController
     response.values.present? ? response.values.flatten : []
   end
 
-
   # Connect's to google client and append news-letter emails to google sheet.
   def write_news_letter_emails_to_google_sheets(email)
     service = GoogleApiClient.sheets_client
     value_range_object = Google::Apis::SheetsV4::ValueRange.new(values: [[email]])
     service.append_spreadsheet_value(GOOGLE_SPREAD_SHEET_ID, RANGE, value_range_object, value_input_option: 'RAW')
   end
-
 
   # Create news-letter email into google sheets
   # After clicking the confirmation email this method receive the input.
