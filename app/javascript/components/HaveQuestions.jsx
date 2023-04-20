@@ -1,7 +1,12 @@
 import React from "react";
-import { Link, Heading } from "@nypl/design-system-react-components";
+import { Link, Heading, Icon, useColorModeValue } from "@nypl/design-system-react-components";
 
 export default function HaveQuestions() {
+  const socialMediaIconColor = useColorModeValue(
+    "var(--nypl-colors-ui-black)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
+
   return (
     <>
       <Heading
@@ -21,6 +26,45 @@ export default function HaveQuestions() {
           Or{" "}
           <Link id="home-contact-link" type="action" href="/contact">
             Contact Us
+          </Link>
+        </p>
+        <p marginTop="s">
+          <Link
+            marginRight="xs"
+            marginTop="s"
+            type="action"
+            target="_blank"
+            href="https://twitter.com/mylibrarynyc/"
+          >
+            <Icon
+              align="right"
+              color={socialMediaIconColor}
+              className="navBarIcon"
+              decorative
+              iconRotation="rotate0"
+              id="social-twitter-icon-id"
+              name="socialTwitter"
+              size="large"
+              type="default"
+            />
+          </Link>
+          
+          <Link
+            type="action"
+            target="_blank"
+            href="https://www.instagram.com/mylibrarynyc/"
+          >
+            <Icon
+              align="right"
+              color={socialMediaIconColor}
+              className="navBarIcon"
+              decorative
+              iconRotation="rotate0"
+              id="social-instagram-icon-id"
+              name="socialInstagram"
+              size="large"
+              type="default"
+            />
           </Link>
         </p>
       </div>
