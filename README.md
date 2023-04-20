@@ -315,13 +315,16 @@ MylibaryNYC application local setup
 
 ```
 Note: Rails, Ruby and Node installation is required to run project in local.
+      Check Ruby and Rails versions in Gemfile.
+      https://github.com/NYPL/MyLibraryNYCApp/blob/development/Gemfile
 
  Step1: Clone git project https://github.com/NYPL/MyLibraryNYCApp.git
 
  Step2: Go to project path then run "bundle install"
 
- Step3: Configure aws credentials in local
-        Go to  aws-configure file and update credentials: ~/.aws/credentials
+ Step3: Configure aws credentials on local
+        Enter a command on terminal:  aws configure
+        (get your aws credentials from devops team and enter on terminal)
 
         [default] 
         aws_access_key_id = ****
@@ -331,12 +334,14 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         aws_access_key_id = ***
         aws_secret_access_key = ***
 
- Step4: Dump the database which ever your interested in (Development or QA)
+ Step4: Install Postgresql
+
+        Dump the database which ever your interested (Development or QA)
 
         Run database dump commands:
         Command: pg_dump --host={host_name} --username mylibrarynyc --file file_name.out {database_name}
 
-        Postgresql commands to create database in local:
+        Postgresql commands to create database on local:
 
         psql -l
         psql -d mylibnyc_local
