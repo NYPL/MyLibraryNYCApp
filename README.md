@@ -341,7 +341,7 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         Run database dump commands:
         Command: pg_dump --host={host_name} --username mylibrarynyc --file file_name.out {database_name}
 
-        Postgresql commands to create database in local:
+        Postgresql commands to create database on local:
 
         psql -l
         psql -d mylibnyc_local
