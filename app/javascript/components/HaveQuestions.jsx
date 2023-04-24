@@ -1,5 +1,10 @@
 import React from "react";
-import { Link, Heading, Icon, useColorModeValue } from "@nypl/design-system-react-components";
+import {
+  Link,
+  Heading,
+  Icon,
+  useColorModeValue,
+} from "@nypl/design-system-react-components";
 
 export default function HaveQuestions() {
   const socialMediaIconColor = useColorModeValue(
@@ -48,7 +53,7 @@ export default function HaveQuestions() {
               type="default"
             />
           </Link>
-          
+
           <Link
             type="action"
             target="_blank"
