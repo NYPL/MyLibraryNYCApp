@@ -530,8 +530,8 @@ export default function TeacherSetDetails(props) {
             marginTop="l"
             marginBottom="l"
             id="mobile-teacher-set-details-order-page"
-            bg="var(--nypl-colors-ui-gray-x-light-cool)"
-            color="var(--nypl-colors-ui-black)"
+            bg={tsOrderBoxBgColor}
+            color={tsOrderTextColor}
             padding="m"
             borderWidth="1px"
             borderRadius="sm"
@@ -544,6 +544,7 @@ export default function TeacherSetDetails(props) {
               level="two"
               size="secondary"
               text="Set Unavailable"
+              color={tsOrderTextColor}
             />
             {teacherSetUnAvailableMsg()}
           </Box>
@@ -554,8 +555,8 @@ export default function TeacherSetDetails(props) {
             marginTop="l"
             marginBottom="l"
             id="mobile-teacher-set-details-order-page"
-            bg="var(--nypl-colors-ui-gray-x-light-cool)"
-            color="var(--nypl-colors-ui-black)"
+            bg={tsOrderBoxBgColor}
+            color={tsOrderTextColor}
             padding="m"
             borderWidth="1px"
             borderRadius="sm"
