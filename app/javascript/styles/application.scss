@@ -965,6 +965,15 @@ $submenu-width: 245px;
 
   }
 }
+.dark.contactInfo {
+
+  @include max-screen($nypl-breakpoint-medium) {
+    
+    tbody th {
+      background-color: var(--nypl-colors-ui-black) !important;
+    }
+  }
+}
 
 .contactInfo {
   font-size: 16px;
