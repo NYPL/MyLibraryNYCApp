@@ -1125,7 +1125,12 @@ $submenu-width: 245px;
 }
 
 .dark.tsFacetsBorderColor {
-  border: 1px solid #E9E9E9;
+  @include min-screen($nypl-breakpoint-medium) {
+      border: 1px solid #E9E9E9;
+  }
+  @include max-screen($nypl-breakpoint-small) {
+    border: none;
+  }
 }
 
 #mln-navbar-list {
