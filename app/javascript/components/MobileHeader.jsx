@@ -23,6 +23,7 @@ export default function MobileHeader(props) {
   const [defaultColorMode, setDefaultColorMode] = useState(
     localStorage.getItem("chakra-ui-color-mode") || "light"
   );
+  const mlnLogo = useColorModeValue("mlnColor", "mlnWhite");
 
   const iconColors = useColorModeValue(
     "var(--nypl-colors-ui-black)",
@@ -179,8 +180,9 @@ export default function MobileHeader(props) {
         <Logo
           id="mln-mobile-header-logo"
           decorative
-          name="mlnColor"
+          name={mlnLogo}
           size="xsmall"
+          marginLeft="s"
         />
       </ReactRouterLink>
       <Spacer />
