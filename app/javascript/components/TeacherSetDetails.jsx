@@ -65,6 +65,11 @@ export default function TeacherSetDetails(props) {
     "var(--nypl-colors-ui-black)",
     "var(--nypl-colors-dark-ui-typography-heading)"
   );
+
+  const bookDetailsBgColor = useColorModeValue(
+    "#F5F5F5",
+    "var(--nypl-colors-dark-ui-bg-default)"
+  );
   const { colorMode } = useColorMode();
 
   useEffect(() => {
@@ -208,7 +213,7 @@ export default function TeacherSetDetails(props) {
             id={"ts-books-" + index}
             key={"ts-books-key-" + index}
             to={"/book_details/" + data.id}
-            style={{ display: "grid", backgroundColor: "#F5F5F5" }}
+            style={{ display: "grid", backgroundColor: bookDetailsBgColor }}
           >
             {BookImage(data)}
           </ReactRouterLink>
