@@ -1157,3 +1157,9 @@ $submenu-width: 245px;
   color: var(--nypl-colors-dark-ui-typography-heading);
   background-color: var(--nypl-colors-ui-black);
 }
+
+.signin-button {  
+  @include max-screen(500px) {
+    width: 100%;
+  }
+}
