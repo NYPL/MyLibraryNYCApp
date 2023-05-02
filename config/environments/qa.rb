@@ -6,7 +6,7 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.perform_deliveries = true
   config.force_ssl = false
   config.consider_all_requests_local = false
-  #config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
+  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
   config.logger = Logger.new($stdout)
   config.logger.level = Logger::INFO
   

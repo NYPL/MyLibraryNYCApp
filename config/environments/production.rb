@@ -71,6 +71,7 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { :host => ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil) }
 
   config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
+  config.logger = Logger.new($stdout)
   config.logger.level = Logger::INFO
   config.hosts = [ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil), ENV.fetch('MLN_SETS_SITE_HOSTNAME', nil),
                   ENV.fetch('MLN_ENVIRONMENT_URL', nil), ENV.fetch('MLN_API_GATEWAY_URL', nil),
