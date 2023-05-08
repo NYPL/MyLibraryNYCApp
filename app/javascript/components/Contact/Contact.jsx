@@ -8,9 +8,11 @@ import {
   Table,
   Text,
   Link,
+  useColorMode,
 } from "@nypl/design-system-react-components";
 
 function Contact() {
+  const { colorMode } = useColorMode();
   useEffect(() => {
     if (process.env.NODE_ENV !== "test") {
       window.scrollTo(0, 0);
@@ -34,11 +36,11 @@ function Contact() {
           </Text>
           <Table
             columnHeaders={["Information", "Contact Emails"]}
-            className="contactInfo"
+            className={`${colorMode} contactInfo`}
             useRowHeaders
             tableData={[
               [
-                <Text key="general-ino" noSpace>
+                <Text key="general-ino" noSpace className={`${colorMode}`}>
                   General Information
                 </Text>,
                 <Link
@@ -50,7 +52,7 @@ function Contact() {
                 </Link>,
               ],
               [
-                <Text key="delivery-questions" noSpace>
+                <Text key="delivery-questions" noSpace className={`${colorMode}`}>
                   Delivery Questions
                 </Text>,
                 <Link
@@ -75,7 +77,7 @@ function Contact() {
           </Text>
           <Table
             columnHeaders={["Information", "Contact Emails"]}
-            className="contactInfo"
+            className={`${colorMode} contactInfo`}
             useRowHeaders
             tableData={[
               [
@@ -160,7 +162,7 @@ function Contact() {
           </Link>
           <Table
             columnHeaders={["Information", "Contact Number"]}
-            className="contactInfo"
+            className={`${colorMode} contactInfo`}
             useRowHeaders
             tableData={[
               [

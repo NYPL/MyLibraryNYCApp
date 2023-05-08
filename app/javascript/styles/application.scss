@@ -215,6 +215,18 @@ $nypl-breakpoint-xxlarge: 1600px;
   margin-left: 1.2em;
 }
 
+.colorModeIcon {
+  color: var(--nypl-colors-ui-black) !important;
+  margin-top: 6px !important;
+  cursor: pointer;
+}
+
+.dark.colorModeIcon {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+  margin-top: 6px !important;
+  cursor: pointer;
+}
+
 .appFooter {
   height: 165px;
   width: 1425px;
@@ -906,10 +918,6 @@ $submenu-width: 245px;
   margin-left: 5px;
 }
 
-.socialMediaIcon {
-  margin-top: 5px !important;
-}
-
 .navBarDropDown {
   align-items: center;
   display: flex;
@@ -955,6 +963,15 @@ $submenu-width: 245px;
       display: none;
     }
 
+  }
+}
+.dark.contactInfo {
+
+  @include max-screen($nypl-breakpoint-medium) {
+    
+    tbody th {
+      background-color: var(--nypl-colors-ui-black) !important;
+    }
   }
 }
 
@@ -1108,9 +1125,41 @@ $submenu-width: 245px;
 }
 
 .dark.tsFacetsBorderColor {
-  border: 1px solid #E9E9E9;
+  @include min-screen($nypl-breakpoint-medium) {
+      border: 1px solid #E9E9E9;
+  }
+  @include max-screen($nypl-breakpoint-small) {
+    border: none;
+  }
 }
 
 #mln-navbar-list {
   align-items: center;
+}
+
+.mobileBrightnessIcon {
+  margin-right: 2px !important;
+  cursor: pointer;
+}
+
+.mobileDarkModeIcon {
+  margin-right: -4px !important;
+  margin-top: 1px !important;
+  cursor: pointer;
+}
+
+.accoutDetailstablecolor {
+  color: var(--nypl-colors-ui-black);
+  background-color: var(--nypl-colors-ui-black);
+}
+
+.dark.accoutDetailstablecolor {
+  color: var(--nypl-colors-dark-ui-typography-heading);
+  background-color: var(--nypl-colors-ui-black);
+}
+
+.signin-button {  
+  @include max-screen(500px) {
+    width: 100%;
+  }
 }
