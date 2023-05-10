@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Link,
-  Icon,
   List,
   Flex,
   Spacer,
   Logo,
-  Box,
   useColorMode,
   useColorModeValue,
 } from "@nypl/design-system-react-components";
@@ -55,7 +53,9 @@ export default function Navbar(props) {
     } else {
       return <svg width="20" height="20" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>Switch to light mode</title>
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M0.5 1.70352C1.97 0.853516 3.68 0.353516 5.5 0.353516C11.02 0.353516 15.5 4.83352 15.5 10.3535C15.5 15.8735 11.02 20.3535 5.5 20.3535C3.68 20.3535 1.97 19.8535 0.5 19.0035C3.49 17.2735 5.5 14.0535 5.5 10.3535C5.5 6.65352 3.49 3.43352 0.5 1.70352ZM13.5 10.3535C13.5 5.94352 9.91 2.35352 5.5 2.35352C5.16 2.35352 4.82 2.37352 4.49 2.42352C6.4 4.58352 7.5 7.40352 7.5 10.3535C7.5 13.3035 6.4 16.1235 4.49 18.2835C4.82 18.3335 5.16 18.3535 5.5 18.3535C9.91 18.3535 13.5 14.7635 13.5 10.3535Z" fill="black"/>
+      <g>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.5 1.70352C1.97 0.853516 3.68 0.353516 5.5 0.353516C11.02 0.353516 15.5 4.83352 15.5 10.3535C15.5 15.8735 11.02 20.3535 5.5 20.3535C3.68 20.3535 1.97 19.8535 0.5 19.0035C3.49 17.2735 5.5 14.0535 5.5 10.3535C5.5 6.65352 3.49 3.43352 0.5 1.70352ZM13.5 10.3535C13.5 5.94352 9.91 2.35352 5.5 2.35352C5.16 2.35352 4.82 2.37352 4.49 2.42352C6.4 4.58352 7.5 7.40352 7.5 10.3535C7.5 13.3035 6.4 16.1235 4.49 18.2835C4.82 18.3335 5.16 18.3535 5.5 18.3535C9.91 18.3535 13.5 14.7635 13.5 10.3535Z" fill="black"/>
+      </g>
       </svg>
     }         
   }
@@ -136,9 +136,10 @@ export default function Navbar(props) {
           <li
             id="color-mode-icon"
             className={`${colorMode} colorModeIcon`}
-            onClick={handleChangeToDarkMode}
           >
-            {displayColorModeIcon()}
+            <button id="color-mode-button" onClick={handleChangeToDarkMode}>
+              {displayColorModeIcon()}
+            </button>
           </li>
         </List>
       </Flex>
