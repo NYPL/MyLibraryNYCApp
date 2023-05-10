@@ -42,6 +42,7 @@ export default function HaveQuestions() {
             href="https://twitter.com/mylibrarynyc/"
           >
             <Icon
+              title="Twitter icon"
               align="right"
               color={socialMediaIconColor}
               className="navBarIcon"
@@ -51,6 +52,7 @@ export default function HaveQuestions() {
               name="socialTwitter"
               size="large"
               type="default"
+              aria-label="Visit our Twitter page"
             />
           </Link>
 
@@ -60,6 +62,7 @@ export default function HaveQuestions() {
             href="https://www.instagram.com/mylibrarynyc/"
           >
             <Icon
+              title="Instagram icon"
               align="right"
               color={socialMediaIconColor}
               className="navBarIcon"
@@ -69,6 +72,7 @@ export default function HaveQuestions() {
               name="socialInstagram"
               size="large"
               type="default"
+              aria-label="Visit our Instagram page"
             />
           </Link>
         </p>
