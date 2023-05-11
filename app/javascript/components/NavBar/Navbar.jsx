@@ -137,7 +137,7 @@ export default function Navbar(props) {
             id="color-mode-icon"
             className={`${colorMode} colorModeIcon`}
           >
-            <button id="color-mode-button" onClick={handleChangeToDarkMode}>
+            <button id="color-mode-button" aria-label="dark-mode-button-label" onClick={handleChangeToDarkMode}>
               {displayColorModeIcon()}
             </button>
           </li>

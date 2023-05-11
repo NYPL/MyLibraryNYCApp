@@ -35,6 +35,7 @@ export default function HaveQuestions() {
             type="action"
             target="_blank"
             href="https://twitter.com/mylibrarynyc/"
+            aria-label="Visit our Twitter page"
           >
             <Icon
               title="Twitter icon"
@@ -47,7 +48,6 @@ export default function HaveQuestions() {
               name="socialTwitter"
               size="large"
               type="default"
-              aria-label="Visit our Twitter page"
             />
           </Link>
 
@@ -55,6 +55,7 @@ export default function HaveQuestions() {
             type="action"
             target="_blank"
             href="https://www.instagram.com/mylibrarynyc/"
+            aria-label="Visit our Instagram page"
           >
             <Icon
               title="Instagram icon"
@@ -67,7 +68,6 @@ export default function HaveQuestions() {
               name="socialInstagram"
               size="large"
               type="default"
-              aria-label="Visit our Instagram page"
             />
           </Link>
         </p>
