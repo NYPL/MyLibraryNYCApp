@@ -4,8 +4,9 @@ class User < ActiveRecord::Base
   include Exceptions
   include LogWrapper
   include Oauth
-
-
+  include MlnException
+  include MlnResponse
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -14,6 +15,8 @@ class User < ActiveRecord::Base
 
   # Makes getters and setters
   attr_accessor :password
+  #before_create :set_code
+  auto_increment :barcode
 
 
   # Validation's for email and pin only occurs when a user record is being
@@ -130,17 +133,86 @@ class User < ActiveRecord::Base
     return self.barcode
   end
 
+  def create_patron_delayed_job
+    binding.pry
+    Rails.logger.info "Entering Delay Job For"
+    Delayed::Job.enqueue(UserDelayedJob.new(self.id, self.password))
+    # Delayed::Worker.logger.info("user details #{user.id}")
+    # Delayed::Worker.logger.info("Delayed Job Log Entry")
+    # Delayed::Worker.logger.info("Test Delayed Job Log Entry  #{find(user.id)}")
+    # find(user.id).save_signup_user_details
+  end 
+
+  def save_as_complete!
+    begin
+      self.status = STATUS_LABELS['complete']
+      self.save!
+    rescue StandardError => exception
+      Delayed::Worker.logger.info("user details #{self.status}  #{exception.backtrace}")
+    end
+  end
+
+  def is_barcode_available_in_sierra
+    isBarCodeAvailable = false
+
+    response = HTTParty.get(
+      ENV['PATRON_MICROSERVICE_URL_V01'] + "?barcode=#{self.barcode}",
+      headers:
+        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
+          'Content-Type' => 'application/json' },
+      timeout: 10
+    )
+
+    if (response.code == 404 && response.message == "Not Found")
+      isBarCodeAvailable = true
+    elsif (response.code == 409)
+      isBarCodeAvailable = false
+      LogWrapper.log('ERROR', {
+        'method' => "is_barcode_available_in_sierra",
+        'message' => "Duplicate patrons found for query. Barcode: #{self.barcode}"
+      })
+    elsif (response.code >= 500)
+      LogWrapper.log('ERROR', {
+        'method' => "is_barcode_available_in_sierra",
+        'message' => "Internal Server error. Barcode: #{self.barcode}"
+      })
+      # raise InternalServerException.new(GENERIC_SERVER_ERROR[:code], GENERIC_SERVER_ERROR[:msg])
+    end
+    return isBarCodeAvailable
+  end
+
+
+  def find_unique_new_barcode
+    # Enqueue a job to be performed as soon as the queuing system is free.
+    begin
+      # Note: user.pin is not getting serialized properly, hence passing as its own var.
+      # Note: user.pin is no longer persisted to MLN db, taking us one step closer
+      # to the goal of using Sierra as the source of truth.
+      FindAvailableUserBarcodeJob.perform_later(user: self)
+    rescue StandardError => exception
+      LogWrapper.log('ERROR', {
+          'method' => "#{model_name}.find_unique_new_barcode",
+          'message' => "Sierra threw an error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
+        })
+      raise exception
+    rescue Exceptions => exception
+    end
+  end
+
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
-  def send_request_to_patron_creator_service
+  def send_request_to_patron_creator_service(pin)
     # Sierra supporting pin as password
+    Delayed::Worker.logger.info("user password details #{pin} ")
+    Delayed::Worker.logger.info("user password details #{self.password} ")
+
     query = {
-      'names' => ["#{last_name.upcase}, #{first_name.upcase}"],
+      'names' => ["#{self.last_name.upcase}", "#{self.first_name.upcase}"],
       'emails' => [email],
-      'pin' => password,
+      'pin' => pin,
       'patronType' => patron_type,
       'patronCodes' => {
         'pcode1' => '-',
@@ -148,7 +220,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode.to_s],
+      'barcodes' => [self.barcode.present? ? "#{self.barcode}" : self.assign_barcode.to_s],
       addresses: [
         {
           lines: [
@@ -167,6 +239,10 @@ class User < ActiveRecord::Base
         content: school.name
       }]
     }
+
+
+    Delayed::Worker.logger.info("user request details #{query} ")
+
     response = HTTParty.post(
       ENV.fetch('PATRON_MICROSERVICE_URL_V02', nil),
       body: query.to_json,
@@ -175,6 +251,9 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
+
+    Delayed::Worker.logger.info("user response details #{response.code}  #{response.message}")
+
     case response.code
     when 201
       LogWrapper.log('DEBUG', {
@@ -198,6 +277,7 @@ class User < ActiveRecord::Base
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
+
 
   # 404 - no records with the same e-mail were found
   # 409 - more then 1 record with the same e-mail was found
