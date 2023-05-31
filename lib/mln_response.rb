@@ -28,4 +28,5 @@ module MlnResponse
   TEACHER_SET_NOT_FOUND_IN_ES               = {code: 'MLN-00014', msg: 'Teacherset not found in elastic-search'}.freeze
   BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN     = {code: 'MLN-00015', msg: 'Bib is suppressed in Sierra; Bib was removed from MyLibraryNYC'}.freeze
   BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN     = {code: 'MLN-00016', msg: 'Bib is suppressed in Sierra; Bib was not added to MyLibraryNYC'}.freeze
+  GENERIC_SERVER_ERROR                       = {code: 'MLN-00017', msg: 'Generic server error from sierra'}.freeze
 end
