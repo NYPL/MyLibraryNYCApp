@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   # end
 
 
-  STATUS_LABELS = {'barcode_pending' => 'barcode_pending', 'complete' => 'complete'}.freeze
+  STATUS_LABELS = {'pending' => 'pending', 'complete' => 'complete'}.freeze
 
 
   ## NOTE: Validation methods, including this one, are called twice when
@@ -144,8 +144,14 @@ class User < ActiveRecord::Base
 
   def save_as_complete!
     begin
-      self.status = STATUS_LABELS['complete']
-      self.save!
+      # isBarCodeAvailable is true means barcode is available we can assign to any user.
+      isBarCodeAvailable = is_barcode_available_in_sierra
+
+      unless isBarCodeAvailable
+        Delayed::Worker.logger.info("User status is updating from #{self.status} to ")
+        self.status = STATUS_LABELS['complete']
+        self.save!
+      end
     rescue StandardError => exception
       Delayed::Worker.logger.info("user details #{self.status}  #{exception.backtrace}")
     end

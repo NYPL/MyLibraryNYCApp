@@ -1,8 +1,8 @@
 class UserDelayedJob < Struct.new(:user_id, :pin)
 
   def perform
-    # Delayed::Worker.logger.info("#{self.class.name}: FindAvailableUserBarcodeJob.perform, user: #{user || 'nil'} arguments: #{args.inspect || 'nil'}")
     user = User.find(user_id)
+    
     if user.blank?
       Delayed::Worker.logger.error("FindAvailableUserBarcodeJob called with nil user or pin.")
       raise Exceptions::ArgumentError, "FindAvailableUserBarcodeJob called with nil user or pin."

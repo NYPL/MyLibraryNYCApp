@@ -13,7 +13,7 @@ module Users
     # POST /resource
     def create
       resource = User.new(user_params)
-      resource.status = 'PENDING'
+      resource.status =  User::STATUS_LABELS['pending']
       resource.password = resource.password
       valid_user = resource.save!
       begin
