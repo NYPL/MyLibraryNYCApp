@@ -12,17 +12,16 @@ module Users
 
     # POST /resource
     def create
-      resource = User.new(user_params)
-      resource.status =  User::STATUS_LABELS['pending']
-      resource.password = resource.password
-      valid_user = resource.save!
       begin
-        resource.create_patron_delayed_job
+        resource = User.new(user_params)
         # is_available = resource.is_barcode_available_in_sierra(resource.barcode)
         # patron_service = User.delay.save_signup_user_details(resource)
-
+        resource.status =  User::STATUS_LABELS['pending']
+        resource.password = resource.password
+        valid = resource.save
         if resource.valid?
-          if valid_user
+         # if valid
+            resource.create_patron_delayed_job
             #resource.save!
             sign_up(resource_name, resource)
             if params.require(:registration)["user"]['news_letter_email'].present?
@@ -33,7 +32,7 @@ module Users
             render json: { status: :created, user: resource, message: "Your account is pending. You should shortly receive an email confirming your account. Please contact help if you've not heard back within 24 hours." }
           # else
           #   render json: { status: 500 }
-          end
+          # end
         else
           render json: { status: 500, message: error_msg_hash(resource) }
         end
