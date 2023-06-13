@@ -22,8 +22,6 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
         # so that the ActiveJob mechanism would take care of retrying.
         # However, such exception handling will become available to us once
         # we upgrade our rails version.  For now, go simpler.
-
-
         Delayed::Worker.logger.error("#{self.class.name}: user.check_barcode_uniqueness_with_sierra threw an error: #{exception.message || 'nil'}")
         raise exception
       end

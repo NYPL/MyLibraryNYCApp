@@ -15,9 +15,8 @@ class User < ActiveRecord::Base
 
   # Makes getters and setters
   attr_accessor :password
-  #before_create :set_code
-  auto_increment :barcode
-
+  #auto_increment :barcode
+  validates :barcode, :uniqueness => true
 
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
@@ -26,7 +25,7 @@ class User < ActiveRecord::Base
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
-
+  # validates :barcode, numericality: { in: 27777000000001..27777099999999 }
   # validate :validate_password_pattern, on: :create
   # PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[[:^alnum:]])/x
   validate :validate_email_pattern, :on => :create
@@ -34,6 +33,8 @@ class User < ActiveRecord::Base
   has_many :holds
 
   belongs_to :school
+  USER_BARCODE_ALLOTTED_RANGE_MINIMUM = 27777000000001
+  USER_BARCODE_ALLOTTED_RANGE_MAXIMUM = 27777099999999
 
   # # Set default password if one is not set
   # before_validation(on: :create) do
@@ -112,24 +113,118 @@ class User < ActiveRecord::Base
     UserMailer.unsubscribe(self).deliver
   end
 
+  # If the user's barcode is not yet finalized, then set its status to
+  # 'pending' and save.  In the future, there may be other conditions that
+  # could set the user to "pending", and we'll be checking for those here, as well.
+  def save_as_pending!
+    LogWrapper.log('DEBUG', {
+       'message' => "Saving as pending #{self.id}",
+       'method' => "#{model_name}.save_as_pending!",
+       'status' => "before save action"
+    })
+
+    # do we need to fill in a provisional barcode?
+    unless self.barcode.present?
+      # Note: assign_barcode could throw a RangeError.
+      # If it does, we want it to propagate up the stack to the calling method.
+      self.barcode = self.assign_barcode!
+    end
+
+    self.status = STATUS_LABELS['pending']
+
+    self.save!
+  end
+
+
+  # ################ THE BARCODES SECTION! ################
+  # Assigns a barcode based on the current range in the MLN db.
+  # Does not check the barcode for availability/uniqueness in Sierra.
+  # We have an ActiveJob for that.
   def assign_barcode
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
-       'method' => "assign_barcode",
-       'status' => "start",
+       'method' => "#{model_name}.assign_barcode",
+       'status' => "start"
+      })
+
+    # Integer(string) can raise ArgumentError.  we choose not to rescue it, because
+    # not having min and max barcode range boundaries set in the application.yml file
+    # should prevent the app from working in a visible manner.
+    min_barcode = USER_BARCODE_ALLOTTED_RANGE_MINIMUM
+    max_barcode = USER_BARCODE_ALLOTTED_RANGE_MAXIMUM
+
+    # if we're being asked to increment our barcode because it's
+    # non-unique in Sierra, then do so here
+    if self.barcode
+      # random number between 5 and 10 is a cheap way of helping prevent collisions,
+      # and we have the barcode range to spare.
+      self.assign_attributes({ barcode: self.barcode + Luhn.control_digit(self.barcode) })
+
+      # Did we go over the limit?  No use stepping back, tell the app we'll
+      # need to ask Sierra team for a wider barcode range.
+      if self.barcode > max_barcode
+        LogWrapper.log('ERROR', {
+            'method' => "#{model_name}.assign_barcode!",
+            'message' => "MLN app has run out of available user barcodes"
+        })
+        raise RangeError, "MLN app has run out of available user barcodes"
+      end
+
+      LogWrapper.log('DEBUG', {
+         'message' => "Had a barcode.  Changed it to #{self.barcode}.  Returning from method.",
+         'method' => "#{model_name}.assign_barcode!",
+         'status' => "end",
+         'user' => {email: self.email}
+        })
+      return self.barcode
+    end
+
+    # runs when this is our first time in this method for this user
+    # some databases sort nulls to top of order, other databases sort nulls to bottom of order
+    last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
+
+    LogWrapper.log('DEBUG', {
+       'message' => "Found last_user_barcode: #{last_user_barcode || 'NIL'}.",
+       'method' => "#{model_name}.assign_barcode!",
+       'status' => "end",
        'user' => {email: self.email}
       })
 
-    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
+    # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
+    if last_user_barcode.blank?
+      # Check to see if we're in an empty database, or if it's the opposite case:
+      # we've run out of allowed barcodes.  Yes, we might have historical user records
+      # with barcodes outside of the range, but we can't be making new records there.
+      current_top_barcode = User.where.not(barcode: nil).order(barcode: :desc).pluck(:barcode).first
+      
+      if current_top_barcode.blank?
+        # hurrah, we're in a fresh db, let's start our users table off
+        last_user_barcode = min_barcode
+      else
+        # No more barcodes left in the range available to MLN.
+        # Throw an Exception-level exception -- we can't operate with
+        # no available barcodes, and this exception shouldn't be caught
+        LogWrapper.log('ERROR', {
+            'method' => "#{model_name}.assign_barcode!",
+            'message' => "MLN app has run out of available user barcodes"
+        })
+        raise RangeError, "MLN app has run out of available user barcodes"
+      end
+    end
+
+    if (last_user_barcode < min_barcode)
+      last_user_barcode = min_barcode
+    end
+
     self.assign_attributes({ barcode: last_user_barcode + 1})
 
     LogWrapper.log('DEBUG', {
        'message' => "Barcode has been assigned to #{self.email}",
-       'method' => "assign_barcode",
+       'method' => "#{model_name}.assign_barcode!",
        'status' => "end",
-       'barcode' => "#{self.barcode}",
-       'user' => {email: self.email}
+       'barcode' => "#{self.barcode}"
       })
+
     return self.barcode
   end
 

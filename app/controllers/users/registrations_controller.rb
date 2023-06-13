@@ -16,6 +16,7 @@ module Users
         resource = User.new(user_params)
         # is_available = resource.is_barcode_available_in_sierra(resource.barcode)
         # patron_service = User.delay.save_signup_user_details(resource)
+        resource.barcode = resource.assign_barcode
         resource.status =  User::STATUS_LABELS['pending']
         resource.password = resource.password
         valid = resource.save
@@ -34,7 +35,7 @@ module Users
           #   render json: { status: 500 }
           # end
         else
-          render json: { status: 500, message: error_msg_hash(resource) }
+          render json: { status: 500, message: error_msg_hash(resource) || "Error" }
         end
       rescue Exceptions::InvalidResponse, StandardError => e
         render json: { status: 500, message: {error: [e.message]} }
