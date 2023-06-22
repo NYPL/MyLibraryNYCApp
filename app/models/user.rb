@@ -156,8 +156,6 @@ class User < ActiveRecord::Base
     # if we're being asked to increment our barcode because it's
     # non-unique in Sierra, then do so here
     if self.barcode
-      # random number between 5 and 10 is a cheap way of helping prevent collisions,
-      # and we have the barcode range to spare.
       self.assign_attributes({ barcode: self.barcode + Luhn.control_digit(self.barcode) })
 
       # Did we go over the limit?  No use stepping back, tell the app we'll
@@ -216,7 +214,7 @@ class User < ActiveRecord::Base
       last_user_barcode = min_barcode
     end
 
-    self.assign_attributes({ barcode: last_user_barcode + 1})
+    self.assign_attributes({ barcode: last_user_barcode + 1 })
 
     LogWrapper.log('DEBUG', {
        'message' => "Barcode has been assigned to #{self.email}",
@@ -224,17 +222,13 @@ class User < ActiveRecord::Base
        'status' => "end",
        'barcode' => "#{self.barcode}"
       })
-
     return self.barcode
   end
 
   def create_patron_delayed_job
     Rails.logger.info "Entering Delay Job For"
     Delayed::Job.enqueue(UserDelayedJob.new(self.id, self.password))
-    # Delayed::Worker.logger.info("user details #{user.id}")
-    # Delayed::Worker.logger.info("Delayed Job Log Entry")
-    # Delayed::Worker.logger.info("Test Delayed Job Log Entry  #{find(user.id)}")
-    # find(user.id).save_signup_user_details
+    UserMailer.account_confirmed_email_to_user(self).deliver
   end
 
   def save_as_complete!
@@ -262,7 +256,6 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
-
     if (response.code == 404 && response.message == "Not Found")
       isBarCodeAvailable = true
     elsif (response.code == 409)
@@ -305,7 +298,7 @@ class User < ActiveRecord::Base
   # Accepts a response from the microservice, and returns.
   def send_request_to_patron_creator_service(pin)
     # Sierra supporting pin as password
-    Delayed::Worker.logger.info("user password details #{pin} ")
+    Delayed::Worker.logger.info("user pin details #{pin} ")
     Delayed::Worker.logger.info("user password details #{self.password} ")
 
     query = {
@@ -351,6 +344,8 @@ class User < ActiveRecord::Base
       timeout: 10
     )
 
+    Delayed::Worker.logger.info("user request details #{query} ")
+
     Delayed::Worker.logger.info("user response details #{response.code}  #{response.message}")
 
     case response.code
@@ -375,8 +370,12 @@ class User < ActiveRecord::Base
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
+    response
   end
 
+  def account_confirmed_email_to_user
+    UserMailer.account_confirmed_email_to_user(self).deliver
+  end
 
   # 404 - no records with the same e-mail were found
   # 409 - more then 1 record with the same e-mail was found

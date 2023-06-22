@@ -14,8 +14,6 @@ module Users
     def create
       begin
         resource = User.new(user_params)
-        # is_available = resource.is_barcode_available_in_sierra(resource.barcode)
-        # patron_service = User.delay.save_signup_user_details(resource)
         resource.barcode = resource.assign_barcode
         resource.status =  User::STATUS_LABELS['pending']
         resource.password = resource.password
