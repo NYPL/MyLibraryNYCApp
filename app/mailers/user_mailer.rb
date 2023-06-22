@@ -31,8 +31,8 @@ class UserMailer < ActionMailer::Base
       # something went wrong.  perhaps the user isn't set properly, or maybe the email couldn't be sent out.
       Rails.logger.error("#{LOG_TAG}.unsubscribe: ")
       LogWrapper.log('ERROR', {
-        'message' => "Cannot send unsubscribe confirmation email.  Backtrace=#{e.backtrace}.",
-        'method' => 'UserMailer unsubscribe'
+        'message' => "Cannot send account confirmed email to user. Backtrace=#{e.backtrace}.",
+        'method' => 'UserMailer account_confirmed_email_to_user'
       })
       raise
     end
