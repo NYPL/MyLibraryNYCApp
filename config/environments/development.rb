@@ -55,4 +55,5 @@ MyLibraryNYC::Application.configure do
                   "my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com"]
   config.eager_load = false
   config.active_job.queue_adapter = :delayed_job
+  Delayed::Worker.logger = Rails.logger
 end
