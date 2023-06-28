@@ -140,12 +140,11 @@ class User < ActiveRecord::Base
     self.save!
   end
 
-
   # ################ THE BARCODES SECTION! ################
   # Assigns a barcode based on the current range in the MLN db.
   # Does not check the barcode for availability/uniqueness in Sierra.
   # We have an ActiveJob for that.
-  def assign_barcode
+  def assign_barcode(number_tries=0)
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
        'method' => "#{model_name}.assign_barcode",
@@ -160,11 +159,11 @@ class User < ActiveRecord::Base
 
     # if we're being asked to increment our barcode because it's
     # non-unique in Sierra, then do so here
-    if self.barcode
-      self.assign_attributes({ barcode: self.barcode + Luhn.control_digit(self.barcode) })
-
+    if self.barcode && number_tries >= 2
       # Did we go over the limit?  No use stepping back, tell the app we'll
       # need to ask Sierra team for a wider barcode range.
+      self.assign_attributes({ barcode: self.barcode + rand(5..10) })
+
       if self.barcode > max_barcode
         LogWrapper.log('ERROR', {
             'method' => "#{model_name}.assign_barcode!",
@@ -182,8 +181,7 @@ class User < ActiveRecord::Base
       return self.barcode
     end
 
-    # runs when this is our first time in this method for this user
-    # some databases sort nulls to top of order, other databases sort nulls to bottom of order
+
     last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
 
     LogWrapper.log('DEBUG', {

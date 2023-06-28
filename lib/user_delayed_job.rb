@@ -24,8 +24,10 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
       # well, we can't be saving this user with a duplicate barcode.
       # ask the user to increment its barcode, and try again.
       unless is_barcode_available
-        defensive_log("#{self.class.name}: barcode [#{user.barcode}] was already in Sierra, calling user.assign_barcode again")
-        user.assign_barcode
+        defensive_log("#{self.class.name}: barcode [#{user.barcode}] was already in Sierra, calling user.assign_barcode again. No.of retries number_tries #{number_tries}")
+        user.assign_barcode(number_tries)
+
+        is_barcode_available = user.is_barcode_available_in_sierra
         # wait a bit before hitting Sierra up again
         sleep(60)
       end
