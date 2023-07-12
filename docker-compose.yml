@@ -1,0 +1,43 @@
+version: '3.4'
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mln-postgres
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - '.:/home/app/MyLibraryNYCApp'
+    depends_on:
+    - mln-postgres
+    command: ["/home/app/MyLibraryNYCApp/bin/delayed_job", "run"]
+  mln-postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      RAILS_ENV: ${RAILS_ENV}
+      RACK_ENV: ${RACK_ENV}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_HOST_AUTH_METHOD: ${DATABASE_HOST}
+      POSTGRES_PORT: ${DATABASE_PORT}
+    ports:
+      - '5433:5432'
+    volumes:
+      - './data/postgres:/var/lib/postgresql/data'
+volumes:
+  pgdata:
