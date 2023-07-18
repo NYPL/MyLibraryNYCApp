@@ -67,14 +67,13 @@ export default function Navbar(props) {
   return (
     <div id="mln-navbar" className="header-topWrapper">
       <Flex alignItems="center">
-        <Link href="/" onClick={hideHomeSignUpMsg}>
+        <Link href="/" onClick={hideHomeSignUpMsg} aria-label="MyLibraryNYC homepage">
           <Logo
             id="mln-nav-bar-header-logo"
             marginLeft="m"
             decorative
             name={mlnLogo}
             size="small"
-            aria-label="MyLibraryNYC homepage"
           />
         </Link>
         <Spacer />
