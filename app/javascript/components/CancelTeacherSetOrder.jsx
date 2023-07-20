@@ -26,6 +26,7 @@ export default function TeacherSetOrder() {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
+    document.title = "Cancel Order | MyLibraryNYC";
     window.scrollTo(0, 0);
     axios({ method: "get", url: "/holds/" + params["id"] + "/cancel_details" })
       .then((res) => {

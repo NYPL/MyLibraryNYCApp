@@ -51,6 +51,7 @@ export default function SignUp(props) {
   const { colorMode } = useColorMode();
   
   useEffect(() => {
+    document.title = "Sign Up | MyLibraryNYC";
     if (process.env.NODE_ENV !== "test") {
       window.scrollTo(0, 0);
     }

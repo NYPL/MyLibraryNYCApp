@@ -84,6 +84,7 @@ export default function SearchTeacherSets(props) {
   const location = useLocation();
 
   useEffect(() => {
+    document.title = "Search Teacher Sets | MyLibraryNYC";
     setIsLoading(true);
   }, [facets, teacherSets, tsTotalCount, noTsResultsFound]);
 
