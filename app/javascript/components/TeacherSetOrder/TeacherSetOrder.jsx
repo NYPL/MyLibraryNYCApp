@@ -38,6 +38,11 @@ export default function TeacherSetOrder(props) {
           } else {
             setTeacherSet(res.data.teacher_set);
             setHold(res.data.hold);
+            if (res.data.hold && res.data.hold.status === "cancelled") {
+              document.title = "Order Cancelled | MyLibraryNYC";
+            } else {
+              document.title = "Order Details | MyLibraryNYC";
+            }
           }
         })
         .catch(function (error) {

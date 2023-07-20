@@ -73,6 +73,7 @@ export default function TeacherSetDetails(props) {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
+    document.title = "Teacher Set Details | [teacher_set_title] | MyLibraryNYC";
     setIsLoading(true);
   }, [books.cover_uri]);
 
