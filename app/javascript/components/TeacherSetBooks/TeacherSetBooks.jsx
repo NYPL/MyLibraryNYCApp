@@ -33,7 +33,6 @@ export default function TeacherSetBooks() {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    document.title = "Book Details | [book_title] | MyLibraryNYC";
     setIsLoading(true);
   }, [book.cover_uri]);
 
@@ -58,6 +57,7 @@ export default function TeacherSetBooks() {
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
         setBook(res.data.book);
+        document.title = "Book Details | "+ res.data.book.title + " | MyLibraryNYC";
       })
       .catch(function (error) {
         console.log(error);
