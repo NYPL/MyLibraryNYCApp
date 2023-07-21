@@ -63,7 +63,11 @@ export default function TeacherSetBooks() {
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
         setBook(res.data.book);
-        document.title = "Book Details | "+ res.data.book.title + " | MyLibraryNYC";
+        if (res.data.book.title !== null) {
+          document.title = "Book Details | " + res.data.book.title + " | MyLibraryNYC";
+        } else {
+          document.title = "Book Details | MyLibraryNYC";
+        }
       })
       .catch(function (error) {
         console.log(error);
