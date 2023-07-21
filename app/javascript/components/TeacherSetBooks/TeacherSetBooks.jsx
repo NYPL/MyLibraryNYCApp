@@ -20,6 +20,8 @@ import {
   Box,
   SkeletonLoader,
   useColorMode,
+  Hero,
+  useColorModeValue,
 } from "@nypl/design-system-react-components";
 
 import ShowBookImage from "./../ShowBookImage";
@@ -31,6 +33,10 @@ export default function TeacherSetBooks() {
   const [teacherSets, setTeacherSets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { colorMode } = useColorMode();
+  const heroBgColor = useColorModeValue(
+    "var(--nypl-colors-brand-primary)",
+    "var(--nypl-colors-dark-ui-bg-hover)"
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -205,6 +211,7 @@ export default function TeacherSetBooks() {
   return (
     <TemplateAppContainer
       breakout={
+      <>
         <Breadcrumbs
           id={"mln-breadcrumbs-ts-details"}
           breadcrumbsData={[
@@ -220,6 +227,20 @@ export default function TeacherSetBooks() {
           ]}
           breadcrumbsType="booksAndMore"
         />
+        <Hero
+            heroType="tertiary"
+            backgroundColor={heroBgColor}
+            heading={
+              <Heading
+                level="one"
+                id={
+                  "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
+                }
+                text="Book Details"
+              />
+            }
+          />
+        </>
       }
       contentPrimary={
         <>
