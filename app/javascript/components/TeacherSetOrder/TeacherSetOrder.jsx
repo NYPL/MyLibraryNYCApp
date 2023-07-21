@@ -24,7 +24,7 @@ export default function TeacherSetOrder(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
+    document.title = "Order Details | MyLibraryNYC";
     if (typeof hold === "string") {
       axios
         .get("/holds/" + params["access_key"])
