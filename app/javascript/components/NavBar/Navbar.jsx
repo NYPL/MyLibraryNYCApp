@@ -44,7 +44,7 @@ export default function Navbar(props) {
 
   const displayColorModeIcon = () => {
     if (defaultColorMode === "dark") {
-      return <button id="color-mode-button" arial-label="Switch to light mode" onClick={handleChangeToDarkMode}>
+      return <button id="color-mode-button" aria-label="Switch to light mode" onClick={handleChangeToDarkMode}>
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
         <title>sun icon</title>
         <g id="icon/image/brightness/5/24px">
@@ -53,7 +53,7 @@ export default function Navbar(props) {
         </svg>
       </button>
     } else {
-      return <button id="color-mode-button"  arial-label="Switch to dark mode" onClick={handleChangeToDarkMode}>
+      return <button id="color-mode-button"  aria-label="Switch to dark mode" onClick={handleChangeToDarkMode}>
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
         <title>moon icon</title>
         <g>
@@ -67,7 +67,7 @@ export default function Navbar(props) {
   return (
     <div id="mln-navbar" className="header-topWrapper">
       <Flex alignItems="center">
-        <Link href="/" onClick={hideHomeSignUpMsg}>
+        <Link href="/" onClick={hideHomeSignUpMsg} aria-label="MyLibraryNYC homepage">
           <Logo
             id="mln-nav-bar-header-logo"
             marginLeft="m"
