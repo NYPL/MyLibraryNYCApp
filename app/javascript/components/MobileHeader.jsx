@@ -112,7 +112,7 @@ export default function MobileHeader(props) {
     } else {
       return (
         <li>
-          <Link className="mobileSubmenu" href="/signin">
+          <Link className="mobileSubmenu" href="/signin" aria-label="Sign in">
             Sign In
           </Link>
           <HorizontalRule align="right" className="mobileHorizontalRule" />
@@ -196,7 +196,7 @@ export default function MobileHeader(props) {
         marginRight="xs"
       >
         <li id="mobile-mln-navbar-ts-link">
-          <Link href="/teacher_set_data" className="nav-link-colors">
+          <Link href="/teacher_set_data" className="nav-link-colors" aria-label="Search teacher sets">
             <Icon
               align="right"
               color={iconColors}
