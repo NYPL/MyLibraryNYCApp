@@ -33,7 +33,7 @@ export default function Navbar(props) {
     props.hideSignInMessage(true);
   };
 
-  const handleChangeToDarkMode = () => {
+  const handleChangeToDarkLightMode = () => {
     const newColorMode = colorMode === "light" ? "dark" : "light";
     setDefaultColorMode(newColorMode)
     console.log(
@@ -44,7 +44,7 @@ export default function Navbar(props) {
 
   const displayColorModeIcon = () => {
     if (defaultColorMode === "dark") {
-      return <button id="color-mode-button" aria-label="Switch to light mode" onClick={handleChangeToDarkMode}>
+      return <button id="color-mode-button" aria-label="Switch to light mode" onClick={handleChangeToDarkLightMode}>
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
         <title>sun icon</title>
         <g id="icon/image/brightness/5/24px">
@@ -53,7 +53,7 @@ export default function Navbar(props) {
         </svg>
       </button>
     } else {
-      return <button id="color-mode-button"  aria-label="Switch to dark mode" onClick={handleChangeToDarkMode}>
+      return <button id="color-mode-button"  aria-label="Switch to dark mode" onClick={handleChangeToDarkLightMode}>
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
         <title>moon icon</title>
         <g>
@@ -140,9 +140,7 @@ export default function Navbar(props) {
           <li
             id="color-mode-icon"
             className={`${colorMode} colorModeIcon`}
-          >
-            
-              {displayColorModeIcon()}
+          > {displayColorModeIcon()}
           </li>
         </List>
       </Flex>

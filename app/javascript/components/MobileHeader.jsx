@@ -35,7 +35,7 @@ export default function MobileHeader(props) {
     "var(--nypl-colors-dark-ui-typography-heading)"
   );
 
-  const handleChangeToDarkMode = () => {
+  const handleChangeToDarkLightMode = () => {
     const newColorMode = colorMode === "light" ? "dark" : "light";
     setDefaultColorMode(newColorMode);
     console.log(
@@ -112,7 +112,7 @@ export default function MobileHeader(props) {
     } else {
       return (
         <li>
-          <Link className="mobileSubmenu" href="/signin">
+          <Link className="mobileSubmenu" href="/signin" aria-label="Sign in">
             Sign In
           </Link>
           <HorizontalRule align="right" className="mobileHorizontalRule" />
@@ -124,9 +124,10 @@ export default function MobileHeader(props) {
   const displayColorModeIcon = () => {
     if (defaultColorMode === "dark") {
       return (
-        <li
+        <button
           id="mobile-color-mode-icon"
-          onClick={handleChangeToDarkMode}
+          aria-label="Switch to light mode"
+          onClick={handleChangeToDarkLightMode}
           className="mobileBrightnessIcon"
         >
           <svg
@@ -146,13 +147,14 @@ export default function MobileHeader(props) {
               />
             </g>
           </svg>
-        </li>
+        </button>
       );
     } else {
       return (
-        <li
+        <button
           id="mobile-color-mode-icon"
-          onClick={handleChangeToDarkMode}
+          aria-label="Switch to dark mode"
+          onClick={handleChangeToDarkLightMode}
           className="mobileDarkModeIcon"
         >
           <svg
@@ -169,7 +171,7 @@ export default function MobileHeader(props) {
               fill="black"
             />
           </svg>
-        </li>
+        </button>
       );
     }
   };
@@ -196,7 +198,11 @@ export default function MobileHeader(props) {
         marginRight="xs"
       >
         <li id="mobile-mln-navbar-ts-link">
-          <Link href="/teacher_set_data" className="nav-link-colors">
+          <Link
+            href="/teacher_set_data"
+            className="nav-link-colors"
+            aria-label="Search teacher sets"
+          >
             <Icon
               align="right"
               color={iconColors}
