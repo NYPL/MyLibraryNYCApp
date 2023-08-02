@@ -1,9 +1,7 @@
 import React from "react";
 import Navbar from "./NavBar/Navbar";
 import MobileHeader from "./MobileHeader";
-import {
-  SkipNavigation,
-} from "@nypl/design-system-react-components";
+import { SkipNavigation } from "@nypl/design-system-react-components";
 export default function Header(props) {
   return (
     <>
