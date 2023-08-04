@@ -11,7 +11,7 @@ import {
   Center,
   Box,
   Logo,
-  Square,
+  Button,
   useColorModeValue,
 } from "@nypl/design-system-react-components";
 
@@ -168,12 +168,17 @@ export default function MobileHeader(props) {
               }
             >
               <li>
-                <Square
+                <Button
                   marginTop="xs"
                   position="absolute"
                   right="s"
+                  top="xs"
                   size="50px"
+                  className="mobile-submenu-close-btn"
                   bg="var(--nypl-colors-ui-gray-xx-dark)"
+                  aria-label="Close main menu"
+                  buttonType="secondary"
+                  id="mobile-submenu-close-btn"
                 >
                   <Icon
                     onClick={() => setMobileMenuActive(!mobileMenuActive)}
@@ -183,7 +188,7 @@ export default function MobileHeader(props) {
                     size="large"
                     type="default"
                   />
-                </Square>
+                </Button>
               </li>
               <li>
                 <Center>
