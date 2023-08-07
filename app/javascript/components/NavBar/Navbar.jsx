@@ -27,7 +27,7 @@ export default function Navbar(props) {
   };
 
   return (
-    <nav>
+   
       <div id="mln-navbar" className="header-topWrapper">
         <Flex alignItems="center">
           <Link href="/" onClick={hideHomeSignUpMsg} aria-label="MyLibraryNYC homepage">
@@ -40,74 +40,75 @@ export default function Navbar(props) {
             />
           </Link>
           <Spacer />
-          <List
-            id="mln-navbar-list"
-            type="ul"
-            inline
-            noStyling
-            key="mln-navbar-list-key"
-          >
-            <li id="mln-navbar-ts-link">
-              <Link
-                marginRight="m"
-                href="/teacher_set_data"
-                onClick={hideSignInMsg}
-                className={`${colorMode} nav-link-colors`}
-              >
-                Search Teacher Sets
-              </Link>
-            </li>
+          <nav>
+            <List
+              id="mln-navbar-list"
+              type="ul"
+              inline
+              noStyling
+              key="mln-navbar-list-key"
+            >
+              <li id="mln-navbar-ts-link">
+                <Link
+                  marginRight="m"
+                  href="/teacher_set_data"
+                  onClick={hideSignInMsg}
+                  className={`${colorMode} nav-link-colors`}
+                >
+                  Search Teacher Sets
+                </Link>
+              </li>
 
-            <li id="mln-navbar-contacts-link">
-              <Link
-                href="/contact"
-                onClick={hideSignInMsg}
-                className={`${colorMode} nav-link-colors`}
-              >
-                Contact
-              </Link>
-            </li>
+              <li id="mln-navbar-contacts-link">
+                <Link
+                  href="/contact"
+                  onClick={hideSignInMsg}
+                  className={`${colorMode} nav-link-colors`}
+                >
+                  Contact
+                </Link>
+              </li>
 
-            <li id="mln-navbar-faq-link">
-              <Link
-                marginLeft="m"
-                marginRight="m"
-                href="/faq"
-                onClick={hideSignInMsg}
-                className={`${colorMode} nav-link-colors`}
-              >
-                FAQ
-              </Link>
-            </li>
+              <li id="mln-navbar-faq-link">
+                <Link
+                  marginLeft="m"
+                  marginRight="m"
+                  href="/faq"
+                  onClick={hideSignInMsg}
+                  className={`${colorMode} nav-link-colors`}
+                >
+                  FAQ
+                </Link>
+              </li>
 
-            <li id="mln-navbar-ps-link">
-              <Link
-                marginRight="m"
-                href="/participating-schools"
-                onClick={hideSignInMsg}
-                className={`${colorMode} nav-link-colors`}
-              >
-                Participating Schools
-              </Link>
-            </li>
+              <li id="mln-navbar-ps-link">
+                <Link
+                  marginRight="m"
+                  href="/participating-schools"
+                  onClick={hideSignInMsg}
+                  className={`${colorMode} nav-link-colors`}
+                >
+                  Participating Schools
+                </Link>
+              </li>
 
-            <li id="mln-navbar-ad-link" className={`${colorMode} nav__menu-item`}>
-              <AccountDetailsSubMenu
-                userSignedIn={props.userSignedIn}
-                handleSignOutMsg={props.handleSignOutMsg}
-                hideSignUpMessage={props.hideSignUpMessage}
-                handleLogout={props.handleLogout}
-              />
-            </li>
+              <li id="mln-navbar-ad-link" className={`${colorMode} nav__menu-item`}>
+                <AccountDetailsSubMenu
+                  userSignedIn={props.userSignedIn}
+                  handleSignOutMsg={props.handleSignOutMsg}
+                  hideSignUpMessage={props.hideSignUpMessage}
+                  handleLogout={props.handleLogout}
+                />
+              </li>
 
-            <li
-              id="color-mode-icon"
-              className={`${colorMode} colorModeIcon`}
-            > {<ColorModeComponent />}
-            </li>
-          </List>
+              <li
+                id="color-mode-icon"
+                className={`${colorMode} colorModeIcon`}
+              > {<ColorModeComponent />}
+              </li>
+            </List>
+          </nav>
         </Flex>
       </div>
-    </nav>
   );
 }

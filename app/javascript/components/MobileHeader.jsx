@@ -105,18 +105,18 @@ export default function MobileHeader(props) {
   };
 
   return (
-    <nav>
-      <Flex alignItems="center" id="mln-mobile-header-topWrapper">
-        <ReactRouterLink to="/">
-          <Logo
-            id="mln-mobile-header-logo"
-            decorative
-            name={mlnLogo}
-            size="xsmall"
-            marginLeft="s"
-          />
-        </ReactRouterLink>
-        <Spacer />
+    <Flex alignItems="center" id="mln-mobile-header-topWrapper">
+      <ReactRouterLink to="/">
+        <Logo
+          id="mln-mobile-header-logo"
+          decorative
+          name={mlnLogo}
+          size="xsmall"
+          marginLeft="s"
+        />
+      </ReactRouterLink>
+      <Spacer />
+      <nav>
         <List
           id="mobile-mln-navbar-list"
           key="mobile-mln-navbar-list-key"
@@ -280,7 +280,7 @@ export default function MobileHeader(props) {
             </Box>
           </li>
         </List>
-      </Flex>
-    </nav>
+      </nav>
+    </Flex>
   );
 }
