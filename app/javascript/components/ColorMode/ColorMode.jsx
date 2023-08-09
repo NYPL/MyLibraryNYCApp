@@ -96,7 +96,7 @@ export default function ColorMode() {
       return (
         lightMode()
       )
-      }
+    }
   };
 
   const darkModeImage = () => {
