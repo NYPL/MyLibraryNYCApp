@@ -29,48 +29,75 @@ export default function ColorMode() {
     toggleColorMode();
   };
 
+  const lightMode = () => {
+    if (isLargerThanMobile) {
+      return <button id="color-mode-button"  aria-label="Switch to dark mode" onClick={handleChangeToDarkLightMode}>
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <title>moon icon</title>
+            {lightModeImage()}
+          </svg>
+        </button>
+    } else {
+      return <button
+      id="mobile-color-mode-icon"
+      aria-label="Switch to dark mode"
+      onClick={handleChangeToDarkLightMode}
+      className="mobileDarkModeIcon"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      > 
+        <title>moon icon</title>
+        { lightModeImage() }
+      </svg>
+      </button>
+    }
+  }
+
+  const darkMode = () => {
+    if (isLargerThanMobile) {
+      return <button id="color-mode-button" aria-label="Switch to light mode" onClick={handleChangeToDarkLightMode}>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <title>sun icon</title>
+        { darkModeImage() }
+        </svg>
+      </button>
+    } else {
+      return <button
+      id="mobile-color-mode-icon"
+      aria-label="Switch to light mode"
+      onClick={handleChangeToDarkLightMode}
+      className="mobileBrightnessIcon"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <title>sun icon</title>
+        { darkModeImage() }
+      </svg>
+      </button>
+    }
+  }
+
   const displayColorModeIcon = () => {
     if (defaultColorMode === "dark") {
       return (
-        <button
-          id="mobile-color-mode-icon"
-          aria-label="Switch to light mode"
-          onClick={handleChangeToDarkLightMode}
-          className="mobileBrightnessIcon"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            { darkModeImage() }
-          </svg>
-        </button>
+        darkMode()
       );
     } else {
       return (
-        <button
-          id="mobile-color-mode-icon"
-          aria-label="Switch to dark mode"
-          onClick={handleChangeToDarkLightMode}
-          className="mobileDarkModeIcon"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            { lightModeImage() }
-          </svg>
-        </button>
-      );
-    }
+        lightMode()
+      )
+      }
   };
-
 
   const darkModeImage = () => {
     return (<g id="icon/image/brightness/5/24px">
