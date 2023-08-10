@@ -15,31 +15,29 @@ module Users
       resource = User.new(user_params)
       resource.status = 'PENDING'
       resource.password = resource.password
-      resource.save!
+      valid_user = resource.save!
       begin
-        binding.pry
         resource.create_patron_delayed_job
         # is_available = resource.is_barcode_available_in_sierra(resource.barcode)
         # patron_service = User.delay.save_signup_user_details(resource)
 
-        # if resource.valid?
-        #   if patron_service
-        #     resource.save!
-        #     sign_up(resource_name, resource)
-        #     if params.require(:registration)["user"]['news_letter_email'].present?
-        #       # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
-        #       email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
-        #       NewsLetterController.new.send_news_letter_confirmation_email(email)
-        #     end
-        #     render json: { status: :created, user: resource, message: "Welcome! You have signed up successfully." }
-        #   else
-        #     render json: { status: 500 }
-        #   end
-        # else
-        #   render json: { status: 500, message: error_msg_hash(resource) }
-        # end
+        if resource.valid?
+          if valid_user
+            #resource.save!
+            sign_up(resource_name, resource)
+            if params.require(:registration)["user"]['news_letter_email'].present?
+              # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
+              email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
+              NewsLetterController.new.send_news_letter_confirmation_email(email)
+            end
+            render json: { status: :created, user: resource, message: "Your account is pending. You should shortly receive an email confirming your account. Please contact help if you've not heard back within 24 hours." }
+          # else
+          #   render json: { status: 500 }
+          end
+        else
+          render json: { status: 500, message: error_msg_hash(resource) }
+        end
       rescue Exceptions::InvalidResponse, StandardError => e
-        binding.pry
         render json: { status: 500, message: {error: [e.message]} }
       end
     end

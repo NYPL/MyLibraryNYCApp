@@ -331,6 +331,33 @@ export default function TeacherSetDetails(props) {
     );
   };
 
+  const tsOrderdata = () => {
+    if (currentUserStatus === "pending") {
+      return userAccountIsPending();
+    } else {
+      return (
+        <>
+          <Heading
+            id="ts-order-set"
+            textAlign="center"
+            noSpace
+            level="two"
+            size="secondary"
+            text="Order Set"
+          />
+          <Heading
+            id="ts-available-copies"
+            textAlign="center"
+            size="callout"
+            level="four"
+            text={AvailableCopies()}
+          />
+          {OrderTeacherSets()}
+        </>
+      );
+    }
+  };
+
   const OrderTeacherSets = () => {
     if (teacherSet && teacherSet.available_copies <= 0) {
       return teacherSetUnAvailableMsg();
@@ -387,6 +414,30 @@ export default function TeacherSetDetails(props) {
         </div>
       );
     }
+  };
+
+  const userAccountIsPending = () => {
+    return (
+      <>
+        <Heading size="callout">Account Pending </Heading>
+        <Text width="m" size="caption">
+          <i>
+            Your account is pending. You should shortly receive an email
+            confirming your account. You will be able to order teacher sets once
+            your account is confirmed. Please contact help if you've not heard
+            back within 24 hours.
+          </i>{" "}
+          <Link
+            type="action"
+            target="_blank"
+            className={`${colorMode} hrefBlackColor`}
+            href="mailto:help@mylibrarynyc.org"
+          >
+            help@mylibrarynyc.org.
+          </Link>
+        </Text>
+      </>
+    );
   };
 
   const truncateTitle = (str, n, useWordBoundary) => {
@@ -461,47 +512,47 @@ export default function TeacherSetDetails(props) {
   };
 
   const orderTeacherSetsInfo = () => {
-    if (
-      isLargerThanMobile ||
-      (!isLargerThanMobile &&
-        teacherSet &&
-        teacherSet.available_copies > 0 &&
-        allowedQuantities.length > 0)
-    ) {
+    if (isLoading) {
       return (
-        <Box>
-          <VStack align="left">
-            <Box
-              id="teacher-set-details-order-page"
-              bg={tsOrderBoxBgColor}
-              color="var(--nypl-colors-ui-black)"
-              padding="m"
-              borderWidth="1px"
-              borderRadius="sm"
-              overflow="hidden"
-              marginBottom="l"
-            >
-              <Heading
-                id="ts-order-set"
-                textAlign="center"
-                noSpace
-                level="two"
-                size="secondary"
-                text="Order Set"
-              />
-              <Heading
-                id="ts-available-copies"
-                textAlign="center"
-                size="callout"
-                level="four"
-                text={AvailableCopies()}
-              />
-              {OrderTeacherSets()}
-            </Box>
-            <HaveQuestions />
-          </VStack>
-        </Box>
+        <SkeletonLoader
+          className="teacher-set-details-skeleton-loader"
+          contentSize={0}
+          headingSize={0}
+          imageAspectRatio="square"
+          layout="column"
+          showImage
+          width="189px"
+          key={"order-teachr-set-info-skelton"}
+        />
       );
+    } else {
+      if (
+        isLargerThanMobile ||
+        (!isLargerThanMobile &&
+          teacherSet &&
+          teacherSet.available_copies > 0 &&
+          allowedQuantities.length > 0)
+      ) {
+        return (
+          <Box>
+            <VStack align="left">
+              <Box
+                id="teacher-set-details-order-page"
+                bg={tsOrderBoxBgColor}
+                color="var(--nypl-colors-ui-black)"
+                padding="m"
+                borderWidth="1px"
+                borderRadius="sm"
+                overflow="hidden"
+                marginBottom="l"
+              >
+                {tsOrderdata()}
+              </Box>
+              <HaveQuestions />
+            </VStack>
+          </Box>
+        );
+      }
     }
   };
 
