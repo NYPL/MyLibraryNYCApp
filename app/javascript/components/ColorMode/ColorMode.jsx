@@ -31,7 +31,7 @@ export default function ColorMode() {
 
   const lightMode = () => {
     if (isLargerThanMobile) {
-      return <button id="color-mode-button"  aria-label="Switch to dark mode" onClick={handleChangeToDarkLightMode}>
+      return <button id="desktop-color-mode-icon"  aria-label="Switch to dark mode" onClick={handleChangeToDarkLightMode}>
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <title>moon icon</title>
             {lightModeImage()}
@@ -60,7 +60,7 @@ export default function ColorMode() {
 
   const darkMode = () => {
     if (isLargerThanMobile) {
-      return <button id="color-mode-button" aria-label="Switch to light mode" onClick={handleChangeToDarkLightMode}>
+      return <button id="desktop-color-mode-icon" aria-label="Switch to light mode" onClick={handleChangeToDarkLightMode}>
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
         <title>sun icon</title>
         { darkModeImage() }

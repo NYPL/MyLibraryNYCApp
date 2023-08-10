@@ -31,7 +31,7 @@ export default function MobileHeader(props) {
     if (props.details.userSignedIn) {
       return (
         <li id="mobile-mln-navbar-account-link">
-          <ReactRouterLink to="/account_details" className="nav-link-colors">
+          <Link href="/account_details" className="nav-link-colors">
             <Icon
               align="right"
               color={iconColors}
@@ -42,13 +42,13 @@ export default function MobileHeader(props) {
               size="large"
               type="default"
             />
-          </ReactRouterLink>
+          </Link>
         </li>
       );
     } else {
       return (
         <li id="mobile-mln-navbar-signin-link">
-          <ReactRouterLink to="/signin" className="nav-link-colors">
+          <Link href="/signin" className="nav-link-colors" aria-label="Sign in">
             <Icon
               align="right"
               color={iconColors}
@@ -59,7 +59,7 @@ export default function MobileHeader(props) {
               size="large"
               type="default"
             />
-          </ReactRouterLink>
+          </Link>
         </li>
       );
     }
@@ -106,7 +106,7 @@ export default function MobileHeader(props) {
 
   return (
     <Flex alignItems="center" id="mln-mobile-header-topWrapper">
-      <ReactRouterLink to="/">
+      <Link href="/">
         <Logo
           id="mln-mobile-header-logo"
           decorative
@@ -114,7 +114,7 @@ export default function MobileHeader(props) {
           size="xsmall"
           marginLeft="s"
         />
-      </ReactRouterLink>
+      </Link>
       <Spacer />
       <nav>
         <List
@@ -145,20 +145,20 @@ export default function MobileHeader(props) {
             </Link>
           </li>
           {signInAccountDetails()}
-          {<ColorMode />}
-
+          <li>{<ColorMode />}</li>
           <li>
-            <Icon
-              onClick={() => setMobileMenuActive(!mobileMenuActive)}
-              id="mobile-sub-menu"
-              align="right"
-              color={iconColors}
-              decorative
-              iconRotation="rotate0"
-              name="utilityHamburger"
-              size="large"
-              type="default"
-            />
+            <button aria-label="Show main menu" onClick={() => setMobileMenuActive(!mobileMenuActive)}>
+              <Icon
+                id="mobile-sub-menu"
+                align="right"
+                color={iconColors}
+                decorative
+                iconRotation="rotate0"
+                name="utilityHamburger"
+                size="large"
+                type="default"
+              />
+            </button>
             <Box id="mobile-navbar-submenu-list">
               <List
                 key="mobile-navbar-submenu-list-key"
