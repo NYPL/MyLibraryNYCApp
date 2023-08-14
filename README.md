@@ -350,6 +350,7 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         Rub below command in project path to create database tables
 
         RAILS_ENV=local rake db:create
+        RAILS_ENV=local rake db:schema:load
         RAILS_ENV=local rake db:migrate
         RAILS_ENV=local rake db:seed
 
