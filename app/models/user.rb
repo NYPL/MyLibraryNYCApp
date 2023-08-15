@@ -134,14 +134,13 @@ class User < ActiveRecord::Base
   end
 
   def create_patron_delayed_job
-    binding.pry
     Rails.logger.info "Entering Delay Job For"
     Delayed::Job.enqueue(UserDelayedJob.new(self.id, self.password))
     # Delayed::Worker.logger.info("user details #{user.id}")
     # Delayed::Worker.logger.info("Delayed Job Log Entry")
     # Delayed::Worker.logger.info("Test Delayed Job Log Entry  #{find(user.id)}")
     # find(user.id).save_signup_user_details
-  end 
+  end
 
   def save_as_complete!
     begin
@@ -180,7 +179,6 @@ class User < ActiveRecord::Base
     end
     return isBarCodeAvailable
   end
-
 
   def find_unique_new_barcode
     # Enqueue a job to be performed as soon as the queuing system is free.

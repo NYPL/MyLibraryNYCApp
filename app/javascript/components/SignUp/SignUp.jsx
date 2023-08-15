@@ -73,9 +73,6 @@ export default function SignUp(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-        .querySelector("meta[name='csrf-token']")
-        .getAttribute("content");
       axios
         .post("/users", {
           user: {
