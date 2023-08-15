@@ -48,7 +48,7 @@ export default function MobileHeader(props) {
     } else {
       return (
         <li id="mobile-mln-navbar-signin-link">
-          <Link href="/signin" className="nav-link-colors" aria-label="Sign in">
+          <ReactRouterLink to="/signin" className="nav-link-colors" aria-label="Sign in">
             <Icon
               align="right"
               color={iconColors}
@@ -59,7 +59,7 @@ export default function MobileHeader(props) {
               size="large"
               type="default"
             />
-          </Link>
+          </ReactRouterLink>
         </li>
       );
     }
@@ -106,7 +106,7 @@ export default function MobileHeader(props) {
 
   return (
     <Flex alignItems="center" id="mln-mobile-header-topWrapper">
-      <Link href="/">
+      <ReactRouterLink to="/">
         <Logo
           id="mln-mobile-header-logo"
           decorative
@@ -114,7 +114,7 @@ export default function MobileHeader(props) {
           size="xsmall"
           marginLeft="s"
         />
-      </Link>
+      </ReactRouterLink>
       <Spacer />
       <nav>
         <List
@@ -127,8 +127,8 @@ export default function MobileHeader(props) {
           marginRight="xs"
         >
           <li id="mobile-mln-navbar-ts-link">
-            <Link
-              href="/teacher_set_data"
+            <ReactRouterLink
+              to="/teacher_set_data"
               className="nav-link-colors"
               aria-label="Search teacher sets"
             >
@@ -142,7 +142,7 @@ export default function MobileHeader(props) {
                 size="large"
                 type="default"
               />
-            </Link>
+            </ReactRouterLink>
           </li>
           {signInAccountDetails()}
           <li>{<ColorMode />}</li>
