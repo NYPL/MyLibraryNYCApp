@@ -6,7 +6,6 @@ $nypl-breakpoint-large: 960px;
 $nypl-breakpoint-xlarge: 1280px;
 $nypl-breakpoint-xxlarge: 1600px;
 
-@import '@nypl/design-system-react-components/dist/resources.scss';
 @import 'utils/viewports';
 @import 'utils/breakpoint';
 @import 'mobile_header';

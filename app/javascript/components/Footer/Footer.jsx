@@ -21,10 +21,11 @@ function Footer() {
   const footerLinks = () => {
     return (
       <>
-        <a
+        <Link
           id="nypl-footer-logo-link"
           href="http://nypl.org"
-          attributes={{ target: "_blank" }}
+          target="_blank"
+          screenreaderOnlyText="New York Public Library"
         >
           <Logo
             decorative
@@ -32,12 +33,13 @@ function Footer() {
             name={nyplFullLogo}
             size="small"
           />
-        </a>
+        </Link>
 
         <Link
           id="brooklyn-foooter-logo-link"
           href="http://www.brooklynpubliclibrary.org"
-          attributes={{ target: "_blank" }}
+          target="_blank"
+          screenreaderOnlyText="Brooklyn Public Library"
         >
           <Logo
             decorative
@@ -50,7 +52,8 @@ function Footer() {
         <Link
           id="queens-foooter-logo-link"
           href="http://www.queenslibrary.org"
-          attributes={{ target: "_blank" }}
+          target="_blank"
+          screenreaderOnlyText="Queens Public Library"
         >
           <Logo
             decorative
@@ -62,7 +65,8 @@ function Footer() {
         <Link
           id="doe-foooter-logo-link"
           href="http://schools.nyc.gov"
-          attributes={{ target: "_blank" }}
+          target="_blank"
+          screenreaderOnlyText="New York City Department of Education"
         >
           <Logo
             decorative
