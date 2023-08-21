@@ -70,7 +70,7 @@ function Footer() {
           <Logo
               decorative
               id="nycps-foooter-logo-id"
-              size="medium"
+              size="small"
             >
               <svg width="332" height="63" viewBox="0 0 332 63" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M266.463 28.6509H262.771V25.8255H266.463V28.6509Z" fill="black"/>
