@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Link,
-  HStack,
-} from "@nypl/design-system-react-components";
+import { Link, HStack } from "@nypl/design-system-react-components";
 
 function CalendarOfEvents() {
   const [calendarFileName, setCalendarFileName] = useState("");
@@ -32,7 +29,7 @@ function CalendarOfEvents() {
 
   return (
     <div className="calendarButton">
-      <HStack gap="xxxxs" marginTop="s">    
+      <HStack gap="xxxxs" marginTop="s">
         <Link
           id="calendar-of-events-link"
           className="calendar_link"

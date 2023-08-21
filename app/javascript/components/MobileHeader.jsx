@@ -48,7 +48,11 @@ export default function MobileHeader(props) {
     } else {
       return (
         <li id="mobile-mln-navbar-signin-link">
-          <ReactRouterLink to="/signin" className="nav-link-colors" aria-label="Sign in">
+          <ReactRouterLink
+            to="/signin"
+            className="nav-link-colors"
+            aria-label="Sign in"
+          >
             <Icon
               align="right"
               color={iconColors}
@@ -147,7 +151,10 @@ export default function MobileHeader(props) {
           {signInAccountDetails()}
           <li>{<ColorMode />}</li>
           <li>
-            <button aria-label="Show main menu" onClick={() => setMobileMenuActive(!mobileMenuActive)}>
+            <button
+              aria-label="Show main menu"
+              onClick={() => setMobileMenuActive(!mobileMenuActive)}
+            >
               <Icon
                 id="mobile-sub-menu"
                 align="right"
