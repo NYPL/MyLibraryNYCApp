@@ -25,7 +25,7 @@ function Footer() {
           id="nypl-footer-logo-link"
           href="http://nypl.org"
           target="_blank"
-          screenreaderOnlyText="New York Public Library"
+          //screenreaderOnlyText="New York Public Library"
         >
           <Logo
             decorative
@@ -39,7 +39,7 @@ function Footer() {
           id="brooklyn-foooter-logo-link"
           href="http://www.brooklynpubliclibrary.org"
           target="_blank"
-          screenreaderOnlyText="Brooklyn Public Library"
+          //screenreaderOnlyText="Brooklyn Public Library"
         >
           <Logo
             decorative
@@ -53,7 +53,7 @@ function Footer() {
           id="queens-foooter-logo-link"
           href="http://www.queenslibrary.org"
           target="_blank"
-          screenreaderOnlyText="Queens Public Library"
+          //screenreaderOnlyText="Queens Public Library"
         >
           <Logo
             decorative
@@ -66,7 +66,7 @@ function Footer() {
           id="doe-foooter-logo-link"
           href="http://schools.nyc.gov"
           target="_blank"
-          screenreaderOnlyText="New York City Department of Education"
+          //screenreaderOnlyText="New York City Department of Education"
         >
           <Logo
             decorative
