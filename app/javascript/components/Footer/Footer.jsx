@@ -69,7 +69,7 @@ function Footer() {
           id="nycps-foooter-logo-link"
           href="http://schools.nyc.gov"
           target="_blank"
-          //screenreaderOnlyText="New York City Department of Education"
+          //screenreaderOnlyText="New York City Public Schools"
         >
           <Logo
               decorative
