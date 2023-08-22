@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Button,
-  Link,
-  ButtonGroup,
-} from "@nypl/design-system-react-components";
+import { Link, HStack } from "@nypl/design-system-react-components";
 
 function CalendarOfEvents() {
   const [calendarFileName, setCalendarFileName] = useState("");
@@ -33,41 +29,38 @@ function CalendarOfEvents() {
 
   return (
     <div className="calendarButton">
-      <ButtonGroup marginTop="s">
-        <Button id="calendar-of-events-button" buttonType="noBrand">
-          <Link
-            id="calendar-of-events-link"
-            className="calendar_link"
-            target="_blank"
-            href={
-              "//" +
-              process.env.MLN_INFO_SITE_HOSTNAME +
-              "/home/calendar_event/" +
-              calendarFileName
-            }
-          >
-            {" "}
-            Calendar of Events{" "}
-          </Link>
-        </Button>
-
-        <Button id="menu-of-services-button" buttonType="noBrand">
-          <Link
-            id="menu-of-services-link"
-            className="calendar_link"
-            target="_blank"
-            href={
-              "//" +
-              process.env.MLN_INFO_SITE_HOSTNAME +
-              "/menu_of_services/" +
-              menuOfServicesFileName
-            }
-          >
-            {" "}
-            Menu of Services{" "}
-          </Link>
-        </Button>
-      </ButtonGroup>
+      <HStack gap="xxxxs" marginTop="s">
+        <Link
+          id="calendar-of-events-link"
+          className="calendar_link"
+          target="_blank"
+          type="buttonNoBrand"
+          href={
+            "//" +
+            process.env.MLN_INFO_SITE_HOSTNAME +
+            "/home/calendar_event/" +
+            calendarFileName
+          }
+        >
+          {" "}
+          Calendar of Events{" "}
+        </Link>
+        <Link
+          id="menu-of-services-link"
+          className="calendar_link"
+          target="_blank"
+          type="buttonNoBrand"
+          href={
+            "//" +
+            process.env.MLN_INFO_SITE_HOSTNAME +
+            "/menu_of_services/" +
+            menuOfServicesFileName
+          }
+        >
+          {" "}
+          Menu of Services{" "}
+        </Link>
+      </HStack>
     </div>
   );
 }
