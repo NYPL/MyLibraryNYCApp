@@ -158,11 +158,6 @@
     "build:clean": "rm -rf public/webpack || true",
     "lint": "eslint app/javascript/components/*.jsx"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
-  ],
   "author": ""
 }
 
