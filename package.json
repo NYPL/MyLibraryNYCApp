@@ -69,7 +69,7 @@
     "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.18.2",
     "@babel/register": "^7.15.3",
-    "@nypl/design-system-react-components": "1.7.0",
+    "@nypl/design-system-react-components": "1.5.4",
     "@nypl/dgx-svg-icons": "0.3.7",
     "@rails/activestorage": "^7.0.2-3",
     "@rails/ujs": "^7.0.2-3",
@@ -151,7 +151,6 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build && npm run generate-sass-resources",
     "test": "jest",
     "coverage": "jest --coverage",
     "build:dev": "rm -rf public/webpack/development && RAILS_ENV=development NODE_ENV=development bin/webpack",
@@ -160,4 +159,3 @@
   },
   "author": ""
 }
-
