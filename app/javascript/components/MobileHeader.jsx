@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import FocusLock from "@chakra-ui/focus-lock";
+import { useStyleConfig } from "@chakra-ui/react";
 import axios from "axios";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
+import { siteNavLinks, upperNavLinks } from "./utils/HeaderUtils";
+
 import {
   Link,
   Flex,
@@ -13,6 +17,7 @@ import {
   Logo,
   Button,
   useColorModeValue,
+  useCloseDropDown,
 } from "@nypl/design-system-react-components";
 
 import ColorMode from "./ColorMode/ColorMode";
@@ -21,6 +26,10 @@ export default function MobileHeader(props) {
   const navigate = useNavigate();
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
   const mlnLogo = useColorModeValue("mlnColor", "mlnWhite");
+  const ref = useRef(null);
+  const styles = useStyleConfig("MobileHeader", { mobileMenuActive });
+
+  useCloseDropDown(mobileMenuActive, ref);
 
   const iconColors = useColorModeValue(
     "var(--nypl-colors-ui-black)",
@@ -89,7 +98,7 @@ export default function MobileHeader(props) {
   const navMenuSignInAccountDetails = () => {
     if (props.details.userSignedIn) {
       return (
-        <li>
+        <li className="mobile-submenu-margin">
           <ReactRouterLink className="mobileSubmenu" onClick={mobileSignOut}>
             Sign Out
           </ReactRouterLink>
@@ -98,7 +107,7 @@ export default function MobileHeader(props) {
       );
     } else {
       return (
-        <li>
+        <li className="mobile-submenu-margin">
           <Link className="mobileSubmenu" href="/signin" aria-label="Sign in">
             Sign In
           </Link>
@@ -109,7 +118,7 @@ export default function MobileHeader(props) {
   };
 
   return (
-    <Flex alignItems="center" id="mln-mobile-header-topWrapper">
+    <Flex alignItems="center" id="mln-mobile-header-topWrapper" paddingTop="s">
       <ReactRouterLink to="/">
         <Logo
           id="mln-mobile-header-logo"
@@ -128,9 +137,10 @@ export default function MobileHeader(props) {
           inline
           noStyling
           marginTop="s"
-          marginRight="xs"
+          marginLeft="s"
+          marginBottom="s"
         >
-          <li id="mobile-mln-navbar-ts-link">
+          <li id="mobile-mln-navbar-ts-link" display="flex" alineItems="center">
             <ReactRouterLink
               to="/teacher_set_data"
               className="nav-link-colors"
@@ -150,71 +160,35 @@ export default function MobileHeader(props) {
           </li>
           {signInAccountDetails()}
           <li>{<ColorMode />}</li>
+
           <li>
-            <button
-              aria-label="Show main menu"
-              onClick={() => setMobileMenuActive(!mobileMenuActive)}
-            >
-              <Icon
-                id="mobile-sub-menu"
-                align="right"
-                color={iconColors}
-                decorative
-                iconRotation="rotate0"
-                name="utilityHamburger"
-                size="large"
-                type="default"
-              />
-            </button>
-            <Box id="mobile-navbar-submenu-list">
-              <List
+            <Box ref={ref}>
+              <FocusLock isDisabled={!mobileMenuActive}>
+                <Button
+                  aria-haspopup="true"
+                  aria-label={mobileMenuActive ? "Close Navigation" : "Open Navigation"}
+                  aria-expanded={mobileMenuActive ? true : null}
+                  buttonType="text"
+                  id="mobileNav-btn"
+                  onClick={() => {
+                    setMobileMenuActive(!mobileMenuActive);
+                  }}
+                  __css={{ ...styles, padding: "1px 6px !important" }}
+                >
+                  <Icon name={mobileMenuActive ? "close" : "utilityHamburger"} size="large" />
+                </Button>
+              { mobileMenuActive && <List
                 key="mobile-navbar-submenu-list-key"
                 noStyling
-                type="ul"
+                type="dl"
+                marginRight="m"
+                marginBottom="m"
                 className={
                   mobileMenuActive ? "nav-links-mobile" : "nav-links-none"
                 }
               >
-                <li>
-                  <Button
-                    marginTop="xs"
-                    position="absolute"
-                    right="s"
-                    top="xs"
-                    size="50px"
-                    className="mobile-submenu-close-btn"
-                    bg="var(--nypl-colors-ui-gray-xx-dark)"
-                    aria-label="Close main menu"
-                    buttonType="secondary"
-                    id="mobile-submenu-close-btn"
-                  >
-                    <Icon
-                      onClick={() => setMobileMenuActive(!mobileMenuActive)}
-                      color="ui.white"
-                      align="right"
-                      name="close"
-                      size="large"
-                      type="default"
-                    />
-                  </Button>
-                </li>
-                <li>
-                  <Center>
-                    <Link marginTop="l" href="/">
-                      <Logo
-                        id="mln-mobile-nav-menu-header-logo"
-                        marginTop="m"
-                        decorative
-                        name="mlnColor"
-                        size="small"
-                      />
-                    </Link>
-                  </Center>
-                </li>
-
                 {navMenuSignInAccountDetails()}
-
-                <li>
+                <li className="mobile-submenu-margin">
                   <Link className="mobileSubmenu" href="/contact">
                     Contact
                   </Link>
@@ -223,8 +197,7 @@ export default function MobileHeader(props) {
                     className="mobileHorizontalRule"
                   />
                 </li>
-
-                <li>
+                <li className="mobile-submenu-margin">
                   <Link className="mobileSubmenu" href="/faq">
                     FAQ
                   </Link>
@@ -233,8 +206,7 @@ export default function MobileHeader(props) {
                     className="mobileHorizontalRule"
                   />
                 </li>
-
-                <li>
+                <li className="mobile-submenu-margin">
                   <Link className="mobileSubmenu" href="/participating-schools">
                     Participating Schools
                   </Link>
@@ -283,9 +255,20 @@ export default function MobileHeader(props) {
                     />
                   </Link>
                 </li>
-              </List>
+              </List>}
+              </FocusLock>
             </Box>
           </li>
+
+          
+          
+          
+          
+          
+
+              
+
+
         </List>
       </nav>
     </Flex>

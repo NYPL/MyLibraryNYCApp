@@ -515,7 +515,7 @@ $nypl-breakpoint-xxlarge: 1600px;
 .mobileSubmenu {
   color: var(--nypl-colors-ui-white) !important;
   text-decoration: none !important;
-  margin-left: 16px;
+  margin-left: 24px;
 }
 
 .mobileHorizontalRule {
@@ -551,6 +551,15 @@ $nypl-breakpoint-xxlarge: 1600px;
 }
 
 @media screen and (max-width: $nypl-breakpoint-mid-large) {
+  .hide-mobile-submenu {
+    display: none;
+  }
+
+  .show-mobile-submenu {
+    display: block;
+    background-color: var(--nypl-colors-ui-gray-xx-dark) !important;
+    border: 0px !important;
+  }
 
   .nav-links-none {
     display: none;
@@ -562,10 +571,11 @@ $nypl-breakpoint-xxlarge: 1600px;
     display: block;
     list-style: none;
     left: 0;
-    top: 0px;
-    bottom: -16px;
+    //top: 64px;
+    //bottom: -16px;
     right: 0px;
     transition: all 0.5s ease-out;
+    margin-top: 16px !important;
     width: 100%;
     background-color: #121212;
   }
@@ -627,4 +637,21 @@ $nypl-breakpoint-xxlarge: 1600px;
 .mobile-submenu-close-btn {
   background-color: var(--nypl-colors-ui-gray-xx-dark) !important;
   border: 0px !important;
+}
+
+.mobile-hamburger-button {
+  border: none !important;
+  min-height: 0px !important;
+}
+
+.mobile-hamburger-icon {
+  margin-bottom: 20px !important;
+}
+
+.mobile-submenu-margin {
+  margin-top: 16px !important;
+}
+
+.socialMediaIcon {
+  margin-bottom: 16px !important;
 }
