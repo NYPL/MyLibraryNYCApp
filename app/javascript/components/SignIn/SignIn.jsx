@@ -32,6 +32,7 @@ export default function SignIn(props) {
   );
 
   useEffect(() => {
+    document.title = "Sign In | MyLibraryNYC";
     if (process.env.NODE_ENV !== "test") {
       window.scrollTo(0, 0);
     }

@@ -25,6 +25,7 @@ export default function ParticipatingSchools(props) {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
+    document.title = "Participating Schools | MyLibraryNYC";
     if (process.env.NODE_ENV !== "test") {
       window.scrollTo(0, 0);
     }

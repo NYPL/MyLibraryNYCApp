@@ -6,7 +6,6 @@ $nypl-breakpoint-large: 960px;
 $nypl-breakpoint-xlarge: 1280px;
 $nypl-breakpoint-xxlarge: 1600px;
 
-@import '@nypl/design-system-react-components/dist/resources.scss';
 @import 'utils/viewports';
 @import 'utils/breakpoint';
 @import 'mobile_header';
@@ -1138,12 +1137,12 @@ $submenu-width: 245px;
 }
 
 .mobileBrightnessIcon {
-  margin-right: 2px !important;
+  margin-right: -4px !important;
   cursor: pointer;
 }
 
 .mobileDarkModeIcon {
-  margin-right: -4px !important;
+  margin-right: -12px !important;
   margin-top: 1px !important;
   cursor: pointer;
 }
