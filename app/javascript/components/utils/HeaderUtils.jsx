@@ -1,25 +1,29 @@
 export const upperNavLinks = {
   accountDetails: {
-    href: process.env.MLN_INFO_SITE_HOSTNAME+"/account_details",
+    href: "/account_details",
     text: "Account Details",
   },
   signIn: {
-    href: process.env.MLN_INFO_SITE_HOSTNAME+"/signin",
+    href: "/signin",
     text: "Sign In",
+  },
+  searchTeacherSets: {
+    href: "/teacher_set_data",
+    text: "Search teacher sets",
   },
 };
 
 export const siteNavLinks = [
   {
-    href: process.env.MLN_INFO_SITE_HOSTNAME+"/participating-schools",
+    href: "/participating-schools",
     text: "Participating Schools",
   },
   {
-    href: process.env.MLN_INFO_SITE_HOSTNAME+"/contact",
+    href: "/contact",
     text: "Contact",
   },
   {
-    href: process.env.MLN_INFO_SITE_HOSTNAME+"/faq",
+    href: "/faq",
     text: "Faqs",
   },
   {
@@ -31,7 +35,7 @@ export const siteNavLinks = [
     text: "Instagram",
   },
   {
-    href: process.env.MLN_INFO_SITE_HOSTNAME+"/signin",
+    href: "/signin",
     text: "Sign In",
   }
 ];
