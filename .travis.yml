@@ -17,7 +17,7 @@ jobs:
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_QA};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_QA};
-          export ENV="MLN-618-barcode-functionality";
+          export ENV="qa";
         fi
       - if [[ "$TRAVIS_BRANCH" == "production" ]];
         then
@@ -43,7 +43,7 @@ jobs:
             aws ecr put-image --repository-name my-library-nyc-app --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
-    - stage: deploy qa
+    - stage: deploy MLN-618-barcode-functionality
       #if: branch IN (MLN-618-barcode-functionality) #AND type != pull_request
       if: branch IN (MLN-618-barcode-functionality) OR type == pull_request
       env:
