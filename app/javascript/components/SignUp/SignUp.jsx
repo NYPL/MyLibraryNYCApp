@@ -71,7 +71,9 @@ export default function SignUp(props) {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault();   
+    const news_email = isCheckedVal? alt_email || email : ""
+
     if (handleValidation()) {
       axios
         .post("/users", {
@@ -82,7 +84,7 @@ export default function SignUp(props) {
             last_name: last_name,
             password: password,
             school_id: school_id,
-            news_letter_email: alt_email || email,
+            news_letter_email: news_email,
           },
         })
         .then((res) => {
