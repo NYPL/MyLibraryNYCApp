@@ -151,7 +151,6 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build && npm run generate-sass-resources",
     "test": "jest",
     "coverage": "jest --coverage",
     "build:dev": "rm -rf public/webpack/development && RAILS_ENV=development NODE_ENV=development bin/webpack",
