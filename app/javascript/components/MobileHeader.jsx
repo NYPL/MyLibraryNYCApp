@@ -38,7 +38,7 @@ export default function MobileHeader(props) {
           className="nav-link-colors"
           aria-label="Account Details"
         >
-          <Button buttonType="text" className="mobileNavbarButton">
+          <Button buttonType="text" className="mobileNavbarButton" id="mobile-navbar-button-account-id">
             <Icon
               align="right"
               color={iconColors}
@@ -55,7 +55,7 @@ export default function MobileHeader(props) {
     } else {
       return (
         <Link href="/signin" className="nav-link-colors" aria-label="Sign in">
-          <Button buttonType="text" className="mobileNavbarButton">
+          <Button buttonType="text" className="mobileNavbarButton" id="mobile-navbar-button-signin-id">
             <Icon
               align="right"
               color={iconColors}
@@ -161,6 +161,7 @@ export default function MobileHeader(props) {
             <FocusLock isDisabled={!mobileMenuActive}>
               <Button
                 aria-haspopup="true"
+                id="mobile-navbar-close-open-button-id"
                 aria-label={
                   mobileMenuActive ? "Close Navigation" : "Open Navigation"
                 }
