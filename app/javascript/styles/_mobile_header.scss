@@ -645,6 +645,14 @@ $nypl-breakpoint-xxlarge: 1600px;
   min-height: 46px !important;
   min-width: 46px !important;
 }
+
+.mobileNavbarLinks {
+  display: flex;
+  width: 44px !important;
+  height: 44px !important;
+  align-items: center;
+  justify-content: center;
+}
 .hamBurger {
   background-color: none !important;
 }
