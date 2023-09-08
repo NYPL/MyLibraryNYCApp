@@ -15,13 +15,11 @@ class User < ActiveRecord::Base
 
   # Makes getters and setters
   attr_accessor :password
-
-  #auto_increment :barcode
- # validates :barcode, :uniqueness => true
-
-  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
-  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: false, only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
-
+  
+  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer:true,
+  less_than_or_equal_to: 27777099999999, uniqueness: true
+  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: false,
+  only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
 
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
@@ -130,7 +128,7 @@ class User < ActiveRecord::Base
 
     # do we need to fill in a provisional barcode?
     unless self.barcode.present?
-      # Note: assign_barcode could throw a RangeError.
+      # NOTE: assign_barcode could throw a RangeError.
       # If it does, we want it to propagate up the stack to the calling method.
       self.barcode = self.assign_barcode!
     end
@@ -180,8 +178,6 @@ class User < ActiveRecord::Base
         })
       return self.barcode
     end
-
-
     last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
 
     LogWrapper.log('DEBUG', {
@@ -231,67 +227,52 @@ class User < ActiveRecord::Base
   def create_patron_delayed_job
     Rails.logger.info "Entering Delay Job For"
     Delayed::Job.enqueue(UserDelayedJob.new(self.id, self.password))
-    UserMailer.account_confirmed_email_to_user(self).deliver
   end
 
   def save_as_complete!
     begin
       # isBarCodeAvailable is true means barcode is available we can assign to any user.
-      isBarCodeAvailable = is_barcode_available_in_sierra
+      is_barcode_available = barcode_available_in_sierra?
 
-      unless isBarCodeAvailable
-        Delayed::Worker.logger.info("User status is updating from #{self.status} to ")
+      unless is_barcode_available
+        Delayed::Worker.logger.info("User status is updating from #{self.status} to #{STATUS_LABELS['complete']}")
         self.status = STATUS_LABELS['complete']
         self.save!
       end
-    rescue StandardError => exception
-      Delayed::Worker.logger.info("user details #{self.status}  #{exception.backtrace}")
+    rescue StandardError => e
+      Delayed::Worker.logger.info("user details #{self.status}  #{e.backtrace}")
     end
   end
 
-  def is_barcode_available_in_sierra
-    isBarCodeAvailable = false
-
+  def barcode_available_in_sierra?
+    is_barcode_available = false
     response = HTTParty.get(
-      ENV['PATRON_MICROSERVICE_URL_V01'] + "?barcode=#{self.barcode}",
+      ENV.fetch('PATRON_MICROSERVICE_URL_V01') + "?barcode=#{self.barcode}",
       headers:
         { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
           'Content-Type' => 'application/json' },
       timeout: 10
     )
     if (response.code == 404 && response.message == "Not Found")
-      isBarCodeAvailable = true
-    elsif (response.code == 409)
-      isBarCodeAvailable = false
+      is_barcode_available = true
       LogWrapper.log('ERROR', {
-        'method' => "is_barcode_available_in_sierra",
+        'method' => "barcode_available_in_sierra?",
+        'message' => "Barcode is available in sierra we can assign to user. Barcode: #{self.barcode}"
+      })
+    elsif (response.code == 409)
+      is_barcode_available = false
+      LogWrapper.log('ERROR', {
+        'method' => "barcode_available_in_sierra?",
         'message' => "Duplicate patrons found for query. Barcode: #{self.barcode}"
       })
     elsif (response.code >= 500)
       LogWrapper.log('ERROR', {
-        'method' => "is_barcode_available_in_sierra",
+        'method' => "barcode_available_in_sierra?",
         'message' => "Internal Server error. Barcode: #{self.barcode}"
       })
       # raise InternalServerException.new(GENERIC_SERVER_ERROR[:code], GENERIC_SERVER_ERROR[:msg])
     end
-    return isBarCodeAvailable
-  end
-
-  def find_unique_new_barcode
-    # Enqueue a job to be performed as soon as the queuing system is free.
-    begin
-      # Note: user.pin is not getting serialized properly, hence passing as its own var.
-      # Note: user.pin is no longer persisted to MLN db, taking us one step closer
-      # to the goal of using Sierra as the source of truth.
-      FindAvailableUserBarcodeJob.perform_later(user: self)
-    rescue StandardError => exception
-      LogWrapper.log('ERROR', {
-          'method' => "#{model_name}.find_unique_new_barcode",
-          'message' => "Sierra threw an error while looking for user(#{self.id || 'No ID Available'}) barcode in Sierra: (#{exception.message})"
-        })
-      raise exception
-    rescue Exceptions => exception
-    end
+    return is_barcode_available
   end
 
   # Sends a request to the patron creator microservice.
@@ -334,10 +315,7 @@ class User < ActiveRecord::Base
         content: school.name
       }]
     }
-
-
-    Delayed::Worker.logger.info("user request details #{query} ")
-
+    Delayed::Worker.logger.info("User request details #{query} ")
     response = HTTParty.post(
       ENV.fetch('PATRON_MICROSERVICE_URL_V02', nil),
       body: query.to_json,
@@ -346,11 +324,7 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
-
-    Delayed::Worker.logger.info("user request details #{query} ")
-
-    Delayed::Worker.logger.info("user response details #{response.code}  #{response.message}")
-
+    Delayed::Worker.logger.info("User response details #{response.code}  #{response.message}")
     case response.code
     when 201
       LogWrapper.log('DEBUG', {
@@ -381,7 +355,7 @@ class User < ActiveRecord::Base
   end
 
   # 404 - no records with the same e-mail were found
-  # 409 - more then 1 record with the same e-mail was found
+  # 409 - more than 1 record with the same e-mail was found
   # 200 - 1 record with the same e-mail was found
   def get_email_records(email)
     query = {

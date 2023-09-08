@@ -2,8 +2,6 @@
 
 module Users
   class RegistrationsController < Devise::RegistrationsController
-    # before_action :configure_sign_up_params, only: [:create]
-    # before_action :configure_account_update_params, only: [:update]
 
     # GET /resource/sign_up
     # def new
@@ -17,21 +15,18 @@ module Users
         resource.barcode = resource.assign_barcode
         resource.status =  User::STATUS_LABELS['pending']
         resource.password = resource.password
-        valid = resource.save
-        if resource.valid?
-         # if valid
-            resource.create_patron_delayed_job
-            #resource.save!
-            sign_up(resource_name, resource)
-            if params.require(:registration)["user"]['news_letter_email'].present?
-              # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
-              email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
-              NewsLetterController.new.send_news_letter_confirmation_email(email)
-            end
-            render json: { status: :created, user: resource, message: "Your account is pending. You should shortly receive an email confirming your account. Please contact help if you've not heard back within 24 hours." }
-          # else
-          #   render json: { status: 500 }
-          # end
+        resource.save!
+        if resource.save!
+          resource.create_patron_delayed_job
+          sign_up(resource_name, resource)
+          if params.require(:registration)["user"]['news_letter_email'].present?
+            # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
+            email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
+            NewsLetterController.new.send_news_letter_confirmation_email(email)
+          end
+          render json: { status: :created, user: resource, message: "Your account is
+            pending. You should shortly receive an email confirming your account.
+            Please contact help if you've not heard back within 24 hours." }
         else
           render json: { status: 500, message: error_msg_hash(resource) || "Error" }
         end
@@ -43,10 +38,8 @@ module Users
     def update
       # Here Updates current user alt_email and schooid.
       # If Alt Email is not present use current user email
-      
       current_user.alt_email = user_params["alt_email"].present? ? user_params["alt_email"] : ""
       current_user.school_id = user_params["school_id"] if user_params["school_id"].present?
-      
       if current_user.save!
         render json: { status: :updated, user: current_user, message: "Your account has been updated." }
       end
@@ -56,7 +49,6 @@ module Users
       else
         render json: { status: 500, message: e.message }
       end
-      
     end
 
     def new
