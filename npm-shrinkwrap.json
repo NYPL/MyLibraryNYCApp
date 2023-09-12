@@ -6276,6 +6276,11 @@
         }
       }
     },
+    "ansi-html": {
+      "version": "0.0.7",
+      "resolved": "https://registry.npmjs.org/ansi-html/-/ansi-html-0.0.7.tgz",
+      "integrity": "sha512-JoAxEa1DfP9m2xfB/y2r/aKcwXNlltr4+0QSBC4TrLfcxyvepX2Pv0t/xpgGV5bGsDzCYV8SzjWgyCW0T9yYbA=="
+    },
     "ansi-html-community": {
       "version": "0.0.8",
       "resolved": "https://registry.npmjs.org/ansi-html-community/-/ansi-html-community-0.0.8.tgz",
@@ -28693,11 +28698,6 @@
           "version": "3.2.0",
           "resolved": "https://registry.npmjs.org/ansi-escapes/-/ansi-escapes-3.2.0.tgz",
           "integrity": "sha512-cBhpre4ma+U0T1oM5fXg7Dy1Jw7zzwv7lt/GoCpr+hDQJoYnKVPLL4dCvSEFMmQurOQvSrwT7SL/DAlhBI97RQ=="
-        },
-        "ansi-html": {
-          "version": "0.0.7",
-          "resolved": "https://registry.npmjs.org/ansi-html/-/ansi-html-0.0.7.tgz",
-          "integrity": "sha512-JoAxEa1DfP9m2xfB/y2r/aKcwXNlltr4+0QSBC4TrLfcxyvepX2Pv0t/xpgGV5bGsDzCYV8SzjWgyCW0T9yYbA=="
         },
         "anymatch": {
           "version": "2.0.0",
