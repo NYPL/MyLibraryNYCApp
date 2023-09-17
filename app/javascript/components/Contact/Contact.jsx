@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
-
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import {
   TemplateAppContainer,
   Heading,
