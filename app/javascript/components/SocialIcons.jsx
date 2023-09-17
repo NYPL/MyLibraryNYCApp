@@ -3,7 +3,6 @@ import { useColorModeValue } from "@nypl/design-system-react-components";
 import { Link, Icon } from "@nypl/design-system-react-components";
 
 export default function SocialIcons() {
-
   const socialMediaIconColor = useColorModeValue(
     "var(--nypl-colors-ui-black)",
     "var(--nypl-colors-dark-ui-typography-heading)"
@@ -53,5 +52,5 @@ export default function SocialIcons() {
         />
       </Link>
     </>
-  )
+  );
 }
