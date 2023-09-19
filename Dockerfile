@@ -42,6 +42,8 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
   && bundle exec rails webpacker:install \
   && bundle exec rails webpacker:compile
 
+RUN npm ci --cache .npm
+
 # webpack overwrites these files
 COPY config/webpacker.yml $APP_HOME/config/
 COPY config/webpack/environment.js $APP_HOME/config/webpack/
