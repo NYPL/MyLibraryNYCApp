@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import {
-  Link,
   useColorModeValue,
   useColorMode,
   useNYPLBreakpoints,
+  Button,
+  Icon,
 } from "@nypl/design-system-react-components";
 
 export default function ColorMode() {
@@ -12,6 +12,10 @@ export default function ColorMode() {
   const { isLargerThanMobile } = useNYPLBreakpoints();
 
   const darkModeIconColor = useColorModeValue(
+    "var(--nypl-colors-ui-black)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
+  const iconColors = useColorModeValue(
     "var(--nypl-colors-ui-black)",
     "var(--nypl-colors-dark-ui-typography-heading)"
   );
@@ -31,59 +35,98 @@ export default function ColorMode() {
 
   const lightMode = () => {
     if (isLargerThanMobile) {
-      return <button id="desktop-color-mode-icon"  aria-label="Switch to dark mode" onClick={handleChangeToDarkLightMode}>
+      return <Button buttonType="text" id="desktop-color-mode-icon" aria-label="Switch to dark mode" className="border-none mobileNavbarButton"
+      bgColor="ui.white"
+      onClick={handleChangeToDarkLightMode}>
+        <Icon
+          align="right"
+          color={iconColors}
+          decorative
+          iconRotation="rotate0"
+          size="large"
+          type="default">
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <title>moon icon</title>
             {lightModeImage()}
           </svg>
-        </button>
+        </Icon>
+      </Button>
     } else {
-      return <button
+      return <Button
       id="mobile-color-mode-icon"
       aria-label="Switch to dark mode"
       onClick={handleChangeToDarkLightMode}
-      className="mobileDarkModeIcon"
+      className="border-none mobileNavbarButton"
+      bgColor="ui.white"
     >
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      > 
-        <title>moon icon</title>
-        { lightModeImage() }
-      </svg>
-      </button>
+      <Icon
+          align="right"
+          color={iconColors}
+          decorative
+          iconRotation="rotate0"
+          size="large"
+          type="default">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        > 
+          <title>moon icon</title>
+          { lightModeImage() }
+        </svg>
+      </Icon>
+      </Button>
     }
   }
 
   const darkMode = () => {
     if (isLargerThanMobile) {
-      return <button id="desktop-color-mode-icon" aria-label="Switch to light mode" onClick={handleChangeToDarkLightMode}>
+      return <Button buttonType="text" id="desktop-color-mode-icon"
+      bgColor="ui.white"
+      aria-label="Switch to light mode"
+      onClick={handleChangeToDarkLightMode} className="border-none mobileNavbarButton">
+      <Icon
+          align="right"
+          color={iconColors}
+          decorative
+          iconRotation="rotate0"
+          size="large"
+          type="default">
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <title>sun icon</title>
-        { darkModeImage() }
+          <title>sun icon</title>
+          { darkModeImage() }
         </svg>
-      </button>
+      </Icon>
+    </Button>
     } else {
-      return <button
+      return <Button
       id="mobile-color-mode-icon"
       aria-label="Switch to light mode"
       onClick={handleChangeToDarkLightMode}
-      className="mobileBrightnessIcon"
+      className="border-none mobileNavbarButton"
+      bgColor="ui.white"
     >
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <title>sun icon</title>
-        { darkModeImage() }
-      </svg>
-      </button>
+      <Icon
+          align="right"
+          color={iconColors}
+          decorative
+          iconRotation="rotate0"
+          size="large"
+          type="default">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <title>sun icon</title>
+          { darkModeImage() }
+        </svg>
+      </Icon>
+      </Button>
     }
   }
 

@@ -20,7 +20,6 @@ function Footer() {
     "var(--nypl-colors-ui-black)",
     "var(--nypl-colors-dark-ui-typography-heading)"
   );
-
   const footerLinks = () => {
     return (
       <>
@@ -37,7 +36,6 @@ function Footer() {
             size="small"
           />
         </Link>
-
         <Link
           id="brooklyn-foooter-logo-link"
           href="http://www.brooklynpubliclibrary.org"
@@ -51,7 +49,6 @@ function Footer() {
             size="small"
           />
         </Link>
-
         <Link
           id="queens-foooter-logo-link"
           href="http://www.queenslibrary.org"
