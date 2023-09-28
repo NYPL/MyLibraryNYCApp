@@ -27,6 +27,7 @@ function Footer() {
           id="nypl-footer-logo-link"
           href="http://nypl.org"
           target="_blank"
+          
           //screenreaderOnlyText="New York Public Library"
         >
           <Logo
