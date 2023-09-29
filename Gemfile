@@ -66,7 +66,8 @@ gem "react_on_rails", "12.0.0"
 gem "webpacker", "~> 5"
 gem "breakpoint", "~>2.4.0"
 gem 'execjs'
-gem 'therubyracer', :platforms => :ruby
+#gem 'therubyracer', :platforms => :ruby
+gem 'mini_racer'
 gem 'bcrypt'
 gem 'puma', '~> 5.5'
 gem 'activeadmin_addons', '~> 1.9'
