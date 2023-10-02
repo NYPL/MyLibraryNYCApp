@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import { Link as ReactRouterLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { titleCase } from "title-case";

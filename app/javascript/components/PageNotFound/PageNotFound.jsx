@@ -1,5 +1,5 @@
 import React from "react";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import {
   TemplateAppContainer,
   Text,

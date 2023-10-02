@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Heading, Icon, useColorModeValue } from "@nypl/design-system-react-components";
+import SocialIcons from "./../SocialIcons";
 
 export default function HaveQuestions() {
   const socialMediaIconColor = useColorModeValue(
