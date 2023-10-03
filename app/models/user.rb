@@ -253,6 +253,7 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
+
     if (response.code == 404 && response.message == "Not Found")
       is_barcode_available = true
       LogWrapper.log('ERROR', {
@@ -272,6 +273,11 @@ class User < ActiveRecord::Base
       })
       # raise InternalServerException.new(GENERIC_SERVER_ERROR[:code], GENERIC_SERVER_ERROR[:msg])
     end
+
+    LogWrapper.log('INFO', {
+      'method' => "barcode_available_in_sierra?",
+      'message' => "barcode_available_in_sierra response details: #{response.code} is_barcode_available: #{is_barcode_available}"
+    })
     return is_barcode_available
   end
 
