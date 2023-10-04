@@ -47,7 +47,6 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
           defensive_log("#{self.class.name}: Patron creator service ran. Saving user in MLN db.")
           user.save_as_complete!
         end
-        
       rescue Exceptions::InvalidResponse => e
         defensive_log("#{self.class.name}: \
           send_request_to_patron_creator_service or user.save_as_complete threw: #{e.message || 'nil'}")
@@ -61,6 +60,6 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
   private
 
   def defensive_log(msg)
-    return Delayed::Worker.logger.add(Logger::INFO, msg) #if Delayed::Worker.logger.present?
+    return Delayed::Worker.logger.add(Logger::INFO, msg) if Delayed::Worker.logger.present?
   end
 end
