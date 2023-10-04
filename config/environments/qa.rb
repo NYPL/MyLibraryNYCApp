@@ -23,9 +23,8 @@ MyLibraryNYC::Application.configure do
     "qa-new-www.mylibrarynyc.org",
     "mylibrarynycapp-qa-456976389.us-east-1.elb.amazonaws.com"
   ]
-
-
   config.eager_load = true
   config.active_job.queue_adapter = :delayed_job
   Delayed::Worker.logger = Rails.logger
+  Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))
 end
