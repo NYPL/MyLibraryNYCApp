@@ -25,6 +25,6 @@ MyLibraryNYC::Application.configure do
   ]
   config.eager_load = true
   config.active_job.queue_adapter = :delayed_job
-  Delayed::Worker.logger = Rails.logger
+  Delayed::Worker.logger = Logger.new($stdout)
   Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))
 end
