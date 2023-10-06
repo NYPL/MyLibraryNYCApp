@@ -14,7 +14,7 @@ Delayed::Worker.max_attempts = 3
 # and allow the job to fail so another worker can pick it up.
 # Also, allows for notifications for over-long tasks
 # (via email notifications on error and failure hooks).
-Delayed::Worker.max_run_time = 30.minutes
+Delayed::Worker.max_run_time = 5.minutes
 
 Delayed::Worker.read_ahead = 10
 
