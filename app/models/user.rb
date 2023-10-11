@@ -154,13 +154,12 @@ class User < ActiveRecord::Base
     # should prevent the app from working in a visible manner.
     min_barcode = USER_BARCODE_ALLOTTED_RANGE_MINIMUM
     max_barcode = USER_BARCODE_ALLOTTED_RANGE_MAXIMUM
-
     # if we're being asked to increment our barcode because it's
     # non-unique in Sierra, then do so here
     if self.barcode && number_tries >= 2
       # Did we go over the limit?  No use stepping back, tell the app we'll
       # need to ask Sierra team for a wider barcode range.
-      self.assign_attributes({ barcode: self.barcode + rand(5..10) })
+      self.assign_attributes({ barcode: self.barcode + rand(100..900) })
 
       if self.barcode > max_barcode
         LogWrapper.log('ERROR', {
