@@ -285,7 +285,7 @@ $nypl-breakpoint-xxlarge: 1600px;
       max-width: 1312px;
      /* margin: 0px 20px;*/
       min-height: 4em;
-      margin-top: 2em !important;
+      //margin-top: 2em !important;
     }
 
     @include min-screen($breakpoint-xl) {
@@ -528,14 +528,13 @@ $nypl-breakpoint-xxlarge: 1600px;
   color: var(--nypl-colors-ui-gray-dark) !important;
 }
 
-.mobile-memu-icon {
-  
-}
 
 #mln-navbar {
-   @include max-screen($nypl-breakpoint-mid-large) {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  @include max-screen($nypl-breakpoint-mid-large) {
     display: none;
-   }
+  }
 }
 
 #mln-mobile-header-topWrapper {
