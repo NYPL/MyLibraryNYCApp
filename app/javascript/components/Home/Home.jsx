@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
 import AccessDigitalResources from "./../AccessDigitalResources";
 import CalendarOfEvents from "./../CalendarOfEvents";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import axios from "axios";
 import {
   Button,
