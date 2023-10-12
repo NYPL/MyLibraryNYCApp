@@ -37,6 +37,7 @@ export default function Navbar(props) {
               decorative
               name={mlnLogo}
               size="small"
+              className="desktopMlnLogo"
             />
           </Link>
           <Spacer />
