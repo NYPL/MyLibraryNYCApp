@@ -15,8 +15,8 @@ module Users
         resource.barcode = resource.assign_barcode
         resource.status =  User::STATUS_LABELS['pending']
         resource.password = resource.password
-        resource.save!
-        if resource.save!
+        if resource.valid?
+          resource.save!
           resource.create_patron_delayed_job
           sign_up(resource_name, resource)
           if params.require(:registration)["user"]['news_letter_email'].present?
