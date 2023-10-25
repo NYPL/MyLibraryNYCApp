@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Notification, Icon } from "@nypl/design-system-react-components";
 
 export default function SignUpMsg(props) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  })
   const details = props.signUpDetails;
   const notification = () => {
     if (
