@@ -67,6 +67,7 @@ export default function SignUp(props) {
   }, []);
 
   const redirectToTeacherSetPage = () => {
+    window.scrollTo(0, 0);
     navigate("/teacher_set_data", { state: { userSignedIn: true } });
   };
 
