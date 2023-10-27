@@ -28,7 +28,6 @@ class User < ActiveRecord::Base
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
-  # validates :barcode, numericality: { in: 27777000000001..27777099999999 }
   # validate :validate_password_pattern, on: :create
   # PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[[:^alnum:]])/x
   validate :validate_email_pattern, :on => :create

@@ -35,7 +35,7 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
       end
     end
 
-    #if is_barcode_available == true
+    if is_barcode_available == true
       begin
         defensive_log("#{self.class.name}: barcode [#{user.barcode}] is available in Sierra, calling patron creator service.")
         response = user.send_request_to_patron_creator_service(pin)
@@ -52,9 +52,9 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
           send_request_to_patron_creator_service or user.save_as_complete threw: #{e.message || 'nil'}")
         raise e
       end
-    # else
-    #   defensive_log("#{self.class.name}: UserBarcodeJob.perform: barcode_already_in_sierra still true")
-    # end
+    else
+      defensive_log("#{self.class.name}: UserBarcodeJob.perform: barcode_already_in_sierra still true")
+    end
   end
 
   private
