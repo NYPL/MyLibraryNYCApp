@@ -1,6 +1,2 @@
 LOCATION_CODE,LOCATION_NAME,PRIMARY_ADDRESS_LINE_1,STATE_CODE,PRINCIPAL_PHONE_NUMBER,Location 1
-Q419 I.S. 419Q,I.S. 419Q,111-10 Astoria Boulevard Queens NY 11369,NY,"",Queens 11369
-X435 Kappa,Kappa,500 East Fordham Road Bronx NY 10458,NY,"",Bronx 10458
-K415 It Takes a Village Academy,It Takes a Village Academy,5800 Tilden Avenue Brooklyn NY 11203,NY,(718) 629-2307,Brooklyn 11203
-K415 Kurt Hahn Expeditionary Learning School,Kurt Hahn Expeditionary Learning School,5800 Tilden Avenue Brooklyn NY 11203,NY,(718) 629-2307,Brooklyn 11203
-K415 Cultural Academy for the Arts and Sciences,Cultural Academy for the Arts and Sciences,5800 Tilden Avenue Brooklyn NY 11203,NY,(718) 629-2307,Brooklyn 11203
+Q419,I.S. 419Q,111-10 Astoria Boulevard Queens NY 11369,NY,"",Queens 11369
