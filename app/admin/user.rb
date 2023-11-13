@@ -70,7 +70,16 @@ ActiveAdmin.register User do
         end
       end
       row :doe_email do user.email end
-      [:barcode, :alt_barcodes, :first_name, :last_name, :updated_at, :current_sign_in_at, :last_sign_in_at].each do |prop|
+
+      [:barcode, :alt_barcodes, :first_name, :last_name].each do |prop|
+        row prop
+      end
+
+      row "Status" do |user|
+        user.status.capitalize
+      end
+
+      [:updated_at, :current_sign_in_at, :last_sign_in_at ].each do |prop|
         row prop
       end
     end

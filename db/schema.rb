@@ -245,7 +245,7 @@ ActiveRecord::Schema.define(version: 20231102023635) do
     t.string   "unconfirmed_email"
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
-    t.bigint   "barcode"
+    t.bigint   "barcode", null: false
     t.string   "first_name",             limit: 40
     t.string   "last_name",              limit: 40
     t.string   "alt_email"
