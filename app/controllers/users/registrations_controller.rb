@@ -18,6 +18,7 @@ module Users
         if resource.valid?
           resource.save!
           resource.create_patron_delayed_job
+          sleep(1)
           sign_up(resource_name, resource)
           if params.require(:registration)["user"]['news_letter_email'].present?
             # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
