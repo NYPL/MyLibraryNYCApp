@@ -60,7 +60,7 @@ ActiveAdmin.register User do
 
     attributes_table do
       row :contact_email do
-        link_to user.contact_email, user.contact_email
+        user.contact_email
       end
       row :school do
         if user.school.nil?
