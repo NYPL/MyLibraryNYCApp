@@ -75,7 +75,7 @@ ActiveAdmin.register User do
       end
 
       row "Status" do |user|
-        user.status.capitalize if user.status.present?
+        user.status.capitalize if user && user.status.present?
       end
 
       [:updated_at, :current_sign_in_at, :last_sign_in_at ].each do |prop|
