@@ -18,7 +18,7 @@ gem "minitest-stub_any_instance"
 gem 'rails', '6.1.4.1'
 gem 'actionpack', '6.1.4.1'
 gem 'actioncable', '6.1.4.1'
-gem 'activeadmin', '~> 2.14'
+gem 'activeadmin', '~> 2.9'
 gem 'actionmailer', '6.1.4.1'
 gem 'activeadmin_reorderable'
 gem 'activemodel', '6.1.4.1'
