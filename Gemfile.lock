@@ -1328,8 +1328,6 @@ GEM
     mime-types-data (3.2021.0225)
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
-    mini_racer (0.6.4)
-      libv8-node (~> 16.19.0.0)
     minitest (5.14.4)
     minitest-stub_any_instance (1.0.2)
     multi_json (1.15.0)
@@ -1589,7 +1587,6 @@ DEPENDENCIES
   jsonapi-serializer
   lograge (~> 0.11.2)
   logstash-event!
-  mini_racer
   minitest (~> 5.14.2)
   minitest-stub_any_instance
   nokogiri
