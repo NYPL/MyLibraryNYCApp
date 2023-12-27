@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Heading, Icon, useColorModeValue } from "@nypl/design-system-react-components";
+import SocialIcons from "./../SocialIcons";
 
 export default function HaveQuestions() {
   const socialMediaIconColor = useColorModeValue(
@@ -35,8 +36,10 @@ export default function HaveQuestions() {
             type="action"
             target="_blank"
             href="https://twitter.com/mylibrarynyc/"
+            aria-label="Visit our Twitter page"
           >
             <Icon
+              title="Twitter icon"
               align="right"
               color={socialMediaIconColor}
               className="navBarIcon"
@@ -53,8 +56,10 @@ export default function HaveQuestions() {
             type="action"
             target="_blank"
             href="https://www.instagram.com/mylibrarynyc/"
+            aria-label="Visit our Instagram page"
           >
             <Icon
+              title="Instagram icon"
               align="right"
               color={socialMediaIconColor}
               className="navBarIcon"

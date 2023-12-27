@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
 import AccessDigitalResources from "./../AccessDigitalResources";
 import CalendarOfEvents from "./../CalendarOfEvents";
@@ -27,6 +27,7 @@ export default function Home(props) {
   const heroBgColor = useColorModeValue("var(--nypl-colors-brand-primary)", "#2C1414");
 
   useEffect(() => {
+    document.title = "MyLibraryNYC | Providing NYC schools with enhanced library privileges";
     if (process.env.NODE_ENV !== "test") {
       window.scrollTo(0, 0);
     }

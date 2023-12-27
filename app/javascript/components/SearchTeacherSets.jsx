@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./AppBreadcrumbs";
 import SignedInMsg from "./SignedInMsg";
+import SignUpMsg from "./SignUp/SignUpMsg";
 import axios from "axios";
 import { titleCase } from "title-case";
 import {
@@ -84,6 +85,7 @@ export default function SearchTeacherSets(props) {
   const location = useLocation();
 
   useEffect(() => {
+    document.title = "Search Teacher Sets | MyLibraryNYC";
     setIsLoading(true);
   }, [facets, teacherSets, tsTotalCount, noTsResultsFound]);
 
@@ -1166,6 +1168,7 @@ export default function SearchTeacherSets(props) {
       contentTop={
         <>
           {<SignedInMsg signInDetails={props} />}
+          {<SignUpMsg signUpDetails={props} />}
           <Heading
             id="search-and-find-teacher-sets-header"
             size="secondary"

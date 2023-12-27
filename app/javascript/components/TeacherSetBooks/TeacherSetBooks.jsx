@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import { Link as ReactRouterLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { titleCase } from "title-case";
@@ -20,6 +20,8 @@ import {
   Box,
   SkeletonLoader,
   useColorMode,
+  Hero,
+  useColorModeValue,
 } from "@nypl/design-system-react-components";
 
 import ShowBookImage from "./../ShowBookImage";
@@ -31,6 +33,10 @@ export default function TeacherSetBooks() {
   const [teacherSets, setTeacherSets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { colorMode } = useColorMode();
+  const heroBgColor = useColorModeValue(
+    "var(--nypl-colors-brand-primary)",
+    "var(--nypl-colors-dark-ui-bg-hover)"
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -57,6 +63,11 @@ export default function TeacherSetBooks() {
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
         setBook(res.data.book);
+        if (res.data.book.title !== null) {
+          document.title = "Book Details | " + res.data.book.title + " | MyLibraryNYC";
+        } else {
+          document.title = "Book Details | MyLibraryNYC";
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -204,6 +215,7 @@ export default function TeacherSetBooks() {
   return (
     <TemplateAppContainer
       breakout={
+      <>
         <Breadcrumbs
           id={"mln-breadcrumbs-ts-details"}
           breadcrumbsData={[
@@ -219,6 +231,20 @@ export default function TeacherSetBooks() {
           ]}
           breadcrumbsType="booksAndMore"
         />
+        <Hero
+            heroType="tertiary"
+            backgroundColor={heroBgColor}
+            heading={
+              <Heading
+                level="one"
+                id={
+                  "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
+                }
+                text="Book Details"
+              />
+            }
+          />
+        </>
       }
       contentPrimary={
         <>

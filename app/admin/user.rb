@@ -57,10 +57,9 @@ ActiveAdmin.register User do
   end
 
   show title: proc{|user| user.name(true) } do |user|
-
     attributes_table do
       row :contact_email do
-        link_to user.contact_email, user.contact_email
+        link_to user.contact_email, admin_user_path(user.id)
       end
       row :school do
         if user.school.nil?
@@ -70,7 +69,16 @@ ActiveAdmin.register User do
         end
       end
       row :doe_email do user.email end
-      [:barcode, :alt_barcodes, :first_name, :last_name, :updated_at, :current_sign_in_at, :last_sign_in_at].each do |prop|
+
+      [:barcode, :alt_barcodes, :first_name, :last_name].each do |prop|
+        row prop
+      end
+
+      row "Status" do |user|
+        user.status.capitalize if user && user.status.present?
+      end
+
+      [:updated_at, :current_sign_in_at, :last_sign_in_at ].each do |prop|
         row prop
       end
     end
