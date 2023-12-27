@@ -1312,7 +1312,7 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    libv8 (3.16.14.19)
+    libv8-node (16.19.0.1)
     lograge (0.11.2)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -1430,7 +1430,6 @@ GEM
       rails (>= 3.2)
       rainbow (~> 3.0)
       webpacker (>= 4.0)
-    ref (2.0.0)
     regexp_parser (2.0.3)
     regexp_property_values (1.0.0)
     representable (3.0.4)
@@ -1500,9 +1499,6 @@ GEM
       sprockets (>= 3.0.0)
     test-unit (3.4.0)
       power_assert
-    therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
-      ref
     thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -1575,6 +1571,7 @@ DEPENDENCIES
   aws-sdk (~> 3)
   bcrypt
   breakpoint (~> 2.4.0)
+  bundler (~> 2.4, >= 2.4.22)
   client_side_validations (= 17.2.0)
   coffee-rails
   cranky
@@ -1622,7 +1619,6 @@ DEPENDENCIES
   sass-rails
   simplecov (~> 0.17.1)
   test-unit
-  therubyracer
   thread_safe (~> 0.3.6)
   travis
   turbolinks (~> 5.2.0)
@@ -1636,4 +1632,4 @@ RUBY VERSION
    ruby 2.7.4p191
 
 BUNDLED WITH
-   2.2.28
+   2.4.22
