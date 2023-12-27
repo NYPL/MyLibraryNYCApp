@@ -41,4 +41,5 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.perform_deliveries = false
 
   config.eager_load = false
+  config.active_job.queue_adapter = :delayed_job
 end

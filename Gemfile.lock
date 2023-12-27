@@ -99,6 +99,9 @@ GEM
     ast (2.4.2)
     auto-session-timeout (0.9.7)
       actionpack (>= 3.2, < 7)
+    auto_increment (1.5.2)
+      activerecord (>= 4.0)
+      activesupport (>= 4.0)
     aws-eventstream (1.1.0)
     aws-partitions (1.427.0)
     aws-sdk (3.0.1)
@@ -1318,6 +1321,7 @@ GEM
     loofah (2.12.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
+    luhn (1.0.2)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
@@ -1563,6 +1567,7 @@ DEPENDENCIES
   acts_as_list
   addressable
   auto-session-timeout
+  auto_increment (~> 1.5, >= 1.5.2)
   aws-sdk (~> 3)
   bcrypt
   breakpoint (~> 2.4.0)
@@ -1587,6 +1592,7 @@ DEPENDENCIES
   jsonapi-serializer
   lograge (~> 0.11.2)
   logstash-event!
+  luhn
   minitest (~> 5.14.2)
   minitest-stub_any_instance
   nokogiri
