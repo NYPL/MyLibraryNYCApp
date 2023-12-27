@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import axios from "axios";
 import {
   Button,
@@ -51,6 +51,7 @@ export default function SignUp(props) {
   const { colorMode } = useColorMode();
   
   useEffect(() => {
+    document.title = "Sign Up | MyLibraryNYC";
     if (process.env.NODE_ENV !== "test") {
       window.scrollTo(0, 0);
     }
@@ -66,15 +67,15 @@ export default function SignUp(props) {
   }, []);
 
   const redirectToTeacherSetPage = () => {
+    window.scrollTo(0, 0);
     navigate("/teacher_set_data", { state: { userSignedIn: true } });
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault();   
+    const news_email = isCheckedVal? alt_email || email : ""
+
     if (handleValidation()) {
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-        .querySelector("meta[name='csrf-token']")
-        .getAttribute("content");
       axios
         .post("/users", {
           user: {
@@ -84,7 +85,7 @@ export default function SignUp(props) {
             last_name: last_name,
             password: password,
             school_id: school_id,
-            news_letter_email: alt_email || email,
+            news_letter_email: news_email,
           },
         })
         .then((res) => {

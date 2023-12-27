@@ -35,4 +35,8 @@ module MlnException
   class SuppressedBibRecordException < MlnException
     
   end
+
+  class InternalServerException < MlnException
+    
+  end
 end

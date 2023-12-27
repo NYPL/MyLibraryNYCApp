@@ -6,8 +6,3 @@ $nypl-breakpoint-large: 960px;
 $nypl-breakpoint-xlarge: 1280px;
 $nypl-breakpoint-xxlarge: 1600px;
 
-.signin-button {
-  @include min-screen($nypl-breakpoint-medium) {
-    width: 6em;
-  }
-}

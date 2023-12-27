@@ -6,7 +6,6 @@ $nypl-breakpoint-large: 960px;
 $nypl-breakpoint-xlarge: 1280px;
 $nypl-breakpoint-xxlarge: 1600px;
 
-@import '@nypl/design-system-react-components/dist/resources.scss';
 @import 'utils/viewports';
 @import 'utils/breakpoint';
 @import 'mobile_header';
@@ -218,11 +217,13 @@ $nypl-breakpoint-xxlarge: 1600px;
 .colorModeIcon {
   color: var(--nypl-colors-ui-black) !important;
   margin-top: 6px !important;
+  cursor: pointer;
 }
 
 .dark.colorModeIcon {
   color: var(--nypl-colors-dark-ui-typography-heading) !important;
   margin-top: 6px !important;
+  cursor: pointer;
 }
 
 .appFooter {
@@ -963,6 +964,15 @@ $submenu-width: 245px;
 
   }
 }
+.dark.contactInfo {
+
+  @include max-screen($nypl-breakpoint-medium) {
+    
+    tbody th {
+      background-color: var(--nypl-colors-ui-black) !important;
+    }
+  }
+}
 
 .contactInfo {
   font-size: 16px;
@@ -1114,17 +1124,46 @@ $submenu-width: 245px;
 }
 
 .dark.tsFacetsBorderColor {
-  border: 1px solid #E9E9E9;
+  @include min-screen($nypl-breakpoint-medium) {
+      border: 1px solid #E9E9E9;
+  }
+  @include max-screen($nypl-breakpoint-small) {
+    border: none;
+  }
 }
 
 #mln-navbar-list {
   align-items: center;
+  margin-bottom: 0px;
+}
+
+.desktopMlnLogo {
+  display: block !important;
 }
 
 .mobileBrightnessIcon {
-  margin-right: 2px
+  margin-right: -4px !important;
+  cursor: pointer;
 }
 
 .mobileDarkModeIcon {
-  margin-right: 2px
+  margin-right: -12px !important;
+  margin-top: 1px !important;
+  cursor: pointer;
+}
+
+.accoutDetailstablecolor {
+  color: var(--nypl-colors-ui-black);
+  background-color: var(--nypl-colors-ui-black);
+}
+
+.dark.accoutDetailstablecolor {
+  color: var(--nypl-colors-dark-ui-typography-heading);
+  background-color: var(--nypl-colors-ui-black);
+}
+
+.signin-button {  
+  @include max-screen(500px) {
+    width: 100%;
+  }
 }

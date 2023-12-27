@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import SignedInMsg from "./../SignedInMsg";
 import axios from "axios";
 import {
@@ -25,6 +25,7 @@ export default function ParticipatingSchools(props) {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
+    document.title = "Participating Schools | MyLibraryNYC";
     if (process.env.NODE_ENV !== "test") {
       window.scrollTo(0, 0);
     }

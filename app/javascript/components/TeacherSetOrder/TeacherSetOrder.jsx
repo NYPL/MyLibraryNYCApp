@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import TeacherSetOrderDetails from "./../TeacherSetOrderDetails";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ export default function TeacherSetOrder(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
+    document.title = "Order Details | MyLibraryNYC";
     if (typeof hold === "string") {
       axios
         .get("/holds/" + params["access_key"])
@@ -38,6 +38,11 @@ export default function TeacherSetOrder(props) {
           } else {
             setTeacherSet(res.data.teacher_set);
             setHold(res.data.hold);
+            if (res.data.hold && res.data.hold.status === "cancelled") {
+              document.title = "Order Cancelled | MyLibraryNYC";
+            } else {
+              document.title = "Order Details | MyLibraryNYC";
+            }
           }
         })
         .catch(function (error) {

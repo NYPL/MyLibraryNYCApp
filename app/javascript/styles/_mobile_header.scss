@@ -285,7 +285,7 @@ $nypl-breakpoint-xxlarge: 1600px;
       max-width: 1312px;
      /* margin: 0px 20px;*/
       min-height: 4em;
-      margin-top: 2em !important;
+      //margin-top: 2em !important;
     }
 
     @include min-screen($breakpoint-xl) {
@@ -528,14 +528,13 @@ $nypl-breakpoint-xxlarge: 1600px;
   color: var(--nypl-colors-ui-gray-dark) !important;
 }
 
-.mobile-memu-icon {
-  
-}
 
 #mln-navbar {
-   @include max-screen($nypl-breakpoint-mid-large) {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  @include max-screen($nypl-breakpoint-mid-large) {
     display: none;
-   }
+  }
 }
 
 #mln-mobile-header-topWrapper {
@@ -546,7 +545,7 @@ $nypl-breakpoint-xxlarge: 1600px;
 
 #mln-mobile-header-logo {
   @include max-screen(890px) {
-    max-width: 130px;
+   // max-width: 130px;
   }
 }
 
@@ -557,19 +556,15 @@ $nypl-breakpoint-xxlarge: 1600px;
   }
 
   .nav-links-mobile {
-    position: fixed;
-    z-index: 2;
-    display: block;
-    list-style: none;
-    left: 0;
-    top: 0px;
-    bottom: -16px;
-    right: 0px;
-    transition: all 0.5s ease-out;
+    background-color: rgb(43, 43, 43);
+    color: var(--nypl-colors-ui-white);
+    left: 0px;
+    min-height: 250px;
+    position: absolute;
+    white-space: initial;
     width: 100%;
-    background-color: #121212;
+    z-index: 99999;
   }
-
 }
 
 @media screen and (max-width: 545px) {
@@ -622,4 +617,41 @@ $nypl-breakpoint-xxlarge: 1600px;
   .teacher-set-details-skeleton-loader {
     width: 285px !important;
   }
+}
+
+.mobile-submenu-close-btn {
+  background-color: var(--nypl-colors-ui-gray-xx-dark) !important;
+  border: 0px !important;
+}
+
+.mobile-navmenu-hamburger {
+  gap: var(--nypl-space-xxs) !important;
+  -webkit-box-align: center !important;
+  align-items: center !important;
+  background-color: rgb(43, 43, 43) !important;
+  border: var(--nypl-borders-none) !important;
+  border-radius: 0px !important;
+  padding: 1px 6px !important;
+}
+
+.border-none {
+  border: none !important;
+  background: none !important;
+}
+
+.mobileNavbarButton {
+  border: none !important;
+  min-height: 46px !important;
+  min-width: 46px !important;
+}
+
+.mobileNavbarLinks {
+  display: flex;
+  width: 44px !important;
+  height: 44px !important;
+  align-items: center;
+  justify-content: center;
+}
+.hamBurger {
+  background-color: none !important;
 }

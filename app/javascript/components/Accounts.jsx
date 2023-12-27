@@ -57,6 +57,7 @@ export default function Accounts() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.title = "Account Details | MyLibraryNYC";
     axios.defaults.headers.common["X-CSRF-TOKEN"] = document
       .querySelector("meta[name='csrf-token']")
       .getAttribute("content");

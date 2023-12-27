@@ -31,7 +31,7 @@ function Banner() {
           <Notification
             ariaLabel="Banner Notification"
             id="banner-notification"
-            notificationType="standard"
+            notificationType="announcement"
             className="bannerMessage"
             isCentered
             showIcon={false}

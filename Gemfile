@@ -72,7 +72,9 @@ gem 'puma', '~> 5.5'
 gem 'activeadmin_addons', '~> 1.9'
 gem 'turbolinks', '~> 5.2.0'
 gem 'rack', '~> 2.2.4'
-gem "jsonapi-serializer"
+gem 'jsonapi-serializer'
+gem 'auto_increment', '~> 1.5', '>= 1.5.2'
+gem 'luhn'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
