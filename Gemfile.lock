@@ -1499,6 +1499,9 @@ GEM
       sprockets (>= 3.0.0)
     test-unit (3.4.0)
       power_assert
+    therubyracer (0.12.3)
+      libv8 (~> 3.16.14.15)
+      ref
     thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -1619,6 +1622,7 @@ DEPENDENCIES
   sass-rails
   simplecov (~> 0.17.1)
   test-unit
+  therubyracer
   thread_safe (~> 0.3.6)
   travis
   turbolinks (~> 5.2.0)
