@@ -28,7 +28,7 @@ COPY Gemfile.lock $APP_HOME
 WORKDIR $APP_HOME
 
 ## bundle
-ENV BUNDLER_VERSION=2.3.27
+ENV BUNDLER_VERSION=2.4.22
 RUN gem install bundler -v $BUNDLER_VERSION
 RUN bundle config --global github.https true \
     && bundle install --jobs 30
