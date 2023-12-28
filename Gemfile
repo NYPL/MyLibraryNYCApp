@@ -75,7 +75,6 @@ gem 'rack', '~> 2.2.4'
 gem 'jsonapi-serializer'
 gem 'auto_increment', '~> 1.5', '>= 1.5.2'
 gem 'luhn'
-gem 'bundler', '~> 2.4', '>= 2.4.22'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'
