@@ -21,10 +21,10 @@ RUN apt-get update -qq \
 #     && apt-get -y install nodejs \
 #     && npm install --global yarn
 
-# Install dependencies and Node.js 15
+# Install dependencies and Node.js 16
 RUN apt-get update && \
     apt-get install -y curl && \
-    curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs
 
 # Install Yarn globally
