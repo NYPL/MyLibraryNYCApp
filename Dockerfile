@@ -17,9 +17,18 @@ RUN apt-get update -qq \
     postgresql-client \
     git
 
-RUN curl -sL https://deb.nodesource.com/setup_15.x  | bash - \
-    && apt-get -y install nodejs \
-    && npm install --global yarn
+# RUN curl -sL https://deb.nodesource.com/setup_15.x  | bash - \
+#     && apt-get -y install nodejs \
+#     && npm install --global yarn
+
+# Install dependencies and Node.js 15
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+    apt-get install -y nodejs
+
+# Install Yarn globally
+RUN npm install --global yarn
 
 # set up app files
 COPY . $APP_HOME
