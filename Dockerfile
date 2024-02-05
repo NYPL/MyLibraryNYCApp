@@ -56,6 +56,9 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
 COPY config/webpacker.yml $APP_HOME/config/
 COPY config/webpack/environment.js $APP_HOME/config/webpack/
 COPY babel.config.js $APP_HOME
+COPY package.json $APP_HOME
+COPY package-lock.json $APP_HOME
+COPY npm-shrinkwrap.json $APP_HOME
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
