@@ -290,7 +290,7 @@ class User < ActiveRecord::Base
     Delayed::Worker.logger.info("user password details #{self.password} ")
 
     query = {
-      'names' => ["#{self.last_name.upcase}", "#{self.first_name.upcase}"],
+      'names' => ["#{self.last_name.upcase}, #{self.first_name.upcase}"],
       'emails' => [email],
       'pin' => pin,
       'patronType' => patron_type,
