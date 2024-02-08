@@ -211,7 +211,7 @@ class User < ActiveRecord::Base
       last_user_barcode = min_barcode
     end
 
-    self.assign_attributes({ barcode: last_user_barcode + 1 })
+    self.assign_attributes({ barcode: last_user_barcode + rand(100..900) })
 
     LogWrapper.log('DEBUG', {
        'message' => "Barcode has been assigned to #{self.email}",
