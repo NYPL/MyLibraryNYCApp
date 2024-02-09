@@ -283,20 +283,16 @@ class User < ActiveRecord::Base
     return is_barcode_available
   end
 
-
   def calculate_next_recurring_event_date(month: 6, day: 30)
     current_date = Date.today
     # Check if it's after June 30th or on June 30th
     if current_date.month > month || (current_date.month == month && current_date.day >= day)
-      new_expiration_date = Date.new(current_date.year + 1, month, day)
+      new_date = Date.new(current_date.year + 1, month, day)
     else
-      new_expiration_date = Date.new(current_date.year, month, day)
+      new_date = Date.new(current_date.year, month, day)
     end
-  
     # Format the date as a string in "YYYY-MM-DD" format
-    formatted_expiration_date = new_expiration_date.strftime('%Y-%m-%d')
-  
-    return formatted_expiration_date
+    next_date.strftime('%Y-%m-%d')
   end
 
   # Sends a request to the patron creator microservice.
