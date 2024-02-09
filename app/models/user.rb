@@ -283,6 +283,23 @@ class User < ActiveRecord::Base
     return is_barcode_available
   end
 
+  MONTH = 6
+  DAY = 30
+  def patron_expiration_date
+    current_date = Date.today
+    # Check if it's after June 30th or on June 30th
+    if current_date.month > 6 || (current_date.month == MONTH && current_date.day >= DAY)
+      new_expiration_date = Date.new(current_date.year + 1, MONTH, DAY)
+    else
+      new_expiration_date = Date.new(current_date.year, MONTH, DAY)
+    end
+  
+    # Format the date as a string in "YYYY-MM-DD" format
+    formatted_expiration_date = new_expiration_date.strftime('%Y-%m-%d')
+  
+    return formatted_expiration_date
+  end
+
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
@@ -321,7 +338,8 @@ class User < ActiveRecord::Base
       varFields: [{
         fieldTag: "o",
         content: school.name
-      }]
+      }],
+      expirationDate: patron_expiration_date
     }
     Delayed::Worker.logger.info("User request details #{query} ")
     response = HTTParty.post(
