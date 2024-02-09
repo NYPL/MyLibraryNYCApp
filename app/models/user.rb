@@ -283,15 +283,14 @@ class User < ActiveRecord::Base
     return is_barcode_available
   end
 
-  MONTH = 6
-  DAY = 30
-  def patron_expiration_date
+
+  def sub_sequent_year(month: 6, day: 30)
     current_date = Date.today
     # Check if it's after June 30th or on June 30th
-    if current_date.month > 6 || (current_date.month == MONTH && current_date.day >= DAY)
-      new_expiration_date = Date.new(current_date.year + 1, MONTH, DAY)
+    if current_date.month > month || (current_date.month == month && current_date.day >= day)
+      new_expiration_date = Date.new(current_date.year + 1, month, day)
     else
-      new_expiration_date = Date.new(current_date.year, MONTH, DAY)
+      new_expiration_date = Date.new(current_date.year, month, day)
     end
   
     # Format the date as a string in "YYYY-MM-DD" format
@@ -339,7 +338,7 @@ class User < ActiveRecord::Base
         fieldTag: "o",
         content: school.name
       }],
-      expirationDate: patron_expiration_date
+      expirationDate: sub_sequent_year
     }
     Delayed::Worker.logger.info("User request details #{query} ")
     response = HTTParty.post(
