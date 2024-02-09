@@ -284,7 +284,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def sub_sequent_year(month: 6, day: 30)
+  def calculate_next_recurring_event_date(month: 6, day: 30)
     current_date = Date.today
     # Check if it's after June 30th or on June 30th
     if current_date.month > month || (current_date.month == month && current_date.day >= day)
@@ -338,7 +338,7 @@ class User < ActiveRecord::Base
         fieldTag: "o",
         content: school.name
       }],
-      expirationDate: sub_sequent_year
+      expirationDate: calculate_next_recurring_event_date
     }
     Delayed::Worker.logger.info("User request details #{query} ")
     response = HTTParty.post(
