@@ -161,11 +161,7 @@ class User < ActiveRecord::Base
       self.assign_attributes({ barcode: self.barcode + rand(100..900) })
 
       if self.barcode > max_barcode
-        LogWrapper.log('ERROR', {
-            'method' => "#{model_name}.assign_barcode!",
-            'message' => "MLN app has run out of available user barcodes"
-        })
-        raise RangeError, "MLN app has run out of available user barcodes"
+        raise_barcode_error_message
       end
 
       LogWrapper.log('DEBUG', {
@@ -199,11 +195,7 @@ class User < ActiveRecord::Base
         # No more barcodes left in the range available to MLN.
         # Throw an Exception-level exception -- we can't operate with
         # no available barcodes, and this exception shouldn't be caught
-        LogWrapper.log('ERROR', {
-            'method' => "#{model_name}.assign_barcode!",
-            'message' => "MLN app has run out of available user barcodes"
-        })
-        raise RangeError, "MLN app has run out of available user barcodes"
+        raise_barcode_error_message
       end
     end
 
@@ -211,7 +203,11 @@ class User < ActiveRecord::Base
       last_user_barcode = min_barcode
     end
 
-    self.assign_attributes({ barcode: last_user_barcode + rand(100..900) })
+    self.assign_attributes({ barcode: last_user_barcode + rand(100..999) })
+
+    if self.barcode > max_barcode
+      raise_barcode_error_message
+    end
 
     LogWrapper.log('DEBUG', {
        'message' => "Barcode has been assigned to #{self.email}",
@@ -220,6 +216,14 @@ class User < ActiveRecord::Base
        'barcode' => "#{self.barcode}"
       })
     return self.barcode
+  end
+
+  def raise_barcode_error_message
+    LogWrapper.log('ERROR', {
+          'method' => "#{model_name}.assign_barcode!",
+          'message' => "MLN app has run out of available user barcodes"
+      })
+    raise RangeError, "MLN app has run out of available user barcodes"
   end
 
   def create_patron_delayed_job
