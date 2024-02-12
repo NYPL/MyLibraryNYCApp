@@ -232,8 +232,10 @@ Go to terminal/commandline
 cd elasticsearch-6.8.0
 Command to start elastic search:  ./bin/elasticsearch
 
-
-# Run below method in rails console to update teacherset docs into elastic search cluster.
+Use below command to create a elastic search cluster.
+sh script/elastic_search/create_es_index_mappings.sh
+Enter elastic search URL (get elastic search url from elasticsearch.yml or MLN confluence page )
+Once ES cluster is created run below method in rails console to update teacherset docs into elastic search cluster.
 
 def create_teacherset_document_in_es
   TeacherSet.find_each do |ts|
