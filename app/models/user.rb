@@ -283,10 +283,9 @@ class User < ActiveRecord::Base
     return is_barcode_available
   end
 
-  def calculate_next_recurring_event_date(month=6, day=30)
-    current_date = Date.today
+  def calculate_next_recurring_event_date(current_date, month=6, day=30)
     # Check if it's after June 30th or on June 30th
-    future_date = if current_date.month < month || (current_date.month == month && current_date.day >= day)
+    future_date = if current_date.month > month || (current_date.month == month && current_date.day >= day)
                     Date.new(current_date.year + 1, month, day)
                   else
                     Date.new(current_date.year, month, day)
@@ -334,7 +333,7 @@ class User < ActiveRecord::Base
         fieldTag: "o",
         content: school.name
       }],
-      expirationDate: calculate_next_recurring_event_date
+      expirationDate: calculate_next_recurring_event_date(Date.today)
     }
     Delayed::Worker.logger.info("User request details #{query} ")
     response = HTTParty.post(
