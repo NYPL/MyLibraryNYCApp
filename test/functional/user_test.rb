@@ -10,7 +10,7 @@ class UserTest < ActionController::TestCase
   
   JUNE_30 = Date.new(Date.today.year, 6, 30)
   # Method: calculate_next_recurring_event_date
-  # Be default next recurring event_date date is june 30.
+  # By default next recurring event_date date is june 30.
   test 'It should return next year if date is June 30' do
     month = 6
     day = 30
