@@ -26,7 +26,7 @@ class UserTest < ActionController::TestCase
     day = 30
     # Check if it's after June 30th
     current_date = Date.new(Date.today.year, month, day)
-    expected_output =(JUNE_30 + 1.year).strftime('%Y-%m-%d')
+    expected_output = (JUNE_30 + 1.year).strftime('%Y-%m-%d')
     resp = @user.calculate_next_recurring_event_date(current_date)
     assert_equal(expected_output, resp)
   end
@@ -37,6 +37,16 @@ class UserTest < ActionController::TestCase
     # Check if it's before June 30th
     current_date = Date.new(Date.today.year, month, day)
     expected_output = JUNE_30.strftime('%Y-%m-%d')
+    resp = @user.calculate_next_recurring_event_date(current_date)
+    assert_equal(expected_output, resp)
+  end
+
+  test 'It should return nex year if date is June 29' do
+    month = 6
+    day = 29
+    # Check if it's before June 30th
+    current_date = Date.new(Date.today.year, month, day)
+    expected_output = (JUNE_30 + 1.year).strftime('%Y-%m-%d')
     resp = @user.calculate_next_recurring_event_date(current_date)
     assert_equal(expected_output, resp)
   end
