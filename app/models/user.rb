@@ -285,7 +285,7 @@ class User < ActiveRecord::Base
 
   def calculate_next_recurring_event_date(current_date=Date.today, month=6, day=30)
     # Check if it's after June 30th or on June 30th
-    future_date = if current_date.month > month || (current_date.month == month && current_date.day >= day)
+    future_date = if current_date.month >= month || (current_date.month == month && current_date.day >= day)
                     Date.new(current_date.year + 1, month, day)
                   else
                     Date.new(current_date.year, month, day)
