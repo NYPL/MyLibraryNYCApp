@@ -67,7 +67,7 @@
     "@babel/preset-env": "^7.18.2",
     "@babel/register": "^7.15.3",
     "@hotwired/stimulus": "^3.2.2",
-    "@nypl/design-system-react-components": "1.5.4",
+    "@nypl/design-system-react-components": "1.7.3",
     "@nypl/dgx-svg-icons": "0.3.7",
     "@rails/activestorage": "^7.0.2-3",
     "@rails/ujs": "^7.0.2-3",
@@ -152,11 +152,11 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "esbuild app/javascript/*.*  app/javascript/stylesheets/*.scss --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx --loader:.scss=css --loader:.svg=file --loader:.png=file  --loader:.jpg=file --loader:.pdf=file",
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx --loader:.scss=css --loader:.svg=file --loader:.png=file  --loader:.jpg=file --loader:.pdf=file",
     "test": "jest",
     "coverage": "jest --coverage",
     "lint": "eslint app/javascript/components/*.jsx",
-    "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+    "build:css": "sass ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
   "author": ""
 }
