@@ -51,6 +51,10 @@ RUN bundle config --global github.https true \
 # COPY config/webpack/environment.js $APP_HOME/config/webpack/
 # COPY babel.config.js $APP_HOME
 
+COPY package.json $APP_HOME/package.json
+COPY package-lock.json $APP_HOME/package-lock.json
+RUN yarn install
+
 # build
 RUN yarn build
 RUN yarn build:css
