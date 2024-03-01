@@ -19,7 +19,7 @@ RUN apt-get update -qq \
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash - \
     && apt-get -y install nodejs \
-    && yarn install --global yarn
+    && npm install --global yarn
 
 # set up app files
 COPY . $APP_HOME
