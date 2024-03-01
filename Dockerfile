@@ -21,6 +21,9 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash - \
     && apt-get -y install nodejs \
     && npm install --global yarn
 
+# Install esbuild
+RUN npm install -g esbuild
+
 # set up app files
 COPY . $APP_HOME
 COPY Gemfile $APP_HOME
