@@ -14,7 +14,7 @@ function Contact() {
   const { colorMode } = useColorMode();
   useEffect(() => {
     document.title = "Contact | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
   }, []);

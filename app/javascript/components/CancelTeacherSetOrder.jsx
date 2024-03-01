@@ -51,7 +51,7 @@ export default function TeacherSetOrder() {
       .then((res) => {
         if (
           res.request.responseURL ===
-          "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
+          "https://" + env.MLN_INFO_SITE_HOSTNAME + "/signin"
         ) {
           window.location = res.request.responseURL;
           return false;

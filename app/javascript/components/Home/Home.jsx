@@ -28,7 +28,7 @@ export default function Home(props) {
 
   useEffect(() => {
     document.title = "MyLibraryNYC | Providing NYC schools with enhanced library privileges";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     navigate("/");

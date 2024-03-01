@@ -703,7 +703,7 @@ export default function TeacherSetDetails(props) {
           <Breadcrumbs
             id={"mln-breadcrumbs-ts-details"}
             breadcrumbsData={[
-              { url: "//" + process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+              { url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
               {
                 url: "//" + window.location.hostname + "/teacher_set_data",
                 text: "Teacher Sets",

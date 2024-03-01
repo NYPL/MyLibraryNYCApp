@@ -26,7 +26,7 @@ export default function ParticipatingSchools(props) {
 
   useEffect(() => {
     document.title = "Participating Schools | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     axios

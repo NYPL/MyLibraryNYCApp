@@ -52,7 +52,7 @@ export default function SignUp(props) {
   
   useEffect(() => {
     document.title = "Sign Up | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     axios

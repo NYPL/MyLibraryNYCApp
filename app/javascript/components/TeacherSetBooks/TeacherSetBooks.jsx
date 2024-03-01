@@ -55,7 +55,7 @@ export default function TeacherSetBooks() {
   }, [isLoading]);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     axios
@@ -219,7 +219,7 @@ export default function TeacherSetBooks() {
         <Breadcrumbs
           id={"mln-breadcrumbs-ts-details"}
           breadcrumbsData={[
-            { url: "//" + process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+            { url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
             {
               url: "//" + window.location.hostname + window.location.pathname,
               text: "Book Details",

@@ -211,13 +211,13 @@ ActiveAdmin.setup do |config|
   # and feel.
   #
   # To load a stylesheet:
-  #   config.register_stylesheet 'active_admin_custom.css'
+  config.register_stylesheet 'active_admin_custom.css'
   #
   # You can provide an options hash for more control, which is passed along to stylesheet_link_tag():
   #   config.register_stylesheet 'my_print_stylesheet.css', media: :print
   #
   # To load a javascript file:
-  # config.register_javascript 'active_admin_custom.js'
+  config.register_javascript 'active_admin_custom.js'
 
   # == CSV options
   #
@@ -328,11 +328,4 @@ ActiveAdmin.setup do |config|
   # You can inherit it with own class and inject it for all resources
   #
   # config.order_clause = MyOrderClause
-
-  # == Webpacker
-  #
-  # By default, Active Admin uses Sprocket's asset pipeline.
-  # You can switch to using Webpacker here.
-  #
-  config.use_webpacker = true
 end

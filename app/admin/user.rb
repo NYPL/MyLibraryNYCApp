@@ -39,7 +39,9 @@ ActiveAdmin.register User do
   filter :barcode
 
   form do |f|
-    f.semantic_errors *f.object.errors.keys
+    if f.object.errors.present? && f.object.errors.keys.present?
+      f.semantic_errors * f.object.errors.keys
+    end
     f.inputs "User Details" do
       f.input :school
       f.input :first_name

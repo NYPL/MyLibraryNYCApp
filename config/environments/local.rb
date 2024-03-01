@@ -59,5 +59,6 @@ MyLibraryNYC::Application.configure do
     ExceptionsController.action(:render_error).call(env)
   end
 
+  config.assets.debug = true
   Delayed::Worker.logger = Rails.logger
 end

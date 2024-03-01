@@ -15,24 +15,24 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 
 gem "minitest-stub_any_instance"
-gem 'rails', '6.1.4.1'
-gem 'actionpack', '6.1.4.1'
-gem 'actioncable', '6.1.4.1'
+gem 'rails', '7.0.2.2'
+gem 'actionpack', '7.0.2.2'
+gem 'actioncable', '7.0.2.2'
 gem 'activeadmin', '~> 2.14'
-gem 'actionmailer', '6.1.4.1'
+gem 'actionmailer', '7.0.2.2'
 gem 'activeadmin_reorderable'
-gem 'activemodel', '6.1.4.1'
-gem 'activejob', '6.1.4.1'
-gem 'activerecord', '6.1.4.1'
-gem 'activestorage', '6.1.4.1'
-gem 'activesupport', '6.1.4.1'
+gem 'activemodel', '7.0.2.2'
+gem 'activejob', '7.0.2.2'
+gem 'activerecord', '7.0.2.2'
+gem 'activestorage', '7.0.2.2'
+gem 'activesupport', '7.0.2.2'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'acts_as_list'
 gem 'addressable'
 gem 'auto-session-timeout'
-gem 'actionview', '6.1.4.1'
+gem 'actionview', '7.0.2.2'
 gem 'aws-sdk', '~> 3'
-gem 'client_side_validations', '17.2.0'
+gem 'client_side_validations', '22.1.1'
 gem 'cranky'
 gem 'devise', '4.8.1'
 gem 'elasticsearch', '6.8'
@@ -40,7 +40,7 @@ gem 'email_validator'
 gem 'faker'
 gem 'figaro'
 gem 'font-awesome-rails'
-gem 'railties', '~> 6.1.4.1'
+gem 'railties', '~> 7.0.2.2'
 gem 'google-api-client'
 gem 'google_drive'
 gem 'httparty'
@@ -62,11 +62,11 @@ gem 'yaml_db'
 gem 'rexml', '~> 3.2.5'
 gem 'rubocop-performance', '~> 1.16'
 gem 'thread_safe', '~> 0.3.6'
-gem "react_on_rails", "12.0.0"
-gem "webpacker", "~> 5"
+gem "react_on_rails", "13.4"
 gem "breakpoint", "~>2.4.0"
 gem 'execjs'
-gem 'therubyracer', :platforms => :ruby
+#gem 'therubyracer', :platforms => :ruby
+gem 'mini_racer'
 gem 'bcrypt'
 gem 'puma', '~> 5.5'
 gem 'activeadmin_addons', '~> 1.9'
@@ -75,6 +75,14 @@ gem 'rack', '~> 2.2.4'
 gem 'jsonapi-serializer'
 gem 'auto_increment', '~> 1.5', '>= 1.5.2'
 gem 'luhn'
+gem 'sprockets-rails'
+gem "turbo-rails"
+gem "stimulus-rails"
+gem "jsbundling-rails"
+gem "cssbundling-rails"
+gem "jquery-rails", "~> 4.2"
+gem "importmap-rails"
+gem 'dotenv-rails'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'

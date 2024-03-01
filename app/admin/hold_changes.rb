@@ -35,8 +35,10 @@ ActiveAdmin.register HoldChange do
   end
 
   form do |f|
-    f.inputs "Status Change" do 
-      f.semantic_errors *f.object.errors.keys
+    f.inputs "Status Change" do
+      if f.object.errors.present? && f.object.errors.keys.present?
+        f.semantic_errors *f.object.errors.keys
+      end
       f.input :status, :as => :radio, :collection => [
         ['Pending', 'pending'],
         ['Pending - In Transit Aux', 'transit'],
