@@ -25,6 +25,10 @@ $submenu-width: 245px;
   color: #404040;
 }
 
+div[data-testid="hero"] {
+  background-color: var(--nypl-colors-brand-primary)
+}
+
 .plusminus {
   float: right;
   font-size: xx-large;
