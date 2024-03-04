@@ -23,6 +23,8 @@ MyLibraryNYC::Application.configure do
     "qa-new-www.mylibrarynyc.org",
     "mylibrarynycapp-qa-456976389.us-east-1.elb.amazonaws.com"
   ]
+  config.assets.precompile += %w( application*.js application*.css )
+  config.public_file_server.enabled = true
   config.eager_load = true
   config.active_job.queue_adapter = :delayed_job
   Delayed::Worker.logger = Logger.new($stdout)
