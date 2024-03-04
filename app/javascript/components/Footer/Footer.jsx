@@ -121,7 +121,7 @@ function Footer() {
           target="_blank"
           margin="s"
         >
-          Terms
+          Termstest1
         </Link>
         |
         <Link
