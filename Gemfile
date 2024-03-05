@@ -82,7 +82,6 @@ gem "jsbundling-rails"
 gem "cssbundling-rails"
 gem "jquery-rails", "~> 4.2"
 gem "importmap-rails"
-gem 'dotenv-rails'
 
 group :assets do # Gems used only for assets and not required in production environments by default.
   gem 'sass-rails'

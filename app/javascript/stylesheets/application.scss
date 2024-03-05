@@ -26,7 +26,11 @@ $submenu-width: 245px;
 }
 
 div[data-testid="hero"] {
-  background-color: var(--nypl-colors-brand-primary)
+  background-color: var(--nypl-colors-brand-primary);
+}
+
+.dark div[data-testid="hero"] {
+  background-color:  var(--nypl-colors-dark-ui-bg-default) !important;
 }
 
 .plusminus {
@@ -290,8 +294,12 @@ div[data-testid="hero"] {
   padding: 3px 130px;
 }
 
-.app-footer {
+.app_footer {
   background: #F9F9F9;
+}
+
+.dark.app_footer {
+  background: var(--nypl-colors-dark-ui-bg-default) !important;
 }
 
 .participating_schools_list {
@@ -1126,13 +1134,11 @@ ul.list li:before {
 
 .dark.tsFacetsBorderColor {
   @include min-screen($breakpoint-medium) {
-      border: 1px solid #E9E9E9;
-      border-color: red;
+    border: 1px solid #E9E9E9;
   }
 
   @include max-screen($breakpoint-small) {
     border: none;
-    border-color: green;
   }
 }
 
