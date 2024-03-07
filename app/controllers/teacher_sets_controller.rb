@@ -142,45 +142,40 @@ class TeacherSetsController < ApplicationController
     if storable_location?
       store_user_location!
     end
-    begin
-      @set = TeacherSet.find(params[:id])
-      @active_hold = nil
-      user_has_ordered_max = false
 
-      # limits book titles to unique ones to mask the problem we've been having
-      # with the teacher_sets detail page puling up duplicate child book records.
-      ts_books = @set.books.select('DISTINCT ON (books.cover_uri) books.cover_uri, books.id, books.title')
+    @set = TeacherSet.find(params[:id])
+    @active_hold = nil
+    user_has_ordered_max = false
 
-      # Max copies value is configured in elastic beanstalk.
-      # Max_copies_requestable is the maximum number of teachersets can request.
-      max_copies_requestable = ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
+    # limits book titles to unique ones to mask the problem we've been having
+    # with the teacher_sets detail page puling up duplicate child book records.
+    ts_books = @set.books.select('DISTINCT ON (books.cover_uri) books.cover_uri, books.id, books.title')
 
-      if @set.held_by? current_user
-        @active_hold = @set.pending_holds_for_user(current_user).first
-      end
+    # Max copies value is configured in elastic beanstalk.
+    # Max_copies_requestable is the maximum number of teachersets can request.
+    max_copies_requestable = ENV['MAXIMUM_COPIES_REQUESTABLE'] || 5
 
-      # ts_holds_count is the number of holds currently held in the database for this teacher set.
-      ts_holds_count = @set.holds_count_for_user(current_user)
-      user_has_ordered_max = (ts_holds_count.to_i >= max_copies_requestable.to_i)
-
-      # Teacher set available copies less than configured value, we should show ts available_copies count in teacherset order dropdown.
-      max_copies_requestable = [max_copies_requestable.to_i - ts_holds_count.to_i, @set.available_copies.to_i].min
-
-      # Button should be disabled after teacher has ordered maximum.
-      allowed_quantities = user_has_ordered_max ? [] : (1..max_copies_requestable.to_i).to_a
-      render json: {
-        teacher_set: @set,
-        active_hold: @active_hold,
-        user: current_user,
-        allowed_quantities: allowed_quantities,
-        books: ts_books,
-        teacher_set_notes: @set.teacher_set_notes
-      }
-    rescue StandardError => e
-      render json: {
-        errorMessage: 'Teacher set not found'
-      }
+    if @set.held_by? current_user
+      @active_hold = @set.pending_holds_for_user(current_user).first
     end
+
+    # ts_holds_count is the number of holds currently held in the database for this teacher set.
+    ts_holds_count = @set.holds_count_for_user(current_user)
+    user_has_ordered_max = (ts_holds_count.to_i >= max_copies_requestable.to_i)
+
+    # Teacher set available copies less than configured value, we should show ts available_copies count in teacherset order dropdown.
+    max_copies_requestable = [max_copies_requestable.to_i - ts_holds_count.to_i, @set.available_copies.to_i].min
+
+    # Button should be disabled after teacher has ordered maximum.
+    allowed_quantities = user_has_ordered_max ? [] : (1..max_copies_requestable.to_i).to_a
+    render json: {
+      teacher_set: @set,
+      active_hold: @active_hold,
+      user: current_user,
+      allowed_quantities: allowed_quantities,
+      books: ts_books,
+      teacher_set_notes: @set.teacher_set_notes
+    }
   end
 
   # Gets current user teacherset holds from database.
