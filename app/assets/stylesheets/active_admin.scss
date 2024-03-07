@@ -11,8 +11,3 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
 @import "activeadmin_reorderable";
-
-// Overriding any non-variable Sass must be done after the fact.
-// For example, to change the default status-tag color:
-//
-//   .status_tag { background: #6090DB; }

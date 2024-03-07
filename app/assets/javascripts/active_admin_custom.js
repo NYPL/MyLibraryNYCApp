@@ -8,7 +8,6 @@ function activateSchool(schoolId, activate) {
     }
   };
   
-  
   function makeAvailableTeacherSet(teacherSetId, make_available) {
     if (make_available == true){
       $('#make-available-teacher-set-' + teacherSetId + '-container').hide();
@@ -18,7 +17,6 @@ function activateSchool(schoolId, activate) {
       $('#make-available-teacher-set-' + teacherSetId + '-container').show();
     }
   };
-  
   
   $( document ).ready(function() {
   
@@ -128,5 +126,5 @@ function activateSchool(schoolId, activate) {
       el.before(img_holder);
       img.attr('src', image_uris[el.val()]);
     });
-  
   });
+  

@@ -109,7 +109,7 @@ function Footer() {
   };
 
   return (
-    <Box className="app-footer" bg={footerBgColor}>
+    <Box className="app_footer" bg={footerBgColor}>
       <Center id="mln-footer-data" paddingTop="xxl">
         {footerData()}
       </Center>

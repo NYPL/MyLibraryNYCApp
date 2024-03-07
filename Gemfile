@@ -65,7 +65,6 @@ gem 'thread_safe', '~> 0.3.6'
 gem "react_on_rails", "13.4"
 gem "breakpoint", "~>2.4.0"
 gem 'execjs'
-#gem 'therubyracer', :platforms => :ruby
 gem 'mini_racer'
 gem 'bcrypt'
 gem 'puma', '~> 5.5'
