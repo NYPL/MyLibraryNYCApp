@@ -1,15 +1,12 @@
 :root {
   --breakpoint-small: 320px;
   --breakpoint-medium: 600px;
-  --breakpoint-mid-large: 860px;
   --breakpoint-large: 960px;
 }
 
 $breakpoint-small: 320px;
 $breakpoint-medium: 600px;
-$breakpoint-mid-large: 860px;
 $breakpoint-large: 960px;
-
 
 @mixin min-screen($breakpoint) {
   @media screen and (min-width: $breakpoint) {
@@ -92,7 +89,7 @@ $breakpoint-large: 960px;
   &-topWrapper {
     display: none;
 
-    @include min-screen($breakpoint-medium) {
+    @include min-screen($breakpoint-large) {
       display: block;
       max-width: 1312px;
       min-height: 4em;
@@ -196,14 +193,14 @@ $breakpoint-large: 960px;
 #mln-navbar {
   margin-top: 16px;
   margin-bottom: 8px;
-  @include max-screen($breakpoint-mid-large) {
+  @include max-screen($breakpoint-large) {
     display: none;
   }
 }
 
 #mln-mobile-header-topWrapper {
-  @include min-screen($breakpoint-mid-large) {
-  display: none;
+  @include min-screen($breakpoint-large) {
+    display: none;
   }
 }
 
@@ -212,7 +209,7 @@ $breakpoint-large: 960px;
   }
 }
 
-@media screen and (max-width: $breakpoint-mid-large) {
+@media screen and (max-width: $breakpoint-large) {
   .nav-links-none {
     display: none;
   }
