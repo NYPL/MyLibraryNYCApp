@@ -368,7 +368,7 @@ export default function Accounts() {
                   Your DOE Email Address
                 </Label>
                 {email && (
-                  <Text id="doe-email-address-id" size="caption" marginTop="xs">
+                  <Text id="doe-email-address-id" size="body2" marginTop="xs">
                     {email}
                   </Text>
                 )}

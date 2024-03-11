@@ -281,7 +281,7 @@ export default function TeacherSetDetails(props) {
 
   const teacherSetUnAvailableMsg = () => {
     return (
-      <Text width="m" size="caption" color={tsOrderTextColor}>
+      <Text width="m" size="body2" color={tsOrderTextColor}>
         <b>This Teacher Set is unavailable.</b>{" "}
         <i>
           As it is currently being used by other educators, please allow 60 days
@@ -302,7 +302,7 @@ export default function TeacherSetDetails(props) {
 
   const UnableToOrderAdditionalTeacherSetsMsg = () => {
     return (
-      <Text width="m" size="caption">
+      <Text width="m" size="body2">
         <b>Unable to order additional Teacher Sets.</b>{" "}
         <i>
           You have{" "}
@@ -395,7 +395,7 @@ export default function TeacherSetDetails(props) {
               </Button>
             </FormField>
           </Form>
-          <Text isItalic size="caption" marginTop="s" color={tsOrderTextColor}>
+          <Text isItalic size="body2" marginTop="s" color={tsOrderTextColor}>
             Note: Available Teacher Sets will deliver to your school within 2
             weeks. For Teacher Sets that are currently in use by other
             educators, please allow 60 days or more for delivery. If you need
@@ -419,7 +419,7 @@ export default function TeacherSetDetails(props) {
     return (
       <>
         <Heading size="callout" level="h4">Account Pending </Heading>
-        <Text width="m" size="caption">
+        <Text width="m" size="body2">
           <i>
             Your account is pending. You should shortly receive an email
             confirming your account. You will be able to order teacher sets once

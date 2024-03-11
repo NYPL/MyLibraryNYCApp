@@ -465,6 +465,7 @@ export default function SearchTeacherSets(props) {
                 <ReactRouterLink
                   to={"/teacher_set_details/" + ts.id}
                   onClick={() => window.scrollTo(0, 0)}
+                  style={{ "text-decoration": "none" }}
                 >
                   {ts.title}
                 </ReactRouterLink>
@@ -1068,7 +1069,7 @@ export default function SearchTeacherSets(props) {
                 <Flex>
                   <span>{item["label"]}</span>
                   <Spacer />
-                  <Text noSpace id={"ts-count-" + index} size="caption">
+                  <Text noSpace id={"ts-count-" + index} size="body2">
                     {item["count"] || 0}
                   </Text>
                 </Flex>
@@ -1095,7 +1096,7 @@ export default function SearchTeacherSets(props) {
       // }
 
       return (
-        <Text isItalic noSpace size="caption" id="accordion-no-results-found">
+        <Text isItalic noSpace size="body2" id="accordion-no-results-found">
           No options available
         </Text>
       );
