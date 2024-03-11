@@ -71,7 +71,7 @@ export default function TeacherSetOrder() {
           <Heading
             marginTop="l"
             id="ts-cancellation-confirmation-text"
-            level="one"
+            level="h3"
             size="tertiary"
             text="Confirm Cancellation"
           />
@@ -127,7 +127,7 @@ export default function TeacherSetOrder() {
         <>
           <Heading
             id="ts-cancellation-confirmation-text"
-            level="two"
+            level="h2"
             size="secondary"
             text="Cancel Order"
           />

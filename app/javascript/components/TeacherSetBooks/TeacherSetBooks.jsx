@@ -236,7 +236,7 @@ export default function TeacherSetBooks() {
             backgroundColor={heroBgColor}
             heading={
               <Heading
-                level="one"
+                level="h1"
                 id={
                   "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
                 }
@@ -252,7 +252,7 @@ export default function TeacherSetBooks() {
             <Heading
               id="book-title-heading-id"
               noSpace
-              level="two"
+              level="h2"
               size="secondary"
               text={bookTitle}
             />
@@ -385,7 +385,7 @@ export default function TeacherSetBooks() {
             marginBottom="l"
             id="appears-in-ts-text"
             size="tertiary"
-            level="three"
+            level="h3"
           >
             Appears in These Sets
           </Heading>

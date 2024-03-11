@@ -98,7 +98,7 @@ export default function TeacherSetOrder(props) {
         <>
           <Heading
             id="order-confirmation-heading"
-            level="two"
+            level="h2"
             size="secondary"
             text={confirmationMsg}
           />

@@ -94,7 +94,7 @@ export default function SignIn(props) {
         <>
           <Heading
             id="sign-in-heading-id"
-            level="two"
+            level="h2"
             size="secondary"
             text="Sign In"
           />

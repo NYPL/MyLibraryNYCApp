@@ -324,7 +324,7 @@ export default function SearchTeacherSets(props) {
           id="no-results-found-id"
           marginBottom="s"
           style={{ fontStyle: "italic" }}
-          level="three"
+          level="h4"
           size="callout"
           text="No results found"
         />
@@ -637,7 +637,7 @@ export default function SearchTeacherSets(props) {
         <Heading
           id="refine-results"
           size="tertiary"
-          level="three"
+          level="h3"
           text={" " + "Refine Results" + " "}
         />
       );
@@ -1172,7 +1172,7 @@ export default function SearchTeacherSets(props) {
           <Heading
             id="search-and-find-teacher-sets-header"
             size="secondary"
-            level="two"
+            level="h2"
             text="Search and Find Teacher Sets"
           />
           <HorizontalRule

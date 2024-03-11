@@ -357,7 +357,8 @@ export default function Accounts() {
         <>
           <Heading
             id="account-user-name"
-            level="three"
+            level="h2"
+            size='secondary'
             text={"Hello, " + userFirstName()}
           />
           <Form id="account-details-form">
@@ -417,7 +418,7 @@ export default function Accounts() {
             marginBottom="m"
             id="your-orders-text"
             size="tertiary"
-            level="three"
+            level="h3"
             text="Orders"
           />
           {accountSkeletonLoader()}

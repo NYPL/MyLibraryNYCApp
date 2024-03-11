@@ -26,7 +26,7 @@ function Contact() {
         <div id="contacts-page">
           <Heading
             id="general-information-heading"
-            level="two"
+            level="h2"
             size="secondary"
             marginBottom="s"
             text="General Information"
@@ -68,7 +68,7 @@ function Contact() {
           <Heading
             id="library-cards-account"
             marginTop="xl"
-            level="two"
+            level="h2"
             size="secondary"
             text="Professional Development"
           />
@@ -121,7 +121,7 @@ function Contact() {
           />
           <Heading
             id="my-library-nyc-questions-secondary"
-            level="two"
+            level="h2"
             marginTop="xl"
             size="secondary"
             text="Joining MyLibraryNYC"
@@ -131,7 +131,7 @@ function Contact() {
           </Text>
           <Heading
             id="my-library-nyc-questions-tertiary"
-            level="three"
+            level="h3"
             size="tertiary"
             text="Find Your School"
           />
@@ -145,7 +145,7 @@ function Contact() {
           <Heading
             id="eligibility"
             marginTop="l"
-            level="three"
+            level="h3"
             size="tertiary"
             text="Eligibility"
           />

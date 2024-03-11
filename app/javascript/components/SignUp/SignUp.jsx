@@ -511,7 +511,7 @@ export default function SignUp(props) {
         <>
           <Heading
             id="sign-up-heading-id"
-            level="two"
+            level="h2"
             size="secondary"
             text="Sign Up"
           />

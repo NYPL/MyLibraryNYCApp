@@ -12,7 +12,7 @@ export default function HaveQuestions() {
     <>
       <Heading
         id="heading-tertiary"
-        level="two"
+        level="h2"
         size="tertiary"
         text="Have Questions?"
       />

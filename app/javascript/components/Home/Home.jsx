@@ -86,7 +86,8 @@ export default function Home(props) {
             heroType="campaign"
             heading={
               <Heading
-                level="one"
+                level="h1"
+                size='primary'
                 id="mln-campaign-hero"
                 text="Welcome To MyLibraryNYC"
               />
@@ -105,7 +106,7 @@ export default function Home(props) {
       contentTop={SignedUpMessage()}
       contentPrimary={
         <>
-          <Heading id="search-for-home-page-teacher-sets" size="secondary">
+          <Heading id="search-for-home-page-teacher-sets" size="secondary" level='h2'>
             Search For Teacher Sets
           </Heading>
           <SearchBar
@@ -126,7 +127,7 @@ export default function Home(props) {
             align="left"
             height="2px"
           />
-          <Heading id="professional-heading" marginTop="s" size="secondary">
+          <Heading id="professional-heading" marginTop="s" size="secondary" level='h2'>
             Professional Development & Exclusive Programs
           </Heading>
           <Text noSpace marginTop="s" size="default">

@@ -340,7 +340,7 @@ export default function TeacherSetDetails(props) {
             id="ts-order-set"
             textAlign="center"
             noSpace
-            level="two"
+            level="h2"
             size="secondary"
             text="Order Set"
           />
@@ -348,7 +348,7 @@ export default function TeacherSetDetails(props) {
             id="ts-available-copies"
             textAlign="center"
             size="callout"
-            level="four"
+            level="h4"
             text={AvailableCopies()}
           />
           {OrderTeacherSets()}
@@ -418,7 +418,7 @@ export default function TeacherSetDetails(props) {
   const userAccountIsPending = () => {
     return (
       <>
-        <Heading size="callout">Account Pending </Heading>
+        <Heading size="callout" level="h4">Account Pending </Heading>
         <Text width="m" size="caption">
           <i>
             Your account is pending. You should shortly receive an email
@@ -604,7 +604,7 @@ export default function TeacherSetDetails(props) {
               id="mobile-ts-order-set"
               textAlign="center"
               noSpace
-              level="two"
+              level="h2"
               size="secondary"
               text="Set Unavailable"
               color={tsOrderTextColor}
@@ -629,7 +629,7 @@ export default function TeacherSetDetails(props) {
               id="mobile-ts-order-set"
               textAlign="center"
               noSpace
-              level="two"
+              level="h2"
               size="secondary"
               text="Set Unavailable"
             />
@@ -662,7 +662,7 @@ export default function TeacherSetDetails(props) {
             id="ts-page-books-count"
             marginTop="s"
             size="callout"
-            level="four"
+            level="h4"
             text={BooksCount()}
           />
           <SimpleGrid
@@ -720,7 +720,7 @@ export default function TeacherSetDetails(props) {
             backgroundColor={heroBgColor}
             heading={
               <Heading
-                level="one"
+                level="h1"
                 id={
                   "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
                 }
@@ -737,7 +737,7 @@ export default function TeacherSetDetails(props) {
             <Heading
               id="ts-title-id"
               noSpace
-              level="two"
+              level="h2"
               size="secondary"
               text={teacherSetTitle()}
             />
@@ -762,7 +762,7 @@ export default function TeacherSetDetails(props) {
             noSpace
             id="ts-header-desc-text"
             level="three"
-            size="tertiary"
+            size="h3"
             text="What is in the box"
           />
           {TeacherSetDescription()}

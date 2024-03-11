@@ -74,8 +74,9 @@ export default function PageNotFound() {
             backgroundColor="var(--nypl-colors-brand-primary)"
             heading={
               <Heading
-                level="one"
-                id={"mln-404-error-page"}
+                level="h1"
+                size='primary'
+                id="mln-404-error-page"
                 text="Page Not Found"
               />
             }

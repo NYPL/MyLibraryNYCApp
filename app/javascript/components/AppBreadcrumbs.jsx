@@ -123,7 +123,7 @@ export default function AppBreadcrumbs() {
         backgroundColor={heroBgColor}
         heading={
           <Heading
-            level="one"
+            level="h1"
             id={"hero-" + locationPath}
             text={HeroDataValue(locationPath)}
           />

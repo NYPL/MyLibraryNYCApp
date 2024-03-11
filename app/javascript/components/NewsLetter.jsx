@@ -60,7 +60,7 @@ export default function NewsLetter() {
       return (
         <VStack justifyContent="center">
           <Heading
-            level="two"
+            level="h4"
             size="callout"
             maxWidth="640px"
             noSpace
@@ -78,7 +78,7 @@ export default function NewsLetter() {
       return (
         <VStack gap="m" justifyContent="center">
           <Heading
-            level="two"
+            level="h4"
             size="callout"
             maxWidth="640px"
             noSpace
