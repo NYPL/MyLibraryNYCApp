@@ -218,7 +218,6 @@ export default function ParticipatingSchools(props) {
             size="heading5"
             text="Does your school participate in MyLibraryNYC?"
           />
-
           <TextInput
             fontWeight="text.tag"
             helperText="Start typing the name of your school."

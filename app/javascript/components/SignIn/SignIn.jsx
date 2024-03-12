@@ -95,7 +95,7 @@ export default function SignIn(props) {
           <Heading
             id="sign-in-heading-id"
             level="h2"
-            size="secondary"
+            size="heading3"
             text="Sign In"
           />
           <HorizontalRule
@@ -103,7 +103,6 @@ export default function SignIn(props) {
             marginTop="s"
             className={`${colorMode} teacherSetHorizontal`}
           />
-
           <TextInput
             isRequired
             id="sign-in-text-input"

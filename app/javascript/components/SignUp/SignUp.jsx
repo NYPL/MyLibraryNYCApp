@@ -512,7 +512,7 @@ export default function SignUp(props) {
           <Heading
             id="sign-up-heading-id"
             level="h2"
-            size="secondary"
+            size="heading3"
             text="Sign Up"
           />
           <HorizontalRule

@@ -341,13 +341,13 @@ export default function TeacherSetDetails(props) {
             textAlign="center"
             noSpace
             level="h2"
-            size="secondary"
+            size="heading5"
             text="Order Set"
           />
           <Heading
             id="ts-available-copies"
             textAlign="center"
-            size="callout"
+            size="heading6"
             level="h4"
             text={AvailableCopies()}
           />
