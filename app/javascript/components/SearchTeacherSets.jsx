@@ -325,7 +325,7 @@ export default function SearchTeacherSets(props) {
           marginBottom="s"
           style={{ fontStyle: "italic" }}
           level="h4"
-          size="callout"
+          size="heading6"
           text="No results found"
         />
       );
@@ -637,7 +637,7 @@ export default function SearchTeacherSets(props) {
       return (
         <Heading
           id="refine-results"
-          size="tertiary"
+          size="heading5"
           level="h3"
           text={" " + "Refine Results" + " "}
         />
@@ -1172,7 +1172,7 @@ export default function SearchTeacherSets(props) {
           {<SignUpMsg signUpDetails={props} />}
           <Heading
             id="search-and-find-teacher-sets-header"
-            size="secondary"
+            size="heading3"
             level="h2"
             text="Search and Find Teacher Sets"
           />

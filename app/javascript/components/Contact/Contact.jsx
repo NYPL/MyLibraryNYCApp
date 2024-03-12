@@ -27,7 +27,7 @@ function Contact() {
           <Heading
             id="general-information-heading"
             level="h2"
-            size="secondary"
+            size="heading3"
             marginBottom="s"
             text="General Information"
           />
@@ -69,7 +69,7 @@ function Contact() {
             id="library-cards-account"
             marginTop="xl"
             level="h2"
-            size="secondary"
+            size="heading3"
             text="Professional Development"
           />
           <Text marginTop="s" marginBottom="l" size="default">
@@ -123,7 +123,7 @@ function Contact() {
             id="my-library-nyc-questions-secondary"
             level="h2"
             marginTop="xl"
-            size="secondary"
+            size="heading3"
             text="Joining MyLibraryNYC"
           />
           <Text marginTop="s" marginBottom="l" size="default">
@@ -132,7 +132,7 @@ function Contact() {
           <Heading
             id="my-library-nyc-questions-tertiary"
             level="h3"
-            size="tertiary"
+            size="heading5"
             text="Find Your School"
           />
           <Text marginTop="s" marginBottom="l" size="default">
@@ -146,7 +146,7 @@ function Contact() {
             id="eligibility"
             marginTop="l"
             level="h3"
-            size="tertiary"
+            size="heading5"
             text="Eligibility"
           />
           To find out if your school is eligible to participate in the program

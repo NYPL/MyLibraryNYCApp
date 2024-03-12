@@ -237,6 +237,7 @@ export default function TeacherSetBooks() {
             heading={
               <Heading
                 level="h1"
+                color="ui.white"
                 id={
                   "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
                 }
@@ -253,7 +254,7 @@ export default function TeacherSetBooks() {
               id="book-title-heading-id"
               noSpace
               level="h2"
-              size="secondary"
+              size="heading5"
               text={bookTitle}
             />
           </Flex>
@@ -384,7 +385,7 @@ export default function TeacherSetBooks() {
             marginTop="l"
             marginBottom="l"
             id="appears-in-ts-text"
-            size="tertiary"
+            size="heading5"
             level="h3"
           >
             Appears in These Sets

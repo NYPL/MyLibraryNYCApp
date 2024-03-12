@@ -124,6 +124,7 @@ export default function AppBreadcrumbs() {
         heading={
           <Heading
             level="h1"
+            color="ui.white"
             id={"hero-" + locationPath}
             text={HeroDataValue(locationPath)}
           />

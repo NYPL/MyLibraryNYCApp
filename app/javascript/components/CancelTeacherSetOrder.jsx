@@ -72,7 +72,7 @@ export default function TeacherSetOrder() {
             marginTop="l"
             id="ts-cancellation-confirmation-text"
             level="h3"
-            size="tertiary"
+            size="heading5"
             text="Confirm Cancellation"
           />
           <TextInput
@@ -128,7 +128,7 @@ export default function TeacherSetOrder() {
           <Heading
             id="ts-cancellation-confirmation-text"
             level="h2"
-            size="secondary"
+            size="heading3"
             text="Cancel Order"
           />
           <HorizontalRule

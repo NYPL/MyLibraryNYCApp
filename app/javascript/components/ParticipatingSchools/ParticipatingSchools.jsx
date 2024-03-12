@@ -130,7 +130,7 @@ export default function ParticipatingSchools(props) {
                   className="alphabet_anchor"
                   name={data["alphabet_anchor"]}
                 >
-                  <Heading level="h3" size="tertiary">
+                  <Heading level="h3" size="heading5">
                     {data["alphabet_anchor"]}
                   </Heading>
                 </a>
@@ -204,7 +204,7 @@ export default function ParticipatingSchools(props) {
           <Heading
             id="find-your-school"
             level="h2"
-            size="secondary"
+            size="heading3"
             text="Find Your School"
           />
           <HorizontalRule
@@ -215,7 +215,7 @@ export default function ParticipatingSchools(props) {
             marginTop="l"
             id="your-school-participate-in-mln"
             level="h3"
-            size="tertiary"
+            size="heading5"
             text="Does your school participate in MyLibraryNYC?"
           />
 

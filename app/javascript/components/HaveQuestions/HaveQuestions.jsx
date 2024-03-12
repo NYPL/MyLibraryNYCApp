@@ -13,7 +13,7 @@ export default function HaveQuestions() {
       <Heading
         id="heading-tertiary"
         level="h2"
-        size="tertiary"
+        size="heading5"
         text="Have Questions?"
       />
       <div id="have-questions-links">

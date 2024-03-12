@@ -87,9 +87,10 @@ export default function Home(props) {
             heading={
               <Heading
                 level="h1"
-                size='primary'
+                size='heading2'
                 id="mln-campaign-hero"
                 text="Welcome To MyLibraryNYC"
+                color="ui.white"
               />
             }
             subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 14,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities."
@@ -106,7 +107,7 @@ export default function Home(props) {
       contentTop={SignedUpMessage()}
       contentPrimary={
         <>
-          <Heading id="search-for-home-page-teacher-sets" size="secondary" level='h2'>
+          <Heading id="search-for-home-page-teacher-sets" size="heading3" level='h2'>
             Search For Teacher Sets
           </Heading>
           <SearchBar
@@ -127,7 +128,7 @@ export default function Home(props) {
             align="left"
             height="2px"
           />
-          <Heading id="professional-heading" marginTop="s" size="secondary" level='h2'>
+          <Heading id="professional-heading" marginTop="s" size="heading3" level='h2'>
             Professional Development & Exclusive Programs
           </Heading>
           <Text noSpace marginTop="s" size="default">

@@ -418,7 +418,7 @@ export default function TeacherSetDetails(props) {
   const userAccountIsPending = () => {
     return (
       <>
-        <Heading size="callout" level="h4">Account Pending </Heading>
+        <Heading size="heading6" level="h4">Account Pending </Heading>
         <Text width="m" size="body2">
           <i>
             Your account is pending. You should shortly receive an email
@@ -605,7 +605,7 @@ export default function TeacherSetDetails(props) {
               textAlign="center"
               noSpace
               level="h2"
-              size="secondary"
+              size="heading5"
               text="Set Unavailable"
               color={tsOrderTextColor}
             />
@@ -630,7 +630,7 @@ export default function TeacherSetDetails(props) {
               textAlign="center"
               noSpace
               level="h2"
-              size="secondary"
+              size="heading5"
               text="Set Unavailable"
             />
             {UnableToOrderAdditionalTeacherSetsMsg()}
@@ -661,7 +661,7 @@ export default function TeacherSetDetails(props) {
           <Heading
             id="ts-page-books-count"
             marginTop="s"
-            size="callout"
+            size="heading6"
             level="h4"
             text={BooksCount()}
           />
@@ -721,6 +721,7 @@ export default function TeacherSetDetails(props) {
             heading={
               <Heading
                 level="h1"
+                color="ui.white"
                 id={
                   "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
                 }
@@ -738,7 +739,7 @@ export default function TeacherSetDetails(props) {
               id="ts-title-id"
               noSpace
               level="h2"
-              size="secondary"
+              size="heading3"
               text={teacherSetTitle()}
             />
             <Spacer />
@@ -761,8 +762,8 @@ export default function TeacherSetDetails(props) {
             marginTop="l"
             noSpace
             id="ts-header-desc-text"
-            level="three"
-            size="h3"
+            level="h3"
+            size="heading5"
             text="What is in the box"
           />
           {TeacherSetDescription()}

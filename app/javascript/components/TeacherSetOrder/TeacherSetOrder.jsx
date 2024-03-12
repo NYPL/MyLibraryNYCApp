@@ -99,7 +99,7 @@ export default function TeacherSetOrder(props) {
           <Heading
             id="order-confirmation-heading"
             level="h2"
-            size="secondary"
+            size="heading3"
             text={confirmationMsg}
           />
           <HorizontalRule

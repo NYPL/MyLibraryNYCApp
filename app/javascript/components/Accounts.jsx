@@ -358,7 +358,7 @@ export default function Accounts() {
           <Heading
             id="account-user-name"
             level="h2"
-            size='secondary'
+            size='heading3'
             text={"Hello, " + userFirstName()}
           />
           <Form id="account-details-form">
@@ -417,7 +417,7 @@ export default function Accounts() {
             marginTop="l"
             marginBottom="m"
             id="your-orders-text"
-            size="tertiary"
+            size="heading5"
             level="h3"
             text="Orders"
           />

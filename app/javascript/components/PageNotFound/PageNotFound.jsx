@@ -75,7 +75,8 @@ export default function PageNotFound() {
             heading={
               <Heading
                 level="h1"
-                size='primary'
+                size='heading1'
+                color="ui.white"
                 id="mln-404-error-page"
                 text="Page Not Found"
               />
