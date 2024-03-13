@@ -19,6 +19,7 @@
 /_dev
 /.project
 .DS_Store
+.env
 
 # Ignore .dump
 /mylibnyc.dump
