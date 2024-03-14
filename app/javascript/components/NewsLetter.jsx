@@ -40,6 +40,9 @@ export default function NewsLetter() {
       })
       .then((res) => {
         setMessage(res.data.message);
+        setTimeout(() => {
+          document.querySelector('input[type="email"][aria-label="Your email address"]').focus();
+        }, 1);
 
         if (res.data.status === "success") {
           setIsInvalid(false);
@@ -96,7 +99,7 @@ export default function NewsLetter() {
             <TextInput
               id="news-letter-text-input"
               type="email"
-              labelText="email"
+              labelText="Your email address"
               showLabel={false}
               maxWidth="500px"
               placeholder="your email address"
@@ -105,6 +108,7 @@ export default function NewsLetter() {
               required
               invalidText={message}
               isInvalid={isInvalid}
+              helperText
             />
             {submitButtonaAndProgressBar()}
           </Stack>
