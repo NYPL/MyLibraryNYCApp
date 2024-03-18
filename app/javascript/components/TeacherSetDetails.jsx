@@ -772,17 +772,10 @@ export default function TeacherSetDetails(props) {
           <Link
             href={legacyDetailUrl()}
             id="ts-page-details_url"
-            type="action"
-            target="_blank"
+            type="external"
             marginTop="l"
           >
             View in catalog
-            <Icon
-              name="actionLaunch"
-              iconRotation="rotate0"
-              size="medium"
-              align="left"
-            />
           </Link>
         </>
       }

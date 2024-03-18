@@ -994,7 +994,7 @@ export default function SearchTeacherSets(props) {
               <ButtonGroup>
                 <Button
                   id="teacher-sets-scroll-to-top"
-                  buttonType="secondary"
+                  buttonType="text"
                   className="backToTop"
                   onClick={() =>
                     window.scrollTo({

@@ -370,16 +370,9 @@ export default function TeacherSetBooks() {
             className="tsDetailUrl"
             href={legacyDetailUrl}
             id="ts-book-page-details_url"
-            type="action"
-            target="_blank"
+            type="external"
           >
             View in catalog
-            <Icon
-              name="actionLaunch"
-              iconRotation="rotate0"
-              size="medium"
-              align="left"
-            />
           </Link>
           <Heading
             marginTop="l"
