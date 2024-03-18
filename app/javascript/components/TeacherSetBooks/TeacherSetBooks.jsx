@@ -254,7 +254,7 @@ export default function TeacherSetBooks() {
               id="book-title-heading-id"
               noSpace
               level="h2"
-              size="heading5"
+              size="heading3"
               text={bookTitle}
             />
           </Flex>
@@ -304,7 +304,7 @@ export default function TeacherSetBooks() {
             id="book-page-list-details"
             key="book-page-list-details-key"
             type="dl"
-            title="Details"
+            title={<Heading level="h3" size="heading5">Order Details</Heading>}
             marginTop="l"
           >
             {book.publication_date ? (

@@ -560,7 +560,7 @@ export default function TeacherSetDetails(props) {
       <List
         id="ts-list-details"
         type="dl"
-        title="Details"
+        title={<Heading level="h3" size="heading5">Details</Heading>}
         marginTop="l"
         key="ts-list-details-key"
       >

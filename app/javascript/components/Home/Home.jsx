@@ -84,6 +84,7 @@ export default function Home(props) {
         <>
           <Hero
             heroType="campaign"
+            foregroundColor="ui.white"
             heading={
               <Heading
                 level="h1"

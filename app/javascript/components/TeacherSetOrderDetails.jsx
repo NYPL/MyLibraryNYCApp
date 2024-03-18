@@ -88,7 +88,7 @@ export default function TeacherSetOrderDetails(props) {
         marginTop="l"
         id="order-confirmation-list-details"
         key="order-confirmation-list-details-key"
-        title="Order Details"
+        title={<Heading level="h3" size="heading5">Order Details</Heading>}
         type="dl"
       >
         <dt>Teacher Set</dt>
