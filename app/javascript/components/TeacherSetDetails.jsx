@@ -29,7 +29,6 @@ import {
   HorizontalRule,
   StatusBadge,
   VStack,
-  Icon,
   Breadcrumbs,
   Hero,
   Notification,
@@ -418,7 +417,9 @@ export default function TeacherSetDetails(props) {
   const userAccountIsPending = () => {
     return (
       <>
-        <Heading size="heading6" level="h4">Account Pending </Heading>
+        <Heading size="heading6" level="h4">
+          Account Pending{" "}
+        </Heading>
         <Text width="m" size="body2">
           <i>
             Your account is pending. You should shortly receive an email
@@ -560,7 +561,11 @@ export default function TeacherSetDetails(props) {
       <List
         id="ts-list-details"
         type="dl"
-        title={<Heading level="h3" size="heading5">Details</Heading>}
+        title={
+          <Heading level="h3" size="heading5">
+            Details
+          </Heading>
+        }
         marginTop="l"
         key="ts-list-details-key"
       >

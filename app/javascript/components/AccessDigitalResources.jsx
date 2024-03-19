@@ -12,7 +12,7 @@ export default function AccessDigitalResources() {
       <Heading
         id="access-digital-resources-header-text"
         size="heading3"
-        level='h2'
+        level="h2"
         marginTop="s"
       >
         Access Digital Resources

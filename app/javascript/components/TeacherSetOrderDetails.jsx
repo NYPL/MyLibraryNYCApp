@@ -6,6 +6,7 @@ import {
   StatusBadge,
   CardHeading,
   Link,
+  Heading,
 } from "@nypl/design-system-react-components";
 import { titleCase } from "title-case";
 import dateFormat from "dateformat";
@@ -88,7 +89,11 @@ export default function TeacherSetOrderDetails(props) {
         marginTop="l"
         id="order-confirmation-list-details"
         key="order-confirmation-list-details-key"
-        title={<Heading level="h3" size="heading5">Order Details</Heading>}
+        title={
+          <Heading level="h3" size="heading5">
+            Order Details
+          </Heading>
+        }
         type="dl"
       >
         <dt>Teacher Set</dt>

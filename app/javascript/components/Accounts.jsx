@@ -358,7 +358,7 @@ export default function Accounts() {
           <Heading
             id="account-user-name"
             level="h2"
-            size='heading3'
+            size="heading3"
             text={"Hello, " + userFirstName()}
           />
           <Form id="account-details-form">
