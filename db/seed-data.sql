@@ -2686,7 +2686,7 @@ INSERT INTO hold_changes (id, hold_id, admin_user_id, status, comment, created_a
 -- Data for Name: schools; Type: TABLE DATA; Schema: public; Owner: _postgres
 --
 
--- INSERT INTO schools (id, name, campus_id, code) VALUES (1067, 'P.S. 179', 387, 'zx179');
+-- INSERT INTO schools (id, name, campus_id, code, ) VALUES (1067, 'P.S. 179', 387, 'zx179');
 -- INSERT INTO schools (id, name, campus_id, code) VALUES (1068, 'Community School for Social Justice', 391, 'zx427');
 -- INSERT INTO schools (id, name, campus_id, code) VALUES (1069, 'Bronx Leadership Academy II High School', 392, 'zx527');
 -- INSERT INTO schools (id, name, campus_id, code) VALUES (1070, 'New Explorers High School', 392, 'zx547');
