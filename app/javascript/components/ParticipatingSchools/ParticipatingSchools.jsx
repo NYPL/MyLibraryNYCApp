@@ -137,7 +137,7 @@ export default function ParticipatingSchools(props) {
               </li>
               {filteredSchools.map((school, index) => (
                 <li
-                  fontWeight="heading.callout"
+                  fontWeight="medium"
                   id={"ps-name-" + data["alphabet_anchor"] + "-" + index}
                   key={"ps-name-" + data["alphabet_anchor"] + "-key-" + index}
                 >

@@ -179,7 +179,7 @@ export default function TeacherSetDetails(props) {
 
   const AvailableCopies = () => {
     return (
-      <div color="var(--nypl-colors-ui-black)">
+      <div color="var(--nypl-colors-ui-black)" style={{ textAlign: "center" }}>
         {ACopies()} of {TotalCopies()} Available
       </div>
     );
@@ -336,19 +336,12 @@ export default function TeacherSetDetails(props) {
       return (
         <>
           <Heading
-            id="ts-order-set"
-            textAlign="center"
-            noSpace
-            level="h2"
-            size="heading5"
-            text="Order Set"
-          />
-          <Heading
             id="ts-available-copies"
             textAlign="center"
             size="heading6"
             level="h4"
-            text={AvailableCopies()}
+            text="Order Set"
+            subtitle={AvailableCopies()}
           />
           {OrderTeacherSets()}
         </>

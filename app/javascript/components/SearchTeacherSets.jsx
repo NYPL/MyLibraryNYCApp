@@ -324,7 +324,7 @@ export default function SearchTeacherSets(props) {
           id="no-results-found-id"
           marginBottom="s"
           style={{ fontStyle: "italic" }}
-          level="h4"
+          level="h3"
           size="heading6"
           text="No results found"
         />
@@ -345,7 +345,7 @@ export default function SearchTeacherSets(props) {
         <Text
           marginTop="m"
           id="ts-result-found-id"
-          fontWeight="heading.callout"
+          fontWeight="medium"
           aria-live="polite"
         >
           {"Showing " +
@@ -377,7 +377,7 @@ export default function SearchTeacherSets(props) {
         <Text
           marginTop="m"
           id="ts-results-found-id"
-          fontWeight="heading.callout"
+          fontWeight="medium"
           aria-live="polite"
         >
           {"Showing " +
