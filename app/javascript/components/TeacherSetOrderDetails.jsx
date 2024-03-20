@@ -40,9 +40,6 @@ export default function TeacherSetOrderDetails(props) {
           <Card
             id="book-page-ts-card-details"
             layout="row"
-            imagealt="Alt text"
-            aspectratio="square"
-            size="xxsmall"
           >
             <CardHeading level="h4" id="ts-order-details">
               <Link
@@ -52,7 +49,7 @@ export default function TeacherSetOrderDetails(props) {
                 {ts.title}
               </Link>
             </CardHeading>
-            <CardHeading level="six" id="ts-suitabilities">
+            <CardHeading level="h5" id="ts-suitabilities">
               {suitabilitiesString}
             </CardHeading>
             <CardContent id="book-page-ts-availability">
