@@ -465,7 +465,7 @@ export default function SearchTeacherSets(props) {
                 <ReactRouterLink
                   to={"/teacher_set_details/" + ts.id}
                   onClick={() => window.scrollTo(0, 0)}
-                  style={{ "text-decoration": "none" }}
+                  style={{ "text-decoration": "none", "font-size": "22px" }}
                 >
                   {ts.title}
                 </ReactRouterLink>
