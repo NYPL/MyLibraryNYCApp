@@ -459,7 +459,7 @@ export default function SearchTeacherSets(props) {
             >
               <CardHeading
                 marginBottom="xs"
-                level="three"
+                level="h3"
                 id={"ts-order-details-" + i}
               >
                 <ReactRouterLink

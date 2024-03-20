@@ -126,7 +126,7 @@ export default function TeacherSetBooks() {
           <div key={"ts-books-div-" + index}>
             <Card id="book-page-ts-card-details" layout="row">
               <CardHeading
-                level="four"
+                level="h4"
                 id="book-page-ts-title"
                 marginBottom="xs"
               >
@@ -274,7 +274,7 @@ export default function TeacherSetBooks() {
               <CardHeading
                 id="book-page-sub_title"
                 marginBottom="s"
-                level="three"
+                level="h3"
               >
                 {book.sub_title}
               </CardHeading>

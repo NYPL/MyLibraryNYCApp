@@ -44,7 +44,7 @@ export default function TeacherSetOrderDetails(props) {
             aspectratio="square"
             size="xxsmall"
           >
-            <CardHeading level="four" id="ts-order-details">
+            <CardHeading level="h4" id="ts-order-details">
               <Link
                 href={"/teacher_set_details/" + ts.id}
                 to={"/teacher_set_details/" + ts.id}
