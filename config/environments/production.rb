@@ -82,4 +82,6 @@ MyLibraryNYC::Application.configure do
   config.eager_load = true
   config.active_job.queue_adapter = :delayed_job
   Delayed::Worker.logger = Rails.logger
+  # Expands the lines which load the assets
+  config.assets.debug = true
 end
