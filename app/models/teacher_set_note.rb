@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TeacherSetNote < ActiveRecord::Base
-  belongs_to :book_set
+  # belongs_to :book_set
   # attr_accessible :content, :teacher_set_id
 
   def as_json(opts={})

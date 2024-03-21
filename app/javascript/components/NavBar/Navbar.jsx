@@ -27,7 +27,6 @@ export default function Navbar(props) {
   };
 
   return (
-   
       <div id="mln-navbar" className="header-topWrapper">
         <Flex alignItems="center">
           <Link href="/" onClick={hideHomeSignUpMsg} aria-label="MyLibraryNYC homepage">

@@ -6,6 +6,7 @@ import {
   StatusBadge,
   CardHeading,
   Link,
+  Heading,
 } from "@nypl/design-system-react-components";
 import { titleCase } from "title-case";
 import dateFormat from "dateformat";
@@ -39,11 +40,8 @@ export default function TeacherSetOrderDetails(props) {
           <Card
             id="book-page-ts-card-details"
             layout="row"
-            imagealt="Alt text"
-            aspectratio="square"
-            size="xxsmall"
           >
-            <CardHeading level="four" id="ts-order-details">
+            <CardHeading level="h4" id="ts-order-details">
               <Link
                 href={"/teacher_set_details/" + ts.id}
                 to={"/teacher_set_details/" + ts.id}
@@ -51,7 +49,7 @@ export default function TeacherSetOrderDetails(props) {
                 {ts.title}
               </Link>
             </CardHeading>
-            <CardHeading level="six" id="ts-suitabilities">
+            <CardHeading level="h5" id="ts-suitabilities">
               {suitabilitiesString}
             </CardHeading>
             <CardContent id="book-page-ts-availability">
@@ -88,7 +86,11 @@ export default function TeacherSetOrderDetails(props) {
         marginTop="l"
         id="order-confirmation-list-details"
         key="order-confirmation-list-details-key"
-        title="Order Details"
+        title={
+          <Heading level="h3" size="heading5">
+            Order Details
+          </Heading>
+        }
         type="dl"
       >
         <dt>Teacher Set</dt>

@@ -33,7 +33,7 @@ export default function SignIn(props) {
 
   useEffect(() => {
     document.title = "Sign In | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     if (props.userSignedIn && location.pathname === "/signin") {
@@ -94,8 +94,8 @@ export default function SignIn(props) {
         <>
           <Heading
             id="sign-in-heading-id"
-            level="two"
-            size="secondary"
+            level="h2"
+            size="heading3"
             text="Sign In"
           />
           <HorizontalRule
@@ -103,7 +103,6 @@ export default function SignIn(props) {
             marginTop="s"
             className={`${colorMode} teacherSetHorizontal`}
           />
-
           <TextInput
             isRequired
             id="sign-in-text-input"

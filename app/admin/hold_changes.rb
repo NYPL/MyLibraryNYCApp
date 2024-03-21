@@ -15,17 +15,22 @@ ActiveAdmin.register HoldChange do
     end
     
     def create
-      params[:hold_change].merge!({ admin_user_id: current_admin_user.id })
-      # Update teacher-set available copies while cancel or closed the hold.
-      if ['cancelled', 'closed'].include?(params[:hold_change]['status'])
-        hold = Hold.find(params[:hold_change]['hold_id'])
-        teacher_set = TeacherSet.where(id: hold.teacher_set_id).first
-        if teacher_set.present?
-          hold.teacher_set.available_copies = hold.teacher_set.available_copies.to_i + teacher_set.holds_count_for_user(current_user, hold.id).to_i
-          hold.teacher_set.save!
+      if params[:hold_change]['status'].blank?
+        flash[:error] = "Please select hold change status"
+        redirect_to new_admin_hold_change_path(hold: params[:hold_change]['hold_id'])
+      else
+        params[:hold_change].merge!({ admin_user_id: current_admin_user.id })
+        # Update teacher-set available copies while cancel or closed the hold.
+        if ['cancelled', 'closed'].include?(params[:hold_change]['status'])
+          hold = Hold.find(params[:hold_change]['hold_id'])
+          teacher_set = TeacherSet.where(id: hold.teacher_set_id).first
+          if teacher_set.present?
+            hold.teacher_set.available_copies = hold.teacher_set.available_copies.to_i + teacher_set.holds_count_for_user(current_user, hold.id).to_i
+            hold.teacher_set.save!
+          end
         end
+        create!
       end
-      create!
     end
   end
 
@@ -35,8 +40,10 @@ ActiveAdmin.register HoldChange do
   end
 
   form do |f|
-    f.inputs "Status Change" do 
-      f.semantic_errors *f.object.errors.keys
+    f.inputs "Status Change" do
+      if f.object.errors.present? && f.object.errors.keys.present?
+        f.semantic_errors *f.object.errors.keys
+      end
       f.input :status, :as => :radio, :collection => [
         ['Pending', 'pending'],
         ['Pending - In Transit Aux', 'transit'],

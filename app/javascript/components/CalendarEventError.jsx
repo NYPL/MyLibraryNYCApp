@@ -25,8 +25,9 @@ const CalendarEventError = () => {
       return (
         <Heading
           marginBottom="15em"
+          size="heading5"
           id="mln-calendar-event-error-id"
-          level="three"
+          level="h3"
           text="MyLibraryNyc calendar not found."
         />
       );

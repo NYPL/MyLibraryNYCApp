@@ -12,9 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
-//= require ./vendor/jquery.ui.touch-punch.min
-//= require ./vendor/jquery.swipeshow.min
 //= require helpers
 //= require rails.validations
 
@@ -58,27 +55,6 @@ $(document).ready(function() {
     }
   });
 });
-
-function hideSchoolNotFoundMessage(val=null) {
-  $("#schools_not_found").hide();
-  $("#participating_schools_id *").filter(function() {
-    $(this).toggle($(this).text().toLowerCase().indexOf() == -1)
-  });
-}
-
-$( document ).ready(function() {
-  //toggle the component with class answers
-  $(".questions").click(function() {
-    if ($(this).next(".answers").is(':visible')) {
-      $(this).next(".answers").slideUp(300);
-      $(this).children(".plusminus").text('+');
-    } else {
-      $(this).next(".answers").slideDown(300);
-      $(this).children(".plusminus").text('-');
-    }
-  });
-});
-
 
 function hideNewsLetterValidation(email) {
   if(email != "") {

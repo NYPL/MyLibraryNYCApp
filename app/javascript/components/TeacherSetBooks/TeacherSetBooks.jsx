@@ -55,7 +55,7 @@ export default function TeacherSetBooks() {
   }, [isLoading]);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     axios
@@ -126,7 +126,7 @@ export default function TeacherSetBooks() {
           <div key={"ts-books-div-" + index}>
             <Card id="book-page-ts-card-details" layout="row">
               <CardHeading
-                level="four"
+                level="h4"
                 id="book-page-ts-title"
                 marginBottom="xs"
               >
@@ -219,7 +219,7 @@ export default function TeacherSetBooks() {
         <Breadcrumbs
           id={"mln-breadcrumbs-ts-details"}
           breadcrumbsData={[
-            { url: "//" + process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+            { url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
             {
               url: "//" + window.location.hostname + window.location.pathname,
               text: "Book Details",
@@ -236,7 +236,8 @@ export default function TeacherSetBooks() {
             backgroundColor={heroBgColor}
             heading={
               <Heading
-                level="one"
+                level="h1"
+                color="ui.white"
                 id={
                   "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
                 }
@@ -252,8 +253,8 @@ export default function TeacherSetBooks() {
             <Heading
               id="book-title-heading-id"
               noSpace
-              level="two"
-              size="secondary"
+              level="h2"
+              size="heading3"
               text={bookTitle}
             />
           </Flex>
@@ -273,7 +274,7 @@ export default function TeacherSetBooks() {
               <CardHeading
                 id="book-page-sub_title"
                 marginBottom="s"
-                level="three"
+                level="h3"
               >
                 {book.sub_title}
               </CardHeading>
@@ -303,7 +304,7 @@ export default function TeacherSetBooks() {
             id="book-page-list-details"
             key="book-page-list-details-key"
             type="dl"
-            title="Details"
+            title={<Heading level="h3" size="heading5">Order Details</Heading>}
             marginTop="l"
           >
             {book.publication_date ? (
@@ -369,23 +370,16 @@ export default function TeacherSetBooks() {
             className="tsDetailUrl"
             href={legacyDetailUrl}
             id="ts-book-page-details_url"
-            type="action"
-            target="_blank"
+            type="external"
           >
             View in catalog
-            <Icon
-              name="actionLaunch"
-              iconRotation="rotate0"
-              size="medium"
-              align="left"
-            />
           </Link>
           <Heading
             marginTop="l"
             marginBottom="l"
             id="appears-in-ts-text"
-            size="tertiary"
-            level="three"
+            size="heading5"
+            level="h3"
           >
             Appears in These Sets
           </Heading>

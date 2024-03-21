@@ -37,7 +37,7 @@ function CalendarOfEvents() {
           type="buttonNoBrand"
           href={
             "//" +
-            process.env.MLN_INFO_SITE_HOSTNAME +
+            env.MLN_INFO_SITE_HOSTNAME +
             "/home/calendar_event/" +
             calendarFileName
           }
@@ -52,7 +52,7 @@ function CalendarOfEvents() {
           type="buttonNoBrand"
           href={
             "//" +
-            process.env.MLN_INFO_SITE_HOSTNAME +
+            env.MLN_INFO_SITE_HOSTNAME +
             "/menu_of_services/" +
             menuOfServicesFileName
           }

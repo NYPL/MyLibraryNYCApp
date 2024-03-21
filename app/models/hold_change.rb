@@ -5,9 +5,8 @@ class HoldChange < ActiveRecord::Base
   # attr_accessible :status, :comment, :hold_id, :admin_user_id
 
   validates_presence_of :hold_id, :status
-
   belongs_to :hold
-  belongs_to :admin_user
+  belongs_to :admin_user, optional: true
 
   after_save :do_after_save
 

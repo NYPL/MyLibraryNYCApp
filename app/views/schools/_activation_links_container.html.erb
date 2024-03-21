@@ -1,14 +1,14 @@
 <div id="activate-school-<%= school.id %>-container"
      style="<%= !school.active? ? '' : 'display:none;' %> <%= (action == 'index' ? 'margin-left:20px;' : '') %>">
   <a href="<%= activate_admin_school_path(school) %>" data-method="put" data-remote="true">
-    <%= image_pack_tag('media/images/unchecked.png', height: 20, width: 20, alt: '') %>
+    <%= image_tag('unchecked.png', height: 20, width: 20, alt: '') %>
     <%= (action == 'show' ? "<span style='position:relative; top:-5px; right:-3px'>Inactive</span>" : '').html_safe %>
   </a>
 </div>
 <div id="inactivate-school-<%= school.id %>-container"
      style="<%= school.active? ? '' : 'display:none;' %> <%= (action == 'index' ? 'margin-left:20px;' : '') %>">
   <a href="<%= inactivate_admin_school_path(school) %>" data-method="put" data-remote="true">
-    <%= image_pack_tag('media/images/checked.png', height: 20, width: 20, alt: '') %>
+    <%= image_tag('checked.png', height: 20, width: 20, alt: '') %>
     <%= (action == 'show' ? "<span style='position:relative; top:-5px; right:-3px'>Active</span>" : '').html_safe %>
   </a>
 </div>

@@ -1,7 +1,520 @@
-.style_id {
-	 color: red !important;
+@import './mobile_header.scss';
+@import './teacher_set.scss';
+@import './teacher_set.scss';
+@import './utils/viewports.scss';
+
+:root {
+  --breakpoint-small: 320px;
+  --breakpoint-medium: 600px;
+  --submenu-width: 245px;
 }
 
-.participating_schools_list {
-  padding: 15px 140px;
+$breakpoint-small: 320px;
+$breakpoint-medium: 600px;
+$submenu-width: 245px;
+
+.answers p {
+  padding: 18px 0px 1px 0px;
+  margin: 0px;
+  font-size: medium;
+  color: #404040;
+}
+
+.nav-link-colors {
+  color: var(--nypl-colors-ui-black) !important;
+  text-decoration: none !important;
+  font-weight: 500;
+}
+
+.dark.nav-link-colors {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
+.nav-links {
+  margin-left: 1.2em;
+}
+
+.colorModeIcon {
+  color: var(--nypl-colors-ui-black) !important;
+  margin-top: 6px !important;
+  cursor: pointer;
+}
+
+.dark.colorModeIcon {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+  margin-top: 6px !important;
+  cursor: pointer;
+}
+
+.sign_in {
+  height: 19px;
+  width: 49px;
+  left: 118px;
+  top: 5px;
+  border-radius: nullpx;
+}
+
+.contacts {
+  height: 19px;
+  width: 65px;
+  left: 365px;
+  top: 5px;
+  border-radius: nullpx;
+}
+
+.faqs {
+  height: 19px;
+  width: 38px;
+  left: 455px;
+  top: 5px;
+  border-radius: nullpx;
+}
+
+.participating_schools {
+  left: 518px;
+  top: 5px;
+  border-radius: nullpx;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.large {
+  font-size: xx-large;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.schoolList {
+  padding-top: 30px
+}
+
+.faq_page {
+  padding: 25px 0px;
+}
+
+.display_none {
+  overflow: hidden;  /* Hide the element content, while height = 0 */
+    height: 0;
+    opacity: 0;
+    transition: height 300ms 400ms, opacity 400ms 0ms;
+}
+
+.display_block {
+  height: auto; opacity: 1;
+  transition: height 400ms 0ms, opacity 600ms 0ms;
+}
+
+.submenu {
+  height: 0;
+  overflow: hidden;
+}
+
+.alphabet_anchor {
+  color: var(--nypl-colors-ui-black);
+}
+
+h1 {
+  text-transform: capitalize !important;
+}
+
+ul.list li:before {
+  color: #FFF !important;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.calendar_button {
+  height: 36px;
+  border-radius: 2px;
+  margin: 7px 32px 7px 0px;
+}
+
+.calendar_button .calendar_link {
+  text-decoration: none !important;
+  color: #FFFFFF !important;
+}
+
+.teacherSetHorizontal {
+  background-color: #D23B42 !important;
+  height: 3px !important;
+}
+
+.dark.teacherSetHorizontal {
+  background-color: var(--nypl-colors-dark-brand-primary) !important;
+  height: 3px !important;
+}
+
+.card.card--horizontal.card--center {
+  align-items: flex-start !important;
+}
+
+.card.card--horizontal .card__image--small {
+  flex: 0 0 75px !important;
+}
+
+.italic {
+  font-style: italic !important;
+}
+
+.orderDetails {
+  border-top: 0px !important;
+  padding-top: 0px !important;
+}
+
+.cancel-button {
+  margin-top: 1.25em;
+}
+
+.sign-up-link {
+  margin-top: 0.8em;
+  font-weight: 400;
+}
+
+.hrefBlackColor {
+  color: var(--nypl-colors-ui-black) !important;
+  text-decoration: underline;
+}
+
+.dark.hrefBlackColor {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+  text-decoration: underline;
+}
+
+.display_none {
+  display: none;
+}
+
+.display_block {
+  display: block;
+}
+
+.signUpMessage {
+  margin: 0px 0px 10px 0px !important;
+}
+
+.accountNotificationMsg {
+  margin: 0 !important;
+}
+
+.accocuntOrderPagination {
+  justify-content: center;
+}
+
+.nav__submenu {
+  display: block;
+}
+
+.nav__menu-item:hover {
+  .nav__submenu {
+    display: block;
+  }
+}
+  
+.nav__menu-item {
+  display: inline-block;
+  position: relative;
+
+  &:hover {
+    background-color: #FFFFFF;
+    .nav__submenu {
+      display: block;
+    }
+  }
+}
+
+.dark.nav__menu-item {
+  display: inline-block;
+  position: relative;
+
+  &:hover {
+    background-color: var(--nypl-colors-dark-ui-bg-default);
+    .dark.nav__submenu {
+      display: block;
+      background-color: var(--nypl-colors-dark-ui-bg-default);
+    }
+  }
+}
+
+.nav__submenu {
+  font-weight: 300;
+  text-transform: none;
+  display: none;
+  position: absolute;
+  min-width: $submenu-width;
+  background: #FFFFFF;
+  z-index: 10;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+}
+
+.dark.nav__submenu {
+  background-color: var(--nypl-colors-dark-ui-bg-default);
+  font-weight: 300;
+  text-transform: none;
+  position: absolute;
+  min-width: $submenu-width;
+  z-index: 1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+}
+
+.account_details {
+  left: -115px;
+  min-width: 240px;
+}
+
+.signin_details {
+  left: -152px;
+}
+    
+.nav__submenu-item {
+  margin-bottom: 16px;
+  margin-top: 16px !important;
+  padding-right: 20px;
+  &:hover {
+    background: hsba(0, 0%, 0%, 0.25);
+  }
+}
+
+.dark.nav__submenu-item {
+  color: var(--nypl-colors-dark-ui-typography-heading);
+  margin-bottom: 16px;
+  margin-top: 16px !important;
+  padding-right: 20px;
+  &:hover {
+    background: hsba(0, 0%, 0%, 0.25);
+  }
+}
+
+.signin_nav_button {
+  width: 100% !important;
+  background-color: var(--nypl-colors-ui-black) !important;
+}
+
+.dark.signin_nav_button {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
+.signinNavArrow {
+  margin-bottom: 3px;
+}
+
+.teacher_set_pagination {
+  justify-content: center;
+}
+
+.bannerMessage {
+  width: 100%;
+  border-radius: 0px !important;
+  margin: 0 auto !important;
+  color:  var(--nypl-colors-ui-black);
+}
+
+.backToTopIcon {
+  padding-right: 2px;
+}
+
+.tsDetailUrl {
+  padding-top: 15px;
+}
+
+.navBarIcon {
+  margin-right: 8px;
+  margin-left: 5px;
+}
+
+.navBarDropDown {
+  align-items: center;
+  display: flex;
+  color: #000000 !important;
+}
+
+.dark.navBarDropDown {
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
+.tsDetailHorizontalLine {
+  background-color: #D23B42 !important;
+  height: 1px;
+}
+
+.dark.tsDetailHorizontalLine {
+  background-color: var(--nypl-colors-dark-brand-primary) !important;
+  height: 1px;
+}
+
+.dark.contactInfo {
+  @include max-screen($breakpoint-medium) {
+    
+    tbody th {
+      background-color: var(--nypl-colors-ui-black) !important;
+    }
+  }
+}
+
+.contactInfo {
+  font-size: 16px;
+
+    tbody tr th p {
+      font-weight: var(--nypl-fontWeights-bold);
+    }
+
+    tbody tr td a {
+      font-weight: var(--nypl-fontWeights-light);
+    }
+
+  @include max-screen($breakpoint-medium) {
+
+    tbody tr td span:first-child {
+      display: none;
+    }
+
+    tbody th {
+      background-color: var(--nypl-colors-ui-white) !important;
+    }
+
+   
+    tbody tr th span p {
+      padding-top: 0px;
+      margin-bottom: -25px;
+    }
+
+    tbody tr td span a {
+      font-weight: var(--nypl-fontWeights-light);
+      padding-top: 0px;
+    }
+
+    tbody tr th span:first-child {
+      display: none;
+    }
+
+    tr {
+      border-bottom: 0px solid !important;
+    }
+
+
+    tbody tr td span {
+     margin-top: -10px;
+    }
+
+  }
+  
+  @include min-screen($breakpoint-medium) {
+
+    tbody tr th {
+      width: 310px;
+    }
+
+    thead tr th {
+      display: none;
+    }
+  }
+}
+
+.cancelOrderButton {
+  text-decoration: none !important;
+  color: var(--nypl-colors-ui-black) !important;
+}
+
+.dark.cancelOrderButton {
+  text-decoration: none !important;
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
+.cancelOrderDate {
+  display: "none";
+}
+
+.visitOurText {
+  margin-bottom: 0px;
+}
+
+.accountPageCancelOrder {
+  text-decoration: none !important;
+  color: var(--nypl-colors-ui-white) !important;
+}
+
+.accountPageTeacherSetOrder {
+  text-decoration: none !important;
+  color: var(--nypl-colors-ui-black) !important;
+}
+
+.dark.accountPageTeacherSetOrder {
+  text-decoration: none !important;
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
+.backToTop {
+  @include max-screen($breakpoint-medium) {
+    width: -webkit-fit-content;
+  }
+}
+
+.footer {
+  margin-top: var(--nypl-space-l) !important;
+}
+
+.textDecorationNone {
+  text-decoration: none !important;
+}
+
+.hrefLink {
+  a {
+    text-decoration: underline;
+  }
+}
+
+.dark.hrefLink {
+  a {
+    color: var(--nypl-colors-dark-ui-link-primary) !important;
+  }
+}
+
+.paginationHR {
+  margin-top: -10px !important;
+}
+
+.selectSortOrder {
+  display: flex !important;
+}
+
+.backToTopButton {
+  margin-left: -20px !important;
+  text-decoration: underline !important;
+  font-size: 16px !important;
+}
+
+.tsFacetsBorderColor {
+  border: none;
+}
+
+.dark.tsFacetsBorderColor {
+  @include min-screen($breakpoint-medium) {
+    border: 1px solid #E9E9E9;
+  }
+
+  @include max-screen($breakpoint-small) {
+    border: none;
+  }
+}
+
+#mln-navbar-list {
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.desktopMlnLogo {
+  display: block !important;
+}
+
+.signin-button {  
+  @include max-screen(500px) {
+    width: 100%;
+  }
 }

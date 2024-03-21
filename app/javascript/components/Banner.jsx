@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../styles/application.scss";
 import { Notification } from "@nypl/design-system-react-components";
 import ReactParser from "html-react-parser";
 

@@ -105,7 +105,9 @@ ActiveAdmin.register TeacherSet do
   end
 
   form do |f|
-    f.semantic_errors *f.object.errors.keys
+    if f.object.errors.present? && f.object.errors.keys.present?
+      f.semantic_errors *f.object.errors.keys
+    end
     f.inputs do
       f.input :total_copies
       f.input :available_copies

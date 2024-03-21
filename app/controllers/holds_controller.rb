@@ -118,34 +118,34 @@ class HoldsController < ApplicationController
 
   def error_message(exception); end
   
-  # Here calculate the teacher-set available_copies based on the current-user holds than saves in teacher-set table and cancel the current-user holds.
+  # Here calculate the teacher-set available_copies based on the current-user holds then saves in teacher-set table and cancel the current-user holds.
   def update
     @hold = Hold.find_by_access_key(params[:id])
+    Hold.transaction do
+      if !(c = params[:hold_change]).nil? && (c[:status] == 'cancelled')
+          teacher_set = @hold.teacher_set
+          
+          LogWrapper.log('INFO', {message: 'Teacher-set hold is cancelled', method: __method__, 
+                                  teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
+          # Update teacher-set availability in DB
+          teacher_set.update_teacher_set_availability_in_db('cancelled', nil, current_user, @hold.id)
+          @hold.cancel! c[:comment]
+      end
+      params.permit!
 
-    if !(c = params[:hold_change]).nil? && (c[:status] == 'cancelled')
-        teacher_set = @hold.teacher_set
-        
-        LogWrapper.log('INFO', {message: 'Teacher-set hold is cancelled', method: __method__, 
-                                teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
-        # Update teacher-set availability in DB
-        teacher_set.update_teacher_set_availability_in_db('cancelled', nil, current_user, @hold.id)
-
+      if @hold.update!(params[:hold])
         # Update teacher-set availability in elastic search document
         teacher_set.update_teacher_set_availability_in_elastic_search
-        @hold.cancel! c[:comment]
-    end
-    params.permit!
-
-    if @hold.update(params[:hold])
-      render json: {
-        hold: @hold.as_json,
-        teacher_set: @hold.teacher_set.as_json,
-        message: 'Your order was successfully updated.'
-      }
-    else
-      render json: {
-        status: :unprocessable_entity
-      }
+        render json: {
+          hold: @hold.as_json,
+          teacher_set: @hold.teacher_set.as_json,
+          message: 'Your order was successfully updated.'
+        }
+      else
+        render json: {
+          status: :unprocessable_entity
+        }
+      end
     end
   end
 

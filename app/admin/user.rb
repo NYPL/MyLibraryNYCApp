@@ -39,7 +39,9 @@ ActiveAdmin.register User do
   filter :barcode
 
   form do |f|
-    f.semantic_errors *f.object.errors.keys
+    if f.object.errors.present? && f.object.errors.keys.present?
+      f.semantic_errors * f.object.errors.keys
+    end
     f.inputs "User Details" do
       f.input :school
       f.input :first_name
@@ -78,7 +80,7 @@ ActiveAdmin.register User do
         user.status.capitalize if user && user.status.present?
       end
 
-      [:updated_at, :current_sign_in_at, :last_sign_in_at ].each do |prop|
+      [:updated_at, :current_sign_in_at, :last_sign_in_at].each do |prop|
         row prop
       end
     end
