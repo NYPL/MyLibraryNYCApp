@@ -5,15 +5,15 @@ services:
 
 branches:
   only:
-  - MLN-rails7-feb22
+  - qa
   - production
 
 jobs:
   include:
     - stage: docker build
-      if: (branch = MLN-rails7-feb22 or branch = production)
+      if: (branch = qa or branch = production)
       before_install:
-      - if [[ $TRAVIS_BRANCH == "MLN-rails7-feb22" ]];
+      - if [[ $TRAVIS_BRANCH == "qa" ]];
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_QA};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_QA};
@@ -43,8 +43,8 @@ jobs:
             aws ecr put-image --repository-name my-library-nyc-app --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
-    - stage: deploy MLN-rails7-feb22
-      if: branch IN (MLN-rails7-feb22) #AND type != pull_request
+    - stage: deploy qa
+      if: branch IN (qa) AND type != pull_request
       env:
       - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
       - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA

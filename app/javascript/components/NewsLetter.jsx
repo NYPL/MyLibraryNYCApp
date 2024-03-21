@@ -78,7 +78,7 @@ export default function NewsLetter() {
       return (
         <VStack justifyContent="center" tabIndex="-1" id="news-letter-msg-box">
           <Heading
-            level="h4"
+            level="h2"
             size="heading6"
             maxWidth="640px"
             noSpace
@@ -96,7 +96,7 @@ export default function NewsLetter() {
       return (
         <VStack gap="m" justifyContent="center">
           <Heading
-            level="h4"
+            level="h2"
             size="heading6"
             maxWidth="640px"
             noSpace

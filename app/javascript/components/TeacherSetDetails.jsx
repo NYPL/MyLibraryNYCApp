@@ -338,8 +338,8 @@ export default function TeacherSetDetails(props) {
           <Heading
             id="ts-available-copies"
             textAlign="center"
-            size="heading6"
-            level="h4"
+            size="heading5"
+            level="h2"
             text="Order Set"
             subtitle={AvailableCopies()}
           />
