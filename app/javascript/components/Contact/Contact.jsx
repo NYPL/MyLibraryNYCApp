@@ -139,7 +139,9 @@ function Contact() {
             Search our list of schools to see if your school already
             participates.
           </Text>
-          <Link id="mln-ps-link" type="external" href="http://www.mylibrarynyc.org/participating-schools">
+          <Link id="mln-ps-link"
+                type="external" 
+                href="http://www.mylibrarynyc.org/participating-schools">
             Participating schools
           </Link>
           <Heading
