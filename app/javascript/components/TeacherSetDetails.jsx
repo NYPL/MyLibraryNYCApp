@@ -410,9 +410,7 @@ export default function TeacherSetDetails(props) {
   const userAccountIsPending = () => {
     return (
       <>
-        <Heading size="heading6" level="h4">
-          Account Pending{" "}
-        </Heading>
+        <Heading size="heading6" level="h4" text={"Account Pending" + " "} />
         <Text width="m" size="body2">
           <i>
             Your account is pending. You should shortly receive an email
