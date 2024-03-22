@@ -140,7 +140,7 @@ function Contact() {
             participates.
           </Text>
           <Link id="mln-ps-link"
-                type="external" 
+                target="_blank" 
                 href="http://www.mylibrarynyc.org/participating-schools">
             Participating schools
           </Link>
