@@ -304,7 +304,7 @@ export default function TeacherSetBooks() {
             id="book-page-list-details"
             key="book-page-list-details-key"
             type="dl"
-            title={<Heading level="h3" size="heading5">Order Details</Heading>}
+            title={<Heading level="h3" size="heading5">Details</Heading>}
             marginTop="l"
           >
             {book.publication_date ? (
