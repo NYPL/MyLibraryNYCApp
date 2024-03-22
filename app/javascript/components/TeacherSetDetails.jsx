@@ -336,7 +336,7 @@ export default function TeacherSetDetails(props) {
       return (
         <>
           <Heading
-            id="ts-available-copies"
+            id="available-order-sets"
             textAlign="center"
             size="heading5"
             level="h2"
