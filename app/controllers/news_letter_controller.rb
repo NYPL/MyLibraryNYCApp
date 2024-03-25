@@ -52,7 +52,7 @@ class NewsLetterController < ApplicationController
     is_valid = EmailValidator.valid? params['email']
     LogWrapper.log('INFO', {'message' => "News letter input email: #{params['email']}",
                             'method' => 'validate_news_letter_email'})
-    raise "Please enter a valid email address" unless is_valid
+    raise "There is an error. Please enter a valid email address." unless is_valid
   end
 
   # sends news-letter confirmation email link to news-letter subscriber.

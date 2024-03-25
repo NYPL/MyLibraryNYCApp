@@ -14,7 +14,7 @@ function Contact() {
   const { colorMode } = useColorMode();
   useEffect(() => {
     document.title = "Contact | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
   }, []);
@@ -26,8 +26,8 @@ function Contact() {
         <div id="contacts-page">
           <Heading
             id="general-information-heading"
-            level="two"
-            size="secondary"
+            level="h2"
+            size="heading3"
             marginBottom="s"
             text="General Information"
           />
@@ -68,8 +68,8 @@ function Contact() {
           <Heading
             id="library-cards-account"
             marginTop="xl"
-            level="two"
-            size="secondary"
+            level="h2"
+            size="heading3"
             text="Professional Development"
           />
           <Text marginTop="s" marginBottom="l" size="default">
@@ -121,9 +121,9 @@ function Contact() {
           />
           <Heading
             id="my-library-nyc-questions-secondary"
-            level="two"
+            level="h2"
             marginTop="xl"
-            size="secondary"
+            size="heading3"
             text="Joining MyLibraryNYC"
           />
           <Text marginTop="s" marginBottom="l" size="default">
@@ -131,22 +131,24 @@ function Contact() {
           </Text>
           <Heading
             id="my-library-nyc-questions-tertiary"
-            level="three"
-            size="tertiary"
+            level="h3"
+            size="heading5"
             text="Find Your School"
           />
           <Text marginTop="s" marginBottom="l" size="default">
             Search our list of schools to see if your school already
             participates.
           </Text>
-          <Link id="mln-ps-link" href="http://www.mylibrarynyc.org/schools">
+          <Link id="mln-ps-link"
+                target="_blank" 
+                href="http://www.mylibrarynyc.org/participating-schools">
             Participating schools
           </Link>
           <Heading
             id="eligibility"
             marginTop="l"
-            level="three"
-            size="tertiary"
+            level="h3"
+            size="heading5"
             text="Eligibility"
           />
           To find out if your school is eligible to participate in the program

@@ -51,7 +51,7 @@ export default function TeacherSetOrder() {
       .then((res) => {
         if (
           res.request.responseURL ===
-          "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
+          "https://" + env.MLN_INFO_SITE_HOSTNAME + "/signin"
         ) {
           window.location = res.request.responseURL;
           return false;
@@ -71,8 +71,8 @@ export default function TeacherSetOrder() {
           <Heading
             marginTop="l"
             id="ts-cancellation-confirmation-text"
-            level="one"
-            size="tertiary"
+            level="h3"
+            size="heading5"
             text="Confirm Cancellation"
           />
           <TextInput
@@ -127,8 +127,8 @@ export default function TeacherSetOrder() {
         <>
           <Heading
             id="ts-cancellation-confirmation-text"
-            level="two"
-            size="secondary"
+            level="h2"
+            size="heading3"
             text="Cancel Order"
           />
           <HorizontalRule

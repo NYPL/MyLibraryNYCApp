@@ -29,7 +29,6 @@ import {
   HorizontalRule,
   StatusBadge,
   VStack,
-  Icon,
   Breadcrumbs,
   Hero,
   Notification,
@@ -180,7 +179,7 @@ export default function TeacherSetDetails(props) {
 
   const AvailableCopies = () => {
     return (
-      <div color="var(--nypl-colors-ui-black)">
+      <div color="var(--nypl-colors-ui-black)" style={{ textAlign: "center" }}>
         {ACopies()} of {TotalCopies()} Available
       </div>
     );
@@ -281,7 +280,7 @@ export default function TeacherSetDetails(props) {
 
   const teacherSetUnAvailableMsg = () => {
     return (
-      <Text width="m" size="caption" color={tsOrderTextColor}>
+      <Text width="m" size="body2" color={tsOrderTextColor}>
         <b>This Teacher Set is unavailable.</b>{" "}
         <i>
           As it is currently being used by other educators, please allow 60 days
@@ -302,7 +301,7 @@ export default function TeacherSetDetails(props) {
 
   const UnableToOrderAdditionalTeacherSetsMsg = () => {
     return (
-      <Text width="m" size="caption">
+      <Text width="m" size="body2">
         <b>Unable to order additional Teacher Sets.</b>{" "}
         <i>
           You have{" "}
@@ -337,19 +336,12 @@ export default function TeacherSetDetails(props) {
       return (
         <>
           <Heading
-            id="ts-order-set"
+            id="available-order-sets"
             textAlign="center"
-            noSpace
-            level="two"
-            size="secondary"
+            size="heading5"
+            level="h2"
             text="Order Set"
-          />
-          <Heading
-            id="ts-available-copies"
-            textAlign="center"
-            size="callout"
-            level="four"
-            text={AvailableCopies()}
+            subtitle={AvailableCopies()}
           />
           {OrderTeacherSets()}
         </>
@@ -395,7 +387,7 @@ export default function TeacherSetDetails(props) {
               </Button>
             </FormField>
           </Form>
-          <Text isItalic size="caption" marginTop="s" color={tsOrderTextColor}>
+          <Text isItalic size="body2" marginTop="s" color={tsOrderTextColor}>
             Note: Available Teacher Sets will deliver to your school within 2
             weeks. For Teacher Sets that are currently in use by other
             educators, please allow 60 days or more for delivery. If you need
@@ -418,8 +410,8 @@ export default function TeacherSetDetails(props) {
   const userAccountIsPending = () => {
     return (
       <>
-        <Heading size="callout">Account Pending </Heading>
-        <Text width="m" size="caption">
+        <Heading size="heading6" level="h4" text={"Account Pending" + " "} />
+        <Text width="m" size="body2">
           <i>
             Your account is pending. You should shortly receive an email
             confirming your account. You will be able to order teacher sets once
@@ -560,7 +552,11 @@ export default function TeacherSetDetails(props) {
       <List
         id="ts-list-details"
         type="dl"
-        title="Details"
+        title={
+          <Heading level="h3" size="heading5">
+            Details
+          </Heading>
+        }
         marginTop="l"
         key="ts-list-details-key"
       >
@@ -604,8 +600,8 @@ export default function TeacherSetDetails(props) {
               id="mobile-ts-order-set"
               textAlign="center"
               noSpace
-              level="two"
-              size="secondary"
+              level="h2"
+              size="heading5"
               text="Set Unavailable"
               color={tsOrderTextColor}
             />
@@ -629,8 +625,8 @@ export default function TeacherSetDetails(props) {
               id="mobile-ts-order-set"
               textAlign="center"
               noSpace
-              level="two"
-              size="secondary"
+              level="h2"
+              size="heading5"
               text="Set Unavailable"
             />
             {UnableToOrderAdditionalTeacherSetsMsg()}
@@ -661,8 +657,8 @@ export default function TeacherSetDetails(props) {
           <Heading
             id="ts-page-books-count"
             marginTop="s"
-            size="callout"
-            level="four"
+            size="heading6"
+            level="h4"
             text={BooksCount()}
           />
           <SimpleGrid
@@ -703,7 +699,7 @@ export default function TeacherSetDetails(props) {
           <Breadcrumbs
             id={"mln-breadcrumbs-ts-details"}
             breadcrumbsData={[
-              { url: "//" + process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+              { url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
               {
                 url: "//" + window.location.hostname + "/teacher_set_data",
                 text: "Teacher Sets",
@@ -720,7 +716,8 @@ export default function TeacherSetDetails(props) {
             backgroundColor={heroBgColor}
             heading={
               <Heading
-                level="one"
+                level="h1"
+                color="ui.white"
                 id={
                   "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
                 }
@@ -737,8 +734,8 @@ export default function TeacherSetDetails(props) {
             <Heading
               id="ts-title-id"
               noSpace
-              level="two"
-              size="secondary"
+              level="h2"
+              size="heading3"
               text={teacherSetTitle()}
             />
             <Spacer />
@@ -761,8 +758,8 @@ export default function TeacherSetDetails(props) {
             marginTop="l"
             noSpace
             id="ts-header-desc-text"
-            level="three"
-            size="tertiary"
+            level="h3"
+            size="heading5"
             text="What is in the box"
           />
           {TeacherSetDescription()}
@@ -771,17 +768,10 @@ export default function TeacherSetDetails(props) {
           <Link
             href={legacyDetailUrl()}
             id="ts-page-details_url"
-            type="action"
-            target="_blank"
+            type="external"
             marginTop="l"
           >
             View in catalog
-            <Icon
-              name="actionLaunch"
-              iconRotation="rotate0"
-              size="medium"
-              align="left"
-            />
           </Link>
         </>
       }

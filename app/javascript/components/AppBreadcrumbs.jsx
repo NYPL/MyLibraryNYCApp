@@ -13,9 +13,7 @@ export default function AppBreadcrumbs() {
   );
   const locationPath = window.location.pathname.split(/\/|\?|&|=|\./g)[1];
   const breadcrumbsUrl = (locationPath) => {
-    let urls = [
-      { url: "//" + process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
-    ];
+    let urls = [{ url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" }];
     let locationPathname = window.location.pathname;
 
     if (
@@ -125,7 +123,8 @@ export default function AppBreadcrumbs() {
         backgroundColor={heroBgColor}
         heading={
           <Heading
-            level="one"
+            level="h1"
+            color="ui.white"
             id={"hero-" + locationPath}
             text={HeroDataValue(locationPath)}
           />

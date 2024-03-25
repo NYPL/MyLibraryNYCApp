@@ -67,7 +67,7 @@ export default function Accounts() {
       .then((res) => {
         if (
           res.request.responseURL ===
-          "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
+          "https://" + env.MLN_INFO_SITE_HOSTNAME + "/signin"
         ) {
           window.location = res.request.responseURL;
           return false;
@@ -318,7 +318,7 @@ export default function Accounts() {
       .then((res) => {
         if (
           res.request.responseURL ===
-          "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
+          "https://" + env.MLN_INFO_SITE_HOSTNAME + "/signin"
         ) {
           window.location = res.request.responseURL;
           return false;
@@ -348,16 +348,15 @@ export default function Accounts() {
   return (
     <TemplateAppContainer
       breakout={
-        <>
-          <AppBreadcrumbs />
-          {AccountUpdatedMessage()}
-        </>
+        <AppBreadcrumbs />
       }
+      contentTop={AccountUpdatedMessage()}
       contentPrimary={
         <>
           <Heading
             id="account-user-name"
-            level="three"
+            level="h2"
+            size="heading3"
             text={"Hello, " + userFirstName()}
           />
           <Form id="account-details-form">
@@ -367,7 +366,7 @@ export default function Accounts() {
                   Your DOE Email Address
                 </Label>
                 {email && (
-                  <Text id="doe-email-address-id" size="caption" marginTop="xs">
+                  <Text id="doe-email-address-id" size="body2" marginTop="xs">
                     {email}
                   </Text>
                 )}
@@ -416,8 +415,8 @@ export default function Accounts() {
             marginTop="l"
             marginBottom="m"
             id="your-orders-text"
-            size="tertiary"
-            level="three"
+            size="heading5"
+            level="h3"
             text="Orders"
           />
           {accountSkeletonLoader()}

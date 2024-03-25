@@ -36,7 +36,11 @@ ActiveAdmin.register Book do
 
   index do
     column :cover_uri do |book|
-      link_to((image_tag book.image_uri :small), admin_book_path(book))
+      if book && book.image_uri.present?
+        link_to((image_tag book.image_uri :small), admin_book_path(book))
+      else
+        "No image"
+      end
     end
     column :title do |book|
       link_to(book.title, admin_book_path(book))

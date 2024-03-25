@@ -2,7 +2,7 @@
 
 require 'user_delayed_job'
 
-#queue_as :user_barcode_queue
+# queue_as :user_barcode_queue
 
 # keep failed jobs in the database, so can troubleshoot later
 Delayed::Worker.destroy_failed_jobs = false

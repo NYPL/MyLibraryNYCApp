@@ -26,7 +26,7 @@ export default function ParticipatingSchools(props) {
 
   useEffect(() => {
     document.title = "Participating Schools | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     axios
@@ -130,14 +130,14 @@ export default function ParticipatingSchools(props) {
                   className="alphabet_anchor"
                   name={data["alphabet_anchor"]}
                 >
-                  <Heading level="three" size="tertiary">
+                  <Heading level="h3" size="heading5">
                     {data["alphabet_anchor"]}
                   </Heading>
                 </a>
               </li>
               {filteredSchools.map((school, index) => (
                 <li
-                  fontWeight="heading.callout"
+                  fontWeight="medium"
                   id={"ps-name-" + data["alphabet_anchor"] + "-" + index}
                   key={"ps-name-" + data["alphabet_anchor"] + "-key-" + index}
                 >
@@ -203,8 +203,8 @@ export default function ParticipatingSchools(props) {
         <>
           <Heading
             id="find-your-school"
-            level="two"
-            size="secondary"
+            level="h2"
+            size="heading3"
             text="Find Your School"
           />
           <HorizontalRule
@@ -214,11 +214,10 @@ export default function ParticipatingSchools(props) {
           <Heading
             marginTop="l"
             id="your-school-participate-in-mln"
-            level="three"
-            size="tertiary"
+            level="h3"
+            size="heading5"
             text="Does your school participate in MyLibraryNYC?"
           />
-
           <TextInput
             fontWeight="text.tag"
             helperText="Start typing the name of your school."

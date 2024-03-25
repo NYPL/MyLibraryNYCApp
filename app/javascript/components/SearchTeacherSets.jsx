@@ -324,8 +324,8 @@ export default function SearchTeacherSets(props) {
           id="no-results-found-id"
           marginBottom="s"
           style={{ fontStyle: "italic" }}
-          level="three"
-          size="callout"
+          level="h3"
+          size="heading6"
           text="No results found"
         />
       );
@@ -345,7 +345,7 @@ export default function SearchTeacherSets(props) {
         <Text
           marginTop="m"
           id="ts-result-found-id"
-          fontWeight="heading.callout"
+          fontWeight="medium"
           aria-live="polite"
         >
           {"Showing " +
@@ -377,7 +377,7 @@ export default function SearchTeacherSets(props) {
         <Text
           marginTop="m"
           id="ts-results-found-id"
-          fontWeight="heading.callout"
+          fontWeight="medium"
           aria-live="polite"
         >
           {"Showing " +
@@ -459,12 +459,13 @@ export default function SearchTeacherSets(props) {
             >
               <CardHeading
                 marginBottom="xs"
-                level="three"
+                level="h3"
                 id={"ts-order-details-" + i}
               >
                 <ReactRouterLink
                   to={"/teacher_set_details/" + ts.id}
                   onClick={() => window.scrollTo(0, 0)}
+                  style={{ "text-decoration": "none", "font-size": "22px" }}
                 >
                   {ts.title}
                 </ReactRouterLink>
@@ -636,8 +637,8 @@ export default function SearchTeacherSets(props) {
       return (
         <Heading
           id="refine-results"
-          size="tertiary"
-          level="three"
+          size="heading5"
+          level="h3"
           text={" " + "Refine Results" + " "}
         />
       );
@@ -993,7 +994,7 @@ export default function SearchTeacherSets(props) {
               <ButtonGroup>
                 <Button
                   id="teacher-sets-scroll-to-top"
-                  buttonType="secondary"
+                  buttonType="text"
                   className="backToTop"
                   onClick={() =>
                     window.scrollTo({
@@ -1068,7 +1069,7 @@ export default function SearchTeacherSets(props) {
                 <Flex>
                   <span>{item["label"]}</span>
                   <Spacer />
-                  <Text noSpace id={"ts-count-" + index} size="caption">
+                  <Text noSpace id={"ts-count-" + index} size="body2">
                     {item["count"] || 0}
                   </Text>
                 </Flex>
@@ -1095,7 +1096,7 @@ export default function SearchTeacherSets(props) {
       // }
 
       return (
-        <Text isItalic noSpace size="caption" id="accordion-no-results-found">
+        <Text isItalic noSpace size="body2" id="accordion-no-results-found">
           No options available
         </Text>
       );
@@ -1171,8 +1172,8 @@ export default function SearchTeacherSets(props) {
           {<SignUpMsg signUpDetails={props} />}
           <Heading
             id="search-and-find-teacher-sets-header"
-            size="secondary"
-            level="two"
+            size="heading3"
+            level="h2"
             text="Search and Find Teacher Sets"
           />
           <HorizontalRule

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 
 import {
@@ -22,6 +22,7 @@ export default function NewsLetter() {
   const [successFullySignedUp, setSuccessFullySignedUp] = useState(false);
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const newsLetterbg = useColorModeValue("ui.bg.default", "dark.ui.bg.default");
+  const newsLetterMsgRef = useRef(null);
 
   const handleNewsLetterEmail = (event) => {
     setEmail(event.target.value);
@@ -40,10 +41,27 @@ export default function NewsLetter() {
       })
       .then((res) => {
         setMessage(res.data.message);
+        setTimeout(() => {
+          const nlTextInputlement = document.getElementById(
+            "news-letter-text-input"
+          );
+          if (nlTextInputlement) {
+            nlTextInputlement.focus();
+          }
+        }, 1);
 
         if (res.data.status === "success") {
           setIsInvalid(false);
           setSuccessFullySignedUp(true);
+          // Set focus to the element
+          setTimeout(() => {
+            const newsLetterElement = document.getElementById(
+              "news-letter-msg-box"
+            );
+            if (newsLetterElement) {
+              newsLetterElement.focus();
+            }
+          }, 1);
         } else {
           setIsInvalid(true);
           setButtonDisabled(false);
@@ -58,10 +76,10 @@ export default function NewsLetter() {
   const newLetterSignup = () => {
     if (successFullySignedUp) {
       return (
-        <VStack justifyContent="center">
+        <VStack justifyContent="center" tabIndex="-1" id="news-letter-msg-box">
           <Heading
-            level="two"
-            size="callout"
+            level="h2"
+            size="heading6"
             maxWidth="640px"
             noSpace
             textAlign="center"
@@ -78,8 +96,8 @@ export default function NewsLetter() {
       return (
         <VStack gap="m" justifyContent="center">
           <Heading
-            level="two"
-            size="callout"
+            level="h2"
+            size="heading6"
             maxWidth="640px"
             noSpace
             textAlign="center"
@@ -96,7 +114,7 @@ export default function NewsLetter() {
             <TextInput
               id="news-letter-text-input"
               type="email"
-              labelText="email"
+              labelText="Your email address"
               showLabel={false}
               maxWidth="500px"
               placeholder="your email address"
@@ -143,7 +161,12 @@ export default function NewsLetter() {
   };
 
   return (
-    <Box bg={newsLetterbg} p="l">
+    <Box
+      bg={newsLetterbg}
+      p="l"
+      ref={newsLetterMsgRef}
+      id="news-letter-success-msg"
+    >
       {newLetterSignup()}
     </Box>
   );

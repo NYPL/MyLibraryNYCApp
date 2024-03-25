@@ -11,13 +11,14 @@ export default function AccessDigitalResources() {
     <>
       <Heading
         id="access-digital-resources-header-text"
-        size="secondary"
+        size="heading3"
+        level="h2"
         marginTop="s"
       >
         Access Digital Resources
       </Heading>
       <Accordion
-        id="access-digital-resources"
+        id="digital-resources-databases"
         marginTop="s"
         accordionData={[
           {
@@ -58,6 +59,7 @@ export default function AccessDigitalResources() {
         ]}
       />
       <Accordion
+        id="digital-resources-ebooks"
         marginTop="s"
         accordionData={[
           {
@@ -89,6 +91,7 @@ export default function AccessDigitalResources() {
         ]}
       />
       <Accordion
+        id="digital-resources-other"
         marginTop="s"
         accordionData={[
           {

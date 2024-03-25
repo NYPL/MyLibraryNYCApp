@@ -6,9 +6,9 @@ import {
   useNYPLBreakpoints,
 } from "@nypl/design-system-react-components";
 export default function Header(props) {
-  const { isLargerThanMobile } = useNYPLBreakpoints();
+  const { isLargerThanLarge } = useNYPLBreakpoints();
   const displayNavbar = () => {
-    if (isLargerThanMobile) {
+    if (isLargerThanLarge) {
       return (
         <Navbar
           userSignedIn={props.userSignedIn}

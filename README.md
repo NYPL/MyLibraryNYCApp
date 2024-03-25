@@ -336,6 +336,10 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         aws_access_key_id = ***
         aws_secret_access_key = ***
 
+        [nypl-digital-dev]
+        aws_access_key_id = ***
+        aws_secret_access_key = ***
+
  Step4: Install Postgresql
 
         Dump the database which ever your interested (Development or QA)
