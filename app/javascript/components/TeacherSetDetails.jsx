@@ -197,6 +197,13 @@ export default function TeacherSetDetails(props) {
     );
   };
 
+  const windowScrollTop = (e, data) => {
+    e.preventDefault();
+    navigate("/book_details/" + data.id, {
+      state: { tsTitle: teacherSet["title"], tsId: teacherSet["id"] },
+    });
+  };
+
   const TeacherSetBooks = () => {
     return books.map((data, index) => {
       if (isLoading) {
@@ -215,10 +222,11 @@ export default function TeacherSetDetails(props) {
       } else {
         return (
           <ReactRouterLink
-            onClick={() => window.scrollTo(0, 0)}
             id={"ts-books-" + index}
             key={"ts-books-key-" + index}
-            to={"/book_details/" + data.id}
+            onClick={(e) => {
+              windowScrollTop(e, data);
+            }}
             style={{ display: "grid", backgroundColor: bookDetailsBgColor }}
           >
             {BookImage(data)}

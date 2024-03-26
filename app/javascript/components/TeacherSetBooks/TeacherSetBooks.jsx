@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
-import { Link as ReactRouterLink, useParams } from "react-router-dom";
+import { Link as ReactRouterLink, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { titleCase } from "title-case";
 import {
@@ -29,7 +29,10 @@ import mlnImage from "./../../images/mln.svg";
 
 export default function TeacherSetBooks() {
   const params = useParams();
+  const location = useLocation();
   const [book, setBook] = useState("");
+  const [tsId, setTsId] = useState('')
+  const [tsTitle, setTsTitle] = useState('');
   const [teacherSets, setTeacherSets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { colorMode } = useColorMode();
@@ -41,6 +44,30 @@ export default function TeacherSetBooks() {
   useEffect(() => {
     setIsLoading(true);
   }, [book.cover_uri]);
+
+  // useEffect to set initial state from localStorage
+  useEffect(() => {
+    const storedTsTitle = localStorage.getItem('tsTitle');
+    const storedTsId = localStorage.getItem('tsId');
+
+    if (storedTsTitle && storedTsId) {
+      setTsTitle(storedTsTitle);
+      setTsId(storedTsId);
+    }
+  }, []);
+
+  // useEffect to update localStorage when tsTitle or tsId changes
+  useEffect(() => {
+    localStorage.setItem('tsTitle', tsTitle);
+    localStorage.setItem('tsId', tsId);
+  }, [tsTitle, tsId]);
+
+  useEffect(() => {
+    if (location.state) {
+      setTsTitle(location.state.tsTitle);
+      setTsId(location.state.tsId);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     let timeoutId = "";
@@ -221,8 +248,12 @@ export default function TeacherSetBooks() {
           breadcrumbsData={[
             { url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
             {
-              url: "//" + window.location.hostname + window.location.pathname,
-              text: "Book Details",
+              url: "//" + window.location.hostname + "/teacher_set_data",
+              text: "Teacher Sets",
+            },
+            {
+              url: "//" + window.location.hostname + "/teacher_set_details/" + tsId,
+              text: breadcrumbTitle(tsTitle),
             },
             {
               url: "//" + window.location.hostname + window.location.pathname,

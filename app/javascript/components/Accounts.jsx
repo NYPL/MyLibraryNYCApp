@@ -347,9 +347,7 @@ export default function Accounts() {
 
   return (
     <TemplateAppContainer
-      breakout={
-        <AppBreadcrumbs />
-      }
+      breakout={<AppBreadcrumbs />}
       contentTop={AccountUpdatedMessage()}
       contentPrimary={
         <>

@@ -37,10 +37,7 @@ export default function TeacherSetOrderDetails(props) {
 
       return (
         <div>
-          <Card
-            id="book-page-ts-card-details"
-            layout="row"
-          >
+          <Card id="book-page-ts-card-details" layout="row">
             <CardHeading level="h4" id="ts-order-details">
               <Link
                 href={"/teacher_set_details/" + ts.id}
