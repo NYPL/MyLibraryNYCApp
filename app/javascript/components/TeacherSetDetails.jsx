@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useHistory } from "react";
+import React, { useState, useEffect } from "react";
 import HaveQuestions from "./HaveQuestions/HaveQuestions";
 import ShowBookImage from "./ShowBookImage";
 import {
@@ -200,9 +200,9 @@ export default function TeacherSetDetails(props) {
   const windowScrollTop = (e, data) => {
     e.preventDefault();
     navigate("/book_details/" + data.id, {
-      state: { tsTitle: teacherSet["title"], tsId: teacherSet['id'] },
+      state: { tsTitle: teacherSet["title"], tsId: teacherSet["id"] },
     });
-  }
+  };
 
   const TeacherSetBooks = () => {
     return books.map((data, index) => {
@@ -224,7 +224,9 @@ export default function TeacherSetDetails(props) {
           <ReactRouterLink
             id={"ts-books-" + index}
             key={"ts-books-key-" + index}
-            onClick={(e) => {windowScrollTop(e, data)}}
+            onClick={(e) => {
+              windowScrollTop(e, data);
+            }}
             style={{ display: "grid", backgroundColor: bookDetailsBgColor }}
           >
             {BookImage(data)}
