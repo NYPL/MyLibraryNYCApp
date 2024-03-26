@@ -37,6 +37,7 @@ export default function TeacherSetBooks() {
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
   );
+  const urlParams = new URLSearchParams(location.search);
 
   useEffect(() => {
     setIsLoading(true);
@@ -221,11 +222,15 @@ export default function TeacherSetBooks() {
           breadcrumbsData={[
             { url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
             {
-              url: "//" + window.location.hostname + window.location.pathname,
-              text: "Book Details",
+              url: "//" + window.location.hostname + "/teacher_set_data",
+              text: "Teacher Sets",
             },
             {
-              url: "//" + window.location.hostname + window.location.pathname,
+              url: "//" + window.location.hostname + "/teacher_set_details/" + urlParams.get('tsId'),
+              text: breadcrumbTitle(urlParams.get('tsTitle')),
+            },
+            {
+              url: "//" + window.location.hostname + window.location.pathname + window.location.search,
               text: breadcrumbTitle(bookTitle),
             },
           ]}
