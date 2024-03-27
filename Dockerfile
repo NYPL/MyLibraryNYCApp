@@ -36,6 +36,15 @@ RUN gem install bundler -v $BUNDLER_VERSION
 RUN bundle config --global github.https true \
     && bundle install --jobs 30
 
+# For example, if you're using a database like PostgreSQL, you might want to do this:
+RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
+    --mount=type=secret,id=AWS_SECRET_ACCESS_KEY \
+  AWS_ACCESS_KEY_ID=$(cat /run/secrets/AWS_ACCESS_KEY_ID) \
+  && export AWS_ACCESS_KEY_ID \
+  AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) \
+  && export AWS_SECRET_ACCESS_KEY \
+  && bundle exec rake db:migrate
+
 COPY package.json $APP_HOME/package.json
 COPY package-lock.json $APP_HOME/package-lock.json
 RUN yarn install
@@ -43,14 +52,14 @@ RUN yarn install
 # build
 RUN yarn build
 RUN yarn build:css
+
 RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
     --mount=type=secret,id=AWS_SECRET_ACCESS_KEY \
   AWS_ACCESS_KEY_ID=$(cat /run/secrets/AWS_ACCESS_KEY_ID) \
   && export AWS_ACCESS_KEY_ID \
   AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) \
   && export AWS_SECRET_ACCESS_KEY \
-  && bundle exe rails assets:precompile \
-  && bundle exe rake db:migrate
+  && bundle exe rails assets:precompile
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
