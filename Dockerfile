@@ -50,7 +50,7 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
   AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) \
   && export AWS_SECRET_ACCESS_KEY \
   && bundle exe rails assets:precompile
-  && bundle exec rake db:migrate
+  && bundle exe rails db:migrate
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
