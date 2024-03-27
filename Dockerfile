@@ -51,6 +51,9 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
   && export AWS_SECRET_ACCESS_KEY \
   && bundle exe rails assets:precompile
 
+# For example, if you're using a database like PostgreSQL, you might want to do this:
+RUN bundle exec rake db:migrate
+
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
 
