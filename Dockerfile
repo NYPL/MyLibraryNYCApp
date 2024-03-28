@@ -55,10 +55,6 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
 # Install PostgreSQL client in the image
 RUN apt-get update -qq && apt-get install -y postgresql-client
 
-# Wait for PostgreSQL service to be available
-RUN apt-get install -y netcat
-RUN echo "IPAddressOfPostgresContainer postgres" >> /etc/hosts
-
 
 # Run database migrations
 RUN bundle exec rake db:migrate
