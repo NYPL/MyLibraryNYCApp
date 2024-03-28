@@ -50,9 +50,18 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
   && export AWS_ACCESS_KEY_ID \
   AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) \
   && export AWS_SECRET_ACCESS_KEY \
-  && bundle exe rails assets:precompile \
-  && bundle exec rails db:migrate
+  && bundle exe rails assets:precompile
+
+# Install PostgreSQL client in the image
+RUN apt-get update -qq && apt-get install -y postgresql-client
+
+# Wait for PostgreSQL service to be available
+RUN apt-get install -y netcat
+RUN echo "waiting for PostgreSQL..." && \
+    while ! nc -z postgres 5432; do sleep 1; done
+
+# Run database migrations
+RUN bundle exec rake db:migrate
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
-
