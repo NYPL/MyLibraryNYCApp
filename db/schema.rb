@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20240327143737) do
+ActiveRecord::Schema.define(version: 20240329153807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -226,6 +226,13 @@ ActiveRecord::Schema.define(version: 20240327143737) do
     t.index ["lexile_begin", "lexile_end"], name: "index_teacher_sets_lexile", using: :btree
     t.index ["set_type"], name: "index_teacher_set_type", using: :btree
     t.index ["title"], name: "index_teacher_sets_title", using: :btree
+  end
+
+  create_table "test_hello_worlds", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
