@@ -10,6 +10,7 @@ ENV RAILS_ENV=${RAILS_ENV}
 
 WORKDIR $APP_HOME
 ADD ./docker_build/startup_scripts/01_db_migrate.sh /etc/my_init.d/01_db_migrate.sh
+CMD ["/sbin/my_init"]
 
 # Ensure the script is executable
 RUN chmod +x /etc/my_init.d/01_db_migrate.sh
