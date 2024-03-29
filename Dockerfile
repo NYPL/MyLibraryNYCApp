@@ -11,6 +11,9 @@ ENV RAILS_ENV=${RAILS_ENV}
 WORKDIR $APP_HOME
 ADD ./docker_build/startup_scripts/01_db_migrate.sh /etc/my_init.d/01_db_migrate.sh
 
+# Ensure the script is executable
+RUN chmod +x /etc/my_init.d/01_db_migrate.sh
+
 # install packages
 RUN apt-get update -qq \
     && apt-get install -y \
@@ -52,9 +55,6 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
   AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) \
   && export AWS_SECRET_ACCESS_KEY \
   && bundle exe rails assets:precompile
-
-# Install PostgreSQL client in the image
-RUN apt-get update -qq && apt-get install -y postgresql-client
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
