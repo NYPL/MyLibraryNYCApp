@@ -9,6 +9,7 @@ ARG RAILS_ENV
 ENV RAILS_ENV=${RAILS_ENV}
 
 WORKDIR $APP_HOME
+ADD ./docker_build/startup_scripts/01_db_migrate.sh /etc/my_init.d/01_db_migrate.sh
 
 # install packages
 RUN apt-get update -qq \
