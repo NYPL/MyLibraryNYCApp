@@ -537,7 +537,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const availableResults = () => {
-    window.scrollTo(428, 428);
+    windowScroll();
     if (availableToggle === true) {
       setAvailableToggle(false);
       setAvailability("");
@@ -554,6 +554,15 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+  const windowScroll = () => {
+    console.log(window.scrollY);
+    if (window.scrollY <= 10) {
+      window.scrollTo({ top: 10, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 400, behavior: "smooth" });
+    }
+  };
+
   const getGrades = (grades) => {
     const [gradeBeginVal, gradeEndVal] = grades;
     if (rangeValues[0] !== gradeBeginVal || rangeValues[1] !== gradeEndVal) {
@@ -563,7 +572,11 @@ export default function SearchTeacherSets(props) {
       searchParams.set("grade_begin", gradeBeginVal);
       searchParams.set("grade_end", gradeEndVal);
       setSearchParams(searchParams);
-      window.scrollTo(428, 428);
+      if (window.scrollY <= 10) {
+        window.scrollTo(10, 10);
+      } else {
+        window.scrollTo(400, 400);
+      }
     }
   };
 
@@ -657,7 +670,7 @@ export default function SearchTeacherSets(props) {
     setGradeBegin(-1);
     setGradeEnd(12);
     setRangevalues([-1, 12]);
-    window.scrollTo({ top: 428, behavior: "smooth" });
+    windowScroll();
   };
 
   const teacherSetSideBarResults = () => {
@@ -681,7 +694,7 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
-        {/* <div>
+        <div>
           <Button
             buttonType="text"
             id="clear-filters-button-id"
@@ -693,7 +706,7 @@ export default function SearchTeacherSets(props) {
           >
             Clear Filters
           </Button>
-        </div> */}
+        </div>
       </Box>
     );
   };
@@ -1032,14 +1045,6 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  const accordionDataScrolltoTop = () => {
-    if (window.pageYOffset > 0) {
-      window.scrollTo({ top: 428, behavior: "smooth" });
-    } else {
-      window.scrollTo({ top: 10, behavior: "smooth" });
-    }
-  };
-
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
 
@@ -1057,7 +1062,7 @@ export default function SearchTeacherSets(props) {
           name={ts.label}
           onChange={tsSelectedFacets.bind(this, ts.label)}
           value={selectedFacets[ts.label]}
-          onClick={accordionDataScrolltoTop}
+          onClick={windowScroll}
         >
           {tsItems.map((item, index) => (
             <Checkbox

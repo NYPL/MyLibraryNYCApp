@@ -2,10 +2,17 @@ import React, { useEffect } from "react";
 import { Notification, Icon } from "@nypl/design-system-react-components";
 
 export default function SignUpMsg(props) {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  })
   const details = props.signUpDetails;
+
+  useEffect(() => {
+    if (
+      details.userSignedIn &&
+      details.signedUpMessage !== ""
+    ) {
+      window.scrollTo(0, 0);
+    }
+  })
+  
   const notification = () => {
     if (
       details.userSignedIn &&
