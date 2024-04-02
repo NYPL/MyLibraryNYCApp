@@ -557,7 +557,6 @@ export default function SearchTeacherSets(props) {
   };
 
   const windowScroll = () => {
-    console.log(window.scrollY);
     if (window.scrollY <= 10) {
       window.scrollTo({ top: 10, behavior: "smooth" });
     } else {
@@ -908,8 +907,6 @@ export default function SearchTeacherSets(props) {
     }
 
   teacherSetArr.map((value) => {
-    //console.log(value["grade_begin"])
-
     if (
       value["grade_begin"] !== undefined ||
       value["grade_end"] !== undefined
@@ -922,11 +919,8 @@ export default function SearchTeacherSets(props) {
         const g_end = value["label"];
       }
     }
-
     teacherSetArr.push(value);
   });
-
-  console.log(teacherSetArr)
 
     let result = teacherSetArr.filter(
       (person, index) =>
