@@ -676,6 +676,24 @@ export default function SearchTeacherSets(props) {
     windowScroll();
   };
 
+  const clearFiltersButton = () => {
+    if (isLargerThanLarge) {
+      <div>
+        <Button
+          buttonType="text"
+          id="clear-filters-button-id"
+          size="medium"
+          type="button"
+          marginTop="m"
+          marginLeft={clearFilteMargin}
+          onClick={clearFilters}
+        >
+          Clear Filters
+        </Button>
+      </div>
+    }
+  }
+
   const teacherSetSideBarResults = () => {
     const bgColor = isLargerThanMedium ? facetBoxColor : "";
     const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
@@ -697,19 +715,7 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
-        <div>
-          <Button
-            buttonType="text"
-            id="clear-filters-button-id"
-            size="medium"
-            type="button"
-            marginTop="m"
-            marginLeft={clearFilteMargin}
-            onClick={clearFilters}
-          >
-            Clear Filters
-          </Button>
-        </div>
+        {clearFiltersButton}
       </Box>
     );
   };
@@ -824,10 +830,10 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("language");
       searchParams.delete("area of study");
       searchParams.delete("set type");
-      searchParams.delete("availability");
+      // searchParams.delete("availability");
+      // searchParams.delete("grade_begin");
+      // searchParams.delete("grade_end");
       searchParams.delete("subjects");
-      searchParams.delete("grade_begin");
-      searchParams.delete("grade_end");
       searchParams.delete("keyword");
       setSearchParams(searchParams);
       //const data = teacherSetArr.filter((element) => element.label !== value);
