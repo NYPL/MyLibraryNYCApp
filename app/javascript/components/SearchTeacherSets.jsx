@@ -147,8 +147,9 @@ export default function SearchTeacherSets(props) {
       } else if (ts["availability"]) {
         setAvailableToggle(true);
         tsfacets["availability"] = [ts["availability"]];
-        tagSets["label"] = "Available Now";
-        tagSets["availability"] = [ts["availability"]];
+        // DON'T SHOW IN TAGSET FOR A WHILE
+        // tagSets["label"] = "Available Now";
+        // tagSets["availability"] = [ts["availability"]];
       } else if (ts["language"]) {
         tsfacets["language"] = [ts["language"]];
         tagSets["label"] = ts["language"];
@@ -180,30 +181,30 @@ export default function SearchTeacherSets(props) {
     const pageNumber = queryValue.get("page")
       ? parseInt(queryValue.get("page"))
       : 1;
+    // FOR A WHILE DONT SHOW IN TAGSET
+    // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
+    //   const tagSetGradeBegin =
+    //     parseInt(g_begin) === -1
+    //       ? "Pre-K"
+    //       : parseInt(g_begin) === 0
+    //       ? "K"
+    //       : parseInt(g_begin);
 
-    if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
-      const tagSetGradeBegin =
-        parseInt(g_begin) === -1
-          ? "Pre-K"
-          : parseInt(g_begin) === 0
-          ? "K"
-          : parseInt(g_begin);
+    //   const tagSetGradeEnd =
+    //     parseInt(g_end) === -1
+    //       ? "Pre-K"
+    //       : parseInt(g_end) === 0
+    //       ? "K"
+    //       : parseInt(g_end);
 
-      const tagSetGradeEnd =
-        parseInt(g_end) === -1
-          ? "Pre-K"
-          : parseInt(g_end) === 0
-          ? "K"
-          : parseInt(g_end);
+    //   const tagSetGrades = {
+    //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
+    //     grade_begin: [queryValue.get("grade_begin")],
+    //     grade_end: [queryValue.get("grade_end")],
+    //   };
 
-      const tagSetGrades = {
-        label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
-        grade_begin: [queryValue.get("grade_begin")],
-        grade_end: [queryValue.get("grade_end")],
-      };
-
-      tagSetsArr.push(tagSetGrades);
-    }
+    //   tagSetsArr.push(tagSetGrades);
+    // }
 
     setSelectedFacets(tsfacets);
     setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
@@ -833,7 +834,6 @@ export default function SearchTeacherSets(props) {
     } else {
       //const subjects = new URLSearchParams(location.search).get("subjects")
       //console.log(subjects)
-
       const data = teacherSetArr.filter((element) => element.label !== value);
       const deleteQueryParams = teacherSetArr
         .filter((element) => element.label === value)
@@ -906,7 +906,6 @@ export default function SearchTeacherSets(props) {
         }
       });
     }
-
   teacherSetArr.map((value) => {
     if (
       value["grade_begin"] !== undefined ||
@@ -945,23 +944,24 @@ export default function SearchTeacherSets(props) {
   const tagSetsData = () => {
     const queryValue = new URLSearchParams(location.search);
     const areaOfStudy = queryValue.get("area of study");
-    const availability = queryValue.get("availability");
     const language = queryValue.get("language");
     const keyword = queryValue.get("keyword");
     const subjects = queryValue.get("subjects");
     const setType = queryValue.get("set type");
-    const gradeBegin = queryValue.get("grade_begin");
-    const gradeEnd = queryValue.get("grade_end");
+    // DON'T SHOW IN TAGSET FOR A WHILE
+    // const availability = queryValue.get("availability");
+    // const gradeBegin = queryValue.get("grade_begin");
+    // const gradeEnd = queryValue.get("grade_end");
 
     if (
+      // gradeBegin !== null ||
+      // gradeEnd !== null
+      // availability !== null ||
       areaOfStudy !== null ||
-      availability !== null ||
       language !== null ||
       keyword !== null ||
       subjects !== null ||
-      setType !== null ||
-      gradeBegin !== null ||
-      gradeEnd !== null
+      setType !== null
     ) {
       return (
         <VStack align="stretch">
