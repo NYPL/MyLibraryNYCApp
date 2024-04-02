@@ -120,7 +120,7 @@ export default function SearchTeacherSets(props) {
   useEffect(() => {
     const queryValue = new URLSearchParams(location.search);
     const tsfacets = {};
-    const tagSetsArr = [];
+    const tagSetsDataArr = [];
     setTsSubjects({});
 
     queryParams.map((ts) => {
@@ -133,7 +133,7 @@ export default function SearchTeacherSets(props) {
             const subjectsHash = {};
             subjectsHash["label"] = tsSubjects[value];
             subjectsHash["subjects"] = [tsSubjects[value]];
-            tagSetsArr.push(subjectsHash);
+            tagSetsDataArr.push(subjectsHash);
           }
         });
       } else if (ts["area of study"]) {
@@ -158,7 +158,7 @@ export default function SearchTeacherSets(props) {
         tagSets["label"] = ts["keyword"];
         tagSets["keyword"] = [ts["language"]];
       }
-      tagSetsArr.push(tagSets);
+      tagSetsDataArr.push(tagSets);
     });
 
     const keywordValue = queryValue.get("keyword")
@@ -213,7 +213,7 @@ export default function SearchTeacherSets(props) {
     setAvailableToggle(availableToggleVal);
     setSortTitleValue(sortOrderVal);
     setComputedCurrentPage(pageNumber);
-    setTeacherSetArr(tagSetsArr);
+    setTeacherSetArr(tagSetsDataArr);
 
     const params = Object.assign(
       {
@@ -677,26 +677,28 @@ export default function SearchTeacherSets(props) {
   };
 
   const clearFiltersButton = () => {
-    if (isLargerThanLarge) {
-      <div>
-        <Button
-          buttonType="text"
-          id="clear-filters-button-id"
-          size="medium"
-          type="button"
-          marginTop="m"
-          marginLeft={clearFilteMargin}
-          onClick={clearFilters}
-        >
-          Clear Filters
-        </Button>
-      </div>
+    const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
+    if (isLargerThanMedium) {
+      return (
+        <div>
+          <Button
+            buttonType="text"
+            id="clear-filters-button-id"
+            size="medium"
+            type="button"
+            marginTop="m"
+            marginLeft={clearFilteMargin}
+            onClick={clearFilters}
+          >
+            Clear Filters
+          </Button>
+        </div>
+      );
     }
-  }
+  };
 
   const teacherSetSideBarResults = () => {
     const bgColor = isLargerThanMedium ? facetBoxColor : "";
-    const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
     return (
       <Box
         id="ts-all-facets"
@@ -715,7 +717,7 @@ export default function SearchTeacherSets(props) {
         />
         <div>{TeacherSetGradesSlider()}</div>
         <div>{TeacherSetFacets()}</div>
-        {clearFiltersButton}
+        {clearFiltersButton()}
       </Box>
     );
   };
@@ -836,7 +838,6 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("subjects");
       searchParams.delete("keyword");
       setSearchParams(searchParams);
-      //const data = teacherSetArr.filter((element) => element.label !== value);
     } else {
       //const subjects = new URLSearchParams(location.search).get("subjects")
       //console.log(subjects)
@@ -900,38 +901,41 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetFilterTags = () => {
+    const teacher_sets_array = [];
     const subjects = new URLSearchParams(location.search).get("subjects");
-
     if (subjects !== null) {
       subjects.split(",").map((value) => {
         if (tsSubjects[value] !== undefined) {
           const subjectsHash = {};
           subjectsHash["label"] ||= tsSubjects[value];
           subjectsHash["subjects"] ||= [tsSubjects[value]];
-          teacherSetArr.push(subjectsHash);
+          teacher_sets_array.push(subjectsHash);
         }
       });
     }
-  teacherSetArr.map((value) => {
-    if (
-      value["grade_begin"] !== undefined ||
-      value["grade_end"] !== undefined
-    ) {
-      if (value["grade_begin"] !== undefined) {
-        const g_begin = value["label"];
-      }
 
-      if (value["grade_end"] !== undefined) {
-        const g_end = value["label"];
-      }
+    // teacherSetArr.map((value) => {
+    //   if (
+    //     value["grade_begin"] !== undefined ||
+    //     value["grade_end"] !== undefined
+    //   ) {
+    //     if (value["grade_begin"] !== undefined) {
+    //       const g_begin = value["label"];
+    //     }
+
+    //     if (value["grade_end"] !== undefined) {
+    //       const g_end = value["label"];
+    //     }
+    //   }
+    //   teacherSetArr.push(value);
+    // });
+    if (teacher_sets_array.length > 0) {
+      teacherSetArr.push(teacher_sets_array);
     }
-    teacherSetArr.push(value);
-  });
 
     let result = teacherSetArr.filter(
-      (person, index) =>
-        index ===
-        teacherSetArr.findIndex((other) => person.label === other.label)
+      (tset, index) =>
+        index === teacherSetArr.findIndex((other) => tset.label === other.label)
     );
 
     return (
@@ -976,7 +980,7 @@ export default function SearchTeacherSets(props) {
           </div>
           <div>
             <HStack mb="s" data-testid="tagSetResultsDisplay">
-              <span>Fiters Applied</span>
+              <span>Filters Applied</span>
               {teacherSetFilterTags()}
             </HStack>
           </div>
