@@ -197,10 +197,11 @@ export default function SearchTeacherSets(props) {
           : parseInt(g_end);
 
       const tagSetGrades = {
-        label: tagSetGradeBegin + " to " + tagSetGradeEnd,
+        label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
         grade_begin: [queryValue.get("grade_begin")],
         grade_end: [queryValue.get("grade_end")],
       };
+
       tagSetsArr.push(tagSetGrades);
     }
 
