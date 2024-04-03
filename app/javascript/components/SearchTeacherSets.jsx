@@ -151,10 +151,12 @@ export default function SearchTeacherSets(props) {
         tsfacets["language"] = [ts["language"]];
         tagSets["label"] = ts["language"];
         tagSets["language"] = [ts["language"]];
-      } else if (ts.keyword) {
-        tagSets["label"] = ts["keyword"];
-        tagSets["keyword"] = [ts["language"]];
       }
+      
+      // else if (ts.keyword) {
+      //   tagSets["label"] = ts["keyword"];
+      //   tagSets["keyword"] = [ts["language"]];
+      // }
       tagSetsDataArr.push(tagSets);
     });
 
@@ -318,7 +320,16 @@ export default function SearchTeacherSets(props) {
     }
   };
 
+  /**
+     * Generates a message based on the number of search results found.
+     * This function should be called after performing a search operation
+     * and can be used to dynamically update the UI with appropriate feedback
+     * to the user regarding the search outcome.
+     */
+
   const resultsFoundMessage = () => {
+    const appendKeyword = keyword !== null && keyword !== "" ? ` for "${keyword}"` : '';
+
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
       return (
         <Heading
@@ -355,7 +366,7 @@ export default function SearchTeacherSets(props) {
             perPageNumbers +
             " of " +
             tsTotalCount +
-            " result"}
+            " result" + appendKeyword}
         </Text>
       );
     } else if (tsTotalCount >= 1) {
@@ -387,7 +398,7 @@ export default function SearchTeacherSets(props) {
             toresults +
             " of " +
             tsTotalCount +
-            " results"}
+            " results" + appendKeyword}
         </Text>
       );
     }
@@ -713,7 +724,7 @@ export default function SearchTeacherSets(props) {
           marginBottom="m"
         />
         <div>{TeacherSetGradesSlider()}</div>
-        <Heading id="facet-filters" size="heading5" level="h4" text="Filters" />
+        <Heading id="facet-filters" size="heading6" level="h4" text="Filters" />
         <div>{TeacherSetFacets()}</div>
         {clearFiltersButton()}
       </Box>
@@ -948,10 +959,10 @@ export default function SearchTeacherSets(props) {
     const queryValue = new URLSearchParams(location.search);
     const areaOfStudy = queryValue.get("area of study");
     const language = queryValue.get("language");
-    const keyword = queryValue.get("keyword");
     const subjects = queryValue.get("subjects");
     const setType = queryValue.get("set type");
     // DON'T SHOW IN TAGSET FOR A WHILE
+    // const keyword = queryValue.get("keyword");
     // const availability = queryValue.get("availability");
     // const gradeBegin = queryValue.get("grade_begin");
     // const gradeEnd = queryValue.get("grade_end");
@@ -960,9 +971,9 @@ export default function SearchTeacherSets(props) {
       // gradeBegin !== null ||
       // gradeEnd !== null
       // availability !== null ||
+      // keyword !== null ||
       areaOfStudy !== null ||
       language !== null ||
-      keyword !== null ||
       subjects !== null ||
       setType !== null
     ) {
