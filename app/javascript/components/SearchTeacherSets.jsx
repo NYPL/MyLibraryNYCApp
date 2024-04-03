@@ -662,14 +662,14 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("language");
     searchParams.delete("area of study");
     searchParams.delete("set type");
-    searchParams.delete("availability");
     searchParams.delete("subjects");
-    searchParams.delete("grade_begin");
-    searchParams.delete("grade_end");
+    // searchParams.delete("availability");
+    // searchParams.delete("grade_begin");
+    // searchParams.delete("grade_end");
     setSearchParams(searchParams);
-    setGradeBegin(-1);
-    setGradeEnd(12);
-    setRangevalues([-1, 12]);
+    // setGradeBegin(-1);
+    // setGradeEnd(12);
+    // setRangevalues([-1, 12]);
     windowScroll();
   };
 
@@ -713,6 +713,12 @@ export default function SearchTeacherSets(props) {
           marginBottom="m"
         />
         <div>{TeacherSetGradesSlider()}</div>
+          <Heading
+            id="facet-filters"
+            size="heading5"
+            level="h4"
+            text="Filters"
+          />
         <div>{TeacherSetFacets()}</div>
         {clearFiltersButton()}
       </Box>
@@ -972,13 +978,13 @@ export default function SearchTeacherSets(props) {
             <HorizontalRule align="left" marginTop="0px" />
           </div>
           <div>
-            <HStack mb="s" data-testid="tagSetResultsDisplay">
+            <HStack data-testid="tagSetResultsDisplay">
               <span>Filters Applied</span>
               {teacherSetFilterTags()}
             </HStack>
           </div>
           <div>
-            <HorizontalRule align="left" className="paginationHR" />
+            <HorizontalRule align="left" />
           </div>
         </VStack>
       );
@@ -1069,7 +1075,6 @@ export default function SearchTeacherSets(props) {
               key={"ts-checkbox-key-" + index}
               id={"ts-checkbox-" + index}
               value={item["value"].toString()}
-              //onChange={checkedValue(item["label"])}
               labelText={
                 <Flex>
                   <span>{item["label"]}</span>
@@ -1084,22 +1089,6 @@ export default function SearchTeacherSets(props) {
         </CheckboxGroup>
       );
     } else {
-      // console.log(selectedFacets)
-      // if (selectedFacets[ts.label] == "subjects") {
-      //searchParams.delete("subjects");
-      //setSearchParams(searchParams);
-      // } else if (selectedFacets[ts.label] == "area of study") {
-
-      //   searchParams.delete("area of study");
-      //   setSearchParams(searchParams);
-      // } else if (selectedFacets[ts.label] == "language") {
-      //   searchParams.delete("language");
-      //   setSearchParams(searchParams);
-      // } else if (selectedFacets[ts.label] == "set type") {
-      //   searchParams.delete("set type");
-      //   setSearchParams(searchParams);
-      // }
-
       return (
         <Text isItalic noSpace size="body2" id="accordion-no-results-found">
           No options available
@@ -1148,8 +1137,6 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("keyword");
     setSearchParams(searchParams);
   };
-
-  // {tagSetsData()}
 
   const tsDataNotRetrievedMsg = () => {
     if (teacherSetDataNotRetrievedMsg !== "") {
