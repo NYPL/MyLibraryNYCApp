@@ -61,7 +61,6 @@ export default function SearchTeacherSets(props) {
   const { colorMode } = useColorMode();
   const [teacherSets, setTeacherSets] = useState([]);
   const [facets, setFacets] = useState([]);
-  // const [tagSets, setTagSets] = useState([]);
   const [teacherSetArr, setTeacherSetArr] = useState([]);
   const [tsTotalCount, setTsTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -75,9 +74,7 @@ export default function SearchTeacherSets(props) {
   const [sortTitleValue, setSortTitleValue] = useState(0);
   const [noTsResultsFound, setNoTsResultsFound] = useState("");
   const [computedCurrentPage, setComputedCurrentPage] = useState(1);
-  // const initialPage = 1;
   const { isLargerThanMedium, isLargerThanMobile } = useNYPLBreakpoints();
-  // const [selectedPage, setSelectedPage] = useState(initialPage);
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
@@ -901,7 +898,6 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetFilterTags = () => {
-    const teacher_sets_array = [];
     const subjects = new URLSearchParams(location.search).get("subjects");
     if (subjects !== null) {
       subjects.split(",").map((value) => {
@@ -909,7 +905,7 @@ export default function SearchTeacherSets(props) {
           const subjectsHash = {};
           subjectsHash["label"] ||= tsSubjects[value];
           subjectsHash["subjects"] ||= [tsSubjects[value]];
-          teacher_sets_array.push(subjectsHash);
+          teacherSetArr.push(subjectsHash);
         }
       });
     }
@@ -929,9 +925,6 @@ export default function SearchTeacherSets(props) {
     //   }
     //   teacherSetArr.push(value);
     // });
-    if (teacher_sets_array.length > 0) {
-      teacherSetArr.push(teacher_sets_array);
-    }
 
     let result = teacherSetArr.filter(
       (tset, index) =>
