@@ -33,6 +33,8 @@ import {
   Notification,
   useColorModeValue,
   useColorMode,
+  VStack,
+  HStack,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -59,7 +61,6 @@ export default function SearchTeacherSets(props) {
   const { colorMode } = useColorMode();
   const [teacherSets, setTeacherSets] = useState([]);
   const [facets, setFacets] = useState([]);
-  // const [tagSets, setTagSets] = useState([]);
   const [teacherSetArr, setTeacherSetArr] = useState([]);
   const [tsTotalCount, setTsTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -73,9 +74,7 @@ export default function SearchTeacherSets(props) {
   const [sortTitleValue, setSortTitleValue] = useState(0);
   const [noTsResultsFound, setNoTsResultsFound] = useState("");
   const [computedCurrentPage, setComputedCurrentPage] = useState(1);
-  // const initialPage = 1;
   const { isLargerThanMedium, isLargerThanMobile } = useNYPLBreakpoints();
-  // const [selectedPage, setSelectedPage] = useState(initialPage);
   const [rangeValues, setRangevalues] = useState([-1, 12]);
   const [isLoading, setIsLoading] = useState(true);
   const [tsSubjects, setTsSubjects] = useState({});
@@ -118,7 +117,7 @@ export default function SearchTeacherSets(props) {
   useEffect(() => {
     const queryValue = new URLSearchParams(location.search);
     const tsfacets = {};
-    const tagSetsArr = [];
+    const tagSetsDataArr = [];
     setTsSubjects({});
 
     queryParams.map((ts) => {
@@ -131,7 +130,7 @@ export default function SearchTeacherSets(props) {
             const subjectsHash = {};
             subjectsHash["label"] = tsSubjects[value];
             subjectsHash["subjects"] = [tsSubjects[value]];
-            tagSetsArr.push(subjectsHash);
+            tagSetsDataArr.push(subjectsHash);
           }
         });
       } else if (ts["area of study"]) {
@@ -145,8 +144,9 @@ export default function SearchTeacherSets(props) {
       } else if (ts["availability"]) {
         setAvailableToggle(true);
         tsfacets["availability"] = [ts["availability"]];
-        tagSets["label"] = "Available Now";
-        tagSets["availability"] = [ts["availability"]];
+        // DON'T SHOW IN TAGSET FOR A WHILE
+        // tagSets["label"] = "Available Now";
+        // tagSets["availability"] = [ts["availability"]];
       } else if (ts["language"]) {
         tsfacets["language"] = [ts["language"]];
         tagSets["label"] = ts["language"];
@@ -155,7 +155,7 @@ export default function SearchTeacherSets(props) {
         tagSets["label"] = ts["keyword"];
         tagSets["keyword"] = [ts["language"]];
       }
-      tagSetsArr.push(tagSets);
+      tagSetsDataArr.push(tagSets);
     });
 
     const keywordValue = queryValue.get("keyword")
@@ -178,29 +178,30 @@ export default function SearchTeacherSets(props) {
     const pageNumber = queryValue.get("page")
       ? parseInt(queryValue.get("page"))
       : 1;
+    // FOR A WHILE DONT SHOW IN TAGSET
+    // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
+    //   const tagSetGradeBegin =
+    //     parseInt(g_begin) === -1
+    //       ? "Pre-K"
+    //       : parseInt(g_begin) === 0
+    //       ? "K"
+    //       : parseInt(g_begin);
 
-    if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
-      const tagSetGradeBegin =
-        parseInt(g_begin) === -1
-          ? "Pre-K"
-          : parseInt(g_begin) === 0
-          ? "K"
-          : parseInt(g_begin);
+    //   const tagSetGradeEnd =
+    //     parseInt(g_end) === -1
+    //       ? "Pre-K"
+    //       : parseInt(g_end) === 0
+    //       ? "K"
+    //       : parseInt(g_end);
 
-      const tagSetGradeEnd =
-        parseInt(g_end) === -1
-          ? "Pre-K"
-          : parseInt(g_end) === 0
-          ? "K"
-          : parseInt(g_end);
+    //   const tagSetGrades = {
+    //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
+    //     grade_begin: [queryValue.get("grade_begin")],
+    //     grade_end: [queryValue.get("grade_end")],
+    //   };
 
-      const tagSetGrades = {
-        label: tagSetGradeBegin + " to " + tagSetGradeEnd,
-        grade_begin: [queryValue.get("grade_begin")],
-        grade_end: [queryValue.get("grade_end")],
-      };
-      tagSetsArr.push(tagSetGrades);
-    }
+    //   tagSetsArr.push(tagSetGrades);
+    // }
 
     setSelectedFacets(tsfacets);
     setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
@@ -209,7 +210,7 @@ export default function SearchTeacherSets(props) {
     setAvailableToggle(availableToggleVal);
     setSortTitleValue(sortOrderVal);
     setComputedCurrentPage(pageNumber);
-    setTeacherSetArr(tagSetsArr);
+    setTeacherSetArr(tagSetsDataArr);
 
     const params = Object.assign(
       {
@@ -555,7 +556,6 @@ export default function SearchTeacherSets(props) {
   };
 
   const windowScroll = () => {
-    console.log(window.scrollY);
     if (window.scrollY <= 10) {
       window.scrollTo({ top: 10, behavior: "smooth" });
     } else {
@@ -662,20 +662,40 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("language");
     searchParams.delete("area of study");
     searchParams.delete("set type");
-    searchParams.delete("availability");
     searchParams.delete("subjects");
-    searchParams.delete("grade_begin");
-    searchParams.delete("grade_end");
+    // searchParams.delete("availability");
+    // searchParams.delete("grade_begin");
+    // searchParams.delete("grade_end");
     setSearchParams(searchParams);
-    setGradeBegin(-1);
-    setGradeEnd(12);
-    setRangevalues([-1, 12]);
+    // setGradeBegin(-1);
+    // setGradeEnd(12);
+    // setRangevalues([-1, 12]);
     windowScroll();
+  };
+
+  const clearFiltersButton = () => {
+    const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
+    if (isLargerThanMedium) {
+      return (
+        <div>
+          <Button
+            buttonType="text"
+            id="clear-filters-button-id"
+            size="medium"
+            type="button"
+            marginTop="m"
+            marginLeft={clearFilteMargin}
+            onClick={clearFilters}
+          >
+            Clear Filters
+          </Button>
+        </div>
+      );
+    }
   };
 
   const teacherSetSideBarResults = () => {
     const bgColor = isLargerThanMedium ? facetBoxColor : "";
-    const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
     return (
       <Box
         id="ts-all-facets"
@@ -693,20 +713,9 @@ export default function SearchTeacherSets(props) {
           marginBottom="m"
         />
         <div>{TeacherSetGradesSlider()}</div>
+        <Heading id="facet-filters" size="heading5" level="h4" text="Filters" />
         <div>{TeacherSetFacets()}</div>
-        <div>
-          <Button
-            buttonType="text"
-            id="clear-filters-button-id"
-            size="medium"
-            type="button"
-            marginTop="m"
-            marginLeft={clearFilteMargin}
-            onClick={clearFilters}
-          >
-            Clear Filters
-          </Button>
-        </div>
+        {clearFiltersButton()}
       </Box>
     );
   };
@@ -815,175 +824,166 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  // const closeTeacherSetTag = (value) => {
-  //   if (value === "clearFilters") {
-  //     setTeacherSetArr([]);
-  //     searchParams.delete("language");
-  //     searchParams.delete("area of study");
-  //     searchParams.delete("set type");
-  //     searchParams.delete("availability");
-  //     searchParams.delete("subjects");
-  //     searchParams.delete("grade_begin");
-  //     searchParams.delete("grade_end");
-  //     searchParams.delete("keyword");
-  //     setSearchParams(searchParams);
-  //     //const data = teacherSetArr.filter((element) => element.label !== value);
-  //   } else {
-  //     //const subjects = new URLSearchParams(location.search).get("subjects")
-  //     //console.log(subjects)
+  const closeTeacherSetTag = (value) => {
+    if (value === "clearFilters") {
+      setTeacherSetArr([]);
+      searchParams.delete("language");
+      searchParams.delete("area of study");
+      searchParams.delete("set type");
+      // searchParams.delete("availability");
+      // searchParams.delete("grade_begin");
+      // searchParams.delete("grade_end");
+      searchParams.delete("subjects");
+      searchParams.delete("keyword");
+      setSearchParams(searchParams);
+    } else {
+      //const subjects = new URLSearchParams(location.search).get("subjects")
+      //console.log(subjects)
+      const data = teacherSetArr.filter((element) => element.label !== value);
+      const deleteQueryParams = teacherSetArr
+        .filter((element) => element.label === value)
+        .flatMap(Object.keys);
 
-  //     const data = teacherSetArr.filter((element) => element.label !== value);
-  //     const deleteQueryParams = teacherSetArr
-  //       .filter((element) => element.label === value)
-  //       .flatMap(Object.keys);
+      deleteQueryParams.map((item) => {
+        if (item === "language") {
+          searchParams.delete("language");
+          setSearchParams(searchParams);
+        } else if (item === "area of study") {
+          searchParams.delete("area of study");
+          setSearchParams(searchParams);
+        } else if (item === "availability") {
+          searchParams.delete("availability");
+          setSearchParams(searchParams);
+        } else if (item === "keyword") {
+          searchParams.delete("keyword");
+          setSearchParams(searchParams);
+        } else if (item === "set type") {
+          searchParams.delete("set type");
+          setSearchParams(searchParams);
+        } else if (item === "subjects") {
+          const subjects = new URLSearchParams(location.search).get("subjects");
+          const subArr = [];
 
-  //     deleteQueryParams.map((item) => {
-  //       if (item === "language") {
-  //         searchParams.delete("language");
-  //         setSearchParams(searchParams);
-  //       } else if (item === "area of study") {
-  //         searchParams.delete("area of study");
-  //         setSearchParams(searchParams);
-  //       } else if (item === "availability") {
-  //         searchParams.delete("availability");
-  //         setSearchParams(searchParams);
-  //       } else if (item === "keyword") {
-  //         searchParams.delete("keyword");
-  //         setSearchParams(searchParams);
-  //       } else if (item === "set type") {
-  //         searchParams.delete("set type");
-  //         setSearchParams(searchParams);
-  //       } else if (item === "subjects") {
-  //         const subjects = new URLSearchParams(location.search).get("subjects");
-  //         const subArr = [];
+          if (subjects !== null) {
+            subjects.split(",").map((subId) => {
+              if (
+                tsSubjects[subId] !== undefined &&
+                tsSubjects[subId] !== value
+              ) {
+                subArr.push(subId);
+              }
+            });
 
-  //         if (subjects !== null) {
-  //           subjects.split(",").map((subId) => {
-  //             if (
-  //               tsSubjects[subId] !== undefined &&
-  //               tsSubjects[subId] !== value
-  //             ) {
-  //               subArr.push(subId);
-  //             }
-  //           });
+            searchParams.set("subjects", subArr);
+            setSearchParams(searchParams);
 
-  //           searchParams.set("subjects", subArr);
-  //           setSearchParams(searchParams);
+            if (subjects.split(",").length === 1) {
+              searchParams.delete("subjects");
+              setSearchParams(searchParams);
+            }
+          }
+        } else if (item === "grade_begin") {
+          searchParams.delete("grade_begin");
+          setSearchParams(searchParams);
+          setGradeBegin(-1);
+          setRangevalues([-1, grade_end]);
+        } else if (item === "grade_end") {
+          searchParams.delete("grade_end");
+          setGradeEnd(12);
+          setRangevalues([grade_begin, 12]);
+          setSearchParams(searchParams);
+        }
+      });
+      setTeacherSetArr(data);
+    }
+  };
 
-  //           if (subjects.split(",").length === 1) {
-  //             searchParams.delete("subjects");
-  //             setSearchParams(searchParams);
-  //           }
-  //         }
-  //       } else if (item === "grade_begin") {
-  //         searchParams.delete("grade_begin");
-  //         setSearchParams(searchParams);
-  //         setGradeBegin(-1);
-  //         setRangevalues([-1, grade_end]);
-  //       } else if (item === "grade_end") {
-  //         searchParams.delete("grade_end");
-  //         setGradeEnd(12);
-  //         setRangevalues([grade_begin, 12]);
-  //         setSearchParams(searchParams);
-  //       }
-  //     });
-  //     setTeacherSetArr(data);
-  //   }
-  // };
+  const teacherSetFilterTags = () => {
+    const subjects = new URLSearchParams(location.search).get("subjects");
+    if (subjects !== null) {
+      subjects.split(",").map((value) => {
+        if (tsSubjects[value] !== undefined) {
+          const subjectsHash = {};
+          subjectsHash["label"] ||= tsSubjects[value];
+          subjectsHash["subjects"] ||= [tsSubjects[value]];
+          teacherSetArr.push(subjectsHash);
+        }
+      });
+    }
 
-  // const teacherSetFilterTags = () => {
-  //   const subjects = new URLSearchParams(location.search).get("subjects");
+    // teacherSetArr.map((value) => {
+    //   if (
+    //     value["grade_begin"] !== undefined ||
+    //     value["grade_end"] !== undefined
+    //   ) {
+    //     if (value["grade_begin"] !== undefined) {
+    //       const g_begin = value["label"];
+    //     }
 
-  //   if (subjects !== null) {
-  //     subjects.split(",").map((value) => {
-  //       if (tsSubjects[value] !== undefined) {
-  //         const subjectsHash = {};
-  //         subjectsHash["label"] ||= tsSubjects[value];
-  //         subjectsHash["subjects"] ||= [tsSubjects[value]];
-  //         teacherSetArr.push(subjectsHash);
-  //       }
-  //     });
-  //   }
+    //     if (value["grade_end"] !== undefined) {
+    //       const g_end = value["label"];
+    //     }
+    //   }
+    //   teacherSetArr.push(value);
+    // });
 
-  // teacherSetArr.map((value) => {
-  //   //console.log(value["grade_begin"])
+    let result = teacherSetArr.filter(
+      (tset, index) =>
+        index === teacherSetArr.findIndex((other) => tset.label === other.label)
+    );
 
-  //   if (
-  //     value["grade_begin"] !== undefined ||
-  //     value["grade_end"] !== undefined
-  //   ) {
-  //     if (value["grade_begin"] !== undefined) {
-  //       const g_begin = value["label"];
-  //     }
+    return (
+      <TagSet
+        id="tagSet-id-filter"
+        isDismissible
+        onClick={closeTeacherSetTag}
+        tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
+        type="filter"
+        marginBottom="m"
+      />
+    );
+  };
 
-  //     if (value["grade_end"] !== undefined) {
-  //       const g_end = value["label"];
-  //     }
-  //   }
+  const tagSetsData = () => {
+    const queryValue = new URLSearchParams(location.search);
+    const areaOfStudy = queryValue.get("area of study");
+    const language = queryValue.get("language");
+    const keyword = queryValue.get("keyword");
+    const subjects = queryValue.get("subjects");
+    const setType = queryValue.get("set type");
+    // DON'T SHOW IN TAGSET FOR A WHILE
+    // const availability = queryValue.get("availability");
+    // const gradeBegin = queryValue.get("grade_begin");
+    // const gradeEnd = queryValue.get("grade_end");
 
-  //   teacherSetArr.push(value);
-  // });
-
-  //console.log(teacherSetArr)
-
-  //   let result = teacherSetArr.filter(
-  //     (person, index) =>
-  //       index ===
-  //       teacherSetArr.findIndex((other) => person.label === other.label)
-  //   );
-
-  //   return (
-  //     <TagSet
-  //       id="tagSet-id-filter"
-  //       isDismissible
-  //       onClick={closeTeacherSetTag}
-  //       tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
-  //       type="filter"
-  //       marginBottom="m"
-  //     />
-  //   );
-  // };
-
-  // This code is useful when tagSet enabled.
-  // const tagSetsData = () => {
-  //   const queryValue = new URLSearchParams(location.search);
-  //   const areaOfStudy = queryValue.get("area of study");
-  //   const availability = queryValue.get("availability");
-  //   const language = queryValue.get("language");
-  //   const keyword = queryValue.get("keyword");
-  //   const subjects = queryValue.get("subjects");
-  //   const setType = queryValue.get("set type");
-  //   const gradeBegin = queryValue.get("grade_begin");
-  //   const gradeEnd = queryValue.get("grade_end");
-
-  //   if (
-  //     areaOfStudy !== null ||
-  //     availability !== null ||
-  //     language !== null ||
-  //     keyword !== null ||
-  //     subjects !== null ||
-  //     setType !== null ||
-  //     gradeBegin !== null ||
-  //     gradeEnd !== null
-  //   ) {
-  //     return (
-  //       <VStack align="stretch">
-  //         <div>
-  //           <HorizontalRule align="left" marginTop="0px" />
-  //         </div>
-  //         <div>
-  //           <HStack mb="s" data-testid="tagSetResultsDisplay">
-  //             <span>Fiters Applied</span>
-  //             {teacherSetFilterTags()}
-  //           </HStack>
-  //         </div>
-  //         <div>
-  //           <HorizontalRule align="left" className="paginationHR" />
-  //         </div>
-  //       </VStack>
-  //     );
-  //   }
-  // };
+    if (
+      // gradeBegin !== null ||
+      // gradeEnd !== null
+      // availability !== null ||
+      areaOfStudy !== null ||
+      language !== null ||
+      keyword !== null ||
+      subjects !== null ||
+      setType !== null
+    ) {
+      return (
+        <VStack align="stretch">
+          <div>
+            <HorizontalRule align="left" marginTop="0px" />
+          </div>
+          <div>
+            <HStack data-testid="tagSetResultsDisplay">
+              <span>Filters Applied</span>
+              {teacherSetFilterTags()}
+            </HStack>
+          </div>
+          <div>
+            <HorizontalRule align="left" />
+          </div>
+        </VStack>
+      );
+    }
+  };
 
   const tsDetails = () => {
     if (isLoading && teacherSetDataNotRetrievedMsg === "") {
@@ -1069,7 +1069,6 @@ export default function SearchTeacherSets(props) {
               key={"ts-checkbox-key-" + index}
               id={"ts-checkbox-" + index}
               value={item["value"].toString()}
-              //onChange={checkedValue(item["label"])}
               labelText={
                 <Flex>
                   <span>{item["label"]}</span>
@@ -1084,22 +1083,6 @@ export default function SearchTeacherSets(props) {
         </CheckboxGroup>
       );
     } else {
-      // console.log(selectedFacets)
-      // if (selectedFacets[ts.label] == "subjects") {
-      //searchParams.delete("subjects");
-      //setSearchParams(searchParams);
-      // } else if (selectedFacets[ts.label] == "area of study") {
-
-      //   searchParams.delete("area of study");
-      //   setSearchParams(searchParams);
-      // } else if (selectedFacets[ts.label] == "language") {
-      //   searchParams.delete("language");
-      //   setSearchParams(searchParams);
-      // } else if (selectedFacets[ts.label] == "set type") {
-      //   searchParams.delete("set type");
-      //   setSearchParams(searchParams);
-      // }
-
       return (
         <Text isItalic noSpace size="body2" id="accordion-no-results-found">
           No options available
@@ -1148,8 +1131,6 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("keyword");
     setSearchParams(searchParams);
   };
-
-  // {tagSetsData()}
 
   const tsDataNotRetrievedMsg = () => {
     if (teacherSetDataNotRetrievedMsg !== "") {
@@ -1206,6 +1187,7 @@ export default function SearchTeacherSets(props) {
       }
       contentPrimary={
         <>
+          {tagSetsData()}
           <div style={{ display: mobileSupport() }}>
             <Flex alignItems="baseline">
               {resultsFoundMessage()}
