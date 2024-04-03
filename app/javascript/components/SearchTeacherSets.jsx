@@ -713,7 +713,7 @@ export default function SearchTeacherSets(props) {
           marginBottom="m"
         />
         <div>{TeacherSetGradesSlider()}</div>
-        <Heading id="facet-filters" size="heading5" level="h4" text="Filters" />
+        <Heading id="facet-filters" size="heading6" level="h4" text="Filters" />
         <div>{TeacherSetFacets()}</div>
         {clearFiltersButton()}
       </Box>
