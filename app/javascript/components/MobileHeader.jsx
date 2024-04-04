@@ -1,4 +1,4 @@
-import FocusLock from "@chakra-ui/focus-lock";
+import { FocusLock } from "@chakra-ui/focus-lock";
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
