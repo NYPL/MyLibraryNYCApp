@@ -688,22 +688,31 @@ export default function SearchTeacherSets(props) {
 
   const clearFiltersButton = () => {
     const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
-    if (isLargerThanMedium) {
-      return (
-        <div>
-          <Button
-            buttonType="text"
-            id="clear-filters-button-id"
-            size="medium"
-            type="button"
-            marginTop="m"
-            marginLeft={clearFilteMargin}
-            onClick={clearFilters}
-          >
-            Clear Filters
-          </Button>
-        </div>
-      );
+    const showClearFiltersButton = (
+      (selectedFacets["area of study"] && selectedFacets["area of study"].length > 0) || 
+      (selectedFacets["language"] && selectedFacets["language"].length > 0) || 
+      (selectedFacets["set type"] && selectedFacets["set type"].length > 0) || 
+      (selectedFacets["subjects"] && selectedFacets["subjects"].length > 0)
+    );
+
+    if (showClearFiltersButton) {
+      if (isLargerThanMedium) {
+        return (
+          <div>
+            <Button
+              buttonType="text"
+              id="clear-filters-button-id"
+              size="medium"
+              type="button"
+              marginTop="m"
+              marginLeft={clearFilteMargin}
+              onClick={clearFilters}
+            >
+              Clear Filters
+            </Button>
+          </div>
+        );
+      }
     }
   };
 
