@@ -688,31 +688,30 @@ export default function SearchTeacherSets(props) {
 
   const clearFiltersButton = () => {
     const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
-    const showClearFiltersButton = (
+    const showClearFiltersButton = !(
       (selectedFacets["area of study"] && selectedFacets["area of study"].length > 0) || 
       (selectedFacets["language"] && selectedFacets["language"].length > 0) || 
       (selectedFacets["set type"] && selectedFacets["set type"].length > 0) || 
       (selectedFacets["subjects"] && selectedFacets["subjects"].length > 0)
     );
 
-    if (showClearFiltersButton) {
-      if (isLargerThanMedium) {
-        return (
-          <div>
-            <Button
-              buttonType="text"
-              id="clear-filters-button-id"
-              size="medium"
-              type="button"
-              marginTop="m"
-              marginLeft={clearFilteMargin}
-              onClick={clearFilters}
-            >
-              Clear Filters
-            </Button>
-          </div>
-        );
-      }
+    if (isLargerThanMedium) {
+      return (
+        <div>
+          <Button
+            buttonType="text"
+            id="clear-filters-button-id"
+            size="medium"
+            type="button"
+            marginTop="s"
+            marginLeft={clearFilteMargin}
+            onClick={clearFilters}
+            isDisabled={showClearFiltersButton}
+          >
+            Clear Filters
+          </Button>
+        </div>
+      );
     }
   };
 
@@ -735,7 +734,7 @@ export default function SearchTeacherSets(props) {
           marginBottom="m"
         />
         <div>{TeacherSetGradesSlider()}</div>
-        <Heading id="facet-filters" size="heading6" level="h4" text="Filters" />
+        <Heading id="facet-filters" size="heading6" fontSize="desktop.subtitle.subtitle1" level="h4" text="Filters" />
         <div>{TeacherSetFacets()}</div>
         {clearFiltersButton()}
       </Box>
@@ -962,7 +961,6 @@ export default function SearchTeacherSets(props) {
         onClick={closeTeacherSetTag}
         tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
         type="filter"
-        marginBottom="m"
       />
     );
   };
@@ -992,11 +990,11 @@ export default function SearchTeacherSets(props) {
       return (
         <VStack align="stretch">
           <div>
-            <HorizontalRule align="left" marginTop="0px" />
+            <HorizontalRule align="left" marginTop="0px" marginBottom="xs"/>
           </div>
           <div>
-            <HStack data-testid="tagSetResultsDisplay" gap="1rem">
-              <span style = {{"margin-top": "-22px"}}>Filters Applied</span>
+            <HStack data-testid="tagSetResultsDisplay" gap="1rem" marginBottom="xs">
+              <span>Filters Applied</span>
               {teacherSetFilterTags()}
             </HStack>
           </div>
@@ -1121,7 +1119,7 @@ export default function SearchTeacherSets(props) {
           key={"ts-facets-key-" + i}
           id={"ts-facets-accordian-" + i}
           backgroundColor="var(--nypl-colors-ui-white)"
-          marginTop="m"
+          marginTop="xs"
           panelMaxHeight="400px"
           accordionData={[
             {
