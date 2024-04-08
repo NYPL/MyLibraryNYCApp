@@ -35,6 +35,8 @@ import {
   useColorMode,
   VStack,
   HStack,
+  SimpleGrid,
+  GridItem,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -441,7 +443,7 @@ export default function SearchTeacherSets(props) {
   const teacherSetAvailability = (ts) => {
     if (ts.availability !== undefined) {
       return (
-        <StatusBadge level={availabilityStatusBadge(ts)}>
+        <StatusBadge type={availabilityStatusBadge(ts)}>
           {titleCase(ts.availability)}
         </StatusBadge>
       );
@@ -451,7 +453,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const availabilityStatusBadge = (ts) => {
-    return ts.availability === "available" ? "medium" : "low";
+    return ts.availability === "available" ? "informative" : "neutral";
   };
 
   const teacherSetDetails = () => {
@@ -467,7 +469,7 @@ export default function SearchTeacherSets(props) {
               layout="row"
               aspectratio="square"
               size="xxsmall"
-              marginTop="l"
+              marginTop="s"
             >
               <CardHeading
                 marginBottom="xs"
@@ -835,8 +837,8 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  const closeTeacherSetTag = (value) => {
-    if (value === "clearFilters") {
+  const closeTeacherSetTag = (tagSet) => {
+    if (tagSet.id === "clear-filters") {
       setTeacherSetArr([]);
       searchParams.delete("language");
       searchParams.delete("area of study");
@@ -847,12 +849,14 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("subjects");
       searchParams.delete("keyword");
       setSearchParams(searchParams);
-    } else {
+      return
+    } 
       //const subjects = new URLSearchParams(location.search).get("subjects")
       //console.log(subjects)
-      const data = teacherSetArr.filter((element) => element.label !== value);
+      const data = teacherSetArr.filter((element) => element.label !== tagSet.label);
+
       const deleteQueryParams = teacherSetArr
-        .filter((element) => element.label === value)
+        .filter((element) => element.label === tagSet.label)
         .flatMap(Object.keys);
 
       deleteQueryParams.map((item) => {
@@ -906,7 +910,6 @@ export default function SearchTeacherSets(props) {
         }
       });
       setTeacherSetArr(data);
-    }
   };
 
   const teacherSetFilterTags = () => {
@@ -983,13 +986,13 @@ export default function SearchTeacherSets(props) {
             <HorizontalRule align="left" marginTop="0px" />
           </div>
           <div>
-            <HStack data-testid="tagSetResultsDisplay">
-              <span>Filters Applied</span>
+            <HStack data-testid="tagSetResultsDisplay" gap="1rem">
+              <span style = {{"margin-top": "-22px"}}>Filters Applied</span>
               {teacherSetFilterTags()}
             </HStack>
           </div>
           <div>
-            <HorizontalRule align="left" />
+            <HorizontalRule align="left" marginTop="0px"/>
           </div>
         </VStack>
       );

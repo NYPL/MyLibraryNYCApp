@@ -97,7 +97,8 @@ export default function TeacherSetDetails(props) {
         setTeacherSet(res.data.teacher_set);
         setBooks(res.data.books);
         setTeacherSetNotes(res.data.teacher_set_notes);
-        setCurrentUserStatus(res.data.user.status);
+        let userStatus = res.data.user ? res.data.user.status : ""
+        setCurrentUserStatus(userStatus);
         if (res.data.teacher_set.title !== null) {
           document.title =
             "Teacher Set Details | " +
@@ -499,7 +500,7 @@ export default function TeacherSetDetails(props) {
   };
 
   const availabilityStatusBadge = () => {
-    return teacherSet.availability === "available" ? "medium" : "low";
+    return teacherSet.availability === "available" ? "informative" : "neutral";
   };
 
   const legacyDetailUrl = () => {

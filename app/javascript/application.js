@@ -1,10 +1,9 @@
 // Entry point for the build script in your package.json
 import React, { Component, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import App from "./components/App";
-import ReactDOM from 'react-dom';
 import "./stylesheets/application.scss";
 
-ReactDOM.render(
-    <App />,
-  document.getElementById("user_data")
-);
+const container = document.getElementById('user_data');
+const root = createRoot(container);
+root.render(<App />);
