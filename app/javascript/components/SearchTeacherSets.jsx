@@ -35,8 +35,6 @@ import {
   useColorMode,
   VStack,
   HStack,
-  SimpleGrid,
-  GridItem,
 } from "@nypl/design-system-react-components";
 
 import {
