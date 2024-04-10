@@ -441,7 +441,7 @@ export default function SearchTeacherSets(props) {
   const teacherSetAvailability = (ts) => {
     if (ts.availability !== undefined) {
       return (
-        <StatusBadge level={availabilityStatusBadge(ts)}>
+        <StatusBadge type={availabilityStatusBadge(ts)}>
           {titleCase(ts.availability)}
         </StatusBadge>
       );
@@ -451,7 +451,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const availabilityStatusBadge = (ts) => {
-    return ts.availability === "available" ? "medium" : "low";
+    return ts.availability === "available" ? "informative" : "neutral";
   };
 
   const teacherSetDetails = () => {
@@ -467,7 +467,7 @@ export default function SearchTeacherSets(props) {
               layout="row"
               aspectratio="square"
               size="xxsmall"
-              marginTop="l"
+              marginTop="s"
             >
               <CardHeading
                 marginBottom="xs"
@@ -686,6 +686,13 @@ export default function SearchTeacherSets(props) {
 
   const clearFiltersButton = () => {
     const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
+    const disableClearFilterButton = !(
+      (selectedFacets["area of study"] && selectedFacets["area of study"].length > 0) || 
+      (selectedFacets["language"] && selectedFacets["language"].length > 0) || 
+      (selectedFacets["set type"] && selectedFacets["set type"].length > 0) || 
+      (selectedFacets["subjects"] && selectedFacets["subjects"].length > 0)
+    );
+
     if (isLargerThanMedium) {
       return (
         <div>
@@ -694,9 +701,10 @@ export default function SearchTeacherSets(props) {
             id="clear-filters-button-id"
             size="medium"
             type="button"
-            marginTop="m"
+            marginTop="xs"
             marginLeft={clearFilteMargin}
             onClick={clearFilters}
+            isDisabled={disableClearFilterButton}
           >
             Clear Filters
           </Button>
@@ -724,7 +732,14 @@ export default function SearchTeacherSets(props) {
           marginBottom="m"
         />
         <div>{TeacherSetGradesSlider()}</div>
-        <Heading id="facet-filters" size="heading6" level="h4" text="Filters" />
+        <Heading 
+          id="facet-filters" 
+          size="heading6" 
+          marginBottom="xs" 
+          fontSize={ { base: "mobile.subtitle.subtitle1", md: "desktop.subtitle.subtitle1" } }
+          level="h4" 
+          text="Filters" 
+        />
         <div>{TeacherSetFacets()}</div>
         {clearFiltersButton()}
       </Box>
@@ -835,8 +850,8 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  const closeTeacherSetTag = (value) => {
-    if (value === "clearFilters") {
+  const closeTeacherSetTag = (tagSet) => {
+    if (tagSet.id === "clear-filters") {
       setTeacherSetArr([]);
       searchParams.delete("language");
       searchParams.delete("area of study");
@@ -847,12 +862,14 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("subjects");
       searchParams.delete("keyword");
       setSearchParams(searchParams);
-    } else {
+      return
+    } 
       //const subjects = new URLSearchParams(location.search).get("subjects")
       //console.log(subjects)
-      const data = teacherSetArr.filter((element) => element.label !== value);
+      const data = teacherSetArr.filter((element) => element.label !== tagSet.label);
+
       const deleteQueryParams = teacherSetArr
-        .filter((element) => element.label === value)
+        .filter((element) => element.label === tagSet.label)
         .flatMap(Object.keys);
 
       deleteQueryParams.map((item) => {
@@ -906,7 +923,6 @@ export default function SearchTeacherSets(props) {
         }
       });
       setTeacherSetArr(data);
-    }
   };
 
   const teacherSetFilterTags = () => {
@@ -950,7 +966,6 @@ export default function SearchTeacherSets(props) {
         onClick={closeTeacherSetTag}
         tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
         type="filter"
-        marginBottom="m"
       />
     );
   };
@@ -980,16 +995,16 @@ export default function SearchTeacherSets(props) {
       return (
         <VStack align="stretch">
           <div>
-            <HorizontalRule align="left" marginTop="0px" />
+            <HorizontalRule align="left" marginTop="0px" marginBottom="xs"/>
           </div>
           <div>
-            <HStack data-testid="tagSetResultsDisplay">
+            <HStack data-testid="tagSetResultsDisplay" gap="1rem" marginBottom="xs">
               <span>Filters Applied</span>
               {teacherSetFilterTags()}
             </HStack>
           </div>
           <div>
-            <HorizontalRule align="left" />
+            <HorizontalRule align="left" marginTop="0px"/>
           </div>
         </VStack>
       );
@@ -1109,7 +1124,7 @@ export default function SearchTeacherSets(props) {
           key={"ts-facets-key-" + i}
           id={"ts-facets-accordian-" + i}
           backgroundColor="var(--nypl-colors-ui-white)"
-          marginTop="m"
+          marginTop="xs"
           panelMaxHeight="400px"
           accordionData={[
             {
