@@ -686,7 +686,7 @@ export default function SearchTeacherSets(props) {
 
   const clearFiltersButton = () => {
     const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
-    const showClearFiltersButton = !(
+    const disableClearFilterButton = !(
       (selectedFacets["area of study"] && selectedFacets["area of study"].length > 0) || 
       (selectedFacets["language"] && selectedFacets["language"].length > 0) || 
       (selectedFacets["set type"] && selectedFacets["set type"].length > 0) || 
@@ -704,7 +704,7 @@ export default function SearchTeacherSets(props) {
             marginTop="xs"
             marginLeft={clearFilteMargin}
             onClick={clearFilters}
-            isDisabled={showClearFiltersButton}
+            isDisabled={disableClearFilterButton}
           >
             Clear Filters
           </Button>
