@@ -251,18 +251,19 @@ class ElasticSearch
       sub_aggs["subjects"]["buckets"].each do |agg_val|
         # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
-        # We want to comment below code to show the data in tagset filters.
+        # We want to comment below code to show the data in tagset filters.        
         if params['subjects'].present? && (params['area of study'].present? || params['set type'].present? || params['language'].present?)
           #agg_val['doc_count'] = 1
         else
           next if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
         end
-
-        subjects_facets[:items] << {
-          :value => agg_val["key"]["id"],
-          :label => agg_val["key"]["title"],
-          :count => agg_val["doc_count"]
-        }
+        if params['subjects'].blank? || params['subjects'].map(&:to_i).include?(agg_val["key"]["id"])
+          subjects_facets[:items] << {
+            :value => agg_val["key"]["id"],
+            :label => agg_val["key"]["title"],
+            :count => agg_val["doc_count"]
+          }
+        end
       end
     end
     # area_of_study data should not show in subjects.

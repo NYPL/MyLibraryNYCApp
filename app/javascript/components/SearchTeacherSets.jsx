@@ -1045,7 +1045,7 @@ export default function SearchTeacherSets(props) {
             showContent
             showImage={false}
             isBordered={false}
-            marginTop="m"
+            marginTop="l"
           />
           <SkeletonLoader
             className="teacher-set-details-skeleton-loader-3"
@@ -1056,7 +1056,7 @@ export default function SearchTeacherSets(props) {
             showContent
             showImage={false}
             isBordered={false}
-            marginTop="m"
+            marginTop="l"
           />
         </>
       );
