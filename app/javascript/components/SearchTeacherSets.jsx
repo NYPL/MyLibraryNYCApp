@@ -1024,17 +1024,41 @@ export default function SearchTeacherSets(props) {
   const tsDetails = () => {
     if (isLoading && teacherSetDataNotRetrievedMsg === "") {
       return (
-        <SkeletonLoader
-          className="teacher-set-details-skeleton-loader"
-          contentSize={4}
-          headingSize={2}
-          imageAspectRatio="portrait"
-          layout="row"
-          showContent
-          showImage={false}
-          isBordered={false}
-          marginTop="m"
-        />
+        <>
+          <SkeletonLoader
+            className="teacher-set-details-skeleton-loader-1"
+            contentSize={4}
+            headingSize={2}
+            imageAspectRatio="portrait"
+            layout="row"
+            showContent
+            showImage={false}
+            isBordered={false}
+            marginTop="m"
+          />
+          <SkeletonLoader
+            className="teacher-set-details-skeleton-loader-2"
+            contentSize={4}
+            headingSize={2}
+            imageAspectRatio="portrait"
+            layout="row"
+            showContent
+            showImage={false}
+            isBordered={false}
+            marginTop="m"
+          />
+          <SkeletonLoader
+            className="teacher-set-details-skeleton-loader-3"
+            contentSize={4}
+            headingSize={2}
+            imageAspectRatio="portrait"
+            layout="row"
+            showContent
+            showImage={false}
+            isBordered={false}
+            marginTop="m"
+          />
+        </>
       );
     } else {
       return (
