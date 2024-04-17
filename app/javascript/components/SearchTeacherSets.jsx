@@ -1030,8 +1030,10 @@ export default function SearchTeacherSets(props) {
           headingSize={2}
           imageAspectRatio="portrait"
           layout="row"
+          showContent
           showImage={false}
-          width="900px"
+          isBordered={false}
+          marginTop="m"
         />
       );
     } else {
