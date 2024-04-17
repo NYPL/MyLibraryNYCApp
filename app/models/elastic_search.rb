@@ -86,7 +86,7 @@ class ElasticSearch
     query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
     query[:aggs] = agg_hash
     teacherset_docs = search_by_query(query)
-    facets = facets_for_teacher_sets(teacherset_docs)
+    facets = facets_for_teacher_sets(teacherset_docs, params)
     [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
@@ -176,12 +176,12 @@ class ElasticSearch
   end  
   
   # Get teacher set facets
-  def facets_for_teacher_sets(teacher_sets_docs)
+  def facets_for_teacher_sets(teacher_sets_docs, params)
     facets = []
     # Get all facets from elastic search.
     facets = get_language_availability_set_type_area_of_study_facets(teacher_sets_docs, facets)
 
-    subjects_facets = get_subject_facets(teacher_sets_docs, facets)
+    subjects_facets = get_subject_facets(teacher_sets_docs, facets, params)
     facets << subjects_facets
 
     # Specify desired order of facets:
@@ -235,7 +235,7 @@ class ElasticSearch
   # :label=>"Checked Out", :count=>32}]},
   # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
   # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
-  def get_subject_facets(teacherset_docs, facets)
+  def get_subject_facets(teacherset_docs, facets, params)
     area_of_study_data = []
     # Collect area_of_study data for restricting subjects
     # area_of_study data eg:  ["Arabic Language Arts.", "Arts", "Arts." etc]
@@ -252,8 +252,12 @@ class ElasticSearch
         # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
         # We want to comment below code to show the data in tagset filters.
-        next if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
-        
+        if params['subjects'].present? && (params['area of study'].present? || params['set type'].present? || params['language'].present?)
+          #agg_val['doc_count'] = 1
+        else
+          next if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
+        end
+
         subjects_facets[:items] << {
           :value => agg_val["key"]["id"],
           :label => agg_val["key"]["title"],
