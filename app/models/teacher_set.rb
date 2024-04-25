@@ -315,7 +315,7 @@ class TeacherSet < ActiveRecord::Base
     {title: self.title, description: self.description, contents: self.contents, 
       id: self.id.to_i, details_url: self.details_url, grade_end: self.grade_end, 
       grade_begin: self.grade_begin, availability: availability, total_copies: self.total_copies,
-      call_number: self.call_number, language: self.language, physical_description: self.physical_description,
+      call_number: self.call_number, physical_description: self.physical_description,
       primary_language: self.primary_language, created_at: created_at, updated_at: updated_at,
       available_copies: self.available_copies, bnumber: self.bnumber, set_type: self.set_type,
       area_of_study: self.area_of_study, subjects: subjects_arr }
