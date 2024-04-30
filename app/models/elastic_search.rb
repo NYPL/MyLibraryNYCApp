@@ -128,7 +128,7 @@ class ElasticSearch
 
     # If language present in filters finding the language in these fields [language, primary_language]
     if language.present?
-      query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[language primary_language]}}
+      query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[primary_language]}}
     end
     
 
