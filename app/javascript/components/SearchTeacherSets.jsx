@@ -152,7 +152,7 @@ export default function SearchTeacherSets(props) {
         tagSets["label"] = ts["language"];
         tagSets["language"] = [ts["language"]];
       }
-      
+
       // else if (ts.keyword) {
       //   tagSets["label"] = ts["keyword"];
       //   tagSets["keyword"] = [ts["language"]];
@@ -321,14 +321,15 @@ export default function SearchTeacherSets(props) {
   };
 
   /**
-     * Generates a message based on the number of search results found.
-     * This function should be called after performing a search operation
-     * and can be used to dynamically update the UI with appropriate feedback
-     * to the user regarding the search outcome.
-     */
+   * Generates a message based on the number of search results found.
+   * This function should be called after performing a search operation
+   * and can be used to dynamically update the UI with appropriate feedback
+   * to the user regarding the search outcome.
+   */
 
   const resultsFoundMessage = () => {
-    const appendKeyword = keyword !== null && keyword !== "" ? ` for "${keyword}"` : '';
+    const appendKeyword =
+      keyword !== null && keyword !== "" ? ` for "${keyword}"` : "";
 
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
       return (
@@ -366,7 +367,8 @@ export default function SearchTeacherSets(props) {
             perPageNumbers +
             " of " +
             tsTotalCount +
-            " result" + appendKeyword}
+            " result" +
+            appendKeyword}
         </Text>
       );
     } else if (tsTotalCount >= 1) {
@@ -398,7 +400,8 @@ export default function SearchTeacherSets(props) {
             toresults +
             " of " +
             tsTotalCount +
-            " results" + appendKeyword}
+            " results" +
+            appendKeyword}
         </Text>
       );
     }
@@ -687,9 +690,10 @@ export default function SearchTeacherSets(props) {
   const clearFiltersButton = () => {
     const clearFilteMargin = isLargerThanMobile ? "xl" : "84px";
     const disableClearFilterButton = !(
-      (selectedFacets["area of study"] && selectedFacets["area of study"].length > 0) || 
-      (selectedFacets["language"] && selectedFacets["language"].length > 0) || 
-      (selectedFacets["set type"] && selectedFacets["set type"].length > 0) || 
+      (selectedFacets["area of study"] &&
+        selectedFacets["area of study"].length > 0) ||
+      (selectedFacets["language"] && selectedFacets["language"].length > 0) ||
+      (selectedFacets["set type"] && selectedFacets["set type"].length > 0) ||
       (selectedFacets["subjects"] && selectedFacets["subjects"].length > 0)
     );
 
@@ -732,13 +736,16 @@ export default function SearchTeacherSets(props) {
           marginBottom="m"
         />
         <div>{TeacherSetGradesSlider()}</div>
-        <Heading 
-          id="facet-filters" 
-          size="heading6" 
-          marginBottom="xs" 
-          fontSize={ { base: "mobile.subtitle.subtitle1", md: "desktop.subtitle.subtitle1" } }
-          level="h4" 
-          text="Filters" 
+        <Heading
+          id="facet-filters"
+          size="heading6"
+          marginBottom="xs"
+          fontSize={{
+            base: "mobile.subtitle.subtitle1",
+            md: "desktop.subtitle.subtitle1",
+          }}
+          level="h4"
+          text="Filters"
         />
         <div>{TeacherSetFacets()}</div>
         {clearFiltersButton()}
@@ -862,67 +869,66 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("subjects");
       searchParams.delete("keyword");
       setSearchParams(searchParams);
-      return
-    } 
-      //const subjects = new URLSearchParams(location.search).get("subjects")
-      //console.log(subjects)
-      const data = teacherSetArr.filter((element) => element.label !== tagSet.label);
+      return;
+    }
+    const data = teacherSetArr.filter(
+      (element) => element.label !== tagSet.label
+    );
 
-      const deleteQueryParams = teacherSetArr
-        .filter((element) => element.label === tagSet.label)
-        .flatMap(Object.keys);
+    const deleteQueryParams = teacherSetArr
+      .filter((element) => element.label === tagSet.label)
+      .flatMap(Object.keys);
 
-      deleteQueryParams.map((item) => {
-        if (item === "language") {
-          searchParams.delete("language");
-          setSearchParams(searchParams);
-        } else if (item === "area of study") {
-          searchParams.delete("area of study");
-          setSearchParams(searchParams);
-        } else if (item === "availability") {
-          searchParams.delete("availability");
-          setSearchParams(searchParams);
-        } else if (item === "keyword") {
-          searchParams.delete("keyword");
-          setSearchParams(searchParams);
-        } else if (item === "set type") {
-          searchParams.delete("set type");
-          setSearchParams(searchParams);
-        } else if (item === "subjects") {
-          const subjects = new URLSearchParams(location.search).get("subjects");
-          const subArr = [];
+    deleteQueryParams.map((item) => {
+      if (item === "language") {
+        searchParams.delete("language");
+        setSearchParams(searchParams);
+      } else if (item === "area of study") {
+        searchParams.delete("area of study");
+        setSearchParams(searchParams);
+      } else if (item === "availability") {
+        searchParams.delete("availability");
+        setSearchParams(searchParams);
+      } else if (item === "keyword") {
+        searchParams.delete("keyword");
+        setSearchParams(searchParams);
+      } else if (item === "set type") {
+        searchParams.delete("set type");
+        setSearchParams(searchParams);
+      } else if (item === "subjects") {
+        const subjects = new URLSearchParams(location.search).get("subjects");
+        const subArr = [];
 
-          if (subjects !== null) {
-            subjects.split(",").map((subId) => {
-              if (
-                tsSubjects[subId] !== undefined &&
-                tsSubjects[subId] !== value
-              ) {
-                subArr.push(subId);
-              }
-            });
-
-            searchParams.set("subjects", subArr);
-            setSearchParams(searchParams);
-
-            if (subjects.split(",").length === 1) {
-              searchParams.delete("subjects");
-              setSearchParams(searchParams);
+        if (subjects !== null) {
+          subjects.split(",").map((subId) => {
+            if (
+              tsSubjects[subId] !== undefined &&
+              tsSubjects[subId] !== tagSet.label
+            ) {
+              subArr.push(subId);
             }
+          });
+          searchParams.set("subjects", subArr);
+          setSearchParams(searchParams);
+
+          if (subjects.split(",").length === 1) {
+            searchParams.delete("subjects");
+            setSearchParams(searchParams);
           }
-        } else if (item === "grade_begin") {
-          searchParams.delete("grade_begin");
-          setSearchParams(searchParams);
-          setGradeBegin(-1);
-          setRangevalues([-1, grade_end]);
-        } else if (item === "grade_end") {
-          searchParams.delete("grade_end");
-          setGradeEnd(12);
-          setRangevalues([grade_begin, 12]);
-          setSearchParams(searchParams);
         }
-      });
-      setTeacherSetArr(data);
+      } else if (item === "grade_begin") {
+        searchParams.delete("grade_begin");
+        setSearchParams(searchParams);
+        setGradeBegin(-1);
+        setRangevalues([-1, grade_end]);
+      } else if (item === "grade_end") {
+        searchParams.delete("grade_end");
+        setGradeEnd(12);
+        setRangevalues([grade_begin, 12]);
+        setSearchParams(searchParams);
+      }
+    });
+    setTeacherSetArr(data);
   };
 
   const teacherSetFilterTags = () => {
@@ -995,16 +1001,20 @@ export default function SearchTeacherSets(props) {
       return (
         <VStack align="stretch">
           <div>
-            <HorizontalRule align="left" marginTop="0px" marginBottom="xs"/>
+            <HorizontalRule align="left" marginTop="0px" marginBottom="xs" />
           </div>
           <div>
-            <HStack data-testid="tagSetResultsDisplay" gap="1rem" marginBottom="xs">
+            <HStack
+              data-testid="tagSetResultsDisplay"
+              gap="1rem"
+              marginBottom="xs"
+            >
               <span>Filters Applied</span>
               {teacherSetFilterTags()}
             </HStack>
           </div>
           <div>
-            <HorizontalRule align="left" marginTop="0px"/>
+            <HorizontalRule align="left" marginTop="0px" />
           </div>
         </VStack>
       );
@@ -1014,15 +1024,41 @@ export default function SearchTeacherSets(props) {
   const tsDetails = () => {
     if (isLoading && teacherSetDataNotRetrievedMsg === "") {
       return (
-        <SkeletonLoader
-          className="teacher-set-details-skeleton-loader"
-          contentSize={4}
-          headingSize={2}
-          imageAspectRatio="portrait"
-          layout="row"
-          showImage={false}
-          width="900px"
-        />
+        <>
+          <SkeletonLoader
+            className="teacher-set-details-skeleton-loader-1"
+            contentSize={4}
+            headingSize={2}
+            imageAspectRatio="portrait"
+            layout="row"
+            showContent
+            showImage={false}
+            isBordered={false}
+            marginTop="m"
+          />
+          <SkeletonLoader
+            className="teacher-set-details-skeleton-loader-2"
+            contentSize={4}
+            headingSize={2}
+            imageAspectRatio="portrait"
+            layout="row"
+            showContent
+            showImage={false}
+            isBordered={false}
+            marginTop="l"
+          />
+          <SkeletonLoader
+            className="teacher-set-details-skeleton-loader-3"
+            contentSize={4}
+            headingSize={2}
+            imageAspectRatio="portrait"
+            layout="row"
+            showContent
+            showImage={false}
+            isBordered={false}
+            marginTop="l"
+          />
+        </>
       );
     } else {
       return (
