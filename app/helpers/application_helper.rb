@@ -29,4 +29,66 @@ module ApplicationHelper
   def info_site_home_page?
     params["host"] == ENV['MLN_INFO_SITE_HOSTNAME'] && params["controller"] == "info_site" && params["action"] == "index"
   end
+
+  def adobe_titles
+    originating_location = request.fullpath
+    site_section = ""
+    page_title = ""
+    if originating_location.present?
+      # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
+      if params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
+        site_section = 'Teacher Sets'
+        page_title = 'teacher-set-details'
+      elsif originating_location == "/schools"
+        page_title = "participating-schools"
+        site_section = 'Marketing'
+      elsif originating_location == "/faqs/show"
+        page_title = "frequently-asked-questions"
+        site_section = 'Marketing'
+      elsif originating_location == "/contacts"
+        page_title = "contact"
+        site_section = 'Marketing'
+      elsif params["controller"] == "books" && params["action"] == "show" && params["id"].present?
+        site_section = 'Teacher Sets'
+        page_title = 'book-details'
+      elsif params["controller"] == "teacher_sets" && params["action"] == "index"
+        query_params = request.query_parameters
+        if params["grade_begin"] == "-1" && params["grade_end"] == "12" && params["grade_begin"] == "-1" && params["keyword"] == "" \
+          && params["sort_order"] == ""
+          query_params.delete("grade_begin")
+          query_params.delete("grade_end")
+          query_params.delete("keyword")
+          query_params.delete("sort_order")
+        end
+        if query_params['language']
+          query_params['language'] = query_params['language'].join
+        end
+
+        if query_params['area of study']
+          query_params['area of study'] = query_params['area of study'].join
+        end
+
+        if query_params['set type']
+          query_params['set type'] = query_params['set type'].join
+        end
+
+        if query_params['subjects']
+          query_params['subjects'] = query_params['subjects'].join(",")
+        end
+
+        site_section = 'Teacher Sets'
+        page_title = 'search-teacher-sets'
+
+      elsif params["controller"] == "holds" && params["action"] == "ordered_holds_details" && params["cache_key"].present?
+        site_section = 'Order'  
+        page_title = 'order-details'
+      else
+        site_section = 'Teacher Sets'
+        page_title = 'search-teacher-sets'
+      end
+    end
+    page_title_string = 'mylibrarynyc'
+    page_title_string += '|' + page_title
+    [page_title_string, site_section]
+  end
 end
