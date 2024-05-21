@@ -52,36 +52,14 @@ module ApplicationHelper
         site_section = 'Teacher Sets'
         page_title = 'book-details'
       elsif params["controller"] == "teacher_sets" && params["action"] == "index"
-        query_params = request.query_parameters
-        if params["grade_begin"] == "-1" && params["grade_end"] == "12" && params["grade_begin"] == "-1" && params["keyword"] == "" \
-          && params["sort_order"] == ""
-          query_params.delete("grade_begin")
-          query_params.delete("grade_end")
-          query_params.delete("keyword")
-          query_params.delete("sort_order")
-        end
-        if query_params['language']
-          query_params['language'] = query_params['language'].join
-        end
-
-        if query_params['area of study']
-          query_params['area of study'] = query_params['area of study'].join
-        end
-
-        if query_params['set type']
-          query_params['set type'] = query_params['set type'].join
-        end
-
-        if query_params['subjects']
-          query_params['subjects'] = query_params['subjects'].join(",")
-        end
-
         site_section = 'Teacher Sets'
         page_title = 'search-teacher-sets'
-
       elsif params["controller"] == "holds" && params["action"] == "ordered_holds_details" && params["cache_key"].present?
         site_section = 'Order'  
         page_title = 'order-details'
+      elsif params["controller"] == "holds" && params["action"] == "holds_cancel_details" && params["cache_key"].present?
+        site_section = 'Order'  
+        page_title = 'cancel-order'
       else
         site_section = 'Teacher Sets'
         page_title = 'search-teacher-sets'
