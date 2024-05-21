@@ -34,9 +34,19 @@ module ApplicationHelper
     originating_location = request.fullpath
     site_section = ""
     page_title = ""
+
     if originating_location.present?
       # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
-      if params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
+      if originating_location == "/signin"
+        site_section = 'Account'
+        page_title = 'sign-in'
+      elsif originating_location == "/signup"
+        site_section = 'Account'
+        page_title = 'sign-up'
+      elsif originating_location ==  "/account_details"
+        site_section = 'Account'
+        page_title = 'account-details'
+      elsif params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
         site_section = 'Teacher Sets'
         page_title = 'teacher-set-details'
       elsif originating_location == "/schools"
