@@ -36,7 +36,6 @@ module ApplicationHelper
     page_title = ""
 
     if originating_location.present?
-      # teacher set detail and create hold request have a '.json' in their urls, and we want a restful parent url
       if originating_location == "/signin"
         site_section = 'Account'
         page_title = 'sign-in'
