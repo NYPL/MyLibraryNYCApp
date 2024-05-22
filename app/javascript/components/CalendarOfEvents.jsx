@@ -29,7 +29,7 @@ function CalendarOfEvents() {
 
   return (
     <div className="calendarButton">
-      <HStack gap="xxxxs" marginTop="s">
+      <HStack gap="xs" marginTop="s">
         <Link
           id="calendar-of-events-link"
           className="calendar_link"
