@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, HStack } from "@nypl/design-system-react-components";
+import { HStack, Button } from "@nypl/design-system-react-components";
 
 function CalendarOfEvents() {
   const [calendarFileName, setCalendarFileName] = useState("");
@@ -27,39 +27,37 @@ function CalendarOfEvents() {
       });
   };
 
+  const handleCalendarOfEvents = () => {
+    const href = "//" + env.MLN_INFO_SITE_HOSTNAME + "/home/calendar_event/" + calendarFileName;
+    window.location.href = href;
+  }
+
+  const handleMenuOfServices = () => {
+    const href = "//" + env.MLN_INFO_SITE_HOSTNAME + "/menu_of_services/" + menuOfServicesFileName;
+    window.location.href = href;
+  }
+
   return (
     <div className="calendarButton">
       <HStack gap="xs" marginTop="s">
-        <Link
+        <Button
+          buttonType="noBrand"
           id="calendar-of-events-link"
           className="calendar_link"
-          target="_blank"
-          type="buttonNoBrand"
-          href={
-            "//" +
-            env.MLN_INFO_SITE_HOSTNAME +
-            "/home/calendar_event/" +
-            calendarFileName
-          }
+          onClick={handleCalendarOfEvents}
         >
           {" "}
           Calendar of Events{" "}
-        </Link>
-        <Link
+        </Button>
+        <Button
+          buttonType="noBrand"
           id="menu-of-services-link"
           className="calendar_link"
-          target="_blank"
-          type="buttonNoBrand"
-          href={
-            "//" +
-            env.MLN_INFO_SITE_HOSTNAME +
-            "/menu_of_services/" +
-            menuOfServicesFileName
-          }
+          onClick={handleMenuOfServices}
         >
           {" "}
           Menu of Services{" "}
-        </Link>
+        </Button>
       </HStack>
     </div>
   );
