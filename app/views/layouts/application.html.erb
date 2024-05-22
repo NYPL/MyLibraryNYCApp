@@ -8,6 +8,24 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <!-- Initial Data Layer Definition -->
+    <script>
+      # First define the global variable for the entire data layer array
+      window.adobeDataLayer = window.adobeDataLayer || [];
+
+      window.adobeDataLayer.push({
+        page_name: null,
+        site_section: null,
+      });
+      # Then push in the variables required in the Initial Data Layer Definition
+      window.adobeDataLayer.push({
+        page_name: "<%= adobe_titles[0] %>",
+        site_section: "<%= adobe_titles[1] %>",
+        sub_collection: "<%= adobe_titles[1] %>"
+      });
+    </script>
+    <!-- Tag Manager Library Script -->
+    <script src=<%= ENV['ADOBE_LAUNCH_URL'] %> async></script>
   </head>
   <body>
     <main class="container mx-auto mt-28 px-5 flex">

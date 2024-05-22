@@ -5,15 +5,15 @@ services:
 
 branches:
   only:
-  - qa
+  - MLN-1169-adobe-analytics
   - production
 
 jobs:
   include:
     - stage: docker build
-      if: (branch = qa or branch = production)
+      if: (branch = MLN-1169-adobe-analytics or branch = production)
       before_install:
-      - if [[ $TRAVIS_BRANCH == "qa" ]];
+      - if [[ $TRAVIS_BRANCH == "MLN-1169-adobe-analytics" ]];
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_QA};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_QA};
@@ -44,7 +44,7 @@ jobs:
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
     - stage: deploy qa
-      if: branch IN (qa) AND type != pull_request
+      if: branch IN (MLN-1169-adobe-analytics) #AND type != pull_request
       env:
       - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
       - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
