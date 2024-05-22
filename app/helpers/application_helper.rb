@@ -33,52 +33,50 @@ module ApplicationHelper
   def adobe_titles
     originating_location = request.fullpath
     site_section = ""
-    page_title = ""
+    page_title = 'mylibrarynyc' + '|'
 
     if originating_location.present?
-      if originating_location == "/signin"
+      if originating_location == "/"
+        site_section = 'Home'
+        page_title += 'home'
+      elsif originating_location == "/signin"
         site_section = 'Account'
-        page_title = 'sign-in'
+        page_title += 'sign-in'
       elsif originating_location == "/signup"
         site_section = 'Account'
-        page_title = 'sign-up'
+        page_title += 'sign-up'
       elsif originating_location ==  "/account_details"
         site_section = 'Account'
-        page_title = 'account-details'
-      elsif params["controller"] == "teacher_sets" && params["action"] == "show" && params["id"].present?
+        page_title += 'account-details'
+      elsif params["controller"] == "teacher_sets" && ["show", "teacher_set_details"].include?(params["action"]) && params["id"].present?
         site_section = 'Teacher Sets'
-        page_title = 'teacher-set-details'
-      elsif originating_location == "/schools"
-        page_title = "participating-schools"
+        page_title += 'teacher-set-details'
+      elsif ["/schools", "/participating-schools"].include?(originating_location)
+        page_title += "participating-schools"
         site_section = 'Marketing'
-      elsif originating_location == "/faqs/show"
-        page_title = "frequently-asked-questions"
+      elsif originating_location == "/faq"
+        page_title += "frequently-asked-questions"
         site_section = 'Marketing'
-      elsif originating_location == "/contacts"
-        page_title = "contact"
+      elsif originating_location == "/contact"
+        page_title += "contact"
         site_section = 'Marketing'
-      elsif params["controller"] == "books" && params["action"] == "show" && params["id"].present?
+      elsif params["controller"] == "books" && ["show", "book_details"].include?(params["action"]) && params["id"].present?
         site_section = 'Teacher Sets'
-        page_title = 'book-details'
+        page_title += 'book-details'
       elsif params["controller"] == "teacher_sets" && params["action"] == "index"
         site_section = 'Teacher Sets'
-        page_title = 'search-teacher-sets'
+        page_title += 'search-teacher-sets'
       elsif params["controller"] == "holds" && params["action"] == "ordered_holds_details" && params["cache_key"].present?
         site_section = 'Order'  
-        page_title = 'order-details'
+        page_title += 'order-details'
       elsif params["controller"] == "holds" && params["action"] == "holds_cancel_details" && params["cache_key"].present?
         site_section = 'Order'  
-        page_title = 'cancel-order'
+        page_title += 'cancel-order'
       elsif originating_location == "/holds/#{params["cache_key"]}"
         site_section = 'Order'  
-        page_title = 'order-cancelled'
-      else
-        site_section = 'Teacher Sets'
-        page_title = 'search-teacher-sets'
+        page_title += 'order-cancelled'
       end
     end
-    page_title_string = 'mylibrarynyc'
-    page_title_string += '|' + page_title
-    [page_title_string, site_section]
+    [page_title, site_section]
   end
 end
