@@ -2,6 +2,8 @@
 
 class ApplicationController < ActionController::Base
   include ApplicationHelper
+
+  before_action :adobe_titles
   before_action :redirect_if_old_domain
   protect_from_forgery only: [:update, :get, :put, :delete]
 
