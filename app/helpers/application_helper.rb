@@ -75,6 +75,9 @@ module ApplicationHelper
       elsif originating_location == "/holds/#{params["cache_key"]}"
         site_section = 'Order'  
         page_title += 'order-cancelled'
+      else originating_location == "/teacher_set_data"
+        site_section = 'Teacher Sets'
+        page_title += 'search-teacher-sets'
       end
     end
     [page_title, site_section]
