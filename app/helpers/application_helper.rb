@@ -34,7 +34,6 @@ module ApplicationHelper
     originating_location = request.fullpath
     site_section = ""
     page_title = 'mylibrarynyc' + '|'
-
     if originating_location.present?
       if originating_location == "/"
         site_section = 'Home'
@@ -75,9 +74,12 @@ module ApplicationHelper
       elsif originating_location == "/holds/#{params["cache_key"]}"
         site_section = 'Order'  
         page_title += 'order-cancelled'
-      else originating_location == "/teacher_set_data"
+      elsif originating_location == "/teacher_set_data"
         site_section = 'Teacher Sets'
         page_title += 'search-teacher-sets'
+      elsif params['controller'] == 'news_letter' && params['action'] == "index" && params["email"].present?
+        site_section = 'News Letter'
+        page_title += 'news-letter-signup'
       end
     end
     [page_title, site_section]
