@@ -28,14 +28,22 @@ function CalendarOfEvents() {
   };
 
   const handleCalendarOfEvents = () => {
-    const href = "//" + env.MLN_INFO_SITE_HOSTNAME + "/home/calendar_event/" + calendarFileName;
+    const href =
+      "//" +
+      env.MLN_INFO_SITE_HOSTNAME +
+      "/home/calendar_event/" +
+      calendarFileName;
     window.location.href = href;
-  }
+  };
 
   const handleMenuOfServices = () => {
-    const href = "//" + env.MLN_INFO_SITE_HOSTNAME + "/menu_of_services/" + menuOfServicesFileName;
+    const href =
+      "//" +
+      env.MLN_INFO_SITE_HOSTNAME +
+      "/menu_of_services/" +
+      menuOfServicesFileName;
     window.location.href = href;
-  }
+  };
 
   return (
     <div className="calendarButton">
