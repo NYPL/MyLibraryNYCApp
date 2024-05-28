@@ -10,19 +10,22 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <% page_title, site_section = adobe_titles %>
     <!-- Initial Data Layer Definition -->
-    <% if page_title.present? &&  site_section.present? %>
+    <% if page_title.present? && site_section.present? %>
       <script>
         # First define the global variable for the entire data layer array
         window.adobeDataLayer = window.adobeDataLayer || [];
 
         # Then push in the variables required in the Initial Data Layer Definition
         window.adobeDataLayer.push({
+          event: "mylibrarynyc_event",
           page_name: "<%= page_title %>",
           site_section: "<%= site_section %>",
         });
       </script>
       <!-- Tag Manager Library Script -->
-      <script src=<%= ENV['ADOBE_LAUNCH_URL'] %> async></script>
+      <% if ['local', 'test'].include?(ENV['RAILS_ENV'])  %>
+        <script src=<%= ENV['ADOBE_LAUNCH_URL'] %> async></script>
+      <% end %>
     <% end %>
   </head>
   <body>
