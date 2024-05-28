@@ -1896,7 +1896,7 @@ GEM
     parser (3.3.1.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.5)
+    pg (1.5.4)
     power_assert (2.0.3)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -2151,7 +2151,7 @@ DEPENDENCIES
   nokogiri
   open_uri_redirections
   paper_trail (~> 11.1)
-  pg (= 1.5.5)
+  pg (= 1.5.4)
   pry (>= 0.10.0)
   pry-nav (>= 0.2.4)
   pry-rails
