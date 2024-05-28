@@ -110,7 +110,7 @@ GEM
       activerecord (>= 6.0)
       activesupport (>= 6.0)
     aws-eventstream (1.3.0)
-    aws-partitions (1.934.0)
+    aws-partitions (1.935.0)
     aws-sdk (3.2.0)
       aws-sdk-resources (~> 3)
     aws-sdk-accessanalyzer (1.49.0)
@@ -471,7 +471,7 @@ GEM
     aws-sdk-drs (1.32.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-dynamodb (1.110.0)
+    aws-sdk-dynamodb (1.111.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-dynamodbstreams (1.57.0)
@@ -480,7 +480,7 @@ GEM
     aws-sdk-ebs (1.40.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-ec2 (1.457.1)
+    aws-sdk-ec2 (1.458.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-ec2instanceconnect (1.40.0)
@@ -684,7 +684,7 @@ GEM
     aws-sdk-ivsrealtime (1.18.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kafka (1.72.0)
+    aws-sdk-kafka (1.73.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-kafkaconnect (1.22.0)
@@ -1561,7 +1561,7 @@ GEM
     aws-sdk-supportapp (1.16.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-swf (1.52.0)
+    aws-sdk-swf (1.53.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-synthetics (1.42.0)
@@ -1896,7 +1896,7 @@ GEM
     parser (3.3.1.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.6)
+    pg (1.5.5)
     power_assert (2.0.3)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -2086,7 +2086,7 @@ GEM
     yaml_db (0.7.0)
       rails (>= 3.0)
       rake (>= 0.8.7)
-    zeitwerk (2.6.14)
+    zeitwerk (2.6.15)
 
 PLATFORMS
   aarch64-linux
@@ -2151,7 +2151,7 @@ DEPENDENCIES
   nokogiri
   open_uri_redirections
   paper_trail (~> 11.1)
-  pg (~> 1.2)
+  pg (= 1.5.5)
   pry (>= 0.10.0)
   pry-nav (>= 0.2.4)
   pry-rails

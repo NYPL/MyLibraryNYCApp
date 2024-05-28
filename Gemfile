@@ -50,7 +50,7 @@ gem 'logstash-event', github: 'elastic/logstash', tag: 'v1.5.4'
 gem 'nokogiri'
 gem 'open_uri_redirections'
 gem 'paper_trail', '~> 11.1'
-gem 'pg', '~> 1.2'
+gem 'pg', '1.5.5'
 gem 'rack-cors'
 gem 'rails-controller-testing'
 gem 'rubocop','~> 1.48', require: false
