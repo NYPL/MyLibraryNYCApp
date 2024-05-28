@@ -23,7 +23,7 @@
         });
       </script>
       <!-- Tag Manager Library Script -->
-      <% if ['local', 'test'].include?(ENV['RAILS_ENV'])  %>
+      <% if ['qa', 'production'].include?(ENV['RAILS_ENV'])  %>
         <script src=<%= ENV['ADOBE_LAUNCH_URL'] %> async></script>
       <% end %>
     <% end %>
