@@ -47,9 +47,6 @@ module ApplicationHelper
       elsif originating_location ==  "/account_details"
         site_section = 'Account'
         page_title += 'account-details'
-      elsif params["controller"] == "teacher_sets" && ["show", "teacher_set_details"].include?(params["action"]) && params["id"].present?
-        site_section = 'Teacher Sets'
-        page_title += 'teacher-set-details'
       elsif ["/schools", "/participating-schools"].include?(originating_location)
         page_title += "participating-schools"
         site_section = 'Marketing'
@@ -59,9 +56,6 @@ module ApplicationHelper
       elsif originating_location == "/contact"
         page_title += "contact"
         site_section = 'Marketing'
-      elsif params["controller"] == "books" && ["show", "book_details"].include?(params["action"]) && params["id"].present?
-        site_section = 'Teacher Sets'
-        page_title += 'book-details'
       elsif params["controller"] == "teacher_sets" && params["action"] == "index"
         site_section = 'Teacher Sets'
         page_title += 'search-teacher-sets'
@@ -77,9 +71,6 @@ module ApplicationHelper
       elsif originating_location == "/teacher_set_data"
         site_section = 'Teacher Sets'
         page_title += 'search-teacher-sets'
-      elsif params['controller'] == 'news_letter' && params['action'] == "index" && params["email"].present?
-        site_section = 'News Letter'
-        page_title += 'news-letter-signup'
       end
     end
     [page_title, site_section]
