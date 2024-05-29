@@ -90,6 +90,9 @@ export default function TeacherSetBooks() {
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
         setBook(res.data.book);
+        if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+          adobeAnalyticsForTeacherSetBooks(res.data.book)
+        }
         if (res.data.book.title !== null) {
           document.title = "Book Details | " + res.data.book.title + " | MyLibraryNYC";
         } else {
@@ -100,6 +103,23 @@ export default function TeacherSetBooks() {
         console.log(error);
       });
   }, []);
+
+  const adobeAnalyticsForTeacherSetBooks = (book) => {
+    let title = book.title !== null ? book.title : ""
+    // Push the event data to the Adobe Data Layer
+    window.adobeDataLayer = window.adobeDataLayer || [];
+    window.adobeDataLayer.push({
+      event: "virtual_page_view",
+      page_name: 'mylibrarynyc|book-details|' + title ,
+      site_section: 'Teacher Sets'
+    });
+  
+    // Dynamically create and insert the script tag for Adobe Launch
+    const script = document.createElement('script');
+    script.src =  env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
+    script.async = true;
+    document.head.appendChild(script);
+  };
 
   const IsBookSubTitlePresent = () => {
     return book["sub_title"] === null ? false : true;

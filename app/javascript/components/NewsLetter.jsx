@@ -75,6 +75,11 @@ export default function NewsLetter() {
 
   const newLetterSignup = () => {
     if (successFullySignedUp) {
+      if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+        {
+          adobeAnalyticsForNewsLetter();
+        }
+      }
       return (
         <VStack justifyContent="center" tabIndex="-1" id="news-letter-msg-box">
           <Heading
@@ -129,6 +134,22 @@ export default function NewsLetter() {
         </VStack>
       );
     }
+  };
+
+  const adobeAnalyticsForNewsLetter = () => {
+    // Push the event data to the Adobe Data Layer
+    window.adobeDataLayer = window.adobeDataLayer || [];
+    window.adobeDataLayer.push({
+      event: "virtual_page_view",
+      page_name: "mylibrarynyc|news-letter-signup",
+      site_section: "News Letter",
+    });
+
+    // Dynamically create and insert the script tag for Adobe Launch
+    const script = document.createElement("script");
+    script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
+    script.async = true;
+    document.head.appendChild(script);
   };
 
   const submitButtonaAndProgressBar = () => {

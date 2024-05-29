@@ -6,7 +6,6 @@ import axios from "axios";
 import {
   Button,
   Heading,
-  Link,
   TextInput,
   Label,
   HStack,
@@ -92,32 +91,32 @@ export default function TeacherSetOrder() {
           >
             Are you sure you want to cancel your teacher set order?
           </Label>
-          <HStack spacing="s" onClick={() => window.scrollTo(0, 0)}>
+          <HStack spacing="xs" onClick={() => window.scrollTo(0, 0)}>
             <Button
               id="ts-cancel-button-id"
               buttonType="noBrand"
               onClick={handleSubmit}
+              marginTop="xs"
             >
-              {" "}
-              Cancel My Order{" "}
+              Cancel My Order
             </Button>
             <Button
               id="keep-my-order-button"
-              className="cancel-button"
+              marginTop="xs"
               buttonType="secondary"
+              onClick={() => handleOrderButton(access_key)}
             >
-              <Link
-                className={`${colorMode} cancelOrderButton`}
-                href={"/ordered_holds/" + access_key}
-              >
-                {" "}
-                No, keep my order{" "}
-              </Link>
+              No, keep my order
             </Button>
           </HStack>
         </>
       );
     }
+  };
+
+  const handleOrderButton = (access_key) => {
+    const href = "/ordered_holds/" + access_key;
+    window.location.href = href;
   };
 
   return (
