@@ -139,7 +139,7 @@ export default function NewsLetter() {
     window.adobeDataLayer = window.adobeDataLayer || [];
     window.adobeDataLayer.push({
       event: "virtual_page_view",
-      page_name: 'news-letter-signup',
+      page_name: 'mylibrarynyc|news-letter-signup',
       site_section: 'News Letter'
     });
   
