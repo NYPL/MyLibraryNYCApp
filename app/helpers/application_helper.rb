@@ -59,13 +59,13 @@ module ApplicationHelper
       elsif params["controller"] == "teacher_sets" && params["action"] == "index"
         site_section = 'Teacher Sets'
         page_title += 'search-teacher-sets'
-      elsif params["controller"] == "holds" && params["action"] == "ordered_holds_details" && params["cache_key"].present?
+      elsif params["controller"] == "holds" && params["action"] == "ordered_holds_details"
         site_section = 'Order'  
         page_title += 'order-details'
-      elsif params["controller"] == "holds" && params["action"] == "holds_cancel_details" && params["cache_key"].present?
+      elsif params["controller"] == "holds" && params["action"] == "holds_cancel_details"
         site_section = 'Order'  
         page_title += 'cancel-order'
-      elsif originating_location == "/holds/#{params["cache_key"]}"
+      elsif   params["controller"] == "holds" && params["action"] == "update" && params['hold_change']['status'] == "cancelled"
         site_section = 'Order'  
         page_title += 'order-cancelled'
       elsif originating_location == "/teacher_set_data"
