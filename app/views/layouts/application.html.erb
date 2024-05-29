@@ -11,7 +11,7 @@
     <% page_title, site_section = adobe_titles %>
     <!-- Initial Data Layer Definition -->
     <% if page_title.present? && site_section.present? %>
-    <script>
+      <script>
         <!-- First define the global variable for the entire data layer array -->
         window.adobeDataLayer = window.adobeDataLayer || [];
         <!-- Then push in the variables required in the Initial Data Layer Definition -->
@@ -37,7 +37,8 @@
 <script>
   const env = {
     MLN_INFO_SITE_HOSTNAME: "<%= ENV['MLN_INFO_SITE_HOSTNAME'] %>",
-    RAILS_ENV: "<%= ENV['RAILS_ENV'] %>"
+    RAILS_ENV: "<%= ENV['RAILS_ENV'] %>",
+    ADOBE_LAUNCH_URL: "<%= ENV['ADOBE_LAUNCH_URL'] %>",
   };
 </script>
 
