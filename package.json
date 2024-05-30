@@ -75,6 +75,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/react-transition-group": "^4.4.2",
     "@types/ws": "^8.5.4",
+    "@vercel/postgres": "^0.8.0",
     "activeadmin_addons": "^1.0.0",
     "activeadmin_reorderable": "^0.2.1",
     "aws-sdk": "2.99.0",
