@@ -21,7 +21,8 @@ MyLibraryNYC::Application.configure do
     "http://my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com",
     "my-library-nyc-app-react-qa-27.unpc66pkwp.us-east-1.elasticbeanstalk.com",
     "qa-new-www.mylibrarynyc.org",
-    "mylibrarynycapp-qa-456976389.us-east-1.elb.amazonaws.com"
+    "mylibrarynycapp-qa-456976389.us-east-1.elb.amazonaws.com",
+    "*.vercel.app"
   ]
   # config.public_file_server.enabled = true
   config.eager_load = true

@@ -77,7 +77,8 @@ MyLibraryNYC::Application.configure do
     ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil), ENV.fetch('MLN_SETS_SITE_HOSTNAME', nil),
     ENV.fetch('MLN_ENVIRONMENT_URL', nil), ENV.fetch('MLN_API_GATEWAY_URL', nil),
     IPAddr.new("10.229.0.0/16"), # connection on private network for ECS target health check
-    "mylibrarynycapp-production-1686255819.us-east-1.elb.amazonaws.com"
+    "mylibrarynycapp-production-1686255819.us-east-1.elb.amazonaws.com",
+    "*.vercel.app"
   ]
   config.eager_load = true
   config.active_job.queue_adapter = :delayed_job
