@@ -65,9 +65,6 @@ module ApplicationHelper
       elsif params["controller"] == "holds" && params["action"] == "holds_cancel_details"
         site_section = 'Order'  
         page_title += 'cancel-order'
-      elsif   params["controller"] == "holds" && params["action"] == "update" && params['hold_change']['status'] == "cancelled"
-        site_section = 'Order'  
-        page_title += 'order-cancelled'
       elsif originating_location == "/teacher_set_data"
         site_section = 'Teacher Sets'
         page_title += 'search-teacher-sets'

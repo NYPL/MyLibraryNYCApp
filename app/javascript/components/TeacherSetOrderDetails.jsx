@@ -64,6 +64,22 @@ export default function TeacherSetOrderDetails(props) {
     }
   };
 
+  const adobeAnalyticsForCancelOrder = () => {
+    // Push the event data to the Adobe Data Layer
+    window.adobeDataLayer = window.adobeDataLayer || [];
+    window.adobeDataLayer.push({
+      event: "virtual_page_view",
+      page_name: "mylibrarynyc|order-cancelled",
+      site_section: "Order",
+    });
+
+    // Dynamically create and insert the script tag for Adobe Launch
+    const script = document.createElement("script");
+    script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
+    script.async = true;
+    document.head.appendChild(script);
+  };
+
   const teacherSetOrderDetails = () => {
     let orderCancellled = "";
     let orderUpdatedDate = "";
@@ -76,6 +92,11 @@ export default function TeacherSetOrderDetails(props) {
         "dddd, mmmm d, yyyy"
       );
       showCancelledDate = "display_block";
+      if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+        {
+          adobeAnalyticsForCancelOrder();
+        }
+      }
     }
 
     return (
