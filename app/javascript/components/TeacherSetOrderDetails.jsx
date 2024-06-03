@@ -29,7 +29,7 @@ export default function TeacherSetOrderDetails(props) {
     if (props.teacherSetDetails) {
       let ts = props.teacherSetDetails;
       let availabilityStatusBadge =
-        ts.availability === "available" ? "medium" : "low";
+        ts.availability === "available" ? "Informative" : "Neutral";
       let availability = ts.availability !== undefined ? ts.availability : "";
       let suitabilitiesString = ts.suitabilities_string
         ? ts.suitabilities_string
@@ -50,7 +50,7 @@ export default function TeacherSetOrderDetails(props) {
               {suitabilitiesString}
             </CardHeading>
             <CardContent id="book-page-ts-availability">
-              <StatusBadge level={availabilityStatusBadge}>
+              <StatusBadge type={availabilityStatusBadge}>
                 {titleCase(availability)}
               </StatusBadge>
             </CardContent>

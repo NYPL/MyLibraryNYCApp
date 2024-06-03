@@ -498,7 +498,7 @@ export default function TeacherSetDetails(props) {
   const teacherSetAvailability = () => {
     if (isLargerThanMobile && teacherSet.availability !== undefined) {
       return (
-        <StatusBadge level={availabilityStatusBadge()}>
+        <StatusBadge type={availabilityStatusBadge()}>
           {titleCase(teacherSet.availability)}
         </StatusBadge>
       );
@@ -510,7 +510,7 @@ export default function TeacherSetDetails(props) {
   const mobileteacherSetAvailability = () => {
     if (!isLargerThanMobile && teacherSet.availability !== undefined) {
       return (
-        <StatusBadge level={availabilityStatusBadge()}>
+        <StatusBadge type={availabilityStatusBadge()}>
           {titleCase(teacherSet.availability)}
         </StatusBadge>
       );
