@@ -16,8 +16,11 @@ ActiveAdmin.register Hold do
   # Tell ActiveAdmin to search teacher sets on the title attribute.
   filter :teacher_set_title, as: :string
 
+  # Tell ActiveAdmin to search holds on the  user_email attribute.
+  filter :user_email, as: :string, filters: [:contains, :equals, :starts_with, :ends_with, :not_cont]
+
   # Make it easier to specify the status, by listing it as a checkbox, rather than a text input field.
-  filter :status, as: :check_boxes, collection: [["new", "new"], ["pending", "pending"], ["cancelled", "cancelled"]]
+  filter :status, as: :check_boxes, collection: [["new", "new"], ["pending", "pending"], ["cancelled", "cancelled"], ["closed", "closed"]]
 
   filter :created_at
   filter :updated_at
