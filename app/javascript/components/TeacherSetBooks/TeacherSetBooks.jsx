@@ -167,7 +167,7 @@ export default function TeacherSetBooks() {
     if (teacherSets) {
       return teacherSets.map((ts, index, arr) => {
         let availabilityStatusBadge =
-          ts.availability === "available" ? "medium" : "low";
+          ts.availability === "available" ? "informative" : "neutral";
         let availability = ts.availability !== undefined ? ts.availability : "";
         return (
           <div key={"ts-books-div-" + index}>
@@ -186,7 +186,7 @@ export default function TeacherSetBooks() {
                 {ts.suitabilities_string}{" "}
               </CardContent>
               <CardContent id="book-page-ts-availability" marginBottom="s">
-                <StatusBadge level={availabilityStatusBadge}>
+                <StatusBadge type={availabilityStatusBadge}>
                   {titleCase(availability)}
                 </StatusBadge>
               </CardContent>
