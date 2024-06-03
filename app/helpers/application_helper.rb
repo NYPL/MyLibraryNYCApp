@@ -59,7 +59,8 @@ module ApplicationHelper
       elsif params["controller"] == "teacher_sets" && params["action"] == "index"
         site_section = 'Teacher Sets'
         page_title += 'search-teacher-sets'
-      elsif params["controller"] == "holds" && params["action"] == "ordered_holds_details"
+      elsif (params["controller"] == "holds" && params["action"] == "ordered_holds_details") ||
+        params["controller"] == "holds" && params["action"] == "create"
         site_section = 'Order'  
         page_title += 'order-details'
       elsif params["controller"] == "holds" && params["action"] == "holds_cancel_details"
