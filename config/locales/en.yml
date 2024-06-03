@@ -2,4 +2,12 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  active_admin:
+    filters:
+      predicates:
+        not_cont: "Not Contains"
+        not_cont: "Not Contains"
+        not_cont: "Not Contains"
+        not_cont: "Not Contains"
+        not_cont: "Not Contains"
   hello: "Hello world"
