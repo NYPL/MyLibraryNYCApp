@@ -5,9 +5,5 @@ en:
   active_admin:
     filters:
       predicates:
-        not_cont: "Not Contains"
-        not_cont: "Not Contains"
-        not_cont: "Not Contains"
-        not_cont: "Not Contains"
-        not_cont: "Not Contains"
+        not_cont: "Does not contain"
   hello: "Hello world"
