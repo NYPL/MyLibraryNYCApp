@@ -29,7 +29,7 @@ export default function TeacherSetOrderDetails(props) {
     if (props.teacherSetDetails) {
       let ts = props.teacherSetDetails;
       let availabilityStatusBadge =
-        ts.availability === "available" ? "medium" : "low";
+        ts.availability === "available" ? "Informative" : "Neutral";
       let availability = ts.availability !== undefined ? ts.availability : "";
       let suitabilitiesString = ts.suitabilities_string
         ? ts.suitabilities_string
@@ -50,7 +50,7 @@ export default function TeacherSetOrderDetails(props) {
               {suitabilitiesString}
             </CardHeading>
             <CardContent id="book-page-ts-availability">
-              <StatusBadge level={availabilityStatusBadge}>
+              <StatusBadge type={availabilityStatusBadge}>
                 {titleCase(availability)}
               </StatusBadge>
             </CardContent>
@@ -62,6 +62,22 @@ export default function TeacherSetOrderDetails(props) {
         </div>
       );
     }
+  };
+
+  const adobeAnalyticsForCancelOrder = () => {
+    // Push the event data to the Adobe Data Layer
+    window.adobeDataLayer = window.adobeDataLayer || [];
+    window.adobeDataLayer.push({
+      event: "virtual_page_view",
+      page_name: "mylibrarynyc|order-cancelled",
+      site_section: "Order",
+    });
+
+    // Dynamically create and insert the script tag for Adobe Launch
+    const script = document.createElement("script");
+    script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
+    script.async = true;
+    document.head.appendChild(script);
   };
 
   const teacherSetOrderDetails = () => {
@@ -76,6 +92,11 @@ export default function TeacherSetOrderDetails(props) {
         "dddd, mmmm d, yyyy"
       );
       showCancelledDate = "display_block";
+      if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+        {
+          adobeAnalyticsForCancelOrder();
+        }
+      }
     }
 
     return (

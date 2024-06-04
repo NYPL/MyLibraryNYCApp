@@ -99,6 +99,9 @@ export default function TeacherSetDetails(props) {
         setTeacherSetNotes(res.data.teacher_set_notes);
         let userStatus = res.data.user ? res.data.user.status : "";
         setCurrentUserStatus(userStatus);
+        if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+          adobeAnalyticsForTeacherSet(res.data.teacher_set);
+        }
         if (res.data.teacher_set.title !== null) {
           document.title =
             "Teacher Set Details | " +
@@ -118,6 +121,23 @@ export default function TeacherSetDetails(props) {
     setQuantity(event.target.value);
   };
 
+  const adobeAnalyticsForTeacherSet = (teacher_set) => {
+    // Push the event data to the Adobe Data Layer
+    let title = teacher_set.title !== null ? teacher_set.title : "";
+    window.adobeDataLayer = window.adobeDataLayer || [];
+    window.adobeDataLayer.push({
+      event: "virtual_page_view",
+      page_name: "mylibrarynyc|teacher-set-details|" + title,
+      site_section: "Teacher Sets",
+    });
+
+    // Dynamically create and insert the script tag for Adobe Launch
+    const script = document.createElement("script");
+    script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
+    script.async = true;
+    document.head.appendChild(script);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     axios.defaults.headers.common["X-CSRF-TOKEN"] = document
@@ -134,6 +154,11 @@ export default function TeacherSetDetails(props) {
           return false;
         } else {
           if (res.data.status === "created") {
+            if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+              {
+                adobeAnalyticsForOrder();
+              }
+            }
             props.handleTeacherSetOrderedData(res.data.hold, teacherSet);
             navigate("/ordered_holds/" + res.data.hold["access_key"]);
           } else {
@@ -144,6 +169,22 @@ export default function TeacherSetDetails(props) {
       .catch(function (error) {
         console.log(error);
       });
+  };
+
+  const adobeAnalyticsForOrder = () => {
+    // Push the event data to the Adobe Data Layer
+    window.adobeDataLayer = window.adobeDataLayer || [];
+    window.adobeDataLayer.push({
+      event: "virtual_page_view",
+      page_name: "mylibrarynyc|order-details",
+      site_section: "Order",
+    });
+
+    // Dynamically create and insert the script tag for Adobe Launch
+    const script = document.createElement("script");
+    script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
+    script.async = true;
+    document.head.appendChild(script);
   };
 
   const teacherSetTitle = () => {
@@ -478,7 +519,7 @@ export default function TeacherSetDetails(props) {
   const teacherSetAvailability = () => {
     if (isLargerThanMobile && teacherSet.availability !== undefined) {
       return (
-        <StatusBadge level={availabilityStatusBadge()}>
+        <StatusBadge type={availabilityStatusBadge()}>
           {titleCase(teacherSet.availability)}
         </StatusBadge>
       );
@@ -490,7 +531,7 @@ export default function TeacherSetDetails(props) {
   const mobileteacherSetAvailability = () => {
     if (!isLargerThanMobile && teacherSet.availability !== undefined) {
       return (
-        <StatusBadge level={availabilityStatusBadge()}>
+        <StatusBadge type={availabilityStatusBadge()}>
           {titleCase(teacherSet.availability)}
         </StatusBadge>
       );
