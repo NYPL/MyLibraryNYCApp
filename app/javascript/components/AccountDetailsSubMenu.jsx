@@ -85,7 +85,7 @@ function AccountDetailsSubMenu(props) {
               size="medium"
               type="default"
             />
-            Sign In{" "}
+            Sign in{" "}
             <Icon
               id="signin-arrow-drop-down"
               size="small"
@@ -218,7 +218,7 @@ function AccountDetailsSubMenu(props) {
                 type="buttonPrimary"
                 className={`${colorMode} textDecorationNone signin_nav_button`}
               >
-                Sign In
+                Sign in
               </Link>
             </li>
 

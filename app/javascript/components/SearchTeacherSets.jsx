@@ -4,6 +4,7 @@ import SignedInMsg from "./SignedInMsg";
 import SignUpMsg from "./SignUp/SignUpMsg";
 import axios from "axios";
 import { titleCase } from "title-case";
+import { capitalizeFirstLetter } from "./Utils";
 import {
   Button,
   ButtonGroup,
@@ -410,8 +411,8 @@ export default function SearchTeacherSets(props) {
   const teacherSetTitleOrder = () => {
     if (teacherSets.length >= 1) {
       let sortByOptions = [
-        { sort_order: "Date Added: Newest to Oldest", value: 0 },
-        { sort_order: "Date Added: Oldest to Newest", value: 1 },
+        { sort_order: "Date added: newest to oldest", value: 0 },
+        { sort_order: "Date added: oldest to newest", value: 1 },
         { sort_order: "Title: A-Z", value: 2 },
         { sort_order: "Title: Z-A", value: 3 },
       ];
@@ -422,7 +423,7 @@ export default function SearchTeacherSets(props) {
           selectType="default"
           value={sortTitleValue}
           onChange={sortTeacherSetTitle.bind(this)}
-          labelText="Sort By"
+          labelText="Sort by"
           labelPosition="inline"
           className="selectSortOrder"
           //marginTop="xs"
@@ -644,7 +645,7 @@ export default function SearchTeacherSets(props) {
                 {
                   label: (
                     <Text isCapitalized noSpace>
-                      Refine Results
+                      Refine results
                     </Text>
                   ),
                   panel: <div>{teacherSetSideBarResults()}</div>,
@@ -666,7 +667,7 @@ export default function SearchTeacherSets(props) {
           id="refine-results"
           size="heading5"
           level="h3"
-          text={" " + "Refine Results" + " "}
+          text={" " + "Refine results" + " "}
         />
       );
     }
@@ -730,7 +731,7 @@ export default function SearchTeacherSets(props) {
         <Toggle
           id="toggle"
           isChecked={availableToggle}
-          labelText="Available Now"
+          labelText="Available now"
           onChange={availableResults}
           size="small"
           marginBottom="m"
@@ -1009,7 +1010,7 @@ export default function SearchTeacherSets(props) {
               gap="1rem"
               marginBottom="xs"
             >
-              <span>Filters Applied</span>
+              <span>Filters applied</span>
               {teacherSetFilterTags()}
             </HStack>
           </div>
@@ -1078,7 +1079,7 @@ export default function SearchTeacherSets(props) {
                     })
                   }
                 >
-                  Back to Top
+                  Back to top
                   <Icon
                     name="arrow"
                     iconRotation="rotate180"
@@ -1165,8 +1166,8 @@ export default function SearchTeacherSets(props) {
           accordionData={[
             {
               label: (
-                <Text isCapitalized noSpace>
-                  {ts.label}
+                <Text size="default" noSpace>
+                  {capitalizeFirstLetter(ts.label)}
                 </Text>
               ),
               panel: displayAccordionData(ts),
@@ -1222,7 +1223,7 @@ export default function SearchTeacherSets(props) {
             id="search-and-find-teacher-sets-header"
             size="heading3"
             level="h2"
-            text="Search and Find Teacher Sets"
+            text="Search and find Teacher Sets"
           />
           <HorizontalRule
             id="ts-horizontal-rule"

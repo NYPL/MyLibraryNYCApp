@@ -222,7 +222,7 @@ export default function TeacherSetDetails(props) {
   const AvailableCopies = () => {
     return (
       <div color="var(--nypl-colors-ui-black)" style={{ textAlign: "center" }}>
-        {ACopies()} of {TotalCopies()} Available
+        {ACopies()} of {TotalCopies()} available
       </div>
     );
   };
@@ -231,9 +231,9 @@ export default function TeacherSetDetails(props) {
     return (
       <div>
         {books.length > 1
-          ? books.length + " Titles"
+          ? books.length + " titles"
           : books.length >= 1
-          ? books.length + " Title"
+          ? books.length + " title"
           : ""}
       </div>
     );
@@ -390,7 +390,7 @@ export default function TeacherSetDetails(props) {
             textAlign="center"
             size="heading5"
             level="h2"
-            text="Order Set"
+            text="Order set"
             subtitle={AvailableCopies()}
           />
           {OrderTeacherSets()}
@@ -433,7 +433,7 @@ export default function TeacherSetDetails(props) {
                 onClick={handleSubmit}
               >
                 {" "}
-                Place Order{" "}
+                Place order{" "}
               </Button>
             </FormField>
           </Form>
@@ -610,22 +610,22 @@ export default function TeacherSetDetails(props) {
         marginTop="l"
         key="ts-list-details-key"
       >
-        <dt id="ts-suggested-grade-range-text">Suggested Grade Range</dt>
+        <dt id="ts-suggested-grade-range-text">Suggested grade range</dt>
         <dd id="ts-page-suitabilities">{teacherSet.suitabilities_string}</dd>
 
-        <dt id="ts-page-primary-language-text">Primary Language</dt>
+        <dt id="ts-page-primary-language-text">Primary language</dt>
         <dd id="ts-page-primary-language">{teacherSet.primary_language}</dd>
 
         <dt id="ts-page-set-type-text">Type</dt>
         <dd id="ts-page-set-type">{teacherSet.set_type}</dd>
 
-        <dt id="ts-page-physical-desc-text">Physical Description</dt>
+        <dt id="ts-page-physical-desc-text">Physical description</dt>
         <dd id="ts-page-physical-desc">{teacherSet.physical_description}</dd>
 
         <dt id="ts-page-notes-content-text">Notes</dt>
         <dd id="ts-page-notes-content">{TeacherSetNotesContent()}</dd>
 
-        <dt id="ts-page-call-number-text">Call Number</dt>
+        <dt id="ts-page-call-number-text">Call number</dt>
         <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
       </List>
     );

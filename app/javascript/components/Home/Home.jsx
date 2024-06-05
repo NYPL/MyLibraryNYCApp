@@ -90,7 +90,7 @@ export default function Home(props) {
                 level="h1"
                 size='heading2'
                 id="mln-campaign-hero"
-                text="Welcome To MyLibraryNYC"
+                text="Welcome to MyLibraryNYC"
                 color="ui.white"
               />
             }
@@ -109,7 +109,7 @@ export default function Home(props) {
       contentPrimary={
         <>
           <Heading id="search-for-home-page-teacher-sets" size="heading3" level='h2'>
-            Search For Teacher Sets
+            Search for teacher sets
           </Heading>
           <SearchBar
             id="home-page-teacher-set-search"
@@ -130,7 +130,7 @@ export default function Home(props) {
             height="2px"
           />
           <Heading id="professional-heading" marginTop="s" size="heading3" level='h2'>
-            Professional Development & Exclusive Programs
+            Professional development & exclusive programs
           </Heading>
           <Text noSpace marginTop="s" size="default">
             MyLibraryNYC educators can participate in workshops on a wide

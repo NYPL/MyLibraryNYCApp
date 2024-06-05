@@ -513,7 +513,7 @@ export default function SignUp(props) {
             id="sign-up-heading-id"
             level="h2"
             size="heading3"
-            text="Sign Up"
+            text="Sign up"
           />
           <HorizontalRule
             id="ts-detail-page-horizontal-rulel"
@@ -531,7 +531,7 @@ export default function SignUp(props) {
                 isRequired
                 marginTop="l"
                 showoptreqlabel="true"
-                labelText="Your DOE Email Address"
+                labelText="Your DOE email address"
                 value={email}
                 onChange={handleEmail.bind(this, "email")}
                 invalidText={errorEmailMsg}
@@ -555,7 +555,7 @@ export default function SignUp(props) {
                 id="sign-up-first-name"
                 isRequired
                 showoptreqlabel="true"
-                labelText="First Name"
+                labelText="First name"
                 value={first_name}
                 invalidText={firstNameErrorMsg}
                 isInvalid={firstNameIsValid}
@@ -567,7 +567,7 @@ export default function SignUp(props) {
                 id="sign-up-last-name"
                 isRequired
                 showoptreqlabel="true"
-                labelText="Last Name"
+                labelText="Last name"
                 value={last_name}
                 invalidText={lastNameErrorMsg}
                 isInvalid={lastNameIsValid}
@@ -577,7 +577,7 @@ export default function SignUp(props) {
             <FormField>
               <Select
                 id="sign-up-select-schools"
-                labelText="Your School"
+                labelText="Your school"
                 value={school_id}
                 showLabel
                 isRequired
@@ -636,7 +636,7 @@ export default function SignUp(props) {
                   isDisabled={isDisabled}
                 >
                   {" "}
-                  Sign Up{" "}
+                  Sign up{" "}
                 </Button>
               </ButtonGroup>
             </FormField>

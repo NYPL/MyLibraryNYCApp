@@ -14,9 +14,9 @@ describe("SignUp", () => {
     expect(screen.getByLabelText("Signup Error Notifications")).toBeInTheDocument();
     expect(screen.getByText("Some of your information needs to be updated before your account can be created. See the fields highlighted below.")).toBeInTheDocument();
     expect(screen.getByLabelText("Preferred email address")).toBeInTheDocument();
-    expect(screen.getByLabelText("First Name (Required)")).toBeInTheDocument();
-    expect(screen.getByLabelText("Last Name (Required)")).toBeInTheDocument();
-    expect(screen.getByLabelText("Your School (Required)")).toBeInTheDocument();
+    expect(screen.getByLabelText("First name (Required)")).toBeInTheDocument();
+    expect(screen.getByLabelText("Last name (Required)")).toBeInTheDocument();
+    expect(screen.getByLabelText("Your school (Required)")).toBeInTheDocument();
     expect(screen.getByLabelText("Password (Required)")).toBeInTheDocument();
     expect(screen.getByLabelText("Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)")).toBeInTheDocument();
   });
