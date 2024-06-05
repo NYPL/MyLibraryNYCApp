@@ -360,7 +360,7 @@ export default function TeacherSetBooks() {
           >
             {book.publication_date ? (
               <>
-                <dt id="book-page-publication-date-text">Publication Date</dt>
+                <dt id="book-page-publication-date-text">Publication date</dt>
                 <dd id="book-page-publication-date">
                   {book.publication_date}
                 </dd>{" "}
@@ -380,7 +380,7 @@ export default function TeacherSetBooks() {
 
             {book.physical_description ? (
               <>
-                <dt id="book-page-physical-desc-text">Physical Description</dt>
+                <dt id="book-page-physical-desc-text">Physical description</dt>
                 <dd id="book-page-physical-desc">
                   {book.physical_description}
                 </dd>
@@ -391,7 +391,7 @@ export default function TeacherSetBooks() {
 
             {book.primary_language ? (
               <>
-                <dt id="book-page-primary-language-text">Primary Language</dt>
+                <dt id="book-page-primary-language-text">Primary language</dt>
                 <dd id="book-page-primary-language">{book.primary_language}</dd>
               </>
             ) : (
@@ -432,7 +432,7 @@ export default function TeacherSetBooks() {
             size="heading5"
             level="h3"
           >
-            Appears in These Sets
+            Appears in these sets
           </Heading>
           {TeacherSetDetails()}
         </>

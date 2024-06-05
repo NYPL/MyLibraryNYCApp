@@ -15,7 +15,7 @@ export default function AccessDigitalResources() {
         level="h2"
         marginTop="s"
       >
-        Access Digital Resources
+        Access digital resources
       </Heading>
       <Accordion
         id="digital-resources-databases"
@@ -63,7 +63,7 @@ export default function AccessDigitalResources() {
         marginTop="s"
         accordionData={[
           {
-            label: "E-Books and More",
+            label: "E-Books and more",
             panel: (
               <p>
                 <Text>
@@ -95,7 +95,7 @@ export default function AccessDigitalResources() {
         marginTop="s"
         accordionData={[
           {
-            label: "Other Resources",
+            label: "Other resources",
             panel: (
               <p>
                 <Link

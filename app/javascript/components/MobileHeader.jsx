@@ -105,7 +105,7 @@ export default function MobileHeader(props) {
       return (
         <li>
           <Link className="mobileSubmenu" href="/signin" aria-label="Sign in">
-            Sign In
+            Sign in
           </Link>
           <HorizontalRule align="right" className="mobileHorizontalRule" />
         </li>

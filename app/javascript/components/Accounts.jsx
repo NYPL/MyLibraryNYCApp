@@ -229,7 +229,7 @@ export default function Accounts() {
               href={"/teacher_set_details/" + hold.teacher_set_id}
             >
               {" "}
-              Order Again{" "}
+              Order again{" "}
             </Link>
           </Button>
         </ButtonGroup>
@@ -267,7 +267,7 @@ export default function Accounts() {
       <>
         <Table
           columnHeaders={[
-            "Order Placed",
+            "Order placed",
             "Quantity",
             "Title",
             "Status",
@@ -361,7 +361,7 @@ export default function Accounts() {
             <FormField>
               <Stack spacing="0" direction="column">
                 <Label id="doe-email-address-text">
-                  Your DOE Email Address
+                  Your DOE email address
                 </Label>
                 {email && (
                   <Text id="doe-email-address-id" size="body2" marginTop="xs">
@@ -372,7 +372,7 @@ export default function Accounts() {
             </FormField>
             <FormField>
               <TextInput
-                labelText="Preferred Email Address for Reservation Notifications"
+                labelText="Preferred email address for reservation notifications"
                 id="account-details-input"
                 value={altEmail}
                 onChange={handleAltEmail}
@@ -383,7 +383,7 @@ export default function Accounts() {
             <FormField>
               <Select
                 id="ad-select-schools"
-                labelText="Your School"
+                labelText="Your school"
                 value={schoolId}
                 showLabel
                 onChange={handleSchool}
@@ -399,7 +399,7 @@ export default function Accounts() {
                 onClick={handleSubmit}
               >
                 {" "}
-                Update Account Information{" "}
+                Update account information{" "}
               </Button>
             </ButtonGroup>
           </Form>
