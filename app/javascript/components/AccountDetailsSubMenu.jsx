@@ -85,7 +85,7 @@ function AccountDetailsSubMenu(props) {
               size="medium"
               type="default"
             />
-            Sign in{" "}
+            Sign In{" "}
             <Icon
               id="signin-arrow-drop-down"
               size="small"
@@ -257,7 +257,7 @@ function AccountDetailsSubMenu(props) {
                   size="medium"
                   type="default"
                 />
-                Not Registered? {<br />} Please Sign Up
+                Not registered? {<br />} Please sign up
               </Link>
             </li>
           </List>

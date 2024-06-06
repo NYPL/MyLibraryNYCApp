@@ -371,7 +371,7 @@ export default function TeacherSetBooks() {
 
             {book.call_number ? (
               <>
-                <dt id="book-page-call-number-text">Call Number</dt>
+                <dt id="book-page-call-number-text">Call number</dt>
                 <dd id="book-page-call-number">{book.call_number}</dd>{" "}
               </>
             ) : (
