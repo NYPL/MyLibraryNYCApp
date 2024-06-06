@@ -13,7 +13,7 @@ describe("Home ", () => {
     const { container } = render(<Router><Home /></Router>,);
     //select the elements you want to interact with
 
-    const JoiningMln = screen.getByText("Welcome To MyLibraryNYC");
+    const JoiningMln = screen.getByText("Welcome to MyLibraryNYC");
     expect(JoiningMln).toBeInTheDocument();
 
     const searchForTs = screen.getByText("Search For Teacher Sets");

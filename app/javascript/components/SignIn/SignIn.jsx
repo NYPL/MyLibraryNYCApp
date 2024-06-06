@@ -126,14 +126,14 @@ export default function SignIn(props) {
           </Button>
 
           <Text id="not-registered-text" marginTop="xs" noSpace size="default">
-            Not Registered? Please
+            Not registered? Please
             <Link
               href="/signup"
               id="sign-up-link"
               type="action"
               marginLeft="xxs"
             >
-              Sign up
+              sign up
             </Link>
           </Text>
           <Notification

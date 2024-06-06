@@ -229,7 +229,7 @@ export default function ParticipatingSchools(props) {
             }}
             onChange={handleChange}
             id="participating-school"
-            labelText="Search by Name"
+            labelText="Search by name"
             placeholder="School name"
             showLabel
           />
