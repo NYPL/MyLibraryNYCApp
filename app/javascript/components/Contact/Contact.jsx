@@ -40,7 +40,7 @@ function Contact() {
             useRowHeaders
             tableData={[
               [
-                <Text key="general-ino" noSpace className={`${colorMode}`}>
+                <Text key="general-info" noSpace className={`${colorMode} noTextTransform`}>
                   General information
                 </Text>,
                 <Link
@@ -52,7 +52,7 @@ function Contact() {
                 </Link>,
               ],
               [
-                <Text key="delivery-questions" noSpace className={`${colorMode}`}>
+                <Text key="delivery-questions" noSpace className={`${colorMode} noTextTransform`}>
                   Delivery questions
                 </Text>,
                 <Link

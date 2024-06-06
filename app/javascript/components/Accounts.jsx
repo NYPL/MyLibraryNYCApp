@@ -266,6 +266,7 @@ export default function Accounts() {
     return (
       <>
         <Table
+          className="accountDetailsHeading"
           columnHeaders={[
             "Order placed",
             "Quantity",

@@ -518,6 +518,12 @@ ul.list li:before {
   }
 }
 
-.capitalize {
-  text-transform: capitalize !important;
+.noTextTransform {
+  text-transform: initial !important;
+}
+
+.accountDetailsHeading {
+  th:first-of-type {
+    text-transform: initial !important;
+  }
 }

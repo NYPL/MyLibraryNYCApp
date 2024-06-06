@@ -92,6 +92,7 @@ export default function Home(props) {
                 id="mln-campaign-hero"
                 text="Welcome to MyLibraryNYC"
                 color="ui.white"
+                className="noTextTransform"
               />
             }
             subHeaderText="We provide participating schools with enhanced library privileges including fine-free student and educator library cards, school delivery and the exclusive use of 14,000+ Teacher Sets designed for educator use in the classroom; and student and educator access to the unparalleled digital resources of New York City's public library systems as well as instructional support and professional development opportunities."

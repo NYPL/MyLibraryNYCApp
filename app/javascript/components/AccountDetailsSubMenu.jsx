@@ -175,7 +175,7 @@ function AccountDetailsSubMenu(props) {
                   size="medium"
                   type="default"
                 />
-                My Orders
+                My orders
               </Link>
             </li>
 
@@ -195,7 +195,7 @@ function AccountDetailsSubMenu(props) {
                   size="medium"
                   type="default"
                 />
-                Sign Out
+                Sign out
               </ReactRouterLink>
             </li>
           </List>
@@ -238,7 +238,7 @@ function AccountDetailsSubMenu(props) {
                   size="medium"
                   type="default"
                 />
-                My Account
+                My account
               </Link>
             </li>
             <li className={`${colorMode} nav__submenu-item`}>
