@@ -78,7 +78,7 @@ export default function TeacherSetOrder(props) {
             href={"/holds/" + params["access_key"] + "/cancel"}
           >
             {" "}
-            Cancel My Order{" "}
+            Cancel my order{" "}
           </Link>
         </Button>
       </div>

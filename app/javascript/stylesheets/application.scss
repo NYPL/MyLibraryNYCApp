@@ -117,10 +117,6 @@ $submenu-width: 245px;
   color: var(--nypl-colors-ui-black);
 }
 
-h1 {
-  text-transform: capitalize !important;
-}
-
 ul.list li:before {
   color: #FFF !important;
 }
@@ -518,6 +514,12 @@ ul.list li:before {
   }
 }
 
-.capitalize {
-  text-transform: capitalize !important;
+.noTextTransform {
+  text-transform: initial !important;
+}
+
+.accountDetailsHeading {
+  th:first-of-type {
+    text-transform: initial !important;
+  }
 }
