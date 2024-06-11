@@ -17,7 +17,7 @@ describe("SignIn", () => {
     expect(screen.getByText('Sign up').closest('a')).toHaveAttribute('href', '/signup')
     expect(screen.getByText("Not Registered? Please")).toBeInTheDocument();
     expect(screen.getByText("Have questions?")).toBeInTheDocument();
-    expect(screen.getByText('Faq Page').closest('a')).toHaveAttribute('href', '/faq')
+    expect(screen.getByText('Faq page').closest('a')).toHaveAttribute('href', '/faq')
     expect(screen.getByText('Contact Us').closest('a')).toHaveAttribute('href', '/contact')
   });
 });
