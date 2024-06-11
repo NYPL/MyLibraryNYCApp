@@ -98,7 +98,7 @@ export default function TeacherSetOrder() {
               onClick={handleSubmit}
               marginTop="xs"
             >
-              Cancel My Order
+              Cancel my order
             </Button>
             <Button
               id="keep-my-order-button"
