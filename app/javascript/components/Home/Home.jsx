@@ -109,7 +109,7 @@ export default function Home(props) {
       contentPrimary={
         <>
           <Heading id="search-for-home-page-teacher-sets" size="heading3" level='h2'>
-            Search for teacher sets
+            Search for Teacher Sets
           </Heading>
           <SearchBar
             id="home-page-teacher-set-search"
