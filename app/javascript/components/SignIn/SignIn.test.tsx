@@ -14,10 +14,10 @@ describe("SignIn", () => {
     expect(screen.getByTestId("hero-content")).toBeInTheDocument();
     expect(screen.getByLabelText("Breadcrumb")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Enter email address")).toBeInTheDocument();
-    expect(screen.getByText('Sign Up').closest('a')).toHaveAttribute('href', '/signup')
+    expect(screen.getByText('Sign up').closest('a')).toHaveAttribute('href', '/signup')
     expect(screen.getByText("Not Registered? Please")).toBeInTheDocument();
-    expect(screen.getByText("Have Questions?")).toBeInTheDocument();
-    expect(screen.getByText('Faq Page').closest('a')).toHaveAttribute('href', '/faq')
+    expect(screen.getByText("Have questions?")).toBeInTheDocument();
+    expect(screen.getByText('Faq page').closest('a')).toHaveAttribute('href', '/faq')
     expect(screen.getByText('Contact Us').closest('a')).toHaveAttribute('href', '/contact')
   });
 });

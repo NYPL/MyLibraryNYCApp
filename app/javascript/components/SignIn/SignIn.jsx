@@ -95,7 +95,7 @@ export default function SignIn(props) {
             id="sign-in-heading-id"
             level="h2"
             size="heading3"
-            text="Sign In"
+            text="Sign in"
           />
           <HorizontalRule
             id="ts-detail-page-horizontal-rule-id"
@@ -107,7 +107,7 @@ export default function SignIn(props) {
             id="sign-in-text-input"
             marginTop="xs"
             type="text"
-            labelText="Your DOE Email Address"
+            labelText="Your DOE email address"
             placeholder="Enter email address"
             onChange={handleEmail}
             invalidText={invali_email_msg}
@@ -122,18 +122,18 @@ export default function SignIn(props) {
             buttonType="noBrand"
             onClick={handleSubmit}
           >
-            Sign In
+            Sign in
           </Button>
 
           <Text id="not-registered-text" marginTop="xs" noSpace size="default">
-            Not Registered? Please
+            Not registered? Please
             <Link
               href="/signup"
               id="sign-up-link"
               type="action"
               marginLeft="xxs"
             >
-              Sign Up
+              sign up
             </Link>
           </Text>
           <Notification

@@ -14,19 +14,19 @@ export default function HaveQuestions() {
         id="heading-tertiary"
         level="h2"
         size="heading5"
-        text="Have Questions?"
+        text="Have questions?"
       />
       <div id="have-questions-links">
         <p className="visitOurText">
-          Visit Our{" "}
+          Visit our{" "}
           <Link id="home-faq-link" type="action" href="/faq">
-            FAQ Page
+            FAQ page
           </Link>
         </p>
         <p>
           Or{" "}
           <Link id="home-contact-link" type="action" href="/contact">
-            Contact Us
+            contact us
           </Link>
         </p>
         <p>

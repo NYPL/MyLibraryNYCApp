@@ -29,7 +29,7 @@ function Contact() {
             level="h2"
             size="heading3"
             marginBottom="s"
-            text="General Information"
+            text="General information"
           />
           <Text size="default" marginBottom="l">
             Have a question about library cards, your account or delivery?
@@ -40,8 +40,8 @@ function Contact() {
             useRowHeaders
             tableData={[
               [
-                <Text key="general-ino" noSpace className={`${colorMode}`}>
-                  General Information
+                <Text key="general-info" noSpace className={`${colorMode} noTextTransform`}>
+                  General information
                 </Text>,
                 <Link
                   key="mln-help-email-key"
@@ -52,8 +52,8 @@ function Contact() {
                 </Link>,
               ],
               [
-                <Text key="delivery-questions" noSpace className={`${colorMode}`}>
-                  Delivery Questions
+                <Text key="delivery-questions" noSpace className={`${colorMode} noTextTransform`}>
+                  Delivery questions
                 </Text>,
                 <Link
                   key="delivery-questions-link"
@@ -70,7 +70,7 @@ function Contact() {
             marginTop="xl"
             level="h2"
             size="heading3"
-            text="Professional Development"
+            text="Professional development"
           />
           <Text marginTop="s" marginBottom="l" size="default">
             Want to find out about library staff visiting your school?
@@ -133,7 +133,7 @@ function Contact() {
             id="my-library-nyc-questions-tertiary"
             level="h3"
             size="heading5"
-            text="Find Your School"
+            text="Find your school"
           />
           <Text marginTop="s" marginBottom="l" size="default">
             Search our list of schools to see if your school already

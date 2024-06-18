@@ -86,7 +86,7 @@ export default function TeacherSetOrderDetails(props) {
     let showCancelledDate = "display_none";
 
     if (orderDetails && orderDetails["status"] === "cancelled") {
-      orderCancellled = "Order Cancelled";
+      orderCancellled = "Order cancelled";
       orderUpdatedDate = dateFormat(
         orderDetails["updated_at"],
         "dddd, mmmm d, yyyy"
@@ -106,16 +106,16 @@ export default function TeacherSetOrderDetails(props) {
         key="order-confirmation-list-details-key"
         title={
           <Heading level="h3" size="heading5">
-            Order Details
+            Order details
           </Heading>
         }
         type="dl"
       >
-        <dt>Teacher Set</dt>
+        <dt>Teacher set</dt>
         <dd>{teacherSetDetails()}</dd>
         <dt>Quantity</dt>
         <dd>{orderDetails["quantity"]}</dd>
-        <dt>Order Placed</dt>
+        <dt>Order placed</dt>
         <dd>{dateFormat(orderDetails["created_at"], "dddd, mmmm d, yyyy")}</dd>
         <dt>Status</dt>
         <dd>{STATUS_LABEL[orderDetails["status"]]}</dd>

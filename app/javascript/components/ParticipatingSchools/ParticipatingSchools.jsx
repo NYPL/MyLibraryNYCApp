@@ -167,7 +167,7 @@ export default function ParticipatingSchools(props) {
                 align="right"
                 marginRight="xs"
               />
-              Back to Top
+              Back to top
             </Button>
           </div>
         );
@@ -205,7 +205,7 @@ export default function ParticipatingSchools(props) {
             id="find-your-school"
             level="h2"
             size="heading3"
-            text="Find Your School"
+            text="Find your school"
           />
           <HorizontalRule
             id="ts-detail-page-horizontal-rulel"
@@ -229,12 +229,12 @@ export default function ParticipatingSchools(props) {
             }}
             onChange={handleChange}
             id="participating-school"
-            labelText="Search by Name"
+            labelText="Search by name"
             placeholder="School name"
             showLabel
           />
           <Text marginTop="l" size="default" fontWeight="medium">
-            Filter by Name
+            Filter by name
           </Text>
           {AnchorTags()}
           <div id="participating-schools-list">

@@ -72,7 +72,7 @@ export default function TeacherSetOrder() {
             id="ts-cancellation-confirmation-text"
             level="h3"
             size="heading5"
-            text="Confirm Cancellation"
+            text="Confirm cancellation"
           />
           <TextInput
             id="ts-cancel-order-button"
@@ -98,7 +98,7 @@ export default function TeacherSetOrder() {
               onClick={handleSubmit}
               marginTop="xs"
             >
-              Cancel My Order
+              Cancel my order
             </Button>
             <Button
               id="keep-my-order-button"
@@ -128,7 +128,7 @@ export default function TeacherSetOrder() {
             id="ts-cancellation-confirmation-text"
             level="h2"
             size="heading3"
-            text="Cancel Order"
+            text="Cancel order"
           />
           <HorizontalRule
             id="ts-cancel-order-horizontal=line"

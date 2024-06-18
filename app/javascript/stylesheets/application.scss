@@ -117,10 +117,6 @@ $submenu-width: 245px;
   color: var(--nypl-colors-ui-black);
 }
 
-h1 {
-  text-transform: capitalize !important;
-}
-
 ul.list li:before {
   color: #FFF !important;
 }
@@ -515,5 +511,15 @@ ul.list li:before {
 .signin-button {  
   @include max-screen(500px) {
     width: 100%;
+  }
+}
+
+.noTextTransform {
+  text-transform: initial !important;
+}
+
+.accountDetailsHeading {
+  th:first-of-type {
+    text-transform: initial !important;
   }
 }

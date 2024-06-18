@@ -24,7 +24,7 @@ export default function TeacherSetOrder(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Order Details | MyLibraryNYC";
+    document.title = "Order details | MyLibraryNYC";
     if (typeof hold === "string") {
       axios
         .get("/holds/" + params["access_key"])
@@ -41,7 +41,7 @@ export default function TeacherSetOrder(props) {
             if (res.data.hold && res.data.hold.status === "cancelled") {
               document.title = "Order Cancelled | MyLibraryNYC";
             } else {
-              document.title = "Order Details | MyLibraryNYC";
+              document.title = "Order details | MyLibraryNYC";
             }
           }
         })
@@ -78,7 +78,7 @@ export default function TeacherSetOrder(props) {
             href={"/holds/" + params["access_key"] + "/cancel"}
           >
             {" "}
-            Cancel My Order{" "}
+            Cancel my order{" "}
           </Link>
         </Button>
       </div>
@@ -126,7 +126,7 @@ export default function TeacherSetOrder(props) {
               size="small"
               align="left"
             />
-            Back to Search Teacher Sets Page
+            Back to search Teacher Sets page
           </Link>
         </>
       }
