@@ -641,7 +641,7 @@ export default function TeacherSetDetails(props) {
         key="ts-book-titles-key"
         showRowDividers
         noStyling={false}
-        paddingInlineStart="m"
+        paddingLeft="s"
         type="ul"
       >
         { books.map((book, i) => (
