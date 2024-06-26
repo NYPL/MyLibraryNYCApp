@@ -5,15 +5,15 @@ services:
 
 branches:
   only:
-  - qa
+  - MLN-1178
   - production
 
 jobs:
   include:
     - stage: docker build
-      if: (branch = qa or branch = production)
+      if: (branch = MLN-1178 or branch = production)
       before_install:
-      - if [[ $TRAVIS_BRANCH == "qa" ]];
+      - if [[ $TRAVIS_BRANCH == "MLN-1178" ]];
         then
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_QA};
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_QA};
@@ -28,7 +28,7 @@ jobs:
       env:
       - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/my-library-nyc-app
       - AWS_DEFAULT_REGION=us-east-1 
-      - AWS_REGION=us-east-1 
+      - AWS_REGION=us-east-1
       install:
         - pip install --user awscli
         - export LOCAL_TAG_NAME="${ENV}-latest"
@@ -44,7 +44,7 @@ jobs:
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
     - stage: deploy qa
-      if: branch IN (qa) AND type != pull_request
+      if: branch IN (MLN-1178) #AND type != pull_request
       env:
       - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
       - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
