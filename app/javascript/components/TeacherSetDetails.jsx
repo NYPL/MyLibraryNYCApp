@@ -644,17 +644,19 @@ export default function TeacherSetDetails(props) {
         paddingInlineStart="m"
         type="ul"
       >
-        {books.map((book, i) => (
-          <li key={"ts-books-key-" + i}>
-            <Link 
-              id={"ts-books-" + i}
-              onClick={(e) => {
-                windowScrollTop(e, book);
-              }}>
-              {book.title}
-            </Link>
-          </li>
-        ))}
+        { books.map((book, i) => (
+          book.title !== null ? (
+            <li key={"ts-books-key-" + i}>
+              <Link 
+                id={"ts-books-" + i}
+                onClick={(e) => {
+                  windowScrollTop(e, book);
+                }}>
+                {book.title}
+              </Link>
+            </li>
+          ) : null
+        )) }
       </List>
     )
   }
