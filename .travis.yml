@@ -28,7 +28,7 @@ jobs:
       env:
       - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/my-library-nyc-app
       - AWS_DEFAULT_REGION=us-east-1 
-      - AWS_REGION=us-east-1 
+      - AWS_REGION=us-east-1
       install:
         - pip install --user awscli
         - export LOCAL_TAG_NAME="${ENV}-latest"
