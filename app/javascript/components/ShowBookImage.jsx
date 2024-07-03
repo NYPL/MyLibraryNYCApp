@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Image, Box, useColorModeValue} from "@nypl/design-system-react-components";
+import {
+  Image,
+  Box,
+  useColorModeValue,
+} from "@nypl/design-system-react-components";
 
 export default function ShowBookImage(props) {
   const [srcToUse, setSrcToUse] = useState(props.src);
@@ -12,7 +16,7 @@ export default function ShowBookImage(props) {
     "var(--nypl-colors-ui-link-primary)",
     "var(--nypl-colors-dark-ui-link-primary)"
   );
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!imgLoadedOnInitSrc.current) setFallBackImageStatus(true);

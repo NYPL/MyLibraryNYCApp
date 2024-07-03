@@ -175,7 +175,9 @@ export default function Accounts() {
   };
 
   const statusLabel = (hold) => {
-    return hold["status_label"] === 'Awaiting Review' ? 'Awaiting review' : hold["status_label"];
+    return hold["status_label"] === "Awaiting Review"
+      ? "Awaiting review"
+      : hold["status_label"];
   };
 
   const cancelButton = (hold, index) => {

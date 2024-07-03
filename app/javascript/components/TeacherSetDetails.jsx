@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import HaveQuestions from "./HaveQuestions/HaveQuestions";
 import ShowBookImage from "./ShowBookImage";
+import BookTitles from "./BookTitles";
 import {
   Link as ReactRouterLink,
   useParams,
@@ -627,39 +628,10 @@ export default function TeacherSetDetails(props) {
 
         <dt id="ts-page-call-number-text">Call number</dt>
         <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
-
-        <dt id="ts-page-book-titles-text">Book titles</dt>
-        <dd id="ts-page-book-titles">{bookTitles()}</dd>
+        <BookTitles books={books} />
       </List>
     );
   };
-
-  const bookTitles = () => {
-    return (
-      <List
-        id="ts-book-titles"
-        key="ts-book-titles-key"
-        showRowDividers
-        noStyling={false}
-        paddingLeft="s"
-        type="ul"
-      >
-        { books.map((book, i) => (
-          book.title !== null ? (
-            <li key={"ts-books-key-" + i}>
-              <Link 
-                id={"ts-books-" + i}
-                onClick={(e) => {
-                  windowScrollTop(e, book);
-                }}>
-                {book.title}
-              </Link>
-            </li>
-          ) : null
-        )) }
-      </List>
-    )
-  }
 
   const mobileTeacherSetOrderButton = () => {
     if (!isLargerThanMobile) {
