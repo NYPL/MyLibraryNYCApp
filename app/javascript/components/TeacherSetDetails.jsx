@@ -59,9 +59,10 @@ export default function TeacherSetDetails(props) {
     "var(--nypl-colors-dark-ui-bg-hover)"
   );
   const tsOrderBoxBgColor = useColorModeValue(
-    "var(--nypl-colors-ui-gray-x-light-cool)",
-    "var(--nypl-colors-dark.ui.bg.default)"
+    "var(--nypl-colors-ui-link-primar)",
+    "var(--nypl-colors-ui-dark-link-primary)"
   );
+
   const tsOrderTextColor = useColorModeValue(
     "var(--nypl-colors-ui-black)",
     "var(--nypl-colors-dark-ui-typography-heading)"
