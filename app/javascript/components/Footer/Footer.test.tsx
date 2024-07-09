@@ -1,13 +1,14 @@
-import { render, screen, cleanup } from "@testing-library/react";
-import '@testing-library/jest-dom/extend-expect';
-import { axe, toHaveNoViolations } from "jest-axe";
 import * as React from "react";
-import renderer from "react-test-renderer";
 import Footer from "../Footer/Footer.jsx";
+import { createRoot } from 'react-dom/client';
 
-describe("Footer ", () => {
-  test("Footer ", () => {
+describe("Footer", () => {
+  test("Footer", () => {
     // render the component on virtual dom
-    const { container } = render(<Footer />);
+    const rootElement = document.createElement('div');
+    document.body.appendChild(rootElement);
+    const root = createRoot(rootElement);
+    // Use act to ensure all updates are processed before assertions
+    root.render(<Footer />);
   });
 });
