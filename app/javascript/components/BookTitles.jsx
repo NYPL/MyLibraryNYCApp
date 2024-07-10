@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  useColorModeValue,
-  Link,
-} from "@nypl/design-system-react-components";
+import { useColorModeValue, Link } from "@nypl/design-system-react-components";
 
 const BookTitles = ({ books }) => {
   const titleColor = useColorModeValue(
