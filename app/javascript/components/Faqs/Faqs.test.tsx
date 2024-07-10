@@ -7,9 +7,6 @@ import Faqs from './Faqs'; // Ensure the path to your Faqs component is correct
 import { act } from 'react-dom/test-utils';
 import { createRoot } from 'react-dom/client';
 import { waitFor, screen } from '@testing-library/react';
-global.env = {}
-global.IS_REACT_ACT_ENVIRONMENT = true
-global.env = { RAILS_ENV: "test" }
 jest.mock('axios');
 
 describe('Faq component', () => {
