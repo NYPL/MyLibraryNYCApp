@@ -31,8 +31,6 @@ describe('Faq component', () => {
       root.render(<Faqs />);
     });
 
-    console.log(rootElement.innerHTML);
-
     await waitFor(() => {
       expect(screen.getByText("kml")).toBeInTheDocument();
       expect(screen.getByText("kml2")).toBeInTheDocument();
