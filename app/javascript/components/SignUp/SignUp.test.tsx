@@ -21,7 +21,6 @@ describe("SignUp", () => {
   });
 
   test("test active schools", async () => {
-
     const active_schools = {
       "J. M. Rapport School Career Development - Albert Tuitt Campus (X362 J.M. RAPPORT SCHOOL CAREER)": 1156,
       "P.S. X017- Adlai Campus (X450 P.S. X017 - ADLAI CAMPUS)": 1158,
