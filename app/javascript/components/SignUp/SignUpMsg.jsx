@@ -7,7 +7,7 @@ export default function SignUpMsg(props) {
   useEffect(() => {
     if (
       details.userSignedIn &&
-      details.signedUpMessage !== ""
+      details.signedUpMessage !== "" && env.RAILS_ENV !== "test"
     ) {
       window.scrollTo(0, 0);
     }

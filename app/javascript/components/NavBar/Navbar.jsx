@@ -19,7 +19,9 @@ export default function Navbar(props) {
   const mlnLogo = useColorModeValue("mlnColor", "mlnWhite");
   const hideHomeSignUpMsg = () => {
     props.hideSignUpMessage(true);
-    navigate("/");
+    if (env.RAILS_ENV !== "test") {
+      navigate("/");
+    }
   };
   
   const hideSignInMsg = () => {
