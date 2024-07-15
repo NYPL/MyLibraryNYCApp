@@ -1831,7 +1831,7 @@ GEM
     memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.5)
+    mini_portile2 (2.8.7)
     mini_racer (0.6.4)
       libv8-node (~> 16.19.0.0)
     minitest (5.14.4)
@@ -1852,7 +1852,7 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.0)
-    nokogiri (1.15.5)
+    nokogiri (1.15.6)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oj (3.16.3)
@@ -2110,7 +2110,7 @@ DEPENDENCIES
   mini_racer
   minitest (~> 5.14.2)
   minitest-stub_any_instance
-  nokogiri
+  nokogiri (= 1.15.6)
   open_uri_redirections
   paper_trail (~> 11.1)
   pg (~> 1.2)

@@ -30,8 +30,8 @@ export default function Home(props) {
     document.title = "MyLibraryNYC | Providing NYC schools with enhanced library privileges";
     if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
+      navigate("/");
     }
-    navigate("/");
   }, []);
 
   const handleSubmit = (event) => {
