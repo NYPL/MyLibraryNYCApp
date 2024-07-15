@@ -320,20 +320,28 @@ Note: Rails, Ruby and Node installation is required to run project in local.
       Check Ruby and Rails versions in Gemfile.
 
  Step1: Rails & Ruby installation:
+        Install RVM with Rails (stable version):
+          \curl -sSL https://get.rvm.io | bash -s stable --rails
+        Install RVM (if not installed with Rails):
+          \curl -sSL https://get.rvm.io | bash
+        Install Ruby 2.7.4:
+          rvm install ruby-2.7.4
+        Use Ruby 2.7.4:
+          rvm use ruby-2.7.4
+        Install Rails 7.0.2.2:
+          gem install rails -v 7.0.2.2
+          bundle install
+        Node Installation:
+            Install homebrew 
+            brew install nvm
+            nvm install 16
+        After installation please check the versions
+        Rails version: rails -v
+        Ruby version: ruby -v
+        Node version: node -v
 
-      1. \curl -sSL https://get.rvm.io | bash -s stable --rails
-      2. \curl -sSL https://get.rvm.io | bash
-      3. rvm install 3.1.2 --autolibs=disable
-      4. gem install rails -v 7.0.2.2
-      5. rvm install ruby-2.7.4
-      6. nvm install 16
-
-      After installation please check the versions
-      Rails version: rails -v
-      Ruby version: ruby -v
-      Node version: node -v
-      
-      https://github.com/NYPL/MyLibraryNYCApp/blob/development/Gemfile
+        Please check Gemfile for reference
+        https://github.com/NYPL/MyLibraryNYCApp/blob/development/Gemfile
 
  Step2: Clone git project https://github.com/NYPL/MyLibraryNYCApp.git
 
@@ -361,13 +369,12 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         psql -l
         psql -d mylibnyc_local
         \c mylibnyc_local;
-        
+
         Rub below command in project path to create database tables
 
         RAILS_ENV=local rake db:create
         RAILS_ENV=local rake db:schema:load
         RAILS_ENV=local rake db:migrate
-        RAILS_ENV=local rake db:seed
 
  Step6: Configure elastic search
         MylibraryNyc project using elastic-search-6.8 version.
