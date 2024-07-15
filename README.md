@@ -318,6 +318,9 @@ MylibaryNYC application local setup
 ```
 Note: Rails, Ruby and Node installation is required to run project in local.
       Check Ruby and Rails versions in Gemfile.
+      Rails version: 7.0.2.2
+      Ruby version: 2.7.4
+      Node version: 16
       https://github.com/NYPL/MyLibraryNYCApp/blob/development/Gemfile
 
  Step1: Clone git project https://github.com/NYPL/MyLibraryNYCApp.git
@@ -413,6 +416,7 @@ Note: Rails, Ruby and Node installation is required to run project in local.
 
 Setp5: Run below commands to start server
         
-        npm i channels
+        yarn install
+        yarn build
         RAILS_ENV=local rails s
 ```

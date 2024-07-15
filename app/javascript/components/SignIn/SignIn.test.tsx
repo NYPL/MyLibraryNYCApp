@@ -2,8 +2,14 @@
 import * as React from "react";
 import SignIn from "../SignIn/SignIn.jsx";
 import { createRoot } from 'react-dom/client';
+import { act } from 'react-dom/test-utils';
 
 describe("SignIn", () => {
+  afterEach(() => {
+    // Clear all mocks after each test
+    jest.clearAllMocks();
+  });
+
   test("SignIn", () => {
     // render the component on virtual dom
     const rootElement = document.createElement('div');
