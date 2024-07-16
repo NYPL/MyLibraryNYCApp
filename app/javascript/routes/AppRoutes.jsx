@@ -12,7 +12,7 @@ import SignUp from "../components/SignUp/SignUp";
 import SearchTeacherSets from "../components/SearchTeacherSets";
 import Accounts from "../components/Accounts";
 import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
-import TeacherSetDetails from "../components/TeacherSetDetails";
+import TeacherSetDetails from "../components/TeacherSetDetails/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks/TeacherSetBooks";

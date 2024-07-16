@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import HaveQuestions from "./HaveQuestions/HaveQuestions";
-import ShowBookImage from "./ShowBookImage";
-import BookTitles from "./BookTitles";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
+import ShowBookImage from "./../ShowBookImage";
+import BookTitles from "./../BookTitles";
 import {
   Link as ReactRouterLink,
   useParams,
@@ -91,7 +91,9 @@ export default function TeacherSetDetails(props) {
   }, [isLoading]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (env.RAILS_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     axios
       .get("/teacher_sets/" + params["id"])
       .then((res) => {
