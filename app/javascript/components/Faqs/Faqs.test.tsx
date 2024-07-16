@@ -49,8 +49,6 @@ describe('Faq component', () => {
       root.render(<Faqs />);
     });
 
-    console.log(rootElement.innerHTML);
-
     await waitFor(() => {
       expect(screen.queryByText("What are Teacher Sets?")).not.toBeInTheDocument();
       expect(screen.queryByText("Does my school participate in MyLibraryNYC?")).not.toBeInTheDocument();

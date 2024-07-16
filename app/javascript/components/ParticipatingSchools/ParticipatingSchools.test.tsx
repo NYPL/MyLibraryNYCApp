@@ -63,7 +63,7 @@ describe('ParticipatingSchools', () => {
     await act(async () => {
       root.render(<ParticipatingSchools />);
     });
-    console.log(rootElement.innerHTML);
     expect(screen.getByText("There are no results that match your search criteria.")).toBeInTheDocument();
   });
+  
 });

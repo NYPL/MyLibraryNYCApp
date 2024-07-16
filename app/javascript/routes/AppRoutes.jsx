@@ -38,7 +38,6 @@ export default function AppRoutes(props) {
   }
 
   const handleSignedUpMsg = (signedUpMsg) => {
-    console.log(signedUpMsg)
     setSignedUpMessage(signedUpMsg)
   }
 

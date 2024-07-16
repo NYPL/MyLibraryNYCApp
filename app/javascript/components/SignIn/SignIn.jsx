@@ -71,7 +71,6 @@ export default function SignIn(props) {
           props.handleLogin(true);
           props.handleSignInMsg(res.data.sign_in_msg, true);
           props.hideSignInMessage(false);
-          console.log(res.data.user_return_to);
           navigate("/" + res.data.user_return_to, {
             state: { userSignedIn: true },
           });
