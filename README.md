@@ -375,6 +375,7 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         RAILS_ENV=local rake db:create
         RAILS_ENV=local rake db:schema:load
         RAILS_ENV=local rake db:migrate
+        RAILS_ENV=local rake db:seed
 
  Step6: Configure elastic search
         MylibraryNyc project using elastic-search-6.8 version.
