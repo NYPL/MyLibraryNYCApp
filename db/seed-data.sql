@@ -2685,10 +2685,20 @@ INSERT INTO hold_changes (id, hold_id, admin_user_id, status, comment, created_a
 --
 -- Data for Name: schools; Type: TABLE DATA; Schema: public; Owner: _postgres
 --
+INSERT INTO schools (id, name, campus_id, code, active, address_line_1, address_line_2, state, postal_code, phone_number, borough, created_at, updated_at) VALUES (1156, 'J. M. Rapport School Career Development - Albert Tuitt Campus', NULL, 'zx362 j.m. rapport school career', true, '921 E. 228th street', 'Bronx NY 10466', 'NY', '10466', NULL, 'BRONX', '2024-07-15 19:41:13.403119', '2024-07-15 19:41:13.403198');
+INSERT INTO schools (id, name, campus_id, code, active, address_line_1, address_line_2, state, postal_code, phone_number, borough, created_at, updated_at) VALUES (1157, 'PS8 The Emily Warren Roebling School', NULL, 'zk008 ps8 emily warren roebling', true, '37 Hicks Street', 'Brooklyn NY 11201', 'NY', '11201', NULL, 'BROOKLYN', '2024-07-15 19:41:13.407981', '2024-07-15 19:41:13.408011');
+INSERT INTO schools (id, name, campus_id, code, active, address_line_1, address_line_2, state, postal_code, phone_number, borough, created_at, updated_at) VALUES (1158, 'P.S. X017- Adlai Campus', NULL, 'zx450 p.s. x017 - adlai campus', true, '1980 Lafayette Avenue', 'Bronx New York 10473', 'NY', '10473', NULL, 'BRONX', '2024-07-15 19:41:13.409871', '2024-07-15 19:41:13.409902');
+INSERT INTO schools (id, name, campus_id, code, active, address_line_1, address_line_2, state, postal_code, phone_number, borough, created_at, updated_at) VALUES (1159, 'Renaissance High School for Musical Theater and the Arts', NULL, 'zx405 renaissance hs for musical', true, '3000 E Tremont Ave', 'Bronx NY 10461', 'NY', '10461', NULL, 'BRONX', '2024-07-15 19:41:13.411769', '2024-07-15 19:41:13.411802');
 
--- INSERT INTO schools (id, name, campus_id, code, ) VALUES (1067, 'P.S. 179', 387, 'zx179');
--- INSERT INTO schools (id, name, campus_id, code) VALUES (1068, 'Community School for Social Justice', 391, 'zx427');
--- INSERT INTO schools (id, name, campus_id, code) VALUES (1069, 'Bronx Leadership Academy II High School', 392, 'zx527');
+--
+-- Data for Name: sierra_code_zcode_matches; Type: TABLE DATA; Schema: public; Owner: _postgres
+--
+
+INSERT INTO sierra_code_zcode_matches (id, sierra_code, zcode, created_at, updated_at) VALUES (1, 982, 'zx362 j.m. rapport school career', '2024-07-15 19:41:13.421218', '2024-07-15 19:41:13.421218');
+INSERT INTO sierra_code_zcode_matches (id, sierra_code, zcode, created_at, updated_at) VALUES (2, 401, 'zk008 ps8 emily warren roebling', '2024-07-15 19:41:13.42329', '2024-07-15 19:41:13.42329');
+INSERT INTO sierra_code_zcode_matches (id, sierra_code, zcode, created_at, updated_at) VALUES (3, 893, 'zx450 p.s. x017 - adlai campus', '2024-07-15 19:41:13.42413', '2024-07-15 19:41:13.42413');
+INSERT INTO sierra_code_zcode_matches (id, sierra_code, zcode, created_at, updated_at) VALUES (4, 1982, 'zx405 renaissance hs for musical', '2024-07-15 19:41:13.424925', '2024-07-15 19:41:13.424925');
+
 -- INSERT INTO schools (id, name, campus_id, code) VALUES (1070, 'New Explorers High School', 392, 'zx547');
 -- INSERT INTO schools (id, name, campus_id, code) VALUES (1071, 'J.H.S. 123 James M. Kieran', 403, 'zx123');
 -- INSERT INTO schools (id, name, campus_id, code) VALUES (1072, 'Gateway School for Environmental Research and Technology', 406, 'zx295');
