@@ -13,9 +13,7 @@ import {
 function AccountDetailsSubMenu(props) {
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
-  //const [user_signed_in, setUserSignedIn] = useState(props.userSignedIn);
   const [showAboutMenu, setShowAboutMenu] = useState(false);
-
   const handleHover = () => {
     setShowAboutMenu(true);
   };
