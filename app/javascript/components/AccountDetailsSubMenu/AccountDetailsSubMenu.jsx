@@ -103,12 +103,6 @@ function AccountDetailsSubMenu(props) {
   const signOut = () => {
     axios
       .delete("/users/logout", {
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": document
-            .querySelector("meta[name='csrf-token']")
-            .getAttribute("content"),
-        },
       })
       .then((res) => {
         if (res.data.status === 200 && res.data.logged_out === true) {

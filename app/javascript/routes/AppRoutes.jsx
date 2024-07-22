@@ -10,7 +10,7 @@ import ParticipatingSchools from "../components/ParticipatingSchools/Participati
 import SignIn from "../components/SignIn/SignIn";
 import SignUp from "../components/SignUp/SignUp";
 import SearchTeacherSets from "../components/SearchTeacherSets/SearchTeacherSets";
-import Accounts from "../components/Accounts";
+import Accounts from "../components/Accounts/Accounts";
 import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
 import TeacherSetDetails from "../components/TeacherSetDetails/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder/TeacherSetOrder";

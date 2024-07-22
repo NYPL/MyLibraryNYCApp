@@ -40,7 +40,7 @@ import {
   useColorMode,
 } from "@nypl/design-system-react-components";
 
-import mlnImage from "../images/mln.svg";
+import mlnImage from "../../images/mln.svg";
 
 export default function TeacherSetDetails(props) {
   const params = useParams();

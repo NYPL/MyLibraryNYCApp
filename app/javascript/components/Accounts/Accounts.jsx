@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions/HaveQuestions";
+import AppBreadcrumbs from "../AppBreadcrumbs";
+import HaveQuestions from "../HaveQuestions/HaveQuestions";
 import axios from "axios";
 
 import {
@@ -58,9 +58,6 @@ export default function Accounts() {
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Account Details | MyLibraryNYC";
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-      .querySelector("meta[name='csrf-token']")
-      .getAttribute("content");
 
     axios
       .get("/account", { params: { page: 1 } })
@@ -313,9 +310,6 @@ export default function Accounts() {
   };
 
   const onPageChange = (page) => {
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-      .querySelector("meta[name='csrf-token']")
-      .getAttribute("content");
     axios
       .get("/account", { params: { page: page } })
       .then((res) => {

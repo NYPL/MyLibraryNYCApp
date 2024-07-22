@@ -406,7 +406,6 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetTitleOrder = () => {
-    console.log("ppppppppp")
     if (teacherSets.length >= 1) {
       let sortByOptions = [
         { sort_order: "Date added: newest to oldest", value: 0 },
@@ -1191,7 +1190,6 @@ export default function SearchTeacherSets(props) {
 
   const tsDataNotRetrievedMsg = () => {
     if (teacherSetDataNotRetrievedMsg !== "") {
-        console.log("eeeeeeee")
       return (
         <Notification
           marginTop="l"
