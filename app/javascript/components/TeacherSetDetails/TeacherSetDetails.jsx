@@ -631,7 +631,7 @@ export default function TeacherSetDetails(props) {
 
         <dt id="ts-page-call-number-text">Call number</dt>
         <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
-        <BookTitles books={books} />
+        <BookTitles books={books} teacherSet={teacherSet} />
       </List>
     );
   };
