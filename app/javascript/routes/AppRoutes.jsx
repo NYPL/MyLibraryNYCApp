@@ -9,8 +9,8 @@ import Banner from "../components/Banner";
 import ParticipatingSchools from "../components/ParticipatingSchools/ParticipatingSchools";
 import SignIn from "../components/SignIn/SignIn";
 import SignUp from "../components/SignUp/SignUp";
-import SearchTeacherSets from "../components/SearchTeacherSets";
-import Accounts from "../components/Accounts";
+import SearchTeacherSets from "../components/SearchTeacherSets/SearchTeacherSets";
+import Accounts from "../components/Accounts/Accounts";
 import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
 import TeacherSetDetails from "../components/TeacherSetDetails/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder/TeacherSetOrder";
@@ -77,7 +77,7 @@ export default function AppRoutes(props) {
           <Banner />
           <Header userSignedIn={userSignedIn} handleSignOutMsg={handleSignOutMsg} hideSignUpMessage={hideSignUpMessage} hideSignInMessage={hideSignInMessage} handleLogout={handleLogout} />
           <Routes>
-            <Route exact path='/' element={<Home userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />} />
+            {/* <Route exact path='/' element={<Home userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />} /> */}
             <Route path='/faq' element={<Faqs userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
             <Route path='/contact' element={ <Contact userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
             <Route path='/participating-schools' element={ <ParticipatingSchools userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />

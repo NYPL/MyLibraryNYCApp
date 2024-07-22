@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import SignedInMsg from "./SignedInMsg";
-import SignUpMsg from "./SignUp/SignUpMsg";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import SignedInMsg from "./../SignedInMsg";
+import SignUpMsg from "./../SignUp/SignUpMsg";
 import axios from "axios";
 import { titleCase } from "title-case";
-import { capitalizeFirstLetter } from "./Utils";
+import { capitalizeFirstLetter } from "./../Utils";
 import {
   Button,
   ButtonGroup,
@@ -230,9 +230,6 @@ export default function SearchTeacherSets(props) {
   }, [location.search]);
 
   const getTeacherSets = (params) => {
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-      .querySelector("meta[name='csrf-token']")
-      .getAttribute("content");
     axios
       .get("/teacher_sets", { params: params })
       .then((res) => {
@@ -515,10 +512,6 @@ export default function SearchTeacherSets(props) {
     setComputedCurrentPage(page);
     searchParams.set("page", page);
     setSearchParams(searchParams);
-
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-      .querySelector("meta[name='csrf-token']")
-      .getAttribute("content");
     axios
       .get("/teacher_sets", {
         params: Object.assign(

@@ -111,8 +111,13 @@ SELECT pg_catalog.setval('users_id_seq', 76895, true);
 -- Data for Name: admin_users; Type: TABLE DATA; Schema: public; Owner: _postgres
 --
 
-INSERT INTO admin_users (id, email, encrypted_password, reset_password_token, reset_password_sent_at, remember_created_at, sign_in_count, current_sign_in_at, last_sign_in_at, current_sign_in_ip, last_sign_in_ip, created_at, updated_at) VALUES (1, 'admin@example.com', '$2a$10$xrSNKn4ymrSoHwdkX6Zhw.sOg0LDH2v1dRrLgMQDDbx2A/84hH9A.', NULL, NULL, NULL, 12, '2014-02-07 17:46:00.404514', '2014-02-07 17:44:25.821704', '127.0.0.1', '127.0.0.1', '2014-01-09 15:59:50.223609', '2014-02-07 17:46:00.406525');
+INSERT INTO admin_users (id, email, encrypted_password, reset_password_token, reset_password_sent_at, remember_created_at, sign_in_count, current_sign_in_at, last_sign_in_at, current_sign_in_ip, last_sign_in_ip, created_at, updated_at) VALUES (1, 'consultdg@nypl.org', 'password', NULL, NULL, NULL, 12, '2014-02-07 17:46:00.404514', '2014-02-07 17:44:25.821704', '127.0.0.1', '127.0.0.1', '2014-01-09 15:59:50.223609', '2014-02-07 17:46:00.406525');
 
+--
+-- Data for Name: admin_users; Type: TABLE DATA; Schema: public; Owner: _postgres
+--
+
+INSERT INTO allowed_user_email_masks (id, email_pattern, active) VALUES (1, '@schools.nyc.gov', 'password', true);
 
 --
 -- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: _postgres

@@ -10,7 +10,7 @@ import {
   useColorModeValue,
 } from "@nypl/design-system-react-components";
 
-import AccountDetailsSubMenu from "./../AccountDetailsSubMenu";
+import AccountDetailsSubMenu from "../AccountDetailsSubMenu/AccountDetailsSubMenu";
 import ColorModeComponent from "./../ColorMode/ColorMode";
 
 export default function Navbar(props) {
