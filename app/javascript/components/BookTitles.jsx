@@ -1,7 +1,11 @@
 import React from "react";
 import { useColorModeValue, Link } from "@nypl/design-system-react-components";
+import {
+  useNavigate,
+} from "react-router-dom";
+const BookTitles = ({ books, teacherSet }) => {
+  const navigate = useNavigate();
 
-const BookTitles = ({ books }) => {
   const titleColor = useColorModeValue(
     "var(--nypl-colors-ui-link-primary)",
     "var(--nypl-colors-dark-ui-link-primary)"
@@ -35,6 +39,13 @@ const BookTitles = ({ books }) => {
     } else {
       return null;
     }
+  };
+
+  const windowScrollTop = (e, data) => {
+    e.preventDefault();
+    navigate("/book_details/" + data.id, {
+      state: { tsTitle: data.title, tsId: teacherSet["id"] },
+    });
   };
 
   return <>{bookTitles(books)}</>;

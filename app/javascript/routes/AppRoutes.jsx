@@ -77,7 +77,7 @@ export default function AppRoutes(props) {
           <Banner />
           <Header userSignedIn={userSignedIn} handleSignOutMsg={handleSignOutMsg} hideSignUpMessage={hideSignUpMessage} hideSignInMessage={hideSignInMessage} handleLogout={handleLogout} />
           <Routes>
-            {/* <Route exact path='/' element={<Home userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />} /> */}
+            <Route exact path='/' element={<Home userSignedIn={userSignedIn} hideSignOutMsg={hide_signout_msg} signoutMsg={signout_msg} />} />
             <Route path='/faq' element={<Faqs userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
             <Route path='/contact' element={ <Contact userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
             <Route path='/participating-schools' element={ <ParticipatingSchools userSignedIn={userSignedIn} hideSignInMsg={hide_signin_msg} signInMsg={signin_msg} />} />
