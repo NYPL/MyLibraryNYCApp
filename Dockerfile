@@ -17,9 +17,12 @@ RUN apt-get update -qq \
     postgresql-client \
     git
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash - \
     && apt-get -y install nodejs \
     && npm install --global yarn
+
+# Install esbuild
+RUN npm install -g esbuild
 
 # set up app files
 COPY . $APP_HOME
@@ -28,24 +31,26 @@ COPY Gemfile.lock $APP_HOME
 WORKDIR $APP_HOME
 
 ## bundle
-RUN gem install bundler
+ENV BUNDLER_VERSION=2.4.22
+RUN gem install bundler -v $BUNDLER_VERSION
 RUN bundle config --global github.https true \
     && bundle install --jobs 30
 
-# mount AWS creds in a single layer
+COPY package.json $APP_HOME/package.json
+COPY package-lock.json $APP_HOME/package-lock.json
+RUN yarn install
+
+# build
+RUN yarn build
+RUN yarn build:css
 RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
     --mount=type=secret,id=AWS_SECRET_ACCESS_KEY \
   AWS_ACCESS_KEY_ID=$(cat /run/secrets/AWS_ACCESS_KEY_ID) \
   && export AWS_ACCESS_KEY_ID \
   AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) \
   && export AWS_SECRET_ACCESS_KEY \
-  && bundle exec rails webpacker:install \
-  && bundle exec rails webpacker:compile
-
-# webpack overwrites these files
-COPY config/webpacker.yml $APP_HOME/config/
-COPY config/webpack/environment.js $APP_HOME/config/webpack/
-COPY babel.config.js $APP_HOME
+  && bundle exe rails assets:precompile
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
+

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import SignedInMsg from "./../SignedInMsg";
 import axios from "axios";
 import {
@@ -17,7 +17,7 @@ export default function Faqs(props) {
 
   useEffect(() => {
     document.title = "Frequently Asked Questions | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
 

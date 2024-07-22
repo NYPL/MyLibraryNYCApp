@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import HaveQuestions from "./../HaveQuestions";
-import { Link as ReactRouterLink, useParams } from "react-router-dom";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
+import { Link as ReactRouterLink, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { titleCase } from "title-case";
 import {
@@ -29,7 +29,10 @@ import mlnImage from "./../../images/mln.svg";
 
 export default function TeacherSetBooks() {
   const params = useParams();
+  const location = useLocation();
   const [book, setBook] = useState("");
+  const [tsId, setTsId] = useState('')
+  const [tsTitle, setTsTitle] = useState('');
   const [teacherSets, setTeacherSets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { colorMode } = useColorMode();
@@ -41,6 +44,30 @@ export default function TeacherSetBooks() {
   useEffect(() => {
     setIsLoading(true);
   }, [book.cover_uri]);
+
+  // useEffect to set initial state from localStorage
+  useEffect(() => {
+    const storedTsTitle = localStorage.getItem('tsTitle');
+    const storedTsId = localStorage.getItem('tsId');
+
+    if (storedTsTitle && storedTsId) {
+      setTsTitle(storedTsTitle);
+      setTsId(storedTsId);
+    }
+  }, []);
+
+  // useEffect to update localStorage when tsTitle or tsId changes
+  useEffect(() => {
+    localStorage.setItem('tsTitle', tsTitle);
+    localStorage.setItem('tsId', tsId);
+  }, [tsTitle, tsId]);
+
+  useEffect(() => {
+    if (location.state) {
+      setTsTitle(location.state.tsTitle);
+      setTsId(location.state.tsId);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     let timeoutId = "";
@@ -55,7 +82,7 @@ export default function TeacherSetBooks() {
   }, [isLoading]);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     axios
@@ -63,6 +90,9 @@ export default function TeacherSetBooks() {
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
         setBook(res.data.book);
+        if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+          adobeAnalyticsForTeacherSetBooks(res.data.book)
+        }
         if (res.data.book.title !== null) {
           document.title = "Book Details | " + res.data.book.title + " | MyLibraryNYC";
         } else {
@@ -73,6 +103,23 @@ export default function TeacherSetBooks() {
         console.log(error);
       });
   }, []);
+
+  const adobeAnalyticsForTeacherSetBooks = (book) => {
+    let title = book.title !== null ? book.title : ""
+    // Push the event data to the Adobe Data Layer
+    window.adobeDataLayer = window.adobeDataLayer || [];
+    window.adobeDataLayer.push({
+      event: "virtual_page_view",
+      page_name: 'mylibrarynyc|book-details|' + title ,
+      site_section: 'Teacher Sets'
+    });
+  
+    // Dynamically create and insert the script tag for Adobe Launch
+    const script = document.createElement('script');
+    script.src =  env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
+    script.async = true;
+    document.head.appendChild(script);
+  };
 
   const IsBookSubTitlePresent = () => {
     return book["sub_title"] === null ? false : true;
@@ -120,13 +167,13 @@ export default function TeacherSetBooks() {
     if (teacherSets) {
       return teacherSets.map((ts, index, arr) => {
         let availabilityStatusBadge =
-          ts.availability === "available" ? "medium" : "low";
+          ts.availability === "available" ? "informative" : "neutral";
         let availability = ts.availability !== undefined ? ts.availability : "";
         return (
           <div key={"ts-books-div-" + index}>
             <Card id="book-page-ts-card-details" layout="row">
               <CardHeading
-                level="four"
+                level="h4"
                 id="book-page-ts-title"
                 marginBottom="xs"
               >
@@ -139,7 +186,7 @@ export default function TeacherSetBooks() {
                 {ts.suitabilities_string}{" "}
               </CardContent>
               <CardContent id="book-page-ts-availability" marginBottom="s">
-                <StatusBadge level={availabilityStatusBadge}>
+                <StatusBadge type={availabilityStatusBadge}>
                   {titleCase(availability)}
                 </StatusBadge>
               </CardContent>
@@ -219,10 +266,14 @@ export default function TeacherSetBooks() {
         <Breadcrumbs
           id={"mln-breadcrumbs-ts-details"}
           breadcrumbsData={[
-            { url: "//" + process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+            { url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
             {
-              url: "//" + window.location.hostname + window.location.pathname,
-              text: "Book Details",
+              url: "//" + window.location.hostname + "/teacher_set_data",
+              text: "Teacher Sets",
+            },
+            {
+              url: "//" + window.location.hostname + "/teacher_set_details/" + tsId,
+              text: breadcrumbTitle(tsTitle),
             },
             {
               url: "//" + window.location.hostname + window.location.pathname,
@@ -236,7 +287,8 @@ export default function TeacherSetBooks() {
             backgroundColor={heroBgColor}
             heading={
               <Heading
-                level="one"
+                level="h1"
+                color="ui.white"
                 id={
                   "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
                 }
@@ -252,8 +304,8 @@ export default function TeacherSetBooks() {
             <Heading
               id="book-title-heading-id"
               noSpace
-              level="two"
-              size="secondary"
+              level="h2"
+              size="heading3"
               text={bookTitle}
             />
           </Flex>
@@ -273,7 +325,7 @@ export default function TeacherSetBooks() {
               <CardHeading
                 id="book-page-sub_title"
                 marginBottom="s"
-                level="three"
+                level="h3"
               >
                 {book.sub_title}
               </CardHeading>
@@ -303,12 +355,12 @@ export default function TeacherSetBooks() {
             id="book-page-list-details"
             key="book-page-list-details-key"
             type="dl"
-            title="Details"
+            title={<Heading level="h3" size="heading5">Details</Heading>}
             marginTop="l"
           >
             {book.publication_date ? (
               <>
-                <dt id="book-page-publication-date-text">Publication Date</dt>
+                <dt id="book-page-publication-date-text">Publication date</dt>
                 <dd id="book-page-publication-date">
                   {book.publication_date}
                 </dd>{" "}
@@ -319,7 +371,7 @@ export default function TeacherSetBooks() {
 
             {book.call_number ? (
               <>
-                <dt id="book-page-call-number-text">Call Number</dt>
+                <dt id="book-page-call-number-text">Call number</dt>
                 <dd id="book-page-call-number">{book.call_number}</dd>{" "}
               </>
             ) : (
@@ -328,7 +380,7 @@ export default function TeacherSetBooks() {
 
             {book.physical_description ? (
               <>
-                <dt id="book-page-physical-desc-text">Physical Description</dt>
+                <dt id="book-page-physical-desc-text">Physical description</dt>
                 <dd id="book-page-physical-desc">
                   {book.physical_description}
                 </dd>
@@ -339,7 +391,7 @@ export default function TeacherSetBooks() {
 
             {book.primary_language ? (
               <>
-                <dt id="book-page-primary-language-text">Primary Language</dt>
+                <dt id="book-page-primary-language-text">Primary language</dt>
                 <dd id="book-page-primary-language">{book.primary_language}</dd>
               </>
             ) : (
@@ -369,25 +421,18 @@ export default function TeacherSetBooks() {
             className="tsDetailUrl"
             href={legacyDetailUrl}
             id="ts-book-page-details_url"
-            type="action"
-            target="_blank"
+            type="external"
           >
             View in catalog
-            <Icon
-              name="actionLaunch"
-              iconRotation="rotate0"
-              size="medium"
-              align="left"
-            />
           </Link>
           <Heading
             marginTop="l"
             marginBottom="l"
             id="appears-in-ts-text"
-            size="tertiary"
-            level="three"
+            size="heading5"
+            level="h3"
           >
-            Appears in These Sets
+            Appears in these sets
           </Heading>
           {TeacherSetDetails()}
         </>

@@ -1,4 +1,4 @@
-import FocusLock from "@chakra-ui/focus-lock";
+import { FocusLock } from "@chakra-ui/focus-lock";
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
@@ -35,38 +35,40 @@ export default function MobileHeader(props) {
       return (
         <Link
           href="/account_details"
-          className="nav-link-colors"
+          className="nav-link-colors mobileNavbarLinks"
           aria-label="Account Details"
+          id="mobile-navbar-account-link-id"
         >
-          <Button buttonType="text" className="mobileNavbarButton" id="mobile-navbar-button-account-id">
-            <Icon
-              align="right"
-              color={iconColors}
-              decorative
-              iconRotation="rotate0"
-              id="mobile-account-icon-id"
-              name="utilityAccountFilled"
-              size="large"
-              type="default"
-            />
-          </Button>
+          <Icon
+            align="right"
+            color={iconColors}
+            decorative
+            iconRotation="rotate0"
+            id="mobile-account-icon-id"
+            name="utilityAccountFilled"
+            size="large"
+            type="default"
+          />
         </Link>
       );
     } else {
       return (
-        <Link href="/signin" className="nav-link-colors" aria-label="Sign in">
-          <Button buttonType="text" className="mobileNavbarButton" id="mobile-navbar-button-signin-id">
-            <Icon
-              align="right"
-              color={iconColors}
-              decorative
-              iconRotation="rotate0"
-              id="mobile-signin-icon-id"
-              name="actionExit"
-              size="large"
-              type="default"
-            />
-          </Button>
+        <Link
+          href="/signin"
+          className="nav-link-colors mobileNavbarLinks"
+          aria-label="Sign in"
+          id="mobile-navbar-signin-link-id"
+        >
+          <Icon
+            align="right"
+            color={iconColors}
+            decorative
+            iconRotation="rotate0"
+            id="mobile-signin-icon-id"
+            name="actionExit"
+            size="large"
+            type="default"
+          />
         </Link>
       );
     }
@@ -103,7 +105,7 @@ export default function MobileHeader(props) {
       return (
         <li>
           <Link className="mobileSubmenu" href="/signin" aria-label="Sign in">
-            Sign In
+            Sign in
           </Link>
           <HorizontalRule align="right" className="mobileHorizontalRule" />
         </li>
@@ -129,21 +131,19 @@ export default function MobileHeader(props) {
             <FocusLock isDisabled={!mobileMenuActive}>
               <Link
                 href="/teacher_set_data"
-                className="nav-link-colors"
+                className="nav-link-colors mobileNavbarLinks"
                 aria-label="Search teacher sets"
               >
-                <Button buttonType="text" className="mobileNavbarButton">
-                  <Icon
-                    align="right"
-                    color={iconColors}
-                    decorative
-                    iconRotation="rotate0"
-                    id="mobile-search-ts-icon-id"
-                    name="utilitySearch"
-                    size="large"
-                    type="default"
-                  />
-                </Button>
+                <Icon
+                  align="right"
+                  color={iconColors}
+                  decorative
+                  iconRotation="rotate0"
+                  id="mobile-search-ts-icon-id"
+                  name="utilitySearch"
+                  size="large"
+                  type="default"
+                />
               </Link>
             </FocusLock>
           </Box>
@@ -167,7 +167,6 @@ export default function MobileHeader(props) {
                 }
                 aria-expanded={mobileMenuActive ? true : null}
                 buttonType="text"
-                id="mobileNav-btn"
                 onClick={() => {
                   setMobileMenuActive(!mobileMenuActive);
                 }}

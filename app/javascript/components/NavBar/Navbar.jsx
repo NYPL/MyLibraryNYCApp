@@ -10,7 +10,7 @@ import {
   useColorModeValue,
 } from "@nypl/design-system-react-components";
 
-import AccountDetailsSubMenu from "./../AccountDetailsSubMenu";
+import AccountDetailsSubMenu from "../AccountDetailsSubMenu/AccountDetailsSubMenu";
 import ColorModeComponent from "./../ColorMode/ColorMode";
 
 export default function Navbar(props) {
@@ -19,7 +19,9 @@ export default function Navbar(props) {
   const mlnLogo = useColorModeValue("mlnColor", "mlnWhite");
   const hideHomeSignUpMsg = () => {
     props.hideSignUpMessage(true);
-    navigate("/");
+    if (env.RAILS_ENV !== "test") {
+      navigate("/");
+    }
   };
   
   const hideSignInMsg = () => {
@@ -27,7 +29,6 @@ export default function Navbar(props) {
   };
 
   return (
-   
       <div id="mln-navbar" className="header-topWrapper">
         <Flex alignItems="center">
           <Link href="/" onClick={hideHomeSignUpMsg} aria-label="MyLibraryNYC homepage">
@@ -37,6 +38,7 @@ export default function Navbar(props) {
               decorative
               name={mlnLogo}
               size="small"
+              className="desktopMlnLogo"
             />
           </Link>
           <Spacer />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import axios from "axios";
 import {
   Button,
@@ -33,7 +33,7 @@ export default function SignIn(props) {
 
   useEffect(() => {
     document.title = "Sign In | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     if (props.userSignedIn && location.pathname === "/signin") {
@@ -71,8 +71,6 @@ export default function SignIn(props) {
           props.handleLogin(true);
           props.handleSignInMsg(res.data.sign_in_msg, true);
           props.hideSignInMessage(false);
-          console.log(res.data.user_return_to);
-          console.log(location);
           navigate("/" + res.data.user_return_to, {
             state: { userSignedIn: true },
           });
@@ -94,22 +92,21 @@ export default function SignIn(props) {
         <>
           <Heading
             id="sign-in-heading-id"
-            level="two"
-            size="secondary"
-            text="Sign In"
+            level="h2"
+            size="heading3"
+            text="Sign in"
           />
           <HorizontalRule
             id="ts-detail-page-horizontal-rule-id"
             marginTop="s"
             className={`${colorMode} teacherSetHorizontal`}
           />
-
           <TextInput
             isRequired
             id="sign-in-text-input"
             marginTop="xs"
             type="text"
-            labelText="Your DOE Email Address"
+            labelText="Your DOE email address"
             placeholder="Enter email address"
             onChange={handleEmail}
             invalidText={invali_email_msg}
@@ -124,18 +121,18 @@ export default function SignIn(props) {
             buttonType="noBrand"
             onClick={handleSubmit}
           >
-            Sign In
+            Sign in
           </Button>
 
           <Text id="not-registered-text" marginTop="xs" noSpace size="default">
-            Not Registered? Please
+            Not registered? Please
             <Link
               href="/signup"
               id="sign-up-link"
               type="action"
               marginLeft="xxs"
             >
-              Sign Up
+              sign up
             </Link>
           </Text>
           <Notification

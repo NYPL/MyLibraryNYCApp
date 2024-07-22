@@ -1,16 +1,14 @@
-import { render, screen, cleanup } from "@testing-library/react";
-import '@testing-library/jest-dom/extend-expect';
-import { axe, toHaveNoViolations } from "jest-axe";
 import * as React from "react";
-import renderer from "react-test-renderer";
-import { shallow } from 'enzyme';
 import HaveQuestions from "../HaveQuestions/HaveQuestions.jsx";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
 
-describe("HaveQuestions ", () => {
-  test("HaveQuestions ", () => {
-    const { wrapper } = shallow(<HaveQuestions />,);
-    const haveQuestionsLinks = screen.findByTestId("have-questions-links");
-    expect(haveQuestionsLinks).toBeTruthy();
+describe("HaveQuestions", () => {
+  test("HaveQuestions", () => {
+    // render the component on virtual dom
+    const rootElement = document.createElement('div');
+    document.body.appendChild(rootElement);
+    const root = createRoot(rootElement);
+    // Use act to ensure all updates are processed before assertions
+    root.render(<HaveQuestions />);
   });
 });

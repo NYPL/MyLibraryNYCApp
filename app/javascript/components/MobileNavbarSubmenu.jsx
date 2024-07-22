@@ -19,7 +19,7 @@ export default function MobileNavbarSubmenu() {
       >
         <li marginTop="s">
           <ReactRouterLink className="mobileSubmenu" to="/signin">
-            Sign In
+            Sign in
           </ReactRouterLink>
           <HorizontalRule align="left" className="mobileHorizontalRule" />
         </li>

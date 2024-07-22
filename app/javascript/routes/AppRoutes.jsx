@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, BrowserRouter as Router, Routes, Switch , Redirect, useNavigate} from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer/Footer";
 import Home from "../components/Home/Home";
@@ -9,10 +9,10 @@ import Banner from "../components/Banner";
 import ParticipatingSchools from "../components/ParticipatingSchools/ParticipatingSchools";
 import SignIn from "../components/SignIn/SignIn";
 import SignUp from "../components/SignUp/SignUp";
-import SearchTeacherSets from "../components/SearchTeacherSets";
-import Accounts from "../components/Accounts";
+import SearchTeacherSets from "../components/SearchTeacherSets/SearchTeacherSets";
+import Accounts from "../components/Accounts/Accounts";
 import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
-import TeacherSetDetails from "../components/TeacherSetDetails";
+import TeacherSetDetails from "../components/TeacherSetDetails/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder/TeacherSetOrder";
 import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks/TeacherSetBooks";
@@ -38,7 +38,6 @@ export default function AppRoutes(props) {
   }
 
   const handleSignedUpMsg = (signedUpMsg) => {
-    console.log(signedUpMsg)
     setSignedUpMessage(signedUpMsg)
   }
 

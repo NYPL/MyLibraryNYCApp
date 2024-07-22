@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
-
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import {
   TemplateAppContainer,
   Heading,
@@ -15,7 +14,7 @@ function Contact() {
   const { colorMode } = useColorMode();
   useEffect(() => {
     document.title = "Contact | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
   }, []);
@@ -27,10 +26,10 @@ function Contact() {
         <div id="contacts-page">
           <Heading
             id="general-information-heading"
-            level="two"
-            size="secondary"
+            level="h2"
+            size="heading3"
             marginBottom="s"
-            text="General Information"
+            text="General information"
           />
           <Text size="default" marginBottom="l">
             Have a question about library cards, your account or delivery?
@@ -41,8 +40,8 @@ function Contact() {
             useRowHeaders
             tableData={[
               [
-                <Text key="general-ino" noSpace className={`${colorMode}`}>
-                  General Information
+                <Text key="general-info" noSpace className={`${colorMode} noTextTransform`}>
+                  General information
                 </Text>,
                 <Link
                   key="mln-help-email-key"
@@ -53,8 +52,8 @@ function Contact() {
                 </Link>,
               ],
               [
-                <Text key="delivery-questions" noSpace className={`${colorMode}`}>
-                  Delivery Questions
+                <Text key="delivery-questions" noSpace className={`${colorMode} noTextTransform`}>
+                  Delivery questions
                 </Text>,
                 <Link
                   key="delivery-questions-link"
@@ -69,9 +68,9 @@ function Contact() {
           <Heading
             id="library-cards-account"
             marginTop="xl"
-            level="two"
-            size="secondary"
-            text="Professional Development"
+            level="h2"
+            size="heading3"
+            text="Professional development"
           />
           <Text marginTop="s" marginBottom="l" size="default">
             Want to find out about library staff visiting your school?
@@ -122,9 +121,9 @@ function Contact() {
           />
           <Heading
             id="my-library-nyc-questions-secondary"
-            level="two"
+            level="h2"
             marginTop="xl"
-            size="secondary"
+            size="heading3"
             text="Joining MyLibraryNYC"
           />
           <Text marginTop="s" marginBottom="l" size="default">
@@ -132,22 +131,24 @@ function Contact() {
           </Text>
           <Heading
             id="my-library-nyc-questions-tertiary"
-            level="three"
-            size="tertiary"
-            text="Find Your School"
+            level="h3"
+            size="heading5"
+            text="Find your school"
           />
           <Text marginTop="s" marginBottom="l" size="default">
             Search our list of schools to see if your school already
             participates.
           </Text>
-          <Link id="mln-ps-link" href="http://www.mylibrarynyc.org/schools">
+          <Link id="mln-ps-link"
+                target="_blank" 
+                href="http://www.mylibrarynyc.org/participating-schools">
             Participating schools
           </Link>
           <Heading
             id="eligibility"
             marginTop="l"
-            level="three"
-            size="tertiary"
+            level="h3"
+            size="heading5"
             text="Eligibility"
           />
           To find out if your school is eligible to participate in the program

@@ -54,8 +54,11 @@ MyLibraryNYC::Application.configure do
   config.eager_load = false
 
   config.active_job.queue_adapter = :delayed_job
-
+  
   config.exceptions_app = lambda do |env|
     ExceptionsController.action(:render_error).call(env)
   end
+
+  config.assets.debug = true
+  Delayed::Worker.logger = Rails.logger
 end

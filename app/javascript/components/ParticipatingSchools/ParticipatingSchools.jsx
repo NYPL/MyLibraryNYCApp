@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import SignedInMsg from "./../SignedInMsg";
 import axios from "axios";
 import {
@@ -26,7 +26,7 @@ export default function ParticipatingSchools(props) {
 
   useEffect(() => {
     document.title = "Participating Schools | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     axios
@@ -130,14 +130,14 @@ export default function ParticipatingSchools(props) {
                   className="alphabet_anchor"
                   name={data["alphabet_anchor"]}
                 >
-                  <Heading level="three" size="tertiary">
+                  <Heading level="h3" size="heading5">
                     {data["alphabet_anchor"]}
                   </Heading>
                 </a>
               </li>
               {filteredSchools.map((school, index) => (
                 <li
-                  fontWeight="heading.callout"
+                  fontWeight="medium"
                   id={"ps-name-" + data["alphabet_anchor"] + "-" + index}
                   key={"ps-name-" + data["alphabet_anchor"] + "-key-" + index}
                 >
@@ -167,7 +167,7 @@ export default function ParticipatingSchools(props) {
                 align="right"
                 marginRight="xs"
               />
-              Back to Top
+              Back to top
             </Button>
           </div>
         );
@@ -203,9 +203,9 @@ export default function ParticipatingSchools(props) {
         <>
           <Heading
             id="find-your-school"
-            level="two"
-            size="secondary"
-            text="Find Your School"
+            level="h2"
+            size="heading3"
+            text="Find your school"
           />
           <HorizontalRule
             id="ts-detail-page-horizontal-rulel"
@@ -214,11 +214,10 @@ export default function ParticipatingSchools(props) {
           <Heading
             marginTop="l"
             id="your-school-participate-in-mln"
-            level="three"
-            size="tertiary"
+            level="h3"
+            size="heading5"
             text="Does your school participate in MyLibraryNYC?"
           />
-
           <TextInput
             fontWeight="text.tag"
             helperText="Start typing the name of your school."
@@ -230,12 +229,12 @@ export default function ParticipatingSchools(props) {
             }}
             onChange={handleChange}
             id="participating-school"
-            labelText="Search by Name"
+            labelText="Search by name"
             placeholder="School name"
             showLabel
           />
           <Text marginTop="l" size="default" fontWeight="medium">
-            Filter by Name
+            Filter by name
           </Text>
           {AnchorTags()}
           <div id="participating-schools-list">

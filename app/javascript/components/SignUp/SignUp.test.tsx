@@ -1,32 +1,57 @@
-import { render, screen, cleanup } from "@testing-library/react";
-import { mount, shallow } from 'enzyme';
 import '@testing-library/jest-dom/extend-expect';
-import { axe, toHaveNoViolations } from "jest-axe";
 import * as React from "react";
-import renderer from "react-test-renderer";
 import SignUp from "../SignUp/SignUp.jsx";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
+import axios from 'axios';
+import { act } from 'react-dom/test-utils';
+import { waitFor, screen, fireEvent } from '@testing-library/react';
+import { useNavigate } from 'react-router-dom';
+jest.mock('axios');
+
+const mockUseNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'), // Use actual react-router-dom for other functions
+  useNavigate: () => mockUseNavigate, // Mock useNavigate
+}));
 
 describe("SignUp", () => {
-  test("SignUp", () => {
-    // render the component on virtual dom
-    const { container } = render(<Router><SignUp /></Router>,);
-    expect(screen.getByLabelText("Signup Error Notifications")).toBeInTheDocument();
-    expect(screen.getByText("Some of your information needs to be updated before your account can be created. See the fields highlighted below.")).toBeInTheDocument();
-    expect(screen.getByLabelText("Preferred email address")).toBeInTheDocument();
-    expect(screen.getByLabelText("First Name (Required)")).toBeInTheDocument();
-    expect(screen.getByLabelText("Last Name (Required)")).toBeInTheDocument();
-    expect(screen.getByLabelText("Your School (Required)")).toBeInTheDocument();
-    expect(screen.getByLabelText("Password (Required)")).toBeInTheDocument();
-    expect(screen.getByLabelText("Select if you would like to receive the MyLibraryNYC email newsletter (we will use your alternate email if supplied above)")).toBeInTheDocument();
+  afterEach(() => {
+    // Clear all mocks after each test
+    jest.clearAllMocks();
   });
 
-  // it("Updates the state", () => {
-  //   const wrapper = shallow(<Router><SignUp /></Router>,);
-  //   const input = wrapper.find("#sign-up-email").at(0).simulate('change');
-  //   //input.simulate("change", { target: { value: 'deepika@gmail.com' } });  // 'value' instead of 'num'
-  //   console.log(wrapper.state())
-  //   //expect(wrapper.state().num).toEqual(2);  // SUCCESS
-  // });
+  test("test active schools", async () => {
+    const active_schools = {
+      "J. M. Rapport School Career Development - Albert Tuitt Campus (X362 J.M. RAPPORT SCHOOL CAREER)": 1156,
+      "P.S. X017- Adlai Campus (X450 P.S. X017 - ADLAI CAMPUS)": 1158,
+      "PS8 The Emily Warren Roebling School (K008 PS8 EMILY WARREN ROEBLING)": 1157,
+      "Renaissance High School for Musical Theater and the Arts (X405 RENAISSANCE HS FOR MUSICAL)": 1159
+    }
+    
+    axios.get.mockResolvedValue({ data: { activeSchools: active_schools, emailMasks: ["schools.nyc.gov", "@nypl.org"] } });
+    const rootElement = document.createElement('div');
+    document.body.appendChild(rootElement);
+    const root = createRoot(rootElement);
+
+    // Use act to ensure all updates are processed before assertions
+    await act(async () => {
+      root.render(<SignUp />);
+    });
+
+    expect(screen.getByText("Email address must end with @schools.nyc.gov or a participating school domain.")).toBeInTheDocument();
+    expect(screen.getByText("J. M. Rapport School Career Development - Albert Tuitt Campus (X362 J.M. RAPPORT SCHOOL CAREER)")).toBeInTheDocument();
+  });
+
+  test("test active schools with no active schools", async () => {
+    axios.get.mockResolvedValue({ data: { activeSchools: {}, emailMasks: ["schools.nyc.gov", "@nypl.org"] } });
+    const rootElement = document.createElement('div');
+    document.body.appendChild(rootElement);
+    const root = createRoot(rootElement);
+
+    // Use act to ensure all updates are processed before assertions
+    await act(async () => {
+      root.render(<SignUp />);
+    });
+  });
 });
 

@@ -32,6 +32,9 @@
     "forceConsistentCasingInFileNames": true,
     // `tsdx build` ignores this option, but it is commonly used when type-checking separately with `tsc`
     "noEmit": true,
-    "types": ["node", "webpack-env", "jest", "@testing-library/jest-dom"]
+    "types": ["node", "webpack-env", "jest", "@testing-library/jest-dom"],
+    "paths": {
+      "react": [ "./node_modules/@types/react" ]
+    }   
   }
 }

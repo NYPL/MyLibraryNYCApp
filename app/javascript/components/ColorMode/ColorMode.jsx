@@ -35,7 +35,7 @@ export default function ColorMode() {
 
   const lightMode = () => {
     if (isLargerThanMobile) {
-      return <Button buttonType="text" id="desktop-color-mode-icon" aria-label="Switch to dark mode" className="border-none"
+      return <Button buttonType="text" id="desktop-color-mode-icon" aria-label="Switch to dark mode" className="border-none mobileNavbarButton"
       bgColor="ui.white"
       onClick={handleChangeToDarkLightMode}>
         <Icon
@@ -56,7 +56,7 @@ export default function ColorMode() {
       id="mobile-color-mode-icon"
       aria-label="Switch to dark mode"
       onClick={handleChangeToDarkLightMode}
-      className="border-none"
+      className="border-none mobileNavbarButton"
       bgColor="ui.white"
     >
       <Icon
@@ -86,7 +86,7 @@ export default function ColorMode() {
       return <Button buttonType="text" id="desktop-color-mode-icon"
       bgColor="ui.white"
       aria-label="Switch to light mode"
-      onClick={handleChangeToDarkLightMode} className="border-none">
+      onClick={handleChangeToDarkLightMode} className="border-none mobileNavbarButton">
       <Icon
           align="right"
           color={iconColors}
@@ -105,7 +105,7 @@ export default function ColorMode() {
       id="mobile-color-mode-icon"
       aria-label="Switch to light mode"
       onClick={handleChangeToDarkLightMode}
-      className="border-none"
+      className="border-none mobileNavbarButton"
       bgColor="ui.white"
     >
       <Icon

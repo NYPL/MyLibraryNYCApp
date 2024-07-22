@@ -1,0 +1,316 @@
+:root {
+  --breakpoint-small: 320px;
+  --breakpoint-medium: 600px;
+  --breakpoint-large: 960px;
+}
+
+$breakpoint-small: 320px;
+$breakpoint-medium: 600px;
+$breakpoint-large: 960px;
+
+@mixin min-screen($breakpoint) {
+  @media screen and (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin max-screen($breakpoint) {
+  @media screen and (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+.navMenu-wrapper {
+  display: inline-block;
+  position: inherit;
+
+  @include min-screen(769px) {
+    display: none;
+  }
+}
+
+.mobileHeader {
+  @include min-screen(769px) {
+    display: none;
+  }
+}
+
+.app-header {
+  height: 104px;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+  border-radius: 0px;
+  background: #FFFFFF;
+  @include max-screen(769px) {
+    display: none;
+  }
+}
+
+.mln-home-page-logo {
+  height: 40px;
+  width: 167px;
+  border-radius: 0px;
+  float: left;
+  padding: 12px 130px !important;
+
+  @include max-screen(769px) {
+    padding: 0px !important
+  }
+}
+
+.homeLogo {
+  @include max-screen(769px) {
+    height: 32px;
+    margin-top: 15px;
+    margin-left: 10px;
+  }
+}
+
+.navMenu-wrapper {
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  background-color: #121212;
+}
+
+.header {
+  a {
+    text-decoration: none;
+  }
+
+  a,
+  button,
+
+  &-wrapper {
+    position: relative;
+  }
+
+  &-topWrapper {
+    display: none;
+
+    @include min-screen($breakpoint-large) {
+      display: block;
+      max-width: 1312px;
+      min-height: 4em;
+    }
+
+    @include min-screen(var(--nypl-breakpoint-xl)) {
+      margin: 0px auto;
+    }
+
+    @include min-screen($breakpoint-large) {
+      margin: 0px auto;
+    }
+  }
+
+  &-logo {
+    overflow: hidden;
+    @include min-screen(769px) {
+      display: block;
+      margin: 0;
+    }
+
+    @include min-screen(1025px) {
+      max-width: 14em;
+      position: relative;
+      top: 40px;
+    }
+
+    @include min-screen(1024px) {
+      max-width: 14em;
+      top: 40px;
+    }
+  }
+}
+
+.hero--campaign .hero__content {
+  background: #F5F5F5 !important;
+  color: #000000 !important;
+}
+
+.calendarButton {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  @include min-screen($breakpoint-small) {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  @include min-screen(280px) {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  @include min-screen($breakpoint-medium) {
+    flex-direction: row;
+  }
+
+  @include min-screen($breakpoint-large) {
+    flex-direction: row;
+    width: 100%;
+  }
+}
+
+.calendarButton .calendar_link {
+  color: #FFFFFF !important;
+}
+
+.calendarButton .calendar_button {
+  margin: 7px 32px 7px 0px;
+  font-weight: 400;
+  font-size: 14px;
+  text-align: center;
+}
+
+.newsLetter {
+  padding-top: 50px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background: #FFFFFF;
+}
+
+.mobileSubmenu {
+  color: var(--nypl-colors-ui-white) !important;
+  text-decoration: none !important;
+  margin-left: 16px;
+}
+
+.mobileHorizontalRule {
+  height: 0.5px !important;
+  background: var(--nypl-colors-ui-gray-dark) !important;
+  margin-top: 8px !important;
+}
+
+.mobileList {
+  color: var(--nypl-colors-ui-gray-dark) !important;
+}
+
+#mln-navbar {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  @include max-screen($breakpoint-large) {
+    display: none;
+  }
+}
+
+#mln-mobile-header-topWrapper {
+  @include min-screen($breakpoint-large) {
+    display: none;
+  }
+}
+
+#mln-mobile-header-logo {
+  @include max-screen(890px) {
+  }
+}
+
+@media screen and (max-width: $breakpoint-large) {
+  .nav-links-none {
+    display: none;
+  }
+
+  .nav-links-mobile {
+    background-color: rgb(43, 43, 43);
+    color: var(--nypl-colors-ui-white);
+    left: 0px;
+    min-height: 250px;
+    position: absolute;
+    white-space: initial;
+    width: 100%;
+    z-index: 99999;
+  }
+}
+
+@media screen and (max-width: 545px) {
+  .teacher-set-skeleton-loader {
+    width: 500px !important;
+  }
+  .teacher-set-details-skeleton-loader {
+    width: 500px !important;
+  }
+}
+
+@media screen and (max-width: $breakpoint-large) {
+  .teacher-set-skeleton-loader {
+    width: 600px !important;
+  }
+  .teacher-set-details-skeleton-loader {
+    width: 600px !important;
+  }
+}
+
+@media screen and (max-width: $breakpoint-medium) {
+  .teacher-set-skeleton-loader {
+    width: 450px !important;
+  }
+
+  .teacher-set-details-skeleton-loader {
+    width: 450px !important;
+  }
+
+  .bookImageTop {
+    margin-top: var(--nypl-space-xs);
+  }
+}
+
+@media screen and (max-width: 285px) {
+  .teacher-set-skeleton-loader {
+    width: 225px !important;
+  }
+
+  .teacher-set-details-skeleton-loader {
+    width: 225px !important;
+  }
+}
+
+@media screen and (max-width: 415px) {
+  .teacher-set-skeleton-loader {
+    width: 285px !important;
+  }
+
+  .teacher-set-details-skeleton-loader {
+    width: 285px !important;
+  }
+}
+
+.mobile-submenu-close-btn {
+  background-color: var(--nypl-colors-ui-gray-xx-dark) !important;
+  border: 0px !important;
+}
+
+.mobile-navmenu-hamburger {
+  gap: var(--nypl-space-xxs) !important;
+  -webkit-box-align: center !important;
+  align-items: center !important;
+  background-color: rgb(43, 43, 43) !important;
+  border: var(--nypl-borders-none) !important;
+  border-radius: 0px !important;
+  padding: 1px 6px !important;
+}
+
+.border-none {
+  border: none !important;
+  background: none !important;
+}
+
+.mobileNavbarButton {
+  border: none !important;
+  min-height: 46px !important;
+  min-width: 46px !important;
+}
+
+.mobileNavbarLinks {
+  display: flex;
+  width: 44px !important;
+  height: 44px !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamBurger {
+  background-color: none !important;
+}

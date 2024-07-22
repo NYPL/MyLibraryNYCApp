@@ -1,5 +1,5 @@
 import React from "react";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import {
   TemplateAppContainer,
   Text,
@@ -27,7 +27,6 @@ export default function PageNotFound() {
         </Text>
         <Text marginLeft="s" data-testid="page-not-found-error-msg-2">To continue using our site, you can:</Text>
         <List
-          id="nypl-list"
           id="nypl-list"
           key="nypl-list-key"
           title=""
@@ -62,7 +61,7 @@ export default function PageNotFound() {
           <Breadcrumbs
             id={"mln-breadcrumbs-error-page"}
             breadcrumbsData={[
-              { url: "//" + process.env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
+              { url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" },
               {
                 url: "//" + window.location.hostname + "/*",
                 text: "404 Error",
@@ -75,8 +74,10 @@ export default function PageNotFound() {
             backgroundColor="var(--nypl-colors-brand-primary)"
             heading={
               <Heading
-                level="one"
-                id={"mln-404-error-page"}
+                level="h1"
+                size='heading1'
+                color="ui.white"
+                id="mln-404-error-page"
                 text="Page Not Found"
               />
             }

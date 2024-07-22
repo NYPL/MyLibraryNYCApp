@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import TeacherSetOrderDetails from "./../TeacherSetOrderDetails";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -24,14 +24,14 @@ export default function TeacherSetOrder(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Order Details | MyLibraryNYC";
+    document.title = "Order details | MyLibraryNYC";
     if (typeof hold === "string") {
       axios
         .get("/holds/" + params["access_key"])
         .then((res) => {
           if (
             res.request.responseURL ===
-            "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
+            "https://" + env.MLN_INFO_SITE_HOSTNAME + "/signin"
           ) {
             navigate(res.request.responseURL);
             return false;
@@ -41,7 +41,7 @@ export default function TeacherSetOrder(props) {
             if (res.data.hold && res.data.hold.status === "cancelled") {
               document.title = "Order Cancelled | MyLibraryNYC";
             } else {
-              document.title = "Order Details | MyLibraryNYC";
+              document.title = "Order details | MyLibraryNYC";
             }
           }
         })
@@ -78,7 +78,7 @@ export default function TeacherSetOrder(props) {
             href={"/holds/" + params["access_key"] + "/cancel"}
           >
             {" "}
-            Cancel My Order{" "}
+            Cancel my order{" "}
           </Link>
         </Button>
       </div>
@@ -98,8 +98,8 @@ export default function TeacherSetOrder(props) {
         <>
           <Heading
             id="order-confirmation-heading"
-            level="two"
-            size="secondary"
+            level="h2"
+            size="heading3"
             text={confirmationMsg}
           />
           <HorizontalRule
@@ -126,7 +126,7 @@ export default function TeacherSetOrder(props) {
               size="small"
               align="left"
             />
-            Back to Search Teacher Sets Page
+            Back to search Teacher Sets page
           </Link>
         </>
       }

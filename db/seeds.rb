@@ -12,7 +12,7 @@ File.open 'db/seed-data.sql', 'r' do |f|
   connection = ActiveRecord::Base.connection
   database_array = ['schema_migrations','holds','users','sierra_code_zcode_matches']
   connection.tables.each do |table|
-    connection.execute("TRUNCATE #{table}") unless database_array.include? table
+    #connection.execute("TRUNCATE #{table}") unless database_array.include? table
   end
 
   statements = f.read.split(/;$/)

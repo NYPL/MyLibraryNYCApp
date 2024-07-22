@@ -20,7 +20,6 @@ function Footer() {
     "var(--nypl-colors-ui-black)",
     "var(--nypl-colors-dark-ui-typography-heading)"
   );
-
   const footerLinks = () => {
     return (
       <>
@@ -28,7 +27,7 @@ function Footer() {
           id="nypl-footer-logo-link"
           href="http://nypl.org"
           target="_blank"
-          //screenreaderOnlyText="New York Public Library"
+          screenreaderOnlyText="New York Public Library"
         >
           <Logo
             decorative
@@ -37,12 +36,11 @@ function Footer() {
             size="small"
           />
         </Link>
-
         <Link
           id="brooklyn-foooter-logo-link"
           href="http://www.brooklynpubliclibrary.org"
           target="_blank"
-          //screenreaderOnlyText="Brooklyn Public Library"
+          screenreaderOnlyText="Brooklyn Public Library"
         >
           <Logo
             decorative
@@ -51,12 +49,11 @@ function Footer() {
             size="small"
           />
         </Link>
-
         <Link
           id="queens-foooter-logo-link"
           href="http://www.queenslibrary.org"
           target="_blank"
-          //screenreaderOnlyText="Queens Public Library"
+          screenreaderOnlyText="Queens Public Library"
         >
           <Logo
             decorative
@@ -69,7 +66,7 @@ function Footer() {
           id="nycps-foooter-logo-link"
           href="http://schools.nyc.gov"
           target="_blank"
-          //screenreaderOnlyText="New York City Public Schools"
+          screenreaderOnlyText="New York City Public Schools"
         >
           <Logo
               decorative
@@ -112,7 +109,7 @@ function Footer() {
   };
 
   return (
-    <Box className="app-footer" bg={footerBgColor}>
+    <Box bg={footerBgColor}>
       <Center id="mln-footer-data" paddingTop="xxl">
         {footerData()}
       </Center>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import HaveQuestions from "./../HaveQuestions";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import axios from "axios";
 import {
   Button,
@@ -52,7 +52,7 @@ export default function SignUp(props) {
   
   useEffect(() => {
     document.title = "Sign Up | MyLibraryNYC";
-    if (process.env.NODE_ENV !== "test") {
+    if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
     axios
@@ -67,15 +67,15 @@ export default function SignUp(props) {
   }, []);
 
   const redirectToTeacherSetPage = () => {
+    window.scrollTo(0, 0);
     navigate("/teacher_set_data", { state: { userSignedIn: true } });
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault();   
+    const news_email = isCheckedVal? alt_email || email : ""
+
     if (handleValidation()) {
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-        .querySelector("meta[name='csrf-token']")
-        .getAttribute("content");
       axios
         .post("/users", {
           user: {
@@ -85,7 +85,7 @@ export default function SignUp(props) {
             last_name: last_name,
             password: password,
             school_id: school_id,
-            news_letter_email: alt_email || email,
+            news_letter_email: news_email,
           },
         })
         .then((res) => {
@@ -511,9 +511,9 @@ export default function SignUp(props) {
         <>
           <Heading
             id="sign-up-heading-id"
-            level="two"
-            size="secondary"
-            text="Sign Up"
+            level="h2"
+            size="heading3"
+            text="Sign up"
           />
           <HorizontalRule
             id="ts-detail-page-horizontal-rulel"
@@ -531,7 +531,7 @@ export default function SignUp(props) {
                 isRequired
                 marginTop="l"
                 showoptreqlabel="true"
-                labelText="Your DOE Email Address"
+                labelText="Your DOE email address"
                 value={email}
                 onChange={handleEmail.bind(this, "email")}
                 invalidText={errorEmailMsg}
@@ -555,7 +555,7 @@ export default function SignUp(props) {
                 id="sign-up-first-name"
                 isRequired
                 showoptreqlabel="true"
-                labelText="First Name"
+                labelText="First name"
                 value={first_name}
                 invalidText={firstNameErrorMsg}
                 isInvalid={firstNameIsValid}
@@ -567,7 +567,7 @@ export default function SignUp(props) {
                 id="sign-up-last-name"
                 isRequired
                 showoptreqlabel="true"
-                labelText="Last Name"
+                labelText="Last name"
                 value={last_name}
                 invalidText={lastNameErrorMsg}
                 isInvalid={lastNameIsValid}
@@ -577,7 +577,7 @@ export default function SignUp(props) {
             <FormField>
               <Select
                 id="sign-up-select-schools"
-                labelText="Your School"
+                labelText="Your school"
                 value={school_id}
                 showLabel
                 isRequired
@@ -636,7 +636,7 @@ export default function SignUp(props) {
                   isDisabled={isDisabled}
                 >
                   {" "}
-                  Sign Up{" "}
+                  Sign up{" "}
                 </Button>
               </ButtonGroup>
             </FormField>

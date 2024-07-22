@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Heading, Icon, useColorModeValue } from "@nypl/design-system-react-components";
+import SocialIcons from "./../SocialIcons";
 
 export default function HaveQuestions() {
   const socialMediaIconColor = useColorModeValue(
@@ -11,21 +12,21 @@ export default function HaveQuestions() {
     <>
       <Heading
         id="heading-tertiary"
-        level="two"
-        size="tertiary"
-        text="Have Questions?"
+        level="h2"
+        size="heading5"
+        text="Have questions?"
       />
       <div id="have-questions-links">
         <p className="visitOurText">
-          Visit Our{" "}
+          Visit our{" "}
           <Link id="home-faq-link" type="action" href="/faq">
-            FAQ Page
+            FAQ page
           </Link>
         </p>
         <p>
           Or{" "}
           <Link id="home-contact-link" type="action" href="/contact">
-            Contact Us
+            contact us
           </Link>
         </p>
         <p>

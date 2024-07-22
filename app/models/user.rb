@@ -4,8 +4,9 @@ class User < ActiveRecord::Base
   include Exceptions
   include LogWrapper
   include Oauth
-
-
+  include MlnException
+  include MlnResponse
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -14,7 +15,11 @@ class User < ActiveRecord::Base
 
   # Makes getters and setters
   attr_accessor :password
-
+  
+  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer:true,
+  less_than_or_equal_to: 27777099999999, uniqueness: true
+  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: false,
+  only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
 
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
@@ -23,7 +28,6 @@ class User < ActiveRecord::Base
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#$%\^&*+_=\x00-\x19]+\z/
   validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
-
   # validate :validate_password_pattern, on: :create
   # PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[[:^alnum:]])/x
   validate :validate_email_pattern, :on => :create
@@ -31,6 +35,8 @@ class User < ActiveRecord::Base
   has_many :holds
 
   belongs_to :school
+  USER_BARCODE_ALLOTTED_RANGE_MINIMUM = 27777000000001
+  USER_BARCODE_ALLOTTED_RANGE_MAXIMUM = 27777099999999
 
   # # Set default password if one is not set
   # before_validation(on: :create) do
@@ -39,7 +45,7 @@ class User < ActiveRecord::Base
   # end
 
 
-  STATUS_LABELS = {'barcode_pending' => 'barcode_pending', 'complete' => 'complete'}.freeze
+  STATUS_LABELS = {'pending' => 'pending', 'complete' => 'complete'}.freeze
 
 
   ## NOTE: Validation methods, including this one, are called twice when
@@ -109,25 +115,183 @@ class User < ActiveRecord::Base
     UserMailer.unsubscribe(self).deliver
   end
 
-  def assign_barcode
+  # If the user's barcode is not yet finalized, then set its status to
+  # 'pending' and save.  In the future, there may be other conditions that
+  # could set the user to "pending", and we'll be checking for those here, as well.
+  def save_as_pending!
+    LogWrapper.log('DEBUG', {
+       'message' => "Saving as pending #{self.id}",
+       'method' => "#{model_name}.save_as_pending!",
+       'status' => "before save action"
+    })
+
+    # do we need to fill in a provisional barcode?
+    unless self.barcode.present?
+      # NOTE: assign_barcode could throw a RangeError.
+      # If it does, we want it to propagate up the stack to the calling method.
+      self.barcode = self.assign_barcode!
+    end
+
+    self.status = STATUS_LABELS['pending']
+
+    self.save!
+  end
+
+  # ################ THE BARCODES SECTION! ################
+  # Assigns a barcode based on the current range in the MLN db.
+  # Does not check the barcode for availability/uniqueness in Sierra.
+  # We have an ActiveJob for that.
+  def assign_barcode(number_tries=0)
     LogWrapper.log('DEBUG', {
        'message' => "Begin assigning barcode to #{self.email}",
-       'method' => "assign_barcode",
-       'status' => "start",
+       'method' => "#{model_name}.assign_barcode",
+       'status' => "start"
+      })
+
+    # Integer(string) can raise ArgumentError.  we choose not to rescue it, because
+    # not having min and max barcode range boundaries set in the application.yml file
+    # should prevent the app from working in a visible manner.
+    min_barcode = USER_BARCODE_ALLOTTED_RANGE_MINIMUM
+    max_barcode = USER_BARCODE_ALLOTTED_RANGE_MAXIMUM
+    # if we're being asked to increment our barcode because it's
+    # non-unique in Sierra, then do so here
+    if self.barcode && number_tries >= 2
+      # Did we go over the limit?  No use stepping back, tell the app we'll
+      # need to ask Sierra team for a wider barcode range.
+      self.assign_attributes({ barcode: self.barcode + rand(100..900) })
+
+      if self.barcode > max_barcode
+        raise_barcode_error_message
+      end
+
+      LogWrapper.log('DEBUG', {
+         'message' => "Had a barcode.  Changed it to #{self.barcode}.  Returning from method.",
+         'method' => "#{model_name}.assign_barcode!",
+         'status' => "end",
+         'user' => {email: self.email}
+        })
+      return self.barcode
+    end
+    last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
+
+    LogWrapper.log('DEBUG', {
+       'message' => "Found last_user_barcode: #{last_user_barcode || 'NIL'}.",
+       'method' => "#{model_name}.assign_barcode!",
+       'status' => "end",
        'user' => {email: self.email}
       })
 
-    last_user_barcode = User.where('barcode < 27777099999999').order(:barcode).last.barcode
-    self.assign_attributes({ barcode: last_user_barcode + 1})
+    # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
+    if last_user_barcode.blank?
+      # Check to see if we're in an empty database, or if it's the opposite case:
+      # we've run out of allowed barcodes.  Yes, we might have historical user records
+      # with barcodes outside of the range, but we can't be making new records there.
+      current_top_barcode = User.where.not(barcode: nil).order(barcode: :desc).pluck(:barcode).first
+      
+      if current_top_barcode.blank?
+        # hurrah, we're in a fresh db, let's start our users table off
+        last_user_barcode = min_barcode
+      else
+        # No more barcodes left in the range available to MLN.
+        # Throw an Exception-level exception -- we can't operate with
+        # no available barcodes, and this exception shouldn't be caught
+        raise_barcode_error_message
+      end
+    end
+
+    if (last_user_barcode < min_barcode)
+      last_user_barcode = min_barcode
+    end
+
+    self.assign_attributes({ barcode: last_user_barcode + rand(100..999) })
+
+    if self.barcode > max_barcode
+      raise_barcode_error_message
+    end
 
     LogWrapper.log('DEBUG', {
        'message' => "Barcode has been assigned to #{self.email}",
-       'method' => "assign_barcode",
+       'method' => "#{model_name}.assign_barcode!",
        'status' => "end",
-       'barcode' => "#{self.barcode}",
-       'user' => {email: self.email}
+       'barcode' => "#{self.barcode}"
       })
     return self.barcode
+  end
+
+  def raise_barcode_error_message
+    LogWrapper.log('ERROR', {
+          'method' => "#{model_name}.assign_barcode!",
+          'message' => "MLN app has run out of available user barcodes"
+      })
+    raise RangeError, "MLN app has run out of available user barcodes"
+  end
+
+  def create_patron_delayed_job
+    Rails.logger.info "Entering Delay Job For"
+    Delayed::Job.enqueue(UserDelayedJob.new(self.id, self.password))
+  end
+
+  def save_as_complete!
+    begin
+      # isBarCodeAvailable is true means barcode is available we can assign to any user.
+      is_barcode_available = barcode_available_in_sierra?
+
+      unless is_barcode_available
+        Delayed::Worker.logger.info("User status is updating from #{self.status} to #{STATUS_LABELS['complete']}")
+        self.status = STATUS_LABELS['complete']
+        self.save!
+      end
+    rescue StandardError => e
+      Delayed::Worker.logger.info("user details #{self.status}  #{e.backtrace}")
+    end
+  end
+
+  def barcode_available_in_sierra?
+    is_barcode_available = false
+    response = HTTParty.get(
+      ENV.fetch('PATRON_MICROSERVICE_URL_V01') + "?barcode=#{self.barcode}",
+      headers:
+        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
+          'Content-Type' => 'application/json' },
+      timeout: 10
+    )
+
+    if (response.code == 404 && response.message == "Not Found")
+      is_barcode_available = true
+      LogWrapper.log('ERROR', {
+        'method' => "barcode_available_in_sierra?",
+        'message' => "Barcode is available in sierra we can assign to user. Barcode: #{self.barcode}"
+      })
+    elsif (response.code == 409)
+      is_barcode_available = false
+      LogWrapper.log('ERROR', {
+        'method' => "barcode_available_in_sierra?",
+        'message' => "Duplicate patrons found for query. Barcode: #{self.barcode}"
+      })
+    elsif (response.code >= 500)
+      LogWrapper.log('ERROR', {
+        'method' => "barcode_available_in_sierra?",
+        'message' => "Internal Server error. Barcode: #{self.barcode}"
+      })
+      # raise InternalServerException.new(GENERIC_SERVER_ERROR[:code], GENERIC_SERVER_ERROR[:msg])
+    end
+
+    LogWrapper.log('INFO', {
+      'method' => "barcode_available_in_sierra?",
+      'message' => "barcode_available_in_sierra response details: #{response.code} is_barcode_available: #{is_barcode_available}"
+    })
+    return is_barcode_available
+  end
+
+  def calculate_next_recurring_event_date(current_date=Date.today, month=6, day=30)
+    # Check if it's after June 30th or on June 30th
+    future_date = if current_date.month > month || (current_date.month == month && current_date.day >= day)
+                    Date.new(current_date.year + 1, month, day)
+                  else
+                    Date.new(current_date.year, month, day)
+                  end
+    # Format the date as a string in "YYYY-MM-DD" format
+    future_date.strftime('%Y-%m-%d')
   end
 
   # Sends a request to the patron creator microservice.
@@ -135,12 +299,15 @@ class User < ActiveRecord::Base
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with
   # a success/failure response.
   # Accepts a response from the microservice, and returns.
-  def send_request_to_patron_creator_service
+  def send_request_to_patron_creator_service(pin)
     # Sierra supporting pin as password
+    Delayed::Worker.logger.info("user pin details #{pin} ")
+    Delayed::Worker.logger.info("user password details #{self.password} ")
+
     query = {
-      'names' => ["#{last_name.upcase}, #{first_name.upcase}"],
+      'names' => ["#{self.last_name.upcase}, #{self.first_name.upcase}"],
       'emails' => [email],
-      'pin' => password,
+      'pin' => pin,
       'patronType' => patron_type,
       'patronCodes' => {
         'pcode1' => '-',
@@ -148,7 +315,7 @@ class User < ActiveRecord::Base
         'pcode3' => pcode3,
         'pcode4' => pcode4
       },
-      'barcodes' => [self.barcode.present? ? self.barcode : self.assign_barcode.to_s],
+      'barcodes' => [self.barcode.present? ? "#{self.barcode}" : self.assign_barcode.to_s],
       addresses: [
         {
           lines: [
@@ -165,8 +332,10 @@ class User < ActiveRecord::Base
       varFields: [{
         fieldTag: "o",
         content: school.name
-      }]
+      }],
+      expirationDate: calculate_next_recurring_event_date
     }
+    Delayed::Worker.logger.info("User request details #{query} ")
     response = HTTParty.post(
       ENV.fetch('PATRON_MICROSERVICE_URL_V02', nil),
       body: query.to_json,
@@ -175,6 +344,7 @@ class User < ActiveRecord::Base
           'Content-Type' => 'application/json' },
       timeout: 10
     )
+    Delayed::Worker.logger.info("User response details #{response.code}  #{response.message}")
     case response.code
     when 201
       LogWrapper.log('DEBUG', {
@@ -197,10 +367,15 @@ class User < ActiveRecord::Base
         })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
+    response
+  end
+
+  def account_confirmed_email_to_user
+    UserMailer.account_confirmed_email_to_user(self).deliver
   end
 
   # 404 - no records with the same e-mail were found
-  # 409 - more then 1 record with the same e-mail was found
+  # 409 - more than 1 record with the same e-mail was found
   # 200 - 1 record with the same e-mail was found
   def get_email_records(email)
     query = {

@@ -6,7 +6,6 @@ import axios from "axios";
 import {
   Button,
   Heading,
-  Link,
   TextInput,
   Label,
   HStack,
@@ -51,7 +50,7 @@ export default function TeacherSetOrder() {
       .then((res) => {
         if (
           res.request.responseURL ===
-          "https://" + process.env.MLN_INFO_SITE_HOSTNAME + "/signin"
+          "https://" + env.MLN_INFO_SITE_HOSTNAME + "/signin"
         ) {
           window.location = res.request.responseURL;
           return false;
@@ -71,9 +70,9 @@ export default function TeacherSetOrder() {
           <Heading
             marginTop="l"
             id="ts-cancellation-confirmation-text"
-            level="one"
-            size="tertiary"
-            text="Confirm Cancellation"
+            level="h3"
+            size="heading5"
+            text="Confirm cancellation"
           />
           <TextInput
             id="ts-cancel-order-button"
@@ -92,32 +91,32 @@ export default function TeacherSetOrder() {
           >
             Are you sure you want to cancel your teacher set order?
           </Label>
-          <HStack spacing="s" onClick={() => window.scrollTo(0, 0)}>
+          <HStack spacing="xs" onClick={() => window.scrollTo(0, 0)}>
             <Button
               id="ts-cancel-button-id"
               buttonType="noBrand"
               onClick={handleSubmit}
+              marginTop="xs"
             >
-              {" "}
-              Cancel My Order{" "}
+              Cancel my order
             </Button>
             <Button
               id="keep-my-order-button"
-              className="cancel-button"
+              marginTop="xs"
               buttonType="secondary"
+              onClick={() => handleOrderButton(access_key)}
             >
-              <Link
-                className={`${colorMode} cancelOrderButton`}
-                href={"/ordered_holds/" + access_key}
-              >
-                {" "}
-                No, keep my order{" "}
-              </Link>
+              No, keep my order
             </Button>
           </HStack>
         </>
       );
     }
+  };
+
+  const handleOrderButton = (access_key) => {
+    const href = "/ordered_holds/" + access_key;
+    window.location.href = href;
   };
 
   return (
@@ -127,9 +126,9 @@ export default function TeacherSetOrder() {
         <>
           <Heading
             id="ts-cancellation-confirmation-text"
-            level="two"
-            size="secondary"
-            text="Cancel Order"
+            level="h2"
+            size="heading3"
+            text="Cancel order"
           />
           <HorizontalRule
             id="ts-cancel-order-horizontal=line"
