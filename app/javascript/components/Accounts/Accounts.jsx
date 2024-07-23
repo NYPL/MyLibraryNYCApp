@@ -56,7 +56,9 @@ export default function Accounts() {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (env.RAILS_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     document.title = "Account Details | MyLibraryNYC";
 
     axios
