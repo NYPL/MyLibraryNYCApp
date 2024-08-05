@@ -14,7 +14,7 @@ import Accounts from "../components/Accounts/Accounts";
 import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
 import TeacherSetDetails from "../components/TeacherSetDetails/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder/TeacherSetOrder";
-import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
+import CancelTeacherSetOrder from "../components/CancelOrderDetails/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks/TeacherSetBooks";
 import CalendarEventError from "../components/CalendarEventError";
 import NewsletterConfirmation from "../components/NewsletterConfirmation";
