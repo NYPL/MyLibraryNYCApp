@@ -523,3 +523,11 @@ ul.list li:before {
     text-transform: initial !important;
   }
 }
+
+#news-letter-success-msg {
+  #newsletter-form {
+    #submit {
+      background: var(--nypl-colors-ui-black) !important;
+    }
+  }
+}
