@@ -12,7 +12,7 @@ import {
 } from "@nypl/design-system-react-components";
 
 export default function NewsLetter() {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
@@ -30,10 +30,10 @@ export default function NewsLetter() {
     event.preventDefault();
     if (!validator.isEmail(email)) {
       setIsInvalid(true);
-      setView('form');
-      return
+      setView("form");
+      return;
     } else {
-      setView('submitting');
+      setView("submitting");
     }
     axios
       .get("/news_letter/index", {
@@ -54,7 +54,7 @@ export default function NewsLetter() {
         if (res.data.status === "success") {
           setIsInvalid(false);
           setSuccessFullySignedUp(true);
-          setView('confirmation')
+          setView("confirmation");
           // Set focus to the element
           setTimeout(() => {
             const newsLetterElement = document.getElementById(
@@ -65,8 +65,8 @@ export default function NewsLetter() {
             }
           }, 1);
         } else {
-          setView('error')
-          setErrorMessage("An error has occurred.")
+          setView("error");
+          setMessage("An error has occurred.");
         }
       })
       .catch(function (error) {
@@ -85,32 +85,34 @@ export default function NewsLetter() {
     }
     return (
       <NewsletterSignup
-      id="news-letter-text-input"
-      view={view}
-      isInvalidEmail={isInvalid}
-      valueEmail={email}
-      onChange={handleNewsLetterEmail}
-      onSubmit={handleSubmit}
-      showPrivacyLink={false}
-      title="Sign Up for Our Newsletter"
-      descriptionText="Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!"
-      confirmationHeading="Thank you for signing up to the Newsletter!"
-      errorHeading={errorMessage}
-      highlightColor="brand.primary"
-      errorText={<Text noSpace size="body2">
-        Please refresh this page and try again. If this error persists,
-        <Link
-            type="action"
-            target="_blank"
-            href="mailto:help@mylibrarynyc.org"
-          >
-            contact our e-mail team.
-        </Link>
-        </Text>}
-      confirmationText="Check your email to learn about teacher sets, best practices & exclusive events."
+        id="news-letter-text-input"
+        view={view}
+        isInvalidEmail={isInvalid}
+        valueEmail={email}
+        onChange={handleNewsLetterEmail}
+        onSubmit={handleSubmit}
+        showPrivacyLink={false}
+        title="Sign Up for Our Newsletter"
+        descriptionText="Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!"
+        confirmationHeading="Thank you for signing up to the Newsletter!"
+        errorHeading={message}
+        highlightColor="brand.primary"
+        errorText={
+          <Text noSpace size="body2">
+            Please refresh this page and try again. If this error persists,
+            <Link
+              type="action"
+              target="_blank"
+              href="mailto:help@mylibrarynyc.org"
+            >
+              contact our e-mail team.
+            </Link>
+          </Text>
+        }
+        confirmationText="Check your email to learn about teacher sets, best practices & exclusive events."
       />
     );
-  }
+  };
 
   const adobeAnalyticsForNewsLetter = () => {
     // Push the event data to the Adobe Data Layer
@@ -158,12 +160,8 @@ export default function NewsLetter() {
   };
 
   return (
-    <Box
-      p="l"
-      ref={newsLetterMsgRef}
-      id="news-letter-success-msg"
-    >
-      { newLetterSignup() }
+    <Box p="l" ref={newsLetterMsgRef} id="news-letter-success-msg">
+      {newLetterSignup()}
     </Box>
   );
 }
