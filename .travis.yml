@@ -1,14 +1,5 @@
-language: python
-python:
-  - "3.8"  # Specify a supported Python version
-
-before_install:
-  - python -m pip install --upgrade pip  # Upgrade pip
-  - pip install --user awscli  # Install awscli
-  - export PATH=$PATH:$HOME/.local/bin  # Add the user-specific path to PATH
-
-script:
-  - aws --version  # Verify the awscli installation
+dist: focal
+language: ruby
 
 services:
 - docker
