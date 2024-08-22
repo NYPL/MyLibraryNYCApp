@@ -1,4 +1,10 @@
-language: minimal
+language: python
+python:
+  - "3.8"  # Specify a supported Python version
+
+before_install:
+  - python -m pip install --upgrade pip  # Upgrade pip
+  - pip install awscli  # Install awscli
 
 services:
 - docker
@@ -30,7 +36,6 @@ jobs:
       - AWS_DEFAULT_REGION=us-east-1 
       - AWS_REGION=us-east-1
       install:
-        - pip install --user awscli
         - export LOCAL_TAG_NAME="${ENV}-latest"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
@@ -52,8 +57,6 @@ jobs:
       - AWS_REGION=us-east-1
       - CLUSTER_NAME=mylibrarynycapp-qa
       - DELAYED_JOB_NAME=mylibrarynycapp-qa-delayed-job
-      install:
-      - pip install --user awscli
       script:
       - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
       - aws ecs update-service --cluster $CLUSTER_NAME --service $DELAYED_JOB_NAME --force-new-deployment
@@ -67,8 +70,6 @@ jobs:
       - AWS_REGION=us-east-1
       - CLUSTER_NAME=mylibrarynycapp-production
       - DELAYED_JOB_NAME=mylibrarynycapp-production-delayed-job
-      install:
-      - pip install --user awscli
       script:
       - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
       - aws ecs update-service --cluster $CLUSTER_NAME --service $DELAYED_JOB_NAME --force-new-deployment
