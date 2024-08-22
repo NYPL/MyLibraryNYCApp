@@ -4,7 +4,11 @@ python:
 
 before_install:
   - python -m pip install --upgrade pip  # Upgrade pip
-  - pip install awscli  # Install awscli
+  - pip install --user awscli  # Install awscli
+  - export PATH=$PATH:$HOME/.local/bin  # Add the user-specific path to PATH
+
+script:
+  - aws --version  # Verify the awscli installation
 
 services:
 - docker
