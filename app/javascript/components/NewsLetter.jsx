@@ -15,21 +15,22 @@ export default function NewsLetter() {
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [isInvalid, setIsInvalid] = useState(false);
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [successFullySignedUp, setSuccessFullySignedUp] = useState(false);
+  const [confirmationHeading, setConfirmationHeading] = useState("");
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const newsLetterMsgRef = useRef(null);
   const [view, setView] = React.useState("form");
 
   const handleNewsLetterEmail = (event) => {
     setEmail(event.target.value);
-    setIsInvalid(false);
+    setIsInvalidEmail(false);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!validator.isEmail(email)) {
-      setIsInvalid(true);
+      setIsInvalidEmail(true);
       setView("form");
       return;
     } else {
@@ -42,28 +43,19 @@ export default function NewsLetter() {
         },
       })
       .then((res) => {
-        setTimeout(() => {
-          const nlTextInputlement = document.getElementById(
-            "news-letter-text-input"
-          );
-          if (nlTextInputlement) {
-            nlTextInputlement.focus();
-          }
-        }, 1);
-
         if (res.data.status === "success") {
-          setIsInvalid(false);
           setSuccessFullySignedUp(true);
           setView("confirmation");
-          // Set focus to the element
-          setTimeout(() => {
-            const newsLetterElement = document.getElementById(
-              "news-letter-msg-box"
-            );
-            if (newsLetterElement) {
-              newsLetterElement.focus();
-            }
-          }, 1);
+          setConfirmationHeading("Thank you for signing up to the Newsletter!");
+        } else if (
+          res.data.status === "error" &&
+          res.data.message ===
+            "That email is already subscribed to the MyLibraryNYC newsletter."
+        ) {
+          setView("confirmation");
+          setConfirmationHeading(
+            "That email is already subscribed to the newsletter."
+          );
         } else {
           setView("error");
           setMessage("An error has occurred.");
@@ -87,14 +79,14 @@ export default function NewsLetter() {
       <NewsletterSignup
         id="news-letter-text-input"
         view={view}
-        isInvalidEmail={isInvalid}
+        isInvalidEmail={isInvalidEmail}
         valueEmail={email}
         onChange={handleNewsLetterEmail}
         onSubmit={handleSubmit}
         showPrivacyLink={false}
         title="Sign Up for Our Newsletter"
         descriptionText="Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!"
-        confirmationHeading="Thank you for signing up to the Newsletter!"
+        confirmationHeading={confirmationHeading}
         errorHeading={message}
         highlightColor="brand.primary"
         errorText={
@@ -128,35 +120,6 @@ export default function NewsLetter() {
     script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
     script.async = true;
     document.head.appendChild(script);
-  };
-
-  const submitButtonaAndProgressBar = () => {
-    if (buttonDisabled) {
-      return (
-        <ProgressIndicator
-          darkMode
-          id="news-letter-progress-bar-indicator"
-          isIndeterminate
-          indicatorType="circular"
-          labelText="Progress"
-          showLabel
-          size="small"
-          value={1}
-          marginTop="xs"
-        />
-      );
-    } else {
-      return (
-        <Button
-          id="news-letter-button"
-          buttonType="noBrand"
-          width={isLargerThanMobile ? null : "100%"}
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
-      );
-    }
   };
 
   return (
