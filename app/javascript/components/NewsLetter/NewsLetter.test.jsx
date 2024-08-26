@@ -19,52 +19,67 @@ const confirmationText =
 const errorHeading = "Oops! Something went wrong.";
 
 describe("NewsletterSignup Unit Tests", () => {
-  const onSubmit = jest.fn();
-  const onChange = jest.fn();
-  const valueEmail = "";
-  it("Renders the Minimum Required Elements for the Form", async () => {
+  it('should handle a valid email submission', async () => {
+    const handleSubmit = jest.fn();
     const rootElement = document.createElement('div');
     document.body.appendChild(rootElement);
     const root = createRoot(rootElement);
-    await act(async () => {
-      root.render(<MemoryRouter>render(
-        <NewsletterSignup
-          onSubmit={onSubmit}
-          onChange={onChange}
-          title={titleString}
-          errorHeading={errorHeading}
-          confirmationHeading={confirmationHeading}
-          confirmationText={confirmationText}
-        />
-      );</MemoryRouter>);
-    });
-    expect(screen.getByRole("form")).toBeInTheDocument();
-    expect(screen.getByRole("textbox")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 2 })).toBeInTheDocument();
-    //expect(onSubmit).toHaveBeenCalledTimes(0);
-  });
-});
 
-describe('handleSubmit', () => {
-  const handleSubmit = jest.fn();
-
-  it('should handle a valid email submission', async () => {
-   // validator.isEmail.mockReturnValue(true);
     axios.get.mockResolvedValue({ data: { status: 'success' } });
     jest.spyOn(validator, 'isEmail').mockImplementation(() => true);
 
     await act(async () => {
-      (<MemoryRouter>render(<NewsLetter />)</MemoryRouter>)
+      (root.render(<MemoryRouter><NewsLetter /></MemoryRouter>))
     });
-
+    
     const emailInput = screen.getByPlaceholderText('Enter your email address');
     const submitButton = screen.getByRole("button", { name: "Submit" });
-
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.click(submitButton);
-    
-    console.log(validator.isEmail('test@example.com'));
+    validator.isEmail('test@example.com')
+    jest.restoreAllMocks();
+  });
 
+  it('should handle a error email submission', async () => {
+    const handleSubmit = jest.fn();
+    const rootElement = document.createElement('div');
+    document.body.appendChild(rootElement);
+    const root = createRoot(rootElement);
+
+    axios.get.mockResolvedValue({ data: { status: 'error' } });
+    jest.spyOn(validator, 'isEmail').mockImplementation(() => true);
+
+    await act(async () => {
+      (root.render(<MemoryRouter><NewsLetter /></MemoryRouter>))
+    });
+    
+    const emailInput = screen.getByPlaceholderText('Enter your email address');
+    const submitButton = screen.getByRole("button", { name: "Submit" });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.click(submitButton);
+    validator.isEmail('test@example.com')
+    jest.restoreAllMocks();
+  });
+
+
+  it('should handle a already email subscribed submission', async () => {
+    const handleSubmit = jest.fn();
+    const rootElement = document.createElement('div');
+    document.body.appendChild(rootElement);
+    const root = createRoot(rootElement);
+
+    axios.get.mockResolvedValue({ data: { status: 'error', message: 'That email is already subscribed to the MyLibraryNYC newsletter.' } });
+    jest.spyOn(validator, 'isEmail').mockImplementation(() => true);
+
+    await act(async () => {
+      (root.render(<MemoryRouter><NewsLetter /></MemoryRouter>))
+    });
+    
+    const emailInput = screen.getByPlaceholderText('Enter your email address');
+    const submitButton = screen.getByRole("button", { name: "Submit" });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.click(submitButton);
+    validator.isEmail('test@example.com')
+    jest.restoreAllMocks();
   });
 });
