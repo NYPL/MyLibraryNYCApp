@@ -46,7 +46,7 @@ export default function NewsLetter() {
         if (res.data.status === "success") {
           setSuccessFullySignedUp(true);
           setView("confirmation");
-          setConfirmationHeading("Thank you for signing up to the Newsletter!");
+          setConfirmationHeading("Thank you for signing up for our newsletter!");
         } else if (
           res.data.status === "error" &&
           res.data.message ===
@@ -84,8 +84,8 @@ export default function NewsLetter() {
         onChange={handleNewsLetterEmail}
         onSubmit={handleSubmit}
         showPrivacyLink={false}
-        title="Sign Up for Our Newsletter"
-        descriptionText="Learn about new teacher sets, best practices & exclusive events when you sign up for the MyLibraryNYC Newsletter!"
+        title="Sign up for our newsletter"
+        descriptionText="Learn about new teacher sets, best practices, and exclusive events when you sign up for the MyLibraryNYC Newsletter!"
         confirmationHeading={confirmationHeading}
         errorHeading={message}
         highlightColor="brand.primary"
@@ -101,7 +101,7 @@ export default function NewsLetter() {
             </Link>
           </Text>
         }
-        confirmationText="Check your email to learn about teacher sets, best practices & exclusive events."
+        confirmationText="Check your email to learn about teacher sets, best practices, and exclusive events."
       />
     );
   };
@@ -123,7 +123,7 @@ export default function NewsLetter() {
   };
 
   return (
-    <Box p="l" ref={newsLetterMsgRef} id="news-letter-success-msg">
+    <Box ref={newsLetterMsgRef} id="news-letter-success-msg">
       {newLetterSignup()}
     </Box>
   );
