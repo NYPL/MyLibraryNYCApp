@@ -43,26 +43,40 @@ export default function NewsLetter() {
         },
       })
       .then((res) => {
+        setTimeout(() => {
+          const nlTextInputlement = document.getElementById(
+            "news-letter-text-input"
+          );
+          if (nlTextInputlement) {
+            nlTextInputlement.focus();
+          }
+        }, 1);
         if (res.data.status === "success") {
           setSuccessFullySignedUp(true);
           setView("confirmation");
           setConfirmationHeading("Thank you for signing up to the Newsletter!");
-        } else if (
-          res.data.status === "error" &&
-          res.data.message ===
-            "That email is already subscribed to the MyLibraryNYC newsletter."
-        ) {
+          // Set focus to the element
+          setTimeout(() => {
+            const newsLetterElement = document.getElementById(
+              "news-letter-msg-box"
+            );
+            if (newsLetterElement) {
+              newsLetterElement.focus();
+            }
+          }, 1);
+        } else if (res.data.status === "error" && res.data.message === 'That email is already subscribed to the MyLibraryNYC newsletter.') {
+          //setIsInvalidEmail(true);
+          console.log("failure")
           setView("confirmation");
-          setConfirmationHeading(
-            "That email is already subscribed to the newsletter."
-          );
-        } else {
+          setConfirmationHeading("That email is already subscribed to the newsletter.");
+        }
+        else {
+          console.log("error")
           setView("error");
           setMessage("An error has occurred.");
         }
       })
       .catch(function (error) {
-        setButtonDisabled(false);
         console.log(error);
       });
   };
@@ -120,6 +134,35 @@ export default function NewsLetter() {
     script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
     script.async = true;
     document.head.appendChild(script);
+  };
+
+  const submitButtonaAndProgressBar = () => {
+    if (buttonDisabled) {
+      return (
+        <ProgressIndicator
+          darkMode
+          id="news-letter-progress-bar-indicator"
+          isIndeterminate
+          indicatorType="circular"
+          labelText="Progress"
+          showLabel
+          size="small"
+          value={1}
+          marginTop="xs"
+        />
+      );
+    } else {
+      return (
+        <Button
+          id="news-letter-button"
+          buttonType="noBrand"
+          width={isLargerThanMobile ? null : "100%"}
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
+      );
+    }
   };
 
   return (

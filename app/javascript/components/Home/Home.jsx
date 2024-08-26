@@ -3,7 +3,7 @@ import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
 import AccessDigitalResources from "../AccessDigitalResources/AccessDigitalResources";
 import CalendarOfEvents from "./../CalendarOfEvents";
-import NewsLetter from "./../NewsLetter";
+import NewsLetter from "../NewsLetter/NewsLetter";
 import homeBgImg from "./../../images/mln-homepage-background.jpg";
 import homeFgImg from "./../../images/mln-homepage-foreground.jpg";
 import { useNavigate } from "react-router-dom";
