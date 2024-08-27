@@ -524,10 +524,7 @@ ul.list li:before {
   }
 }
 
-#news-letter-success-msg {
-  #newsletter-form {
-    #submit {
-      background: var(--nypl-colors-ui-black) !important;
-    }
-  }
+#news-letter-success-msg #newsletter-form #submit {
+  background: var(--nypl-colors-ui-black) !important;
+  color: var(--nypl-colors-dark-ui-typography-heading) !important;
 }
