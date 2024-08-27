@@ -4,7 +4,7 @@ class UserMailer < ActionMailer::Base
   include LogWrapper
   LOG_TAG = "UserMailer"
 
-  default :from => '"MyLibraryNYC Admin" <no-reply@mylibrarynyc.org>'
+  default :from => '"help" <help@mylibrarynyc.org>'
 
   # Let the user know they've successfully unsubscribed from regular notification emails.
   # NOTE: Does not get used at this time.
