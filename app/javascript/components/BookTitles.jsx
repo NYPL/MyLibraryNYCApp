@@ -1,8 +1,6 @@
 import React from "react";
 import { useColorModeValue, Link } from "@nypl/design-system-react-components";
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const BookTitles = ({ books, teacherSet }) => {
   const navigate = useNavigate();
 
