@@ -2,10 +2,8 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import validator from "validator";
 import {
-  Button,
   Text,
   Box,
-  ProgressIndicator,
   Link,
   useNYPLBreakpoints,
   NewsletterSignup,
@@ -14,11 +12,9 @@ import {
 export default function NewsLetter() {
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [successFullySignedUp, setSuccessFullySignedUp] = useState(false);
   const [confirmationHeading, setConfirmationHeading] = useState("");
-  const { isLargerThanMobile } = useNYPLBreakpoints();
   const newsLetterMsgRef = useRef(null);
   const [view, setView] = React.useState("form");
 
@@ -43,9 +39,12 @@ export default function NewsLetter() {
         },
       })
       .then((res) => {
+
         if (res.data.status === "success") {
           setSuccessFullySignedUp(true);
           setView("confirmation");
+          setConfirmationHeading("Thank you for signing up to the Newsletter!");
+        } else if (res.data.status === "error" && res.data.message === 'That email is already subscribed to the MyLibraryNYC newsletter.') {
           setConfirmationHeading("Thank you for signing up for our newsletter!");
         } else if (
           res.data.status === "error" &&
@@ -53,16 +52,15 @@ export default function NewsLetter() {
             "That email is already subscribed to the MyLibraryNYC newsletter."
         ) {
           setView("confirmation");
-          setConfirmationHeading(
-            "That email is already subscribed to the newsletter."
-          );
-        } else {
+          setConfirmationHeading("That email is already subscribed to the newsletter.");
+        }
+        else {
+          console.log("error")
           setView("error");
           setMessage("An error has occurred.");
         }
       })
       .catch(function (error) {
-        setButtonDisabled(false);
         console.log(error);
       });
   };
