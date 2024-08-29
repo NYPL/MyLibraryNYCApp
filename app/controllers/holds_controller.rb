@@ -67,7 +67,7 @@ class HoldsController < ApplicationController
       # If user's school is inactive, then display an error message and redirect to teacher set detail page.
       is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
       if !is_school_active
-        render json: { status: :error, message:  "Your school is inactive. Please contact to help@mylibrarynyc.org" }
+        render json: { status: :error, message:  "Your school is inactive. Please contact help@mylibrarynyc.org" }
         # stop processing further code, so new hold is not created,
         # and double-render runtime error is not caused in the rescue exception block.
         return
