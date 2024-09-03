@@ -29,8 +29,12 @@ export default function Home(props) {
   useEffect(() => {
     document.title = "MyLibraryNYC | Providing NYC schools with enhanced library privileges";
     if (env.RAILS_ENV !== "test") {
-      window.scrollTo(0, 0);
-      navigate("/");
+      if (window.location.hash !== "") {
+        navigate("/" + window.location.hash);
+      } else {
+        window.scrollTo(0, 0);
+        navigate("/")
+      }
     }
   }, []);
 
