@@ -31,6 +31,10 @@ export default function Home(props) {
     if (env.RAILS_ENV !== "test") {
       if (window.location.hash !== "") {
         navigate("/" + window.location.hash);
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
       } else {
         window.scrollTo(0, 0);
         navigate("/")
