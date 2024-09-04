@@ -186,7 +186,13 @@ ActiveAdmin.register_page "Dashboard" do
                 h.quantity
               end
             end
-            column 'User', sortable: :p_user do |h| link_to h.user.email, admin_hold_path(h) end
+            column 'User', sortable: :p_user do |h|
+              if h.user.nil?
+                "Missing user data"
+              else
+                link_to h.user.email, admin_hold_path(h)
+              end
+            end
             column 'Requester Barcode', sortable: :p_barcode do |h| link_to h.user.barcode, admin_hold_path(h) end
             column 'Date', sortable: :p_created_at do |h|
               if h.nil?
