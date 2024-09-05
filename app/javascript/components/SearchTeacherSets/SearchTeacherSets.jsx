@@ -82,6 +82,7 @@ export default function SearchTeacherSets(props) {
   const [resetPageNumber, setResetPageNumber] = useState("");
   const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] =
     useState("");
+  const [showKeyword, setShowKeyWord] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -214,6 +215,7 @@ export default function SearchTeacherSets(props) {
     setSortTitleValue(sortOrderVal);
     setComputedCurrentPage(pageNumber);
     setTeacherSetArr(tagSetsDataArr);
+    setShowKeyWord(true);
 
     const params = Object.assign(
       {
@@ -255,7 +257,7 @@ export default function SearchTeacherSets(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    setShowKeyWord(true);
     if (keyword === "") {
       searchParams.delete("keyword");
     } else {
@@ -326,9 +328,9 @@ export default function SearchTeacherSets(props) {
    */
 
   const resultsFoundMessage = () => {
-    const appendKeyword =
+    const searchKeyword =
       keyword !== null && keyword !== "" ? ` for "${keyword}"` : "";
-
+    const appendKeyword = showKeyword ? searchKeyword : ""
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
       return (
         <Heading
@@ -1184,6 +1186,7 @@ export default function SearchTeacherSets(props) {
 
   const clearSearchKeyword = () => {
     setKeyWord("");
+    setShowKeyWord(false);
     searchParams.delete("keyword");
     setSearchParams(searchParams);
   };

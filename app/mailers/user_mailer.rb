@@ -26,7 +26,7 @@ class UserMailer < ActionMailer::Base
   def account_confirmed_email_to_user(user)
     begin
       @user = user
-      mail(:to => @user.contact_email, :subject => "Welcome to MyLibraryNYC.")
+      mail(:to => @user.contact_email, :subject => "Welcome to MyLibraryNYC")
     rescue => e
       Rails.logger.error("#{LOG_TAG}.account_confirmed_email_to_user: ")
       LogWrapper.log('ERROR', {
