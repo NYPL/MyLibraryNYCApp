@@ -83,6 +83,7 @@ export default function SearchTeacherSets(props) {
   const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] =
     useState("");
   const [showKeyword, setShowKeyWord] = useState(false);
+  const [updateKeyword, setUpdateKeyword] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -256,7 +257,6 @@ export default function SearchTeacherSets(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setShowKeyWord(true);
     if (keyword === "") {
       searchParams.delete("keyword");
     } else {
@@ -279,15 +279,17 @@ export default function SearchTeacherSets(props) {
       selectedFacets
     );
     getTeacherSets(params);
+    setShowKeyWord(true);
+    setUpdateKeyword(keyword)
   };
 
   const handleSearchKeyword = (event) => {
     setKeyWord(event.target.value);
-    setShowKeyWord(false);
     if (event.target.value === "") {
       setKeyWord("");
       searchParams.delete("keyword");
       searchParams.delete("page");
+      setUpdateKeyword("");
       setSearchParams(searchParams);
       getTeacherSets(
         Object.assign(
@@ -329,8 +331,9 @@ export default function SearchTeacherSets(props) {
 
   const resultsFoundMessage = () => {
     const searchKeyword =
-      keyword !== null && keyword !== "" ? ` for "${keyword}"` : "";
+    updateKeyword !== null && updateKeyword !== "" ? ` for "${updateKeyword}"` : "";
     const appendKeyword = showKeyword ? searchKeyword : ""
+
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
       return (
         <Heading
