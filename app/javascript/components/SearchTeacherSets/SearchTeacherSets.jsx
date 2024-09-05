@@ -215,7 +215,6 @@ export default function SearchTeacherSets(props) {
     setSortTitleValue(sortOrderVal);
     setComputedCurrentPage(pageNumber);
     setTeacherSetArr(tagSetsDataArr);
-    setShowKeyWord(true);
 
     const params = Object.assign(
       {
@@ -284,6 +283,7 @@ export default function SearchTeacherSets(props) {
 
   const handleSearchKeyword = (event) => {
     setKeyWord(event.target.value);
+    setShowKeyWord(false);
     if (event.target.value === "") {
       setKeyWord("");
       searchParams.delete("keyword");
