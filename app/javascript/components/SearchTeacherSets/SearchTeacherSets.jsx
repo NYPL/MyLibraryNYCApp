@@ -83,7 +83,7 @@ export default function SearchTeacherSets(props) {
   const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] =
     useState("");
   const [showKeyword, setShowKeyWord] = useState(false);
-  const [updateKeyword, setUpdateKeyword] = useState(false);
+  const [updateKeyword, setUpdateKeyword] = useState("");
   const location = useLocation();
 
   useEffect(() => {
@@ -163,9 +163,15 @@ export default function SearchTeacherSets(props) {
       tagSetsDataArr.push(tagSets);
     });
 
-    const keywordValue = queryValue.get("keyword")
-      ? queryValue.get("keyword")
-      : "";
+    
+    let keywordValue;
+    if (queryValue.get("keyword")) {
+      keywordValue = queryValue.get("keyword");
+      setUpdateKeyword(keywordValue);
+      setShowKeyWord(true);
+    } else {
+      keywordValue = "";
+    }
     const g_begin = queryValue.get("grade_begin")
       ? queryValue.get("grade_begin")
       : -1;
