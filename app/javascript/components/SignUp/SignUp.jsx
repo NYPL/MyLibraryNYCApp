@@ -172,6 +172,13 @@ export default function SignUp(props) {
       setEmailIsInvalid(true);
       setIsDisabled(true);
       formIsValid = false;
+    } else if (email && !validator.isEmail(email)) {
+      let msg =
+        'Email address is invalid';
+      setErrorEmailMsg(msg);
+      setEmailIsInvalid(true);
+      setIsDisabled(true);
+      formIsValid = false;
     } else {
       setErrorEmailMsg("");
       setNewsLetterError("");
