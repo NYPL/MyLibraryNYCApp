@@ -5,6 +5,7 @@
     "@babel/preset-react": "^7.16.7",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
+    "@types/validator": "^13.12.1",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
     "axios-mock-adapter": "^1.7.1",
