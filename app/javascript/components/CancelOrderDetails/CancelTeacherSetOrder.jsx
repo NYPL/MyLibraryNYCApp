@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import HaveQuestions from "./HaveQuestions/HaveQuestions";
-import TeacherSetOrderDetails from "./TeacherSetOrderDetails";
+import AppBreadcrumbs from "../AppBreadcrumbs";
+import HaveQuestions from "../HaveQuestions/HaveQuestions";
+import TeacherSetOrderDetails from "../TeacherSetOrderDetails";
 import axios from "axios";
 import {
   Button,
@@ -18,6 +18,7 @@ import { useParams, useNavigate } from "react-router-dom";
 export default function TeacherSetOrder() {
   const params = useParams();
   const navigate = useNavigate();
+  console.log(params)
   const [access_key] = useState(params["id"]);
   const [hold, setHold] = useState("");
   const [teacher_set, setTeacherSet] = useState("");
@@ -26,7 +27,9 @@ export default function TeacherSetOrder() {
 
   useEffect(() => {
     document.title = "Cancel Order | MyLibraryNYC";
-    window.scrollTo(0, 0);
+    if (env.RAILS_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     axios({ method: "get", url: "/holds/" + params["id"] + "/cancel_details" })
       .then((res) => {
         setTeacherSet(res.data.teacher_set);

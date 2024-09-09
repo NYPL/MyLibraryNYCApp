@@ -43,7 +43,7 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
         if response.code == 201
           defensive_log("Patron created successfully")
           # Send user account confirmation email
-          #user.account_confirmed_email_to_user
+          # user.account_confirmed_email_to_user
           defensive_log("#{self.class.name}: Patron creator service ran. Saving user in MLN db.")
           user.save_as_complete!
         end

@@ -318,13 +318,36 @@ MylibaryNYC application local setup
 ```
 Note: Rails, Ruby and Node installation is required to run project in local.
       Check Ruby and Rails versions in Gemfile.
-      https://github.com/NYPL/MyLibraryNYCApp/blob/development/Gemfile
 
- Step1: Clone git project https://github.com/NYPL/MyLibraryNYCApp.git
+ Step1: Rails & Ruby installation:
+        Install RVM with Rails (stable version):
+          \curl -sSL https://get.rvm.io | bash -s stable --rails
+        Install RVM (if not installed with Rails):
+          \curl -sSL https://get.rvm.io | bash
+        Install Ruby 2.7.4:
+          rvm install ruby-2.7.4
+        Use Ruby 2.7.4:
+          rvm use ruby-2.7.4
+        Install Rails 7.0.2.2:
+          gem install rails -v 7.0.2.2
+          bundle install
+        Node Installation:
+            Install homebrew 
+            brew install nvm
+            nvm install 16
+        After installation please check the versions
+        Rails version: rails -v
+        Ruby version: ruby -v
+        Node version: node -v
 
- Step2: Go to project path then run "bundle install"
+        Please check Gemfile for reference
+        https://github.com/NYPL/MyLibraryNYCApp/blob/development/Gemfile
 
- Step3: Configure aws credentials on local
+ Step2: Clone git project https://github.com/NYPL/MyLibraryNYCApp.git
+
+ Step3: Go to project path then run "bundle install"
+
+ Step4: Configure aws credentials on local
         Enter a command on terminal:  aws configure
         (get your aws credentials from devops team and enter on terminal)
 
@@ -340,18 +363,12 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         aws_access_key_id = ***
         aws_secret_access_key = ***
 
- Step4: Install Postgresql
-
-        Dump the database which ever your interested (Development or QA)
-
-        Run database dump commands:
-        Command: pg_dump --host={host_name} --username mylibrarynyc --file file_name.out {database_name}
-
+ Step5: Install Postgresql
         Postgresql commands to create database on local:
 
         psql -l
         psql -d mylibnyc_local
-        psql --host localhost --dbname mylibnyc_local -f qa-new_name.out
+        \c mylibnyc_local;
 
         Rub below command in project path to create database tables
 
@@ -360,7 +377,7 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         RAILS_ENV=local rake db:migrate
         RAILS_ENV=local rake db:seed
 
- Step4: Configure elastic search
+ Step6: Configure elastic search
         MylibraryNyc project using elastic-search-6.8 version.
         Download elastic-search-6.8 version based on OS.
 
@@ -411,8 +428,9 @@ Note: Rails, Ruby and Node installation is required to run project in local.
 
         create_teacherset_document_in_es
 
-Setp5: Run below commands to start server
+Setp7: Run below commands to start server
         
-        npm i channels
+        yarn install
+        yarn build
         RAILS_ENV=local rails s
 ```

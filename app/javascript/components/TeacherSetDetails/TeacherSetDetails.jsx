@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import HaveQuestions from "./HaveQuestions/HaveQuestions";
-import ShowBookImage from "./ShowBookImage";
-import BookTitles from "./BookTitles";
+import HaveQuestions from "./../HaveQuestions/HaveQuestions";
+import ShowBookImage from "./../ShowBookImage";
+import BookTitles from "./../BookTitles";
 import {
   Link as ReactRouterLink,
   useParams,
@@ -40,7 +40,7 @@ import {
   useColorMode,
 } from "@nypl/design-system-react-components";
 
-import mlnImage from "../images/mln.svg";
+import mlnImage from "../../images/mln.svg";
 
 export default function TeacherSetDetails(props) {
   const params = useParams();
@@ -91,7 +91,9 @@ export default function TeacherSetDetails(props) {
   }, [isLoading]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (env.RAILS_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     axios
       .get("/teacher_sets/" + params["id"])
       .then((res) => {
@@ -629,7 +631,7 @@ export default function TeacherSetDetails(props) {
 
         <dt id="ts-page-call-number-text">Call number</dt>
         <dd id="ts-page-call-number">{teacherSet.call_number}</dd>
-        <BookTitles books={books} />
+        <BookTitles books={books} teacherSet={teacherSet} />
       </List>
     );
   };

@@ -10,7 +10,7 @@ export default function AccessDigitalResources() {
   return (
     <>
       <Heading
-        id="access-digital-resources-header-text"
+        id="access-digital-resources"
         size="heading3"
         level="h2"
         marginTop="s"

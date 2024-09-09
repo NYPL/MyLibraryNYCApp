@@ -9,12 +9,12 @@ import Banner from "../components/Banner";
 import ParticipatingSchools from "../components/ParticipatingSchools/ParticipatingSchools";
 import SignIn from "../components/SignIn/SignIn";
 import SignUp from "../components/SignUp/SignUp";
-import SearchTeacherSets from "../components/SearchTeacherSets";
-import Accounts from "../components/Accounts";
+import SearchTeacherSets from "../components/SearchTeacherSets/SearchTeacherSets";
+import Accounts from "../components/Accounts/Accounts";
 import MobileNavbarSubmenu from "../components/MobileNavbarSubmenu";
-import TeacherSetDetails from "../components/TeacherSetDetails";
+import TeacherSetDetails from "../components/TeacherSetDetails/TeacherSetDetails";
 import TeacherSetOrder from "../components/TeacherSetOrder/TeacherSetOrder";
-import CancelTeacherSetOrder from "../components/CancelTeacherSetOrder";
+import CancelTeacherSetOrder from "../components/CancelOrderDetails/CancelTeacherSetOrder";
 import TeacherSetBooks from "../components/TeacherSetBooks/TeacherSetBooks";
 import CalendarEventError from "../components/CalendarEventError";
 import NewsletterConfirmation from "../components/NewsletterConfirmation";
@@ -38,7 +38,6 @@ export default function AppRoutes(props) {
   }
 
   const handleSignedUpMsg = (signedUpMsg) => {
-    console.log(signedUpMsg)
     setSignedUpMessage(signedUpMsg)
   }
 

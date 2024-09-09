@@ -1,19 +1,17 @@
 <div class="user_confirmation_email">
-  <p><%= @user.first_name %><%= @user.last_name %>,</p>
+  <p><%= @user.first_name %> <%= @user.last_name %>,</p>
 
-  <p>This is an automated email to confirm that 
-  account has been confirmed and you can reserve TeacherSets. Please keep this email, which contains your account information, for your records.</p>
-
+  <p>This is an automated email to confirm that your account has been created and is now active for ordering 
+  Teacher Sets. Please keep this email which contains your account information.</p>
 
   <p>Your barcode is: <b><code><%= @user.barcode %></code></b></p>
 
-  <p>You selected your PIN when you signed up for your account. </p>
+  <p>You selected your password when you signed up for your account. </p>
 
   <p>As an educator at a participating MyLibraryNYC school, there are millions of free resources for you to discover.</p>
-  
   <ul>
-      <li>Immediately <a href="https://www.mylibrarynyc.org/teacher_set_data">explore and order teacher sets</a> for delivery to your school. </li>
-      <li><a href="https://www.mylibrarynyc.org/">Learn more</a> about requesting individual items for pickup, as well as accessing databases and e-books.</li>
+      <li><a href="https://www.mylibrarynyc.org/teacher_set_data">Explore and order teacher sets</a> for delivery to your school.</li>
+      <li><a href="https://<%= ENV['MLN_INFO_SITE_HOSTNAME'] %>/#access-digital-resources">Learn more</a> about requesting individual items for pickup, as well as accessing databases and e-books.</li>
   </ul>
   <p>Please email help@mylibrarynyc.org if you have questions.</p>
   <p>

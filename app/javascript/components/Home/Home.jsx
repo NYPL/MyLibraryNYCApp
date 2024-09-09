@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
-import AccessDigitalResources from "./../AccessDigitalResources";
+import AccessDigitalResources from "../AccessDigitalResources/AccessDigitalResources";
 import CalendarOfEvents from "./../CalendarOfEvents";
-import NewsLetter from "./../NewsLetter";
+import NewsLetter from "../NewsLetter/NewsLetter";
 import homeBgImg from "./../../images/mln-homepage-background.jpg";
 import homeFgImg from "./../../images/mln-homepage-foreground.jpg";
 import { useNavigate } from "react-router-dom";
@@ -29,9 +29,17 @@ export default function Home(props) {
   useEffect(() => {
     document.title = "MyLibraryNYC | Providing NYC schools with enhanced library privileges";
     if (env.RAILS_ENV !== "test") {
-      window.scrollTo(0, 0);
+      if (window.location.hash !== "") {
+        navigate("/" + window.location.hash);
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      } else {
+        window.scrollTo(0, 0);
+        navigate("/")
+      }
     }
-    navigate("/");
   }, []);
 
   const handleSubmit = (event) => {

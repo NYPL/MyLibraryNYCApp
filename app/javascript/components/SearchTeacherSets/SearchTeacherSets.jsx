@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import AppBreadcrumbs from "./AppBreadcrumbs";
-import SignedInMsg from "./SignedInMsg";
-import SignUpMsg from "./SignUp/SignUpMsg";
+import AppBreadcrumbs from "./../AppBreadcrumbs";
+import SignedInMsg from "./../SignedInMsg";
+import SignUpMsg from "./../SignUp/SignUpMsg";
 import axios from "axios";
 import { titleCase } from "title-case";
-import { capitalizeFirstLetter } from "./Utils";
+import { capitalizeFirstLetter } from "./../Utils";
 import {
   Button,
   ButtonGroup,
@@ -82,6 +82,8 @@ export default function SearchTeacherSets(props) {
   const [resetPageNumber, setResetPageNumber] = useState("");
   const [teacherSetDataNotRetrievedMsg, setTeacherSetDataNotRetrievedMsg] =
     useState("");
+  const [showKeyword, setShowKeyWord] = useState(false);
+  const [updateKeyword, setUpdateKeyword] = useState("");
   const location = useLocation();
 
   useEffect(() => {
@@ -161,9 +163,15 @@ export default function SearchTeacherSets(props) {
       tagSetsDataArr.push(tagSets);
     });
 
-    const keywordValue = queryValue.get("keyword")
-      ? queryValue.get("keyword")
-      : "";
+    
+    let keywordValue;
+    if (queryValue.get("keyword")) {
+      keywordValue = queryValue.get("keyword");
+      setUpdateKeyword(keywordValue);
+      setShowKeyWord(true);
+    } else {
+      keywordValue = "";
+    }
     const g_begin = queryValue.get("grade_begin")
       ? queryValue.get("grade_begin")
       : -1;
@@ -230,9 +238,6 @@ export default function SearchTeacherSets(props) {
   }, [location.search]);
 
   const getTeacherSets = (params) => {
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-      .querySelector("meta[name='csrf-token']")
-      .getAttribute("content");
     axios
       .get("/teacher_sets", { params: params })
       .then((res) => {
@@ -258,7 +263,6 @@ export default function SearchTeacherSets(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     if (keyword === "") {
       searchParams.delete("keyword");
     } else {
@@ -281,6 +285,8 @@ export default function SearchTeacherSets(props) {
       selectedFacets
     );
     getTeacherSets(params);
+    setShowKeyWord(true);
+    setUpdateKeyword(keyword)
   };
 
   const handleSearchKeyword = (event) => {
@@ -289,6 +295,7 @@ export default function SearchTeacherSets(props) {
       setKeyWord("");
       searchParams.delete("keyword");
       searchParams.delete("page");
+      setUpdateKeyword("");
       setSearchParams(searchParams);
       getTeacherSets(
         Object.assign(
@@ -329,8 +336,9 @@ export default function SearchTeacherSets(props) {
    */
 
   const resultsFoundMessage = () => {
-    const appendKeyword =
-      keyword !== null && keyword !== "" ? ` for "${keyword}"` : "";
+    const searchKeyword =
+    updateKeyword !== null && updateKeyword !== "" ? ` for "${updateKeyword}"` : "";
+    const appendKeyword = showKeyword ? searchKeyword : ""
 
     if (noTsResultsFound !== "" && tsTotalCount === 0) {
       return (
@@ -515,10 +523,6 @@ export default function SearchTeacherSets(props) {
     setComputedCurrentPage(page);
     searchParams.set("page", page);
     setSearchParams(searchParams);
-
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = document
-      .querySelector("meta[name='csrf-token']")
-      .getAttribute("content");
     axios
       .get("/teacher_sets", {
         params: Object.assign(
@@ -1191,6 +1195,7 @@ export default function SearchTeacherSets(props) {
 
   const clearSearchKeyword = () => {
     setKeyWord("");
+    setShowKeyWord(false);
     searchParams.delete("keyword");
     setSearchParams(searchParams);
   };
