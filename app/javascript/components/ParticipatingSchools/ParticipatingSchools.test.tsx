@@ -65,5 +65,4 @@ describe('ParticipatingSchools', () => {
     });
     expect(screen.getByText("There are no results that match your search criteria.")).toBeInTheDocument();
   });
-  
 });

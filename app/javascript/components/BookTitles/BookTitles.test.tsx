@@ -45,4 +45,3 @@ describe('BookTitles component', () => {
     });
   });
 });
-  
