@@ -55,7 +55,6 @@ export default function NewsLetter() {
           setConfirmationHeading("That email is already subscribed to the newsletter.");
         }
         else {
-          console.log("error")
           setView("error");
           setMessage("An error has occurred.");
         }
