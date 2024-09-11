@@ -23,7 +23,9 @@ export default function TeacherSetOrder(props) {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (env.RAILS_ENV !== "test") {
+      window.scrollTo(0, 0);
+    }
     document.title = "Order details | MyLibraryNYC";
     if (typeof hold === "string") {
       axios
