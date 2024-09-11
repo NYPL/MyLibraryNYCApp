@@ -528,3 +528,7 @@ ul.list li:before {
   background: var(--nypl-colors-ui-black) !important;
   color: var(--nypl-colors-dark-ui-typography-heading) !important;
 }
+
+#news-letter-success-msg #newsletter-form #submit:disabled {
+  background: var(--nypl-colors-ui-gray-light-cool) !important;  /* Background color when disabled */
+}
