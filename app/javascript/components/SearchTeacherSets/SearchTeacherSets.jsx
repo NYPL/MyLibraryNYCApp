@@ -430,25 +430,25 @@ export default function SearchTeacherSets(props) {
           {
             id: 'sort-by-item-title-1',
             label: "Date added: newest to oldest",
-            onClick: (e) => sortTeacherSetTitle(e, 0),
+            onClick: sortTeacherSetTitle(0),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-2',
             label: "Date added: oldest to newest",
-            onClick: (e) => sortTeacherSetTitle(e, 1),
+            onClick: sortTeacherSetTitle(1),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-3',
             label: "Title: A-Z",
-            onClick: (e) => sortTeacherSetTitle(e, 2),
+            onClick: sortTeacherSetTitle(2),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-4',
             label: "Title: Z-A",
-            onClick: (e) => sortTeacherSetTitle(e, 3),
+            onClick: sortTeacherSetTitle(3),
             type: 'action'
           }
         ]}
@@ -765,7 +765,7 @@ export default function SearchTeacherSets(props) {
     );
   };
 
-  const sortTeacherSetTitle = (e, value) => {
+  const sortTeacherSetTitle = (value) => {
     searchParams.set("sort_order", [value]);
     setSearchParams(searchParams);
     setSortTitleValue(value);
