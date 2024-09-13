@@ -421,7 +421,7 @@ export default function SearchTeacherSets(props) {
       return (
         <Menu
           id="ts-sort-by-menu"
-          labelText={"menu"}
+          labelText="menu"
           listAlignment="left"
           showSelectionAsLabel
           selectedItem="sort-by-item-title-1"
