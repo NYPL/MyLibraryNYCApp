@@ -9,7 +9,6 @@ import {
   Button,
   ButtonGroup,
   SearchBar,
-  Select,
   Icon,
   HorizontalRule,
   Heading,
@@ -36,6 +35,7 @@ import {
   useColorMode,
   VStack,
   HStack,
+  Menu,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -418,34 +418,41 @@ export default function SearchTeacherSets(props) {
 
   const teacherSetTitleOrder = () => {
     if (teacherSets.length >= 1) {
-      let sortByOptions = [
-        { sort_order: "Date added: newest to oldest", value: 0 },
-        { sort_order: "Date added: oldest to newest", value: 1 },
-        { sort_order: "Title: A-Z", value: 2 },
-        { sort_order: "Title: Z-A", value: 3 },
-      ];
       return (
-        <Select
-          id="ts-sort-by-select"
-          name="sortBy"
-          selectType="default"
-          value={sortTitleValue}
-          onChange={sortTeacherSetTitle.bind(this)}
-          labelText="Sort by"
-          labelPosition="inline"
-          className="selectSortOrder"
-          //marginTop="xs"
-        >
-          {sortByOptions.map((s) => (
-            <option
-              id={"ts-sort-by-options-" + s.value}
-              key={s.value}
-              value={s.value}
-            >
-              {s.sort_order}
-            </option>
-          ))}
-        </Select>
+        <Menu
+          id="ts-sort-by-menu"
+          labelText={"menu"}
+          listAlignment="left"
+          showSelectionAsLabel
+          selectedItem="sort-by-item-title-1"
+          showBorder
+          listItemsData={[
+          {
+            id: 'sort-by-item-title-1',
+            label: "Date added: newest to oldest",
+            onClick: (e) => sortTeacherSetTitle(e, 0),
+            type: 'action'
+          },
+          {
+            id: 'sort-by-item-title-2',
+            label: "Date added: oldest to newest",
+            onClick: (e) => sortTeacherSetTitle(e, 1),
+            type: 'action'
+          },
+          {
+            id: 'sort-by-item-title-3',
+            label: "Title: A-Z",
+            onClick: (e) => sortTeacherSetTitle(e, 2),
+            type: 'action'
+          },
+          {
+            id: 'sort-by-item-title-4',
+            label: "Title: Z-A",
+            onClick: (e) => sortTeacherSetTitle(e, 3),
+            type: 'action'
+          }
+        ]}
+      />
       );
     }
   };
@@ -758,17 +765,17 @@ export default function SearchTeacherSets(props) {
     );
   };
 
-  const sortTeacherSetTitle = (e) => {
-    searchParams.set("sort_order", [e.target.value]);
+  const sortTeacherSetTitle = (e, value) => {
+    searchParams.set("sort_order", [value]);
     setSearchParams(searchParams);
-    setSortTitleValue(e.target.value);
+    setSortTitleValue(value);
     getTeacherSets(
       Object.assign(
         {
           keyword: keyword,
           grade_begin: grade_begin,
           grade_end: grade_end,
-          sort_order: e.target.value,
+          sort_order: value,
           availability: availability,
           page: computedCurrentPage,
         },
