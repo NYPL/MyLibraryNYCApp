@@ -10,7 +10,7 @@ import {
   Text,
   FormField,
   Form,
-  Notification,
+  Banner,
   Checkbox,
   HorizontalRule,
   Heading,
@@ -392,7 +392,7 @@ export default function SignUp(props) {
       passwordErrorMsg ||
       serverError
     ) {
-      return "display_block signUpMessage";
+      return "signUpMessage";
     } else {
       return "display_none signUpMessage";
     }
@@ -485,12 +485,11 @@ export default function SignUp(props) {
   const showNotificationContent = () => {
     return (
       <div style={{ display: showErrorMessage() }}>
-        <Notification
-          ariaLabel="Signup Error Notifications"
+        <Banner
           id="sign-up-error-notifications"
+          ariaLabel="Signup Error Notifications"
           className={showNotifications()}
-          notificationType="warning"
-          notificationContent={
+          content={<>
             <Text
               id="sign-up-error-notifications-text"
               noSpace
@@ -499,7 +498,8 @@ export default function SignUp(props) {
               {" "}
               {showCommonErrorMsg()}{" "}
             </Text>
-          }
+          </>}
+          type="warning"
         />
       </div>
     );
