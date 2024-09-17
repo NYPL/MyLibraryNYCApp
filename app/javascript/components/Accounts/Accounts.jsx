@@ -40,7 +40,7 @@ export default function Accounts() {
   const [ordersNotPresentMsg, setOrdersNotPresentMsg] = useState("");
   const [altEmailIsvalid, setAltEmailIsvalid] = useState(false);
   const [notificationType, setNotificationType] = useState("neutral");
-  const [displayNotification, setDisplayNotification] = useState("block");
+  const [displayNotification, setDisplayNotification] = useState("");
   const tableHeaderBgColor = useColorModeValue(
     "ui.bg.default",
     "dark.ui.bg.default"
@@ -106,19 +106,15 @@ export default function Accounts() {
         })
         .then((res) => {
           setMessage(res.data.message);
-          setDisplayNotification("block");
+          setDisplayNotification("");
           if (res.data.status === "updated") {
             setAltEmailIsvalid(false);
             setNotificationType("neutral");
-            setNotificationIcon("actionCheckCircle");
-            setNotificationIconColor("ui.black");
             if (altEmail === "") {
               setAltEmail(res.data.user.alt_email);
             }
           } else {
             setNotificationType("warning");
-            setNotificationIcon("errorFilled");
-            setNotificationIconColor("brand.primary");
           }
         })
         .catch(function (error) {
@@ -238,6 +234,7 @@ export default function Accounts() {
     if (message !== "") {
       return (
         <Banner
+          style={{ display: displayNotification }}
           id="account-details-notification"
           ariaLabel="Account Notification"
           content={message}
