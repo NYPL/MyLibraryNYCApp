@@ -13,9 +13,8 @@ import {
   Heading,
   Link,
   Table,
-  Notification,
+  Banner,
   Pagination,
-  Icon,
   ButtonGroup,
   Text,
   SkeletonLoader,
@@ -40,10 +39,7 @@ export default function Accounts() {
   const [totalPages, setTotalPages] = useState("");
   const [ordersNotPresentMsg, setOrdersNotPresentMsg] = useState("");
   const [altEmailIsvalid, setAltEmailIsvalid] = useState(false);
-  const [notificationType, setNotificationType] = useState("announcement");
-  const [notificationIcon, setNotificationIcon] = useState("actionCheckCircle");
-  const [notificationIconColor, setNotificationIconColor] =
-    useState("ui.black");
+  const [notificationType, setNotificationType] = useState("neutral");
   const [displayNotification, setDisplayNotification] = useState("block");
   const tableHeaderBgColor = useColorModeValue(
     "ui.bg.default",
@@ -113,7 +109,7 @@ export default function Accounts() {
           setDisplayNotification("block");
           if (res.data.status === "updated") {
             setAltEmailIsvalid(false);
-            setNotificationType("announcement");
+            setNotificationType("neutral");
             setNotificationIcon("actionCheckCircle");
             setNotificationIconColor("ui.black");
             if (altEmail === "") {
@@ -241,24 +237,12 @@ export default function Accounts() {
   const AccountUpdatedMessage = () => {
     if (message !== "") {
       return (
-        <div>
-          <Notification
-            style={{ display: displayNotification }}
-            ariaLabel="Account Notification"
-            id="account-details-notification"
-            className="accountNotificationMsg"
-            notificationType={notificationType}
-            icon={
-              <Icon
-                color={notificationIconColor}
-                iconRotation="rotate0"
-                name={notificationIcon}
-                size="small"
-              />
-            }
-            notificationContent={message}
-          />
-        </div>
+        <Banner
+          id="account-details-notification"
+          ariaLabel="Account Notification"
+          content={message}
+          type={notificationType}
+        />
       );
     }
   };

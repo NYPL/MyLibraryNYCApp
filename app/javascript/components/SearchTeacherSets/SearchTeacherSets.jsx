@@ -30,7 +30,7 @@ import {
   SkeletonLoader,
   useNYPLBreakpoints,
   TagSet,
-  Notification,
+  Banner,
   useColorModeValue,
   useColorMode,
   VStack,
@@ -1210,13 +1210,12 @@ export default function SearchTeacherSets(props) {
   const tsDataNotRetrievedMsg = () => {
     if (teacherSetDataNotRetrievedMsg !== "") {
       return (
-        <Notification
+        <Banner
           marginTop="l"
-          icon={<Icon name="alertWarningFilled" color="ui.warning.primary" />}
-          ariaLabel="SignOut Notification"
-          id="sign-out-notification"
-          notificationType="announcement"
-          notificationContent={teacherSetDataNotRetrievedMsg}
+          id="sign-up-notification"
+          ariaLabel="Teacher sets not found"
+          content={teacherSetDataNotRetrievedMsg}
+          type="warning"
         />
       );
     } else {
