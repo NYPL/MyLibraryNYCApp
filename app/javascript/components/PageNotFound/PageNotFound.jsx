@@ -3,7 +3,7 @@ import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import {
   TemplateAppContainer,
   Text,
-  Notification,
+  Banner,
   List,
   Link,
   Breadcrumbs,
@@ -15,16 +15,12 @@ export default function PageNotFound() {
   const pageNotFoundMsg = () => {
     return (
       <>
-        <Notification
+        <Banner
           marginBottom="l"
-          notificationType="warning"
-          notificationContent={
-            <>The page you are looking for does not exist.</>
-          }
+          id="page-not-found-notification"
+          content={<>We’re sorry, the page you requested may have moved or it no longer exists. Please make sure the link you are using is correct.</>}
+          type="warning"
         />
-        <Text marginLeft="s" data-testid="page-not-found-error-msg-1">
-          We’re sorry, the page you requested may have moved or it no longer exists. Please make sure the link you are using is correct.
-        </Text>
         <Text marginLeft="s" data-testid="page-not-found-error-msg-2">To continue using our site, you can:</Text>
         <List
           id="nypl-list"
