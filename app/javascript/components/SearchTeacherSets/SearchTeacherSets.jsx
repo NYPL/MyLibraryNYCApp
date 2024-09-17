@@ -421,10 +421,9 @@ export default function SearchTeacherSets(props) {
       return (
         <Menu
           id="ts-sort-by-menu"
-          labelText="menu"
+          labelText="Sort By"
           listAlignment="left"
           showSelectionAsLabel
-          selectedItem="sort-by-item-title-1"
           showBorder
           listItemsData={[
           {
@@ -1121,12 +1120,10 @@ export default function SearchTeacherSets(props) {
 
   const displayAccordionData = (ts) => {
     const tsItems = ts.items;
-
     if (tsItems.length >= 1) {
       if (selectedFacets[ts.label] === undefined) {
         selectedFacets[ts.label] = [];
       }
-
       return (
         <CheckboxGroup
           isFullWidth
