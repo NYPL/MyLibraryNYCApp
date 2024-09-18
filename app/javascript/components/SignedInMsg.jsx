@@ -13,8 +13,9 @@ export default function SignedInMsg(props) {
         <Banner
           id="sign-in-notification"
           ariaLabel="SignIn Notification"
-          content="Signed in successfully!"
+          content="You have signed in successfully!"
           type="informative"
+          mb="l"
         />
       );
     } else {

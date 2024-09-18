@@ -489,16 +489,7 @@ export default function SignUp(props) {
           id="sign-up-error-notifications"
           ariaLabel="Signup Error Notifications"
           className={showNotifications()}
-          content={<>
-            <Text
-              id="sign-up-error-notifications-text"
-              noSpace
-              className="signUpMessage"
-            >
-              {" "}
-              {showCommonErrorMsg()}{" "}
-            </Text>
-          </>}
+          content={showCommonErrorMsg()}
           type="warning"
         />
       </div>

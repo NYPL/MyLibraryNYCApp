@@ -421,32 +421,32 @@ export default function SearchTeacherSets(props) {
       return (
         <Menu
           id="ts-sort-by-menu"
-          labelText="Sort By"
+          labelText="Sort by"
           listAlignment="left"
           showSelectionAsLabel
           showBorder
           listItemsData={[
           {
             id: 'sort-by-item-title-1',
-            label: "Date added: newest to oldest",
+            label: "Sort by: newest to oldest",
             onClick: () => sortTeacherSetTitle(0),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-2',
-            label: "Date added: oldest to newest",
+            label: "Sort by: oldest to newest",
             onClick: () => sortTeacherSetTitle(1),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-3',
-            label: "Title: A-Z",
+            label: "Sort by: A-Z",
             onClick: () => sortTeacherSetTitle(2),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-4',
-            label: "Title: Z-A",
+            label: "Sort by: Z-A",
             onClick: () => sortTeacherSetTitle(3),
             type: 'action'
           }
