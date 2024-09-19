@@ -85,6 +85,7 @@ export default function SearchTeacherSets(props) {
   const [showKeyword, setShowKeyWord] = useState(false);
   const [updateKeyword, setUpdateKeyword] = useState("");
   const location = useLocation();
+  const [selectedSortOption, setSelectedSortOption] = useState('');
 
   useEffect(() => {
     document.title = "Search Teacher Sets | MyLibraryNYC";
@@ -421,33 +422,33 @@ export default function SearchTeacherSets(props) {
       return (
         <Menu
           id="ts-sort-by-menu"
-          labelText="Sort by"
+          labelText={selectedSortOption !== "" ? `Sort by: ${selectedSortOption}` : 'Sort by'}
           listAlignment="left"
-          showSelectionAsLabel
           showBorder
+          showLabel
           listItemsData={[
           {
             id: 'sort-by-item-title-1',
-            label: "Sort by: newest to oldest",
-            onClick: () => sortTeacherSetTitle(0),
+            label: "Newest to oldest",
+            onClick: () => sortTeacherSetTitle("Newest to oldest", 0),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-2',
-            label: "Sort by: oldest to newest",
-            onClick: () => sortTeacherSetTitle(1),
+            label: "Oldest to newest",
+            onClick: () => sortTeacherSetTitle("Oldest to newest", 1),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-3',
-            label: "Sort by: A-Z",
-            onClick: () => sortTeacherSetTitle(2),
+            label: "Title A-Z",
+            onClick: () => sortTeacherSetTitle("Title A-Z", 2),
             type: 'action'
           },
           {
             id: 'sort-by-item-title-4',
-            label: "Sort by: Z-A",
-            onClick: () => sortTeacherSetTitle(3),
+            label: "Title Z-A",
+            onClick: () => sortTeacherSetTitle("Title Z-A", 3),
             type: 'action'
           }
         ]}
@@ -764,10 +765,12 @@ export default function SearchTeacherSets(props) {
     );
   };
 
-  const sortTeacherSetTitle = (value) => {
+  
+  const sortTeacherSetTitle = (sortOption, value) => {
     searchParams.set("sort_order", [value]);
     setSearchParams(searchParams);
     setSortTitleValue(value);
+    setSelectedSortOption(sortOption); // Updates the displayed sort option
     getTeacherSets(
       Object.assign(
         {
