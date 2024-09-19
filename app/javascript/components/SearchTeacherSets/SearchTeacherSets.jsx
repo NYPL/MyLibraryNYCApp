@@ -85,7 +85,7 @@ export default function SearchTeacherSets(props) {
   const [showKeyword, setShowKeyWord] = useState(false);
   const [updateKeyword, setUpdateKeyword] = useState("");
   const location = useLocation();
-  const [selectedSortOption, setSelectedSortOption] = useState('');
+  const [selectedSortOption, setSelectedSortOption] = useState("Newest to oldest");
 
   useEffect(() => {
     document.title = "Search Teacher Sets | MyLibraryNYC";
@@ -421,11 +421,12 @@ export default function SearchTeacherSets(props) {
     if (teacherSets.length >= 1) {
       return (
         <Menu
-          id="ts-sort-by-menu"
+          id='menu-button-ts-sort-by-menu'
           labelText={selectedSortOption !== "" ? `Sort by: ${selectedSortOption}` : 'Sort by'}
           listAlignment="left"
           showBorder
-          showLabel
+          selectedItem='sort-by-item-title-1'
+          showLabel={true}
           listItemsData={[
           {
             id: 'sort-by-item-title-1',
@@ -766,11 +767,11 @@ export default function SearchTeacherSets(props) {
   };
 
   
-  const sortTeacherSetTitle = (sortOption, value) => {
+  const sortTeacherSetTitle = (sortOption="Newest to oldest", value=0) => {
     searchParams.set("sort_order", [value]);
     setSearchParams(searchParams);
     setSortTitleValue(value);
-    setSelectedSortOption(sortOption); // Updates the displayed sort option
+    setSelectedSortOption(sortOption);
     getTeacherSets(
       Object.assign(
         {
