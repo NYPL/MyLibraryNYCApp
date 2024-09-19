@@ -22,6 +22,7 @@ export default function SignUpMsg(props) {
         <Banner
           id="sign-up-notification"
           ariaLabel="SignUp Notification"
+          mb="l"
           content={details.signedUpMessage}
           heading="Registration Successful!"
           type="positive"
