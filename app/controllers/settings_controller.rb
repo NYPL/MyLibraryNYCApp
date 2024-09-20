@@ -4,9 +4,7 @@ class SettingsController < ApplicationController
 
   def signin
     return unless params["settingType"] == "account"
-
     store_location_for(:user, "account_details")
-    
   end
 
   def signup; end
@@ -101,9 +99,7 @@ class SettingsController < ApplicationController
 
   def acccount_details
     return if logged_in?
-
     redirect_to "/signin"
-    
   end
 
   def sign_up_details

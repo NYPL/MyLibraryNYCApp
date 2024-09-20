@@ -1,5 +1,5 @@
 import React from "react";
-import { Notification, Icon } from "@nypl/design-system-react-components";
+import { Banner } from "@nypl/design-system-react-components";
 
 export default function SignedInMsg(props) {
   const details = props.signInDetails;
@@ -10,14 +10,12 @@ export default function SignedInMsg(props) {
       details.signInMsg !== ""
     ) {
       return (
-        <Notification
-          icon={
-            <Icon name="actionCheckCircleFilled" color="ui.success.primary" />
-          }
-          ariaLabel="SignIn Notification"
+        <Banner
           id="sign-in-notification"
-          notificationType="announcement"
-          notificationContent="Signed in successfully!"
+          ariaLabel="SignIn Notification"
+          content="You have signed in successfully!"
+          type="informative"
+          mb="l"
         />
       );
     } else {
