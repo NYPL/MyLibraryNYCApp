@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Notification, Icon } from "@nypl/design-system-react-components";
+import { Banner } from "@nypl/design-system-react-components";
 
 export default function SignUpMsg(props) {
   const details = props.signUpDetails;
@@ -19,15 +19,13 @@ export default function SignUpMsg(props) {
       details.signedUpMessage !== ""
     ) {
       return (
-        <Notification
-          icon={
-            <Icon name="actionCheckCircleFilled" color="ui.success.primary" />
-          }
-          ariaLabel="SignUp Notification"
+        <Banner
           id="sign-up-notification"
-          notificationHeading="Registration Successful!"
-          notificationType="announcement"
-          notificationContent={details.signedUpMessage}
+          ariaLabel="SignUp Notification"
+          mb="l"
+          content={details.signedUpMessage}
+          heading="Registration Successful!"
+          type="positive"
         />
       );
     } else {

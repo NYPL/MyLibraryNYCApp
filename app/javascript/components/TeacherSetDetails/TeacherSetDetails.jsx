@@ -32,7 +32,7 @@ import {
   VStack,
   Breadcrumbs,
   Hero,
-  Notification,
+  Banner,
   useNYPLBreakpoints,
   Accordion,
   SkeletonLoader,
@@ -508,11 +508,11 @@ export default function TeacherSetDetails(props) {
   const errorMsg = () => {
     if (errorMessage) {
       return (
-        <Notification
+        <Banner
           ariaLabel="Hold creation error"
           id="hold-error-message"
-          notificationType="warning"
-          notificationContent={errorMessage}
+          type="warning"
+          content={errorMessage}
         />
       );
     } else {

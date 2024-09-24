@@ -193,10 +193,6 @@ ul.list li:before {
   margin: 0px 0px 10px 0px !important;
 }
 
-.accountNotificationMsg {
-  margin: 0 !important;
-}
-
 .accocuntOrderPagination {
   justify-content: center;
 }
@@ -527,4 +523,20 @@ ul.list li:before {
 #news-letter-success-msg #newsletter-form #submit {
   background: var(--nypl-colors-ui-black) !important;
   color: var(--nypl-colors-dark-ui-typography-heading) !important;
+}
+
+#news-letter-success-msg #newsletter-form #submit:disabled {
+  background: var(--nypl-colors-ui-gray-light-cool) !important;  /* Background color when disabled */
+  color: var(--nypl-colors-ui-gray-dark) !important;
+}
+
+#menu-button-menu-button-ts-sort-by-menu {
+  width: 240px;
+  text-align: left;
+}
+
+#menu-button-menu-button-ts-sort-by-menu span {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 }

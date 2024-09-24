@@ -25,7 +25,7 @@ export default function App() {
       .get("/logged_in")
       .then((response) => {
         if (response.data.logged_in) {
-          handleLogin(response.data);
+          handleLogin();
         } else {
           handleLogout();
         }

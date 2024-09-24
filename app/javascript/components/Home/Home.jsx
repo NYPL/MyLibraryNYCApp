@@ -15,7 +15,7 @@ import {
   HorizontalRule,
   Heading,
   TemplateAppContainer,
-  Notification,
+  Banner,
   Text,
   Link,
   useColorModeValue,
@@ -66,19 +66,16 @@ export default function Home(props) {
       props.signoutMsg !== ""
     ) {
       return (
-        <Notification
+        <Banner
           marginTop="l"
-          icon={<Icon name="alertWarningFilled" color="ui.warning.primary" />}
-          ariaLabel="SignOut Notification"
           id="sign-out-notification"
-          notificationType="announcement"
-          notificationContent={
-            <>
-              <b>You have been signed out.</b> You will need to{" "}
-              <Link href="/signin">sign in</Link> again to access your account
-              details.
-            </>
-          }
+          ariaLabel="SignOut Notification"
+          content={<>
+            <b>You have been signed out.</b> You will need to{" "}
+            <Link href="/signin">sign in</Link> again to access your account
+            details.
+          </>}
+          type="warning"
         />
       );
     } else {

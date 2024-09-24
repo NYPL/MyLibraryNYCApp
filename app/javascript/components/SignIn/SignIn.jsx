@@ -6,8 +6,7 @@ import {
   Button,
   TextInput,
   TemplateAppContainer,
-  Icon,
-  Notification,
+  Banner,
   Text,
   Heading,
   HorizontalRule,
@@ -135,32 +134,21 @@ export default function SignIn(props) {
               sign up
             </Link>
           </Text>
-          <Notification
+          <Banner
+            id="sign-in-email-info"
             marginTop="l"
             marginLeft="0"
-            notificationType="announcement"
-            icon={
-              <Icon
-                color={actionHelpOutlineColor}
-                align="right"
-                iconRotation="rotate0"
-                name="actionHelpOutline"
-                size="medium"
-                type="default"
-              />
-            }
-            notificationContent={
-              <>
-                Your DOE email address will look like{" "}
-                <b>jsmith@schools.nyc.gov</b>, consisting of your first initial
-                plus your last name. It may also contain a numeral after your
-                name (
-                <b>jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.</b>).
-                Even if you do not check your DOE email regularly, please use it
-                to sign in. You can provide an alternate email address later for
-                delivery notifications and other communications.
-              </>
-            }
+            content={<>
+                  Your DOE email address will look like{" "}
+                  <b>jsmith@schools.nyc.gov</b>, consisting of your first initial
+                  plus your last name. It may also contain a numeral after your
+                  name (
+                  <b>jsmith2@schools.nyc.gov, jsmith3@schools.nyc.gov, etc.</b>).
+                  Even if you do not check your DOE email regularly, please use it
+                  to sign in. You can provide an alternate email address later for
+                  delivery notifications and other communications.
+            </>}
+            type="informative"
           />
         </>
       }
