@@ -8,7 +8,6 @@ import axios from 'axios';
 import { MemoryRouter } from 'react-router-dom';
 jest.mock('axios');
 
-
 // Mock useLocation
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'), // Use actual react-router-dom for other functions
@@ -22,6 +21,20 @@ jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(), // Mock useNavigate if needed
   useHref: jest.fn(), // Mock useHref if needed
 }));
+
+beforeAll(() => {
+  window.matchMedia = jest.fn().mockImplementation(query => {
+    return {
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: jest.fn(),  // Modern method
+      removeEventListener: jest.fn(),
+      addListener: jest.fn(),       // Fallback for compatibility
+      removeListener: jest.fn(),
+    };
+  });
+});
 
 describe("SearchTeacherSets", () => {
   afterEach(() => {
