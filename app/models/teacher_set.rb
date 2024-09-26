@@ -122,7 +122,8 @@ class TeacherSet < ActiveRecord::Base
   def update_teacher_set_availability_in_elastic_search
     body = {
      :availability => self.availability,
-     :available_copies => self.available_copies
+     :available_copies => self.available_copies,
+     :total_copies => self.total_copies
     }
     ElasticSearch.new.update_document_by_id(self.id, body)
   end
@@ -1076,6 +1077,7 @@ class TeacherSet < ActiveRecord::Base
     response = get_items_info_from_bibs_service(bibid)
     self.update(total_copies: response[:total_count], available_copies: response[:available_count],
                 availability: response[:availability_string])
+    update_teacher_set_availability_in_elastic_search
     return {bibs_resp: response[:bibs_resp]}
   end
   
