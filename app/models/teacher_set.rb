@@ -123,7 +123,6 @@ class TeacherSet < ActiveRecord::Base
     body = {
      :availability => self.availability,
      :available_copies => self.available_copies,
-     :total_copies => self.total_copies
     }
     ElasticSearch.new.update_document_by_id(self.id, body)
   end
