@@ -1,5 +1,5 @@
 services:
-  web:
+  webapp:
     build:
       context: .
     ports:
@@ -11,11 +11,11 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db
+      - postgres
       - elasticsearch
     command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
 
-  db:
+  postgres:
     image: postgres:13
     environment:
       POSTGRES_USER: postgres
