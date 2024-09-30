@@ -1,5 +1,5 @@
 # Set base image and working directory
-FROM ruby:2.7.4
+FROM ruby:3.3
 
 # Install necessary packages, including curl and PostgreSQL client
 RUN apt-get update -qq && apt-get install -y \
@@ -23,10 +23,11 @@ WORKDIR $APP_HOME
 RUN npm install -g esbuild
 
 # Copy Gemfile and Gemfile.lock first
-COPY Gemfile Gemfile.lock $APP_HOME/
+#COPY Gemfile Gemfile.lock $APP_HOME/
+COPY Gemfile $APP_HOME/
 
 # Install bundler and Ruby dependencies
-RUN gem install bundler -v 2.4.22
+RUN gem install bundler #-v 2.4.22
 RUN bundle install --jobs 30
 
 # Copy package.json and package-lock.json before running yarn install
@@ -37,6 +38,9 @@ RUN yarn install
 
 # Now copy the rest of the application
 COPY . $APP_HOME/
+
+# Provision databases
+# RUN ./provisioning/docker_build/00-create-databases.sh
 
 # Precompile assets
 RUN yarn build

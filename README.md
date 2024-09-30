@@ -428,8 +428,8 @@ Note: Rails, Ruby and Node installation is required to run project in local.
 
         create_teacherset_document_in_es
 
-Setp7: Run below commands to start server
-        
+Step7: Run below commands to start server
+
         yarn install
         yarn build
         RAILS_ENV=local rails s
