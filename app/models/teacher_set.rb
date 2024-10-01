@@ -836,14 +836,14 @@ class TeacherSet < ActiveRecord::Base
   #         puts "#{(i+1) + (params[:page]-1)*params[:limit]} of #{items['count']}: Add/update #{title['id']}: #{title['title']}"
   #         id = title['id'].to_i
   #         # puts "upsert_from_catalog_id #{id}"
-  #         new << id unless self.exists?(id)
+  #         new << id unless self.exist?(id)
   #         unique_ids << id
 
   #         # If debugging a specific id, skip all except for that id
   #         next if !just_id.nil? && id != just_id
 
   # =begin
-  #         if self.exists? id
+  #         if self.exist? id
   #           s = self.find id
   #           next if !s.description.empty?
   #         end

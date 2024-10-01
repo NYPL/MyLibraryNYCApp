@@ -262,7 +262,7 @@ school: school}
     School.active.each do |school|
       code = school.code
       path = "#{dumps_base}/#{code}.csv"
-      path = "#{dumps_base}/e#{code}.csv" if !File.exists?(path)
+      path = "#{dumps_base}/e#{code}.csv" if !File.exist?(path)
 
       if File.exists?(path)
         puts "Process teachers for #{code}"
