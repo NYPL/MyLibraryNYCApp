@@ -101,4 +101,5 @@ group :test do
   gem 'minitest'#, '~> 5.14.2'
   gem 'simplecov'#, '~> 0.17.1'
   gem 'database_cleaner'
+  gem 'rspec-rails'
 end
