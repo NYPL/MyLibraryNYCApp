@@ -88,7 +88,7 @@ group :assets do # Gems used only for assets and not required in production envi
   gem 'uglifier'#, '>= 1.0.3'
 end
 
-group :development, :local do
+group :development do
   gem 'pry'#, '>= 0.10.0'
   gem 'pry-rails'
   gem 'pry-remote'

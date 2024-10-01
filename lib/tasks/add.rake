@@ -9,10 +9,10 @@
 # desc "Add prod data to #{ENV['RAILS_ENV']} db"
 # task :add_data, [] => :environment do |t, args|
 
-# 	sh 'dropdb mln_local --if-exists'
-# 	sh 'heroku pg:pull DATABASE mln_local -a mylibrarynyc'
-# 	sh 'psql mln_local -c "alter table teacher_sets drop column test_column"'
-# 	sh 'pg_dump mln_local -f db/seed-data.sql --data-only --exclude-table="schema_migrations" --inserts --column-inserts'
+# 	sh 'dropdb mln_development --if-exists'
+# 	sh 'heroku pg:pull DATABASE mln_development -a mylibrarynyc'
+# 	sh 'psql mln_development -c "alter table teacher_sets drop column test_column"'
+# 	sh 'pg_dump mln_development -f db/seed-data.sql --data-only --exclude-table="schema_migrations" --inserts --column-inserts'
 # 	sh "psql #{ENV['DATABASE_URL']} -c 'drop schema public cascade'"
 # 	sh "psql #{ENV['DATABASE_URL']} -c 'create schema public'"
 

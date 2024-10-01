@@ -90,7 +90,7 @@ export default function TeacherSetBooks() {
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
         setBook(res.data.book);
-        if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+        if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
           adobeAnalyticsForTeacherSetBooks(res.data.book)
         }
         if (res.data.book.title !== null) {
