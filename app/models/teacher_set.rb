@@ -31,7 +31,7 @@ class TeacherSet < ActiveRecord::Base
 
   before_create :make_slug
 
-  KEY_WORDS = ["NYC", "BMC"]
+  KEY_WORDS = ["NYC"]
   
   AVAILABLE = 'available'
   UNAVAILABLE = 'unavailable'
