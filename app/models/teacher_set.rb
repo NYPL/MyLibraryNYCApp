@@ -31,6 +31,8 @@ class TeacherSet < ActiveRecord::Base
 
   before_create :make_slug
 
+  KEY_WORDS = ["NYC", "BMC"]
+  
   AVAILABLE = 'available'
   UNAVAILABLE = 'unavailable'
 
@@ -396,8 +398,6 @@ class TeacherSet < ActiveRecord::Base
 
     # Sort most available first with id as tie breaker to ensure consistent sorts
     sets.order('availability ASC, available_copies DESC, id DESC')
-
-    
   end
 
   def self.facets_for_query(qry)
@@ -1034,9 +1034,24 @@ class TeacherSet < ActiveRecord::Base
     # strip leading and trailing whitespace
     new_subject_string = new_subject_string.strip()
 
-    # if the subject ends in a period (something metadata rules can require), strip the period
-    new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
+    # Check if "NYC" is present
+    if KEY_WORDS.any? { |keyword| new_subject_string.include?(keyword) }
+      # Remove any trailing period
+      new_subject_string = new_subject_string.gsub(/\.$/, '')
 
+      # Split the string into words
+      parts = new_subject_string.split
+
+      # Titleize every word except for those in the keywords array
+      parts.map! do |word|
+        KEY_WORDS.include?(word) ? word : word.titleize
+      end
+
+      # Join the parts back into a single string
+      new_subject_string = parts.join(' ')
+    else
+      new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
+    end
     # If new_subject_string is empty, return nil, else return new_subject_string.
     return unless new_subject_string.present?
 
