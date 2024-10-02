@@ -1,56 +1,50 @@
-# syntax = docker/dockerfile:1.3
-FROM ruby:2.7.4 AS builder
+# Set base image and working directory
+FROM ruby:2.7.4
 
-# set env vars
-ENV APP_HOME /home/app/MyLibraryNYCApp
-ENV AWS_DEFAULT_REGION=us-east-1
+# Install necessary packages, including curl and PostgreSQL client
+RUN apt-get update -qq && apt-get install -y \
+  curl \
+  postgresql-client \
+  && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get install -y nodejs \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
-ARG RAILS_ENV
-ENV RAILS_ENV=${RAILS_ENV}
+# Install Yarn globally
+RUN npm install -g yarn
 
+# Set environment variables
+ENV RAILS_ENV=development
+ENV APP_HOME=/app
+RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
-# install packages
-RUN apt-get update -qq \
-    && apt-get install -y \
-    curl \
-    postgresql-client \
-    git
-
-RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash - \
-    && apt-get -y install nodejs \
-    && npm install --global yarn
-
-# Install esbuild
+# Install esbuild globally
 RUN npm install -g esbuild
 
-# set up app files
-COPY . $APP_HOME
-COPY Gemfile $APP_HOME
-COPY Gemfile.lock $APP_HOME
-WORKDIR $APP_HOME
+# Copy Gemfile and Gemfile.lock first
+COPY Gemfile Gemfile.lock $APP_HOME/
 
-## bundle
-ENV BUNDLER_VERSION=2.4.22
-RUN gem install bundler -v $BUNDLER_VERSION
-RUN bundle config --global github.https true \
-    && bundle install --jobs 30
+# Install bundler and Ruby dependencies
+RUN gem install bundler -v 2.4.22
+RUN bundle install --jobs 30
 
-COPY package.json $APP_HOME/package.json
-COPY package-lock.json $APP_HOME/package-lock.json
+# Copy package.json and package-lock.json before running yarn install
+COPY package.json $APP_HOME/
+
+# Install JS dependencies
 RUN yarn install
 
-# build
+# Now copy the rest of the application
+COPY . $APP_HOME/
+
+# Precompile assets
 RUN yarn build
 RUN yarn build:css
-RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
-    --mount=type=secret,id=AWS_SECRET_ACCESS_KEY \
-  AWS_ACCESS_KEY_ID=$(cat /run/secrets/AWS_ACCESS_KEY_ID) \
-  && export AWS_ACCESS_KEY_ID \
-  AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) \
-  && export AWS_SECRET_ACCESS_KEY \
-  && bundle exe rails assets:precompile
 
+# Expose the app port
 EXPOSE 3000
+
+# Start the server
 CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
 

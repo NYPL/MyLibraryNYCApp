@@ -4179,6 +4179,7 @@ begin
   puts "Starting test run..."
 
   puts "Starting DatabaseCleaner..."
+  DatabaseCleaner.allow_remote_database_url = true
   DatabaseCleaner.strategy = :truncation
   DatabaseCleaner.start
 ensure
