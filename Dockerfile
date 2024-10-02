@@ -39,9 +39,6 @@ RUN yarn install
 # Now copy the rest of the application
 COPY . $APP_HOME/
 
-# Provision databases
-# RUN ./provisioning/docker_build/00-create-databases.sh
-
 # Precompile assets
 RUN yarn build
 RUN yarn build:css
