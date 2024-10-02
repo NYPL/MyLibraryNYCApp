@@ -23,7 +23,6 @@ WORKDIR $APP_HOME
 RUN npm install -g esbuild
 
 # Copy Gemfile and Gemfile.lock first
-#COPY Gemfile Gemfile.lock $APP_HOME/
 COPY Gemfile Gemfile.lock $APP_HOME/
 
 # Install bundler and Ruby dependencies
