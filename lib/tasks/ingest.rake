@@ -264,7 +264,7 @@ school: school}
       path = "#{dumps_base}/#{code}.csv"
       path = "#{dumps_base}/e#{code}.csv" if !File.exist?(path)
 
-      if File.exists?(path)
+      if File.exist?(path)
         puts "Process teachers for #{code}"
         CSV.foreach(path) do |line|
           # "p44607908",151,"KIM, DENISE",23333087938609,"zx445",9/27/2013,0,2,9/14/2011,"example@myschool.edu"

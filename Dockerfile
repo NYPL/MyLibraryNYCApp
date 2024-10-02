@@ -26,7 +26,7 @@ RUN npm install -g esbuild
 COPY Gemfile Gemfile.lock $APP_HOME/
 
 # Install bundler and Ruby dependencies
-RUN gem install bundler #-v 2.4.22
+RUN gem install bundler -v 2.5.20
 RUN bundle install --jobs 30
 
 # Copy package.json and package-lock.json before running yarn install
