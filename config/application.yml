@@ -7,7 +7,7 @@ case ENV['RAILS_ENV']
 when 'development'
   ENV['MLN_INFO_SITE_HOSTNAME'] = "dev-www.mylibrarynyc.local"
   ENV['MLN_SETS_SITE_HOSTNAME'] = "dev-sets.mylibrarynyc.local"
-  ENV['DATABASE_URL'] = "postgresql://postgres:password@db:5432/mln_development"
+  ENV['DATABASE_URL'] = "postgresql://postgres:password@postgres:5432/mln_development"
   ENV['API_GATEWAY_HEADER_KEY'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAydkErOQnDmhq+LmN8CARCAQ6BaEialZwZtZrF9XDXGVq0hJHo8lVgwDMyjtOXAaYQ5Z9Z7O/9XU3hLUND7c6uagr+RwAXD8arCtKAzJbfhpO7BL1I=")
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons"
@@ -81,7 +81,7 @@ when 'production'
 
 when 'test'
 
-  ENV['DATABASE_URL'] = "postgresql://postgres:password@db:5432/mln_test"
+  ENV['DATABASE_URL'] = "postgresql://postgres:password@postgres:5432/mln_test"
   ENV['MLN_INFO_SITE_HOSTNAME'] = "qa-www.mylibrarynyc.org"
   ENV['MLN_SETS_SITE_HOSTNAME'] = "qa-sets.mylibrarynyc.org"
   ENV['RACK_ENV'] = 'test'
