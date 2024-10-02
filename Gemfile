@@ -90,6 +90,7 @@ group :development do
 end
 
 group :test do
+  gem 'factory_bot_rails'
   gem 'minitest'
   gem 'simplecov'
   gem 'database_cleaner'

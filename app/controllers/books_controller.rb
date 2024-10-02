@@ -5,7 +5,7 @@ class BooksController < ApplicationController
   def index
     @books = Book.paginate(:page => params[:page])
   end
-  
+
   def show
     if storable_location?
       store_user_location!
