@@ -24,7 +24,7 @@ RUN npm install -g esbuild
 
 # Copy Gemfile and Gemfile.lock first
 #COPY Gemfile Gemfile.lock $APP_HOME/
-COPY Gemfile $APP_HOME/
+COPY Gemfile Gemfile.lock $APP_HOME/
 
 # Install bundler and Ruby dependencies
 RUN gem install bundler #-v 2.4.22
@@ -50,5 +50,5 @@ RUN yarn build:css
 EXPOSE 3000
 
 # Start the server
-CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
+#CMD ["rm -f /tmp/pids/server.pid", "bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
 
