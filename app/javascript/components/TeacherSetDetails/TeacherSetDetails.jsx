@@ -103,7 +103,7 @@ export default function TeacherSetDetails(props) {
         setTeacherSetNotes(res.data.teacher_set_notes);
         let userStatus = res.data.user ? res.data.user.status : "";
         setCurrentUserStatus(userStatus);
-        if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+        if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
           adobeAnalyticsForTeacherSet(res.data.teacher_set);
         }
         if (res.data.teacher_set.title !== null) {
@@ -158,7 +158,7 @@ export default function TeacherSetDetails(props) {
           return false;
         } else {
           if (res.data.status === "created") {
-            if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+            if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
               {
                 adobeAnalyticsForOrder();
               }

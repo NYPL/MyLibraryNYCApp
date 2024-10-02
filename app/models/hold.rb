@@ -90,7 +90,7 @@ class Hold < ActiveRecord::Base
 
   # Asks the hold_mailer to send a notificaion email to BookOps.
   def send_admin_notification_email
-    return if Rails.env.development? || Rails.env.local?
+    return if Rails.env.development?
 
     HoldMailer.admin_notification(self).deliver
   end
