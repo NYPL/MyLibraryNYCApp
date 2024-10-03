@@ -15,7 +15,6 @@ MyLibraryNYC::Application.routes.draw do
   get '/logged_in', to: 'sessions#logged_in?'
   get 'extend_session_iframe' => 'home#extend_session_iframe'
   get 'home/calendar_event/:filename', to: 'home#mln_calendar'
-  get 'home/calendar_event/error', to: 'home#calendar_event_error'
   get 'home/calendar_event', to: 'home#calendar_event'
   get 'home/newsletter_confirmation_msg', to: 'home#newsletter_confirmation_msg'
   get '/menu_of_services/:filename', to: 'home#menu_of_services'

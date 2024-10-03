@@ -1881,6 +1881,7 @@ GEM
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
+    mutex_m (0.2.0)
     net-http-persistent (4.0.4)
       connection_pool (~> 2.2)
     net-http-pipeline (1.0.1)
@@ -1899,6 +1900,7 @@ GEM
     open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
     os (1.1.4)
+    ostruct (0.6.0)
     paper_trail (15.2.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -2074,6 +2076,9 @@ GEM
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
     slop (3.6.0)
+    spring (4.2.1)
+    spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -2188,8 +2193,10 @@ DEPENDENCIES
   mini_racer
   minitest
   minitest-stub_any_instance
+  mutex_m
   nokogiri
   open_uri_redirections
+  ostruct
   paper_trail
   pg
   pry
@@ -2211,6 +2218,8 @@ DEPENDENCIES
   rubocop-performance
   sass-rails
   simplecov
+  spring
+  spring-commands-rspec
   sprockets-rails
   stimulus-rails
   test-unit
