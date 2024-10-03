@@ -61,6 +61,7 @@ class User < ActiveRecord::Base
     allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern)
 
     index = email.index('@')
+
     if (index && (allowed_email_patterns.include? email[index..]))
       return true
     else
