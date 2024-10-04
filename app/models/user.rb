@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   include Oauth
   include MlnException
   include MlnResponse
-  
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
 
   # Makes getters and setters
   attr_accessor :password
-  
+
   validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer:true,
   less_than_or_equal_to: 27777099999999, uniqueness: true
   validates_numericality_of :barcode, on: :update, presence: true, allow_blank: false,
@@ -46,6 +46,14 @@ class User < ActiveRecord::Base
 
 
   STATUS_LABELS = {'pending' => 'pending', 'complete' => 'complete'}.freeze
+
+  def self.ransackable_associations(auth_object = nil)
+    ["holds", "school"]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["alt_barcodes", "alt_email", "barcode", "confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "current_sign_in_at", "current_sign_in_ip", "email", "encrypted_password", "first_name", "home_library", "id", "id_value", "last_name", "last_sign_in_at", "last_sign_in_ip", "remember_created_at", "reset_password_sent_at", "reset_password_token", "school_id", "sign_in_count", "status", "unconfirmed_email", "updated_at"]
+  end
 
 
   ## NOTE: Validation methods, including this one, are called twice when
