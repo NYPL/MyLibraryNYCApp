@@ -8,8 +8,8 @@ class NewsLetterControllerUnitTest < Minitest::Test
 
   def setup
     @nl_controller = NewsLetterController.new
-    @mintest_mock1 = MiniTest::Mock.new
-    @mintest_mock2 = MiniTest::Mock.new
+    @mintest_mock1 = Minitest::Mock.new
+    @mintest_mock2 = Minitest::Mock.new
   end
 
   describe 'news-letter email already in google sheets?' do

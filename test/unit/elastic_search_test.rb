@@ -8,8 +8,8 @@ class ElasticSearchTest < Minitest::Test
 
   def setup
     @es_model = ElasticSearch.new
-    @mintest_mock1 = MiniTest::Mock.new
-    @mintest_mock2 = MiniTest::Mock.new
+    @mintest_mock1 = Minitest::Mock.new
+    @mintest_mock2 = Minitest::Mock.new
     # models the format of the ES query terms, the structure we'll be sending our search requests in
     @agg_hash = {"language" => {:terms => {:field => "primary_language", :size => 100, :order => {:_key => "asc"}}},
         "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},

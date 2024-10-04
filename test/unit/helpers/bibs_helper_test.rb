@@ -10,8 +10,8 @@ class BibsHelperTest < Minitest::Test
   include MlnHelper
 
   def setup
-    @mintest_mock1 = MiniTest::Mock.new
-    @mintest_mock2 = MiniTest::Mock.new
+    @mintest_mock1 = Minitest::Mock.new
+    @mintest_mock2 = Minitest::Mock.new
   end
 
 
