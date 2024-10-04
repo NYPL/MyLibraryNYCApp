@@ -34,4 +34,15 @@ RSpec.describe 'Hold', type: :request do
     end
   end
 
+  describe '#new' do
+    let(:get_url) { "http://localhost:3000/holds/new.json" }
+
+    it 'gets successfully' do
+      get get_url
+      expect(response).to be_successful
+    end
+  end
+
+
+
 end

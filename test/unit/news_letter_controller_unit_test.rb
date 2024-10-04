@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-class NewsLetterControllerUnitTest < MiniTest::Test
+class NewsLetterControllerUnitTest < Minitest::Test
 
   extend Minitest::Spec::DSL
   include LogWrapper

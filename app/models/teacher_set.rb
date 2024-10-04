@@ -122,6 +122,7 @@ class TeacherSet < ActiveRecord::Base
 
   # Update teacher-set availability while creation/cancellation of hold.
   def update_teacher_set_availability_in_elastic_search
+    puts "@JC myself: #{self.inspect}"
     body = {
      :availability => self.availability,
      :available_copies => self.available_copies,
@@ -133,12 +134,12 @@ class TeacherSet < ActiveRecord::Base
   def ts_holds_by_user_and_hold_id(user, hold_id)
     holds.where(:user_id => user.id, :id => hold_id).where.not(status: ['cancelled', 'closed'])
   end
-  
+
   # Get teacher-set holds by user.
   def ts_holds_by_user(user)
     holds.where(:user_id => user.id).where.not(status: ['cancelled', 'closed'])
   end
-  
+
   def make_slug
     # check for nil title otherwise parameterize will fail
     parameterized_title = (self.title || '').parameterize
@@ -1082,7 +1083,7 @@ class TeacherSet < ActiveRecord::Base
   rescue StandardError => e
     raise TeacherSetNoteException.new(TEACHER_SET_NOTE_EXCEPTION[:code], TEACHER_SET_NOTE_EXCEPTION[:msg])
   end
-  
+
   # Calls Bib service for items.
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items and available items in the list
@@ -1094,7 +1095,7 @@ class TeacherSet < ActiveRecord::Base
     update_teacher_set_availability_in_elastic_search
     return {bibs_resp: response[:bibs_resp]}
   end
-  
+
   # Calls Bib service for items.
   def get_items_info_from_bibs_service(bibid)
     bibs_resp, items_found = send_request_to_items_microservice(bibid)

@@ -101,6 +101,7 @@ GEM
       activesupport (>= 6.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    ansi (1.5.0)
     arbre (1.7.0)
       activesupport (>= 3.0.0)
       ruby2_keywords (>= 0.0.2)
@@ -1717,13 +1718,13 @@ GEM
     diff-lcs (1.5.1)
     docile (1.4.1)
     drb (2.2.1)
-    elastic-transport (8.3.5)
-      faraday (< 3)
+    elasticsearch (6.8.0)
+      elasticsearch-api (= 6.8.0)
+      elasticsearch-transport (= 6.8.0)
+    elasticsearch-api (6.8.0)
       multi_json
-    elasticsearch (8.15.0)
-      elastic-transport (~> 8.3)
-      elasticsearch-api (= 8.15.0)
-    elasticsearch-api (8.15.0)
+    elasticsearch-transport (6.8.0)
+      faraday
       multi_json
     email_validator (2.2.4)
       activemodel
@@ -1876,7 +1877,14 @@ GEM
     mini_racer (0.16.0)
       libv8-node (~> 18.19.0.0)
     minitest (5.25.1)
+    minitest-reporters (1.7.1)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
     minitest-stub_any_instance (1.0.3)
+    mocha (2.4.5)
+      ruby2_keywords (>= 0.0.5)
     multi_json (1.15.0)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
@@ -1970,6 +1978,7 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
+    rails-perftest (0.0.7)
     railties (7.2.1)
       actionpack (= 7.2.1)
       activesupport (= 7.2.1)
@@ -2173,7 +2182,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   devise
-  elasticsearch
+  elasticsearch (= 6.8)
   email_validator
   execjs
   factory_bot_rails
@@ -2192,7 +2201,9 @@ DEPENDENCIES
   luhn
   mini_racer
   minitest
+  minitest-reporters
   minitest-stub_any_instance
+  mocha
   mutex_m
   nokogiri
   open_uri_redirections
@@ -2210,6 +2221,7 @@ DEPENDENCIES
   rack-cors
   rails
   rails-controller-testing
+  rails-perftest
   railties
   react_on_rails
   rexml

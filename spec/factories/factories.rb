@@ -22,9 +22,7 @@ FactoryBot.define do
     barcode { Faker::Number.number }
     school { create(:school) }
 
-    after(:build) do |user|
-      create(:allowed_user_email_masks)
-    end
+    after(:build) { |u| create(:allowed_user_email_masks) }
   end
 
   factory :allowed_user_email_masks do

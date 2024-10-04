@@ -30,10 +30,15 @@ require 'pry-stack_explorer'
 include WebMock::API
 
 WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow: 'elasticsearch:9200')
 
 require 'minitest'
 require 'minitest/assertions'
 require 'minitest/autorun'
+require 'minitest/reporters'
+
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+
 require 'stringio'
 
 require 'active_support'

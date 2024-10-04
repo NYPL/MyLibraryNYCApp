@@ -14,6 +14,8 @@ MyLibraryNYC::Application.configure do
   config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=3600' }
   config.action_mailer.default_url_options = { :host => "http://test.host" }
 
+  config.action_cable.mount_path = nil
+
   # Log error messages when you accidentally call methods on nil
   config.whiny_nils = true
 

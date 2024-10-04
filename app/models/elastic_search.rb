@@ -14,6 +14,7 @@ class ElasticSearch
   def initialize(_index = nil)
     # Load elastic search configs from 'config/elastic_search.yml'.
     @es_config = MlnConfigurationController.new.elasticsearch_config('teachersets')
+
     arguments = {
       host: es_host(@es_config),
       transport_options: {
@@ -28,7 +29,7 @@ class ElasticSearch
     @teachersets_per_page = @es_config['teachersets_per_page'] || 10
     @size = @es_config['size'] || 10000
   end
-  
+
   # Decode aws elastic-search url
   def es_host(config)
     return if !config['host'].present? || ENV['RAILS_ENV'] == "test"
@@ -37,10 +38,10 @@ class ElasticSearch
 
     es_host = AwsDecrypt.decrypt_kms(config['host'])
     return unless es_host.present?
-    
+
     "https://#{es_host}"
   end
-  
+
   # Create elastic search document by id and body. Eg: id: "1234567", body: {id: "1234567", title: "test"}
   def create_document(id, body)
     response = @client.create index: @index, type: @type, id: id, body: body
@@ -57,7 +58,7 @@ class ElasticSearch
 
     response
   end
-  
+
   # Teacher set filter params
   def teacher_sets_input_params(params)
     keyword = params["keyword"]
@@ -73,7 +74,7 @@ class ElasticSearch
 
   # Get teacher sets documents from elastic search.
   def get_teacher_sets_from_es(params)
-    
+
     # Per page showing 10 teachersets.
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
@@ -331,6 +332,5 @@ class ElasticSearch
   # Delete elastic search document by body.Eg: body: {id: "1234567", title: "test"}
   def delete_by_query(query)
     @client.delete_by_query(index: @index, body: query)
-    
   end
 end

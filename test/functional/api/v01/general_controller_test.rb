@@ -2,14 +2,14 @@
 
 require 'test_helper'
 
-class Api::GeneralControllerTest < MiniTest::Test
+class Api::GeneralControllerTest < Minitest::Test
 
   extend Minitest::Spec::DSL
   include LogWrapper
 
   before do
     @controller = Api::V01::GeneralController.new
-    @mintest_mock1 = MiniTest::Mock.new
+    @mintest_mock1 = Minitest::Mock.new
     body = StringIO.new
     body.puts "#{{:test=>"test1"}}"
     @request = Struct.new(:key, :body).new('1234', body)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-class ElasticSearchTest < MiniTest::Test
+class ElasticSearchTest < Minitest::Test
 
   extend Minitest::Spec::DSL
   include LogWrapper
