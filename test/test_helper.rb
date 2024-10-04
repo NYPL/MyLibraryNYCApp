@@ -18,6 +18,7 @@ SimpleCov.minimum_coverage_by_file 0
 
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
+require 'active_support/all'
 require 'rails/test_help'
 require 'webmock/test_unit'
 require 'factories/user_factory'

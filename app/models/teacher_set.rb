@@ -32,7 +32,7 @@ class TeacherSet < ActiveRecord::Base
   before_create :make_slug
 
   KEY_WORDS = ["NYC"]
-  
+
   AVAILABLE = 'available'
   UNAVAILABLE = 'unavailable'
 
@@ -48,6 +48,14 @@ class TeacherSet < ActiveRecord::Base
 
   FULLTEXT_COLUMNS = ['title', 'description', 'contents']
 
+  def self.ransackable_associations(auth_object = nil)
+    ["books", "holds", "subject_teacher_sets", "subjects", "teacher_set_books", "teacher_set_notes", "versions"]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["area_of_study", "availability", "available_copies", "bnumber", "call_number", "contents", "created_at", "description", "details_url", "edition", "grade_begin", "grade_end", "id", "isbn", "language", "last_book_change", "lexile_begin", "lexile_end", "physical_description", "primary_language", "publication_date", "publisher", "series", "set_type", "statement_of_responsibility", "sub_title", "title", "total_copies", "updated_at"]
+  end
+
   def new_or_pending_holds
     # puts "holds: #{holds.where(:status => ['new','pending'])}"
     holds.where(:status => ['new','pending'])
@@ -60,7 +68,7 @@ class TeacherSet < ActiveRecord::Base
   def availability_string
     AVAILABILITY_LABELS[self.availability]
   end
-  
+
   # Get teacher-set record by bib_id
   def self.get_teacher_set_by_bnumber(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first
@@ -73,7 +81,7 @@ class TeacherSet < ActiveRecord::Base
       []
     end
   end
-  
+
   # Get all teacher-set status holds except for cancelled and closed.
   def ts_holds_count
     ts_holds = holds.where.not(status: ['cancelled'])
