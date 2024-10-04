@@ -106,12 +106,12 @@ class ElasticSearch
     # Eg: wrong spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
 
     if keyword.present?
-      subjects_query = {:nested => {:path => "subjects", :query => 
+      subjects_query = {:nested => {:path => "subjects", :query =>
       [
         {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["subjects.title^3"]}},
         {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["subjects.title^3"]}}
       ]}}
-      query[:query][:bool][:must] << {:bool => {:should => 
+      query[:query][:bool][:must] << {:bool => {:should =>
       [
         {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["title^10", "description^2", "contents"]}},
         {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}},
@@ -130,8 +130,8 @@ class ElasticSearch
     # If language present in filters finding the language in these fields [language, primary_language]
     if language.present?
       query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[primary_language]}}
+      puts "@JC query: #{query.inspect}"
     end
-    
 
     # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi

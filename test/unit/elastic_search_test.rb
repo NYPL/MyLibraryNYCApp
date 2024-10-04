@@ -15,8 +15,8 @@ class ElasticSearchTest < Minitest::Test
         "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},
         "availability" => {:terms => {:field => "availability.raw", :size => 10, :order => {:_key => "asc"}}},
         "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
-        "subjects" =>  {:nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000, 
-          :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+        "subjects" =>  {:nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000,
+          :sources => [{:id => {:terms => {:field => "subjects.id"}}},
                        {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}}
   end
 
@@ -174,8 +174,9 @@ class ElasticSearchTest < Minitest::Test
       params = { "language" => ['language'] }
       @mintest_mock1.expect(:call, [nil, nil, nil, ['language']], [params])
       @mintest_mock2.expect(:call, @agg_hash, [{}])
-      expected_resp = [{:query => {:bool => {:must => [{:multi_match => {:query => "language", :fields => %w[language primary_language]}}]}}}]
+      expected_resp = [{:query => {:bool => {:must => [{:multi_match => {:query => "language", :fields => %w[primary_language]}}]}}}]
       expected_resp << @agg_hash
+      expected_resp.delete(:availability)
 
       resp = nil
       @es_model.stub :teacher_sets_input_params, @mintest_mock1 do
@@ -189,13 +190,14 @@ class ElasticSearchTest < Minitest::Test
     end
   end
 
-  
   # User query fields are correctly formatted into an aggregate query structure
   describe 'test group_by facets_query' do
     it 'test group_by facets query' do
       aggregation_hash = {}
       resp = @es_model.group_by_facets_query(aggregation_hash)
-      assert_equal(@agg_hash, resp)
+      expected_hash = @agg_hash.dup
+      expected_hash.delete('availability')
+      assert_equal(expected_hash, resp)
     end
   end
 
@@ -213,20 +215,20 @@ class ElasticSearchTest < Minitest::Test
 
       @mintest_mock1.expect(:call, expected_facets, [es_document_resp, facets])
       subjects_facets = {:label => "subjects", :items => [{:value => "123", :label => "subject", :count => 5}]}
-      @mintest_mock2.expect(:call, subjects_facets, [es_document_resp, expected_facets])
+      @mintest_mock2.expect(:call, subjects_facets, [es_document_resp, expected_facets, {}])
 
       @es_model.stub :get_language_availability_set_type_area_of_study_facets, @mintest_mock1 do
         @es_model.stub :get_subject_facets, @mintest_mock2 do
-          resp = @es_model.facets_for_teacher_sets(es_document_resp)
+          resp = @es_model.facets_for_teacher_sets(es_document_resp, {})
         end
       end
-      assert_equal(teacherset_facets, resp)                    
+      assert_equal(teacherset_facets, resp)
     end
   end
 
   # Test subject facets
   # facets eg: [ {:label=>"language", :items=> [{:value=>"Chinese", :label=>"Chinese", :count=>34}]},
-  # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable", 
+  # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable",
   # :label=>"Checked Out", :count=>32}]},
   # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
   # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
@@ -234,11 +236,11 @@ class ElasticSearchTest < Minitest::Test
     it 'test subject facets' do
       facets = [
         {:label => "language", :items => [{:value => "English", :label => "English", :count => 1}]},
-        {:label => "availability", :items => [{:value => "available", :label => "Available", :count => 1}]},
+#        {:label => "availability", :items => [{:value => "available", :label => "Available", :count => 1}]},
         {:label => "set type", :items => [{:value => "multi", :label => "Topic Sets", :count => 1}]},
         {:label => "area of study", :items => [{:value => "Arabic Language Arts.", :label => "Arabic Language Arts.", :count => 1}]}
       ]
-      resp = @es_model.get_subject_facets(es_document_resp, facets)
+      resp = @es_model.get_subject_facets(es_document_resp, facets, {})
       assert_equal(teacherset_facets[1], resp)
     end
   end
@@ -247,7 +249,7 @@ class ElasticSearchTest < Minitest::Test
   describe 'test language availability set_type area_of_study facts' do
     it 'get language_availability_set_type_area_of_study_facts' do
       expected_resp = [{:label => "language", :items => [{:value => "English", :label => "English", :count => 1}]},
-                       {:label => "availability", :items => [{:value => "available", :label => "Available", :count => 1}]},
+#                       {:label => "availability", :items => [{:value => "available", :label => "Available", :count => 1}]},
                        {:label => "set type", :items => [{:value => "multi", :label => "multi", :count => 1}]},
                        {:label => "area of study", :items => [{:value => "Arabic Language Arts.", :label => "Arabic Language Arts.", :count => 1}]}]
       resp = @es_model.get_language_availability_set_type_area_of_study_facets(es_document_resp, [])

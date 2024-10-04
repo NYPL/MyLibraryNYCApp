@@ -19,7 +19,6 @@ class SettingsController < ApplicationController
     end
 
     render json: { bannerText: ENV['MAINTENANCE_BANNER_TEXT'].html_safe, bannerTextFound: true }
-    
   end
 
   def page_not_found; end
@@ -54,7 +53,7 @@ class SettingsController < ApplicationController
       # 2019-08-08: I think this is now ignored.  Commenting out for now, until make sure.
       # session[:redirect_after_login] = "/users/edit"
       store_location_for(:user, "/signin")
-      render json: { accountdetails: {}, ordersNotPresentMsg: "", errorMessage: "You must be logged in to access this page" }
+#      render json: { accountdetails: {}, ordersNotPresentMsg: "", errorMessage: "You must be logged in to access this page" }
       redirect_to new_user_session_path
       return
     end
