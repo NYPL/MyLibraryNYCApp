@@ -284,6 +284,7 @@ export default function TeacherSetBooks() {
         />
         <Hero
             heroType="tertiary"
+            foregroundColor="ui.white"
             backgroundColor={heroBgColor}
             heading={
               <Heading
