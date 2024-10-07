@@ -121,6 +121,7 @@ export default function AppBreadcrumbs() {
       <Hero
         heroType="tertiary"
         backgroundColor={heroBgColor}
+        foregroundColor="ui.white"
         heading={
           <Heading
             level="h1"
