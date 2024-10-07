@@ -78,7 +78,7 @@ class HoldsControllerTest < ActionController::TestCase
 
     # Teacher_set available_copies before cancellation of hold.
     assert_equal(2, @hold2.teacher_set.available_copies)
-    
+
     resp = post :update, params: { id: @hold2.access_key, hold_change: {"comment" => "qqq", "status" => "new"}, hold: {status: "new"} }
     resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold2.id)
     # Hold status not changed.

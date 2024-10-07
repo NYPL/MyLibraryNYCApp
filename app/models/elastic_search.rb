@@ -79,7 +79,7 @@ class ElasticSearch
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
     query, agg_hash = teacher_sets_query_based_on_filters(params)
-    
+
     query[:from] = from
     query[:size] = @teachersets_per_page
     # Sorting teachersets based on availability and created_at values. 
@@ -130,7 +130,6 @@ class ElasticSearch
     # If language present in filters finding the language in these fields [language, primary_language]
     if language.present?
       query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[primary_language]}}
-      puts "@JC query: #{query.inspect}"
     end
 
     # If set_type present in filters get ES query based on set_type.
@@ -232,7 +231,7 @@ class ElasticSearch
 
   # Get subject facets
   # facets eg: [ {:label=>"language", :items=> [{:value=>"Chinese", :label=>"Chinese", :count=>34}]},
-  # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable", 
+  # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable",
   # :label=>"Checked Out", :count=>32}]},
   # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
   # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]

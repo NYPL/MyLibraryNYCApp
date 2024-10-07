@@ -16,7 +16,7 @@ class TeacherSetsController < ApplicationController
     if storable_location?
       store_user_location!
     end
-    LogWrapper.log('INFO', {'message' => "Calling elastic search to get teacher-sets", 
+    LogWrapper.log('INFO', {'message' => "Calling elastic search to get teacher-sets",
                             'method' => 'app/controllers/teacher_sets_controller.rb.index'})
 
     # Get teachersets and facets from elastic search
