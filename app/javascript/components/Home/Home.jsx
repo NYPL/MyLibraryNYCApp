@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Hero,
   SearchBar,
-  Icon,
   HorizontalRule,
   Heading,
   TemplateAppContainer,
@@ -25,7 +24,10 @@ export default function Home(props) {
   const navigate = useNavigate();
   const [keyword, setKeyWord] = useState("");
   const heroBgColor = useColorModeValue("var(--nypl-colors-brand-primary)", "#2C1414");
-
+  const heroFgColor = useColorModeValue(
+    "var(--nypl-colors-ui-white)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
   useEffect(() => {
     document.title = "MyLibraryNYC | Providing NYC schools with enhanced library privileges";
     if (env.RAILS_ENV !== "test") {
@@ -89,7 +91,8 @@ export default function Home(props) {
         <>
           <Hero
             heroType="campaign"
-            foregroundColor="ui.white"
+            foregroundColor={heroFgColor}
+            backgroundColor={heroBgColor}
             heading={
               <Heading
                 level="h1"
@@ -106,7 +109,7 @@ export default function Home(props) {
               src: homeFgImg,
               id: "mln-hero-image",
             }}
-            backgroundColor={heroBgColor}
+
           />
         </>
       }
