@@ -50,7 +50,7 @@ MyLibraryNYC::Application.routes.draw do
   match '/home/get_mln_file_names' => 'home#mln_file_names', via: [:get]
   match '/secondary_menu' => 'home#secondary_menu', via: [:get]
 
-  match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page', 
+  match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page',
         via: [:get, :post]
   match '/news_letter/news_letter_email_is_valid' => 'news_letter#news_letter_email_is_valid', via: [:get, :post]
 
