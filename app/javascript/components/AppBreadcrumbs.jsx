@@ -127,6 +127,7 @@ export default function AppBreadcrumbs() {
             color="ui.white"
             id={"hero-" + locationPath}
             text={HeroDataValue(locationPath)}
+            foregroundColor="ui.white"
           />
         }
       />

@@ -768,6 +768,7 @@ export default function TeacherSetDetails(props) {
           />
           <Hero
             heroType="tertiary"
+            foregroundColor="ui.white"
             backgroundColor={heroBgColor}
             heading={
               <Heading
