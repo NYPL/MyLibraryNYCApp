@@ -68,6 +68,7 @@ export default function PageNotFound() {
           <Hero
             heroType="tertiary"
             backgroundColor="var(--nypl-colors-brand-primary)"
+            foregroundColor="ui.white"
             heading={
               <Heading
                 level="h1"
