@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'mocha/minitest'
 
 # TODO: We had some functional tests that tested CRUD (create-update-delete)
 # functionality of the teacher sets controller.  They were deleted in
@@ -14,6 +15,10 @@ class TeacherSetsControllerTest < ActionController::TestCase
   end
 
   test "should get index" do
+    @elastic_search_mock = mock('ElasticSearch')
+    @elastic_search_mock.stubs(:search).returns([])
+    ElasticSearch.stubs(:new).returns(@elastic_search_mock)
+
     get :index
     assert_response :success
   end

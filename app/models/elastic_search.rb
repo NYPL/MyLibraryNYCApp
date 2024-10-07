@@ -91,7 +91,6 @@ class ElasticSearch
     [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
-    
   end
 
   # Get elastic serach queries based on input filter params.
@@ -170,11 +169,11 @@ class ElasticSearch
     aggregation_hash["area of study"] = { terms: { field: "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
     aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
-    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}},
                                                                                {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
     aggregation_hash
-  end  
-  
+  end
+
   # Get teacher set facets
   def facets_for_teacher_sets(teacher_sets_docs, params)
     facets = []
@@ -196,7 +195,7 @@ class ElasticSearch
     end
     facets
   end
- 
+
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study) 
   def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets)
     [
