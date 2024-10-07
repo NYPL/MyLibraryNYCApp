@@ -9,9 +9,16 @@ import {
   Breadcrumbs,
   Hero,
   Heading,
+  useColorModeValue,
 } from "@nypl/design-system-react-components";
 
 export default function PageNotFound() {
+  const heroFgColor = useColorModeValue(
+    "var(--nypl-colors-ui-white)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
+  const heroBgColor = useColorModeValue("var(--nypl-colors-brand-primary)", "#2C1414");
+
   const pageNotFoundMsg = () => {
     return (
       <>
@@ -67,8 +74,8 @@ export default function PageNotFound() {
           />
           <Hero
             heroType="tertiary"
-            backgroundColor="var(--nypl-colors-brand-primary)"
-            foregroundColor="ui.white"
+            backgroundColor={heroBgColor}
+            foregroundColor={heroFgColor}
             heading={
               <Heading
                 level="h1"

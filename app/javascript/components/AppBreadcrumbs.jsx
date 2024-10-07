@@ -11,6 +11,10 @@ export default function AppBreadcrumbs() {
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
   );
+  const heroFgColor = useColorModeValue(
+    "var(--nypl-colors-ui-white)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
   const locationPath = window.location.pathname.split(/\/|\?|&|=|\./g)[1];
   const breadcrumbsUrl = (locationPath) => {
     let urls = [{ url: "//" + env.MLN_INFO_SITE_HOSTNAME, text: "Home" }];
@@ -121,7 +125,7 @@ export default function AppBreadcrumbs() {
       <Hero
         heroType="tertiary"
         backgroundColor={heroBgColor}
-        foregroundColor="ui.white"
+        foregroundColor={heroFgColor}
         heading={
           <Heading
             level="h1"
