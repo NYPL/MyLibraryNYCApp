@@ -40,6 +40,10 @@ export default function TeacherSetBooks() {
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
   );
+  const heroFgColor = useColorModeValue(
+    "var(--nypl-colors-ui-white)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -284,7 +288,7 @@ export default function TeacherSetBooks() {
         />
         <Hero
             heroType="tertiary"
-            foregroundColor="ui.white"
+            foregroundColor={heroFgColor}
             backgroundColor={heroBgColor}
             heading={
               <Heading
