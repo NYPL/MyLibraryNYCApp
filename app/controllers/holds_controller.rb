@@ -9,6 +9,8 @@ class HoldsController < ApplicationController
   end
 
   def index
+    @controller.stubs(:render).returns(nil)
+    puts "@JC Yo"
     redirect_to root_url
   end
 

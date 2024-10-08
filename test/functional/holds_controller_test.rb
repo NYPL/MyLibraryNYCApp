@@ -33,7 +33,7 @@ class HoldsControllerTest < ActionController::TestCase
   end
 
   test "should cancel hold" do
-    post :cancel, params: { id: @hold2.access_key }
+    post :holds_cancel_details, params: { id: @hold2.access_key }
     assert_response :success
   end
 
@@ -56,8 +56,8 @@ class HoldsControllerTest < ActionController::TestCase
     # Before cancellation of hold teacher-set available_copies count is 2.
     # After cancellation of hold teacher-set available_copies count is 3.
     assert_equal(3, TeacherSet.find(resp_hold_obj.teacher_set_id).available_copies)
-    assert_response :redirect
-    assert_equal("Your order was successfully updated.", flash[:notice])
+    assert_response :success
+    assert_equal("Your order was successfully updated.", JSON.parse(response.body)['message'])
   end
 
   test "test update method with empty holds" do
