@@ -98,11 +98,11 @@ class NewsLetterController < ApplicationController
     decrypt_email = EncryptDecryptString.decrypt_string(params["key"])
     # Email is already in google sheets return true. Do not overwrite to google sheets.
     return true if emails_arr.include?(decrypt_email)
-    
+
     # Append news letter emails to google sheeets
     response = write_news_letter_emails_to_google_sheets(decrypt_email)
     is_saved_in_google_sheets = true
-    LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params}, 
+    LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params},
                              tableRange: #{response.table_range}", 'method' => 'create_news_letter_email_in_google_sheets'})
     is_saved_in_google_sheets
   rescue StandardError => e

@@ -63,13 +63,11 @@ class NewsLetterControllerUnitTest < Minitest::Test
     # Case: 3
     it 'Test successfully create the news letter email in google sheets method' do
       email = 'test@ss1.com'
-      params = {key: "edededede"}
-      google_sheet = Struct.new
-      google_sheet.updates = Struct.new
-      google_sheet.updates.spreadsheet_id = "wed11"
+      params = { key: 'edededede' }
+      google_sheet = Struct.new(:spreadsheet_id, :table_range).new('wed11', 'A1')
       @mintest_mock1.expect(:call, ['test@ss.com'])
       @mintest_mock2.expect(:call, google_sheet, [email])
-      
+
       resp = nil
       @nl_controller.stub :news_letter_google_spread_sheet_emails, @mintest_mock1 do
         EncryptDecryptString.stub :decrypt_string, email, [params['key']] do
