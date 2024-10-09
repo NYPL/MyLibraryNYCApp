@@ -48,11 +48,11 @@ class User < ActiveRecord::Base
   STATUS_LABELS = {'pending' => 'pending', 'complete' => 'complete'}.freeze
 
   def self.ransackable_associations(auth_object = nil)
-    ["holds", "school"]
+    ["holds", "school", "email"]
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["alt_barcodes", "alt_email", "barcode", "confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "current_sign_in_at", "current_sign_in_ip", "email", "encrypted_password", "first_name", "home_library", "id", "id_value", "last_name", "last_sign_in_at", "last_sign_in_ip", "remember_created_at", "reset_password_sent_at", "reset_password_token", "school_id", "sign_in_count", "status", "unconfirmed_email", "updated_at"]
+    ["alt_barcodes", "alt_email", "barcode", "confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "current_sign_in_at", "current_sign_in_ip", "email", "encrypted_password", "first_name", "holds", "home_library", "id", "id_value", "last_name", "last_sign_in_at", "last_sign_in_ip", "remember_created_at", "reset_password_sent_at", "reset_password_token", "school_id", "sign_in_count", "status", "unconfirmed_email", "updated_at"]
   end
 
 
@@ -196,7 +196,7 @@ class User < ActiveRecord::Base
       # we've run out of allowed barcodes.  Yes, we might have historical user records
       # with barcodes outside of the range, but we can't be making new records there.
       current_top_barcode = User.where.not(barcode: nil).order(barcode: :desc).pluck(:barcode).first
-      
+
       if current_top_barcode.blank?
         # hurrah, we're in a fresh db, let's start our users table off
         last_user_barcode = min_barcode
@@ -265,7 +265,7 @@ class User < ActiveRecord::Base
       timeout: 10
     )
 
-    if (response.code == 404 && response.message == "Not Found")
+    if (response.code == 404)
       is_barcode_available = true
       LogWrapper.log('ERROR', {
         'method' => "barcode_available_in_sierra?",
