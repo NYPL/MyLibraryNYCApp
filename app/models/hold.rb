@@ -9,6 +9,8 @@ class Hold < ActiveRecord::Base
 
   belongs_to :teacher_set
   belongs_to :user
+  delegate :email, to: :user, prefix: true
+
   has_many :hold_changes
 
   scope :pending, -> { where(status: 'pending') }
@@ -21,11 +23,11 @@ class Hold < ActiveRecord::Base
   after_create :do_after_create
 
   def self.ransackable_associations(auth_object = nil)
-    ["hold_changes", "teacher_set", "user"]
+    ["hold_changes", "teacher_set", "user", "user_email"]
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["access_key", "created_at", "date_required", "id", "id_value", "quantity", "status", "teacher_set_id", "updated_at", "user_id"]
+    ["access_key", "created_at", "date_required", "id", "id_value", "quantity", "status", "teacher_set_id", "updated_at", "user_id", "user", "user_email"]
   end
 
   STATUS_LABEL = {

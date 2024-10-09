@@ -17,6 +17,7 @@ class TeacherSetsControllerTest < ActionController::TestCase
   test "should get index" do
     @elastic_search_mock = mock('ElasticSearch')
     @elastic_search_mock.stubs(:search).returns([])
+    @elastic_search_mock.stubs(:get_teacher_sets_from_es).returns([{}, [], 0])
     ElasticSearch.stubs(:new).returns(@elastic_search_mock)
 
     get :index
