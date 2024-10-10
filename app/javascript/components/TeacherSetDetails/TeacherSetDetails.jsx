@@ -58,6 +58,10 @@ export default function TeacherSetDetails(props) {
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
   );
+  const heroFgColor = useColorModeValue(
+    "var(--nypl-colors-ui-white)",
+    "var(--nypl-colors-dark-ui-typography-heading)"
+  );
   const tsOrderBoxBgColor = useColorModeValue(
     "var(--nypl-colors-ui-link-primar)",
     "var(--nypl-colors-ui-dark-link-primary)"
@@ -768,6 +772,7 @@ export default function TeacherSetDetails(props) {
           />
           <Hero
             heroType="tertiary"
+            foregroundColor={heroFgColor}
             backgroundColor={heroBgColor}
             heading={
               <Heading

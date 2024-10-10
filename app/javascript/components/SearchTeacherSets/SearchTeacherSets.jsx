@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
 import SignedInMsg from "./../SignedInMsg";
 import SignUpMsg from "./../SignUp/SignUpMsg";
@@ -47,6 +47,7 @@ import {
 export default function SearchTeacherSets(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = [];
+  const searchResultsTextRef = useRef(null)
 
   for (let entry of searchParams.entries()) {
     const queryParamsHash = {};
@@ -263,6 +264,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const handleSubmit = (event) => {
+    searchResultsTextRef.current.focus();
     event.preventDefault();
     if (keyword === "") {
       searchParams.delete("keyword");
@@ -370,6 +372,8 @@ export default function SearchTeacherSets(props) {
           id="ts-result-found-id"
           fontWeight="medium"
           aria-live="polite"
+          ref={searchResultsTextRef}
+          tabIndex={-1} 
         >
           {"Showing " +
             test +
@@ -403,6 +407,8 @@ export default function SearchTeacherSets(props) {
           id="ts-results-found-id"
           fontWeight="medium"
           aria-live="polite"
+          ref={searchResultsTextRef}
+          tabIndex={-1} 
         >
           {"Showing " +
             fromResults +
@@ -528,6 +534,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const onPageChange = (page) => {
+    searchResultsTextRef.current.focus();
     setComputedCurrentPage(page);
     searchParams.set("page", page);
     setSearchParams(searchParams);
@@ -686,6 +693,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const clearFilters = () => {
+    searchResultsTextRef.current.focus();
     searchParams.delete("language");
     searchParams.delete("area of study");
     searchParams.delete("set type");
@@ -873,6 +881,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const closeTeacherSetTag = (tagSet) => {
+    searchResultsTextRef.current.focus();
     if (tagSet.id === "clear-filters") {
       setTeacherSetArr([]);
       searchParams.delete("language");
