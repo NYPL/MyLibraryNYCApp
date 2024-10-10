@@ -17,7 +17,7 @@ div class: "header", id: "header" do
     end
     li id: "holds" do
       a href: "/admin/holds" do
-        '@JC Holds'
+        'Holds'
       end
     end
     li id: "teacher_sets", class: "#{assigns[:versioned_object].instance_of?(TeacherSet) ? 'current' : ''}" do

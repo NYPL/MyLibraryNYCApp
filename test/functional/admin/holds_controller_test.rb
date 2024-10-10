@@ -14,7 +14,6 @@ module Admin
       #get 'http://localhost:3000/admin/holds'
       assert_equal("200", response.code)
       assert_response :success
-      puts "@JC my response: #{response.body}"
     end
 
     test "test show method" do
