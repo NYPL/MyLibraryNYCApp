@@ -52,11 +52,11 @@ class HoldsController < ApplicationController
   def ordered_holds_details
     return if logged_in?
 
-      if storable_location?
-        store_user_location!
-      end
-      redirect_to "/signin"
-    
+    if storable_location?
+      store_user_location!
+    end
+
+    redirect_to "/signin"
   end
 
   ##
@@ -88,19 +88,19 @@ class HoldsController < ApplicationController
         if @hold.save
           teacher_set = @hold.teacher_set
 
-          LogWrapper.log('INFO', {message: 'Teacher-set hold is created', method: __method__, 
+          LogWrapper.log('INFO', {message: 'Teacher-set hold is created', method: __method__,
                           teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
-          
-         
+
+
           # Update teacher-set availability in DB
           teacher_set.update_teacher_set_availability_in_db('create', quantity.to_i)
-          
+
           # Update teacher-set availability in elastic search document
           teacher_set.update_teacher_set_availability_in_elastic_search
           LogWrapper.log('DEBUG', {'message' => 'create: a pre-existing hold was saved', 'method' => 'app/controllers/holds_controller.rb.create'})
           # format.html { redirect_to hold_url(@hold.access_key), notice:
           #   'Your order has been received by our system and will soon be delivered to your school.\
-          #   <br/><br/>Check your email inbox for a message with further details.' 
+          #   <br/><br/>Check your email inbox for a message with further details.'
           # }
           render json: { hold: @hold.as_json, status: :created, location: @hold.as_json, message: "successfully" }
         else
@@ -117,15 +117,15 @@ class HoldsController < ApplicationController
   end
 
   def error_message(exception); end
-  
+
   # Here calculate the teacher-set available_copies based on the current-user holds then saves in teacher-set table and cancel the current-user holds.
   def update
     @hold = Hold.find_by_access_key(params[:id])
     Hold.transaction do
       if !(c = params[:hold_change]).nil? && (c[:status] == 'cancelled')
           teacher_set = @hold.teacher_set
-          
-          LogWrapper.log('INFO', {message: 'Teacher-set hold is cancelled', method: __method__, 
+
+          LogWrapper.log('INFO', {message: 'Teacher-set hold is cancelled', method: __method__,
                                   teacher_set_id: @hold.teacher_set_id, hold_id: @hold.id, bnumber: teacher_set.bnumber })
           # Update teacher-set availability in DB
           teacher_set.update_teacher_set_availability_in_db('cancelled', nil, current_user, @hold.id)
@@ -133,9 +133,9 @@ class HoldsController < ApplicationController
       end
       params.permit!
 
-      if @hold.update!(params[:hold])
+      if @hold.update(params[:hold])
         # Update teacher-set availability in elastic search document
-        teacher_set.update_teacher_set_availability_in_elastic_search
+        teacher_set&.update_teacher_set_availability_in_elastic_search
         render json: {
           hold: @hold.as_json,
           teacher_set: @hold.teacher_set.as_json,

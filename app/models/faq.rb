@@ -8,4 +8,8 @@ class Faq < ActiveRecord::Base
   # Reordering of Frequently asked question when faq is destroyed.
   before_destroy { |record| record.remove_from_list }
   scope :get_faqs, -> { order("position ASC") }
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["answer", "id", "id_value", "position", "question"]
+  end
 end

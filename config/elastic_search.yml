@@ -1,6 +1,7 @@
 development:
   teachersets:
-    host: 'http://localhost:9200/'
+    #host: 'http://localhost:9200/'
+    host: 'http://elasticsearch:9200'
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'
@@ -27,7 +28,8 @@ production:
 
 test:
   teachersets:
-    host: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAALQwgbEGCSqGSIb3DQEHBqCBozCBoAIBADCBmgYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyS9HSNvErgrdg9VuwCARCAbZYtB/RGgKYco/pRRFwU2rC2P6CMfQs4ExV20e693vMOqQiBHalhLXLASQVJZkR8Izatvt9G3pdhB7RdWbFaUh1HBiwQemuRV0rUnM3bhhAYh7I2SVUJFVCG3a07zmDDBLeVtEW+KbVXv9Qw0E0="
+    #host: "AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAALQwgbEGCSqGSIb3DQEHBqCBozCBoAIBADCBmgYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyS9HSNvErgrdg9VuwCARCAbZYtB/RGgKYco/pRRFwU2rC2P6CMfQs4ExV20e693vMOqQiBHalhLXLASQVJZkR8Izatvt9G3pdhB7RdWbFaUh1HBiwQemuRV0rUnM3bhhAYh7I2SVUJFVCG3a07zmDDBLeVtEW+KbVXv9Qw0E0="
+    host: 'http://elasticsearch:9200'
     connect_timeout: 3
     index: 'teacherset'
     type: 'teacherset'

@@ -16,8 +16,9 @@ ActiveAdmin.register Hold do
   # Tell ActiveAdmin to search teacher sets on the title attribute.
   filter :teacher_set_title, as: :string
 
-  # Tell ActiveAdmin to search holds on the  user_email attribute.
-  filter :user_email, as: :string, filters: [:contains, :equals, :starts_with, :ends_with, :not_cont]
+  # Tell ActiveAdmin to search holds on the user_email attribute.
+  filter :user_email, as: :string, filters: [:cont, :eq, :start, :end, :not_cont]
+
 
   # Make it easier to specify the status, by listing it as a checkbox, rather than a text input field.
   filter :status, as: :check_boxes, collection: [["new", "new"], ["pending", "pending"], ["cancelled", "cancelled"], ["closed", "closed"]]
@@ -195,6 +196,7 @@ ActiveAdmin.register Hold do
   end
 
   controller do
+    puts "@JC Yo"
     #Setting up Strong Parameters
     #You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
     def permitted_params

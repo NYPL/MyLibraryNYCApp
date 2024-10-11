@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'mocha/minitest'
 
 class TeacherSetTest < ActiveSupport::TestCase
 
@@ -10,6 +11,10 @@ class TeacherSetTest < ActiveSupport::TestCase
   include MlnException
 
   before do
+    @school1 = schools(:school_one)
+    @school2 = schools(:school_two)
+    @school3 = schools(:school_three)
+
     @user = holds(:hold1).user
     @hold1 = holds(:hold1)
     @hold2 = holds(:hold2)
@@ -18,7 +23,7 @@ class TeacherSetTest < ActiveSupport::TestCase
     @hold10 = holds(:hold10)
     @user2 = holds(:hold9).user
     @user3 = holds(:hold10).user
-    
+
     @teacher_set = teacher_sets(:teacher_set_one)
     @teacher_set2 = teacher_sets(:teacher_set_two)
     @teacher_set3 = teacher_sets(:teacher_set_three)
@@ -27,11 +32,11 @@ class TeacherSetTest < ActiveSupport::TestCase
     @teacher_set7 = teacher_sets(:teacher_set_seven)
     @teacher_set8 = teacher_sets(:teacher_set_eight)
     @model = TeacherSet.new
-    @mintest_mock1 = MiniTest::Mock.new
-    @mintest_mock2 = MiniTest::Mock.new
+    #@model.save!
+    @mintest_mock1 = Minitest::Mock.new
+    @mintest_mock2 = Minitest::Mock.new
     @elasticsearch_adapter_mock = Minitest::Mock.new
   end
-  
 
   describe 'creating a teacher set does not create a version, because papertrail is turned off' do
     it 'test creating a teacher set does not create a version, because papertrail is turned off' do
@@ -50,15 +55,21 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-  #Calls Bibs service 
-  #Calculates the total number of items and available items in the BIb service response
+  # Calls Bibs service
+  # Calculates the total number of items and available items in the Bib service response
   describe 'test update available and total count method' do
+    before do
+      @elastic_search_mock = mock('ElasticSearch')
+      @elastic_search_mock.stubs(:update_document_by_id).returns(true)
+      ElasticSearch.stubs(:new).returns(@elastic_search_mock)
+    end
+
     it 'test update available and total count' do
       bib_id = '21480355'
       nypl_source = 'sierra-nypl'
       @items_found = "ert"
       resp = nil
-      total_count = 2 
+      total_count = 2
       available_count = 2
 
       @mintest_mock1.expect(:call, [bib_items_response, true], [bib_id])
@@ -71,7 +82,7 @@ class TeacherSetTest < ActiveSupport::TestCase
           end
         end
       end
-      assert_equal(bib_items_response, resp[:bibs_resp]) 
+      assert_equal(bib_items_response, resp[:bibs_resp])
     end
 
     #Test:2 Bibid is not found in bibs service
@@ -91,7 +102,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       assert_equal(bib_id_not_found_response, resp[:bibs_resp])
     end
   end
-  
+
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items in the list, the number of items that are
   # available to lend.
@@ -106,7 +117,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-  
   # case 1: {:fieldTag=>"n", :marcTag=>"526", :ind1=>"0", :ind2=>"", :content=>"null", :subfields=>[{:tag=>"a", :content=>"Topic Set"}]}
   # If subfields.content type is "Topic Set", set_type value  stored as 'multi' in teacher_sets table.
   # If subfields.content type is "Book Club Set" set_type value  stored as 'single' in teacher_sets table.
@@ -180,7 +190,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-
   describe 'Test delete teacher_set record' do
     it 'Delete teacher_set record in db and elastic search' do
       es_resp = {"found" => true, "result" => 'deleted'}
@@ -205,7 +214,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
   end
 
-
   describe 'create_or_update_teacherset ' do
     it 'test create or update teacherset' do
       resp = nil
@@ -217,7 +225,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
       SIERRA_USER["data"][0]['suppressed'] = false
       ts_items_info = {bibs_resp: SIERRA_USER, total_count: 1, available_count: 1, availability_string: 'available'}
-      
+
       TeacherSet.stub_any_instance :get_items_info_from_bibs_service, ts_items_info do
         TeacherSet.stub_any_instance :create_or_update_teacherset_document_in_es, es_resp do
           resp = TeacherSet.create_or_update_teacher_set(SIERRA_USER["data"][0])
@@ -246,7 +254,7 @@ class TeacherSetTest < ActiveSupport::TestCase
     end
 
     it 'Bib request-body has suppressed value as true but teacher-set record not found in database' do
-      bib_id = rand.to_s[2..8] 
+      bib_id = rand.to_s[2..8]
       # Created teacher-set record not saved in DB.
       TeacherSet.new(bnumber: "b#{bib_id}")
 
@@ -264,8 +272,8 @@ class TeacherSetTest < ActiveSupport::TestCase
   # Update teacher-set document in ES
   describe '#test create or update teacherset' do
     before do
-      @es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-                "_id" => 8888, "_version" => 11, "result" => "updated", 
+      @es_doc = {"_index" => "teacherset", "_type" => "teacherset",
+                "_id" => 8888, "_version" => 11, "result" => "updated",
                 "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
       @expected_resp = {:title=>"title",:description=>"desc",
                         :contents=>nil,:id=>8888,:details_url=>nil,:grade_end=>nil,
@@ -295,7 +303,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       elasticsearch_adapter_mock.expect(:update_document_by_id, nil) do
         raise StandardError, ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg]
       end
-    
+
       resp = assert_raises(ElasticsearchException) do
         ElasticSearch.stub :new, elasticsearch_adapter_mock do
           teacher_set.create_or_update_teacherset_document_in_es
@@ -428,7 +436,7 @@ class TeacherSetTest < ActiveSupport::TestCase
 
 
   describe 'teacher_set#update_teacher_set_availability_in_db' do
-    
+
     it 'update teacher-set availability while creation the hold ' do
       # Teacher-set available_copies and availability before creation of hold
       assert_equal('available', @teacher_set7.availability)
@@ -445,7 +453,7 @@ class TeacherSetTest < ActiveSupport::TestCase
       assert_equal('unavailable', @teacher_set8.availability)
       assert_equal(0, @teacher_set8.available_copies)
       resp = @teacher_set8.update_teacher_set_availability_in_db('cancelled', nil, @user3, @hold10.id)
-      
+
       # After cancellation of hold available_copies count increased and availability status changed to 'available'
       assert_equal(2, @teacher_set8.available_copies)
       assert_equal('available', @teacher_set8.availability)
@@ -479,8 +487,8 @@ class TeacherSetTest < ActiveSupport::TestCase
     it 'should call ElasticSearch#update_document_by_id' do
       resp = nil
       elasticsearch_adapter_mock = Minitest::Mock.new
-      es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-                "_id" => @teacher_set2.id, "_version" => 11, "result" => "updated", 
+      es_doc = {"_index" => "teacherset", "_type" => "teacherset",
+                "_id" => @teacher_set2.id, "_version" => 11, "result" => "updated",
                 "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
       body = {
          :availability => @teacher_set2.availability,
@@ -512,24 +520,24 @@ class TeacherSetTest < ActiveSupport::TestCase
 
   def bib_items_response
     { 'data' => [ {
-          'nyplSource' => 'sierra-nypl', 
+          'nyplSource' => 'sierra-nypl',
           'bibIds' => [
             '21480355'
           ],
           'status' => {
-            'code' => 'W', 
-            'display' => 'AVAILABLE', 
+            'code' => 'W',
+            'display' => 'AVAILABLE',
             'duedate' => '2011-04-26T16:16:00-04:00'
           },
         },
         {
-          'nyplSource' => 'sierra-nypl', 
+          'nyplSource' => 'sierra-nypl',
           'bibIds' => [
             '21480355'
           ],
           'status' => {
-            'code' => '-', 
-            'display' => 'AVAILABLE', 
+            'code' => '-',
+            'display' => 'AVAILABLE',
             'duedate' => ""
           },
         }
