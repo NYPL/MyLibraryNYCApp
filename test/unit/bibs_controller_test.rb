@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class BibsControllerTest < MiniTest::Test
+class BibsControllerTest < Minitest::Test
   extend Minitest::Spec::DSL
   include LogWrapper
 

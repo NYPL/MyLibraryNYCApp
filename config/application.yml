@@ -96,7 +96,7 @@ when 'test'
   ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
   ENV['BIBS_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/bibs"
   ENV['NEWS_LETTER_GOOGLE_SPREAD_SHEET_ID'] = 'test_id'
-  ENV['MLN_GOOGLE_ACCCOUNT'] = "{\"client_email\":\"google_mln_test@gmail.com\"}"
+  ENV['MLN_GOOGLE_ACCCOUNT'] = "{\"client_email\":\"google_mln_test@gmail.com\",\"private_key\":\"fake_key\"}"
   ENV['MLN_ENVIRONMENT_URL'] = "my-library-nyc-app-qa25.unpc66pkwp.us-east-1.elasticbeanstalk.com"
   ENV['MLN_API_GATEWAY_URL'] = 'qa-www.mylibrarynyc.org'
   ENV['ADOBE_LAUNCH_URL'] = "https://assets.adobedtm.com/1a9376472d37/47d869131fa4/launch-3ce19d1f4eed-development.min.js"

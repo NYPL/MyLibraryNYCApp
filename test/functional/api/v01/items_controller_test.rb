@@ -2,16 +2,16 @@
 
 require 'test_helper'
 
-class Api::ItemsControllerTest < MiniTest::Test
+class Api::ItemsControllerTest < Minitest::Test
 
   extend Minitest::Spec::DSL
   include LogWrapper
 
   def setup
     @controller = Api::V01::ItemsController.new
-    @mintest_mock1 = MiniTest::Mock.new
-    @mintest_mock2 = MiniTest::Mock.new
-    @mintest_mock3 = MiniTest::Mock.new
+    @mintest_mock1 = Minitest::Mock.new
+    @mintest_mock2 = Minitest::Mock.new
+    @mintest_mock3 = Minitest::Mock.new
     @teacher_set = TeacherSet.new(bnumber: 998)
   end
   # Update availability method parses the item bodies to retrieve the bib id.
@@ -155,26 +155,26 @@ class Api::ItemsControllerTest < MiniTest::Test
 
   def req_body_for_item
     [ {
-      'nyplSource' => 'sierra-nypl', 
+      'nyplSource' => 'sierra-nypl',
       'bibIds' => [
         '998'
       ],
       'status' => {
-        'code' => '-', 
-        'display' => 'AVAILABLE', 
+        'code' => '-',
+        'display' => 'AVAILABLE',
         'duedate' => '2011-04-26T16:16:00-04:00'
       },
     } ]
   end
-  
+
   def bibid_missing_req_body_for_item
-    [ 
+    [
       {
-        'nyplSource' => 'sierra-nypl', 
+        'nyplSource' => 'sierra-nypl',
         'bibIds' => [],
         'status' => {
-          'code' => '-', 
-          'display' => 'AVAILABLE', 
+          'code' => '-',
+          'display' => 'AVAILABLE',
           'duedate' => '2011-04-26T16:16:00-04:00'
         },
       } 
@@ -184,11 +184,11 @@ class Api::ItemsControllerTest < MiniTest::Test
   def nypl_source_missing_req_body_for_item
     [ 
       {
-        'nyplSource' => '', 
+        'nyplSource' => '',
         'bibIds' => ['998'],
         'status' => {
-          'code' => '-', 
-          'display' => 'AVAILABLE', 
+          'code' => '-',
+          'display' => 'AVAILABLE',
           'duedate' => '2011-04-26T16:16:00-04:00'
         },
       } 

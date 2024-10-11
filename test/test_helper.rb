@@ -18,6 +18,7 @@ SimpleCov.minimum_coverage_by_file 0
 
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
+require 'active_support/all'
 require 'rails/test_help'
 require 'webmock/test_unit'
 require 'factories/user_factory'
@@ -30,10 +31,15 @@ require 'pry-stack_explorer'
 include WebMock::API
 
 WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow: 'elasticsearch:9200')
 
 require 'minitest'
 require 'minitest/assertions'
 require 'minitest/autorun'
+require 'minitest/reporters'
+
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+
 require 'stringio'
 
 require 'active_support'

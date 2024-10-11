@@ -101,6 +101,7 @@ GEM
       activesupport (>= 6.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    ansi (1.5.0)
     arbre (1.7.0)
       activesupport (>= 3.0.0)
       ruby2_keywords (>= 0.0.2)
@@ -1714,15 +1715,16 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    diff-lcs (1.5.1)
     docile (1.4.1)
     drb (2.2.1)
-    elastic-transport (8.3.5)
-      faraday (< 3)
+    elasticsearch (6.8.0)
+      elasticsearch-api (= 6.8.0)
+      elasticsearch-transport (= 6.8.0)
+    elasticsearch-api (6.8.0)
       multi_json
-    elasticsearch (8.15.0)
-      elastic-transport (~> 8.3)
-      elasticsearch-api (= 8.15.0)
-    elasticsearch-api (8.15.0)
+    elasticsearch-transport (6.8.0)
+      faraday
       multi_json
     email_validator (2.2.4)
       activemodel
@@ -1730,6 +1732,11 @@ GEM
     ethon (0.16.0)
       ffi (>= 1.15.0)
     execjs (2.9.1)
+    factory_bot (6.5.0)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.4.3)
+      factory_bot (~> 6.4)
+      railties (>= 5.0.0)
     faker (3.4.2)
       i18n (>= 1.8.11, < 2)
     faraday (0.17.6)
@@ -1870,11 +1877,19 @@ GEM
     mini_racer (0.16.0)
       libv8-node (~> 18.19.0.0)
     minitest (5.25.1)
+    minitest-reporters (1.7.1)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
     minitest-stub_any_instance (1.0.3)
+    mocha (2.4.5)
+      ruby2_keywords (>= 0.0.5)
     multi_json (1.15.0)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
+    mutex_m (0.2.0)
     net-http-persistent (4.0.4)
       connection_pool (~> 2.2)
     net-http-pipeline (1.0.1)
@@ -1893,6 +1908,7 @@ GEM
     open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
     os (1.1.4)
+    ostruct (0.6.0)
     paper_trail (15.2.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -1962,6 +1978,7 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
+    rails-perftest (0.0.7)
     railties (7.2.1)
       actionpack (= 7.2.1)
       activesupport (= 7.2.1)
@@ -2004,6 +2021,23 @@ GEM
       railties (>= 5.2)
     retriable (3.1.2)
     rexml (3.3.8)
+    rspec-core (3.13.1)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.3)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-rails (7.0.1)
+      actionpack (>= 7.0)
+      activesupport (>= 7.0)
+      railties (>= 7.0)
+      rspec-core (~> 3.13)
+      rspec-expectations (~> 3.13)
+      rspec-mocks (~> 3.13)
+      rspec-support (~> 3.13)
+    rspec-support (3.13.1)
     rubocop (1.66.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -2051,6 +2085,9 @@ GEM
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
     slop (3.6.0)
+    spring (4.2.1)
+    spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -2145,9 +2182,10 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   devise
-  elasticsearch
+  elasticsearch (= 6.8)
   email_validator
   execjs
+  factory_bot_rails
   faker
   figaro
   font-awesome-rails
@@ -2163,9 +2201,13 @@ DEPENDENCIES
   luhn
   mini_racer
   minitest
+  minitest-reporters
   minitest-stub_any_instance
+  mocha
+  mutex_m
   nokogiri
   open_uri_redirections
+  ostruct
   paper_trail
   pg
   pry
@@ -2179,13 +2221,17 @@ DEPENDENCIES
   rack-cors
   rails
   rails-controller-testing
+  rails-perftest
   railties
   react_on_rails
   rexml
+  rspec-rails
   rubocop
   rubocop-performance
   sass-rails
   simplecov
+  spring
+  spring-commands-rspec
   sprockets-rails
   stimulus-rails
   test-unit

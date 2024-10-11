@@ -2,7 +2,7 @@
 
 MyLibraryNYC::Application.routes.draw do
 
-  devise_for :users, :path => "users", :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }, 
+  devise_for :users, :path => "users", :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' },
 :controllers => { :registrations => 'users/registrations', :sessions => 'users/sessions' }
 
   get 'hello_world', to: 'hello_world#index'
@@ -15,7 +15,6 @@ MyLibraryNYC::Application.routes.draw do
   get '/logged_in', to: 'sessions#logged_in?'
   get 'extend_session_iframe' => 'home#extend_session_iframe'
   get 'home/calendar_event/:filename', to: 'home#mln_calendar'
-  get 'home/calendar_event/error', to: 'home#calendar_event_error'
   get 'home/calendar_event', to: 'home#calendar_event'
   get 'home/newsletter_confirmation_msg', to: 'home#newsletter_confirmation_msg'
   get '/menu_of_services/:filename', to: 'home#menu_of_services'
@@ -51,7 +50,7 @@ MyLibraryNYC::Application.routes.draw do
   match '/home/get_mln_file_names' => 'home#mln_file_names', via: [:get]
   match '/secondary_menu' => 'home#secondary_menu', via: [:get]
 
-  match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page', 
+  match '/news_letter/validate_news_letter_email_from_user_sign_up_page' => 'news_letter#validate_news_letter_email_from_user_sign_up_page',
         via: [:get, :post]
   match '/news_letter/news_letter_email_is_valid' => 'news_letter#news_letter_email_is_valid', via: [:get, :post]
 
