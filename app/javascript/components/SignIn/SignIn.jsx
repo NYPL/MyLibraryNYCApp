@@ -35,10 +35,12 @@ export default function SignIn(props) {
     if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
-    if (props.userSignedIn && location.pathname === "/signin") {
-      navigate("/account_details");
-      return false;
-    }
+    axios.get("/logged_in").then((response) => {
+      if (response.data.logged_in && location.pathname === "/signin") {
+        navigate("/account_details");
+        return false;
+      }
+    }).catch((error) => console.log("sign in errors:", error));
   }, []);
 
   const handleEmail = (event) => {

@@ -75,8 +75,8 @@ MyLibraryNYC::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  post 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#create_or_update_teacher_set'
-  delete 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#delete_teacher_set'
+  post 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#create_or_update_teacher_sets'
+  delete 'api/v0.1/mylibrarynyc/teacher-sets' => 'api/v01/bibs#delete_teacher_sets'
   post 'api/v0.1/mylibrarynyc/item-availability' => 'api/v01/items#update_availability'
   get 'api/unauthorized' => 'api/v01/general#unauthorized'
 end
