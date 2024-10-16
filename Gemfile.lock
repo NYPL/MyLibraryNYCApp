@@ -2153,96 +2153,96 @@ PLATFORMS
   aarch64-linux-gnu
 
 DEPENDENCIES
-  actioncable
-  actionmailer
-  actionpack
-  actionview
-  active_model_serializers
-  activeadmin
-  activeadmin_addons
-  activeadmin_reorderable
-  activejob
-  activemodel
-  activerecord
-  activestorage
-  activesupport
-  acts_as_list
-  addressable
-  auto-session-timeout
-  auto_increment
-  aws-sdk
-  bcrypt
-  breakpoint
-  client_side_validations
-  coffee-rails
-  cranky
-  cssbundling-rails
-  daemons
-  database_cleaner
-  delayed_job
-  delayed_job_active_record
-  devise
+  actioncable (~> 7.2)
+  actionmailer (~> 7.2)
+  actionpack (~> 7.2)
+  actionview (~> 7.2)
+  active_model_serializers (~> 0.10)
+  activeadmin (~> 3.2)
+  activeadmin_addons (~> 1.10)
+  activeadmin_reorderable (~> 0.3)
+  activejob (~> 7.2)
+  activemodel (~> 7.2)
+  activerecord (~> 7.2)
+  activestorage (~> 7.2)
+  activesupport (~> 7.2)
+  acts_as_list (~> 1.2)
+  addressable (~> 2.8)
+  auto-session-timeout (~> 1.2)
+  auto_increment (~> 1.6)
+  aws-sdk (~> 3.2)
+  bcrypt (~> 3.1)
+  breakpoint (~> 2.7)
+  client_side_validations (~> 22.2)
+  coffee-rails (~> 5.0)
+  cranky (~> 1.1)
+  cssbundling-rails (~> 1.4)
+  daemons (~> 1.4)
+  database_cleaner (~> 2.0)
+  delayed_job (~> 4.1)
+  delayed_job_active_record (~> 4.1)
+  devise (~> 4.9)
   elasticsearch (= 6.8)
-  email_validator
-  execjs
-  factory_bot_rails
-  faker
-  figaro
-  font-awesome-rails
-  google-api-client
-  google_drive
-  httparty
-  importmap-rails
-  jquery-rails
-  jsbundling-rails
-  json
-  jsonapi-serializer
-  lograge
-  luhn
-  mini_racer
-  minitest
-  minitest-reporters
-  minitest-stub_any_instance
-  mocha
-  mutex_m
-  nokogiri
-  open_uri_redirections
-  ostruct
-  paper_trail
-  pg
-  pry
-  pry-nav
-  pry-rails
-  pry-remote
-  pry-rescue
-  pry-stack_explorer
-  puma
-  rack
-  rack-cors
-  rails
-  rails-controller-testing
-  rails-perftest
-  railties
-  react_on_rails
-  rexml
-  rspec-rails
-  rubocop
-  rubocop-performance
-  sass-rails
-  simplecov
-  spring
-  spring-commands-rspec
-  sprockets-rails
-  stimulus-rails
-  test-unit
-  thread_safe
-  travis
-  turbo-rails
-  turbolinks
-  uglifier
-  webmock
-  will_paginate
-  yaml_db
+  email_validator (~> 2.2)
+  execjs (~> 2.9)
+  factory_bot_rails (~> 6.4)
+  faker (~> 3.4)
+  figaro (~> 1.2)
+  font-awesome-rails (~> 4.7)
+  google-api-client (~> 0.53)
+  google_drive (~> 3.0)
+  httparty (~> 0.22)
+  importmap-rails (~> 2.0)
+  jquery-rails (~> 4.6)
+  jsbundling-rails (~> 1.3)
+  json (~> 2.7)
+  jsonapi-serializer (~> 2.2)
+  lograge (~> 0.14)
+  luhn (~> 1.0)
+  mini_racer (~> 0.16)
+  minitest (~> 5.25)
+  minitest-reporters (~> 1.7)
+  minitest-stub_any_instance (~> 1.0)
+  mocha (~> 2.4)
+  mutex_m (~> 0.2)
+  nokogiri (~> 1.16)
+  open_uri_redirections (~> 0.2)
+  ostruct (~> 0.6)
+  paper_trail (~> 15.2)
+  pg (~> 1.5)
+  pry (~> 0.14)
+  pry-nav (~> 1.0)
+  pry-rails (~> 0.3)
+  pry-remote (~> 0.1)
+  pry-rescue (~> 1.6)
+  pry-stack_explorer (~> 0.6)
+  puma (~> 6.4)
+  rack (~> 3.1)
+  rack-cors (~> 2.0)
+  rails (~> 7.2)
+  rails-controller-testing (~> 1.0)
+  rails-perftest (~> 0.0)
+  railties (~> 7.2)
+  react_on_rails (~> 14.0)
+  rexml (~> 3.3)
+  rspec-rails (~> 7.0)
+  rubocop (~> 1.66)
+  rubocop-performance (~> 1.22)
+  sass-rails (~> 6.0)
+  simplecov (~> 0.22)
+  spring (~> 4.2)
+  spring-commands-rspec (~> 1.0)
+  sprockets-rails (~> 3.5)
+  stimulus-rails (~> 1.3)
+  test-unit (~> 3.6)
+  thread_safe (~> 0.3)
+  travis (~> 1.8)
+  turbo-rails (~> 2.0)
+  turbolinks (~> 5.2)
+  uglifier (~> 4.2)
+  webmock (~> 3.24)
+  will_paginate (~> 4.0)
+  yaml_db (~> 0.7)
 
 BUNDLED WITH
    2.5.20
