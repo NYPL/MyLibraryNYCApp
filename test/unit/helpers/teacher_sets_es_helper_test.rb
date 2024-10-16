@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class TeacherSetsEsHelperTest < MiniTest::Test
+class TeacherSetsEsHelperTest < Minitest::Test
   extend Minitest::Spec::DSL
   include TeacherSetsEsHelper
 

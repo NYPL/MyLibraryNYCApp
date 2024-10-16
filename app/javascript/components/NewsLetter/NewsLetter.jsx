@@ -67,7 +67,7 @@ export default function NewsLetter() {
 
   const newLetterSignup = () => {
     if (successFullySignedUp) {
-      if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+      if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
         {
           adobeAnalyticsForNewsLetter();
         }

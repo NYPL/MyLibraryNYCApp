@@ -11,7 +11,7 @@ namespace :sync_users do
   # For each user, see if they exist in the MLN database.
   # If they do, and if the MLN user was created within the last month, while the Sierra user has been there for longer than that,
   # then this is a user account manually fixed by the Library Outreach team.
-  # call like this:  RAILS_ENV=local rake check_user_fixes:check_mismatch['data/private/20181128_sierra_mln_user_accounts.csv',2,1,'23333090060508']
+  # call like this:  RAILS_ENV=development rake check_user_fixes:check_mismatch['data/private/20181128_sierra_mln_user_accounts.csv',2,1,'23333090060508']
   desc "Check manually made account fixes"
   task :check_user_fixes, [:file_name, :start, :limit, :barcode] => :environment do |t, args|
     # if barcode is set, then only checks that barcode for Sierra-MLN mismatch
@@ -86,7 +86,7 @@ namespace :sync_users do
   # For each user, see if they exist in the MLN database.
   # If they do not, then output the user, so we can review them later.
   # TODO:  later functionality -- write to db a new user.
-  # call like this:  RAILS_ENV=local rake sync_users:ingest_mismatched_sierra_users['data/private/20181128_sierra_mln_user_accounts.csv',2,1,
+  # call like this:  RAILS_ENV=development rake sync_users:ingest_mismatched_sierra_users['data/private/20181128_sierra_mln_user_accounts.csv',2,1,
   # '23333090060508']
   # @param safetyoff -- manually set this in the task call, to really truly write to the DB (a destructive change)
   desc "Check and Automatically Fix Sierra-MLN mismatch"

@@ -8,4 +8,8 @@ class Subject < ActiveRecord::Base
 
   MIN_COUNT_FOR_FACET = 5
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "id", "id_value", "title", "updated_at"]
+  end
+
 end

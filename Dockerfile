@@ -1,5 +1,5 @@
 # Set base image and working directory
-FROM ruby:2.7.4
+FROM ruby:3.3
 
 # Install necessary packages, including curl and PostgreSQL client
 RUN apt-get update -qq && apt-get install -y \
@@ -26,7 +26,7 @@ RUN npm install -g esbuild
 COPY Gemfile Gemfile.lock $APP_HOME/
 
 # Install bundler and Ruby dependencies
-RUN gem install bundler -v 2.4.22
+RUN gem install bundler -v 2.5.20
 RUN bundle install --jobs 30
 
 # Copy package.json and package-lock.json before running yarn install
@@ -46,5 +46,4 @@ RUN yarn build:css
 EXPOSE 3000
 
 # Start the server
-CMD ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
-
+CMD ["bash", "-c", "rm -f /app/tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"]

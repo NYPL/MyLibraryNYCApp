@@ -8,8 +8,8 @@ class HomeControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'test faq method' do
-    get :faq
+  test 'test faq data method' do
+    get :faq_data
     assert_response :success
   end
 

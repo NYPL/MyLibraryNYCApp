@@ -2,6 +2,7 @@
 
 MyLibraryNYC::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
+
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
@@ -13,7 +14,7 @@ MyLibraryNYC::Application.configure do
 
   # Show full error reports and disable caching
   config.consider_all_requests_local = false
-  config.action_dispatch.show_exceptions = true
+
   config.action_controller.perform_caching = false
 
   config.action_mailer.raise_delivery_errors = true
@@ -36,24 +37,28 @@ MyLibraryNYC::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-  config.action_mailer.default_url_options = { :host => ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil) }
+
+  config.action_mailer.default_url_options = { :host => "#{ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil)}:3000" }
   config.action_mailer.perform_deliveries = false
+  config.api_only = false
+  # config.middleware.use ActionDispatch::Cookies
+  # config.middleware.use ActionDispatch::Session::CookieStore
+  # config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore)
 
-  config.middleware.use ActionDispatch::Cookies
-  config.middleware.use ActionDispatch::Session::CookieStore
-  config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore)
+  config.logger = Logger.new($stdout)
+  config.logger.level = Logger::DEBUG
 
+  # Turn off asset pipline information showing in logs
+  config.assets.logger = true
+
+  config.eager_load = false
+
+  config.active_job.queue_adapter = :delayed_job
+  
   config.exceptions_app = lambda do |env|
     ExceptionsController.action(:render_error).call(env)
   end
 
-  config.logger = ActiveSupport::Logger.new("log/my-library-nyc-application.log")
-  config.logger.level = Logger::DEBUG
-  config.hosts = [ENV.fetch('MLN_INFO_SITE_HOSTNAME', nil), ENV.fetch('MLN_SETS_SITE_HOSTNAME', nil),
-                  ENV.fetch('MLN_ENVIRONMENT_URL', nil), ENV.fetch('MLN_API_GATEWAY_URL', nil),
-                  "http://my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com",
-                  "my-library-nyc-app-react-dev-18.9aa2mtunik.us-east-1.elasticbeanstalk.com"]
-  config.eager_load = false
-  config.active_job.queue_adapter = :delayed_job
+  config.assets.debug = true
   Delayed::Worker.logger = Rails.logger
 end
