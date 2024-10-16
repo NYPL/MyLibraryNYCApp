@@ -196,7 +196,6 @@ ActiveAdmin.register Hold do
   end
 
   controller do
-    puts "@JC Yo"
     #Setting up Strong Parameters
     #You must specify permitted_params within your users ActiveAdmin resource which reflects a users's expected params.
     def permitted_params
