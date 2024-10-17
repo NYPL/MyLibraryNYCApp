@@ -15,6 +15,9 @@ MyLibraryNYC::Application.configure do
   config.action_mailer.default_url_options = { :host => "http://test.host" }
 
   config.action_cable.mount_path = nil
+  config.action_cable.url = "ws://localhost:3000/cable"
+  config.action_cable.allowed_request_origins = ['http://localhost:3000', /http:\/\/localhost.*/]
+#  config.action_cable.pubsub_adapter = :test # or :redis, depending on your setup
 
   # Log error messages when you accidentally call methods on nil
   config.whiny_nils = true
