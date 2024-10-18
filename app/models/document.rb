@@ -13,6 +13,10 @@ class Document < ActiveRecord::Base
 
   validate :google_document, :on => [:create, :update]
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "event_type", "file", "file_name", "id", "id_value", "updated_at", "url"]
+  end
+
   def validate_event_type
     errors.add(:event_type, 'Please select event_type') if event_type.to_s == "0"
   end

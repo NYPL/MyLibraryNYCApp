@@ -7,7 +7,7 @@ module TeacherSetsEsHelper
     if es_doc[:hits].present?
       es_doc[:hits].each do |ts|
         next if ts["_source"]['mappings'].present?
-        
+
         teacher_set = TeacherSet.new
         teacher_set.title = ts["_source"]['title']
         teacher_set.description = ts["_source"]['description']

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-class NewsLetterControllerUnitTest < MiniTest::Test
+class NewsLetterControllerUnitTest < Minitest::Test
 
   extend Minitest::Spec::DSL
   include LogWrapper
 
   def setup
     @nl_controller = NewsLetterController.new
-    @mintest_mock1 = MiniTest::Mock.new
-    @mintest_mock2 = MiniTest::Mock.new
+    @mintest_mock1 = Minitest::Mock.new
+    @mintest_mock2 = Minitest::Mock.new
   end
 
   describe 'news-letter email already in google sheets?' do
@@ -63,13 +63,11 @@ class NewsLetterControllerUnitTest < MiniTest::Test
     # Case: 3
     it 'Test successfully create the news letter email in google sheets method' do
       email = 'test@ss1.com'
-      params = {key: "edededede"}
-      google_sheet = Struct.new
-      google_sheet.updates = Struct.new
-      google_sheet.updates.spreadsheet_id = "wed11"
+      params = { key: 'edededede' }
+      google_sheet = Struct.new(:spreadsheet_id, :table_range).new('wed11', 'A1')
       @mintest_mock1.expect(:call, ['test@ss.com'])
       @mintest_mock2.expect(:call, google_sheet, [email])
-      
+
       resp = nil
       @nl_controller.stub :news_letter_google_spread_sheet_emails, @mintest_mock1 do
         EncryptDecryptString.stub :decrypt_string, email, [params['key']] do

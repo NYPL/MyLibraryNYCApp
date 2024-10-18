@@ -112,7 +112,7 @@ If you add it after the EB project is set up in AWS, then 07_https-nypl-digital-
 
 Server
 ========================
-In many rails projects when you run the server with `rails s` Rails sets RAILS_ENV to "development".  If you do that with this app, you will connect to the development database on AWS (if you have permission to decrypt the value).  Instead, run `RAILS_ENV=local rails s` to start the server and `RAILS_ENV=local rails c` to run the console.
+In many rails projects when you run the server with `rails s` Rails sets RAILS_ENV to "development".  If you do that with this app, you will connect to the development database on AWS (if you have permission to decrypt the value).  Instead, run `RAILS_ENV=development rails s` to start the server and `RAILS_ENV=development rails c` to run the console.
 
 
 Testing
@@ -135,9 +135,9 @@ ruby -Itest test/functional/api/v01/bibs_controller_test.rb
 ```
 
 NOTE:  You might want to pre-pend each command with some environment setup, s.a.:
-`RAILS_ENV=local bundle exec rake db:schema:load RAILS_ENV=test`
+`RAILS_ENV=development bundle exec rake db:schema:load RAILS_ENV=test`
 and
-`RAILS_ENV=local ruby -Itest test/unit/user_test.rb`
+`RAILS_ENV=development ruby -Itest test/unit/user_test.rb`
 
 
 Order Multiple Teacher Sets Configuration
@@ -213,7 +213,7 @@ Emails
 Emailing notifications out of MyLibraryNYC is done through the AWS Simple Email Service.  We turn emails off on the development and local servers by setting
 
 config.action_mailer.perform_deliveries = false
-in config/environments/development.rb and local.rb
+in config/environments/development.rb
 
 So if you want to test mailing locally, turn the perform_deliveries back on.
 ```
@@ -367,15 +367,15 @@ Note: Rails, Ruby and Node installation is required to run project in local.
         Postgresql commands to create database on local:
 
         psql -l
-        psql -d mylibnyc_local
-        \c mylibnyc_local;
+        psql -d mylibnyc_development
+        \c mylibnyc_development;
 
         Rub below command in project path to create database tables
 
-        RAILS_ENV=local rake db:create
-        RAILS_ENV=local rake db:schema:load
-        RAILS_ENV=local rake db:migrate
-        RAILS_ENV=local rake db:seed
+        RAILS_ENV=development rake db:create
+        RAILS_ENV=development rake db:schema:load
+        RAILS_ENV=development rake db:migrate
+        RAILS_ENV=development rake db:seed
 
  Step6: Configure elastic search
         MylibraryNyc project using elastic-search-6.8 version.
@@ -428,9 +428,9 @@ Note: Rails, Ruby and Node installation is required to run project in local.
 
         create_teacherset_document_in_es
 
-Setp7: Run below commands to start server
-        
+Step7: Run below commands to start server
+
         yarn install
         yarn build
-        RAILS_ENV=local rails s
+        RAILS_ENV=development rails s
 ```

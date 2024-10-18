@@ -42,7 +42,7 @@ class DocumentTest < ActionController::TestCase
 
 
   test 'Google document not found' do
-    error_obj = Struct.new(:status_code, :body).new('404', 'body')
+    error_obj = Struct.new(:status_code, :body).new(404, 'body')
     email = JSON.parse(ENV.fetch('MLN_GOOGLE_ACCCOUNT', nil))['client_email']
     error_msg = "There was an error accessing this file. Please check this URL is valid, and that the document is shared with #{email}"
     resp = @document.google_client_error_message(error_obj)

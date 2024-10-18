@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-class BookUnitTest < MiniTest::Test
+class BookUnitTest < Minitest::Test
 
   extend Minitest::Spec::DSL
   include LogWrapper
 
   def setup
     @book_model = Book.new
-    @mintest_mock1 = MiniTest::Mock.new
-    @mintest_mock2 = MiniTest::Mock.new
+    @mintest_mock1 = Minitest::Mock.new
+    @mintest_mock2 = Minitest::Mock.new
   end
 
   def test_bib_service_response_failure_case

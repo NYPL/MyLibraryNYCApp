@@ -10,9 +10,10 @@ class NewsLetterController < ApplicationController
   def index
     flash[:error] = nil
     email = params['email']
-    
+
     # Checking input email is valid format or not.
     validate_news_letter_email
+
     # Connect's to google sheets and get's google sheet emails.
     emails_arr = news_letter_google_spread_sheet_emails
 
@@ -26,11 +27,11 @@ class NewsLetterController < ApplicationController
                              'method' => 'index'})
     render json: { status: "error", message: e.message[0..75]}
   end
-  
+
   # Validate news-letter email from user-signup page.
   def validate_news_letter_email_from_user_sign_up_page
     email = params['email']
-    
+
     # Checking input email is valid format or not.
     validate_news_letter_email
     # Connect's to google sheets and get's google sheet emails.
@@ -71,7 +72,7 @@ class NewsLetterController < ApplicationController
                              'method' => 'email_already_in_google_sheets'})
     raise 'That email is already subscribed to the MyLibraryNYC newsletter.' 
   end
-  
+
   # Connect's to google client and get all news-letter emails
   def news_letter_google_spread_sheet_emails
     service = GoogleApiClient.sheets_client
@@ -97,11 +98,11 @@ class NewsLetterController < ApplicationController
     decrypt_email = EncryptDecryptString.decrypt_string(params["key"])
     # Email is already in google sheets return true. Do not overwrite to google sheets.
     return true if emails_arr.include?(decrypt_email)
-    
+
     # Append news letter emails to google sheeets
     response = write_news_letter_emails_to_google_sheets(decrypt_email)
     is_saved_in_google_sheets = true
-    LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params}, 
+    LogWrapper.log('INFO', {'message' => "Saved in google sheets  #{is_saved_in_google_sheets}, params: #{params},
                              tableRange: #{response.table_range}", 'method' => 'create_news_letter_email_in_google_sheets'})
     is_saved_in_google_sheets
   rescue StandardError => e

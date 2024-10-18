@@ -92,7 +92,7 @@ export default function TeacherSetOrderDetails(props) {
         "dddd, mmmm d, yyyy"
       );
       showCancelledDate = "display_block";
-      if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "local") {
+      if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
         {
           adobeAnalyticsForCancelOrder();
         }
