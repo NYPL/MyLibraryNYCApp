@@ -252,11 +252,11 @@ class ElasticSearch
         # Restrict to min_count_for_facet (5).
         # but let's make it 5 consistently now.
         # and the next keyword is used to skip to the next iteration if conditions are not met.
-        # if params['subjects'].blank? || (params['area of study'].blank? && params['set type'].blank? && params['language'].blank?)
-        #   if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
-        #     next
-        #   end
-        # end
+        if params['subjects'].blank? || (params['area of study'].blank? && params['set type'].blank? && params['language'].blank?)
+          if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
+            next
+          end
+        end
         if params['subjects'].blank? || params['subjects'].map(&:to_i).include?(agg_val["key"]["id"])
           subjects_facets[:items] << {
             :value => agg_val["key"]["id"],
