@@ -1007,12 +1007,11 @@ class TeacherSet < ActiveRecord::Base
     # record we're processing, ignoring duplicate associations.
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)
-
       subject = Subject.find_or_create_by(title: subject_name)
       subject_teacher_set = SubjectTeacherSet.find_or_create_by(teacher_set_id: self.id, subject_id: subject.id)
     end
-
     prune_subjects(old_subjects)
+    self.subjects.reload
   end
 
   # Clean up the area_of_study field to match the subjects table title string rules.
