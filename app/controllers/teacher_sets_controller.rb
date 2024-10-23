@@ -59,6 +59,9 @@ class TeacherSetsController < ApplicationController
     # Attach custom :q param to each facet with query params to be applied to that link
 
     per_page = 10
+
+    # Account for differences in ES 7.10 vs 6.8
+    total_count = total_count['value'] if total_count.is_a?(Hash)
     total_pages = (total_count / per_page.to_f).ceil
 
     no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
@@ -66,11 +69,9 @@ class TeacherSetsController < ApplicationController
     render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, 
                    no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjects_hash, resetPageNumber: reset_page_number, errrorMessage: "" }
   rescue ElasticsearchException => e
-    render json: { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, 
-                   facets: {} }
+    render json: { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, facets: {} }
   rescue StandardError => e
-    LogWrapper.log('ERROR', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 
-                             'method' => 'app/controllers/teacher_sets_controller.rb.index'})
+    LogWrapper.log('ERROR', {'message' => "Error occured in teacherset controller. Error: #{e.message}, backtrace: #{e.backtrace}", 'method' => 'app/controllers/teacher_sets_controller.rb.index'})
     render json:  { errrorMessage: "We've encountered an error. Please try again later or email help@mylibrarynyc.org for assistance.",
       teacher_sets: {}, facets: {}}
   end
