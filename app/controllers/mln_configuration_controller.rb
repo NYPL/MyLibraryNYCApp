@@ -9,7 +9,7 @@ class MlnConfigurationController < ApplicationController
     super
     @feature_flag_config = nil
     @elasticsearch_config = nil
-    @app_env = ENV['RACK_ENV'].nil? ? 'local' : ENV['RACK_ENV']
+    @app_env = ENV['RACK_ENV'].nil? ? 'development' : ENV['RACK_ENV']
     load_all_configs
   end
 
