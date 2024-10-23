@@ -1018,8 +1018,9 @@ class TeacherSet < ActiveRecord::Base
       subject = Subject.find_or_create_by(title: subject_name)
       subject_teacher_set = SubjectTeacherSet.find_or_create_by(teacher_set_id: self.id, subject_id: subject.id)
     end
-    prune_subjects(old_subjects)
+    prune_result = prune_subjects(old_subjects)
     self.subjects.reload
+    prune_result
   end
 
   # Clean up the area_of_study field to match the subjects table title string rules.
