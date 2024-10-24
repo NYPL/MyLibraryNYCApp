@@ -40,4 +40,4 @@ jobs:
 
           #      - name: Force ECS Update
           #        run: |
-          #          aws ecs update-service --cluster shared-ruby-qa-tf --service shared-ruby-qa-tf --force-new-deployment
+          #          aws ecs update-service --cluster mylibrarynycapp-qa --service mylibrarynycapp-qa --force-new-deployment
