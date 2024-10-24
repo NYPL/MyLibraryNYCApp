@@ -9,7 +9,7 @@ class MlnConfigurationController < ApplicationController
     super
     @feature_flag_config = nil
     @elasticsearch_config = nil
-    @app_env = ENV['RACK_ENV'].nil? ? 'local' : ENV['RACK_ENV']
+    @app_env = ENV['RACK_ENV'].nil? ? 'development' : ENV['RACK_ENV']
     load_all_configs
   end
 
@@ -17,7 +17,7 @@ class MlnConfigurationController < ApplicationController
   def feature_flag_config(key)
     @feature_flag_config[@app_env][key]
   end
-  
+
   # Load elastic search configurations based on environment
   def elasticsearch_config(key)
     @elasticsearch_config[@app_env][key]
@@ -33,16 +33,16 @@ class MlnConfigurationController < ApplicationController
 
   def load_config
     # Load feature_flag configurations from s3 bucket.
-    @feature_flag_config = YAML.safe_load(S3Controller.new.get_s3_file("my-library-nyc-config-#{ENV.fetch('RAILS_ENV', nil)}", 
+    @feature_flag_config = YAML.safe_load(S3Controller.new.get_s3_file("my-library-nyc-config-#{ENV.fetch('RAILS_ENV', nil)}",
                                                                        "feature_flag.yml"))    
-    
+
     # Load elastic search configurations for all environments
     @elasticsearch_config = YAML.load_file('config/elastic_search.yml')
   end
 
   def load_all_configs
     # Load local configurations
-    if ['local', 'test', nil].include?(@app_env)
+    if ['development', 'test', nil].include?(@app_env)
       load_config_for_local
     else
       # Load dev, qa, prod, test configurations

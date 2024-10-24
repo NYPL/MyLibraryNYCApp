@@ -9,22 +9,25 @@ user1:
   id: 206669143
   email: myText@test.com
   school_id: 382274395
-  school: school_one
+#  school: school_one
   first_name: 'firstname'
   last_name: 'lastname'
+  barcode: '0000000000'
 
 user2:
   id: "1234"
   email: myText1@test.com
   school_id: 382274395
-  school: school_one
+#  school: school_one
   first_name: 'firstname'
   last_name: 'lastname'
+  barcode: '1111111111'
 
 user3:
   id: "12345"
   email: myText5@test.com
   school_id: 38227476
-  school: school_three
+#  school: school_three
   first_name: 'firstname3'
   last_name: 'lastname3'
+  barcode: '2222222222'

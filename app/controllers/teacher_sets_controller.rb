@@ -16,7 +16,7 @@ class TeacherSetsController < ApplicationController
     if storable_location?
       store_user_location!
     end
-    LogWrapper.log('INFO', {'message' => "Calling elastic search to get teacher-sets", 
+    LogWrapper.log('INFO', {'message' => "Calling elastic search to get teacher-sets",
                             'method' => 'app/controllers/teacher_sets_controller.rb.index'})
 
     # Get teachersets and facets from elastic search
@@ -138,7 +138,7 @@ class TeacherSetsController < ApplicationController
     # Stores the current location in session, so if an un-authenticated user
     # tries to order this teacher set, we can ask the user to sign in, and
     # then redirect back to this teacher_set detail page.
-    
+
     if storable_location?
       store_user_location!
     end

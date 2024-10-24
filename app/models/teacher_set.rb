@@ -32,7 +32,7 @@ class TeacherSet < ActiveRecord::Base
   before_create :make_slug
 
   KEY_WORDS = ["NYC"]
-  
+
   AVAILABLE = 'available'
   UNAVAILABLE = 'unavailable'
 
@@ -48,6 +48,14 @@ class TeacherSet < ActiveRecord::Base
 
   FULLTEXT_COLUMNS = ['title', 'description', 'contents']
 
+  def self.ransackable_associations(auth_object = nil)
+    ["books", "holds", "subject_teacher_sets", "subjects", "teacher_set_books", "teacher_set_notes", "versions"]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["area_of_study", "availability", "available_copies", "bnumber", "call_number", "contents", "created_at", "description", "details_url", "edition", "grade_begin", "grade_end", "id", "isbn", "language", "last_book_change", "lexile_begin", "lexile_end", "physical_description", "primary_language", "publication_date", "publisher", "series", "set_type", "statement_of_responsibility", "sub_title", "title", "total_copies", "updated_at"]
+  end
+
   def new_or_pending_holds
     # puts "holds: #{holds.where(:status => ['new','pending'])}"
     holds.where(:status => ['new','pending'])
@@ -60,7 +68,7 @@ class TeacherSet < ActiveRecord::Base
   def availability_string
     AVAILABILITY_LABELS[self.availability]
   end
-  
+
   # Get teacher-set record by bib_id
   def self.get_teacher_set_by_bnumber(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first
@@ -73,7 +81,7 @@ class TeacherSet < ActiveRecord::Base
       []
     end
   end
-  
+
   # Get all teacher-set status holds except for cancelled and closed.
   def ts_holds_count
     ts_holds = holds.where.not(status: ['cancelled'])
@@ -89,14 +97,14 @@ class TeacherSet < ActiveRecord::Base
   # Current user Teacher set holds
   def holds_for_user(user, hold_id)
     return [] unless user
-    
+
     if hold_id.present?
       ts_holds_by_user_and_hold_id(user, hold_id)
     else
       ts_holds_by_user(user)
     end
   end
-  
+
   def availability
     self.available_copies.to_i > 0 ? AVAILABLE : UNAVAILABLE
   end
@@ -133,12 +141,12 @@ class TeacherSet < ActiveRecord::Base
   def ts_holds_by_user_and_hold_id(user, hold_id)
     holds.where(:user_id => user.id, :id => hold_id).where.not(status: ['cancelled', 'closed'])
   end
-  
+
   # Get teacher-set holds by user.
   def ts_holds_by_user(user)
     holds.where(:user_id => user.id).where.not(status: ['cancelled', 'closed'])
   end
-  
+
   def make_slug
     # check for nil title otherwise parameterize will fail
     parameterized_title = (self.title || '').parameterize
@@ -836,14 +844,14 @@ class TeacherSet < ActiveRecord::Base
   #         puts "#{(i+1) + (params[:page]-1)*params[:limit]} of #{items['count']}: Add/update #{title['id']}: #{title['title']}"
   #         id = title['id'].to_i
   #         # puts "upsert_from_catalog_id #{id}"
-  #         new << id unless self.exists?(id)
+  #         new << id unless self.exist?(id)
   #         unique_ids << id
 
   #         # If debugging a specific id, skip all except for that id
   #         next if !just_id.nil? && id != just_id
 
   # =begin
-  #         if self.exists? id
+  #         if self.exist? id
   #           s = self.find id
   #           next if !s.description.empty?
   #         end
@@ -1007,12 +1015,12 @@ class TeacherSet < ActiveRecord::Base
     # record we're processing, ignoring duplicate associations.
     subject_name_array.each do |subject_name|
       subject_name = clean_subject_string(subject_name)
-
       subject = Subject.find_or_create_by(title: subject_name)
       subject_teacher_set = SubjectTeacherSet.find_or_create_by(teacher_set_id: self.id, subject_id: subject.id)
     end
-
-    prune_subjects(old_subjects)
+    prune_result = prune_subjects(old_subjects)
+    self.subjects.reload
+    prune_result
   end
 
   # Clean up the area_of_study field to match the subjects table title string rules.
@@ -1082,7 +1090,7 @@ class TeacherSet < ActiveRecord::Base
   rescue StandardError => e
     raise TeacherSetNoteException.new(TEACHER_SET_NOTE_EXCEPTION[:code], TEACHER_SET_NOTE_EXCEPTION[:msg])
   end
-  
+
   # Calls Bib service for items.
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items and available items in the list
@@ -1094,7 +1102,7 @@ class TeacherSet < ActiveRecord::Base
     update_teacher_set_availability_in_elastic_search
     return {bibs_resp: response[:bibs_resp]}
   end
-  
+
   # Calls Bib service for items.
   def get_items_info_from_bibs_service(bibid)
     bibs_resp, items_found = send_request_to_items_microservice(bibid)

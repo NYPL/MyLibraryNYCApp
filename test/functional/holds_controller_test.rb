@@ -33,7 +33,7 @@ class HoldsControllerTest < ActionController::TestCase
   end
 
   test "should cancel hold" do
-    post :cancel, params: { id: @hold2.access_key }
+    post :holds_cancel_details, params: { id: @hold2.access_key }
     assert_response :success
   end
 
@@ -56,19 +56,37 @@ class HoldsControllerTest < ActionController::TestCase
     # Before cancellation of hold teacher-set available_copies count is 2.
     # After cancellation of hold teacher-set available_copies count is 3.
     assert_equal(3, TeacherSet.find(resp_hold_obj.teacher_set_id).available_copies)
-    assert_response :redirect
-    assert_equal("Your order was successfully updated.", flash[:notice])
+    assert_response :success
+    assert_equal("Your order was successfully updated.", JSON.parse(response.body)['message'])
   end
 
   test "test update method with empty holds" do
     sign_in @user
-    es_doc = {"_index" => "teacherset", "_type" => "teacherset", 
-              "_id" => @hold4.teacher_set.id, "_version" => 11, "result" => "updated", 
-              "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
+    es_doc = {
+      "_index" => "teacherset",
+      "_type" => "teacherset",
+      "_id" => @hold4.teacher_set.id,
+      "_version" => 11,
+      "result" => "updated",
+      "_shards" => {
+        "total" => 0,
+        "successful" => 1,
+        "failed" => 0
+      }
+    }
 
     TeacherSet.stub_any_instance :update_teacher_set_availability_in_elastic_search, es_doc do
-      post :update, params: { id: @hold4.access_key, hold_change: {"comment" => "qqq", "status" => "MyText"}, hold: {status: "MyText"} }
+      post_params = {
+        id: @hold4.access_key,
+        hold_change: {
+          "comment" => "qqq", "status" => "MyText"
+        },
+        hold: { status: "MyText" }
+      }
+
+      post :update, params: post_params
     end
+
     assert_nil(flash[:notice])
   end
 
@@ -78,14 +96,22 @@ class HoldsControllerTest < ActionController::TestCase
 
     # Teacher_set available_copies before cancellation of hold.
     assert_equal(2, @hold2.teacher_set.available_copies)
-    
-    resp = post :update, params: { id: @hold2.access_key, hold_change: {"comment" => "qqq", "status" => "new"}, hold: {status: "new"} }
+
+    post_params = {
+      id: @hold2.access_key,
+      hold_change: {
+        "comment" => "qqq",
+        "status" => "new"
+      },
+      hold: { status: "new" }
+    }
+    resp = post :update, params: post_params
     resp_hold_obj = resp.request.env["action_controller.instance"].current_user.holds.find(@hold2.id)
     # Hold status not changed.
     # teacher-set available_copies also not changed, because hold is not cancelled.
     assert_equal(resp_hold_obj.status, "new")
     assert_equal(2, TeacherSet.find(resp_hold_obj.teacher_set_id).available_copies)
-    assert_response :redirect
+    assert_response :success
   end
 
   test "create hold and update teacher-set available_copies" do

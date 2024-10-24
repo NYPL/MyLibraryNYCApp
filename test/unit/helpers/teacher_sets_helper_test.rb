@@ -9,8 +9,8 @@ class TeacherSetsHelperTest < ActiveSupport::TestCase
 
   before do
     @teacher_set = TeacherSet.new
-    @mintest_mock1 = MiniTest::Mock.new
-    @mintest_mock2 = MiniTest::Mock.new
+    @mintest_mock1 = Minitest::Mock.new
+    @mintest_mock2 = Minitest::Mock.new
   end
 
   describe 'Get var field data from request body' do

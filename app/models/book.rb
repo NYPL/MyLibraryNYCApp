@@ -31,6 +31,14 @@ class Book < ActiveRecord::Base
 
   validates_uniqueness_of :bnumber, allow_blank: true
 
+  def self.ransackable_associations(auth_object = nil)
+    ["teacher_set_books", "teacher_sets", "versions"]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+     ["bib_code_3", "bnumber", "call_number", "cover_uri", "created_at", "description", "details_url", "format", "id", "id_value", "isbn", "notes", "physical_description", "primary_language", "publication_date", "statement_of_responsibility", "sub_title", "title", "updated_at"]
+  end
+
   # Unused method
   # def populate_missing_data
   #   if self.details_url.nil?
