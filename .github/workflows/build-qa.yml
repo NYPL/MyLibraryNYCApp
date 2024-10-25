@@ -2,7 +2,7 @@ name: Deploy QA
 on:
   push:
     branches:
-      - TGR-127-implement-github-actions
+      - qa
 
 permissions:
   id-token: write
