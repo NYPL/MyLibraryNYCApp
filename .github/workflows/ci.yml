@@ -3,7 +3,14 @@ name: CI
 on:
   push:
     branches:
-      - TGR-130-unit-tests-run-automatically
+      - tiger-team-feature
+      - qa
+      - production
+  pull_request:
+    branches:
+      - tiger-team-feature
+      - qa
+      - production
 
 jobs:
   build_and_test:
