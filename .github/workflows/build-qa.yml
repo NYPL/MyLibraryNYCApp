@@ -38,6 +38,6 @@ jobs:
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:qa-remediation
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:qa-remediation
 
-          #      - name: Force ECS Update
-          #        run: |
-          #          aws ecs update-service --cluster mylibrarynycapp-qa --service mylibrarynycapp-qa --force-new-deployment
+      - name: Force ECS Update
+        run: |
+          aws ecs update-service --cluster mylibrarynycapp-qa --service mylibrarynycapp-qa --force-new-deployment
