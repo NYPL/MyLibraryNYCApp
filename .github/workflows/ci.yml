@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - TGR-130-unit-tests-run-automatically
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out code
+        uses: actions/checkout@v2
+
+      - name: build application
+        run: |
+          docker-compose build
+
+      - name: Run tests
+        run: |
+          docker-compose run webapp
+          docker exec -it webapp bundle exec rails test
