@@ -27,4 +27,4 @@ jobs:
       - name: Run tests
         run: |
           docker-compose up -d
-          docker-compose run webapp 'RAILS_ENV=test db:create db:migrate && RAILS_ENV=test bundle exec rails test'
+          docker-compose run webapp sh -c 'RAILS_ENV=test db:create db:migrate && RAILS_ENV=test bundle exec rails test'
