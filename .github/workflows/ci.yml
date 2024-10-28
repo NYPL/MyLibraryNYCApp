@@ -12,11 +12,19 @@ jobs:
       - name: check out code
         uses: actions/checkout@v2
 
+      - name: set up docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: install docker compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       - name: build application
         run: |
           docker-compose build
 
       - name: Run tests
         run: |
-          docker-compose run webapp
-          docker exec -it webapp bundle exec rails test
+          docker-compose up -d
+          docker-compose exec webapp bundle exec rails test
