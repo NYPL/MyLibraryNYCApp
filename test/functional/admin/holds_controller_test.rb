@@ -11,7 +11,6 @@ module Admin
 
     test "test index method" do
       get :index
-      #get 'http://localhost:3000/admin/holds'
       assert_equal("200", response.code)
       assert_response :success
     end
