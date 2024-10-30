@@ -35,9 +35,10 @@ jobs:
         run: |
           DOCKER_BUILDKIT=1 docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:qa-remediation
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:qa-remediation
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:qa-latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:qa-latest
 
       - name: Force ECS Update
         run: |
           aws ecs update-service --cluster mylibrarynycapp-qa --service mylibrarynycapp-qa --force-new-deployment
+          aws ecs update-service --cluster mylibrarynycapp-qa --service mylibrarynycapp-qa-delayed-job --force-new-deployment
