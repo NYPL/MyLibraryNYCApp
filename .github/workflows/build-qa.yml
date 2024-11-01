@@ -1,8 +1,9 @@
 name: Deploy QA
 on:
-  push:
-    branches:
-      - qa
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
 
 permissions:
   id-token: write
@@ -10,6 +11,7 @@ permissions:
 
 jobs:
   deploy_qa:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'qa' }}
     name: Deploy QA
     runs-on: ubuntu-latest
     environment: qa
