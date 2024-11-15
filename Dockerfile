@@ -1,6 +1,11 @@
 # Set base image and working directory
 FROM ruby:3.3
 
+# Use baseimage-docker's init process.
+RUN mkdir -p /etc/my_init.d
+ADD ./provisioning/docker_build/00-create-databases.sh /etc/my_init.d/00-create-databases.sh
+CMD ["/sbin/my_init"]
+
 # Install necessary packages, including curl and PostgreSQL client
 RUN apt-get update -qq && apt-get install -y \
   curl \
