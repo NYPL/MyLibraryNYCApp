@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   deploy_qa:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'tiger-team-feature' }}
+    #    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'tiger-team-feature' }}
     name: Deploy QA
     runs-on: ubuntu-latest
     environment: qa
