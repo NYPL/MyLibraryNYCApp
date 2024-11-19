@@ -1,9 +1,13 @@
 name: Deploy QA
+  #on:
+  #  workflow_run:
+  #    workflows: ["CI"]
+  #    types:
+  #      - completed
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+  push:
+    branches:
+      - tiger-team-feature
 
 permissions:
   id-token: write
