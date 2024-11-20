@@ -46,9 +46,6 @@ GEM
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
     active_material (2.1.2)
-    active_model_serializers (0.9.13)
-      activemodel (>= 3.2)
-      concurrent-ruby (~> 1.0)
     activeadmin (3.2.5)
       arbre (~> 1.2, >= 1.2.1)
       csv
@@ -2152,7 +2149,6 @@ DEPENDENCIES
   actionmailer (~> 7.2)
   actionpack (~> 7.2)
   actionview (~> 7.2)
-  active_model_serializers (~> 0.9.8)
   activeadmin (~> 3.2)
   activeadmin_addons (~> 1.10)
   activeadmin_reorderable (~> 0.3)
