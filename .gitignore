@@ -27,6 +27,9 @@
 # Ignore files in the data/private subdirectory
 /data/private
 
+# Ignore postgresql data from the local environment
+/data/postgres-my-library-nyc-app
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

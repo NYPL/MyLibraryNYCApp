@@ -32,7 +32,6 @@ class TeacherSetTest < ActiveSupport::TestCase
     @teacher_set7 = teacher_sets(:teacher_set_seven)
     @teacher_set8 = teacher_sets(:teacher_set_eight)
     @model = TeacherSet.new
-    #@model.save!
     @mintest_mock1 = Minitest::Mock.new
     @mintest_mock2 = Minitest::Mock.new
     @elasticsearch_adapter_mock = Minitest::Mock.new

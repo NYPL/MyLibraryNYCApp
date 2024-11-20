@@ -13,7 +13,6 @@ class HoldChange < ActiveRecord::Base
   def do_after_save
     update_hold
 
-    # This is a code change. Need to check on the expected behavior here! @JC 2024-10-07
     if hold.teacher_set.present? && hold.teacher_set.availability != 'unavailable'
       send_change_status_email
     else

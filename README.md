@@ -21,7 +21,7 @@ Data
 
 To create and seed the database:
 
-1. Load schema and data (from within the webapp container):
+Load schema and data (from within the webapp container):
 
 ```
 bundle exec rake db:create db:migrate db:seed
@@ -50,21 +50,13 @@ Run this command from the local webapp container or in the ECS webapp container 
 If the school is not found by zcode, the rake task will create a new record.  If the school is found by zcode, it will overwrite school's name, address_line_1, state, address_line_2, borough, postal_code, and phone_number with the data in the CSV.
 
 
-Travis-CI
-==================
-
-Important to note, MyLibraryNYC is integrated with Travis-CI.
-
-This means the following:
-
-When a developer, commits a change or merges a branch into the qa or production branch, it will trigger a deployment with travis. If the build is is successful, Travis will deploy the build to the corresponding environment in AWS/ECS.
-
-
 Testing
 ========================
 
 First, set up a test database:
+```
 RAILS_ENV=test bundle exec rake db:drop db:create db:schema:load
+```
 
 For the unit tests and integration tests, please run the following command inside a webapp container while in the root directory.
 
@@ -159,7 +151,7 @@ end
 ```
 
 
-Commands to copy database from one environmentt to another
+Commands to copy database from one environment to another
 =========================================================
 
 ```
