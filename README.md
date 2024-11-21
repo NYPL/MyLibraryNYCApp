@@ -101,6 +101,7 @@ If that doesn't work, you can try 'sh script.elastic_search/delete_es_mappings.s
 Enter the local elasticsearch URL (currently http://elasticsearch:9200)
 
 Do `bundle exec rake seeds:teacher_sets` to seed the teacher set data in the development elasticsearch instance.
+```
 
 
 Commands to copy database from one environment to another
