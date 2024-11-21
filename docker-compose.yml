@@ -1,5 +1,7 @@
 services:
   webapp:
+    stdin_open: true
+    tty: true
     build:
       context: .
     ports:

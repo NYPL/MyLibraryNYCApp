@@ -59,7 +59,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
         "type": "text",
         "fields": {
           "raw": {
-            "type": "text"
+            "type": "keyword"
           }
         }
       },
@@ -67,28 +67,51 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
         "type": "long"
       },
       "call_number": {
-        "type": "text"
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
       },
       "language": {
-        "type": "text"
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
       },
       "physical_description": {
-        "type": "text"
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
       },
       "primary_language": {
-        "type": "text"
+        "type": "text",
+        "fielddata": true
       },
       "available_copies": {
         "type": "long"
       },
       "bnumber": {
-        "type": "text"
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
       },
       "set_type": {
-        "type": "text"
+        "type": "text",
+        "fielddata": true
       },
       "area_of_study": {
-        "type": "text"
+        "type": "text",
+        "fielddata": true
       },
       "created_at": {
         "type": "date",
@@ -99,7 +122,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
         "format": "strict_date_optional_time||epoch_millis"
       },
       "subjects": {
-        "type": "object",
+        "type": "nested",
         "properties": {
           "id": {
             "type": "long"

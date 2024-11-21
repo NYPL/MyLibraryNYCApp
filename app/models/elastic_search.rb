@@ -25,7 +25,7 @@ class ElasticSearch
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
     @index = @es_config['index'] || 'teacherset'
-    @type = @es_config['type'] || 'teacherset'
+    @type = @es_config['type'] || '_doc'
     @teachersets_per_page = @es_config['teachersets_per_page'] || 10
     @size = @es_config['size'] || 10000
   end
