@@ -23,7 +23,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
             "type": "keyword"
           }
         },
-        "analyzer": "ts_analyzer"
+        "analyzer": "default"
       },
       "description": {
         "type": "text",
@@ -32,7 +32,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
             "type": "keyword"
           }
         },
-        "analyzer": "ts_analyzer"
+        "analyzer": "default"
       },
       "contents": {
         "type": "text",
@@ -41,7 +41,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
             "type": "keyword"
           }
         },
-        "analyzer": "ts_analyzer"
+        "analyzer": "default"
       },
       "grade_begin": {
         "type": "long"
@@ -53,56 +53,56 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
         "type": "long"
       },
       "details_url": {
-        "type": "keyword"
+        "type": "text"
       },
       "availability": {
         "type": "text",
         "fields": {
           "raw": {
-            "type": "keyword"
+            "type": "text"
           }
         }
       },
       "total_copies": {
-        "type": "keyword"
+        "type": "long"
       },
       "call_number": {
-        "type": "keyword"
+        "type": "text"
       },
       "language": {
-        "type": "keyword"
+        "type": "text"
       },
       "physical_description": {
-        "type": "keyword"
+        "type": "text"
       },
       "primary_language": {
-        "type": "keyword"
+        "type": "text"
       },
       "available_copies": {
-        "type": "integer"
+        "type": "long"
       },
       "bnumber": {
-        "type": "keyword"
+        "type": "text"
       },
       "set_type": {
-        "type": "keyword"
+        "type": "text"
       },
       "area_of_study": {
-        "type": "keyword"
+        "type": "text"
       },
       "created_at": {
         "type": "date",
-        "format": "date_time_no_millis"
+        "format": "strict_date_optional_time||epoch_millis"
       },
       "updated_at": {
         "type": "date",
-        "format": "date_time_no_millis"
+        "format": "strict_date_optional_time||epoch_millis"
       },
       "subjects": {
-        "type": "nested",
+        "type": "object",
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "long"
           },
           "title": {
             "type": "text",
@@ -114,11 +114,11 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
           },
           "created_at": {
             "type": "date",
-            "format": "date_time_no_millis"
+            "format": "strict_date_optional_time||epoch_millis"
           },
           "updated_at": {
             "type": "date",
-            "format": "date_time_no_millis"
+            "format": "strict_date_optional_time||epoch_millis"
           }
         }
       }
