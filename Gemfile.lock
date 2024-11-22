@@ -1755,6 +1755,7 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.17.0-aarch64-linux-gnu)
+    ffi (1.17.0-x86_64-darwin)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
     font-awesome-rails (4.7.0.8)
@@ -1855,6 +1856,7 @@ GEM
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.3)
     libv8-node (18.19.0.0-aarch64-linux)
+    libv8-node (18.19.0.0-x86_64-darwin)
     logger (1.6.1)
     lograge (0.14.0)
       actionpack (>= 4)
@@ -1901,6 +1903,8 @@ GEM
       net-protocol
     nio4r (2.7.3)
     nokogiri (1.16.7-aarch64-linux)
+      racc (~> 1.4)
+    nokogiri (1.16.7-x86_64-darwin)
       racc (~> 1.4)
     open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
@@ -2133,6 +2137,7 @@ GEM
 
 PLATFORMS
   aarch64-linux-gnu
+  x86_64-darwin-23
 
 DEPENDENCIES
   actioncable (~> 7.2)
