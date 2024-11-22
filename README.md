@@ -19,13 +19,7 @@ The app will be available at `http://localhost:3000`.
 Data
 ====
 
-To create and seed the database:
-
-Load schema and data (from within the webapp container):
-
-```
-bundle exec rake db:create db:migrate db:seed
-```
+Locally, the development and test Postgres databases should be created and set up automatically.
 
 To dump data to seed-data dump file (i.e. for use by other devs):
 
@@ -52,11 +46,6 @@ If the school is not found by zcode, the rake task will create a new record.  If
 
 Testing
 ========================
-
-First, set up a test database:
-```
-RAILS_ENV=test bundle exec rake db:drop db:create db:schema:load
-```
 
 For the unit tests and integration tests, please run the following command inside a webapp container while in the root directory.
 
@@ -101,7 +90,7 @@ Setting Up ElasticSearch locally
 =================================
 
 ```
-The MylibraryNyc project uses elastic-search-6.8.
+The MylibraryNyc project uses elastic-search-7.10
 
 Make sure the elasticsearch container is running. Then, enter into a webapp container.
 
@@ -111,43 +100,7 @@ If that doesn't work, you can try 'sh script.elastic_search/delete_es_mappings.s
 
 Enter the local elasticsearch URL (currently http://elasticsearch:9200)
 
-Run the code below in a rails console to update teacherset doc data in the elasticsearch cluster.
-
-TeacherSet.find_each do |ts|
-  arr = []
-  created_at = ts.created_at.present? ? ts.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-  updated_at = ts.updated_at.present? ? ts.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-  availability = ts.availability.present? ? ts.availability.downcase : nil
-  begin
-    subjects_arr = []
-    if ts.subjects.present?
-      ts.subjects.uniq.each do |subject|
-        subjects_hash = {}
-        s_created_at = subject.created_at.present? ? subject.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-        s_updated_at = subject.updated_at.present? ? subject.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
-        subjects_hash[:id] = subject.id
-        subjects_hash[:title] = subject.title
-        subjects_hash[:created_at] = s_created_at
-        subjects_hash[:updated_at] = s_updated_at
-        subjects_arr << subjects_hash
-      end
-    end
-    body = {title: ts.title, description: ts.description, contents: ts.contents,
-      id: ts.id.to_i, details_url: ts.details_url, grade_end: ts.grade_end,
-      grade_begin: ts.grade_begin, availability: availability, total_copies: ts.total_copies,
-      call_number: ts.call_number, language: ts.language, physical_description: ts.physical_description,
-      primary_language: ts.primary_language, created_at: created_at, updated_at: updated_at,
-      available_copies: ts.available_copies, bnumber: ts.bnumber, set_type: ts.set_type,
-      area_of_study: ts.area_of_study, subjects: subjects_arr}
-    ElasticSearch.new.create_document(ts.id, body)
-    puts "updating elastic search"
-  rescue Elasticsearch::Transport::Transport::Errors::Conflict => e
-     puts "Error in elastic search"
-    arr << ts.id
-  end
-  arr
-end
-
+Do `bundle exec rake seeds:teacher_sets` to seed the teacher set data in the development elasticsearch instance.
 ```
 
 
