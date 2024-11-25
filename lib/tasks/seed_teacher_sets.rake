@@ -3,8 +3,7 @@ namespace :seeds do
 
   task teacher_sets: :environment do
     failed = []
-
-    TeacherSet.find_each do |ts|
+    TeacherSet.find_each(batch_size: 1) do |ts|
       created_at = ts.created_at.present? ? ts.created_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
       updated_at = ts.updated_at.present? ? ts.updated_at.strftime("%Y-%m-%dT%H:%M:%S%z") : nil
       availability = ts.availability.present? ? ts.availability.downcase : nil
