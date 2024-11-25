@@ -17,7 +17,7 @@ class ElasticSearch
 
     arguments = {
       host: es_host(@es_config),
-      port: 443,
+      port: @es_config['port'],
       transport_options: {
         request: { open_timeout: @es_config['connect_timeout'] },
         headers: { content_type: 'application/json' }

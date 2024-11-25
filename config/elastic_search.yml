@@ -1,6 +1,7 @@
 development:
   teachersets:
-    host: 'http://elasticsearch:9200'
+    host: 'http://elasticsearch'
+    port: 9200
     connect_timeout: 3
     index: 'teacherset'
     type: '_doc'
@@ -10,6 +11,7 @@ development:
 qa:
   teachersets:
     host: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAKswgagGCSqGSIb3DQEHBqCBmjCBlwIBADCBkQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxmV/rQcH0PEpTP/e0CARCAZM7Y5WpMxizb+hPnVNlHDp2MNM12elMYOcy3n7I0ix+DxfB6EfVDQoSMDSPWSf/uVlaBq/yMdEzYS3ZGN/Zzd1SrmU7N9S5aUEretGu+9/5sPu2eXl/N+mBzYxMqt00oznAf0mk="
+    port: 443
     connect_timeout: 3
     index: 'teacherset'
     type: '_doc'
@@ -19,6 +21,7 @@ qa:
 production:
   teachersets:
     host: "AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAALMwgbAGCSqGSIb3DQEHBqCBojCBnwIBADCBmQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAz+uWwzu8aSQMbcufgCARCAbDerYV+KnsRNGPUtkRFBfynrgCR1i1h+Bx0XFJXvGMlfoqpuQh8PAWUNXjzpmoZhL2TQ9Eht+RIBIW7WlFG8jo1c0rdY4cfsA/wLdUE+VVIzb4WzX0rqS+lRjhMtyNuVJS/2YNWVmtYZAk4LJw=="
+    port: 443
     connect_timeout: 3
     index: 'teacherset'
     type: '_doc'
@@ -28,6 +31,7 @@ production:
 test:
   teachersets:
     host: 'http://elasticsearch:9200'
+    port: 9200
     connect_timeout: 3
     index: 'teacherset'
     type: '_doc'
