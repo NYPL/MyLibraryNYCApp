@@ -23,7 +23,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
             "type": "keyword"
           }
         },
-        "analyzer": "default"
+        "analyzer": "ts_analyzer"
       },
       "description": {
         "type": "text",
@@ -32,7 +32,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
             "type": "keyword"
           }
         },
-        "analyzer": "default"
+        "analyzer": "ts_analyzer"
       },
       "contents": {
         "type": "text",
@@ -41,7 +41,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
             "type": "keyword"
           }
         },
-        "analyzer": "default"
+        "analyzer": "ts_analyzer"
       },
       "grade_begin": {
         "type": "long"
@@ -91,8 +91,7 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
         }
       },
       "primary_language": {
-        "type": "text",
-        "fielddata": true
+        "type": "keyword"
       },
       "available_copies": {
         "type": "long"
@@ -106,12 +105,10 @@ curl -XPUT "$es_url/teacherset?" -H 'Content-Type: application/json' -d '
         }
       },
       "set_type": {
-        "type": "text",
-        "fielddata": true
+        "type": "keyword"
       },
       "area_of_study": {
-        "type": "text",
-        "fielddata": true
+        "type": "keyword"
       },
       "created_at": {
         "type": "date",

@@ -23,7 +23,7 @@ namespace :elasticsearch do
                 type: 'keyword'
               }
             },
-            analyzer: 'default'
+            analyzer: 'ts_analyzer'
           },
           description: {
             type: 'text',
@@ -32,7 +32,7 @@ namespace :elasticsearch do
                 type: 'keyword'
               }
             },
-            analyzer: 'default'
+            analyzer: 'ts_analyzer'
           },
           contents: {
             type: 'text',
@@ -41,7 +41,7 @@ namespace :elasticsearch do
                 type: 'keyword'
               }
             },
-            analyzer: 'default'
+            analyzer: 'ts_analyzer'
           },
           grade_begin: { type: 'long' },
           grade_end: { type: 'long' },
@@ -73,8 +73,7 @@ namespace :elasticsearch do
             }
           },
           primary_language: {
-            type: 'text',
-            fielddata: true
+            type: 'keyword'
           },
           available_copies: { type: 'long' },
           bnumber: {
@@ -84,12 +83,10 @@ namespace :elasticsearch do
             }
           },
           set_type: {
-            type: 'text',
-            fielddata: true
+            type: 'keyword'
           },
           area_of_study: {
-            type: 'text',
-            fielddata: true
+            type: 'keyword'
           },
           created_at: {
             type: 'date',
