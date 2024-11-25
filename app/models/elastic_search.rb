@@ -46,7 +46,7 @@ class ElasticSearch
   # Create elastic search document by id and body. Eg: id: "1234567", body: {id: "1234567", title: "test"}
   def create_document(id, body)
     response = @client.create index: @index, type: @type, id: id, body: body
-    LogWrapper.log('DEBUG', {'message' => "ES document successfully created. Id: #{id}", 
+    LogWrapper.log('DEBUG', {'message' => "ES document successfully created. Id: #{id}",
                              'method' => 'create_document'})
     response
   end
@@ -54,7 +54,7 @@ class ElasticSearch
   # Delete elastic search document by id. Eg: id: "1234567"
   def delete_document_by_id(id)
     response = @client.delete index: @index, type: @type, id: id
-    LogWrapper.log('DEBUG', {'message' => "ES document successfully deleted. Id: #{id}", 
+    LogWrapper.log('DEBUG', {'message' => "ES document successfully deleted. Id: #{id}",
                              'method' => 'delete_document_by_id'})
 
     response
@@ -169,7 +169,7 @@ class ElasticSearch
     # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
     aggregation_hash["area of study"] = { terms: { field: "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
-    aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
+    aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
     :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}},
                                                                                {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
     aggregation_hash
@@ -292,10 +292,10 @@ class ElasticSearch
     end
     query
   end
-  
+
   # Search elastic documents based on the query.Eg: body: {id: "1234567", title: "test"}
   def search_by_query(body)
-    LogWrapper.log('INFO', {'message' => "Elastic search query: #{body}", 
+    LogWrapper.log('INFO', {'message' => "Elastic search query: #{body}",
                             'method' => 'search_by_query'})
     results = {}
     resp = @client.search(index: @index, body: body)
@@ -331,5 +331,34 @@ class ElasticSearch
   # Delete elastic search document by body.Eg: body: {id: "1234567", title: "test"}
   def delete_by_query(query)
     @client.delete_by_query(index: @index, body: query)
+  end
+
+  def create_or_update_index(index_name, body)
+    begin
+      if @client.indices.exists?(index: index_name)
+        puts "Index #{index_name} already exists. Updating..."
+        @client.indices.put_mapping(index: index_name, body: body[:mappings])
+      else
+        puts "Creating index #{index_name}..."
+        @client.indices.create(index: index_name, body: body)
+      end
+      puts "Index #{index_name} created/updated successfully."
+    rescue StandardError => e
+      puts "Error: #{e.message}"
+    end
+  end
+
+  def delete_index(index_name)
+    begin
+      if @client.indices.exists?(index: index_name)
+        puts "Deleting index #{index_name}..."
+        @client.indices.delete(index: index_name)
+        puts "Index #{index_name} deleted successfully."
+      else
+        puts "Index #{index_name} does not exist."
+      end
+    rescue StandardError => e
+      puts "Error: #{e.message}"
+    end
   end
 end

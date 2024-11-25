@@ -19,6 +19,9 @@ services:
       bash -c "
       RAILS_ENV=test bundle exec rake db:set_up_for_local;
       RAILS_ENV=development bundle exec rake db:set_up_for_local;
+      RAILS_ENV=development bundle exec rake elasticsearch:delete_teacherset_index;
+      RAILS_ENV=development bundle exec rake elasticsearch:create_teacherset_index;
+      RAILS_ENV=development bundle exec rake seeds:teacher_sets;
       bundle exec rails server -b 0.0.0.0
       "
 
