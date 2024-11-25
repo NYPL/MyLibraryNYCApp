@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 require 'csv'
-require 'pry'
-
+require 'pry' if Rails.env.development?
 
 namespace :sync_users do
 
