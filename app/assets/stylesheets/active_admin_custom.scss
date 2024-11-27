@@ -71,7 +71,17 @@
     width: 16% !important;
     display: table-row-group;
   }
-  
+
+  form fieldset > ol > li.boolean label[for="school_active"],
+  form fieldset > ol > li.boolean label[for="allowed_user_email_masks_active"] {
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+    margin-left: 0;
+    cursor: pointer;
+    padding-left: 16%;
+  }
+
   body.active_admin {
     #hold_change_cancel_action {
       margin-right: 10px;
