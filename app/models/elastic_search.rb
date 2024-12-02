@@ -14,8 +14,10 @@ class ElasticSearch
   def initialize(_index = nil)
     # Load elastic search configs from 'config/elastic_search.yml'.
     @es_config = MlnConfigurationController.new.elasticsearch_config('teachersets')
+
     arguments = {
       host: es_host(@es_config),
+      port: @es_config['port'],
       transport_options: {
         request: { open_timeout: @es_config['connect_timeout'] },
         headers: { content_type: 'application/json' }
@@ -24,27 +26,27 @@ class ElasticSearch
     @client = Elasticsearch::Client.new(arguments)
     @current_file = File.basename(__FILE__)
     @index = @es_config['index'] || 'teacherset'
-    @type = @es_config['type'] || 'teacherset'
+    @type = @es_config['type'] || '_doc'
     @teachersets_per_page = @es_config['teachersets_per_page'] || 10
     @size = @es_config['size'] || 10000
   end
-  
+
   # Decode aws elastic-search url
   def es_host(config)
     return if !config['host'].present? || ENV['RAILS_ENV'] == "test"
 
-    return config['host'] if ENV['RAILS_ENV'] == "local"
+    return config['host'] if ENV['RAILS_ENV'] == "development"
 
     es_host = AwsDecrypt.decrypt_kms(config['host'])
     return unless es_host.present?
-    
+
     "https://#{es_host}"
   end
-  
+
   # Create elastic search document by id and body. Eg: id: "1234567", body: {id: "1234567", title: "test"}
   def create_document(id, body)
     response = @client.create index: @index, type: @type, id: id, body: body
-    LogWrapper.log('DEBUG', {'message' => "ES document successfully created. Id: #{id}", 
+    LogWrapper.log('DEBUG', {'message' => "ES document successfully created. Id: #{id}",
                              'method' => 'create_document'})
     response
   end
@@ -52,12 +54,12 @@ class ElasticSearch
   # Delete elastic search document by id. Eg: id: "1234567"
   def delete_document_by_id(id)
     response = @client.delete index: @index, type: @type, id: id
-    LogWrapper.log('DEBUG', {'message' => "ES document successfully deleted. Id: #{id}", 
+    LogWrapper.log('DEBUG', {'message' => "ES document successfully deleted. Id: #{id}",
                              'method' => 'delete_document_by_id'})
 
     response
   end
-  
+
   # Teacher set filter params
   def teacher_sets_input_params(params)
     keyword = params["keyword"]
@@ -73,12 +75,12 @@ class ElasticSearch
 
   # Get teacher sets documents from elastic search.
   def get_teacher_sets_from_es(params)
-    
+
     # Per page showing 10 teachersets.
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
     query, agg_hash = teacher_sets_query_based_on_filters(params)
-    
+
     query[:from] = from
     query[:size] = @teachersets_per_page
     # Sorting teachersets based on availability and created_at values. 
@@ -90,7 +92,6 @@ class ElasticSearch
     [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
-    
   end
 
   # Get elastic serach queries based on input filter params.
@@ -105,12 +106,12 @@ class ElasticSearch
     # Eg: wrong spelling: 'hiden figurs', Still fuzziness will give results like "Hidden Figures"
 
     if keyword.present?
-      subjects_query = {:nested => {:path => "subjects", :query => 
+      subjects_query = {:nested => {:path => "subjects", :query =>
       [
         {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["subjects.title^3"]}},
         {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["subjects.title^3"]}}
       ]}}
-      query[:query][:bool][:must] << {:bool => {:should => 
+      query[:query][:bool][:must] << {:bool => {:should =>
       [
         {:multi_match => {:query => keyword, :type => "phrase_prefix", :boost => 3, :fields => ["title^10", "description^2", "contents"]}},
         {:multi_match => {:query => keyword, :fuzziness => 1, :fields => ["title^10", "description^2", "contents"]}},
@@ -130,7 +131,6 @@ class ElasticSearch
     if language.present?
       query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[primary_language]}}
     end
-    
 
     # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi
@@ -169,12 +169,12 @@ class ElasticSearch
     # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
     aggregation_hash["area of study"] = { terms: { field: "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
-    aggregation_hash["subjects"] = {:nested => {:path => "subjects"}, 
-    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}}, 
+    aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
+    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}},
                                                                                {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
     aggregation_hash
-  end  
-  
+  end
+
   # Get teacher set facets
   def facets_for_teacher_sets(teacher_sets_docs, params)
     facets = []
@@ -196,7 +196,7 @@ class ElasticSearch
     end
     facets
   end
- 
+
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study) 
   def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets)
     [
@@ -231,7 +231,7 @@ class ElasticSearch
 
   # Get subject facets
   # facets eg: [ {:label=>"language", :items=> [{:value=>"Chinese", :label=>"Chinese", :count=>34}]},
-  # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable", 
+  # {:label=>"availability", :items=>[{:value=>"available", :label=>"Available", :count=>1223}, {:value=>"unavailable",
   # :label=>"Checked Out", :count=>32}]},
   # {:label=>"set type", :items=>[{:value=>"multi", :label=>"Topic Sets", :count=>910}, {:value=>"single", :label=>"Book Club Set", :count=>276}]},
   # {:label=>"area of study", :items=> [{:value=>"Arabic Language Arts.", :label=>"Arabic Language Arts.", :count=>1}]}]
@@ -292,10 +292,10 @@ class ElasticSearch
     end
     query
   end
-  
+
   # Search elastic documents based on the query.Eg: body: {id: "1234567", title: "test"}
   def search_by_query(body)
-    LogWrapper.log('INFO', {'message' => "Elastic search query: #{body}", 
+    LogWrapper.log('INFO', {'message' => "Elastic search query: #{body}",
                             'method' => 'search_by_query'})
     results = {}
     resp = @client.search(index: @index, body: body)
@@ -331,6 +331,34 @@ class ElasticSearch
   # Delete elastic search document by body.Eg: body: {id: "1234567", title: "test"}
   def delete_by_query(query)
     @client.delete_by_query(index: @index, body: query)
-    
+  end
+
+  def create_or_update_index(index_name, body)
+    begin
+      if @client.indices.exists?(index: index_name)
+        puts "Index #{index_name} already exists. Updating..."
+        @client.indices.put_mapping(index: index_name, body: body[:mappings])
+      else
+        puts "Creating index #{index_name}..."
+        @client.indices.create(index: index_name, body: body)
+      end
+      puts "Index #{index_name} created/updated successfully."
+    rescue StandardError => e
+      puts "Error: #{e.message}"
+    end
+  end
+
+  def delete_index(index_name)
+    begin
+      if @client.indices.exists?(index: index_name)
+        puts "Deleting index #{index_name}..."
+        @client.indices.delete(index: index_name)
+        puts "Index #{index_name} deleted successfully."
+      else
+        puts "Index #{index_name} does not exist."
+      end
+    rescue StandardError => e
+      puts "Error: #{e.message}"
+    end
   end
 end

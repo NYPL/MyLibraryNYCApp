@@ -7,7 +7,7 @@ hold1:
   teacher_set: [teacher_set_one, teacher_set_two]
   user: user1
   teacher_set_id: teacher_set_one.id
-  
+
 hold2:
   access_key: access_key2
   status: new
@@ -69,6 +69,7 @@ hold10:
   user: user1
   quantity: 2
   teacher_set_id: teacher_set_eight.id
+
 hold11:
   access_key: access_key11
   teacher_set: nil

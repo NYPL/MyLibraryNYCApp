@@ -1,7 +1,3 @@
-local:
-  teacherset.data.from.elasticsearch.enabled: true
-  news_letter.enabled: true
-  signup.pin_password.enabled: false
 development:
   teacherset.data.from.elasticsearch.enabled: true
   news_letter.enabled: true

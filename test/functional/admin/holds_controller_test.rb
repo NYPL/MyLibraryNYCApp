@@ -21,7 +21,6 @@ module Admin
       assert_response :success
     end
 
-
     test "Teacher set no longer exist for hold" do
       # @hold11 = this hold does not have any teacher-set.
       get :show, params: { id: @hold11.id }

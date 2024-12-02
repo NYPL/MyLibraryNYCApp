@@ -2,10 +2,16 @@
 
 class BooksController < ApplicationController
 
+  # looks like this endpoint has no template (@JC 2024-10-03)
   def index
     @books = Book.paginate(:page => params[:page])
+
+#    respond_to do |format|
+#      format.html # Render the default HTML view
+#      format.json { render json: @books } # Optionally, support JSON
+#    end
   end
-  
+
   def show
     if storable_location?
       store_user_location!

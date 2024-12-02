@@ -19,8 +19,8 @@ class CreateVersions < ActiveRecord::Migration[4.2]
   TEXT_BYTES = 1_073_741_823
 
   def change
-    create_table :versions, versions_table_options do |t|
-      t.string   :item_type, item_type_options
+    create_table :versions, **versions_table_options do |t|
+      t.string   :item_type, **item_type_options
       t.integer  :item_id,   null: false, limit: 8
       t.string   :event,     null: false
       t.string   :whodunnit

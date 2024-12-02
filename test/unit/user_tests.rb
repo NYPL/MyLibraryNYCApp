@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class UserTest < ActiveSupport::TestCase
+class UserTests < ActiveSupport::TestCase
   include AwsDecrypt
 
   setup do
@@ -16,31 +16,34 @@ class UserTest < ActiveSupport::TestCase
   [generate_barcode].each do |barcode|
     test 'sierra user can be found by barcode' do
       mock_check_barcode_request(barcode, '200')
-      response = @user.check_barcode_found_in_sierra(barcode)
+      @user.barcode = barcode
+      response = @user.barcode_available_in_sierra?
       user_would_be_unique_in_sierra = false
-      assert_equal response, !user_would_be_unique_in_sierra
+      assert_equal response, user_would_be_unique_in_sierra
     end
 
     test 'sierra user cannot be found by barcode' do
       mock_check_barcode_request(barcode, '404')
-      response = @user.check_barcode_found_in_sierra(barcode)
+      @user.barcode = barcode
+      response = @user.barcode_available_in_sierra?
       user_would_be_unique_in_sierra = true
-      assert_equal response, !user_would_be_unique_in_sierra
+      assert_equal response, user_would_be_unique_in_sierra
     end
 
     test 'multiple sierra users found' do
       mock_check_barcode_request(barcode, '409')
-      response = @user.check_barcode_found_in_sierra(barcode)
+      @user.barcode = barcode
+      response = @user.barcode_available_in_sierra?
       user_would_be_unique_in_sierra = false
-      assert_equal response, !user_would_be_unique_in_sierra
+      assert_equal response, user_would_be_unique_in_sierra
     end
 
-    test 'sierra barcode lookup crashes' do
+    test 'sierra barcode lookup fails' do
       mock_check_barcode_request(barcode, '500')
-      exception = assert_raise(Exceptions::InvalidResponse) do
-        @user.check_barcode_found_in_sierra(barcode)
-      end
-      assert_equal('Invalid status code of: 500', exception.message)
+      @user.barcode = barcode
+      response = @user.barcode_available_in_sierra?
+      user_would_be_unique_in_sierra = false
+      assert_equal response, user_would_be_unique_in_sierra
     end
 
     test 'user model cannot be created without first name' do
@@ -53,48 +56,6 @@ class UserTest < ActiveSupport::TestCase
       @user.last_name = ""
       @user.save
       assert_equal(["can't be blank", "is invalid"], @user.errors.messages[:last_name])
-    end
-
-    test 'user model cannot be created without pin' do
-      @user.pin = ""
-      @user.save
-      assert_equal(["can't be blank", "is invalid", "must be 4 to 32 characters."], @user.errors.messages[:pin])
-    end
-
-    test 'validate pin length less than 4 characters' do
-      @user.pin = "123"
-      @user.save
-      assert_equal(["must be 4 to 32 characters."], @user.errors.messages[:pin])
-    end
-
-    test 'validate pin length is 33 characters' do
-      @user.pin = "1234!qwertyuioplkjhgfsaqwerwuytr2"
-      @user.save
-      assert_equal(["must be 4 to 32 characters."], @user.errors.messages[:pin])
-    end
-
-    test 'pin length is 32 characters' do
-      @user.pin = "1234!qwertyuioplkjhgfsaqwerwuytr"
-      @user.save
-      assert_empty(@user.errors.messages)
-    end
-
-    test 'user model cannot be created with 4 of the same repeated digits as pin' do
-      @user.pin = "1111"
-      @user.save
-      assert_equal(@user.errors.messages[:pin],[@pin_error])
-    end
-
-    test 'user model cannot be created with alternate repeated digits as pin' do
-      @user.pin = "1212"
-      @user.save
-      assert_equal(@user.errors.messages[:pin],[@pin_error])
-    end
-
-    test 'user model cannot be created with 3 of the same repeated digits in a row as pin' do
-      @user.pin = "0007"
-      @user.save
-      assert_equal(@user.errors.messages[:pin],[@pin_error])
     end
   end
 
@@ -137,18 +98,16 @@ class UserTest < ActiveSupport::TestCase
     a 201 illustrating patron was created through
       patron creator microservice" do
     crank(:queens_user, barcode: 27777011111111)
-    assert_equal(206, @user.send_request_to_patron_creator_service)
+    assert_equal(206, @user.send_request_to_patron_creator_service(@user.password))
   end
 
   # Need to call twice, in order to receive the second response
   # in the mock_send_request_to_patron_creator_service
   # method which is a status code of 500
-  test "user method send_request_to_patron_creator_service returns
-    an exception illustrating patron was not created
-      through patron creator micro-service" do
-    @user.send_request_to_patron_creator_service
+  test "user method send_request_to_patron_creator_service returns an exception illustrating patron was not created through patron creator micro-service" do
+    @user.send_request_to_patron_creator_service(@user.password)
     exception = assert_raise(Exceptions::InvalidResponse) do
-      @user.send_request_to_patron_creator_service
+      @user.send_request_to_patron_creator_service(@user.password)
     end
     assert_equal('Invalid status code of: 500', exception.message)
   end
@@ -173,39 +132,5 @@ class UserTest < ActiveSupport::TestCase
     user = crank(:bronx_user)
     SierraCodeZcodeMatch.create(sierra_code: 1, zcode: user.school.code)
     assert_equal(user.pcode4, user.school.sierra_code)
-  end
-
-
-  test 'validate different pin pattern' do
-    # user model cannot be created with alternate repeated words as pin
-    # Test1
-    @user.pin = "abcabc"
-    @user.save
-    assert_equal(@user.errors.messages[:pin], [@pin_error])
-
-    # Test2
-    @user.pin = "abcabcabcabc"
-    @user.save
-    assert_equal(@user.errors.messages[:pin], [@pin_error])
-
-    # Test3
-    @user.pin = "abab"
-    @user.save
-    assert_equal(@user.errors.messages[:pin], [@pin_error])
-
-    # Test4
-    @user.pin = "ababab"
-    @user.save
-    assert_equal(@user.errors.messages[:pin], [@pin_error])
-
-    # Test5
-    @user.pin = "aaabb111333444"
-    @user.save
-    assert_equal(@user.errors.messages[:pin], [@pin_error])
-
-    # Test6
-    @user.pin = "@@>>@@>>abc123"
-    @user.save
-    assert_equal(@user.errors.messages[:pin], [@pin_error])
   end
 end

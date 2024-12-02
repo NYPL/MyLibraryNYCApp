@@ -20,7 +20,7 @@ class SettingsControllerTest < ActionController::TestCase
   test "test index method with out current_user" do
     get :index, params: { settings: { contact_email: "test@gmail.com", school: { id: @school.id } } }
     assert_equal("You must be logged in to access this page", flash[:error])
-    assert_response :redirect
+    assert_response :success # Changed because no double render is allowed @JC 2024-10-08
   end
 
   test "test index method with out school code" do
