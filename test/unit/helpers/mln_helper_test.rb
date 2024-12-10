@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class MlnHelperTest < MiniTest::Test
+class MlnHelperTest < Minitest::Test
   extend Minitest::Spec::DSL
   include LogWrapper
   include MlnResponse

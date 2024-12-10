@@ -1,0 +1,11 @@
+test:
+  adapter: test
+
+development:
+  adapter: async
+
+qa:
+  adapter: async
+
+production:
+  adapter: async

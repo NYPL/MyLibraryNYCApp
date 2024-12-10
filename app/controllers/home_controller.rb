@@ -5,9 +5,7 @@ require 'open-uri'
 class HomeController < ApplicationController
   layout 'empty', :only => [ :extend_session_iframe ]
 
-  def index
-    
-  end
+  def index; end
 
   def mln_file_names
     calendar_event = Document.calendar_of_events
@@ -16,28 +14,16 @@ class HomeController < ApplicationController
   end
 
   def swagger_docs
-  	render :json => File.read("app/controllers/api/swagger/swaggerDoc.json")
-  end 
-  
-  def secondary_menu
+    render :json => File.read("app/controllers/api/swagger/swaggerDoc.json")
   end
-  
+
+  # I'm not sure this is still needed (@JC 2024-10-03)
+  def secondary_menu; end
+
   # for timing out sessions, this method reloads a hidden iframe so that the user's session["warden.user.user.session"]["last_request_at"] updates
   def extend_session_iframe
     user_signed_in?
   end
-
-  # Display's mylibrarynyc information
-  def about; end
-
-
-  # Display's mylibrarynyc contact's information
-  def contacts; end
-
-
-  # Display's mylibrarynyc school's information
-  def participating_schools; end
-  
 
   def digital_resources; end
 
@@ -45,26 +31,14 @@ class HomeController < ApplicationController
     store_location_for(:user, "contact")
   end
 
-  def faq
-    faqs = FaqsController.new.frequently_asked_questions
-    render json: { faqs: faqs }
-  end
-
-  def faq_data
-    
-  end
+  def faq_data; end
 
   # Create news-letter confirmation email in google sheets
-  def newsletter_confirmation
-    
-  end
+  def newsletter_confirmation; end
 
   def newsletter_confirmation_msg
     is_success = NewsLetterController.new.create_news_letter_email_in_google_sheets(params)
     render json: { success: is_success }
-  end
-
-  def calendar_event_error
   end
 
   def calendar_event
@@ -91,7 +65,7 @@ class HomeController < ApplicationController
       respond_to do |format|
         file = URI.open(File.join(Rails.root, 'app/javascript/pdf/2021_2022_MyLibraryNYC_Menu_of_Services_for_Educators.pdf'))
         menu_of_services_pdf = file.read
-        format.pdf do 
+        format.pdf do
           send_data(menu_of_services_pdf, type: "application/pdf", disposition: :inline)
         end
       end
