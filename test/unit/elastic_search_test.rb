@@ -12,7 +12,7 @@ class ElasticSearchTest < Minitest::Test
     @mintest_mock2 = Minitest::Mock.new
     # models the format of the ES query terms, the structure we'll be sending our search requests in
     @agg_hash = {"language" => {:terms => {:field => "primary_language", :size => 100, :order => {:_key => "asc"}}},
-        "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},
+        "set type" => {:terms => {:field => "set_type", :size => 100, :order => {:_key => "asc"}}},
         "availability" => {:terms => {:field => "availability.raw", :size => 10, :order => {:_key => "asc"}}},
         "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
         "subjects" =>  {:nested => {:path => "subjects"}, :aggregations => {:subjects => {:composite => {:size => 3000,
@@ -54,7 +54,7 @@ class ElasticSearchTest < Minitest::Test
                         {:multi_match => {:query => "test", :fuzziness => 1, :fields => ["subjects.title^3"]}}]}},
                    {:term => {:'title.keyword' => {:value => "test"}}}]}}]}}},
                     {"language" => {:terms => {:field => "primary_language", :size => 100, :order => {:_key => "asc"}}},
-                     "set type" => {:terms => {:field => "set_type", :size => 10, :order => {:_key => "asc"}}},
+                     "set type" => {:terms => {:field => "set_type", :size => 100, :order => {:_key => "asc"}}},
                      "availability" => {:terms => {:field => "availability.raw", :size => 10, :order => {:_key => "asc"}}},
                      "area of study" => {:terms => {:field => "area_of_study", :size => 100, :order => {:_key => "asc"}}},
                      "subjects" => 
