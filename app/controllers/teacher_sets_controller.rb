@@ -30,7 +30,6 @@ class TeacherSetsController < ApplicationController
       teacher_sets, @facets, total_count = ElasticSearch.new.get_teacher_sets_from_es(params)
       @teacher_sets = teacher_sets_from_elastic_search_doc(teacher_sets)
     end
-
     # Determine what facets are selected based on query string
     @facets.each do |f|
       f[:items].each do |v|
@@ -175,7 +174,8 @@ class TeacherSetsController < ApplicationController
       user: current_user,
       allowed_quantities: allowed_quantities,
       books: ts_books,
-      teacher_set_notes: @set.teacher_set_notes
+      teacher_set_notes: @set.teacher_set_notes,
+      is_school_active: current_user.school_id.present? ? School.find(current_user.school_id).active : false
     }
   end
 
