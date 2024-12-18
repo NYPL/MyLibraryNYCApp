@@ -66,22 +66,24 @@ export default function TeacherSetOrder(props) {
     return hold && hold.status === "cancelled" ? "none" : "block";
   };
 
+  const handleSubmit = () => {
+    window.scrollTo({ top: 10 })
+    const href = "/holds/" + params["access_key"] + "/cancel";
+    window.location.href = href;
+  };
+
   const CancelButton = () => {
     return (
       <div style={{ display: showCancelButton() }}>
         <Button
           id="order-cancel-button"
-          className="cancel-button"
-          buttonType="secondary"
-          onClick={() => window.scrollTo({ top: 10 })}
+          buttonType="noBrand"
+          marginTop="s"
+          type="button"
+          screenreaderOnlyText="Confirmation cancel button"
+          onClick={() => handleSubmit()}
         >
-          <Link
-            className={`${colorMode} cancelOrderButton`}
-            href={"/holds/" + params["access_key"] + "/cancel"}
-          >
-            {" "}
-            Cancel my order{" "}
-          </Link>
+          Cancel my order
         </Button>
       </div>
     );
