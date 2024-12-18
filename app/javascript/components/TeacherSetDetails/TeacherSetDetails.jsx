@@ -55,6 +55,7 @@ export default function TeacherSetDetails(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserStatus, setCurrentUserStatus] = useState();
   const [disabledButton, setDisabledButton] = useState(false);
+  const [isSchoolActive, setIsSchoolActive] = useState(false);
   const heroBgColor = useColorModeValue(
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
@@ -108,6 +109,8 @@ export default function TeacherSetDetails(props) {
         setTeacherSetNotes(res.data.teacher_set_notes);
         let userStatus = res.data.user ? res.data.user.status : "";
         setCurrentUserStatus(userStatus);
+        setIsSchoolActive(res.data.is_school_active)
+        setDisabledButton(!res.data.is_school_active)
         if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
           adobeAnalyticsForTeacherSet(res.data.teacher_set);
         }
@@ -530,6 +533,14 @@ export default function TeacherSetDetails(props) {
     }
   };
 
+  const inactiveSchoolMessage = () => {
+    if (!isSchoolActive) {
+      return (<Banner content={<>
+        Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
+      </>} type="warning" />)
+    }
+  }
+
   const teacherSetAvailability = () => {
     if (isLargerThanMobile && teacherSet.availability !== undefined) {
       return (
@@ -793,7 +804,12 @@ export default function TeacherSetDetails(props) {
           />
         </>
       }
-      contentTop={errorMsg()}
+      contentTop={
+        <>
+          {errorMsg()}
+          {inactiveSchoolMessage()}
+        </>
+      }
       contentPrimary={
         <>
           <Flex alignItems="baseline">
