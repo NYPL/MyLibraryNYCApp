@@ -11,7 +11,9 @@ require 'mocha/minitest'
 class TeacherSetsControllerTest < ActionController::TestCase
 
   setup do
+    @user = users(:user1)
     @teacher_set = teacher_sets(:teacher_set_one)
+    sign_in @user
   end
 
   test "should get index" do
