@@ -54,6 +54,7 @@ export default function TeacherSetDetails(props) {
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserStatus, setCurrentUserStatus] = useState();
+  const [disabledButton, setDisabledButton] = useState(false);
   const heroBgColor = useColorModeValue(
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
@@ -122,7 +123,7 @@ export default function TeacherSetDetails(props) {
       .catch(function (error) {
         console.log(error);
         console.error(error);
-      });
+      })
   }, []);
 
   const handleQuantity = (event) => {
@@ -148,6 +149,7 @@ export default function TeacherSetDetails(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setDisabledButton(true);
     axios.defaults.headers.common["X-CSRF-TOKEN"] = document
       .querySelector("meta[name='csrf-token']")
       .getAttribute("content");
@@ -175,7 +177,10 @@ export default function TeacherSetDetails(props) {
         }
       })
       .catch(function (error) {
+        setDisabledButton(false);
         console.log(error);
+      }).finally(() => {
+        setDisabledButton(false);
       });
   };
 
@@ -439,6 +444,7 @@ export default function TeacherSetDetails(props) {
                 id="ts-order-submit"
                 buttonType="noBrand"
                 onClick={handleSubmit}
+                isDisabled={disabledButton}
               >
                 {" "}
                 Place order{" "}

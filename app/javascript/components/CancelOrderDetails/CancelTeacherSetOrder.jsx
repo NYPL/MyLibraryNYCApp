@@ -23,6 +23,7 @@ export default function TeacherSetOrder() {
   const [teacher_set, setTeacherSet] = useState("");
   const [comment, setComment] = useState("");
   const { colorMode } = useColorMode();
+  const [disabledButton, setDisabledButton] = useState(false);
 
   useEffect(() => {
     document.title = "Cancel Order | MyLibraryNYC";
@@ -45,6 +46,7 @@ export default function TeacherSetOrder() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setDisabledButton(true)
     axios
       .put("/holds/" + access_key, {
         hold_change: { status: "cancelled", comment: comment },
@@ -62,6 +64,8 @@ export default function TeacherSetOrder() {
       })
       .catch(function (error) {
         console.log(error);
+      }).finally(() => {
+        setDisabledButton(false);
       });
   };
 
@@ -99,6 +103,7 @@ export default function TeacherSetOrder() {
               buttonType="noBrand"
               onClick={handleSubmit}
               marginTop="xs"
+              isDisabled={disabledButton}
             >
               Cancel my order
             </Button>
