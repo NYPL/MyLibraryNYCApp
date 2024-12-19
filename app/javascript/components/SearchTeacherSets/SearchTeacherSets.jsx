@@ -374,7 +374,7 @@ export default function SearchTeacherSets(props) {
           ref={searchResultsTextRef}
           tabIndex={-1}
           size="heading6"
-          marginBottom="s"
+          marginBottom="m"
         >
           {"Showing " +
             test +
@@ -409,7 +409,7 @@ export default function SearchTeacherSets(props) {
           ref={searchResultsTextRef}
           tabIndex={-1}
           size="heading6"
-          marginBottom="s"
+          marginBottom="m"
         >
           {"Showing " +
             fromResults +
