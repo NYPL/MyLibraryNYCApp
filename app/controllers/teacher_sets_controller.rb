@@ -168,6 +168,7 @@ class TeacherSetsController < ApplicationController
 
     # Button should be disabled after teacher has ordered maximum.
     allowed_quantities = user_has_ordered_max ? [] : (1..max_copies_requestable.to_i).to_a
+    
     render json: {
       teacher_set: @set,
       active_hold: @active_hold,
@@ -175,7 +176,7 @@ class TeacherSetsController < ApplicationController
       allowed_quantities: allowed_quantities,
       books: ts_books,
       teacher_set_notes: @set.teacher_set_notes,
-      is_school_active: current_user.school_id.present? ? School.find(current_user.school_id).active : false
+      is_school_active: current_user&.school&.active || false
     }
   end
 
