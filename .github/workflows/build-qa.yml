@@ -1,9 +1,14 @@
 name: Deploy QA
+# on:
+#   workflow_run:
+#     workflows: ["CI"]
+#     types:
+#       - completed
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+  push:
+    branches:
+      - MLN-1304
+
 
 permissions:
   id-token: write
