@@ -55,7 +55,7 @@ export default function TeacherSetDetails(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserStatus, setCurrentUserStatus] = useState();
   const [disabledButton, setDisabledButton] = useState(false);
-  const [isSchoolActive, setIsSchoolActive] = useState(false);
+  const [isSchoolActive, setIsSchoolActive] = useState("");
   const heroBgColor = useColorModeValue(
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
@@ -534,7 +534,7 @@ export default function TeacherSetDetails(props) {
   };
 
   const inactiveSchoolMessage = () => {
-    if (!isSchoolActive) {
+    if (isSchoolActive !== "" && isSchoolActive == false) {
       return (<Banner content={<>
         Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
       </>} type="warning" />)
