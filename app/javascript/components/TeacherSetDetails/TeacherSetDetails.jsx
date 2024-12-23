@@ -534,7 +534,7 @@ export default function TeacherSetDetails(props) {
   };
 
   const inactiveSchoolMessage = () => {
-    if (isSchoolActive !== "" && isSchoolActive == false) {
+    if (currentUserStatus !== undefined && isSchoolActive !== "" && isSchoolActive == false) {
       return (<Banner content={<>
         Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
       </>} type="warning" />)
