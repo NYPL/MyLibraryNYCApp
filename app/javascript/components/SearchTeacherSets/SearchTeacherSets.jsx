@@ -517,7 +517,7 @@ export default function SearchTeacherSets(props) {
               id={"ts-details-" + i}
               isAlignedRightActions
               layout="row"
-              marginBottom="xs"
+              marginBottom="m"
             >
               <CardHeading
                 level="h3"
