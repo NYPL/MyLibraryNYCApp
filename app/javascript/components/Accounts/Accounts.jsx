@@ -189,23 +189,28 @@ export default function Accounts() {
     }
   };
 
+  const handleCancel = (hold) => {
+    const href = "/holds/" + hold["access_key"] + "/cancel";
+    window.location.href = href;
+  }
+
   const orderCancelConfirmation = (hold) => {
     return (
       <div id={"cancel_" + hold["access_key"]}>
         <ButtonGroup buttonWidth="full">
-          <Button id="account-page-cancel-button" buttonType="noBrand">
-            <Link
-              className="accountPageCancelOrder"
-              href={"/holds/" + hold["access_key"] + "/cancel"}
-            >
-              {" "}
-              Cancel{" "}
-            </Link>
+          <Button id="account-page-cancel-button" buttonType="noBrand"
+            onClick={() => handleCancel(hold)}>
+            Cancel
           </Button>
         </ButtonGroup>
       </div>
     );
   };
+
+  const handleOrder = (hold ) => {
+    const href = "/teacher_set_details/" + hold.teacher_set_id;
+    window.location.href = href;
+  }
 
   const orderTeacherSet = (hold) => {
     return (
@@ -215,15 +220,10 @@ export default function Accounts() {
             id="account-page-order-button"
             buttonType="secondary"
             whiteSpace="nowrap"
+            onClick={() => handleOrder(hold)}
+            style={{color: "var(--nypl-colors-ui-black)"}}
           >
-            <Link
-              id="account-page-order-link"
-              className={`${colorMode} accountPageTeacherSetOrder`}
-              href={"/teacher_set_details/" + hold.teacher_set_id}
-            >
-              {" "}
-              Order again{" "}
-            </Link>
+            Order again
           </Button>
         </ButtonGroup>
       </div>

@@ -540,3 +540,9 @@ ul.list li:before {
   display: flex;
   justify-content: space-between;
 }
+
+#teacher-set-results {
+  .card-right {
+    flex-shrink: 8 !important;
+  }
+}

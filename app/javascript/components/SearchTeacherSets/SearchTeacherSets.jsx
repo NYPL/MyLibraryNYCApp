@@ -15,6 +15,7 @@ import {
   Card,
   CardHeading,
   CardContent,
+  CardActions,
   Pagination,
   Checkbox,
   TemplateAppContainer,
@@ -367,13 +368,13 @@ export default function SearchTeacherSets(props) {
           : paginationData;
 
       return (
-        <Text
-          marginTop="m"
+        <Heading
           id="ts-result-found-id"
-          fontWeight="medium"
           aria-live="polite"
           ref={searchResultsTextRef}
-          tabIndex={-1} 
+          tabIndex={-1}
+          size="heading6"
+          marginBottom="m"
         >
           {"Showing " +
             test +
@@ -383,7 +384,7 @@ export default function SearchTeacherSets(props) {
             tsTotalCount +
             " result" +
             appendKeyword}
-        </Text>
+        </Heading>
       );
     } else if (tsTotalCount >= 1) {
       const pageCount = 10;
@@ -402,13 +403,13 @@ export default function SearchTeacherSets(props) {
       );
 
       return (
-        <Text
-          marginTop="m"
+        <Heading
           id="ts-results-found-id"
-          fontWeight="medium"
           aria-live="polite"
           ref={searchResultsTextRef}
-          tabIndex={-1} 
+          tabIndex={-1}
+          size="heading6"
+          marginBottom="m"
         >
           {"Showing " +
             fromResults +
@@ -418,7 +419,7 @@ export default function SearchTeacherSets(props) {
             tsTotalCount +
             " results" +
             appendKeyword}
-        </Text>
+        </Heading>
       );
     }
   };
@@ -480,6 +481,30 @@ export default function SearchTeacherSets(props) {
     return ts.availability === "available" ? "informative" : "neutral";
   };
 
+  const displayAvailableCopies = (ts) => {
+    return (
+      <>
+        {availableCopies(ts)} of {totalCopies(ts)} copies available
+      </>
+    );
+  };
+
+  const availableCopies = (ts) => {
+    if (ts.available_copies !== undefined) {
+      return ts.available_copies;
+    } else {
+      return "";
+    }
+  };
+
+  const totalCopies = (ts) => {
+    if (ts.total_copies !== undefined) {
+      return ts.total_copies;
+    } else {
+      return "";
+    }
+  };
+
   const teacherSetDetails = () => {
     if (teacherSets.length >= 0) {
       return teacherSets.map((ts, i) => {
@@ -490,15 +515,16 @@ export default function SearchTeacherSets(props) {
           >
             <Card
               id={"ts-details-" + i}
+              isAlignedRightActions
               layout="row"
-              aspectratio="square"
-              size="xxsmall"
-              marginTop="s"
+              marginBottom="m"
             >
               <CardHeading
-                marginBottom="xs"
                 level="h3"
+                size="heading5"
                 id={"ts-order-details-" + i}
+                overline={ts.suitabilities_string}
+                subtitle={displayAvailableCopies(ts)}
               >
                 <ReactRouterLink
                   to={"/teacher_set_details/" + ts.id}
@@ -508,19 +534,16 @@ export default function SearchTeacherSets(props) {
                   {ts.title}
                 </ReactRouterLink>
               </CardHeading>
-              <CardContent marginBottom="xs" id={"ts-suitabilities-" + i}>
-                {ts.suitabilities_string}
-              </CardContent>
-              <CardContent marginBottom="s" id={"ts-availability-" + i}>
-                {teacherSetAvailability(ts)}
-              </CardContent>
               <CardContent id={"ts-description-" + i}>
                 {ts.description}
               </CardContent>
+              <CardActions id={"ts-availability-" + i} marginTop="m">
+                {teacherSetAvailability(ts)}
+              </CardActions>
             </Card>
             <HorizontalRule
-              marginTop="l"
-              marginBottom="l"
+              marginTop="m"
+              marginBottom="m"
               id={"ts-horizontal-rule-" + i}
               align="left"
               className={`${colorMode} tsDetailHorizontalLine`}
