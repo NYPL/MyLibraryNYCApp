@@ -507,6 +507,8 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetDetails = () => {
+    const  availabilityStatusStyle = isLargerThanMedium ? "end" : "";
+
     if (teacherSets.length >= 0) {
       return teacherSets.map((ts, i) => {
         return (
@@ -538,7 +540,7 @@ export default function SearchTeacherSets(props) {
               <CardContent id={"ts-description-" + i}>
                 {ts.description}
               </CardContent>
-              <CardActions id={"ts-availability-" + i} marginTop="m" justifyContent="end">
+              <CardActions id={"ts-availability-" + i} marginTop="m" justifyContent={isLargerThanMedium ? "end" : "start"}>
                 {teacherSetAvailability(ts)}
               </CardActions>
             </Card>
