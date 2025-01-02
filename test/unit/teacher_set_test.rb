@@ -491,7 +491,8 @@ class TeacherSetTest < ActiveSupport::TestCase
                 "_shards" => {"total" => 0, "successful" => 1, "failed" => 0}}
       body = {
          :availability => @teacher_set2.availability,
-         :available_copies => @teacher_set2.available_copies
+         :available_copies => @teacher_set2.available_copies,
+         :total_copies => @teacher_set2.total_copies
         }
 
       elasticsearch_adapter_mock.expect(:update_document_by_id, es_doc, [@teacher_set2.id, body])
