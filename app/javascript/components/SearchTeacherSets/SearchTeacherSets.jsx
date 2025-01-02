@@ -482,9 +482,10 @@ export default function SearchTeacherSets(props) {
   };
 
   const displayAvailableCopies = (ts) => {
+    const copyLabel = ts.total_copies !== undefined && ts.total_copies > 1 ? "copies" : "copy";
     return (
       <>
-        {availableCopies(ts)} of {totalCopies(ts)} copies available
+        {availableCopies(ts)} of {totalCopies(ts)} {copyLabel} available
       </>
     );
   };
@@ -537,7 +538,7 @@ export default function SearchTeacherSets(props) {
               <CardContent id={"ts-description-" + i}>
                 {ts.description}
               </CardContent>
-              <CardActions id={"ts-availability-" + i} marginTop="m">
+              <CardActions id={"ts-availability-" + i} marginTop="m" justifyContent="end">
                 {teacherSetAvailability(ts)}
               </CardActions>
             </Card>
