@@ -202,8 +202,8 @@ export default function ParticipatingSchools(props) {
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
       contentTop={ <>
-          {renderInactiveSchoolMessage(isSchoolActive)}
           {<SignedInMsg signInDetails={props} />}
+          {renderInactiveSchoolMessage(isSchoolActive)}
         </>
       }
       contentPrimary={
