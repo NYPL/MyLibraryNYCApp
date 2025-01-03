@@ -4,9 +4,10 @@ import {
   Heading,
   Hero,
   useColorModeValue,
+  Banner
 } from "@nypl/design-system-react-components";
 
-export default function AppBreadcrumbs() {
+export default function AppBreadcrumbs(props) {
   const heroBgColor = useColorModeValue(
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
@@ -82,6 +83,15 @@ export default function AppBreadcrumbs() {
     }
   };
 
+  const inactiveSchoolMessage = () => {
+    console.log(props.is_school_active)
+    if (props.is_school_active === false) {
+      return (<Banner className="inactiveSchool" content={<>
+        Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
+      </>} type="warning"/>)
+    }
+  }
+
   const HeroDataValue = (levelString) => {
     switch (levelString) {
       case "participating-schools":
@@ -136,6 +146,7 @@ export default function AppBreadcrumbs() {
           />
         }
       />
+      {inactiveSchoolMessage()}
     </>
   );
 }

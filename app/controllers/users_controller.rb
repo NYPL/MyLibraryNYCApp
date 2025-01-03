@@ -23,6 +23,10 @@ class UsersController < ApplicationController
     User.create(user_params)
   end
 
+  def user_school
+    render :json => { school: current_user.present? ? current_user.school : {} }
+  end
+
   private
 
   # Strong parameters: protect object creation and allow mass assignment.

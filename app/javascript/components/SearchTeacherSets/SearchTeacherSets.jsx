@@ -87,6 +87,7 @@ export default function SearchTeacherSets(props) {
   const [showKeyword, setShowKeyWord] = useState(false);
   const [updateKeyword, setUpdateKeyword] = useState("");
   const location = useLocation();
+  const [isSchoolActive, setIsSchoolActive] = useState("");
   const [selectedSortOption, setSelectedSortOption] = useState("Newest to oldest");
 
   useEffect(() => {
@@ -252,6 +253,7 @@ export default function SearchTeacherSets(props) {
         setTsSubjects(res.data.tsSubjectsHash);
         setResetPageNumber(res.data.resetPageNumber);
         setTeacherSetDataNotRetrievedMsg(res.data.errrorMessage);
+        setIsSchoolActive(res.data.is_school_active)
         if (res.data.teacher_sets.length > 0 && res.data.total_count > 10) {
           setDisplayPagination("block");
         } else {
@@ -1261,7 +1263,7 @@ export default function SearchTeacherSets(props) {
 
   return (
     <TemplateAppContainer
-      breakout={<AppBreadcrumbs />}
+      breakout={<AppBreadcrumbs is_school_active={isSchoolActive} />}
       contentTop={
         <>
           {<SignedInMsg signInDetails={props} />}

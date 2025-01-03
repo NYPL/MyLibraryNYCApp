@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import {
@@ -10,18 +10,30 @@ import {
   useColorMode,
 } from "@nypl/design-system-react-components";
 
+import axios from "axios";
+
 function Contact() {
   const { colorMode } = useColorMode();
+  const [isSchoolActive, setIsSchoolActive] = useState("");
+
   useEffect(() => {
     document.title = "Contact | MyLibraryNYC";
     if (env.RAILS_ENV !== "test") {
       window.scrollTo(0, 0);
     }
+    axios
+    .get("/user_school")
+    .then((res) => {
+      setIsSchoolActive(res.data.school.active)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }, []);
 
   return (
     <TemplateAppContainer
-      breakout={<AppBreadcrumbs />}
+      breakout={<AppBreadcrumbs is_school_active={isSchoolActive}/>}
       contentPrimary={
         <div id="contacts-page">
           <Heading

@@ -535,7 +535,7 @@ export default function TeacherSetDetails(props) {
 
   const inactiveSchoolMessage = () => {
     if (currentUserStatus && isSchoolActive === false) {
-      return (<Banner content={<>
+      return (<Banner className="inactiveSchool" content={<>
         Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
       </>} type="warning" />)
     }
@@ -802,12 +802,12 @@ export default function TeacherSetDetails(props) {
               />
             }
           />
+          {inactiveSchoolMessage()}
         </>
       }
       contentTop={
         <>
           {errorMsg()}
-          {inactiveSchoolMessage()}
         </>
       }
       contentPrimary={

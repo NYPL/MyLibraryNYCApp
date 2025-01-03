@@ -63,10 +63,11 @@ class TeacherSetsController < ApplicationController
     total_count = total_count['value'] if total_count.is_a?(Hash)
     total_pages = (total_count / per_page.to_f).ceil
 
-    no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""
+    no_results_found_msg = @teacher_sets.length <= 0 ? "No results found." : ""    
 
     render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, 
-                   no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjects_hash, resetPageNumber: reset_page_number, errrorMessage: "" }
+                   no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjects_hash, resetPageNumber: reset_page_number, errrorMessage: "", 
+                   is_school_active: current_user&.school&.active || false }
   rescue ElasticsearchException => e
     render json: { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, facets: {} }
   rescue StandardError => e
