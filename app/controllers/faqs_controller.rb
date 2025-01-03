@@ -7,6 +7,6 @@ class FaqsController < ApplicationController
       store_user_location!
     end
     # Get all frequently asked questions by position ASC order.
-    render json: { faqs: Faq.get_faqs }
+    render json: { faqs: Faq.get_faqs, is_school_active: current_user&.school&.active || false }
   end
 end

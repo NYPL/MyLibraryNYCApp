@@ -14,6 +14,7 @@ export default function Faqs(props) {
   
   const [faqs, setFaqs] = useState([]);
   const { colorMode } = useColorMode();
+  const [isSchoolActive, setIsSchoolActive] = useState("");
 
   useEffect(() => {
     document.title = "Frequently Asked Questions | MyLibraryNYC";
@@ -25,6 +26,7 @@ export default function Faqs(props) {
       .get("/faqs/show")
       .then((res) => {
         setFaqs(res.data.faqs);
+        setIsSchoolActive(res.data.is_school_active)
       })
       .catch(function (error) {
         console.log(error);
@@ -52,7 +54,7 @@ export default function Faqs(props) {
 
   return (
     <TemplateAppContainer
-      breakout={<AppBreadcrumbs />}
+      breakout={<AppBreadcrumbs is_school_active={isSchoolActive} />}
       contentTop={<SignedInMsg signInDetails={props} />}
       contentPrimary={
         <>
