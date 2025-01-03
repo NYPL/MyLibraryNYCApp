@@ -58,8 +58,8 @@ export default function Faqs(props) {
       breakout={<AppBreadcrumbs />}
       contentTop={
         <>
-          {renderInactiveSchoolMessage(isSchoolActive)}
           {<SignedInMsg signInDetails={props} />} 
+          {renderInactiveSchoolMessage(isSchoolActive)}
         </>}
       contentPrimary={
         <>
