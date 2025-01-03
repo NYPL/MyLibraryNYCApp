@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import ShowBookImage from "./../ShowBookImage";
 import BookTitles from "./../BookTitles";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   Link as ReactRouterLink,
   useParams,
@@ -533,14 +534,6 @@ export default function TeacherSetDetails(props) {
     }
   };
 
-  const inactiveSchoolMessage = () => {
-    if (currentUserStatus && isSchoolActive === false) {
-      return (<Banner className="inactiveSchool" content={<>
-        Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
-      </>} type="warning" />)
-    }
-  }
-
   const teacherSetAvailability = () => {
     if (isLargerThanMobile && teacherSet.availability !== undefined) {
       return (
@@ -802,11 +795,10 @@ export default function TeacherSetDetails(props) {
               />
             }
           />
-          {inactiveSchoolMessage()}
         </>
       }
       contentTop={
-        <>
+        <>{renderInactiveSchoolMessage(isSchoolActive)}
           {errorMsg()}
         </>
       }

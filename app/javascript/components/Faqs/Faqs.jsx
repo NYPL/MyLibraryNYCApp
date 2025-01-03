@@ -3,6 +3,7 @@ import AppBreadcrumbs from "./../AppBreadcrumbs";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import SignedInMsg from "./../SignedInMsg";
 import axios from "axios";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   Accordion,
   TemplateAppContainer,
@@ -54,8 +55,12 @@ export default function Faqs(props) {
 
   return (
     <TemplateAppContainer
-      breakout={<AppBreadcrumbs is_school_active={isSchoolActive} />}
-      contentTop={<SignedInMsg signInDetails={props} />}
+      breakout={<AppBreadcrumbs />}
+      contentTop={
+        <>
+          {renderInactiveSchoolMessage(isSchoolActive)}
+          {<SignedInMsg signInDetails={props} />} 
+        </>}
       contentPrimary={
         <>
           {skeletonLoaderForFaqs()}

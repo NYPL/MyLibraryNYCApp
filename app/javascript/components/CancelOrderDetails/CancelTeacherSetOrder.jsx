@@ -14,6 +14,7 @@ import {
   useColorMode,
 } from "@nypl/design-system-react-components";
 import { useParams, useNavigate } from "react-router-dom";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 
 export default function TeacherSetOrder() {
   const params = useParams();
@@ -24,6 +25,7 @@ export default function TeacherSetOrder() {
   const [comment, setComment] = useState("");
   const { colorMode } = useColorMode();
   const [disabledButton, setDisabledButton] = useState(false);
+  const [isSchoolActive, setIsSchoolActive] = useState("");
 
   useEffect(() => {
     document.title = "Cancel Order | MyLibraryNYC";
@@ -34,6 +36,7 @@ export default function TeacherSetOrder() {
       .then((res) => {
         setTeacherSet(res.data.teacher_set);
         setHold(res.data.hold);
+        setIsSchoolActive(res.data.is_school_active);
       })
       .catch(function (error) {
         console.log(error);
@@ -129,6 +132,7 @@ export default function TeacherSetOrder() {
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
+      contentTop={renderInactiveSchoolMessage(isSchoolActive)}
       contentPrimary={
         <>
           <Heading

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import SignedInMsg from "./../SignedInMsg";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import axios from "axios";
 import {
   TextInput,
@@ -199,8 +200,12 @@ export default function ParticipatingSchools(props) {
 
   return (
     <TemplateAppContainer
-      breakout={<AppBreadcrumbs is_school_active={isSchoolActive} />}
-      contentTop={<SignedInMsg signInDetails={props} />}
+      breakout={<AppBreadcrumbs />}
+      contentTop={ <>
+          {renderInactiveSchoolMessage(isSchoolActive)}
+          {<SignedInMsg signInDetails={props} />}
+        </>
+      }
       contentPrimary={
         <>
           <Heading
