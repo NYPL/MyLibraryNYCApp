@@ -4,7 +4,9 @@ import SignedInMsg from "./../SignedInMsg";
 import SignUpMsg from "./../SignUp/SignUpMsg";
 import axios from "axios";
 import { titleCase } from "title-case";
-import { capitalizeFirstLetter } from "./../Utils";
+import { capitalizeFirstLetter } from "../Utils/Utils";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
+
 import {
   Button,
   ButtonGroup,
@@ -1263,10 +1265,11 @@ export default function SearchTeacherSets(props) {
 
   return (
     <TemplateAppContainer
-      breakout={<AppBreadcrumbs is_school_active={isSchoolActive} />}
+      breakout={<AppBreadcrumbs />}
       contentTop={
         <>
           {<SignedInMsg signInDetails={props} />}
+          {renderInactiveSchoolMessage(isSchoolActive)}
           {<SignUpMsg signUpDetails={props} />}
           <Heading
             id="search-and-find-teacher-sets-header"

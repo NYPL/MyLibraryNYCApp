@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   TemplateAppContainer,
   Heading,
@@ -33,7 +34,8 @@ function Contact() {
 
   return (
     <TemplateAppContainer
-      breakout={<AppBreadcrumbs is_school_active={isSchoolActive}/>}
+      breakout={<AppBreadcrumbs />}
+      contentTop={renderInactiveSchoolMessage(isSchoolActive)}
       contentPrimary={
         <div id="contacts-page">
           <Heading

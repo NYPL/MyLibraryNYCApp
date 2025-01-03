@@ -22,7 +22,8 @@ class HoldsController < ApplicationController
     render json: {
       hold: @hold.as_json,
       teacher_set: @hold.teacher_set.as_json,
-      teacher_set_notes: @hold.teacher_set.teacher_set_notes
+      teacher_set_notes: @hold.teacher_set.teacher_set_notes,
+      is_school_active: current_user.present? ? current_user.is_school_active? : nil
     }
   end
 
@@ -43,7 +44,8 @@ class HoldsController < ApplicationController
     render json: {
       hold: @hold.as_json,
       teacher_set: @hold.teacher_set.as_json,
-      teacher_set_notes: @hold.teacher_set.teacher_set_notes
+      teacher_set_notes: @hold.teacher_set.teacher_set_notes,
+      is_school_active: current_user.present? ? current_user.is_school_active? : nil
     }
   end
 

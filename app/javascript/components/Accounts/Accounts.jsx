@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "../AppBreadcrumbs";
 import HaveQuestions from "../HaveQuestions/HaveQuestions";
 import axios from "axios";
-
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   TextInput,
   Form,
@@ -41,6 +41,7 @@ export default function Accounts() {
   const [altEmailIsvalid, setAltEmailIsvalid] = useState(false);
   const [notificationType, setNotificationType] = useState("neutral");
   const [displayNotification, setDisplayNotification] = useState("");
+  const [isSchoolActive, setIsSchoolActive] = useState("");
   const tableHeaderBgColor = useColorModeValue(
     "ui.bg.default",
     "dark.ui.bg.default"
@@ -77,6 +78,7 @@ export default function Accounts() {
           setPassword(accountDetails.current_password);
           setTotalPages(accountDetails.total_pages);
           setOrdersNotPresentMsg(accountDetails.ordersNotPresentMsg);
+          setIsSchoolActive(res.data.is_school_active)
         }
       })
       .catch(function (error) {
@@ -328,7 +330,10 @@ export default function Accounts() {
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
-      contentTop={AccountUpdatedMessage()}
+      contentTop={<>
+        {renderInactiveSchoolMessage(isSchoolActive)}
+        {AccountUpdatedMessage()}
+      </>}
       contentPrimary={
         <>
           <Heading

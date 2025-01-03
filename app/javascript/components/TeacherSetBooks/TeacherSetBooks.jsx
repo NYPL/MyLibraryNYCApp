@@ -3,6 +3,7 @@ import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import { Link as ReactRouterLink, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { titleCase } from "title-case";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   Card,
   CardHeading,
@@ -231,15 +232,6 @@ export default function TeacherSetBooks() {
     );
   };
 
-  const inactiveSchoolMessage = () => {
-    console.log(isSchoolActive === false)
-    if (isSchoolActive === false) {
-      return (<Banner className="inactiveSchool" content={<>
-        Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
-      </>} type="warning"/>)
-    }
-  }
-
   const BookImage = (data) => {
     if (isLoading) {
       return (
@@ -313,9 +305,9 @@ export default function TeacherSetBooks() {
             />
           }
         />
-          {inactiveSchoolMessage()}
-        </>
+      </>
       }
+      contentTop={renderInactiveSchoolMessage(isSchoolActive)}
       contentPrimary={
         <>
           <Flex alignItems="baseline">
