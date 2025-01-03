@@ -22,6 +22,7 @@ import {
   useColorMode,
   Hero,
   useColorModeValue,
+  Banner,
 } from "@nypl/design-system-react-components";
 
 import ShowBookImage from "./../ShowBookImage";
@@ -35,6 +36,7 @@ export default function TeacherSetBooks() {
   const [tsTitle, setTsTitle] = useState('');
   const [teacherSets, setTeacherSets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSchoolActive, setIsSchoolActive] = useState("");
   const { colorMode } = useColorMode();
   const heroBgColor = useColorModeValue(
     "var(--nypl-colors-brand-primary)",
@@ -93,6 +95,7 @@ export default function TeacherSetBooks() {
       .get("/books/" + params["id"])
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
+        setIsSchoolActive(res.data.is_school_active);
         setBook(res.data.book);
         if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
           adobeAnalyticsForTeacherSetBooks(res.data.book)
@@ -228,6 +231,15 @@ export default function TeacherSetBooks() {
     );
   };
 
+  const inactiveSchoolMessage = () => {
+    console.log(isSchoolActive === false)
+    if (isSchoolActive === false) {
+      return (<Banner className="inactiveSchool" content={<>
+        Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
+      </>} type="warning"/>)
+    }
+  }
+
   const BookImage = (data) => {
     if (isLoading) {
       return (
@@ -287,20 +299,21 @@ export default function TeacherSetBooks() {
           breadcrumbsType="booksAndMore"
         />
         <Hero
-            heroType="tertiary"
-            foregroundColor={heroFgColor}
-            backgroundColor={heroBgColor}
-            heading={
-              <Heading
-                level="h1"
-                color="ui.white"
-                id={
-                  "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
-                }
-                text="Book Details"
-              />
-            }
-          />
+          heroType="tertiary"
+          foregroundColor={heroFgColor}
+          backgroundColor={heroBgColor}
+          heading={
+            <Heading
+              level="h1"
+              color="ui.white"
+              id={
+                "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
+              }
+              text="Book Details"
+            />
+          }
+        />
+          {inactiveSchoolMessage()}
         </>
       }
       contentPrimary={
