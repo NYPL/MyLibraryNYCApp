@@ -1269,13 +1269,14 @@ export default function SearchTeacherSets(props) {
       contentTop={
         <>
           {<SignedInMsg signInDetails={props} />}
-          {renderInactiveSchoolMessage(isSchoolActive)}
           {<SignUpMsg signUpDetails={props} />}
+          {renderInactiveSchoolMessage(isSchoolActive)}
           <Heading
             id="search-and-find-teacher-sets-header"
             size="heading3"
             level="h2"
             text="Search and find Teacher Sets"
+            marginTop="l"
           />
           <HorizontalRule
             id="ts-horizontal-rule"
