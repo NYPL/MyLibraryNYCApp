@@ -24,7 +24,7 @@ class UsersController < ApplicationController
   end
 
   def user_school
-    render :json => { school: current_user.present? ? current_user.school : {} }
+    render :json => { school: current_user.present? && current_user.school.present? ? current_user.school : {} }
   end
 
   private

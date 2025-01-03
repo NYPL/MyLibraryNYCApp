@@ -67,7 +67,8 @@ class TeacherSetsController < ApplicationController
 
     render json: { teacher_sets: @teacher_sets, facets: facets, total_count: total_count, total_pages: total_pages, 
                    no_results_found_msg: no_results_found_msg, tsSubjectsHash: subjects_hash, resetPageNumber: reset_page_number, errrorMessage: "", 
-                   is_school_active: current_user&.school&.active || false }
+                   is_school_active: current_user.present? ? current_user.is_school_active? : nil }
+
   rescue ElasticsearchException => e
     render json: { errrorMessage: "We are having trouble retrieving Teacher Set data right now. Please try again later", teacher_sets: {}, facets: {} }
   rescue StandardError => e
@@ -177,7 +178,7 @@ class TeacherSetsController < ApplicationController
       allowed_quantities: allowed_quantities,
       books: ts_books,
       teacher_set_notes: @set.teacher_set_notes,
-      is_school_active: current_user&.school&.active || false
+      is_school_active: current_user.present? ? current_user.is_school_active? : nil
     }
   end
 
