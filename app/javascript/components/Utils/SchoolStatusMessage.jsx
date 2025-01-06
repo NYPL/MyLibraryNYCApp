@@ -6,13 +6,13 @@ export const renderInactiveSchoolMessage = (isSchoolActive) => {
     return (
       <Banner
         content={<>
-          Your school is inactive, so your account is restricted. Please contact 
+          Your school is inactive, so your account is restricted. Please contact{' '}
           <Link 
             href="mailto:help@mylibrarynyc.org" 
             target="_blank" 
             rel="noreferrer"
           >
-          {' '}help@mylibrarynyc.org
+            help@mylibrarynyc.org
           </Link>.
         </>}
         type="warning"
