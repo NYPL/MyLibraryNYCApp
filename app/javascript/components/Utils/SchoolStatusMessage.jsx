@@ -1,12 +1,19 @@
 import React from "react";
-import { Banner } from "@nypl/design-system-react-components";
+import { Banner, Link } from "@nypl/design-system-react-components";
 
 export const renderInactiveSchoolMessage = (isSchoolActive) => {
   if (isSchoolActive === false) {
     return (
       <Banner
         content={<>
-          Your school is inactive, so your account is restricted. Please contact help@mylibrarynyc.org.
+          Your school is inactive, so your account is restricted. Please contact 
+          <Link 
+            href="mailto:help@mylibrarynyc.org" 
+            target="_blank" 
+            rel="noreferrer"
+          >
+          {' '}help@mylibrarynyc.org
+          </Link>.
         </>}
         type="warning"
       />
