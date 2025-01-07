@@ -448,7 +448,7 @@ export default function TeacherSetDetails(props) {
                 id="ts-order-submit"
                 buttonType="noBrand"
                 onClick={handleSubmit}
-                isDisabled={disabledButton}
+                isDisabled={currentUserStatus && disabledButton}
               >
                 {" "}
                 Place order{" "}
