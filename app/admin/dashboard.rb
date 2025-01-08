@@ -164,7 +164,7 @@ ActiveAdmin.register_page "Dashboard" do
 
     columns do
       column do
-        h2 "Pending"
+        h2 "Pending Account Verification"
         if Hold.pending.count == 0
           div 'No Pending - Trouble holds'
         else
@@ -214,7 +214,7 @@ ActiveAdmin.register_page "Dashboard" do
 
     columns do
       column do
-        h2 "Pending - In Transit Aux"
+        h2 "Priority Orders"
         if Hold.transit.count == 0
           div 'No Pending - In Transit Aux holds'
         else
@@ -264,7 +264,7 @@ ActiveAdmin.register_page "Dashboard" do
 
     columns do
       column do
-        h2 "Pending - Trouble"
+        h2 "Pending Outreach"
         if Hold.trouble.count == 0
           div 'No Pending - Trouble holds'
         else
@@ -314,7 +314,7 @@ ActiveAdmin.register_page "Dashboard" do
 
     columns do
       column do
-        h2 "Pending - Unavailable"
+        h2 "Pending Unavailable"
         if Hold.unavailable.count == 0
           div 'No Pending - Unavailable holds'
         else

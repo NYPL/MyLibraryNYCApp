@@ -6,7 +6,7 @@ import {
   useColorModeValue,
 } from "@nypl/design-system-react-components";
 
-export default function AppBreadcrumbs() {
+export default function AppBreadcrumbs(props) {
   const heroBgColor = useColorModeValue(
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"

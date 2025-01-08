@@ -124,6 +124,10 @@ class User < ActiveRecord::Base
     UserMailer.unsubscribe(self).deliver
   end
 
+  def is_school_active?
+    school.present? && school.active
+  end
+
   # If the user's barcode is not yet finalized, then set its status to
   # 'pending' and save.  In the future, there may be other conditions that
   # could set the user to "pending", and we'll be checking for those here, as well.

@@ -3,6 +3,7 @@ import AppBreadcrumbs from "./../AppBreadcrumbs";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import SignedInMsg from "./../SignedInMsg";
 import axios from "axios";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   Accordion,
   TemplateAppContainer,
@@ -14,6 +15,7 @@ export default function Faqs(props) {
   
   const [faqs, setFaqs] = useState([]);
   const { colorMode } = useColorMode();
+  const [isSchoolActive, setIsSchoolActive] = useState("");
 
   useEffect(() => {
     document.title = "Frequently Asked Questions | MyLibraryNYC";
@@ -25,6 +27,7 @@ export default function Faqs(props) {
       .get("/faqs/show")
       .then((res) => {
         setFaqs(res.data.faqs);
+        setIsSchoolActive(res.data.is_school_active)
       })
       .catch(function (error) {
         console.log(error);
@@ -53,7 +56,11 @@ export default function Faqs(props) {
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
-      contentTop={<SignedInMsg signInDetails={props} />}
+      contentTop={
+        <>
+          {<SignedInMsg signInDetails={props} />} 
+          {renderInactiveSchoolMessage(isSchoolActive)}
+        </>}
       contentPrimary={
         <>
           {skeletonLoaderForFaqs()}

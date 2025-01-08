@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "../AppBreadcrumbs";
 import HaveQuestions from "../HaveQuestions/HaveQuestions";
 import axios from "axios";
-
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   TextInput,
   Form,
@@ -41,6 +41,7 @@ export default function Accounts() {
   const [altEmailIsvalid, setAltEmailIsvalid] = useState(false);
   const [notificationType, setNotificationType] = useState("neutral");
   const [displayNotification, setDisplayNotification] = useState("");
+  const [isSchoolActive, setIsSchoolActive] = useState("");
   const tableHeaderBgColor = useColorModeValue(
     "ui.bg.default",
     "dark.ui.bg.default"
@@ -77,6 +78,7 @@ export default function Accounts() {
           setPassword(accountDetails.current_password);
           setTotalPages(accountDetails.total_pages);
           setOrdersNotPresentMsg(accountDetails.ordersNotPresentMsg);
+          setIsSchoolActive(res.data.is_school_active)
         }
       })
       .catch(function (error) {
@@ -189,23 +191,28 @@ export default function Accounts() {
     }
   };
 
+  const handleCancel = (hold) => {
+    const href = "/holds/" + hold["access_key"] + "/cancel";
+    window.location.href = href;
+  }
+
   const orderCancelConfirmation = (hold) => {
     return (
       <div id={"cancel_" + hold["access_key"]}>
         <ButtonGroup buttonWidth="full">
-          <Button id="account-page-cancel-button" buttonType="noBrand">
-            <Link
-              className="accountPageCancelOrder"
-              href={"/holds/" + hold["access_key"] + "/cancel"}
-            >
-              {" "}
-              Cancel{" "}
-            </Link>
+          <Button id="account-page-cancel-button" buttonType="noBrand"
+            onClick={() => handleCancel(hold)}>
+            Cancel
           </Button>
         </ButtonGroup>
       </div>
     );
   };
+
+  const handleOrder = (hold ) => {
+    const href = "/teacher_set_details/" + hold.teacher_set_id;
+    window.location.href = href;
+  }
 
   const orderTeacherSet = (hold) => {
     return (
@@ -215,15 +222,10 @@ export default function Accounts() {
             id="account-page-order-button"
             buttonType="secondary"
             whiteSpace="nowrap"
+            onClick={() => handleOrder(hold)}
+            style={{color: "var(--nypl-colors-ui-black)"}}
           >
-            <Link
-              id="account-page-order-link"
-              className={`${colorMode} accountPageTeacherSetOrder`}
-              href={"/teacher_set_details/" + hold.teacher_set_id}
-            >
-              {" "}
-              Order again{" "}
-            </Link>
+            Order again
           </Button>
         </ButtonGroup>
       </div>
@@ -328,7 +330,10 @@ export default function Accounts() {
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
-      contentTop={AccountUpdatedMessage()}
+      contentTop={<>
+        {renderInactiveSchoolMessage(isSchoolActive)}
+        {AccountUpdatedMessage()}
+      </>}
       contentPrimary={
         <>
           <Heading

@@ -22,7 +22,8 @@ class HoldsController < ApplicationController
     render json: {
       hold: @hold.as_json,
       teacher_set: @hold.teacher_set.as_json,
-      teacher_set_notes: @hold.teacher_set.teacher_set_notes
+      teacher_set_notes: @hold.teacher_set.teacher_set_notes,
+      is_school_active: current_user.present? ? current_user.is_school_active? : nil
     }
   end
 
@@ -43,7 +44,8 @@ class HoldsController < ApplicationController
     render json: {
       hold: @hold.as_json,
       teacher_set: @hold.teacher_set.as_json,
-      teacher_set_notes: @hold.teacher_set.teacher_set_notes
+      teacher_set_notes: @hold.teacher_set.teacher_set_notes,
+      is_school_active: current_user.present? ? current_user.is_school_active? : nil
     }
   end
 
@@ -64,14 +66,14 @@ class HoldsController < ApplicationController
   # Calculate available copies from quantity saves in teacherset table.
   def create
     begin
-      # If user's school is inactive, then display an error message and redirect to teacher set detail page.
-      is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
-      if !is_school_active
-        render json: { status: :error, message:  "Your school is inactive. Please contact help@mylibrarynyc.org" }
-        # stop processing further code, so new hold is not created,
-        # and double-render runtime error is not caused in the rescue exception block.
-        return
-      end
+      # # If user's school is inactive, then display an error message and redirect to teacher set detail page.
+      # is_school_active = current_user.school_id.present? ? School.find(current_user.school_id).active : false
+      # if !is_school_active
+      #   render json: { status: :error, message:  "Your school is inactive. Please contact help@mylibrarynyc.org", is_school_active: is_school_active }
+      #   # stop processing further code, so new hold is not created,
+      #   # and double-render runtime error is not caused in the rescue exception block.
+      #   return
+      # end
 
       Hold.transaction do
         set = TeacherSet.find(params[:teacher_set_id])

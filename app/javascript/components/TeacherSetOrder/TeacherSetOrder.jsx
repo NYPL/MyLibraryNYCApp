@@ -4,6 +4,7 @@ import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import TeacherSetOrderDetails from "./../TeacherSetOrderDetails";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 
 import {
   Button,
@@ -21,6 +22,7 @@ export default function TeacherSetOrder(props) {
   const [hold, setHold] = useState(props.holddetails);
   const [teacherSet, setTeacherSet] = useState(props.teachersetdetails);
   const { colorMode } = useColorMode();
+  const [isSchoolActive, setIsSchoolActive] = useState("");
 
   useEffect(() => {
     if (env.RAILS_ENV !== "test") {
@@ -40,6 +42,7 @@ export default function TeacherSetOrder(props) {
           } else {
             setTeacherSet(res.data.teacher_set);
             setHold(res.data.hold);
+            setIsSchoolActive(res.data.is_school_active)
             if (res.data.hold && res.data.hold.status === "cancelled") {
               document.title = "Order Cancelled | MyLibraryNYC";
             } else {
@@ -66,22 +69,24 @@ export default function TeacherSetOrder(props) {
     return hold && hold.status === "cancelled" ? "none" : "block";
   };
 
+  const handleSubmit = () => {
+    window.scrollTo({ top: 10 })
+    const href = "/holds/" + params["access_key"] + "/cancel";
+    window.location.href = href;
+  };
+
   const CancelButton = () => {
     return (
       <div style={{ display: showCancelButton() }}>
         <Button
           id="order-cancel-button"
-          className="cancel-button"
-          buttonType="secondary"
-          onClick={() => window.scrollTo({ top: 10 })}
+          buttonType="noBrand"
+          marginTop="s"
+          type="button"
+          screenreaderOnlyText="Confirmation cancel button"
+          onClick={() => handleSubmit()}
         >
-          <Link
-            className={`${colorMode} cancelOrderButton`}
-            href={"/holds/" + params["access_key"] + "/cancel"}
-          >
-            {" "}
-            Cancel my order{" "}
-          </Link>
+          Cancel my order
         </Button>
       </div>
     );
@@ -96,6 +101,7 @@ export default function TeacherSetOrder(props) {
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
+      contentTop={renderInactiveSchoolMessage(isSchoolActive)}
       contentPrimary={
         <>
           <Heading

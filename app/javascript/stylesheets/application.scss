@@ -540,3 +540,13 @@ ul.list li:before {
   display: flex;
   justify-content: space-between;
 }
+
+#teacher-set-results {
+  .card-right {
+    flex-shrink: none !important;
+  }
+}
+
+.inactiveSchool {
+  padding-left: var(--nypl-sizes-36);
+}

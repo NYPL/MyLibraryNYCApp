@@ -3,6 +3,7 @@ import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import { Link as ReactRouterLink, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { titleCase } from "title-case";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   Card,
   CardHeading,
@@ -22,6 +23,7 @@ import {
   useColorMode,
   Hero,
   useColorModeValue,
+  Banner,
 } from "@nypl/design-system-react-components";
 
 import ShowBookImage from "./../ShowBookImage";
@@ -35,6 +37,7 @@ export default function TeacherSetBooks() {
   const [tsTitle, setTsTitle] = useState('');
   const [teacherSets, setTeacherSets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSchoolActive, setIsSchoolActive] = useState("");
   const { colorMode } = useColorMode();
   const heroBgColor = useColorModeValue(
     "var(--nypl-colors-brand-primary)",
@@ -93,6 +96,7 @@ export default function TeacherSetBooks() {
       .get("/books/" + params["id"])
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
+        setIsSchoolActive(res.data.is_school_active);
         setBook(res.data.book);
         if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
           adobeAnalyticsForTeacherSetBooks(res.data.book)
@@ -287,22 +291,23 @@ export default function TeacherSetBooks() {
           breadcrumbsType="booksAndMore"
         />
         <Hero
-            heroType="tertiary"
-            foregroundColor={heroFgColor}
-            backgroundColor={heroBgColor}
-            heading={
-              <Heading
-                level="h1"
-                color="ui.white"
-                id={
-                  "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
-                }
-                text="Book Details"
-              />
-            }
-          />
-        </>
+          heroType="tertiary"
+          foregroundColor={heroFgColor}
+          backgroundColor={heroBgColor}
+          heading={
+            <Heading
+              level="h1"
+              color="ui.white"
+              id={
+                "hero-" + window.location.pathname.split(/\/|\?|&|=|\./g)[1]
+              }
+              text="Book Details"
+            />
+          }
+        />
+      </>
       }
+      contentTop={renderInactiveSchoolMessage(isSchoolActive)}
       contentPrimary={
         <>
           <Flex alignItems="baseline">

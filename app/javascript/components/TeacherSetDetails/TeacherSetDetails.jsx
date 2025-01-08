@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import ShowBookImage from "./../ShowBookImage";
 import BookTitles from "./../BookTitles";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import {
   Link as ReactRouterLink,
   useParams,
@@ -54,6 +55,8 @@ export default function TeacherSetDetails(props) {
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserStatus, setCurrentUserStatus] = useState();
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [isSchoolActive, setIsSchoolActive] = useState("");
   const heroBgColor = useColorModeValue(
     "var(--nypl-colors-brand-primary)",
     "var(--nypl-colors-dark-ui-bg-hover)"
@@ -107,6 +110,8 @@ export default function TeacherSetDetails(props) {
         setTeacherSetNotes(res.data.teacher_set_notes);
         let userStatus = res.data.user ? res.data.user.status : "";
         setCurrentUserStatus(userStatus);
+        setIsSchoolActive(res.data.is_school_active)
+        setDisabledButton(!res.data.is_school_active)
         if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
           adobeAnalyticsForTeacherSet(res.data.teacher_set);
         }
@@ -122,7 +127,7 @@ export default function TeacherSetDetails(props) {
       .catch(function (error) {
         console.log(error);
         console.error(error);
-      });
+      })
   }, []);
 
   const handleQuantity = (event) => {
@@ -148,6 +153,7 @@ export default function TeacherSetDetails(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setDisabledButton(true);
     axios.defaults.headers.common["X-CSRF-TOKEN"] = document
       .querySelector("meta[name='csrf-token']")
       .getAttribute("content");
@@ -175,7 +181,10 @@ export default function TeacherSetDetails(props) {
         }
       })
       .catch(function (error) {
+        setDisabledButton(false);
         console.log(error);
+      }).finally(() => {
+        setDisabledButton(false);
       });
   };
 
@@ -439,6 +448,7 @@ export default function TeacherSetDetails(props) {
                 id="ts-order-submit"
                 buttonType="noBrand"
                 onClick={handleSubmit}
+                isDisabled={currentUserStatus && disabledButton}
               >
                 {" "}
                 Place order{" "}
@@ -787,7 +797,11 @@ export default function TeacherSetDetails(props) {
           />
         </>
       }
-      contentTop={errorMsg()}
+      contentTop={
+        <>{renderInactiveSchoolMessage(isSchoolActive)}
+          {errorMsg()}
+        </>
+      }
       contentPrimary={
         <>
           <Flex alignItems="baseline">

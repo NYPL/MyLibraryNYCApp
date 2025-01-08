@@ -16,6 +16,7 @@ export default function SignedInMsg(props) {
           content="You have signed in successfully!"
           type="informative"
           mb="l"
+          marginBottom="xs"
         />
       );
     } else {

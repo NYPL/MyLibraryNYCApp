@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AppBreadcrumbs from "./../AppBreadcrumbs";
 import HaveQuestions from "./../HaveQuestions/HaveQuestions";
 import SignedInMsg from "./../SignedInMsg";
+import { renderInactiveSchoolMessage } from '../Utils/SchoolStatusMessage';
 import axios from "axios";
 import {
   TextInput,
@@ -23,6 +24,7 @@ export default function ParticipatingSchools(props) {
   const [anchor_tags, setAnchorTags] = useState([]);
   const [schoolNotFound, setSchoolNotFound] = useState("");
   const { colorMode } = useColorMode();
+  const [isSchoolActive, setIsSchoolActive] = useState("");
 
   useEffect(() => {
     document.title = "Participating Schools | MyLibraryNYC";
@@ -35,6 +37,7 @@ export default function ParticipatingSchools(props) {
         setSchools(res.data.schools);
         setAnchorTags(res.data.anchor_tags);
         setSchoolNotFound(res.data.school_not_found);
+        setIsSchoolActive(res.data.is_school_active)
       })
       .catch(function (error) {
         console.log(error);
@@ -198,7 +201,11 @@ export default function ParticipatingSchools(props) {
   return (
     <TemplateAppContainer
       breakout={<AppBreadcrumbs />}
-      contentTop={<SignedInMsg signInDetails={props} />}
+      contentTop={ <>
+          {<SignedInMsg signInDetails={props} />}
+          {renderInactiveSchoolMessage(isSchoolActive)}
+        </>
+      }
       contentPrimary={
         <>
           <Heading
