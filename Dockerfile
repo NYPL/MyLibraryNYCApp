@@ -33,7 +33,7 @@ RUN bundle install --jobs 30
 COPY package.json $APP_HOME/
 
 # Install JS dependencies
-RUN yarn install
+RUN yarn cache clean && yarn install
 
 # Now copy the rest of the application
 COPY . $APP_HOME/
