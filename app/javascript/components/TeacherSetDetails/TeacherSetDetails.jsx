@@ -110,6 +110,7 @@ export default function TeacherSetDetails(props) {
         setTeacherSetNotes(res.data.teacher_set_notes);
         let userStatus = res.data.user ? res.data.user.status : "";
         setCurrentUserStatus(userStatus);
+        console.log(userStatus)
         setIsSchoolActive(res.data.is_school_active)
         setDisabledButton(!res.data.is_school_active)
         if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
