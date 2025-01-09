@@ -184,9 +184,7 @@ export default function TeacherSetDetails(props) {
       .catch(function (error) {
         setDisabledButton(false);
         console.log(error);
-      }).finally(() => {
-        setDisabledButton(false);
-      });
+      })
   };
 
   const adobeAnalyticsForOrder = () => {
