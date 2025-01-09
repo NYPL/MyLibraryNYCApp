@@ -54,7 +54,7 @@ export default function TeacherSetDetails(props) {
   const [errorMessage, setErrorMessage] = useState("");
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUserStatus, setCurrentUserStatus] = useState();
+  const [currentUserStatus, setCurrentUserStatus] = useState("");
   const [disabledButton, setDisabledButton] = useState(false);
   const [isSchoolActive, setIsSchoolActive] = useState("");
   const heroBgColor = useColorModeValue(
@@ -448,7 +448,7 @@ export default function TeacherSetDetails(props) {
                 id="ts-order-submit"
                 buttonType="noBrand"
                 onClick={handleSubmit}
-                isDisabled={currentUserStatus && disabledButton}
+                isDisabled={currentUserStatus !== "" && disabledButton}
               >
                 {" "}
                 Place order{" "}
