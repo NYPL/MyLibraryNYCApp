@@ -54,7 +54,7 @@ export default function TeacherSetDetails(props) {
   const [errorMessage, setErrorMessage] = useState("");
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUserStatus, setCurrentUserStatus] = useState();
+  const [currentUserStatus, setCurrentUserStatus] = useState("");
   const [disabledButton, setDisabledButton] = useState(false);
   const [isSchoolActive, setIsSchoolActive] = useState("");
   const heroBgColor = useColorModeValue(
@@ -110,6 +110,7 @@ export default function TeacherSetDetails(props) {
         setTeacherSetNotes(res.data.teacher_set_notes);
         let userStatus = res.data.user ? res.data.user.status : "";
         setCurrentUserStatus(userStatus);
+        console.log(userStatus)
         setIsSchoolActive(res.data.is_school_active)
         setDisabledButton(!res.data.is_school_active)
         if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
@@ -183,9 +184,7 @@ export default function TeacherSetDetails(props) {
       .catch(function (error) {
         setDisabledButton(false);
         console.log(error);
-      }).finally(() => {
-        setDisabledButton(false);
-      });
+      })
   };
 
   const adobeAnalyticsForOrder = () => {
@@ -448,7 +447,7 @@ export default function TeacherSetDetails(props) {
                 id="ts-order-submit"
                 buttonType="noBrand"
                 onClick={handleSubmit}
-                isDisabled={currentUserStatus && disabledButton}
+                isDisabled={currentUserStatus !== "" && disabledButton}
               >
                 {" "}
                 Place order{" "}
