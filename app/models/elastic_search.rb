@@ -75,20 +75,22 @@ class ElasticSearch
 
   # Get teacher sets documents from elastic search.
   def get_teacher_sets_from_es(params)
-
     # Per page showing 10 teachersets.
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
-    query, agg_hash = teacher_sets_query_based_on_filters(params)
-
+    query, global_agg_hash, subjects_agg_hash = teacher_sets_query_based_on_filters(params)
     query[:from] = from
     query[:size] = @teachersets_per_page
     # Sorting teachersets based on availability and created_at values. 
     # Showing latest created teachersets.
     query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
-    query[:aggs] = agg_hash
-    teacherset_docs = search_by_query(query)
-    facets = facets_for_teacher_sets(teacherset_docs, params)
+    query[:aggs] = global_agg_hash
+    facet_teacherset_docs = search_by_query(query)
+    facets = get_language_availability_set_type_area_of_study_facets(facet_teacherset_docs, [])
+    query[:aggs] = subjects_agg_hash
+    sub_teacherset_docs = search_by_query(query)
+    facets = facets_for_teacher_sets(sub_teacherset_docs, facets, params)
+    teacherset_docs = facet_teacherset_docs.merge(sub_teacherset_docs)
     [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
@@ -157,33 +159,82 @@ class ElasticSearch
       query[:query][:bool][:must] << {:nested => {:path => "subjects", 
                                       :query => {:bool => {:must => [{:terms => {"subjects.id" => params["subjects"]}}]}}}}
     end
-    aggregation_hash = group_by_facets_query(aggregation_hash)
-    [query, aggregation_hash]
+    global_aggregation_hash, subject_aggregation_hash  = group_by_facets_query(aggregation_hash)
+    [query, global_aggregation_hash, subject_aggregation_hash]
   end
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-    aggregation_hash["language"] = { terms: { field: "primary_language", :size => 100, :order => {:_key => "asc"} } }
-    aggregation_hash["set type"] = { terms: { field: "set_type", :size => 100, :order => {:_key => "asc"} } }
-    # Remove Availability lable in facets.
-    # aggregation_hash["availability"] = { "terms": { "field": "availability.raw", :size => 10, :order => {:_key => "asc"} } }
-    aggregation_hash["area of study"] = { terms: { field: "area_of_study", :size => 100, :order => {:_key => "asc"} } }
 
-    aggregation_hash["subjects"] = {:nested => {:path => "subjects"},
-    :aggregations => {:subjects => {:composite => {:size => 3000, :sources => [{:id => {:terms => {:field => "subjects.id"}}},
-                                                                               {:title => {:terms => {:field => "subjects.title.keyword"}}}]}}}}
-    aggregation_hash
+    
+
+
+    global_aggregation_hash = {
+      "total_aggregations": {
+        "global": {},
+        "aggs": {
+          "language": {
+            "terms": {
+              "field": "primary_language",
+              "size": 100,
+              "order": { "_key": "asc" }
+            }
+          },
+          "set type": {
+            "terms": {
+              "field": "set_type",
+              "size": 10,
+              "order": { "_key": "asc" }
+            }
+          },
+          "area of study": {
+            "terms": {
+              "field": "area_of_study",
+              "size": 100,
+              "order": { "_key": "asc" }
+            }
+          }
+        }
+      }
+    }
+    subject_aggregation_hash = {
+      "subjects": {
+        "nested": {
+          "path": "subjects"
+        },
+        "aggs": {
+          "subjects": {
+            "composite": {
+              "size": 3000,
+              "sources": [
+                {
+                  "id": {
+                    "terms": {
+                      "field": "subjects.id"
+                    }
+                  }
+                },
+                {
+                  "title": {
+                    "terms": {
+                      "field": "subjects.title.keyword"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+
+    [global_aggregation_hash, subject_aggregation_hash]
   end
 
   # Get teacher set facets
-  def facets_for_teacher_sets(teacher_sets_docs, params)
-    facets = []
-    # Get all facets from elastic search.
-    facets = get_language_availability_set_type_area_of_study_facets(teacher_sets_docs, facets)
-
+  def facets_for_teacher_sets(teacher_sets_docs, facets, params)
     subjects_facets = get_subject_facets(teacher_sets_docs, facets, params)
     facets << subjects_facets
-
     # Specify desired order of facets:
     facets.sort_by! do |f|
       ind = ['area of study', 'subjects', 'language','set type'].index f[:label]
@@ -208,10 +259,10 @@ class ElasticSearch
       facets_group = {:label => config[:label], :items => []}
       # eg: aggregation_name = 'language' or 'availability' etc
       aggregation_name = config[:label]
-      aggregations = teacherset_docs[:aggregations][aggregation_name.to_s]
+      aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]
 
       if aggregations.present? && aggregations["buckets"].present?
-        teacherset_docs[:aggregations][aggregation_name.to_s]["buckets"].each do |agg_val|
+        teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]["buckets"].each do |agg_val|
           label = agg_val['key']
           unless config[:value_map].nil?
             label = config[:value_map][agg_val['key']]
@@ -246,7 +297,6 @@ class ElasticSearch
     subjects_facets = {:label => 'subjects', :items => []}
 
     sub_aggs = teacherset_docs[:aggregations]["subjects"]
-
     if sub_aggs.present? || (sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?)
       sub_aggs["subjects"]["buckets"].each do |agg_val|
         # Restrict to min_count_for_facet (5).
