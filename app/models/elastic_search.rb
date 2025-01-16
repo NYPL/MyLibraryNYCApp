@@ -198,34 +198,30 @@ class ElasticSearch
       }
     }
     subject_aggregation_hash = {
-      "subjects": {
-        "nested": {
-          "path": "subjects"
-        },
-        "aggs": {
-          "subjects": {
-            "composite": {
-              "size": 3000,
-              "sources": [
-                {
-                  "id": {
-                    "terms": {
-                      "field": "subjects.id"
-                    }
-                  }
-                },
-                {
-                  "title": {
-                    "terms": {
-                      "field": "subjects.title.keyword"
-                    }
-                  }
-                }
-              ]
+      "total_aggregations": {
+      "global": {},
+      "aggs": {
+        "subjects": {
+          "nested": {
+            "path": "subjects"
+          },
+          "aggs": {
+            "id": {
+              "terms": {
+                "field": "subjects.id",
+                "size": 3000
+              }
+            },
+            "title": {
+              "terms": {
+                "field": "subjects.title.keyword",
+                "size": 3000
+              }
             }
           }
         }
       }
+    }
     }
 
     [global_aggregation_hash, subject_aggregation_hash]
@@ -307,13 +303,13 @@ class ElasticSearch
             next
           end
         end
-        if params['subjects'].blank? || params['subjects'].map(&:to_i).include?(agg_val["key"]["id"])
+        #if params['subjects'].blank? || params['subjects'].map(&:to_i).include?(agg_val["key"]["id"])
           subjects_facets[:items] << {
             :value => agg_val["key"]["id"],
             :label => agg_val["key"]["title"],
             :count => agg_val["doc_count"]
           }
-        end
+       # end
       end
     end
     # area_of_study data should not show in subjects.
