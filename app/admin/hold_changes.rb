@@ -45,12 +45,12 @@ ActiveAdmin.register HoldChange do
         f.semantic_errors *f.object.errors.keys
       end
       f.input :status, :as => :radio, :collection => [
-        ['Pending', 'pending'],
-        ['Pending - In Transit Aux', 'transit'],
-        ['Pending - Trouble Shooting', 'trouble'],
-        ['Pending - Unavailable', 'n_a'],
-        ['closed', 'closed'],
-        ['cancelled', 'cancelled']]
+        ['Pending Account Verification', 'pending'],
+        ['Priority Orders', 'transit'],
+        ['Pending Outreach', 'trouble'],
+        ['Pending Unavailable', 'n_a'],
+        ['Closed', 'closed'],
+        ['Cancelled', 'cancelled']]
 
       f.input :comment, :label => 'Note to Requester', :input_html => { :class => 'message' }
       f.input :hold_id, :as => :hidden # :input_html => { :disabled => true } 
