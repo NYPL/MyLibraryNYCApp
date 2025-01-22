@@ -219,30 +219,23 @@ export default function TeacherSetDetails(props) {
     }
   };
 
-  const ACopies = () => {
-    if (teacherSet["available_copies"] !== undefined) {
-      return teacherSet["available_copies"];
-    } else {
-      return "";
-    }
-  };
-
-  const TotalCopies = () => {
-    if (teacherSet["total_copies"] !== undefined) {
-      return teacherSet["total_copies"];
-    } else {
-      return "";
-    }
-  };
-
-  const AvailableCopies = () => {
-    return (
-      <div color="var(--nypl-colors-ui-black)" style={{ textAlign: "center" }}>
-        {ACopies()} of {TotalCopies()} available
-      </div>
+  const displayAvailableCopies = (teacherSet) => {
+    const copyLabel = teacherSet.total_copies > 1 ? "copies" : "copy";
+    return teacherSet.total_copies ? (
+      <>
+        {teacherSet.available_copies || 0} of {teacherSet.total_copies || 0} {copyLabel} available
+      </>
+    ) : (
+      <>0 of 0 copies available</>
     );
   };
-
+  
+  const AvailableCopies = () => (
+    <div color="var(--nypl-colors-ui-black)" style={{ textAlign: "center" }}>
+      {displayAvailableCopies(teacherSet)}
+    </div>
+  );
+  
   const BooksCount = () => {
     return (
       <div>
