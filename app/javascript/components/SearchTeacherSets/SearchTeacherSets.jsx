@@ -39,6 +39,10 @@ import {
   VStack,
   HStack,
   Menu,
+  FilterBarInline,
+  MultiSelect,
+  useMultiSelect,
+  MultiSelectGroup,
 } from "@nypl/design-system-react-components";
 
 import {
@@ -46,6 +50,10 @@ import {
   useSearchParams,
   useLocation,
 } from "react-router-dom";
+
+import {
+  MultiSelectItem,
+} from "@nypl/design-system-react-components/dist/src/components/MultiSelect/MultiSelect";
 
 export default function SearchTeacherSets(props) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -91,6 +99,15 @@ export default function SearchTeacherSets(props) {
   const location = useLocation();
   const [isSchoolActive, setIsSchoolActive] = useState("");
   const [selectedSortOption, setSelectedSortOption] = useState("Newest to oldest");
+  const { onChange, onMixedStateChange, selectedItems, onClear, onClearAll } =
+  useMultiSelect();
+
+  const [selectedFilterItems, setSelectedFilterItems] = useState([
+    selectedItems,
+  ]);
+  useEffect(() => {
+    setSelectedFilterItems([selectedItems]);
+  }, [selectedItems]);
 
   useEffect(() => {
     document.title = "Search Teacher Sets | MyLibraryNYC";
@@ -486,6 +503,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const displayAvailableCopies = (ts) => {
+    
     const copyLabel = ts.total_copies !== undefined && ts.total_copies > 1 ? "copies" : "copy";
     return (
       <>
@@ -677,6 +695,83 @@ export default function SearchTeacherSets(props) {
       />
     );
   };
+
+  const filterBarMultiSelect = () => {
+    return (
+      <FilterBarInline
+        heading="Refine Results"
+        layout="column"
+        renderChildren={renderMultiSelect}
+        // bg={sidebarBg}
+        // border={sidebarBorder}
+        // borderColor={sidebarBorderColor}
+        display={{ base: "none", md: "block" }}
+        padding="m"
+      />
+    )
+  }
+
+  const renderFilterComponents = () => {
+    return (
+      <MultiSelectGroup
+        id="multiselect-group"
+        labelText="MultiSelect Group"
+        layout="column"
+        renderMultiSelect={renderMultiSelect.bind(this)}
+      />
+    );
+  };
+
+  const tsLabel = (ts) => {
+    return ts.label === "area of study"
+      ? "Area of Study"
+      : ts.label.replace(
+          /\w\S*/g,
+          (txt) =>
+            txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
+        )
+  }
+
+  const formattedItems = (items) => {
+    return items.map(item => {
+      return {
+        id: String(item.value),
+        name: item.label,
+      };
+    });
+  };
+
+  const renderMultiSelect = (
+    ) => {
+      if (facets && facets.length >= 1) {
+        return facets.map((ts, i) => {
+        return (
+            <MultiSelect
+              buttonText={tsLabel(ts)}
+              key={"ts-facets-key-" + i}
+              id={"ts-facets-multi-select-" + i}
+              items={formattedItems(ts.items)}
+              selectedItems={selectedItems}
+              isBlockElement={true}
+              onChange={(e) => {
+                // First, handle the existing onChange logic
+                onChange(e.target.id, "ts-facets-multi-select-" + i)
+                // Then, handle the additional tsSelectedFacets logic
+                tsSelectedFacets(ts.label, e.target.id)
+              }}
+              onMixedStateChange={(e) => {
+                return onMixedStateChange(e.target.id, id, formattedItems(ts.items));
+              }}
+              onClear={() => onClear("ts-facets-multi-select-" + i)}
+              width="full"
+              listOverflow="expand"
+            />
+            );
+        });
+      } else {
+        return null;
+      }
+    };
 
   const RefineResults = () => {
     if (facets && facets.length >= 1) {
@@ -1064,7 +1159,7 @@ export default function SearchTeacherSets(props) {
               marginBottom="xs"
             >
               <span>Filters applied</span>
-              {teacherSetFilterTags()}
+              {/* {teacherSetFilterTags()} */}
             </HStack>
           </div>
           <div>
@@ -1206,6 +1301,18 @@ export default function SearchTeacherSets(props) {
   };
 
   const TeacherSetFacets = () => {
+    return (<FilterBarInline
+      id="ts-facets-id"
+      heading="Filters"
+      layout="column"
+      onClear={onClearFilterBar}
+      onSubmit={() => console.log(selectedFilterItems)}
+      selectedItems={selectedItems}
+      renderChildren={renderFilterComponents}
+    />)
+  };
+
+  const TeacherSetFacets1 = () => {
     return facets.map((ts, i) => {
       return (
         <Accordion
@@ -1317,7 +1424,6 @@ export default function SearchTeacherSets(props) {
       contentSidebar={
         <>
           {skeletonLoader()}
-          {RefineResults()}
         </>
       }
       sidebar="left"

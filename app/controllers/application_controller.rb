@@ -163,7 +163,7 @@ class ApplicationController < ActionController::Base
         end
 
         if query_params['area of study']
-          query_params['area of study'] = query_params['area of study'].join
+          query_params['area of study'] = query_params['area of study']
         end
 
         if query_params['set type']

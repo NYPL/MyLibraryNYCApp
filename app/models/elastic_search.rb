@@ -131,25 +131,25 @@ class ElasticSearch
 
     # If language present in filters finding the language in these fields [language, primary_language]
     if language.present?
-      query[:query][:bool][:must] << {:multi_match => {:query => language.join, :fields => %w[primary_language]}}
+      query[:query][:bool][:must] << {:multi_match => {:query => language, :fields => %w[primary_language]}}
     end
 
     # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi
     if set_type.present?
-      query[:query][:bool][:must] << {:match => {:set_type => set_type.join}}
+      query[:query][:bool][:must] << {:match => {:set_type => set_type}}
     end
 
     # If availability present in filters get ES query based on availability.
     # Eg: availability: "available/unavailable"
     if availability.present?
-      query[:query][:bool][:must] << {:match => {:availability => availability.join}}
+      query[:query][:bool][:must] << {:match => {:availability => availability}}
     end
 
     # If area_of_study present in filters get ES query based on area_of_study.
     # Eg: area_of_study: "Social Studies"
     if area_of_study.present?
-      query[:query][:bool][:must] << {:match => {:area_of_study => area_of_study.join}}
+      query[:query][:bool][:must] << {:terms => {:area_of_study => area_of_study}}
     end
 
     # If subjects present in filters get ES query based on subjects.
@@ -165,10 +165,6 @@ class ElasticSearch
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-
-    
-
-
     global_aggregation_hash = {
       "total_aggregations": {
         "global": {},
@@ -197,6 +193,7 @@ class ElasticSearch
         }
       }
     }
+    
     subject_aggregation_hash = {
       "total_aggregations": {
       "global": {},
@@ -220,10 +217,8 @@ class ElasticSearch
             }
           }
         }
-      }
+      } }
     }
-    }
-
     [global_aggregation_hash, subject_aggregation_hash]
   end
 
@@ -291,25 +286,30 @@ class ElasticSearch
     end
 
     subjects_facets = {:label => 'subjects', :items => []}
+    sub_aggs = teacherset_docs[:aggregations]['total_aggregations']["subjects"]
 
-    sub_aggs = teacherset_docs[:aggregations]["subjects"]
-    if sub_aggs.present? || (sub_aggs["subjects"].present? && sub_aggs["subjects"]["buckets"].present?)
-      sub_aggs["subjects"]["buckets"].each do |agg_val|
-        # Restrict to min_count_for_facet (5).
-        # but let's make it 5 consistently now.
-        # and the next keyword is used to skip to the next iteration if conditions are not met.
-        if params['subjects'].blank? || (params['area of study'].blank? && params['set type'].blank? && params['language'].blank?)
-          if agg_val['doc_count'] < Subject::MIN_COUNT_FOR_FACET
-            next
-          end
-        end
-        #if params['subjects'].blank? || params['subjects'].map(&:to_i).include?(agg_val["key"]["id"])
+    # Ensure sub_aggs contains valid data
+    if sub_aggs.present? && sub_aggs["id"].present? && sub_aggs["title"].present?
+      id_buckets = sub_aggs["id"]["buckets"]
+      title_buckets = sub_aggs["title"]["buckets"]
+
+      # Ensure both buckets are present and have matching lengths
+      if id_buckets.size == title_buckets.size
+        id_buckets.each_with_index do |id_agg, index|
+          title_agg = title_buckets[index] # Match id with the corresponding title
+
+          # Skip if the document count is below the threshold
+          next if id_agg['doc_count'] < Subject::MIN_COUNT_FOR_FACET
+
+          # Add the id and title values to the result
           subjects_facets[:items] << {
-            :value => agg_val["key"]["id"],
-            :label => agg_val["key"]["title"],
-            :count => agg_val["doc_count"]
+            value: id_agg["key"],
+            label: title_agg["key"],
+            count: id_agg["doc_count"] # Assuming doc_count matches for id and title
           }
-       # end
+        end
+      else
+        puts "Warning: Mismatch in the number of id and title buckets!"
       end
     end
     # area_of_study data should not show in subjects.
