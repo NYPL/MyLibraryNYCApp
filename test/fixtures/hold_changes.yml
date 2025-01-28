@@ -10,3 +10,8 @@ hold_changes2:
   admin_user_id: 1
   status: new
   hold: hold10
+hold_changes3:
+  hold_id: hold11.id
+  admin_user_id: 1
+  status: "closed"
+  hold: hold12
