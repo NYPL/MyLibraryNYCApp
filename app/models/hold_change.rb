@@ -12,8 +12,7 @@ class HoldChange < ActiveRecord::Base
 
   def do_after_save
     update_hold
-
-    if hold.teacher_set.present? && hold.teacher_set.availability != 'unavailable'
+    if hold.teacher_set.present?
       send_change_status_email
     else
       send_teacher_set_deleted_email
