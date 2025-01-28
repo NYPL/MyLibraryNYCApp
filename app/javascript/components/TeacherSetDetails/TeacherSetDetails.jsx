@@ -226,7 +226,7 @@ export default function TeacherSetDetails(props) {
         {teacherSet.available_copies || 0} of {teacherSet.total_copies || 0} {copyLabel} available
       </>
     ) : (
-      <>0 of 0 copies available</>
+      <></>
     );
   };
   

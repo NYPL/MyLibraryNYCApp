@@ -7,6 +7,7 @@ class HoldChangeTest < ActionController::TestCase
   setup do
     @hold_changes1 = hold_changes(:hold_changes1)
     @hold_changes2 = hold_changes(:hold_changes2)
+    @hold_changes3 = hold_changes(:hold_changes3)
     @hold2 = holds(:hold2)
   end
 
@@ -45,8 +46,8 @@ class HoldChangeTest < ActionController::TestCase
     assert_equal("Order closed | Your teacher set order for MyString1", resp.subject)
 
     # test2 : Send deleted teacher-set notification email If Teacher-set is not available
-    @hold_changes2.status = 'closed'
-    resp2 = @hold_changes2.do_after_save
+    @hold_changes3.status = 'closed'
+    resp2 = @hold_changes3.do_after_save
     assert_equal("Order closed | The Teacher Set you requested has been deleted", resp2.subject)
   end
 end

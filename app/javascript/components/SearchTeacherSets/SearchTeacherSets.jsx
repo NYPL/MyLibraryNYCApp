@@ -492,7 +492,7 @@ export default function SearchTeacherSets(props) {
         {availableCopies(ts)} of {totalCopies(ts)} {copyLabel} available
       </>
     ) : (
-      <>0 of 0 copies available</>
+      <></>
     );
   };
 
