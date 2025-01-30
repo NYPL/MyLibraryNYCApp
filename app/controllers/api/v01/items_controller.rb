@@ -40,7 +40,8 @@ class Api::V01::ItemsController < Api::V01::GeneralController
       end
       teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
       unless teacher_set.present?
-        render_error([404, "BIB id not found in MLN DB. BibId b#{t_set_bnumber}"])
+        # I added 500 for testing only, needs to remove
+        render_error([500, "BIB id not found in MLN DB. BibId b#{t_set_bnumber}"])
         return
       end
 
