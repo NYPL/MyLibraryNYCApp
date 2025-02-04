@@ -34,7 +34,7 @@ class ItemsControllerTest < ActionController::TestCase
     end
   end
 
-  test "should update teacher set" do
+  test "Bib id is empty" do
     @controller.stub :parse_request_body, req_body_for_item do
       @valid_teacher_set.stub :update_available_and_total_count, true do
         post :update_availability, params: { items: @request_body }
@@ -70,7 +70,7 @@ class ItemsControllerTest < ActionController::TestCase
     end
   end
 
-  #   private
+  # private
   def req_body_for_item
     [{
       "nyplSource" => "sierra-nypl",
