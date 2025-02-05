@@ -31,7 +31,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           message = e.message
           response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg, "Bib id: #{req_body["id"]}")
         rescue SuppressedBibRecordException, BibRecordNotFoundException => e
-          http_status = 500 #this is for testing
+          http_status = 404
           message = e.message
           response = SYS_FAILURE.call(e.code, e.message, e.detailed_msg, "Bib id: #{req_body["id"]}")
         rescue DBException, ElasticsearchException => e
@@ -81,7 +81,7 @@ class Api::V01::BibsController < Api::V01::GeneralController
           message = e.message
           response = SYS_FAILURE.call(e.code, message, e.detailed_msg, "Bib id: #{req_body["id"]}")
         rescue BibRecordNotFoundException => e
-          http_status = 500 #this is for testing
+          http_status = 404
           message = e.message
           response = SYS_FAILURE.call(e.code, message, e.detailed_msg, "Bib id: #{req_body["id"]}")
         rescue DBException, ElasticsearchException => e
