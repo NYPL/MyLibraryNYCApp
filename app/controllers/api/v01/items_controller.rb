@@ -46,7 +46,7 @@ class Api::V01::ItemsController < Api::V01::GeneralController
 
           teacher_set = TeacherSet.find_by_bnumber("b#{t_set_bnumber}")
           unless teacher_set.present?
-            http_status = 404
+            http_status = 500 #this is for testing
             message = "BIB id not found in MLN DB. Bib id b#{t_set_bnumber},"
             http_response = SYS_FAILURE.call(http_status, message, "Item id: #{req_body["id"]}")
           end
