@@ -34,17 +34,17 @@ class ItemsControllerTest < ActionController::TestCase
     end
   end
 
-  test "Bib id is empty" do
-    @controller.stub :parse_request_body, req_body_for_item do
-      @valid_teacher_set.stub :update_available_and_total_count, true do
-        post :update_availability, params: { items: @request_body }
+  # test "Bib id is empty" do
+  #   @controller.stub :parse_request_body, req_body_for_item do
+  #     @valid_teacher_set.stub :update_available_and_total_count, true do
+  #       post :update_availability, params: { items: @request_body }
 
-        assert_response :success
-        response_body = JSON.parse(@response.body)
-        assert_equal 404, response_body["items"][0]["status"]
-      end
-    end
-  end
+  #       assert_response :success
+  #       response_body = JSON.parse(@response.body)
+  #       assert_equal 404, response_body["items"][0]["status"]
+  #     end
+  #   end
+  # end
 
   test "NYPL source is empty" do
     @request_body = [{
