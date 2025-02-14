@@ -90,7 +90,7 @@ class ElasticSearch
     query[:aggs] = subjects_hash
     teacherset_docs = search_by_query(query)
     subject_facets = get_subject_facets(teacherset_docs, facets, params)
-    [teacherset_docs, facets, teacherset_docs[:totalMatches]]
+    [teacherset_docs, facets << subject_facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
   end
