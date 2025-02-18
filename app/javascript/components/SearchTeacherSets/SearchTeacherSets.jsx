@@ -56,10 +56,12 @@ export default function SearchTeacherSets(props) {
   const queryParams = [];
   const searchResultsTextRef = useRef(null)
 
+
   for (let entry of searchParams.entries()) {
     const queryParamsHash = {};
     queryParamsHash[entry[0]] = entry[1];
     queryParams.push(queryParamsHash);
+    //console.log(queryParams)
   }
 
   const facetBoxColor = useColorModeValue(
@@ -97,13 +99,18 @@ export default function SearchTeacherSets(props) {
   const [selectedSortOption, setSelectedSortOption] = useState("Newest to oldest");
   const { onChange, onMixedStateChange, selectedItems, onClear, onClearAll } =
   useMultiSelect();
+  const [tsFacetKeys, setTsFacetKeys] = useState({});
 
   const [selectedFilterItems, setSelectedFilterItems] = useState([
     selectedItems,
   ]);
+
+
   useEffect(() => {
     setSelectedFilterItems([selectedItems]);
+    tsSelectedFacets(selectedItems);
   }, [selectedItems]);
+
 
   useEffect(() => {
     document.title = "Search Teacher Sets | MyLibraryNYC";
@@ -136,131 +143,135 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  useEffect(() => {
-    const queryValue = new URLSearchParams(location.search);
-    const tsfacets = {};
-    const tagSetsDataArr = [];
-    setTsSubjects({});
+  // useEffect(() => {
+  //   const queryValue = new URLSearchParams(location.search);
+  //   const tsfacets = {};
+  //   const tagSetsDataArr = [];
+  //   setTsSubjects({});
+  //   queryParams.map((ts) => {
+  //     const tagSets = {};
 
-    queryParams.map((ts) => {
-      const tagSets = {};
+  //     if (ts.subjects) {
+  //       tsfacets["subjects"] = ts.subjects.split(",");
+  //       ts.subjects.split(",").map((value) => {
+  //         if (tsSubjects[value] !== undefined) {
+  //           const subjectsHash = {};
+  //           subjectsHash["label"] = tsSubjects[value];
+  //           subjectsHash["subjects"] = [tsSubjects[value]];
+  //           tagSetsDataArr.push(subjectsHash);
+  //         }
+  //       });
+  //     } else if (ts["area of study"]) {
+  //       tsfacets["area of study"] = [ts["area of study"]];
+  //       tagSets["label"] = ts["area of study"];
+  //       tagSets["area of study"] = [ts["area of study"]];
+  //     } 
+  //     // else if (ts["set type"]) {
+  //     //   tsfacets["set type"] = [ts["set type"]];
+  //     //   tagSets["label"] = ts["set type"];
+  //     //   tagSets["set type"] = [ts["set type"]];
+  //     // } else if (ts["availability"]) {
+  //     //   setAvailableToggle(true);
+  //     //   tsfacets["availability"] = [ts["availability"]];
+  //     //   // DON'T SHOW IN TAGSET FOR A WHILE
+  //     //   // tagSets["label"] = "Available Now";
+  //     //   // tagSets["availability"] = [ts["availability"]];
+  //     // } else if (ts["language"]) {
+  //     //   tsfacets["language"] = [ts["language"]];
+  //     //   tagSets["label"] = ts["language"];
+  //     //   tagSets["language"] = [ts["language"]];
+  //     // }
 
-      if (ts.subjects) {
-        tsfacets["subjects"] = ts.subjects.split(",");
-        ts.subjects.split(",").map((value) => {
-          if (tsSubjects[value] !== undefined) {
-            const subjectsHash = {};
-            subjectsHash["label"] = tsSubjects[value];
-            subjectsHash["subjects"] = [tsSubjects[value]];
-            tagSetsDataArr.push(subjectsHash);
-          }
-        });
-      } else if (ts["area of study"]) {
-        tsfacets["area of study"] = [ts["area of study"]];
-        tagSets["label"] = ts["area of study"];
-        tagSets["area of study"] = [ts["area of study"]];
-      } else if (ts["set type"]) {
-        tsfacets["set type"] = [ts["set type"]];
-        tagSets["label"] = ts["set type"];
-        tagSets["set type"] = [ts["set type"]];
-      } else if (ts["availability"]) {
-        setAvailableToggle(true);
-        tsfacets["availability"] = [ts["availability"]];
-        // DON'T SHOW IN TAGSET FOR A WHILE
-        // tagSets["label"] = "Available Now";
-        // tagSets["availability"] = [ts["availability"]];
-      } else if (ts["language"]) {
-        tsfacets["language"] = [ts["language"]];
-        tagSets["label"] = ts["language"];
-        tagSets["language"] = [ts["language"]];
-      }
-
-      // else if (ts.keyword) {
-      //   tagSets["label"] = ts["keyword"];
-      //   tagSets["keyword"] = [ts["language"]];
-      // }
-      tagSetsDataArr.push(tagSets);
-    });
+  //     // // else if (ts.keyword) {
+  //     // //   tagSets["label"] = ts["keyword"];
+  //     // //   tagSets["keyword"] = [ts["language"]];
+  //     // // }
+  //     // tagSetsDataArr.push(tagSets);
+  //   });
 
     
-    let keywordValue;
-    if (queryValue.get("keyword")) {
-      keywordValue = queryValue.get("keyword");
-      setUpdateKeyword(keywordValue);
-      setShowKeyWord(true);
-    } else {
-      keywordValue = "";
-    }
-    const g_begin = queryValue.get("grade_begin")
-      ? queryValue.get("grade_begin")
-      : -1;
-    const g_end = queryValue.get("grade_end")
-      ? queryValue.get("grade_end")
-      : 12;
-    const availabilityval = queryValue.get("availability")
-      ? [queryValue.get("availability")]
-      : [];
-    const availableToggleVal = queryValue.get("availability") ? true : false;
-    const sortOrderVal = queryValue.get("sort_order")
-      ? queryValue.get("sort_order")
-      : "";
+  //   // let keywordValue;
+  //   // if (queryValue.get("keyword")) {
+  //   //   keywordValue = queryValue.get("keyword");
+  //   //   setUpdateKeyword(keywordValue);
+  //   //   setShowKeyWord(true);
+  //   // } else {
+  //   //   keywordValue = "";
+  //   // }
+  //   // const g_begin = queryValue.get("grade_begin")
+  //   //   ? queryValue.get("grade_begin")
+  //   //   : -1;
+  //   // const g_end = queryValue.get("grade_end")
+  //   //   ? queryValue.get("grade_end")
+  //   //   : 12;
+  //   // const availabilityval = queryValue.get("availability")
+  //   //   ? [queryValue.get("availability")]
+  //   //   : [];
+  //   // const availableToggleVal = queryValue.get("availability") ? true : false;
+  //   // const sortOrderVal = queryValue.get("sort_order")
+  //   //   ? queryValue.get("sort_order")
+  //   //   : "";
 
-    const pageNumber = queryValue.get("page")
-      ? parseInt(queryValue.get("page"))
-      : 1;
-    // FOR A WHILE DONT SHOW IN TAGSET
-    // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
-    //   const tagSetGradeBegin =
-    //     parseInt(g_begin) === -1
-    //       ? "Pre-K"
-    //       : parseInt(g_begin) === 0
-    //       ? "K"
-    //       : parseInt(g_begin);
+  //   // const pageNumber = queryValue.get("page")
+  //   //   ? parseInt(queryValue.get("page"))
+  //   //   : 1;
+  //   // FOR A WHILE DONT SHOW IN TAGSET
+  //   // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
+  //   //   const tagSetGradeBegin =
+  //   //     parseInt(g_begin) === -1
+  //   //       ? "Pre-K"
+  //   //       : parseInt(g_begin) === 0
+  //   //       ? "K"
+  //   //       : parseInt(g_begin);
 
-    //   const tagSetGradeEnd =
-    //     parseInt(g_end) === -1
-    //       ? "Pre-K"
-    //       : parseInt(g_end) === 0
-    //       ? "K"
-    //       : parseInt(g_end);
+  //   //   const tagSetGradeEnd =
+  //   //     parseInt(g_end) === -1
+  //   //       ? "Pre-K"
+  //   //       : parseInt(g_end) === 0
+  //   //       ? "K"
+  //   //       : parseInt(g_end);
 
-    //   const tagSetGrades = {
-    //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
-    //     grade_begin: [queryValue.get("grade_begin")],
-    //     grade_end: [queryValue.get("grade_end")],
-    //   };
+  //   //   const tagSetGrades = {
+  //   //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
+  //   //     grade_begin: [queryValue.get("grade_begin")],
+  //   //     grade_end: [queryValue.get("grade_end")],
+  //   //   };
 
-    //   tagSetsArr.push(tagSetGrades);
-    // }
+  //   //   tagSetsArr.push(tagSetGrades);
+  //   // }
 
-    setSelectedFacets(tsfacets);
-    setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
-    setKeyWord(keywordValue);
-    setAvailability(availabilityval);
-    setAvailableToggle(availableToggleVal);
-    setSortTitleValue(sortOrderVal);
-    setComputedCurrentPage(pageNumber);
-    setTeacherSetArr(tagSetsDataArr);
+  //   // setSelectedFacets(tsfacets);
+  //   // setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
+  //   // setKeyWord(keywordValue);
+  //   // setAvailability(availabilityval);
+  //   // setAvailableToggle(availableToggleVal);
+  //   // setSortTitleValue(sortOrderVal);
+  //   // setComputedCurrentPage(pageNumber);
+  //   // setTeacherSetArr(tagSetsDataArr);
 
-    const params = Object.assign(
-      {
-        keyword: keywordValue,
-        grade_begin: g_begin,
-        grade_end: g_end,
-        availability: availabilityval,
-        sort_order: sortOrderVal,
-        page: pageNumber,
-      },
-      tsfacets
-    );
-    getTeacherSets(params);
-  }, [location.search]);
+  //   const params = Object.assign(
+  //     {
+  //       // keyword: keywordValue,
+  //       // grade_begin: g_begin,
+  //       // grade_end: g_end,
+  //       // availability: availabilityval,
+  //       // sort_order: sortOrderVal,
+  //       // page: pageNumber,
+  //     },
+  //    tsfacets
+  //   );
+  //   console.log(" tsfacets tsfacets")
+  //   console.log(tsfacets)
+  //   console.log(" tsfacets tsfacets")
+  //   getTeacherSets(params);
+  // }, [location.search]);
 
   const getTeacherSets = (params) => {
     axios
       .get("/teacher_sets", { params: params })
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
+        // console.log(res.data.facets)
         setFacets(res.data.facets);
         setTsTotalCount(res.data.total_count);
         setTotalPages(res.data.total_pages);
@@ -499,7 +510,6 @@ export default function SearchTeacherSets(props) {
   };
 
   const displayAvailableCopies = (ts) => {
-    console.log(ts.total_copies)
     const copyLabel = ts.total_copies !== undefined && ts.total_copies > 1 ? "copies" : "copy";
     return (
       <>
@@ -697,10 +707,11 @@ export default function SearchTeacherSets(props) {
       <FilterBarInline
         heading="Refine Results"
         layout="column"
-        renderChildren={renderMultiSelect}
         // bg={sidebarBg}
         // border={sidebarBorder}
         // borderColor={sidebarBorderColor}
+        selectedItems={selectedItems}
+        renderChildren={renderFilterComponents}
         display={{ base: "none", md: "block" }}
         padding="m"
       />
@@ -737,68 +748,64 @@ export default function SearchTeacherSets(props) {
     });
   };
 
-  const renderMultiSelect = (
-    ) => {
-      if (facets && facets.length >= 1) {
-        return facets.map((ts, i) => {
-        return (
-            <MultiSelect
-              buttonText={tsLabel(ts)}
-              key={"ts-facets-key-" + i}
-              id={"ts-facets-multi-select-" + i}
-              items={formattedItems(ts.items)}
-              selectedItems={selectedItems}
-              isBlockElement={true}
-              onChange={(e) => {
-                // First, handle the existing onChange logic
-                onChange(e.target.id, "ts-facets-multi-select-" + i)
-                // Then, handle the additional tsSelectedFacets logic
-                tsSelectedFacets(ts.label, e.target.id)
-              }}
-              onMixedStateChange={(e) => {
-                return onMixedStateChange(e.target.id, id, formattedItems(ts.items));
-              }}
-              onClear={() => onClear("ts-facets-multi-select-" + i)}
-              width="full"
-              listOverflow="expand"
-            />
-            );
-        });
-      } else {
-        return null;
-      }
-    };
-
-  const RefineResults = () => {
-    if (facets && facets.length >= 1) {
-      if (isLargerThanMedium) {
-        return <div>{teacherSetSideBarResults()}</div>;
-      } else {
-        return (
-          <>
-            {resultsFoundMessage()}
-            <Accordion
-              backgroundColor="var(--nypl-colors-ui-white)"
-              marginTop="m"
-              id="mobile-ts-facet-label"
-              accordionData={[
-                {
-                  label: (
-                    <Text isCapitalized noSpace>
-                      Refine results
-                    </Text>
-                  ),
-                  panel: <div>{teacherSetSideBarResults()}</div>,
-                },
-              ]}
-            />
-          </>
-        );
-      }
-    } else {
-      return null;
-    }
+  const renderMultiSelect = () => {
+    if (!facets || facets.length === 0) return null;
+    
+    return facets.map((ts, i) => (
+      <MultiSelect
+        buttonText={tsLabel(ts)}
+        key={`ts-facets-key-${i}`}
+        id={ts.label}
+        items={formattedItems(ts.items)}
+        isBlockElement={true}
+        onChange={(e) => {
+          // First, handle the existing onChange logic
+          onChange(e.target.id, ts.label);
+         // tsSelectedFacets(ts.label, "ts-facets-multi-select-" + i)
+          // Then, handle the additional tsSelectedFacets logic
+          
+        }}
+        onMixedStateChange={(e) => {
+          onMixedStateChange(e.target.id, id, formattedItems(ts.items));
+        }}
+        onClear={() => onClear(ts.label)}
+        selectedItems={selectedItems}
+        width="full"
+        listOverflow="expand"
+      />
+    ));
   };
+
+  // const RefineResults = () => {
+  //   if (facets && facets.length >= 1) {
+  //     if (isLargerThanMedium) {
+  //       return <div>{teacherSetSideBarResults()}</div>;
+  //     } else {
+  //       return (
+  //         <>
+  //           {resultsFoundMessage()}
+  //           <Accordion
+  //             backgroundColor="var(--nypl-colors-ui-white)"
+  //             marginTop="m"
+  //             id="mobile-ts-facet-label"
+  //             accordionData={[
+  //               {
+  //                 label: (
+  //                   <Text isCapitalized noSpace>
+  //                     Refine results
+  //                   </Text>
+  //                 ),
+  //                 panel: <div>{teacherSetSideBarResults()}</div>,
+  //               },
+  //             ]}
+  //           />
+  //         </>
+  //       );
+  //     }
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   const tsRefineResultsHeading = () => {
     if (isLargerThanMedium) {
@@ -889,7 +896,7 @@ export default function SearchTeacherSets(props) {
           level="h4"
           text="Filters"
         />
-        <div>{TeacherSetFacets()}</div>
+        {/* <div>{TeacherSetFacets()}</div> */}
         {clearFiltersButton()}
       </Box>
     );
@@ -916,42 +923,49 @@ export default function SearchTeacherSets(props) {
     );
   };
 
-  const tsSelectedFacets = (field, value) => {
-    if (field === "area of study") {
+  const tsSelectedFacets = (selected_items) => {
+    if (selected_items["area of study"]) {
+      // If "area of study" exists and is an array
+      // Update the "area of study" in the search params with the selected items
       searchParams.delete("page");
-      setSearchParams(searchParams);
-      setComputedCurrentPage(1);
-      selectedFacets[field] = value;
-    } else if (field === "availability") {
-      searchParams.delete("page");
-      setSearchParams(searchParams);
-      setComputedCurrentPage(1);
-      selectedFacets[field] = value;
-    } else if (field === "set type") {
-      searchParams.delete("page");
-      setSearchParams(searchParams);
-      setComputedCurrentPage(1);
-      selectedFacets[field] = value;
-    } else if (field === "language") {
-      searchParams.delete("page");
-      setSearchParams(searchParams);
-      setComputedCurrentPage(1);
-      selectedFacets[field] = value;
-    } else if (field === "subjects") {
-      searchParams.delete("page");
-      setSearchParams(searchParams);
-      setComputedCurrentPage(1);
-      selectedFacets[field] = value;
+      searchParams.set("area of study", selected_items["area of study"]['items']); // Convert array to a comma-separated string
+      selectedFacets["area of study"] = selected_items["area of study"]['items']
+      setSearchParams(searchParams); // Update the search params in state
+      setComputedCurrentPage(1); // Reset pagination
     }
 
-    if (value.length > 0) {
-      searchParams.set(field, value);
-    } else {
-      searchParams.delete(field);
-    }
+    console.log(selectedFacets)
+    // else if (field === "availability") {
+    //   searchParams.delete("page");
+    //   setSearchParams(searchParams);
+    //   setComputedCurrentPage(1);
+    //   selectedFacets[field].push(value);
+    // } else if (field === "set type") {
+    //   searchParams.delete("page");
+    //   setSearchParams(searchParams);
+    //   setComputedCurrentPage(1);
+    //   selectedFacets[field].push(value);
+    // } else if (field === "language") {
+    //   searchParams.delete("page");
+    //   setSearchParams(searchParams);
+    //   setComputedCurrentPage(1);
+    //   selectedFacets[field].push(value);
+    // } else if (field === "subjects") {
+    //   searchParams.delete("page");
+    //   setSearchParams(searchParams);
+    //   setComputedCurrentPage(1);
+    //   selectedFacets[field].push(value);
+    // }
 
-    setSelectedFacets(selectedFacets);
-    setSearchParams(searchParams);
+    // console.log("selectedFacets")
+    // console.log(selectedFacets)
+    // console.log("selectedFacets")
+    // if (selected_items.length > 0) {
+    //   searchParams.set(field, selectedFacets[field]);
+    // } else {
+    //   searchParams.delete(selectedFacets[field]);
+    // }
+
     if (keyword !== null) {
       getTeacherSets(
         Object.assign(
@@ -962,6 +976,7 @@ export default function SearchTeacherSets(props) {
             sort_order: sortTitleValue,
             availability: availability,
             page: computedCurrentPage,
+
           },
           selectedFacets
         )
@@ -1252,60 +1267,53 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  const displayAccordionData = (ts) => {
-    const tsItems = ts.items;
-    if (tsItems.length >= 1) {
-      if (selectedFacets[ts.label] === undefined) {
-        selectedFacets[ts.label] = [];
-      }
-      return (
-        <CheckboxGroup
-          isFullWidth
-          id="ts-checkbox-group"
-          isRequired={false}
-          layout="column"
-          name={ts.label}
-          onChange={tsSelectedFacets.bind(this, ts.label)}
-          value={selectedFacets[ts.label]}
-          onClick={windowScroll}
-        >
-          {tsItems.map((item, index) => (
-            <Checkbox
-              key={"ts-checkbox-key-" + index}
-              id={"ts-checkbox-" + index}
-              value={item["value"].toString()}
-              labelText={
-                <Flex>
-                  <span>{item["label"]}</span>
-                  <Spacer />
-                  <Text noSpace id={"ts-count-" + index} size="body2">
-                    {item["count"] || 0}
-                  </Text>
-                </Flex>
-              }
-            />
-          ))}
-        </CheckboxGroup>
-      );
-    } else {
-      return (
-        <Text isItalic noSpace size="body2" id="accordion-no-results-found">
-          No options available
-        </Text>
-      );
-    }
-  };
+  // const displayAccordionData = (ts) => {
+  //   const tsItems = ts.items;
+  //   if (tsItems.length >= 1) {
+  //     if (selectedFacets[ts.label] === undefined) {
+  //       selectedFacets[ts.label] = [];
+  //     }
+  //     return (
+  //       <CheckboxGroup
+  //         isFullWidth
+  //         id="ts-checkbox-group"
+  //         isRequired={false}
+  //         layout="column"
+  //         name={ts.label}
+  //         onChange={tsSelectedFacets.bind(this, ts.label)}
+  //         value={selectedFacets[ts.label]}
+  //         onClick={windowScroll}
+  //       >
+  //         {tsItems.map((item, index) => (
+  //           <Checkbox
+  //             key={"ts-checkbox-key-" + index}
+  //             id={"ts-checkbox-" + index}
+  //             value={item["value"].toString()}
+  //             labelText={
+  //               <Flex>
+  //                 <span>{item["label"]}</span>
+  //                 <Spacer />
+  //                 <Text noSpace id={"ts-count-" + index} size="body2">
+  //                   {item["count"] || 0}
+  //                 </Text>
+  //               </Flex>
+  //             }
+  //           />
+  //         ))}
+  //       </CheckboxGroup>
+  //     );
+  //   } else {
+  //     return (
+  //       <Text isItalic noSpace size="body2" id="accordion-no-results-found">
+  //         No options available
+  //       </Text>
+  //     );
+  //   }
+  // };
 
-  const TeacherSetFacets = () => {
-    return (<FilterBarInline
-      id="ts-facets-id"
-      heading="Filters"
-      layout="column"
-      onClear={onClearFilterBar}
-      onSubmit={() => console.log(selectedFilterItems)}
-      selectedItems={selectedItems}
-      renderChildren={renderFilterComponents}
-    />)
+
+  const onClearFilterBar = () => {
+    onClearAll();
   };
 
   const TeacherSetFacets1 = () => {

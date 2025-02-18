@@ -134,19 +134,19 @@ class ElasticSearch
     # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi
     if set_type.present?
-      query[:query][:bool][:must] << { :match => { :set_type => set_type.join } }
+      query[:query][:bool][:must] << { :terms => { :set_type => set_type.join } }
     end
 
     # If availability present in filters get ES query based on availability.
     # Eg: availability: "available/unavailable"
     if availability.present?
-      query[:query][:bool][:must] << { :match => { :availability => availability.join } }
+      query[:query][:bool][:must] << { :terms => { :availability => availability.join } }
     end
 
     # If area_of_study present in filters get ES query based on area_of_study.
     # Eg: area_of_study: "Social Studies"
     if area_of_study.present?
-      query[:query][:bool][:must] << { :match => { :area_of_study => area_of_study.join } }
+      query[:query][:bool][:must] << { :terms => { :area_of_study => area_of_study } }
     end
 
     # If subjects present in filters get ES query based on subjects.
