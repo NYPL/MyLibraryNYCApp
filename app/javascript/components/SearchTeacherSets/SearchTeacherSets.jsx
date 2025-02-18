@@ -143,128 +143,128 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  // useEffect(() => {
-  //   const queryValue = new URLSearchParams(location.search);
-  //   const tsfacets = {};
-  //   const tagSetsDataArr = [];
-  //   setTsSubjects({});
-  //   queryParams.map((ts) => {
-  //     const tagSets = {};
+  useEffect(() => {
+    const queryValue = new URLSearchParams(location.search);
+    const tsfacets = {};
+    const tagSetsDataArr = [];
+    setTsSubjects({});
+    queryParams.map((ts) => {
+      const tagSets = {};
 
-  //     if (ts.subjects) {
-  //       tsfacets["subjects"] = ts.subjects.split(",");
-  //       ts.subjects.split(",").map((value) => {
-  //         if (tsSubjects[value] !== undefined) {
-  //           const subjectsHash = {};
-  //           subjectsHash["label"] = tsSubjects[value];
-  //           subjectsHash["subjects"] = [tsSubjects[value]];
-  //           tagSetsDataArr.push(subjectsHash);
-  //         }
-  //       });
-  //     } else if (ts["area of study"]) {
-  //       tsfacets["area of study"] = [ts["area of study"]];
-  //       tagSets["label"] = ts["area of study"];
-  //       tagSets["area of study"] = [ts["area of study"]];
-  //     } 
-  //     // else if (ts["set type"]) {
-  //     //   tsfacets["set type"] = [ts["set type"]];
-  //     //   tagSets["label"] = ts["set type"];
-  //     //   tagSets["set type"] = [ts["set type"]];
-  //     // } else if (ts["availability"]) {
-  //     //   setAvailableToggle(true);
-  //     //   tsfacets["availability"] = [ts["availability"]];
-  //     //   // DON'T SHOW IN TAGSET FOR A WHILE
-  //     //   // tagSets["label"] = "Available Now";
-  //     //   // tagSets["availability"] = [ts["availability"]];
-  //     // } else if (ts["language"]) {
-  //     //   tsfacets["language"] = [ts["language"]];
-  //     //   tagSets["label"] = ts["language"];
-  //     //   tagSets["language"] = [ts["language"]];
-  //     // }
+      if (ts.subjects) {
+        tsfacets["subjects"] = ts.subjects.split(",");
+        ts.subjects.split(",").map((value) => {
+          if (tsSubjects[value] !== undefined) {
+            const subjectsHash = {};
+            subjectsHash["label"] = tsSubjects[value];
+            subjectsHash["subjects"] = [tsSubjects[value]];
+            tagSetsDataArr.push(subjectsHash);
+          }
+        });
+      } else if (ts["area of study"]) {
+        tsfacets["area of study"] = ts["area of study"].split(",");
+        tagSets["label"] = ts["area of study"];
+        tagSets["area of study"] = [ts["area of study"]];
+      } 
+      // else if (ts["set type"]) {
+      //   tsfacets["set type"] = [ts["set type"]];
+      //   tagSets["label"] = ts["set type"];
+      //   tagSets["set type"] = [ts["set type"]];
+      // } else if (ts["availability"]) {
+      //   setAvailableToggle(true);
+      //   tsfacets["availability"] = [ts["availability"]];
+      //   // DON'T SHOW IN TAGSET FOR A WHILE
+      //   // tagSets["label"] = "Available Now";
+      //   // tagSets["availability"] = [ts["availability"]];
+      // } else if (ts["language"]) {
+      //   tsfacets["language"] = [ts["language"]];
+      //   tagSets["label"] = ts["language"];
+      //   tagSets["language"] = [ts["language"]];
+      // }
 
-  //     // // else if (ts.keyword) {
-  //     // //   tagSets["label"] = ts["keyword"];
-  //     // //   tagSets["keyword"] = [ts["language"]];
-  //     // // }
-  //     // tagSetsDataArr.push(tagSets);
-  //   });
+      // // else if (ts.keyword) {
+      // //   tagSets["label"] = ts["keyword"];
+      // //   tagSets["keyword"] = [ts["language"]];
+      // // }
+      // tagSetsDataArr.push(tagSets);
+    });
 
     
-  //   // let keywordValue;
-  //   // if (queryValue.get("keyword")) {
-  //   //   keywordValue = queryValue.get("keyword");
-  //   //   setUpdateKeyword(keywordValue);
-  //   //   setShowKeyWord(true);
-  //   // } else {
-  //   //   keywordValue = "";
-  //   // }
-  //   // const g_begin = queryValue.get("grade_begin")
-  //   //   ? queryValue.get("grade_begin")
-  //   //   : -1;
-  //   // const g_end = queryValue.get("grade_end")
-  //   //   ? queryValue.get("grade_end")
-  //   //   : 12;
-  //   // const availabilityval = queryValue.get("availability")
-  //   //   ? [queryValue.get("availability")]
-  //   //   : [];
-  //   // const availableToggleVal = queryValue.get("availability") ? true : false;
-  //   // const sortOrderVal = queryValue.get("sort_order")
-  //   //   ? queryValue.get("sort_order")
-  //   //   : "";
+    // let keywordValue;
+    // if (queryValue.get("keyword")) {
+    //   keywordValue = queryValue.get("keyword");
+    //   setUpdateKeyword(keywordValue);
+    //   setShowKeyWord(true);
+    // } else {
+    //   keywordValue = "";
+    // }
+    // const g_begin = queryValue.get("grade_begin")
+    //   ? queryValue.get("grade_begin")
+    //   : -1;
+    // const g_end = queryValue.get("grade_end")
+    //   ? queryValue.get("grade_end")
+    //   : 12;
+    // const availabilityval = queryValue.get("availability")
+    //   ? [queryValue.get("availability")]
+    //   : [];
+    // const availableToggleVal = queryValue.get("availability") ? true : false;
+    // const sortOrderVal = queryValue.get("sort_order")
+    //   ? queryValue.get("sort_order")
+    //   : "";
 
-  //   // const pageNumber = queryValue.get("page")
-  //   //   ? parseInt(queryValue.get("page"))
-  //   //   : 1;
-  //   // FOR A WHILE DONT SHOW IN TAGSET
-  //   // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
-  //   //   const tagSetGradeBegin =
-  //   //     parseInt(g_begin) === -1
-  //   //       ? "Pre-K"
-  //   //       : parseInt(g_begin) === 0
-  //   //       ? "K"
-  //   //       : parseInt(g_begin);
+    // const pageNumber = queryValue.get("page")
+    //   ? parseInt(queryValue.get("page"))
+    //   : 1;
+    // FOR A WHILE DONT SHOW IN TAGSET
+    // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
+    //   const tagSetGradeBegin =
+    //     parseInt(g_begin) === -1
+    //       ? "Pre-K"
+    //       : parseInt(g_begin) === 0
+    //       ? "K"
+    //       : parseInt(g_begin);
 
-  //   //   const tagSetGradeEnd =
-  //   //     parseInt(g_end) === -1
-  //   //       ? "Pre-K"
-  //   //       : parseInt(g_end) === 0
-  //   //       ? "K"
-  //   //       : parseInt(g_end);
+    //   const tagSetGradeEnd =
+    //     parseInt(g_end) === -1
+    //       ? "Pre-K"
+    //       : parseInt(g_end) === 0
+    //       ? "K"
+    //       : parseInt(g_end);
 
-  //   //   const tagSetGrades = {
-  //   //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
-  //   //     grade_begin: [queryValue.get("grade_begin")],
-  //   //     grade_end: [queryValue.get("grade_end")],
-  //   //   };
+    //   const tagSetGrades = {
+    //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
+    //     grade_begin: [queryValue.get("grade_begin")],
+    //     grade_end: [queryValue.get("grade_end")],
+    //   };
 
-  //   //   tagSetsArr.push(tagSetGrades);
-  //   // }
+    //   tagSetsArr.push(tagSetGrades);
+    // }
 
-  //   // setSelectedFacets(tsfacets);
-  //   // setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
-  //   // setKeyWord(keywordValue);
-  //   // setAvailability(availabilityval);
-  //   // setAvailableToggle(availableToggleVal);
-  //   // setSortTitleValue(sortOrderVal);
-  //   // setComputedCurrentPage(pageNumber);
-  //   // setTeacherSetArr(tagSetsDataArr);
+    setSelectedFacets(tsfacets);
+    // setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
+    // setKeyWord(keywordValue);
+    // setAvailability(availabilityval);
+    // setAvailableToggle(availableToggleVal);
+    // setSortTitleValue(sortOrderVal);
+    // setComputedCurrentPage(pageNumber);
+    // setTeacherSetArr(tagSetsDataArr);
 
-  //   const params = Object.assign(
-  //     {
-  //       // keyword: keywordValue,
-  //       // grade_begin: g_begin,
-  //       // grade_end: g_end,
-  //       // availability: availabilityval,
-  //       // sort_order: sortOrderVal,
-  //       // page: pageNumber,
-  //     },
-  //    tsfacets
-  //   );
-  //   console.log(" tsfacets tsfacets")
-  //   console.log(tsfacets)
-  //   console.log(" tsfacets tsfacets")
-  //   getTeacherSets(params);
-  // }, [location.search]);
+    const params = Object.assign(
+      {
+        // keyword: keywordValue,
+        // grade_begin: g_begin,
+        // grade_end: g_end,
+        // availability: availabilityval,
+        // sort_order: sortOrderVal,
+        // page: pageNumber,
+      },
+     tsfacets
+    );
+    console.log(" tsfacets tsfacets")
+    console.log(tsfacets)
+    console.log(" tsfacets tsfacets")
+    getTeacherSets(params);
+  }, [location.search]);
 
   const getTeacherSets = (params) => {
     axios
@@ -933,8 +933,6 @@ export default function SearchTeacherSets(props) {
       setSearchParams(searchParams); // Update the search params in state
       setComputedCurrentPage(1); // Reset pagination
     }
-
-    console.log(selectedFacets)
     // else if (field === "availability") {
     //   searchParams.delete("page");
     //   setSearchParams(searchParams);
