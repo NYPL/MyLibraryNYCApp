@@ -191,21 +191,21 @@ class ElasticSearch
                 "language": {
                   "terms": {
                     "field": "primary_language",
-                    "size": 100,
+                    "size": 200,
                     "order": { "_key": "asc" },
                   },
                 },
                 "set type": {
                   "terms": {
                     "field": "set_type",
-                    "size": 10,
+                    "size": 200,
                     "order": { "_key": "asc" },
                   },
                 },
                 "area of study": {
                   "terms": {
                     "field": "area_of_study",
-                    "size": 100,
+                    "size": 200,
                     "order": { "_key": "asc" },
                   },
                 },
