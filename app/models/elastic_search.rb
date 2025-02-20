@@ -78,7 +78,6 @@ class ElasticSearch
     page = params["page"].present? ? params["page"].to_i - 1 : 0
     from = page.to_i * @teachersets_per_page.to_i
     query, agg_hash, subjects_hash = teacher_sets_query_based_on_filters(params)
-
     query[:from] = from
     query[:size] = @teachersets_per_page
     # Sorting teachersets based on availability and created_at values.
@@ -134,13 +133,13 @@ class ElasticSearch
     # If set_type present in filters get ES query based on set_type.
     # Eg: set_type: single/multi
     if set_type.present?
-      query[:query][:bool][:must] << { :terms => { :set_type => set_type.join } }
+      query[:query][:bool][:must] << { :terms => { :set_type => set_type } }
     end
 
     # If availability present in filters get ES query based on availability.
     # Eg: availability: "available/unavailable"
     if availability.present?
-      query[:query][:bool][:must] << { :terms => { :availability => availability.join } }
+      query[:query][:bool][:must] << { :terms => { :availability => availability } }
     end
 
     # If area_of_study present in filters get ES query based on area_of_study.
@@ -162,34 +161,60 @@ class ElasticSearch
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
   def group_by_facets_query(aggregation_hash)
-    global_aggregation_hash = {
-      "total_aggregations": {
-        "global": {},
-        "aggs": {
-          "language": {
-            "terms": {
-              "field": "primary_language",
-              "size": 100,
-              "order": { "_key": "asc" },
-            },
-          },
-          "set type": {
-            "terms": {
-              "field": "set_type",
-              "size": 10,
-              "order": { "_key": "asc" },
-            },
-          },
-          "area of study": {
-            "terms": {
-              "field": "area_of_study",
-              "size": 100,
-              "order": { "_key": "asc" },
+    global_aggregation_hash =
+      {
+        "total_aggregations": {
+          "global": {},
+          "aggs": {
+            "filtered_data": {
+              "filter": {
+                "bool": {
+                  "must": [
+                    {
+                      "range": {
+                        "grade_begin": {
+                          "lte": 12,
+                        },
+                      },
+                    },
+                    {
+                      "range": {
+                        "grade_end": {
+                          "gte": -1,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              "aggs": {
+                "language": {
+                  "terms": {
+                    "field": "primary_language",
+                    "size": 100,
+                    "order": { "_key": "asc" },
+                  },
+                },
+                "set type": {
+                  "terms": {
+                    "field": "set_type",
+                    "size": 10,
+                    "order": { "_key": "asc" },
+                  },
+                },
+                "area of study": {
+                  "terms": {
+                    "field": "area_of_study",
+                    "size": 100,
+                    "order": { "_key": "asc" },
+                  },
+                },
+              },
             },
           },
         },
-      },
-    }
+      }
+
     subject_aggregation_hash = {
       "total_aggregations": {
         "global": {},
@@ -249,10 +274,10 @@ class ElasticSearch
       facets_group = { :label => config[:label], :items => [] }
       # eg: aggregation_name = 'language' or 'availability' etc
       aggregation_name = config[:label]
-      aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]
+      aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
 
       if aggregations.present? && aggregations["buckets"].present?
-        teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]["buckets"].each do |agg_val|
+        teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]["buckets"].each do |agg_val|
           label = agg_val["key"]
           unless config[:value_map].nil?
             label = config[:value_map][agg_val["key"]]
