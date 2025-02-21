@@ -86,10 +86,7 @@ class ElasticSearch
     query[:aggs] = agg_hash
     teacherset_docs = search_by_query(query)
     facets = facets_for_teacher_sets(teacherset_docs, params)
-    query[:aggs] = subjects_hash
-    teacherset_docs = search_by_query(query)
-    subject_facets = get_subject_facets(teacherset_docs, facets, params)
-    [teacherset_docs, facets << subject_facets, teacherset_docs[:totalMatches]]
+    [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
   end
@@ -127,7 +124,7 @@ class ElasticSearch
 
     # If language present in filters finding the language in these fields [language, primary_language]
     if language.present?
-      query[:query][:bool][:must] << { :multi_match => { :query => language.join, :fields => %w[primary_language] } }
+      query[:query][:bool][:must] << { :terms => { :primary_language => language } }
     end
 
     # If set_type present in filters get ES query based on set_type.
@@ -155,8 +152,8 @@ class ElasticSearch
       query[:query][:bool][:must] << { :nested => { :path => "subjects",
                                                    :query => { :bool => { :must => [{ :terms => { "subjects.id" => params["subjects"] } }] } } } }
     end
-    aggregation_hash, subjects_hash = group_by_facets_query(aggregation_hash)
-    [query, aggregation_hash, subjects_hash]
+    aggregation_hash = group_by_facets_query(aggregation_hash)
+    [query, aggregation_hash]
   end
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
@@ -209,40 +206,31 @@ class ElasticSearch
                     "order": { "_key": "asc" },
                   },
                 },
+                "subjects": {
+                  "nested": {
+                    "path": "subjects",
+                  },
+                  "aggs": {
+                    "id": {
+                      "terms": {
+                        "field": "subjects.id",
+                        "size": 3000,
+                      },
+                    },
+                    "title": {
+                      "terms": {
+                        "field": "subjects.title.keyword",
+                        "size": 3000,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
         },
       }
-
-    subject_aggregation_hash = {
-      "total_aggregations": {
-        "global": {},
-        "aggs": {
-          "subjects": {
-            "nested": {
-              "path": "subjects",
-            },
-            "aggs": {
-              "id": {
-                "terms": {
-                  "field": "subjects.id",
-                  "size": 3000,
-                },
-              },
-              "title": {
-                "terms": {
-                  "field": "subjects.title.keyword",
-                  "size": 3000,
-                },
-              },
-            },
-          },
-        },
-      },
-    }
-
-    [global_aggregation_hash, subject_aggregation_hash]
+    global_aggregation_hash
   end
 
   # Get teacher set facets
@@ -270,11 +258,37 @@ class ElasticSearch
       { :label => "language", :column => :primary_language },
       { :label => "set type", :column => "set_type" },
       { :label => "area of study", :column => "area_of_study" },
+      { :label => "subjects", :column => "subjects" },
     ].each do |config|
       facets_group = { :label => config[:label], :items => [] }
       # eg: aggregation_name = 'language' or 'availability' etc
       aggregation_name = config[:label]
+
       aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
+      if aggregation_name.to_s == "subjects"
+        id_buckets = aggregations["id"]["buckets"]
+        title_buckets = aggregations["title"]["buckets"]
+
+        # Ensure that id_buckets and title_buckets are equal in length before processing
+        if id_buckets.length == title_buckets.length
+          id_buckets.each_with_index do |id_bucket, index|
+            title_bucket = title_buckets[index]
+
+            # Ensure that doc_count is above the minimum threshold if necessary
+            if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
+              next
+            end
+
+            # Check if the current subject ID matches the parameters (if any)
+            # Add the facet to the items list
+            facets_group[:items] << {
+              value: id_bucket["key"],   # ID as value
+              label: title_bucket["key"], # Title as label
+              count: id_bucket["doc_count"],
+            }
+          end
+        end
+      end
 
       if aggregations.present? && aggregations["buckets"].present?
         teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]["buckets"].each do |agg_val|
