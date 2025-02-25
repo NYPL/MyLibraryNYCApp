@@ -108,7 +108,7 @@ export default function SearchTeacherSets(props) {
 
   useEffect(() => {
     setSelectedFilterItems([selectedItems]);
-    tsSelectedFacets(selectedItems);
+    tsSelectedFacets(selectedItems)
   }, [selectedItems]);
 
 
@@ -143,132 +143,130 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  // useEffect(() => {
-  //   const queryValue = new URLSearchParams(location.search);
-  //   const tsfacets = {};
-  //   const tagSetsDataArr = [];
-  //   setTsSubjects({});
-  //   queryParams.map((ts) => {
-  //     const tagSets = {};
+  useEffect(() => {
+    const queryValue = new URLSearchParams(location.search);
+    const tsfacets = {};
+    const tagSetsDataArr = [];
+    setTsSubjects({});
+    queryParams.map((ts) => {
+      const tagSets = {};
+      if (ts.subjects) {
+        tsfacets["subjects"] = ts.subjects.split(",");
+        ts.subjects.split(",").map((value) => {
+          if (tsSubjects[value] !== undefined) {
+            const subjectsHash = {};
+            subjectsHash["label"] = tsSubjects[value];
+            subjectsHash["subjects"] = [tsSubjects[value]];
+            tagSetsDataArr.push(subjectsHash);
+          }
+        });
+      } else if (ts["area of study"]) {
+        tsfacets["area of study"] = [ts["area of study"].split(",")];
+        tagSets["label"] = ts["area of study"];
+        tagSets["area of study"] = [ts["area of study"]];
+      } 
+      else if (ts["set type"]) {
+        tsfacets["set type"] = [ts["set type"].split(",")];
+        tagSets["label"] = ts["set type"];
+        tagSets["set type"] = [ts["set type"]];
+      } else if (ts["availability"]) {
+        setAvailableToggle(true);
+        tsfacets["availability"] = [ts["availability"]];
+        // DON'T SHOW IN TAGSET FOR A WHILE
+        // tagSets["label"] = "Available Now";
+        // tagSets["availability"] = [ts["availability"]];
+      } else if (ts["language"]) {
+        tsfacets["language"] = ts["language"].split(",");
+        tagSets["label"] = ts["language"];
+        tagSets["language"] = [ts["language"]];
+      }
 
-  //     if (ts.subjects) {
-  //       tsfacets["subjects"] = ts.subjects.split(",");
-  //       ts.subjects.split(",").map((value) => {
-  //         if (tsSubjects[value] !== undefined) {
-  //           const subjectsHash = {};
-  //           subjectsHash["label"] = tsSubjects[value];
-  //           subjectsHash["subjects"] = [tsSubjects[value]];
-  //           tagSetsDataArr.push(subjectsHash);
-  //         }
-  //       });
-  //     } else if (ts["area of study"]) {
-  //       tsfacets["area of study"] = ts["area of study"].split(",");
-  //       tagSets["label"] = ts["area of study"];
-  //       tagSets["area of study"] = [ts["area of study"]];
-  //     } 
-  //     else if (ts["set type"]) {
-  //       tsfacets["set type"] = [ts["set type"].split(",")];
-  //       tagSets["label"] = ts["set type"];
-  //       tagSets["set type"] = [ts["set type"]];
-  //     } else if (ts["availability"]) {
-  //       setAvailableToggle(true);
-  //       tsfacets["availability"] = [ts["availability"]];
-  //       // DON'T SHOW IN TAGSET FOR A WHILE
-  //       // tagSets["label"] = "Available Now";
-  //       // tagSets["availability"] = [ts["availability"]];
-  //     } else if (ts["language"]) {
-  //       tsfacets["language"] = [ts["language"].split(",")];
-  //       tagSets["label"] = ts["language"];
-  //       tagSets["language"] = [ts["language"]];
-  //     }
-
-  //     // // else if (ts.keyword) {
-  //     // //   tagSets["label"] = ts["keyword"];
-  //     // //   tagSets["keyword"] = [ts["language"]];
-  //     // // }
-  //     // tagSetsDataArr.push(tagSets);
-  //   });
-
+      // // else if (ts.keyword) {
+      // //   tagSets["label"] = ts["keyword"];
+      // //   tagSets["keyword"] = [ts["language"]];
+      // // }
+      // tagSetsDataArr.push(tagSets);
+      console.log(tsfacets)
+    });
     
-  //   // let keywordValue;
-  //   // if (queryValue.get("keyword")) {
-  //   //   keywordValue = queryValue.get("keyword");
-  //   //   setUpdateKeyword(keywordValue);
-  //   //   setShowKeyWord(true);
-  //   // } else {
-  //   //   keywordValue = "";
-  //   // }
-  //   // const g_begin = queryValue.get("grade_begin")
-  //   //   ? queryValue.get("grade_begin")
-  //   //   : -1;
-  //   // const g_end = queryValue.get("grade_end")
-  //   //   ? queryValue.get("grade_end")
-  //   //   : 12;
-  //   // const availabilityval = queryValue.get("availability")
-  //   //   ? [queryValue.get("availability")]
-  //   //   : [];
-  //   // const availableToggleVal = queryValue.get("availability") ? true : false;
-  //   // const sortOrderVal = queryValue.get("sort_order")
-  //   //   ? queryValue.get("sort_order")
-  //   //   : "";
+    let keywordValue;
+    if (queryValue.get("keyword")) {
+      keywordValue = queryValue.get("keyword");
+      setUpdateKeyword(keywordValue);
+      setShowKeyWord(true);
+    } else {
+      keywordValue = "";
+    }
+    const g_begin = queryValue.get("grade_begin")
+      ? queryValue.get("grade_begin")
+      : -1;
+    const g_end = queryValue.get("grade_end")
+      ? queryValue.get("grade_end")
+      : 12;
+    const availabilityval = queryValue.get("availability")
+      ? [queryValue.get("availability")]
+      : [];
+    const availableToggleVal = queryValue.get("availability") ? true : false;
+    const sortOrderVal = queryValue.get("sort_order")
+      ? queryValue.get("sort_order")
+      : "";
+    const pageNumber = queryValue.get("page")
+      ? parseInt(queryValue.get("page"))
+      : 1;
+    // FOR A WHILE DONT SHOW IN TAGSET
+    // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
+    //   const tagSetGradeBegin =
+    //     parseInt(g_begin) === -1
+    //       ? "Pre-K"
+    //       : parseInt(g_begin) === 0
+    //       ? "K"
+    //       : parseInt(g_begin);
 
-  //   // const pageNumber = queryValue.get("page")
-  //   //   ? parseInt(queryValue.get("page"))
-  //   //   : 1;
-  //   // FOR A WHILE DONT SHOW IN TAGSET
-  //   // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
-  //   //   const tagSetGradeBegin =
-  //   //     parseInt(g_begin) === -1
-  //   //       ? "Pre-K"
-  //   //       : parseInt(g_begin) === 0
-  //   //       ? "K"
-  //   //       : parseInt(g_begin);
+    //   const tagSetGradeEnd =
+    //     parseInt(g_end) === -1
+    //       ? "Pre-K"
+    //       : parseInt(g_end) === 0
+    //       ? "K"
+    //       : parseInt(g_end);
 
-  //   //   const tagSetGradeEnd =
-  //   //     parseInt(g_end) === -1
-  //   //       ? "Pre-K"
-  //   //       : parseInt(g_end) === 0
-  //   //       ? "K"
-  //   //       : parseInt(g_end);
+    //   const tagSetGrades = {
+    //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
+    //     grade_begin: [queryValue.get("grade_begin")],
+    //     grade_end: [queryValue.get("grade_end")],
+    //   };
 
-  //   //   const tagSetGrades = {
-  //   //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
-  //   //     grade_begin: [queryValue.get("grade_begin")],
-  //   //     grade_end: [queryValue.get("grade_end")],
-  //   //   };
+    //   tagSetsArr.push(tagSetGrades);
+    // }
+    setSelectedFacets(tsfacets);
+    setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
+    setKeyWord(keywordValue);
+    setAvailability(availabilityval);
+    setAvailableToggle(availableToggleVal);
+    setSortTitleValue(sortOrderVal);
+    setComputedCurrentPage(pageNumber);
+    //setTeacherSetArr(tagSetsDataArr);
+    
 
-  //   //   tagSetsArr.push(tagSetGrades);
-  //   // }
-
-  //   setSelectedFacets(tsfacets);
-  //   // setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
-  //   // setKeyWord(keywordValue);
-  //   // setAvailability(availabilityval);
-  //   // setAvailableToggle(availableToggleVal);
-  //   // setSortTitleValue(sortOrderVal);
-  //   // setComputedCurrentPage(pageNumber);
-  //   // setTeacherSetArr(tagSetsDataArr);
-
-  //   const params = Object.assign(
-  //     {
-  //       // keyword: keywordValue,
-  //       // grade_begin: g_begin,
-  //       // grade_end: g_end,
-  //       // availability: availabilityval,
-  //       // sort_order: sortOrderVal,
-  //       // page: pageNumber,
-  //     },
-  //    tsfacets
-  //   );
-  //   getTeacherSets(params);
-  // }, [location.search]);
+    // getTeacherSets(
+    //   Object.assign(
+    //     {
+    //       keyword: keywordValue,
+    //       grade_begin: g_begin,
+    //       grade_end: g_end,
+    //       sort_order: sortOrderVal,
+    //       availability: availabilityval,
+    //       page: pageNumber,
+    //     },
+    //     tsfacets
+    //   )
+    // );
+  }, [location.search]);
 
   const getTeacherSets = (params) => {
     axios
       .get("/teacher_sets", { params: params })
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
-        console.log(res.data.facets)
         setFacets(res.data.facets);
         setTsTotalCount(res.data.total_count);
         setTotalPages(res.data.total_pages);
@@ -699,6 +697,10 @@ export default function SearchTeacherSets(props) {
     );
   };
 
+  const onClearFilterBar = () => {
+    onClearAll();
+  };
+
   const filterBarMultiSelect = () => {
     return (
       <FilterBarInline
@@ -707,10 +709,11 @@ export default function SearchTeacherSets(props) {
         // bg={sidebarBg}
         // border={sidebarBorder}
         // borderColor={sidebarBorderColor}
+        onClear={clearFilters}
         selectedItems={selectedItems}
         renderChildren={renderFilterComponents}
         display={{ base: "none", md: "block" }}
-        padding="m"
+        padding="xs"
       />
     )
   }
@@ -719,7 +722,7 @@ export default function SearchTeacherSets(props) {
     return (
       <MultiSelectGroup
         id="multiselect-group"
-        labelText="MultiSelect Group"
+        labelText=""
         layout="column"
         renderMultiSelect={renderMultiSelect.bind(this)}
       />
@@ -819,14 +822,15 @@ export default function SearchTeacherSets(props) {
   };
 
   const clearFilters = () => {
+    onClearAll();
     searchResultsTextRef.current.focus();
     searchParams.delete("language");
     searchParams.delete("area of study");
     searchParams.delete("set type");
     searchParams.delete("subjects");
-    // searchParams.delete("availability");
-    // searchParams.delete("grade_begin");
-    // searchParams.delete("grade_end");
+    searchParams.delete("availability");
+    searchParams.delete("grade_begin");
+    searchParams.delete("grade_end");
     setSearchParams(searchParams);
     // setGradeBegin(-1);
     // setGradeEnd(12);
@@ -894,8 +898,8 @@ export default function SearchTeacherSets(props) {
           level="h4"
           text="Filters"
         />
-        {/* <div>{TeacherSetFacets()}</div> */}
-        {clearFiltersButton()}
+        <div>{filterBarMultiSelect()}</div>
+        {/* {clearFiltersButton()} */}
       </Box>
     );
   };
@@ -921,16 +925,20 @@ export default function SearchTeacherSets(props) {
     );
   };
 
-  const tsSelectedFacets = (selected_items) => {
-    console.log(selected_items["language"])
+  const tsSelectedFacets = (selected_items) => {    
     if (selected_items["area of study"]) {
+      const areaOfStudy = selected_items["area of study"]['items'];
       // If "area of study" exists and is an array
       // Update the "area of study" in the search params with the selected items
-      searchParams.delete("page");
-      searchParams.set("area of study", selected_items["area of study"]['items']);
-      selectedFacets["area of study"] = selected_items["area of study"]['items']
-      setSearchParams(searchParams); // Update the search params in state
-      setComputedCurrentPage(1); // Reset pagination
+      searchParams.delete("page");      
+      if (areaOfStudy.length > 0) {
+        searchParams.set("area of study", areaOfStudy);
+        selectedFacets["area of study"] = areaOfStudy
+        setComputedCurrentPage(1);
+      } else {
+        searchParams.delete("area of study");
+      }
+      setSearchParams(searchParams);
     }
     else if (selected_items["availability"]) {
       searchParams.delete("page");
@@ -938,29 +946,42 @@ export default function SearchTeacherSets(props) {
       setComputedCurrentPage(1);
       //selectedFacets['availability'] = selected_items["set type"]
     } else if (selected_items["set type"]) {
+      const setType = selected_items["set type"]['items']
       searchParams.delete("page");
-      searchParams.set("set type", selected_items["set type"]['items']);
-      setSearchParams(searchParams);
       setComputedCurrentPage(1);
-      selectedFacets["set type"] = selected_items["set type"]['items']
+      if (setType.length > 0) {
+        searchParams.set("set type", setType);
+        selectedFacets["set type"] = setType
+        setComputedCurrentPage(1);
+      } else {
+        searchParams.delete("set type");
+      }
+      setSelectedFacets(selectedFacets);
+      setSearchParams(searchParams);
     } else if (selected_items["language"]) {
+      const language = selected_items["language"]['items']
       searchParams.delete("page");
-      searchParams.set("language", selected_items["language"]['items']);
+      if (language.length > 0) {
+        searchParams.set("language", language);
+        selectedFacets["language"] = language
+        setComputedCurrentPage(1);
+      } else {
+        searchParams.delete("language");
+      }
       setSearchParams(searchParams);
-      setSearchParams(searchParams);
-      setComputedCurrentPage(1);
-      selectedFacets["language"] = selected_items["language"]['items']
     } else if (selected_items["subjects"]) {
       searchParams.delete("page");
-      searchParams.set("subjects", selected_items["subjects"]['items']);
+      const subjects = selected_items["subjects"]['items']
+      if (language.length > 0) {
+        searchParams.set("subjects", subjects);
+        selectedFacets["subjects"] = subjects
+        setComputedCurrentPage(1);
+      } else {
+        searchParams.delete("subjects");
+      }
       setSearchParams(searchParams);
-      setComputedCurrentPage(1);
-      selectedFacets["subjects"] = selected_items["subjects"]['items']
     }
 
-    // console.log("selectedFacets")
-    // console.log(selectedFacets)
-    // console.log("selectedFacets")
     // if (selected_items.length > 0) {
     //   searchParams.set(field, selectedFacets[field]);
     // } else {
@@ -1268,55 +1289,6 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  // const displayAccordionData = (ts) => {
-  //   const tsItems = ts.items;
-  //   if (tsItems.length >= 1) {
-  //     if (selectedFacets[ts.label] === undefined) {
-  //       selectedFacets[ts.label] = [];
-  //     }
-  //     return (
-  //       <CheckboxGroup
-  //         isFullWidth
-  //         id="ts-checkbox-group"
-  //         isRequired={false}
-  //         layout="column"
-  //         name={ts.label}
-  //         onChange={tsSelectedFacets.bind(this, ts.label)}
-  //         value={selectedFacets[ts.label]}
-  //         onClick={windowScroll}
-  //       >
-  //         {tsItems.map((item, index) => (
-  //           <Checkbox
-  //             key={"ts-checkbox-key-" + index}
-  //             id={"ts-checkbox-" + index}
-  //             value={item["value"].toString()}
-  //             labelText={
-  //               <Flex>
-  //                 <span>{item["label"]}</span>
-  //                 <Spacer />
-  //                 <Text noSpace id={"ts-count-" + index} size="body2">
-  //                   {item["count"] || 0}
-  //                 </Text>
-  //               </Flex>
-  //             }
-  //           />
-  //         ))}
-  //       </CheckboxGroup>
-  //     );
-  //   } else {
-  //     return (
-  //       <Text isItalic noSpace size="body2" id="accordion-no-results-found">
-  //         No options available
-  //       </Text>
-  //     );
-  //   }
-  // };
-
-
-  const onClearFilterBar = () => {
-    onClearAll();
-  };
-
   const TeacherSetFacets1 = () => {
     return facets.map((ts, i) => {
       return (
@@ -1463,7 +1435,7 @@ const htmlContent = `Audio Player helper text. ${formattedRange}`;
       contentSidebar={
         <>
           {skeletonLoader()}
-          {filterBarMultiSelect()}
+          {teacherSetSideBarResults()}
         </>
       }
       sidebar="left"
