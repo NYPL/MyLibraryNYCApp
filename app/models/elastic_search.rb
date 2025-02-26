@@ -152,76 +152,79 @@ class ElasticSearch
       query[:query][:bool][:must] << { :nested => { :path => "subjects",
                                                    :query => { :bool => { :must => [{ :terms => { "subjects.id" => params["subjects"] } }] } } } }
     end
-    aggregation_hash = group_by_facets_query(aggregation_hash)
+    aggregation_hash = group_by_facets_query(aggregation_hash, params)
     [query, aggregation_hash]
   end
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
-  def group_by_facets_query(aggregation_hash)
-    global_aggregation_hash =
-      {
-        "total_aggregations": {
-          "global": {},
-          "aggs": {
-            "filtered_data": {
-              "filter": {
-                "bool": {
-                  "must": [
-                    {
-                      "range": {
-                        "grade_begin": {
-                          "lte": 12,
-                        },
-                      },
-                    },
-                    {
-                      "range": {
-                        "grade_end": {
-                          "gte": -1,
-                        },
-                      },
-                    },
-                  ],
+  def group_by_facets_query(aggregation_hash, params)
+    set_type = "Book Club Set Set1" #params["set type"]
+    primary_language = "English" #params["language"]
+    area_of_study = ""
+    subjects = ""
+    aggregation_hash = {}
+    must_conditions = [
+      { range: { grade_begin: { lte: 12 } } },
+      { range: { grade_end: { gte: -1 } } },
+    ]
+
+    # Only add set_type and primary_language conditions if they are not nil
+    must_conditions << { terms: { set_type: [set_type] } } if set_type.present?
+    must_conditions << { terms: { primary_language: [primary_language] } } if primary_language.present?
+    must_conditions << { terms: { area_of_study: [area_of_study] } } if area_of_study.present?
+    must_conditions << { terms: { subjects: [subjects] } } if subjects.present?
+
+    aggregation_hash = {}
+    aggregation_hash[:aggs] = {
+      total_aggregations: {
+        global: {},
+        aggs: {
+          filtered_data: {
+            filter: {
+              bool: {
+                must: must_conditions,
+              },
+            },
+            aggs: {
+              language: {
+                terms: {
+                  field: "primary_language",
+                  size: 200,
+                  order: { _key: "asc" },
+                  min_doc_count: 0,  # Include even empty buckets
                 },
               },
-              "aggs": {
-                "language": {
-                  "terms": {
-                    "field": "primary_language",
-                    "size": 200,
-                    "order": { "_key": "asc" },
-                  },
+              'set type': {
+                terms: {
+                  field: "set_type",
+                  size: 200,
+                  order: { _key: "asc" },
+                  min_doc_count: 0,  # Include even empty buckets
                 },
-                "set type": {
-                  "terms": {
-                    "field": "set_type",
-                    "size": 200,
-                    "order": { "_key": "asc" },
-                  },
+              },
+              'area of study': {
+                terms: {
+                  field: "area_of_study",
+                  size: 200,
+                  order: { _key: "asc" },
+                  min_doc_count: 0,  # Include even empty buckets
                 },
-                "area of study": {
-                  "terms": {
-                    "field": "area_of_study",
-                    "size": 200,
-                    "order": { "_key": "asc" },
-                  },
+              },
+              "subjects": {
+                "nested": {
+                  "path": "subjects",
                 },
-                "subjects": {
-                  "nested": {
-                    "path": "subjects",
-                  },
-                  "aggs": {
-                    "id": {
-                      "terms": {
-                        "field": "subjects.id",
-                        "size": 3000,
-                      },
+                "aggs": {
+                  "id": {
+                    "terms": {
+                      "field": "subjects.id",
+                      "size": 3000,
                     },
-                    "title": {
-                      "terms": {
-                        "field": "subjects.title.keyword",
-                        "size": 3000,
-                      },
+                  },
+                  "title": {
+                    "terms": {
+                      "field": "subjects.title.keyword",
+                      "size": 3000,
                     },
                   },
                 },
@@ -229,8 +232,8 @@ class ElasticSearch
             },
           },
         },
-      }
-    global_aggregation_hash
+      },
+    }
   end
 
   # Get teacher set facets
