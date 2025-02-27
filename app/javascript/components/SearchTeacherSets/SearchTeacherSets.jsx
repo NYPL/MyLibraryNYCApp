@@ -186,7 +186,7 @@ export default function SearchTeacherSets(props) {
       // //   tagSets["keyword"] = [ts["language"]];
       // // }
       // tagSetsDataArr.push(tagSets);
-      console.log(tsfacets)
+     //console.log(tsfacets)
     });
     
     let keywordValue;
@@ -268,6 +268,7 @@ export default function SearchTeacherSets(props) {
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
         setFacets(res.data.facets);
+        console.log(res.data.facets)
         setTsTotalCount(res.data.total_count);
         setTotalPages(res.data.total_pages);
         setNoTsResultsFound(res.data.no_results_found_msg);
@@ -744,6 +745,7 @@ export default function SearchTeacherSets(props) {
       return {
         id: String(item.value),
         name: item.label,
+        isDisabled: item.count > 0  ? false : true,
         itemCount: item.count,
       };
     });
@@ -925,7 +927,8 @@ export default function SearchTeacherSets(props) {
     );
   };
 
-  const tsSelectedFacets = (selected_items) => {    
+  const tsSelectedFacets = (selected_items) => {  
+    console.log(selected_items["availability"])  
     if (selected_items["area of study"]) {
       const areaOfStudy = selected_items["area of study"]['items'];
       // If "area of study" exists and is an array
@@ -937,6 +940,7 @@ export default function SearchTeacherSets(props) {
         setComputedCurrentPage(1);
       } else {
         searchParams.delete("area of study");
+        selectedFacets["area of study"] = []
       }
       setSearchParams(searchParams);
     }
@@ -955,6 +959,7 @@ export default function SearchTeacherSets(props) {
         setComputedCurrentPage(1);
       } else {
         searchParams.delete("set type");
+        selectedFacets["set type"] = []
       }
       setSelectedFacets(selectedFacets);
       setSearchParams(searchParams);
@@ -967,6 +972,7 @@ export default function SearchTeacherSets(props) {
         setComputedCurrentPage(1);
       } else {
         searchParams.delete("language");
+        selectedFacets["language"] = []
       }
       setSearchParams(searchParams);
     } else if (selected_items["subjects"]) {
@@ -978,15 +984,17 @@ export default function SearchTeacherSets(props) {
         setComputedCurrentPage(1);
       } else {
         searchParams.delete("subjects");
+        selectedFacets["subjects"] = []
       }
       setSearchParams(searchParams);
     }
-
+    console.log(selectedFacets)
     // if (selected_items.length > 0) {
     //   searchParams.set(field, selectedFacets[field]);
     // } else {
     //   searchParams.delete(selectedFacets[field]);
     // }
+
 
     if (keyword !== null) {
       getTeacherSets(

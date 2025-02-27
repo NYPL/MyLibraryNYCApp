@@ -95,7 +95,6 @@ class ElasticSearch
   def teacher_sets_query_based_on_filters(params)
     keyword, grade_begin, grade_end, language, set_type, availability, area_of_study, subjects = teacher_sets_input_params(params)
     query = { :query => { :bool => { :must => [] } } }
-    aggregation_hash = {}
     # If search keyword is present in filters, finding the search keyword in these fields [title, description, contents, subjects]
     # Subjects is a nested object.
     # If any search keyword have wrong spelling, still getting the elasticsearch documents with fuzziness.
@@ -152,29 +151,23 @@ class ElasticSearch
       query[:query][:bool][:must] << { :nested => { :path => "subjects",
                                                    :query => { :bool => { :must => [{ :terms => { "subjects.id" => params["subjects"] } }] } } } }
     end
-    aggregation_hash = group_by_facets_query(aggregation_hash, params)
+    aggregation_hash = group_by_facets_query(area_of_study, language, subjects, set_type)
     [query, aggregation_hash]
   end
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
-  def group_by_facets_query(aggregation_hash, params)
-    set_type = "Book Club Set Set1" #params["set type"]
-    primary_language = "English" #params["language"]
-    area_of_study = ""
-    subjects = ""
+  def group_by_facets_query(area_of_study, primary_language, subjects, set_type)
     aggregation_hash = {}
     must_conditions = [
       { range: { grade_begin: { lte: 12 } } },
       { range: { grade_end: { gte: -1 } } },
     ]
 
-    # Only add set_type and primary_language conditions if they are not nil
-    must_conditions << { terms: { set_type: [set_type] } } if set_type.present?
-    must_conditions << { terms: { primary_language: [primary_language] } } if primary_language.present?
-    must_conditions << { terms: { area_of_study: [area_of_study] } } if area_of_study.present?
-    must_conditions << { terms: { subjects: [subjects] } } if subjects.present?
+    must_conditions << { terms: { set_type: set_type } } if set_type.present?
+    must_conditions << { terms: { primary_language: primary_language } } if primary_language.present?
+    must_conditions << { terms: { area_of_study: area_of_study } } if area_of_study.present?
+    must_conditions << { terms: { subjects: subjects } } if subjects.present?
 
-    aggregation_hash = {}
     aggregation_hash[:aggs] = {
       total_aggregations: {
         global: {},
