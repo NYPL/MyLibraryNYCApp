@@ -238,6 +238,26 @@ class ElasticSearch
               "min_doc_count": 0,
             },
           },
+          "all_language": {
+            "terms": {
+              "field": "primary_language",
+              "size": 200,
+              "order": {
+                "_key": "asc",
+              },
+              "min_doc_count": 0,
+            },
+          },
+          "all_set_type": {
+            "terms": {
+              "field": "set_type",
+              "size": 200,
+              "order": {
+                "_key": "asc",
+              },
+              "min_doc_count": 0,
+            },
+          },
         },
       },
     }
@@ -265,9 +285,9 @@ class ElasticSearch
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study)
   def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets, params)
     area_of_study = params["area of study"].present? ? "all_area_of_study" : "area of study"
-    set_type = params["set type"].present? ? "set type" : "set type"
-    language = params["language"].present? ? "language" : "language"
-    subjects = params["subjects"].present? ? "subjects" : "subjects"
+    set_type = params["set type"].present? ? "all_set_type" : "set type"
+    language = params["language"].present? ? "all_language" : "language"
+    subjects = params["subjects"].present? ? "all_subjects" : "subjects"
 
     [
       { :label => "language", :column => :primary_language, :aggregation_name => language },
@@ -278,8 +298,10 @@ class ElasticSearch
       facets_group = { :label => config[:label], :items => [] }
       # eg: aggregation_name = 'language' or 'availability' etc
       aggregation_name = config[:aggregation_name]
-
-      if area_of_study.present? && aggregation_name.to_s == "all_area_of_study"
+      #binding.pry
+      if ((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
+          (set_type.present? && aggregation_name.to_s == "all_set_type") ||
+          (language.present? && aggregation_name.to_s == "all_language"))
         aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]
       else
         aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
@@ -309,9 +331,11 @@ class ElasticSearch
           end
         end
       end
-
+      #binding.pry
       if aggregations.present? && aggregations["buckets"].present?
-        if area_of_study.present? && aggregation_name.to_s == "all_area_of_study"
+        if ((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
+            (set_type.present? && aggregation_name.to_s == "all_set_type") ||
+            (language.present? && aggregation_name.to_s == "all_language"))
           buckets = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]["buckets"]
         else
           buckets = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]["buckets"]
