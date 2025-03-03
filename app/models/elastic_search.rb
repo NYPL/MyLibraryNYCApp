@@ -268,7 +268,7 @@ class ElasticSearch
     facets = []
     # Get all facets from elastic search.
     facets = get_language_availability_set_type_area_of_study_facets(teacher_sets_docs, facets, params)
-
+    #binding.pry
     # Specify desired order of facets:
     facets.sort_by! do |f|
       ind = ["area of study", "subjects", "language", "set type"].index f[:label]
@@ -283,78 +283,177 @@ class ElasticSearch
   end
 
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study)
-  def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets, params)
-    area_of_study = params["area of study"].present? ? "all_area_of_study" : "area of study"
-    set_type = params["set type"].present? ? "all_set_type" : "set type"
-    language = params["language"].present? ? "all_language" : "language"
-    subjects = params["subjects"].present? ? "all_subjects" : "subjects"
+  # def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets, params)
+  #   more_than_one_present = params["area of study"].present? && (params["set type"].present? || params["language"].present? || params["subjects"].present?)
+  #   #binding.pry
+  #   area_of_study = params["area of study"].present? ? "all_area_of_study" : "area of study"
+  #   set_type = params["set type"].present? ? "all_set_type" : "set type"
+  #   language = params["language"].present? ? "all_language" : "language"
+  #   subjects = params["subjects"].present? ? "all_subjects" : "subjects"
 
+  #   [
+  #     { :label => "language", :column => :primary_language, :aggregation_name => language },
+  #     { :label => "set type", :column => "set_type", :aggregation_name => set_type },
+  #     { :label => "area of study", :column => "area_of_study", :aggregation_name => area_of_study },
+  #     { :label => "subjects", :column => "subjects", :aggregation_name => subjects },
+  #   ].each do |config|
+  #     facets_group = { :label => config[:label], :items => [] }
+  #     # eg: aggregation_name = 'language' or 'availability' etc
+  #     aggregation_name = config[:aggregation_name]
+  #     #binding.pry
+  #     if ((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
+  #         (set_type.present? && aggregation_name.to_s == "all_set_type") ||
+  #         (language.present? && aggregation_name.to_s == "all_language"))
+  #       aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]
+  #     else
+  #       aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
+  #     end
+  #     #binding.pry
+  #     if aggregation_name.to_s == "subjects"
+  #       id_buckets = aggregations["id"]["buckets"]
+  #       title_buckets = aggregations["title"]["buckets"]
+
+  #       # Ensure that id_buckets and title_buckets are equal in length before processing
+  #       if id_buckets.length == title_buckets.length
+  #         id_buckets.each_with_index do |id_bucket, index|
+  #           title_bucket = title_buckets[index]
+
+  #           # Ensure that doc_count is above the minimum threshold if necessary
+  #           if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
+  #             next
+  #           end
+
+  #           # Check if the current subject ID matches the parameters (if any)
+  #           # Add the facet to the items list
+  #           facets_group[:items] << {
+  #             value: id_bucket["key"],   # ID as value
+  #             label: title_bucket["key"], # Title as label
+  #             count: id_bucket["doc_count"],
+  #           }
+  #         end
+  #       end
+  #     end
+  #     #binding.pry
+
+  #     anyonePresent = (((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
+  #                       (set_type.present? && aggregation_name.to_s == "all_set_type") ||
+  #                       (language.present? && aggregation_name.to_s == "all_language")))
+  #     #binding.pry
+  #     if aggregations.present? && aggregations["buckets"].present?
+  #       if anyonePresent
+  #         buckets = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]["buckets"]
+  #       else
+  #         buckets = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]["buckets"]
+  #       end
+  #       buckets.each do |agg_val|
+  #         label = agg_val["key"]
+  #         unless config[:value_map].nil?
+  #           label = config[:value_map][agg_val["key"]]
+  #           next if label.nil?
+  #         end
+  #         facets_group[:items] << {
+  #           :value => agg_val["key"],
+  #           :label => label,
+  #           :count => agg_val["doc_count"],
+  #         }
+  #       end
+  #     end
+  #     facets << facets_group
+  #   end
+  #   facets
+  # end
+
+  def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets, params)
+    # Determine if any filter is applied
+    firstFacetSelectedItem = params["firstFacetSelectedItem"]
+    filters_applied = params["area of study"].present? || params["set type"].present? || params["language"].present? || params["subjects"].present?
+
+    area_of_study = "area of study"
+    set_type = "set type"
+    language = "language"
+    subjects = "subjects"
+
+    if firstFacetSelectedItem.present?
+      if firstFacetSelectedItem == "area of study"
+        area_of_study = "all_area_of_study"
+        firstFacetSelectedItem = "all_area_of_study"
+      end
+      if firstFacetSelectedItem == "set type"
+        set_type = "all_set_type"
+        firstFacetSelectedItem = "all_set_type"
+      end
+      if firstFacetSelectedItem == "language"
+        language = "all_language"
+        firstFacetSelectedItem = "all_language"
+      end
+      if firstFacetSelectedItem == "subjects"
+        subjects = "subjects"
+        firstFacetSelectedItem = "subjects"
+      end
+    end
+
+    #binding.pry
+
+    # Iterate over each filter configuration and handle the aggregations
     [
-      { :label => "language", :column => :primary_language, :aggregation_name => language },
-      { :label => "set type", :column => "set_type", :aggregation_name => set_type },
-      { :label => "area of study", :column => "area_of_study", :aggregation_name => area_of_study },
-      { :label => "subjects", :column => "subjects", :aggregation_name => subjects },
+      { label: "language", column: :primary_language, aggregation_name: language },
+      { label: "set type", column: "set_type", aggregation_name: set_type },
+      { label: "area of study", column: "area_of_study", aggregation_name: area_of_study },
+      { label: "subjects", column: "subjects", aggregation_name: subjects },
     ].each do |config|
-      facets_group = { :label => config[:label], :items => [] }
-      # eg: aggregation_name = 'language' or 'availability' etc
+      facets_group = { label: config[:label], items: [] }
       aggregation_name = config[:aggregation_name]
+
+      # Determine the aggregation source based on whether it's the first filter or not
       #binding.pry
-      if ((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
-          (set_type.present? && aggregation_name.to_s == "all_set_type") ||
-          (language.present? && aggregation_name.to_s == "all_language"))
+      if firstFacetSelectedItem === aggregation_name.to_s && filters_applied
         aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]
       else
         aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
       end
       #binding.pry
-      if aggregation_name.to_s == "subjects"
-        id_buckets = aggregations["id"]["buckets"]
-        title_buckets = aggregations["title"]["buckets"]
+      # Handle the specific aggregation logic for each field
+      case aggregation_name
+      when "subjects"
+        if aggregations.present? && aggregations["id"].present? && aggregations["title"].present?
+          id_buckets = aggregations["id"]["buckets"]
+          title_buckets = aggregations["title"]["buckets"]
 
-        # Ensure that id_buckets and title_buckets are equal in length before processing
-        if id_buckets.length == title_buckets.length
-          id_buckets.each_with_index do |id_bucket, index|
-            title_bucket = title_buckets[index]
+          # Ensure the number of items in both "id" and "title" are equal before combining them
+          if id_buckets.length == title_buckets.length
+            id_buckets.each_with_index do |id_bucket, index|
+              title_bucket = title_buckets[index]
+              next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET # Skip low-count items
 
-            # Ensure that doc_count is above the minimum threshold if necessary
-            if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
-              next
+              facets_group[:items] << {
+                value: id_bucket["key"],
+                label: title_bucket["key"],
+                count: id_bucket["doc_count"],
+              }
             end
-
-            # Check if the current subject ID matches the parameters (if any)
-            # Add the facet to the items list
+          end
+        else
+          facets_group[:items] << { value: "No data available", label: "No data available", count: 0 }
+        end
+      else
+        # General case for area_of_study, set_type, and language
+        if aggregations.present? && aggregations["buckets"].present?
+          buckets = aggregations["buckets"]
+          buckets.each do |agg_val|
             facets_group[:items] << {
-              value: id_bucket["key"],   # ID as value
-              label: title_bucket["key"], # Title as label
-              count: id_bucket["doc_count"],
+              value: agg_val["key"],
+              label: agg_val["key"],
+              count: agg_val["doc_count"],
             }
           end
-        end
-      end
-      #binding.pry
-      if aggregations.present? && aggregations["buckets"].present?
-        if ((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
-            (set_type.present? && aggregation_name.to_s == "all_set_type") ||
-            (language.present? && aggregation_name.to_s == "all_language"))
-          buckets = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]["buckets"]
         else
-          buckets = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]["buckets"]
-        end
-        buckets.each do |agg_val|
-          label = agg_val["key"]
-          unless config[:value_map].nil?
-            label = config[:value_map][agg_val["key"]]
-            next if label.nil?
-          end
-          facets_group[:items] << {
-            :value => agg_val["key"],
-            :label => label,
-            :count => agg_val["doc_count"],
-          }
+          facets_group[:items] << { value: "No data available", label: "No data available", count: 0 }
         end
       end
+
       facets << facets_group
     end
+
     facets
   end
 
