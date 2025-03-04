@@ -991,9 +991,7 @@ export default function SearchTeacherSets(props) {
     // Update the search params and selected facets state
     setSearchParams(searchParams);
     setSelectedFacets(selectedFacetItems);
-    
-    console.log(selectedFacetItems)
-  
+      
     // Prepare the parameters for the API call
     const params = {
       ...selectedFacetItems,  // Add selected facets to the params

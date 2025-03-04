@@ -84,12 +84,10 @@ class ElasticSearch
     # Showing latest created teachersets.
     query[:sort] = teacher_sets_sort_order(params["sort_order"].to_i)
     query[:aggs] = agg_hash
-    #binding.pry
     teacherset_docs = search_by_query(query)
     facets = facets_for_teacher_sets(teacherset_docs, params)
     [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
-    binding.pry
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
   end
 
@@ -178,18 +176,6 @@ class ElasticSearch
       { range: { grade_end: { gte: -1 } } },
     ]
 
-    if selectedItemCount.to_i > 1 && firstFacetSelectedItem.present?
-      if set_type.present?
-        first_conditions << { terms: { set_type: set_type } }
-      elsif area_of_study.present?
-        first_conditions << { terms: { area_of_study: area_of_study } }
-      elsif primary_language.present?
-        first_conditions << { terms: { primary_language: language } }
-      elsif subjects.present?
-        first_conditions << { terms: { subjects: subjects } }
-      end
-    end
-
     aggregation_hash[:aggs] = {
       total_aggregations: {
         global: {},
@@ -265,6 +251,43 @@ class ElasticSearch
               },
             },
           },
+          "selected_area_override": {
+            "filter": {
+              "bool": {
+                "must": must_conditions,
+              },
+            },
+            "aggs": {
+              "area_of_study": {
+                "terms": {
+                  "field": "area_of_study",
+                  "size": 200,
+                  "order": { "_key": "asc" },
+                  "min_doc_count": 0,
+                },
+              },
+              "language": {
+                "terms": {
+                  "field": "primary_language",
+                  "size": 200,
+                  "order": {
+                    "_key": "asc",
+                  },
+                  "min_doc_count": 0,
+                },
+              },
+              "set_type": {
+                "terms": {
+                  "field": "set_type",
+                  "size": 200,
+                  "order": {
+                    "_key": "asc",
+                  },
+                  "min_doc_count": 0,
+                },
+              },
+            },
+          },
           "all_language": {
             "filter": {
               "bool": {
@@ -326,87 +349,7 @@ class ElasticSearch
     facets
   end
 
-  # Group by facets from elasticsearch (language, availability, set_type, area_of_study)
-  # def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets, params)
-  #   more_than_one_present = params["area of study"].present? && (params["set type"].present? || params["language"].present? || params["subjects"].present?)
-
-  #   area_of_study = params["area of study"].present? ? "all_area_of_study" : "area of study"
-  #   set_type = params["set type"].present? ? "all_set_type" : "set type"
-  #   language = params["language"].present? ? "all_language" : "language"
-  #   subjects = params["subjects"].present? ? "all_subjects" : "subjects"
-
-  #   [
-  #     { :label => "language", :column => :primary_language, :aggregation_name => language },
-  #     { :label => "set type", :column => "set_type", :aggregation_name => set_type },
-  #     { :label => "area of study", :column => "area_of_study", :aggregation_name => area_of_study },
-  #     { :label => "subjects", :column => "subjects", :aggregation_name => subjects },
-  #   ].each do |config|
-  #     facets_group = { :label => config[:label], :items => [] }
-  #     # eg: aggregation_name = 'language' or 'availability' etc
-  #     aggregation_name = config[:aggregation_name]
-
-  #     if ((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
-  #         (set_type.present? && aggregation_name.to_s == "all_set_type") ||
-  #         (language.present? && aggregation_name.to_s == "all_language"))
-  #       aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]
-  #     else
-  #       aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
-  #     end
-
-  #     if aggregation_name.to_s == "subjects"
-  #       id_buckets = aggregations["id"]["buckets"]
-  #       title_buckets = aggregations["title"]["buckets"]
-
-  #       # Ensure that id_buckets and title_buckets are equal in length before processing
-  #       if id_buckets.length == title_buckets.length
-  #         id_buckets.each_with_index do |id_bucket, index|
-  #           title_bucket = title_buckets[index]
-
-  #           # Ensure that doc_count is above the minimum threshold if necessary
-  #           if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
-  #             next
-  #           end
-
-  #           # Check if the current subject ID matches the parameters (if any)
-  #           # Add the facet to the items list
-  #           facets_group[:items] << {
-  #             value: id_bucket["key"],   # ID as value
-  #             label: title_bucket["key"], # Title as label
-  #             count: id_bucket["doc_count"],
-  #           }
-  #         end
-  #       end
-  #     end
-
-  #     anyonePresent = (((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
-  #                       (set_type.present? && aggregation_name.to_s == "all_set_type") ||
-  #                       (language.present? && aggregation_name.to_s == "all_language")))
-  #     if aggregations.present? && aggregations["buckets"].present?
-  #       if anyonePresent
-  #         buckets = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]["buckets"]
-  #       else
-  #         buckets = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]["buckets"]
-  #       end
-  #       buckets.each do |agg_val|
-  #         label = agg_val["key"]
-  #         unless config[:value_map].nil?
-  #           label = config[:value_map][agg_val["key"]]
-  #           next if label.nil?
-  #         end
-  #         facets_group[:items] << {
-  #           :value => agg_val["key"],
-  #           :label => label,
-  #           :count => agg_val["doc_count"],
-  #         }
-  #       end
-  #     end
-  #     facets << facets_group
-  #   end
-  #   facets
-  # end
-
   def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets, params)
-    # Determine if any filter is applied
     firstFacetSelectedItem = params["firstFacetSelectedItem"]
     filters_applied = params["area of study"].present? || params["set type"].present? || params["language"].present? || params["subjects"].present?
 
@@ -414,33 +357,28 @@ class ElasticSearch
     set_type = "set type"
     language = "language"
     subjects = "subjects"
-    #binding.pry
+
     if firstFacetSelectedItem.present?
-      if firstFacetSelectedItem == "area of study"
+      case firstFacetSelectedItem
+      when "area of study"
         area_of_study = "all_area_of_study"
         another_value = "area_of_study"
         firstFacetSelectedItem = "all_area_of_study"
-      end
-      if firstFacetSelectedItem == "set type"
+      when "set type"
         set_type = "all_set_type"
         another_value = "set_type"
         firstFacetSelectedItem = "all_set_type"
-      end
-      if firstFacetSelectedItem == "language"
+      when "language"
         language = "all_language"
         another_value = "language"
         firstFacetSelectedItem = "all_language"
-      end
-      if firstFacetSelectedItem == "subjects"
+      when "subjects"
         subjects = "subjects"
         another_value = "subjects"
         firstFacetSelectedItem = "subjects"
       end
     end
 
-    #binding.pry
-
-    # Iterate over each filter configuration and handle the aggregations
     [
       { label: "language", column: :primary_language, aggregation_name: language },
       { label: "set type", column: "set_type", aggregation_name: set_type },
@@ -450,25 +388,22 @@ class ElasticSearch
       facets_group = { label: config[:label], items: [] }
       aggregation_name = config[:aggregation_name]
 
-      #binding.pry
-      # Determine the aggregation source based on whether it's the first filter or not
-      if firstFacetSelectedItem === aggregation_name.to_s
-        aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s][another_value.to_s]
+      if firstFacetSelectedItem == aggregation_name.to_s
+        aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", aggregation_name.to_s, another_value.to_s)
       else
-        aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
+        aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", aggregation_name.to_s)
       end
-      # Handle the specific aggregation logic for each field
+
       case aggregation_name
       when "subjects"
-        if aggregations.present? && aggregations["id"].present? && aggregations["title"].present?
+        if aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
           id_buckets = aggregations["id"]["buckets"]
           title_buckets = aggregations["title"]["buckets"]
 
-          # Ensure the number of items in both "id" and "title" are equal before combining them
           if id_buckets.length == title_buckets.length
             id_buckets.each_with_index do |id_bucket, index|
               title_bucket = title_buckets[index]
-              next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET # Skip low-count items
+              next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
 
               facets_group[:items] << {
                 value: id_bucket["key"],
@@ -481,14 +416,38 @@ class ElasticSearch
           facets_group[:items] << { value: "No data available", label: "No data available", count: 0 }
         end
       else
-        # General case for area_of_study, set_type, and language
-        if aggregations.present? && aggregations["buckets"].present?
+        if aggregations&.dig("buckets")
           buckets = aggregations["buckets"]
+
+          if params["selectedItemCount"].to_i > 1
+            # Extract override counts (generic for all values)
+            override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "selected_area_override", "area_of_study", "buckets")
+
+            # Create a hash of the override counts for fast lookups, but only for counts > 0
+            override_count_hash = override_counts.each_with_object({}) do |bucket, hash|
+              hash[bucket["key"]] = bucket["doc_count"] #if bucket["doc_count"] > 0
+            end
+          end
+
           buckets.each do |agg_val|
+            # Override count if the area_of_study exists in the `selected_area_override` and doc_count > 0
+            if params["selectedItemCount"].to_i > 1
+              if override_count_hash.key?(agg_val["key"])
+                agg_val["doc_count"] = override_count_hash[agg_val["key"]]
+              end
+            end
+
+            if params["selectedItemCount"].to_i > 1
+              isDisabled = false
+            else
+              isDisabled = agg_val["doc_count"].to_i > 0 ? false : true
+            end
+
             facets_group[:items] << {
               value: agg_val["key"],
               label: agg_val["key"],
               count: agg_val["doc_count"],
+              isDisabled: agg_val["doc_count"].to_i > 0 ? false : true,
             }
           end
         else
