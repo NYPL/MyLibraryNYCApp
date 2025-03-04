@@ -97,6 +97,8 @@ export default function SearchTeacherSets(props) {
   const location = useLocation();
   const [isSchoolActive, setIsSchoolActive] = useState("");
   const [selectedSortOption, setSelectedSortOption] = useState("Newest to oldest");
+  const [firstSelectedItem, setFirstSelectedItem] = useState({});
+
   const { onChange, onMixedStateChange, selectedItems, onClear, onClearAll } =
   useMultiSelect();
   const [tsFacetKeys, setTsFacetKeys] = useState({});
@@ -268,7 +270,6 @@ export default function SearchTeacherSets(props) {
       .then((res) => {
         setTeacherSets(res.data.teacher_sets);
         setFacets(res.data.facets);
-        console.log(res.data.facets)
         setTsTotalCount(res.data.total_count);
         setTotalPages(res.data.total_pages);
         setNoTsResultsFound(res.data.no_results_found_msg);
@@ -925,108 +926,91 @@ export default function SearchTeacherSets(props) {
         selectedFacets
       )
     );
-  };
+  };  
 
   const tsSelectedFacets = (selected_items) => {  
-    console.log(selected_items["availability"])  
+    setFirstSelectedItem(Object.keys(selected_items)[0])
+    
+    // Initialize selectedFacetItems to either selectedFacets or an empty object
+    const selectedFacetItems = selectedFacets ? { ...selectedFacets } : {};
+  
+    // Clear page parameter before making any updates
+    searchParams.delete("page");
+    setComputedCurrentPage(1);
+  
+    // Handling the "area of study" facet
     if (selected_items["area of study"]) {
       const areaOfStudy = selected_items["area of study"]['items'];
-      // If "area of study" exists and is an array
-      // Update the "area of study" in the search params with the selected items
-      searchParams.delete("page");      
       if (areaOfStudy.length > 0) {
         searchParams.set("area of study", areaOfStudy);
-        selectedFacets["area of study"] = areaOfStudy
-        setComputedCurrentPage(1);
+        // Merge with existing values to avoid overwriting
+        selectedFacetItems["area of study"] = [ ...new Set([...areaOfStudy]) ];
       } else {
         searchParams.delete("area of study");
-        selectedFacets["area of study"] = []
+        selectedFacetItems["area of study"] = [];
       }
-      setSearchParams(searchParams);
     }
-    else if (selected_items["availability"]) {
-      searchParams.delete("page");
-      setSearchParams(searchParams);
-      setComputedCurrentPage(1);
-      //selectedFacets['availability'] = selected_items["set type"]
-    } else if (selected_items["set type"]) {
-      const setType = selected_items["set type"]['items']
-      searchParams.delete("page");
-      setComputedCurrentPage(1);
+  
+    // Handling the "set type" facet
+    if (selected_items["set type"]) {
+      const setType = selected_items["set type"]['items'];
       if (setType.length > 0) {
         searchParams.set("set type", setType);
-        selectedFacets["set type"] = setType
-        setComputedCurrentPage(1);
+        // Merge with existing values to avoid overwriting and prevent array nesting
+        selectedFacetItems["set type"] = [ ...new Set([...setType]) ];
       } else {
         searchParams.delete("set type");
-        selectedFacets["set type"] = []
+        selectedFacetItems["set type"] = [];
       }
-      setSelectedFacets(selectedFacets);
-      setSearchParams(searchParams);
-    } else if (selected_items["language"]) {
-      const language = selected_items["language"]['items']
-      searchParams.delete("page");
+    }
+  
+    // Handling the "language" facet
+    if (selected_items["language"]) {
+      const language = selected_items["language"]['items'];
       if (language.length > 0) {
         searchParams.set("language", language);
-        selectedFacets["language"] = language
-        setComputedCurrentPage(1);
+        selectedFacetItems["language"] = [ ...new Set([...language]) ];
       } else {
         searchParams.delete("language");
-        selectedFacets["language"] = []
+        selectedFacetItems["language"] = [];
       }
-      setSearchParams(searchParams);
-    } else if (selected_items["subjects"]) {
-      searchParams.delete("page");
-      const subjects = selected_items["subjects"]['items']
-      if (language.length > 0) {
+    }
+  
+    // Handling the "subjects" facet
+    if (selected_items["subjects"]) {
+      const subjects = selected_items["subjects"]['items'];
+      if (subjects.length > 0) {
         searchParams.set("subjects", subjects);
-        selectedFacets["subjects"] = subjects
-        setComputedCurrentPage(1);
+        selectedFacetItems["subjects"] = [ ...new Set([...subjects]) ];
       } else {
         searchParams.delete("subjects");
-        selectedFacets["subjects"] = []
+        selectedFacetItems["subjects"] = [];
       }
-      setSearchParams(searchParams);
     }
-    console.log(selectedFacets)
-    // if (selected_items.length > 0) {
-    //   searchParams.set(field, selectedFacets[field]);
-    // } else {
-    //   searchParams.delete(selectedFacets[field]);
-    // }
-
-
-    if (keyword !== null) {
-      getTeacherSets(
-        Object.assign(
-          {
-            keyword: keyword,
-            grade_begin: grade_begin,
-            grade_end: grade_end,
-            sort_order: sortTitleValue,
-            availability: availability,
-            page: computedCurrentPage,
-
-          },
-          selectedFacets
-        )
-      );
-    } else {
-      getTeacherSets(
-        Object.assign(
-          {
-            grade_begin: grade_begin,
-            grade_end: grade_end,
-            sort_order: sortTitleValue,
-            availability: availability,
-            page: computedCurrentPage,
-          },
-          selectedFacets
-        )
-      );
-    }
+  
+    // Update the search params and selected facets state
+    setSearchParams(searchParams);
+    setSelectedFacets(selectedFacetItems);
+    
+    console.log(selectedFacetItems)
+  
+    // Prepare the parameters for the API call
+    const params = {
+      ...selectedFacetItems,  // Add selected facets to the params
+      keyword: keyword,
+      grade_begin: grade_begin,
+      grade_end: grade_end,
+      sort_order: sortTitleValue,
+      availability: availability,
+      page: computedCurrentPage,
+      firstFacetSelectedItem: Object.keys(selected_items)[0],
+      selectedItemCount: Object.keys(selected_items).length,
+    };
+  
+    // Make the API call with the updated params
+    getTeacherSets(params);
   };
-
+  
   const skeletonLoader = () => {
     if (noTsResultsFound === "" && teacherSets.length <= 0) {
       return (

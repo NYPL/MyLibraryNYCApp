@@ -153,24 +153,42 @@ class ElasticSearch
       query[:query][:bool][:must] << { :nested => { :path => "subjects",
                                                    :query => { :bool => { :must => [{ :terms => { "subjects.id" => params["subjects"] } }] } } } }
     end
-    aggregation_hash = group_by_facets_query(area_of_study, language, subjects, set_type)
+    aggregation_hash = group_by_facets_query(area_of_study, language, subjects, set_type, params)
     [query, aggregation_hash]
   end
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
-  def group_by_facets_query(area_of_study, primary_language, subjects, set_type)
+  def group_by_facets_query(area_of_study, primary_language, subjects, set_type, params)
     aggregation_hash = {}
     must_conditions = [
       { range: { grade_begin: { lte: 12 } } },
       { range: { grade_end: { gte: -1 } } },
     ]
 
-    area_of_study_doc_count = area_of_study.present? ? 0 : 1
-
     must_conditions << { terms: { set_type: set_type } } if set_type.present?
     must_conditions << { terms: { primary_language: primary_language } } if primary_language.present?
     must_conditions << { terms: { area_of_study: area_of_study } } if area_of_study.present?
     must_conditions << { terms: { subjects: subjects } } if subjects.present?
+
+    firstFacetSelectedItem = params["firstFacetSelectedItem"]
+    selectedItemCount = params["selectedItemCount"]
+
+    first_conditions = [
+      { range: { grade_begin: { lte: 12 } } },
+      { range: { grade_end: { gte: -1 } } },
+    ]
+
+    if selectedItemCount.to_i > 1 && firstFacetSelectedItem.present?
+      if set_type.present?
+        first_conditions << { terms: { set_type: set_type } }
+      elsif area_of_study.present?
+        first_conditions << { terms: { area_of_study: area_of_study } }
+      elsif primary_language.present?
+        first_conditions << { terms: { primary_language: language } }
+      elsif subjects.present?
+        first_conditions << { terms: { subjects: subjects } }
+      end
+    end
 
     aggregation_hash[:aggs] = {
       total_aggregations: {
@@ -229,33 +247,60 @@ class ElasticSearch
             },
           },
           "all_area_of_study": {
-            "terms": {
-              "field": "area_of_study",
-              "size": 200,
-              "order": {
-                "_key": "asc",
+            "filter": {
+              "bool": {
+                "must": first_conditions,
               },
-              "min_doc_count": 0,
+            },
+            "aggs": {
+              "area_of_study": {
+                "terms": {
+                  "field": "area_of_study",
+                  "size": 200,
+                  "order": {
+                    "_key": "asc",
+                  },
+                  "min_doc_count": 0,
+                },
+              },
             },
           },
           "all_language": {
-            "terms": {
-              "field": "primary_language",
-              "size": 200,
-              "order": {
-                "_key": "asc",
+            "filter": {
+              "bool": {
+                "must": first_conditions,
               },
-              "min_doc_count": 0,
+            },
+            "aggs": {
+              "language": {
+                "terms": {
+                  "field": "primary_language",
+                  "size": 200,
+                  "order": {
+                    "_key": "asc",
+                  },
+                  "min_doc_count": 0,
+                },
+              },
             },
           },
           "all_set_type": {
-            "terms": {
-              "field": "set_type",
-              "size": 200,
-              "order": {
-                "_key": "asc",
+            "filter": {
+              "bool": {
+                "must": first_conditions,
               },
-              "min_doc_count": 0,
+            },
+            "aggs": {
+              "set_type": {
+                "terms": {
+                  "field": "set_type",
+                  "size": 200,
+                  "order": {
+                    "_key": "asc",
+                  },
+                  "min_doc_count": 0,
+                },
+              },
             },
           },
         },
@@ -268,7 +313,6 @@ class ElasticSearch
     facets = []
     # Get all facets from elastic search.
     facets = get_language_availability_set_type_area_of_study_facets(teacher_sets_docs, facets, params)
-    #binding.pry
     # Specify desired order of facets:
     facets.sort_by! do |f|
       ind = ["area of study", "subjects", "language", "set type"].index f[:label]
@@ -285,7 +329,7 @@ class ElasticSearch
   # Group by facets from elasticsearch (language, availability, set_type, area_of_study)
   # def get_language_availability_set_type_area_of_study_facets(teacherset_docs, facets, params)
   #   more_than_one_present = params["area of study"].present? && (params["set type"].present? || params["language"].present? || params["subjects"].present?)
-  #   #binding.pry
+
   #   area_of_study = params["area of study"].present? ? "all_area_of_study" : "area of study"
   #   set_type = params["set type"].present? ? "all_set_type" : "set type"
   #   language = params["language"].present? ? "all_language" : "language"
@@ -300,7 +344,7 @@ class ElasticSearch
   #     facets_group = { :label => config[:label], :items => [] }
   #     # eg: aggregation_name = 'language' or 'availability' etc
   #     aggregation_name = config[:aggregation_name]
-  #     #binding.pry
+
   #     if ((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
   #         (set_type.present? && aggregation_name.to_s == "all_set_type") ||
   #         (language.present? && aggregation_name.to_s == "all_language"))
@@ -308,7 +352,7 @@ class ElasticSearch
   #     else
   #       aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
   #     end
-  #     #binding.pry
+
   #     if aggregation_name.to_s == "subjects"
   #       id_buckets = aggregations["id"]["buckets"]
   #       title_buckets = aggregations["title"]["buckets"]
@@ -333,12 +377,10 @@ class ElasticSearch
   #         end
   #       end
   #     end
-  #     #binding.pry
 
   #     anyonePresent = (((area_of_study.present? && aggregation_name.to_s == "all_area_of_study") ||
   #                       (set_type.present? && aggregation_name.to_s == "all_set_type") ||
   #                       (language.present? && aggregation_name.to_s == "all_language")))
-  #     #binding.pry
   #     if aggregations.present? && aggregations["buckets"].present?
   #       if anyonePresent
   #         buckets = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]["buckets"]
@@ -372,22 +414,26 @@ class ElasticSearch
     set_type = "set type"
     language = "language"
     subjects = "subjects"
-
+    #binding.pry
     if firstFacetSelectedItem.present?
       if firstFacetSelectedItem == "area of study"
         area_of_study = "all_area_of_study"
+        another_value = "area_of_study"
         firstFacetSelectedItem = "all_area_of_study"
       end
       if firstFacetSelectedItem == "set type"
         set_type = "all_set_type"
+        another_value = "set_type"
         firstFacetSelectedItem = "all_set_type"
       end
       if firstFacetSelectedItem == "language"
         language = "all_language"
+        another_value = "language"
         firstFacetSelectedItem = "all_language"
       end
       if firstFacetSelectedItem == "subjects"
         subjects = "subjects"
+        another_value = "subjects"
         firstFacetSelectedItem = "subjects"
       end
     end
@@ -404,14 +450,13 @@ class ElasticSearch
       facets_group = { label: config[:label], items: [] }
       aggregation_name = config[:aggregation_name]
 
-      # Determine the aggregation source based on whether it's the first filter or not
       #binding.pry
-      if firstFacetSelectedItem === aggregation_name.to_s && filters_applied
-        aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s]
+      # Determine the aggregation source based on whether it's the first filter or not
+      if firstFacetSelectedItem === aggregation_name.to_s
+        aggregations = teacherset_docs[:aggregations]["total_aggregations"][aggregation_name.to_s][another_value.to_s]
       else
         aggregations = teacherset_docs[:aggregations]["total_aggregations"]["filtered_data"][aggregation_name.to_s]
       end
-      #binding.pry
       # Handle the specific aggregation logic for each field
       case aggregation_name
       when "subjects"
