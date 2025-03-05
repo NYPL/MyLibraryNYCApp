@@ -772,13 +772,41 @@ export default function SearchTeacherSets(props) {
         onMixedStateChange={(e) => {
           onMixedStateChange(e.target.id, id, formattedItems(ts.items));
         }}
-        onClear={() => onClear(ts.label)}
+        onClear={() => onClearItems(ts.label)}
         selectedItems={selectedItems}
         width="full"
         listOverflow="expand"
       />
     ));
   };
+
+  const onClearItems = (label) => {
+    onClear(label)
+    // console.log(label)
+
+    // if (label == "area of study") {
+    //   selectedFacets["area of study"] = {};
+    // } else if (label == 'set type') {
+    //   selectedFacets["set type"] = {};
+    // }
+
+    // setSelectedFacets(selectedFacets);
+
+    // const params = {
+    //   ...selectedFacets,  // Add selected facets to the params
+    //   keyword: keyword,
+    //   grade_begin: -1,
+    //   grade_end: 12,
+    //   // sort_order: sortTitleValue,
+    //   // availability: availability,
+    //   // page: computedCurrentPage,
+    //   // firstFacetSelectedItem: Object.keys(selected_items)[0],
+    //   // selectedItemCount: Object.keys(selected_items).length,
+    // };
+  
+    // // Make the API call with the updated params
+    // getTeacherSets(params);
+  }
 
   // const RefineResults = () => {
   //   if (facets && facets.length >= 1) {
@@ -835,10 +863,23 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("grade_begin");
     searchParams.delete("grade_end");
     setSearchParams(searchParams);
-    // setGradeBegin(-1);
-    // setGradeEnd(12);
-    // setRangevalues([-1, 12]);
+    setGradeBegin(-1);
+    setGradeEnd(12);
+    setRangevalues([-1, 12]);
     windowScroll();
+    // getTeacherSets(
+    //   Object.assign(
+    //     {
+    //       keyword: keyword,
+    //       grade_begin: grade_begin,
+    //       grade_end: grade_end,
+    //       sort_order: value,
+    //       availability: availability,
+    //       page: computedCurrentPage,
+    //     },
+    //     selectedFacets
+    //   )
+    // );
   };
 
   const clearFiltersButton = () => {
@@ -928,7 +969,13 @@ export default function SearchTeacherSets(props) {
     );
   };  
 
-  const tsSelectedFacets = (selected_items) => {  
+  const getSelectedCategoriesCount = (selected_items) => {
+    return Object.values(selected_items).filter(category => 
+      Array.isArray(category.items) && category.items.length > 0
+    ).length;
+  };
+
+  const tsSelectedFacets = (selected_items) => {
     setFirstSelectedItem(Object.keys(selected_items)[0])
     
     // Initialize selectedFacetItems to either selectedFacets or an empty object
@@ -1002,7 +1049,7 @@ export default function SearchTeacherSets(props) {
       availability: availability,
       page: computedCurrentPage,
       firstFacetSelectedItem: Object.keys(selected_items)[0],
-      selectedItemCount: Object.keys(selected_items).length,
+      selectedItemCount: getSelectedCategoriesCount(selected_items),
     };
   
     // Make the API call with the updated params

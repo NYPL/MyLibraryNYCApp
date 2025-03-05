@@ -437,17 +437,10 @@ class ElasticSearch
               end
             end
 
-            if params["selectedItemCount"].to_i > 1
-              isDisabled = false
-            else
-              isDisabled = agg_val["doc_count"].to_i > 0 ? false : true
-            end
-
             facets_group[:items] << {
               value: agg_val["key"],
               label: agg_val["key"],
               count: agg_val["doc_count"],
-              isDisabled: agg_val["doc_count"].to_i > 0 ? false : true,
             }
           end
         else
