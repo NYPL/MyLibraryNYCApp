@@ -101,6 +101,7 @@ export default function SearchTeacherSets(props) {
 
   const { onChange, onMixedStateChange, selectedItems, onClear, onClearAll } =
   useMultiSelect();
+
   const [tsFacetKeys, setTsFacetKeys] = useState({});
 
   const [selectedFilterItems, setSelectedFilterItems] = useState([
@@ -110,6 +111,7 @@ export default function SearchTeacherSets(props) {
 
   useEffect(() => {
     setSelectedFilterItems([selectedItems]);
+    console.log(selectedItems)
     tsSelectedFacets(selectedItems)
   }, [selectedItems]);
 
@@ -772,7 +774,7 @@ export default function SearchTeacherSets(props) {
         onMixedStateChange={(e) => {
           onMixedStateChange(e.target.id, id, formattedItems(ts.items));
         }}
-        onClear={() => onClearItems(ts.label)}
+        onClear={() => onClearItems(ts.label, selectedItems)}
         selectedItems={selectedItems}
         width="full"
         listOverflow="expand"
@@ -780,32 +782,34 @@ export default function SearchTeacherSets(props) {
     ));
   };
 
-  const onClearItems = (label) => {
-    onClear(label)
-    // console.log(label)
-
-    // if (label == "area of study") {
-    //   selectedFacets["area of study"] = {};
-    // } else if (label == 'set type') {
-    //   selectedFacets["set type"] = {};
-    // }
-
-    // setSelectedFacets(selectedFacets);
-
-    // const params = {
-    //   ...selectedFacets,  // Add selected facets to the params
-    //   keyword: keyword,
-    //   grade_begin: -1,
-    //   grade_end: 12,
-    //   // sort_order: sortTitleValue,
-    //   // availability: availability,
-    //   // page: computedCurrentPage,
-    //   // firstFacetSelectedItem: Object.keys(selected_items)[0],
-    //   // selectedItemCount: Object.keys(selected_items).length,
-    // };
+  const onClearItems = (label, selected_items_data) => {
+    onClear(label);
+    if (label === "area of study") {
+      selectedFacets["area of study"] = [];
+    } else if (label === "set type") {
+      selectedFacets["set type"] = [];
+      selected_items_data['set type']['items'] = []
+    } else if (label === "subjects") {
+      selectedFacets["subjects"] = [];
+    } else if (label === "language") {
+      selectedFacets["language"] = [];
+    } 
+    console.log(selected_items_data)
+    setSelectedFacets(selectedFacets);
+    const params = {
+      ...selectedFacets,  // Add selected facets to the params
+      keyword: keyword,
+      grade_begin: -1,
+      grade_end: 12,
+      // sort_order: sortTitleValue,
+      // availability: availability,
+      // page: computedCurrentPage,
+      firstFacetSelectedItem: Object.keys(selectedItems)[0],
+      //selectedItemCount: getSelectedCategoriesCount(selectedItems),
+    };
   
     // // Make the API call with the updated params
-    // getTeacherSets(params);
+    getTeacherSets(params);
   }
 
   // const RefineResults = () => {
@@ -1049,7 +1053,7 @@ export default function SearchTeacherSets(props) {
       availability: availability,
       page: computedCurrentPage,
       firstFacetSelectedItem: Object.keys(selected_items)[0],
-      selectedItemCount: getSelectedCategoriesCount(selected_items),
+      selectedItemCount: getSelectedCategoriesCount(selectedItems),
     };
   
     // Make the API call with the updated params
