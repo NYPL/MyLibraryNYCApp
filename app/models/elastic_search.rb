@@ -239,46 +239,9 @@ class ElasticSearch
               },
             },
             "aggs": {
-              "area_of_study": {
+              "area of study": {
                 "terms": {
                   "field": "area_of_study",
-                  "size": 200,
-                  "order": {
-                    "_key": "asc",
-                  },
-                  "min_doc_count": 0,
-                },
-              },
-            },
-          },
-          "selected_area_override": {
-            "filter": {
-              "bool": {
-                "must": must_conditions,
-              },
-            },
-            "aggs": {
-              "area_of_study": {
-                "terms": {
-                  "field": "area_of_study",
-                  "size": 200,
-                  "order": { "_key": "asc" },
-                  "min_doc_count": 0,
-                },
-              },
-              "language": {
-                "terms": {
-                  "field": "primary_language",
-                  "size": 200,
-                  "order": {
-                    "_key": "asc",
-                  },
-                  "min_doc_count": 0,
-                },
-              },
-              "set_type": {
-                "terms": {
-                  "field": "set_type",
                   "size": 200,
                   "order": {
                     "_key": "asc",
@@ -314,7 +277,7 @@ class ElasticSearch
               },
             },
             "aggs": {
-              "set_type": {
+              "set type": {
                 "terms": {
                   "field": "set_type",
                   "size": 200,
@@ -362,19 +325,19 @@ class ElasticSearch
       case firstFacetSelectedItem
       when "area of study"
         area_of_study = "all_area_of_study"
-        another_value = "area_of_study"
+        alias_aggregation_name = "area of study"
         firstFacetSelectedItem = "all_area_of_study"
       when "set type"
         set_type = "all_set_type"
-        another_value = "set_type"
+        alias_aggregation_name = "set type"
         firstFacetSelectedItem = "all_set_type"
       when "language"
         language = "all_language"
-        another_value = "language"
+        alias_aggregation_name = "language"
         firstFacetSelectedItem = "all_language"
       when "subjects"
         subjects = "subjects"
-        another_value = "subjects"
+        alias_aggregation_name = "subjects"
         firstFacetSelectedItem = "subjects"
       end
     end
@@ -389,9 +352,13 @@ class ElasticSearch
       aggregation_name = config[:aggregation_name]
 
       if firstFacetSelectedItem == aggregation_name.to_s
-        aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", aggregation_name.to_s, another_value.to_s)
+        aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", aggregation_name.to_s, alias_aggregation_name.to_s)
       else
         aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", aggregation_name.to_s)
+      end
+
+      if aggregations.nil?
+        aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", alias_aggregation_name.to_s)
       end
 
       case aggregation_name
@@ -421,11 +388,11 @@ class ElasticSearch
 
           if params["selectedItemCount"].to_i > 1
             # Extract override counts (generic for all values)
-            override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "selected_area_override", "area_of_study", "buckets")
+            override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "#{alias_aggregation_name}", "buckets")
 
             # Create a hash of the override counts for fast lookups, but only for counts > 0
             override_count_hash = override_counts.each_with_object({}) do |bucket, hash|
-              hash[bucket["key"]] = bucket["doc_count"] #if bucket["doc_count"] > 0
+              hash[bucket["key"]] = bucket["doc_count"]
             end
           end
 
