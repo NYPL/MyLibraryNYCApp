@@ -98,6 +98,7 @@ export default function SearchTeacherSets(props) {
   const [isSchoolActive, setIsSchoolActive] = useState("");
   const [selectedSortOption, setSelectedSortOption] = useState("Newest to oldest");
   const [firstSelectedItem, setFirstSelectedItem] = useState({});
+  const [isDefaultOpen, setIsDefaultOpen] = useState(false);
 
   const { onChange, onMixedStateChange, selectedItems, onClear, onClearAll } =
   useMultiSelect();
@@ -110,9 +111,42 @@ export default function SearchTeacherSets(props) {
 
 
   useEffect(() => {
-    setSelectedFilterItems([selectedItems]);
-    console.log(selectedItems)
-    tsSelectedFacets(selectedItems)
+    const selected_items = selectedItems
+    if (getSelectedCategoriesCount(selectedItems) > 0) {
+      tsSelectedFacets(selected_items);
+    } else {
+      queryParams.map((ts) => {
+        if (ts.subjects) {
+          selected_items['subjects'] = selected_items['subjects'] || {};
+          selected_items['subjects']['items'] = ts.subjects.split(",");
+          ts.subjects.split(",").map((value) => {
+            if (tsSubjects[value] !== undefined) {
+              const subjectsHash = {};
+              subjectsHash["label"] = tsSubjects[value];
+              subjectsHash["subjects"] = [tsSubjects[value]];
+            }
+          });
+        } else if (ts["area of study"]) {
+          selected_items['area of study'] = selected_items['area of study'] || {};
+          selected_items['area of study']['items'] = ts["area of study"].split(",");
+        } 
+        else if (ts["set type"]) {
+          selected_items["set type"] = selected_items['set type'] || {};
+          selected_items['set type']['items'] = ts["set type"].split(",");
+        } else if (ts["availability"]) {
+          selected_items['availability'] =  selected_items['availability'] || {};
+          selected_items['availability']['items'] = ts["availability"].split(",");
+          setAvailableToggle(true);
+        } else if (ts["language"]) {
+          selected_items['language']['items'] =  selected_items['language'] || {};
+          selected_items['language']['items'] = ts["language"].split(",");
+        }
+      });      
+    }
+    if (getSelectedCategoriesCount(selectedItems) > 0) {
+      setIsDefaultOpen(true);
+    }
+    tsSelectedFacets(selected_items);
   }, [selectedItems]);
 
 
@@ -147,124 +181,131 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-  useEffect(() => {
-    const queryValue = new URLSearchParams(location.search);
-    const tsfacets = {};
-    const tagSetsDataArr = [];
-    setTsSubjects({});
-    queryParams.map((ts) => {
-      const tagSets = {};
-      if (ts.subjects) {
-        tsfacets["subjects"] = ts.subjects.split(",");
-        ts.subjects.split(",").map((value) => {
-          if (tsSubjects[value] !== undefined) {
-            const subjectsHash = {};
-            subjectsHash["label"] = tsSubjects[value];
-            subjectsHash["subjects"] = [tsSubjects[value]];
-            tagSetsDataArr.push(subjectsHash);
-          }
-        });
-      } else if (ts["area of study"]) {
-        tsfacets["area of study"] = [ts["area of study"].split(",")];
-        tagSets["label"] = ts["area of study"];
-        tagSets["area of study"] = [ts["area of study"]];
-      } 
-      else if (ts["set type"]) {
-        tsfacets["set type"] = [ts["set type"].split(",")];
-        tagSets["label"] = ts["set type"];
-        tagSets["set type"] = [ts["set type"]];
-      } else if (ts["availability"]) {
-        setAvailableToggle(true);
-        tsfacets["availability"] = [ts["availability"]];
-        // DON'T SHOW IN TAGSET FOR A WHILE
-        // tagSets["label"] = "Available Now";
-        // tagSets["availability"] = [ts["availability"]];
-      } else if (ts["language"]) {
-        tsfacets["language"] = ts["language"].split(",");
-        tagSets["label"] = ts["language"];
-        tagSets["language"] = [ts["language"]];
-      }
+  // useEffect(() => {
+  //   const queryValue = new URLSearchParams(location.search);
+  //   const tsfacets = {};
+  //   const tagSetsDataArr = [];
+  //   const selectedItemsData = {}
+  //   setTsSubjects({});
+  //   queryParams.map((ts) => {
+  //     const tagSets = {};
+  //     if (ts.subjects) {
+  //       tsfacets["subjects"] = ts.subjects.split(",");
+  //       selectedItemsData['subjects']['items'] = ts.subjects.split(",");
+  //       ts.subjects.split(",").map((value) => {
+  //         if (tsSubjects[value] !== undefined) {
+  //           const subjectsHash = {};
+  //           subjectsHash["label"] = tsSubjects[value];
+  //           subjectsHash["subjects"] = [tsSubjects[value]];
+  //           tagSetsDataArr.push(subjectsHash);
+  //         }
+  //       });
+  //     } else if (ts["area of study"]) {
+  //       selectedItemsData['area of study']['items'] = ts["area of study"].split(",");
+  //       tsfacets["area of study"] = ts["area of study"].split(",");
+  //       tagSets["label"] = ts["area of study"];
+  //       tagSets["area of study"] = [ts["area of study"]];
+  //     } 
+  //     else if (ts["set type"]) {
+  //       selectedItemsData['set type']['items'] = ts["set type"].split(",");
+  //       tsfacets["set type"] = ts["set type"].split(",");
+  //       tagSets["label"] = ts["set type"];
+  //       tagSets["set type"] = [ts["set type"]];
+  //     } else if (ts["availability"]) {
+  //       selectedItemsData['availability']['items'] = ts["availability"].split(",");
+  //       setAvailableToggle(true);
+  //       tsfacets["availability"] = [ts["availability"]];
+  //       // DON'T SHOW IN TAGSET FOR A WHILE
+  //       // tagSets["label"] = "Available Now";
+  //       // tagSets["availability"] = [ts["availability"]];
+  //     } else if (ts["language"]) {
+  //       selectedItemsData['language']['items'] = ts["language"].split(",");
+  //       tsfacets["language"] = ts["language"].split(",");
+  //       tagSets["label"] = ts["language"];
+  //       tagSets["language"] = [ts["language"]];
+  //     }
 
-      // // else if (ts.keyword) {
-      // //   tagSets["label"] = ts["keyword"];
-      // //   tagSets["keyword"] = [ts["language"]];
-      // // }
-      // tagSetsDataArr.push(tagSets);
-     //console.log(tsfacets)
-    });
+  //     // // else if (ts.keyword) {
+  //     // //   tagSets["label"] = ts["keyword"];
+  //     // //   tagSets["keyword"] = [ts["language"]];
+  //     // // }
+  //     // tagSetsDataArr.push(tagSets);
+  //    //console.log(tsfacets)
+  //   });
     
-    let keywordValue;
-    if (queryValue.get("keyword")) {
-      keywordValue = queryValue.get("keyword");
-      setUpdateKeyword(keywordValue);
-      setShowKeyWord(true);
-    } else {
-      keywordValue = "";
-    }
-    const g_begin = queryValue.get("grade_begin")
-      ? queryValue.get("grade_begin")
-      : -1;
-    const g_end = queryValue.get("grade_end")
-      ? queryValue.get("grade_end")
-      : 12;
-    const availabilityval = queryValue.get("availability")
-      ? [queryValue.get("availability")]
-      : [];
-    const availableToggleVal = queryValue.get("availability") ? true : false;
-    const sortOrderVal = queryValue.get("sort_order")
-      ? queryValue.get("sort_order")
-      : "";
-    const pageNumber = queryValue.get("page")
-      ? parseInt(queryValue.get("page"))
-      : 1;
-    // FOR A WHILE DONT SHOW IN TAGSET
-    // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
-    //   const tagSetGradeBegin =
-    //     parseInt(g_begin) === -1
-    //       ? "Pre-K"
-    //       : parseInt(g_begin) === 0
-    //       ? "K"
-    //       : parseInt(g_begin);
+  //   let keywordValue;
+  //   if (queryValue.get("keyword")) {
+  //     keywordValue = queryValue.get("keyword");
+  //     setUpdateKeyword(keywordValue);
+  //     setShowKeyWord(true);
+  //   } else {
+  //     keywordValue = "";
+  //   }
+  //   const g_begin = queryValue.get("grade_begin")
+  //     ? queryValue.get("grade_begin")
+  //     : -1;
+  //   const g_end = queryValue.get("grade_end")
+  //     ? queryValue.get("grade_end")
+  //     : 12;
+  //   const availabilityval = queryValue.get("availability")
+  //     ? [queryValue.get("availability")]
+  //     : [];
+  //   const availableToggleVal = queryValue.get("availability") ? true : false;
+  //   const sortOrderVal = queryValue.get("sort_order")
+  //     ? queryValue.get("sort_order")
+  //     : "";
+  //   const pageNumber = queryValue.get("page")
+  //     ? parseInt(queryValue.get("page"))
+  //     : 1;
+  //   // FOR A WHILE DONT SHOW IN TAGSET
+  //   // if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
+  //   //   const tagSetGradeBegin =
+  //   //     parseInt(g_begin) === -1
+  //   //       ? "Pre-K"
+  //   //       : parseInt(g_begin) === 0
+  //   //       ? "K"
+  //   //       : parseInt(g_begin);
 
-    //   const tagSetGradeEnd =
-    //     parseInt(g_end) === -1
-    //       ? "Pre-K"
-    //       : parseInt(g_end) === 0
-    //       ? "K"
-    //       : parseInt(g_end);
+  //   //   const tagSetGradeEnd =
+  //   //     parseInt(g_end) === -1
+  //   //       ? "Pre-K"
+  //   //       : parseInt(g_end) === 0
+  //   //       ? "K"
+  //   //       : parseInt(g_end);
 
-    //   const tagSetGrades = {
-    //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
-    //     grade_begin: [queryValue.get("grade_begin")],
-    //     grade_end: [queryValue.get("grade_end")],
-    //   };
+  //   //   const tagSetGrades = {
+  //   //     label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
+  //   //     grade_begin: [queryValue.get("grade_begin")],
+  //   //     grade_end: [queryValue.get("grade_end")],
+  //   //   };
 
-    //   tagSetsArr.push(tagSetGrades);
-    // }
-    setSelectedFacets(tsfacets);
-    setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
-    setKeyWord(keywordValue);
-    setAvailability(availabilityval);
-    setAvailableToggle(availableToggleVal);
-    setSortTitleValue(sortOrderVal);
-    setComputedCurrentPage(pageNumber);
-    //setTeacherSetArr(tagSetsDataArr);
-    
+  //   //   tagSetsArr.push(tagSetGrades);
+  //   // }
+  //   setSelectedFacets(tsfacets);
+  //   setGrades(queryValue.get("grade_begin"), queryValue.get("grade_end"));
+  //   setKeyWord(keywordValue);
+  //   setAvailability(availabilityval);
+  //   setAvailableToggle(availableToggleVal);
+  //   setSortTitleValue(sortOrderVal);
+  //   setComputedCurrentPage(pageNumber);
+  //   //setTeacherSetArr(tagSetsDataArr);
 
-    // getTeacherSets(
-    //   Object.assign(
-    //     {
-    //       keyword: keywordValue,
-    //       grade_begin: g_begin,
-    //       grade_end: g_end,
-    //       sort_order: sortOrderVal,
-    //       availability: availabilityval,
-    //       page: pageNumber,
-    //     },
-    //     tsfacets
-    //   )
-    // );
-  }, [location.search]);
+  //   getTeacherSets(
+  //     Object.assign(
+  //       {
+  //         keyword: keywordValue,
+  //         grade_begin: g_begin,
+  //         grade_end: g_end,
+  //         sort_order: sortOrderVal,
+  //         availability: availabilityval,
+  //         page: pageNumber,
+  //         firstFacetSelectedItem: Object.keys(tsfacets)[0],
+  //         selectedItemCount: getSelectedCategoriesCount(tsfacets)
+  //       },
+  //       tsfacets
+  //     )
+  //   );
+  // }, [location.search]);
 
   const getTeacherSets = (params) => {
     axios
@@ -778,23 +819,28 @@ export default function SearchTeacherSets(props) {
         selectedItems={selectedItems}
         width="full"
         listOverflow="expand"
+        isDefaultOpen={isDefaultOpen}
       />
     ));
   };
 
   const onClearItems = (label, selected_items_data) => {
+    console.log(selectedItems)
     onClear(label);
+
     if (label === "area of study") {
       selectedFacets["area of study"] = [];
+      searchParams.delete("area of study");
     } else if (label === "set type") {
       selectedFacets["set type"] = [];
-      selected_items_data['set type']['items'] = []
+      searchParams.delete("set type");
     } else if (label === "subjects") {
+      searchParams.delete("subjects");
       selectedFacets["subjects"] = [];
     } else if (label === "language") {
       selectedFacets["language"] = [];
-    } 
-    console.log(selected_items_data)
+      searchParams.delete("language");
+    }
     setSelectedFacets(selectedFacets);
     const params = {
       ...selectedFacets,  // Add selected facets to the params
@@ -980,6 +1026,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const tsSelectedFacets = (selected_items) => {
+
     setFirstSelectedItem(Object.keys(selected_items)[0])
     
     // Initialize selectedFacetItems to either selectedFacets or an empty object
