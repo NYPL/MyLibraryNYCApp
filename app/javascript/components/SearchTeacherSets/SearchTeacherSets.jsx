@@ -850,7 +850,7 @@ export default function SearchTeacherSets(props) {
       // availability: availability,
       // page: computedCurrentPage,
       firstFacetSelectedItem: Object.keys(selectedItems)[0],
-      //selectedItemCount: getSelectedCategoriesCount(selectedItems),
+      selectedItemCount: getSelectedCategoriesCount(selectedItems),
     };
   
     // // Make the API call with the updated params

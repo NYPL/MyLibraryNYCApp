@@ -192,7 +192,7 @@ class ElasticSearch
                   field: "primary_language",
                   size: 200,
                   order: { _key: "asc" },
-                  min_doc_count: 0,  # Include even empty buckets
+                  min_doc_count: 0,
                 },
               },
               'set type': {
@@ -200,7 +200,7 @@ class ElasticSearch
                   field: "set_type",
                   size: 200,
                   order: { _key: "asc" },
-                  min_doc_count: 0,  # Include even empty buckets
+                  min_doc_count: 0,
                 },
               },
               'area of study': {
@@ -208,7 +208,7 @@ class ElasticSearch
                   field: "area_of_study",
                   size: 200,
                   order: { _key: "asc" },
-                  min_doc_count: 0,  # Include even empty buckets
+                  min_doc_count: 0,
                 },
               },
               "subjects": {
@@ -380,15 +380,30 @@ class ElasticSearch
         aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", alias_aggregation_name.to_s)
       end
 
-      case aggregation_name
+      case aggregation_name.to_s
       when "all_subjects", "subjects"
         if aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
           id_buckets = aggregations["id"]["buckets"]
           title_buckets = aggregations["title"]["buckets"]
+          if params["selectedItemCount"].to_i > 1 && !["language", "area of study", "set type"].include?(alias_aggregation_name)
+            # Extract override counts (generic for all values)
+            override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "#{alias_aggregation_name}", "title", "buckets")
+            # Create a hash of the override counts for fast lookups, but only for counts > 0
+            override_count_hash = override_counts.each_with_object({}) do |bucket, hash|
+              hash[bucket["key"]] = bucket["doc_count"]
+            end
+          end
+
           if id_buckets.length == title_buckets.length
             id_buckets.each_with_index do |id_bucket, index|
               title_bucket = title_buckets[index]
-              next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
+              #next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
+
+              if params["selectedItemCount"].to_i > 1 && !["language", "area of study", "set type"].include?(alias_aggregation_name)
+                if override_count_hash.key?(id_bucket["key"])
+                  id_bucket["doc_count"] = override_count_hash[id_bucket["key"]]
+                end
+              end
 
               facets_group[:items] << {
                 value: id_bucket["key"],
@@ -400,10 +415,10 @@ class ElasticSearch
         else
           facets_group[:items] << { value: "No data available", label: "No data available", count: 0 }
         end
-      else
+      when language, set_type, area_of_study
         if aggregations&.dig("buckets")
           buckets = aggregations["buckets"]
-          if params["selectedItemCount"].to_i > 1
+          if params["selectedItemCount"].to_i > 1 && alias_aggregation_name != "subjects"
             # Extract override counts (generic for all values)
             override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "#{alias_aggregation_name}", "buckets")
             # Create a hash of the override counts for fast lookups, but only for counts > 0
@@ -414,7 +429,7 @@ class ElasticSearch
 
           buckets.each do |agg_val|
             # Override count if the area_of_study exists in the `selected_area_override` and doc_count > 0
-            if params["selectedItemCount"].to_i > 1
+            if params["selectedItemCount"].to_i > 1 && alias_aggregation_name != "subjects"
               if override_count_hash.key?(agg_val["key"])
                 agg_val["doc_count"] = override_count_hash[agg_val["key"]]
               end
