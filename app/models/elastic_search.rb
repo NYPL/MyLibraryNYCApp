@@ -166,7 +166,7 @@ class ElasticSearch
     must_conditions << { terms: { set_type: set_type } } if set_type.present?
     must_conditions << { terms: { primary_language: primary_language } } if primary_language.present?
     must_conditions << { terms: { area_of_study: area_of_study } } if area_of_study.present?
-    must_conditions << { terms: { subjects: subjects } } if subjects.present?
+    must_conditions << { nested: { path: "subjects", query: { bool: { must: [{ terms: { "subjects.id": params["subjects"] } }] } } } } if subjects.present?
 
     firstFacetSelectedItem = params["firstFacetSelectedItem"]
     selectedItemCount = params["selectedItemCount"]
@@ -289,6 +289,25 @@ class ElasticSearch
               },
             },
           },
+          "all_subjects": {
+            "nested": {
+              "path": "subjects",
+            },
+            "aggs": {
+              "id": {
+                "terms": {
+                  "field": "subjects.id",
+                  "size": 3000,
+                },
+              },
+              "title": {
+                "terms": {
+                  "field": "subjects.title.keyword",
+                  "size": 3000,
+                },
+              },
+            },
+          },
         },
       },
     }
@@ -336,9 +355,9 @@ class ElasticSearch
         alias_aggregation_name = "language"
         firstFacetSelectedItem = "all_language"
       when "subjects"
-        subjects = "subjects"
+        subjects = "all_subjects"
         alias_aggregation_name = "subjects"
-        firstFacetSelectedItem = "subjects"
+        firstFacetSelectedItem = "all_subjects"
       end
     end
 
@@ -362,11 +381,10 @@ class ElasticSearch
       end
 
       case aggregation_name
-      when "subjects"
+      when "all_subjects", "subjects"
         if aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
           id_buckets = aggregations["id"]["buckets"]
           title_buckets = aggregations["title"]["buckets"]
-
           if id_buckets.length == title_buckets.length
             id_buckets.each_with_index do |id_bucket, index|
               title_bucket = title_buckets[index]
@@ -385,11 +403,9 @@ class ElasticSearch
       else
         if aggregations&.dig("buckets")
           buckets = aggregations["buckets"]
-
           if params["selectedItemCount"].to_i > 1
             # Extract override counts (generic for all values)
             override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "#{alias_aggregation_name}", "buckets")
-
             # Create a hash of the override counts for fast lookups, but only for counts > 0
             override_count_hash = override_counts.each_with_object({}) do |bucket, hash|
               hash[bucket["key"]] = bucket["doc_count"]

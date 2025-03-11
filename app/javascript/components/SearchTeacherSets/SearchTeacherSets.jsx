@@ -138,7 +138,7 @@ export default function SearchTeacherSets(props) {
           selected_items['availability']['items'] = ts["availability"].split(",");
           setAvailableToggle(true);
         } else if (ts["language"]) {
-          selected_items['language']['items'] =  selected_items['language'] || {};
+          selected_items['language'] =  selected_items['language'] || {};
           selected_items['language']['items'] = ts["language"].split(",");
         }
       });      
@@ -825,7 +825,6 @@ export default function SearchTeacherSets(props) {
   };
 
   const onClearItems = (label, selected_items_data) => {
-    console.log(selectedItems)
     onClear(label);
 
     if (label === "area of study") {
