@@ -383,10 +383,9 @@ class ElasticSearch
       if aggregations.nil?
         aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", alias_aggregation_name.to_s)
       end
-
       case aggregation_name.to_s
       when "all_subjects", "subjects"
-        if !["language", "area of study", "set type"].include?(alias_aggregation_name) && aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
+        if !["language", "area of study", "set type"].include?("subjects") && aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
           id_buckets = aggregations["id"]["buckets"]
           title_buckets = aggregations["title"]["buckets"]
 
