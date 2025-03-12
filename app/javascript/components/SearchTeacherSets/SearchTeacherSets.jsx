@@ -1521,7 +1521,6 @@ const htmlContent = `Audio Player helper text. ${formattedRange}`;
       }
       contentSidebar={
         <>
-          {skeletonLoader()}
           {teacherSetSideBarResults()}
         </>
       }
