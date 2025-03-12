@@ -388,10 +388,9 @@ class ElasticSearch
         if !["language", "area of study", "set type"].include?("subjects") && aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
           id_buckets = aggregations["id"]["buckets"]
           title_buckets = aggregations["title"]["buckets"]
-
           if params["selectedItemCount"].to_i > 1
             # Extract override counts (generic for all values)
-            override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "#{alias_aggregation_name}", "title", "buckets")
+            override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "subjects", "title", "buckets")
             # Create a hash of the override counts for fast lookups, but only for counts > 0
             override_count_hash = override_counts.each_with_object({}) do |bucket, hash|
               hash[bucket["key"]] = bucket["doc_count"]
