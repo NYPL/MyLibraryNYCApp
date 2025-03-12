@@ -371,7 +371,11 @@ class ElasticSearch
       aggregation_name = config[:aggregation_name]
 
       if firstFacetSelectedItem == aggregation_name.to_s
-        aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", aggregation_name.to_s, alias_aggregation_name.to_s)
+        if alias_aggregation_name == "subjects"
+          aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", aggregation_name.to_s)
+        else
+          aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", aggregation_name.to_s, alias_aggregation_name.to_s)
+        end
       else
         aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", aggregation_name.to_s)
       end
@@ -382,10 +386,11 @@ class ElasticSearch
 
       case aggregation_name.to_s
       when "all_subjects", "subjects"
-        if aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
+        if !["language", "area of study", "set type"].include?(alias_aggregation_name) && aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
           id_buckets = aggregations["id"]["buckets"]
           title_buckets = aggregations["title"]["buckets"]
-          if params["selectedItemCount"].to_i > 1 && !["language", "area of study", "set type"].include?(alias_aggregation_name)
+
+          if params["selectedItemCount"].to_i > 1
             # Extract override counts (generic for all values)
             override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "#{alias_aggregation_name}", "title", "buckets")
             # Create a hash of the override counts for fast lookups, but only for counts > 0
@@ -393,18 +398,16 @@ class ElasticSearch
               hash[bucket["key"]] = bucket["doc_count"]
             end
           end
-
           if id_buckets.length == title_buckets.length
             id_buckets.each_with_index do |id_bucket, index|
               title_bucket = title_buckets[index]
-              #next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
+              next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
 
               if params["selectedItemCount"].to_i > 1 && !["language", "area of study", "set type"].include?(alias_aggregation_name)
                 if override_count_hash.key?(id_bucket["key"])
                   id_bucket["doc_count"] = override_count_hash[id_bucket["key"]]
                 end
               end
-
               facets_group[:items] << {
                 value: id_bucket["key"],
                 label: title_bucket["key"],
