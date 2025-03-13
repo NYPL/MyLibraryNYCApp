@@ -151,29 +151,45 @@ class ElasticSearch
       query[:query][:bool][:must] << { :nested => { :path => "subjects",
                                                    :query => { :bool => { :must => [{ :terms => { "subjects.id" => params["subjects"] } }] } } } }
     end
-    aggregation_hash = group_by_facets_query(area_of_study, language, subjects, set_type, params)
+    aggregation_hash = group_by_facets_query(area_of_study, language, subjects, set_type, grade_begin, grade_end, keyword, availability, params)
     [query, aggregation_hash]
   end
 
   # Groupby facets elastic search queries. (language, set_type, availability, area_of_study, subjects)
-  def group_by_facets_query(area_of_study, primary_language, subjects, set_type, params)
+  def group_by_facets_query(area_of_study, primary_language, subjects, set_type, grade_begin, grade_end, keyword, availability, params)
     aggregation_hash = {}
     must_conditions = [
-      { range: { grade_begin: { lte: 12 } } },
-      { range: { grade_end: { gte: -1 } } },
+      { range: { grade_begin: { lte: grade_end } } },
+      { range: { grade_end: { gte: grade_begin } } },
     ]
 
     must_conditions << { terms: { set_type: set_type } } if set_type.present?
+    must_conditions << { terms: { availability: availability } } if availability.present?
     must_conditions << { terms: { primary_language: primary_language } } if primary_language.present?
     must_conditions << { terms: { area_of_study: area_of_study } } if area_of_study.present?
     must_conditions << { nested: { path: "subjects", query: { bool: { must: [{ terms: { "subjects.id": params["subjects"] } }] } } } } if subjects.present?
+
+    # Add the keyword-based search condition
+    if keyword.present?
+      # Adding subjects_query and keyword search conditions
+      keyword_conditions = { bool: { should: [
+        { multi_match: { query: keyword, type: "phrase_prefix", boost: 3, fields: ["title^10", "description^2", "contents"] } },
+        { multi_match: { query: keyword, fuzziness: 1, fields: ["title^10", "description^2", "contents"] } },
+        { nested: { path: "subjects", query: { bool: { should: [
+          { multi_match: { query: keyword, type: "phrase_prefix", boost: 3, fields: ["subjects.title^3"] } },
+          { multi_match: { query: keyword, fuzziness: 1, fields: ["subjects.title^3"] } },
+        ] } } } },
+        { term: { "title.keyword": { value: keyword } } },
+      ] } }
+      must_conditions << keyword_conditions
+    end
 
     firstFacetSelectedItem = params["firstFacetSelectedItem"]
     selectedItemCount = params["selectedItemCount"]
 
     first_conditions = [
-      { range: { grade_begin: { lte: 12 } } },
-      { range: { grade_end: { gte: -1 } } },
+      { range: { grade_begin: { lte: grade_end.to_i } } },
+      { range: { grade_end: { gte: grade_begin.to_i } } },
     ]
 
     aggregation_hash[:aggs] = {
@@ -235,7 +251,7 @@ class ElasticSearch
           "all_area_of_study": {
             "filter": {
               "bool": {
-                "must": first_conditions,
+                "must": must_conditions,
               },
             },
             "aggs": {
@@ -254,7 +270,7 @@ class ElasticSearch
           "all_language": {
             "filter": {
               "bool": {
-                "must": first_conditions,
+                "must": must_conditions,
               },
             },
             "aggs": {
@@ -273,7 +289,7 @@ class ElasticSearch
           "all_set_type": {
             "filter": {
               "bool": {
-                "must": first_conditions,
+                "must": must_conditions,
               },
             },
             "aggs": {

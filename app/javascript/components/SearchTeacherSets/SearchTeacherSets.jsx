@@ -61,7 +61,6 @@ export default function SearchTeacherSets(props) {
     const queryParamsHash = {};
     queryParamsHash[entry[0]] = entry[1];
     queryParams.push(queryParamsHash);
-    //console.log(queryParams)
   }
 
   const facetBoxColor = useColorModeValue(
@@ -103,22 +102,20 @@ export default function SearchTeacherSets(props) {
   const { onChange, onMixedStateChange, selectedItems, onClear, onClearAll } =
   useMultiSelect();
 
-  const [tsFacetKeys, setTsFacetKeys] = useState({});
-
-  const [selectedFilterItems, setSelectedFilterItems] = useState([
-    selectedItems,
-  ]);
-
-
   useEffect(() => {
     const selected_items = selectedItems
     if (getSelectedCategoriesCount(selectedItems) > 0) {
-      tsSelectedFacets(selected_items);
+      tsSelectedFacets(selected_items, availability);
     } else {
+      let availability_val = ""
       queryParams.map((ts) => {
         if (ts.subjects) {
-          selected_items['subjects'] = selected_items['subjects'] || {};
-          selected_items['subjects']['items'] = ts.subjects.split(",");
+          if (selected_items['subjects'] && selected_items['subjects']['items'].length === 0) {
+            selected_items['subjects']['items'] = selected_items['subjects']['items']
+          } else {
+            selected_items['subjects'] = selected_items['subjects'] || {}
+            selected_items['subjects']['items'] = ts["subjects"].split(",");
+          }
           ts.subjects.split(",").map((value) => {
             if (tsSubjects[value] !== undefined) {
               const subjectsHash = {};
@@ -127,27 +124,40 @@ export default function SearchTeacherSets(props) {
             }
           });
         } else if (ts["area of study"]) {
-          selected_items['area of study'] = selected_items['area of study'] || {};
-          selected_items['area of study']['items'] = ts["area of study"].split(",");
+          if (selected_items['area of study'] && selected_items['area of study']['items'].length === 0) {
+            selected_items['area of study']['items'] = selected_items['area of study']['items']
+          } else {
+            selected_items['area of study'] = selected_items['area of study'] || {}
+            selected_items['area of study']['items'] = ts["area of study"].split(",");
+          }
         } 
         else if (ts["set type"]) {
-          selected_items["set type"] = selected_items['set type'] || {};
-          selected_items['set type']['items'] = ts["set type"].split(",");
+          if (selected_items['set type'] && selected_items['set type']['items'].length === 0) {
+            selected_items['set type']['items'] = selected_items['set type']['items']
+          } else {
+            selected_items['set type'] = selected_items['set type'] || {}
+            selected_items['set type']['items'] = ts["set type"].split(",");;
+          }
         } else if (ts["availability"]) {
-          selected_items['availability'] =  selected_items['availability'] || {};
-          selected_items['availability']['items'] = ts["availability"].split(",");
+          setAvailability([ts["availability"]])
+          availability_val = [ts["availability"]]
           setAvailableToggle(true);
         } else if (ts["language"]) {
-          selected_items['language'] =  selected_items['language'] || {};
-          selected_items['language']['items'] = ts["language"].split(",");
+          if (selected_items['language'] && selected_items['language']['items'].length === 0) {
+            selected_items['language']['items'] = selected_items['language']['items']
+          } else {
+            selected_items['language'] = selected_items['language'] || {}
+            selected_items['language']['items'] = ts["language"].split(",");;
+          }
         }
-      });      
+      });
+
+      tsSelectedFacets(selected_items, availability_val);    
     }
     if (getSelectedCategoriesCount(selectedItems) > 0) {
       setIsDefaultOpen(true);
     }
-    tsSelectedFacets(selected_items);
-  }, [selectedItems]);
+  }, [selectedItems, location.search]);
 
 
   useEffect(() => {
@@ -846,9 +856,9 @@ export default function SearchTeacherSets(props) {
       keyword: keyword,
       grade_begin: -1,
       grade_end: 12,
-      // sort_order: sortTitleValue,
-      // availability: availability,
-      // page: computedCurrentPage,
+      sort_order: sortTitleValue,
+      availability: availability,
+      page: computedCurrentPage,
       firstFacetSelectedItem: Object.keys(selectedItems)[0],
       selectedItemCount: getSelectedCategoriesCount(selectedItems),
     };
@@ -916,19 +926,20 @@ export default function SearchTeacherSets(props) {
     setGradeEnd(12);
     setRangevalues([-1, 12]);
     windowScroll();
-    // getTeacherSets(
-    //   Object.assign(
-    //     {
-    //       keyword: keyword,
-    //       grade_begin: grade_begin,
-    //       grade_end: grade_end,
-    //       sort_order: value,
-    //       availability: availability,
-    //       page: computedCurrentPage,
-    //     },
-    //     selectedFacets
-    //   )
-    // );
+    setSelectedFacets({})
+    getTeacherSets(
+      Object.assign(
+        {
+          keyword: keyword,
+          grade_begin: grade_begin,
+          grade_end: grade_end,
+          sort_order: sortTitleValue,
+          availability: availability,
+          page: computedCurrentPage,
+        },
+        selectedFacets
+      )
+    );
   };
 
   const clearFiltersButton = () => {
@@ -1024,12 +1035,36 @@ export default function SearchTeacherSets(props) {
     ).length;
   };
 
-  const tsSelectedFacets = (selected_items) => {
+  const tsSelectedFacets = (selected_items, availability_val="") => {
+    const queryValue = new URLSearchParams(location.search);
+    let keywordValue;
+    if (queryValue.get("keyword")) {
+      keywordValue = queryValue.get("keyword");
+      setUpdateKeyword(keywordValue);
+      setShowKeyWord(true);
+    } else {
+      keywordValue = "";
+    }
+    const g_begin = queryValue.get("grade_begin")
+    ? queryValue.get("grade_begin")
+    : -1;
+    const g_end = queryValue.get("grade_end")
+      ? queryValue.get("grade_end")
+      : 12;
+    const availabilityval = queryValue.get("availability")
+      ? [queryValue.get("availability")]
+      : [];
+    const availableToggleVal = queryValue.get("availability") ? true : false;
+    const sortOrderVal = queryValue.get("sort_order")
+      ? queryValue.get("sort_order")
+      : "";
+    const pageNumber = queryValue.get("page")
+      ? parseInt(queryValue.get("page"))
+      : 1;
 
     setFirstSelectedItem(Object.keys(selected_items)[0])
-    
-    // Initialize selectedFacetItems to either selectedFacets or an empty object
-    const selectedFacetItems = selectedFacets ? { ...selectedFacets } : {};
+    // Initialize selectedFacetItems to either selected_items or an empty object
+    const selectedFacetItems = selected_items ? { ...selected_items } : {};
   
     // Clear page parameter before making any updates
     searchParams.delete("page");
@@ -1046,7 +1081,7 @@ export default function SearchTeacherSets(props) {
         searchParams.delete("area of study");
         selectedFacetItems["area of study"] = [];
       }
-    }
+    } 
   
     // Handling the "set type" facet
     if (selected_items["set type"]) {
@@ -1084,11 +1119,26 @@ export default function SearchTeacherSets(props) {
         selectedFacetItems["subjects"] = [];
       }
     }
-  
+
+    if (availability_val.length > 0) {
+      searchParams.set("availability", availability_val);
+      setAvailability(availability_val)
+    } else {
+      searchParams.delete("availability");
+      setAvailability("")
+    }
+
     // Update the search params and selected facets state
     setSearchParams(searchParams);
     setSelectedFacets(selectedFacetItems);
-      
+    setGrades(g_begin, g_end);
+    setKeyWord(keywordValue);
+    setAvailability(availabilityval);
+    setAvailableToggle(availableToggleVal);
+    setSortTitleValue(sortOrderVal);
+    setComputedCurrentPage(pageNumber);
+       //setTeacherSetArr(tagSetsDataArr);
+    
     // Prepare the parameters for the API call
     const params = {
       ...selectedFacetItems,  // Add selected facets to the params
@@ -1096,12 +1146,13 @@ export default function SearchTeacherSets(props) {
       grade_begin: grade_begin,
       grade_end: grade_end,
       sort_order: sortTitleValue,
-      availability: availability,
+      availability: availability_val,
       page: computedCurrentPage,
       firstFacetSelectedItem: Object.keys(selected_items)[0],
       selectedItemCount: getSelectedCategoriesCount(selectedItems),
     };
-  
+    
+
     // Make the API call with the updated params
     getTeacherSets(params);
   };
