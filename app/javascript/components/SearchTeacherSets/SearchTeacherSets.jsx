@@ -836,7 +836,6 @@ export default function SearchTeacherSets(props) {
 
   const onClearItems = (label, selected_items_data) => {
     onClear(label);
-
     if (label === "area of study") {
       selectedFacets["area of study"] = [];
       searchParams.delete("area of study");
@@ -921,16 +920,20 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("availability");
     searchParams.delete("grade_begin");
     searchParams.delete("grade_end");
-    setSearchParams(searchParams);
+    searchParams.delete("keyword");
     setGradeBegin(-1);
     setGradeEnd(12);
     setRangevalues([-1, 12]);
     windowScroll();
+    setAvailability("");
     setSelectedFacets({})
+    setKeyWord("")
+    setSearchParams(searchParams);
+
     getTeacherSets(
       Object.assign(
         {
-          keyword: keyword,
+          keyword: "",
           grade_begin: grade_begin,
           grade_end: grade_end,
           sort_order: sortTitleValue,
