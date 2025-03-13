@@ -187,10 +187,14 @@ class ElasticSearch
     firstFacetSelectedItem = params["firstFacetSelectedItem"]
     selectedItemCount = params["selectedItemCount"]
 
-    first_conditions = [
-      { range: { grade_begin: { lte: grade_end.to_i } } },
-      { range: { grade_end: { gte: grade_begin.to_i } } },
-    ]
+    if keyword.present? || availability.present?
+      first_conditions = must_conditions
+    else
+      first_conditions = [
+        { range: { grade_begin: { lte: grade_end.to_i } } },
+        { range: { grade_end: { gte: grade_begin.to_i } } },
+      ]
+    end
 
     aggregation_hash[:aggs] = {
       total_aggregations: {
@@ -251,7 +255,7 @@ class ElasticSearch
           "all_area_of_study": {
             "filter": {
               "bool": {
-                "must": must_conditions,
+                "must": first_conditions,
               },
             },
             "aggs": {
@@ -270,7 +274,7 @@ class ElasticSearch
           "all_language": {
             "filter": {
               "bool": {
-                "must": must_conditions,
+                "must": first_conditions,
               },
             },
             "aggs": {
@@ -289,7 +293,7 @@ class ElasticSearch
           "all_set_type": {
             "filter": {
               "bool": {
-                "must": must_conditions,
+                "must": first_conditions,
               },
             },
             "aggs": {
