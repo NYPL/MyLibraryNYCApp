@@ -147,7 +147,7 @@ export default function TeacherSetDetails(props) {
 
     // Dynamically create and insert the script tag for Adobe Launch
     const script = document.createElement("script");
-    script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
+    // script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
     script.async = true;
     document.head.appendChild(script);
   };
