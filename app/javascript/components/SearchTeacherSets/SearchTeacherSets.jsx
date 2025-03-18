@@ -103,12 +103,14 @@ export default function SearchTeacherSets(props) {
   useMultiSelect();
 
   useEffect(() => {
-    const selected_items = selectedItems
+    const selected_items = selectedItems;
+    const tagSetsDataArr = [];
     if (getSelectedCategoriesCount(selectedItems) > 0) {
       tsSelectedFacets(selected_items, availability);
     } else {
       let availability_val = ""
       queryParams.map((ts) => {
+        const tagSets = {};
         if (ts.subjects) {
           if (selected_items['subjects'] && selected_items['subjects']['items'].length === 0) {
             selected_items['subjects']['items'] = selected_items['subjects']['items']
@@ -121,6 +123,7 @@ export default function SearchTeacherSets(props) {
               const subjectsHash = {};
               subjectsHash["label"] = tsSubjects[value];
               subjectsHash["subjects"] = [tsSubjects[value]];
+              tagSetsDataArr.push(subjectsHash);
             }
           });
         } else if (ts["area of study"]) {
@@ -130,6 +133,8 @@ export default function SearchTeacherSets(props) {
             selected_items['area of study'] = selected_items['area of study'] || {}
             selected_items['area of study']['items'] = ts["area of study"].split(",");
           }
+          tagSets["label"] = 'Area of study'
+          tagSets["area of study"] = selected_items['area of study']['items']
         } 
         else if (ts["set type"]) {
           if (selected_items['set type'] && selected_items['set type']['items'].length === 0) {
@@ -138,10 +143,14 @@ export default function SearchTeacherSets(props) {
             selected_items['set type'] = selected_items['set type'] || {}
             selected_items['set type']['items'] = ts["set type"].split(",");;
           }
+          tagSets["label"] = 'Set type';
+          tagSets["set type"] = selected_items['set type']['items'];
         } else if (ts["availability"]) {
           setAvailability([ts["availability"]])
           availability_val = [ts["availability"]]
           setAvailableToggle(true);
+          tagSets["label"] = "Available Now";
+          tagSets["availability"] = [ts["availability"]];
         } else if (ts["language"]) {
           if (selected_items['language'] && selected_items['language']['items'].length === 0) {
             selected_items['language']['items'] = selected_items['language']['items']
@@ -149,7 +158,10 @@ export default function SearchTeacherSets(props) {
             selected_items['language'] = selected_items['language'] || {}
             selected_items['language']['items'] = ts["language"].split(",");;
           }
+          tagSets["label"] = "Language";
+          tagSets["language"] = selected_items['language']['items']
         }
+        tagSetsDataArr.push(tagSets);
       });
 
       tsSelectedFacets(selected_items, availability_val);    
