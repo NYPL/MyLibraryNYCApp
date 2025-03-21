@@ -101,69 +101,45 @@ export default function SearchTeacherSets(props) {
 
   const { onChange, onMixedStateChange, selectedItems, onClear, onClearAll } =
   useMultiSelect();
+  
+  const [selectedFilterItems, setSelectedFilterItems] = useState([
+    selectedItems,
+  ]);
+
+
+  const tagSetDetails = (label) => ({ label, id: label.toLowerCase() });
 
   useEffect(() => {
     const selected_items = selectedItems;
-    const tagSetsDataArr = [];
+   //const tagSetsDataArr = [];
+   setSelectedFilterItems([selectedItems]);
+
     if (getSelectedCategoriesCount(selectedItems) > 0) {
       tsSelectedFacets(selected_items, availability);
     } else {
       let availability_val = ""
-      queryParams.map((ts) => {
-        const tagSets = {};
-        if (ts.subjects) {
-          if (selected_items['subjects'] && selected_items['subjects']['items'].length === 0) {
-            selected_items['subjects']['items'] = selected_items['subjects']['items']
-          } else {
-            selected_items['subjects'] = selected_items['subjects'] || {}
-            selected_items['subjects']['items'] = ts["subjects"].split(",");
-          }
-          ts.subjects.split(",").map((value) => {
-            if (tsSubjects[value] !== undefined) {
-              const subjectsHash = {};
-              subjectsHash["label"] = tsSubjects[value];
-              subjectsHash["subjects"] = [tsSubjects[value]];
-              tagSetsDataArr.push(subjectsHash);
+      
+      queryParams.forEach((ts) => {
+        Object.keys(ts).forEach((key) => {
+          if (ts[key]) {
+            if (key === "availability") {
+              setAvailability([ts[key]]);
+              availability_val = [ts[key]];
+              setAvailableToggle(true);
+            } else {
+              // Ensure selected_items[key] exists and is an array
+              selected_items[key] = selected_items[key] || { items: [] };
+              
+              // Merge new items, maintaining order and uniqueness
+              selected_items[key]["items"] = [
+                ...selected_items[key]["items"], 
+                ...ts[key].split(",")
+              ]
+                .filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates while maintaining order
             }
-          });
-        } else if (ts["area of study"]) {
-          if (selected_items['area of study'] && selected_items['area of study']['items'].length === 0) {
-            selected_items['area of study']['items'] = selected_items['area of study']['items']
-          } else {
-            selected_items['area of study'] = selected_items['area of study'] || {}
-            selected_items['area of study']['items'] = ts["area of study"].split(",");
           }
-          tagSets["label"] = 'Area of study'
-          tagSets["area of study"] = selected_items['area of study']['items']
-        } 
-        else if (ts["set type"]) {
-          if (selected_items['set type'] && selected_items['set type']['items'].length === 0) {
-            selected_items['set type']['items'] = selected_items['set type']['items']
-          } else {
-            selected_items['set type'] = selected_items['set type'] || {}
-            selected_items['set type']['items'] = ts["set type"].split(",");;
-          }
-          tagSets["label"] = 'Set type';
-          tagSets["set type"] = selected_items['set type']['items'];
-        } else if (ts["availability"]) {
-          setAvailability([ts["availability"]])
-          availability_val = [ts["availability"]]
-          setAvailableToggle(true);
-          tagSets["label"] = "Available Now";
-          tagSets["availability"] = [ts["availability"]];
-        } else if (ts["language"]) {
-          if (selected_items['language'] && selected_items['language']['items'].length === 0) {
-            selected_items['language']['items'] = selected_items['language']['items']
-          } else {
-            selected_items['language'] = selected_items['language'] || {}
-            selected_items['language']['items'] = ts["language"].split(",");;
-          }
-          tagSets["label"] = "Language";
-          tagSets["language"] = selected_items['language']['items']
-        }
-        tagSetsDataArr.push(tagSets);
+        });
       });
-
       tsSelectedFacets(selected_items, availability_val);    
     }
     if (getSelectedCategoriesCount(selectedItems) > 0) {
@@ -428,7 +404,6 @@ export default function SearchTeacherSets(props) {
    * and can be used to dynamically update the UI with appropriate feedback
    * to the user regarding the search outcome.
    */
-
   const resultsFoundMessage = () => {
     const searchKeyword =
     updateKeyword !== null && updateKeyword !== "" ? ` for "${updateKeyword}"` : "";
@@ -764,9 +739,6 @@ export default function SearchTeacherSets(props) {
     );
   };
 
-  const onClearFilterBar = () => {
-    onClearAll();
-  };
 
   const filterBarMultiSelect = () => {
     return (
@@ -837,7 +809,7 @@ export default function SearchTeacherSets(props) {
         onMixedStateChange={(e) => {
           onMixedStateChange(e.target.id, id, formattedItems(ts.items));
         }}
-        onClear={() => onClearItems(ts.label, selectedItems)}
+        onClear={() => onClearItems(ts.label)}
         selectedItems={selectedItems}
         width="full"
         listOverflow="expand"
@@ -846,7 +818,7 @@ export default function SearchTeacherSets(props) {
     ));
   };
 
-  const onClearItems = (label, selected_items_data) => {
+  const onClearItems = (label) => {
     onClear(label);
     if (label === "area of study") {
       selectedFacets["area of study"] = [];
@@ -1053,6 +1025,7 @@ export default function SearchTeacherSets(props) {
   const tsSelectedFacets = (selected_items, availability_val="") => {
     const queryValue = new URLSearchParams(location.search);
     let keywordValue;
+
     if (queryValue.get("keyword")) {
       keywordValue = queryValue.get("keyword");
       setUpdateKeyword(keywordValue);
@@ -1076,7 +1049,6 @@ export default function SearchTeacherSets(props) {
     const pageNumber = queryValue.get("page")
       ? parseInt(queryValue.get("page"))
       : 1;
-
     setFirstSelectedItem(Object.keys(selected_items)[0])
     // Initialize selectedFacetItems to either selected_items or an empty object
     const selectedFacetItems = selected_items ? { ...selected_items } : {};
@@ -1085,63 +1057,34 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("page");
     setComputedCurrentPage(1);
   
-    // Handling the "area of study" facet
-    if (selected_items["area of study"]) {
-      const areaOfStudy = selected_items["area of study"]['items'];
-      if (areaOfStudy.length > 0) {
-        searchParams.set("area of study", areaOfStudy);
-        // Merge with existing values to avoid overwriting
-        selectedFacetItems["area of study"] = [ ...new Set([...areaOfStudy]) ];
+    // Iterate over selected_items in the same order
+    Object.keys(selected_items).forEach((facet) => {
+      const facetItems = selected_items[facet]['items'];
+
+      // Handle each facet based on its existence and items
+      if (facetItems && facetItems.length > 0) {
+        searchParams.set(facet, facetItems);
+        facetItems.forEach((value) => {
+          teacherSetArr.push(tagSetDetails(value));
+        });
+        selectedFacetItems[facet] = [...new Set([...facetItems])];
       } else {
-        searchParams.delete("area of study");
-        selectedFacetItems["area of study"] = [];
+        searchParams.delete(facet);
+        selectedFacetItems[facet] = [];
       }
-    } 
-  
-    // Handling the "set type" facet
-    if (selected_items["set type"]) {
-      const setType = selected_items["set type"]['items'];
-      if (setType.length > 0) {
-        searchParams.set("set type", setType);
-        // Merge with existing values to avoid overwriting and prevent array nesting
-        selectedFacetItems["set type"] = [ ...new Set([...setType]) ];
-      } else {
-        searchParams.delete("set type");
-        selectedFacetItems["set type"] = [];
-      }
-    }
-  
-    // Handling the "language" facet
-    if (selected_items["language"]) {
-      const language = selected_items["language"]['items'];
-      if (language.length > 0) {
-        searchParams.set("language", language);
-        selectedFacetItems["language"] = [ ...new Set([...language]) ];
-      } else {
-        searchParams.delete("language");
-        selectedFacetItems["language"] = [];
-      }
-    }
-  
-    // Handling the "subjects" facet
-    if (selected_items["subjects"]) {
-      const subjects = selected_items["subjects"]['items'];
-      if (subjects.length > 0) {
-        searchParams.set("subjects", subjects);
-        selectedFacetItems["subjects"] = [ ...new Set([...subjects]) ];
-      } else {
-        searchParams.delete("subjects");
-        selectedFacetItems["subjects"] = [];
-      }
-    }
+    });
 
     if (availability_val.length > 0) {
+      availability_val.map((value) => {
+        teacherSetArr.push(tagSetDetails('Available Now'));
+      });
       searchParams.set("availability", availability_val);
       setAvailability(availability_val)
     } else {
       searchParams.delete("availability");
       setAvailability("")
     }
+
 
     // Update the search params and selected facets state
     setSearchParams(searchParams);
@@ -1152,7 +1095,7 @@ export default function SearchTeacherSets(props) {
     setAvailableToggle(availableToggleVal);
     setSortTitleValue(sortOrderVal);
     setComputedCurrentPage(pageNumber);
-       //setTeacherSetArr(tagSetsDataArr);
+    setTeacherSetArr(teacherSetArr);
     
     // Prepare the parameters for the API call
     const params = {
@@ -1166,8 +1109,12 @@ export default function SearchTeacherSets(props) {
       firstFacetSelectedItem: Object.keys(selected_items)[0],
       selectedItemCount: getSelectedCategoriesCount(selectedItems),
     };
-    
 
+    if (selected_items['subjects'] && selected_items['subjects']['items'].length > 0) {
+      selected_items['subjects']['items'].map((value) => {c
+        teacherSetArr.push(tagSetDetails(tsSubjects[value]));
+      });
+    }
     // Make the API call with the updated params
     getTeacherSets(params);
   };
@@ -1193,19 +1140,14 @@ export default function SearchTeacherSets(props) {
 
   const closeTeacherSetTag = (tagSet) => {
     searchResultsTextRef.current.focus();
+
     if (tagSet.id === "clear-filters") {
-      setTeacherSetArr([]);
-      searchParams.delete("language");
-      searchParams.delete("area of study");
-      searchParams.delete("set type");
-      // searchParams.delete("availability");
-      // searchParams.delete("grade_begin");
-      // searchParams.delete("grade_end");
-      searchParams.delete("subjects");
-      searchParams.delete("keyword");
-      setSearchParams(searchParams);
-      return;
+      clearFilters();
+      setTeacherSetArr([])
+    } else {
+      onClear(tagSet.id)
     }
+      
     const data = teacherSetArr.filter(
       (element) => element.label !== tagSet.label
     );
@@ -1218,6 +1160,7 @@ export default function SearchTeacherSets(props) {
       if (item === "language") {
         searchParams.delete("language");
         setSearchParams(searchParams);
+        onClearItems("language")
       } else if (item === "area of study") {
         searchParams.delete("area of study");
         setSearchParams(searchParams);
@@ -1267,18 +1210,18 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetFilterTags = () => {
-    const subjects = new URLSearchParams(location.search).get("subjects");
-    if (subjects !== null) {
-      subjects.split(",").map((value) => {
-        if (tsSubjects[value] !== undefined) {
-          const subjectsHash = {};
-          subjectsHash["label"] ||= tsSubjects[value];
-          subjectsHash["subjects"] ||= [tsSubjects[value]];
-          teacherSetArr.push(subjectsHash);
-        }
-      });
-    }
-
+    // const subjects = new URLSearchParams(location.search).get("subjects");
+    // if (subjects !== null) {
+    //   subjects.split(",").map((value) => {
+    //     if (tsSubjects[value] !== undefined) {
+    //       const subjectsHash = {};
+    //       subjectsHash["label"] ||= tsSubjects[value];
+    //       subjectsHash["subjects"] ||= [tsSubjects[value]];
+    //       teacherSetArr.push(subjectsHash);
+    //     }
+    //   });
+    // }
+    
     // teacherSetArr.map((value) => {
     //   if (
     //     value["grade_begin"] !== undefined ||
@@ -1295,17 +1238,28 @@ export default function SearchTeacherSets(props) {
     //   teacherSetArr.push(value);
     // });
 
-    let result = teacherSetArr.filter(
-      (tset, index) =>
-        index === teacherSetArr.findIndex((other) => tset.label === other.label)
-    );
-
+    // let result = teacherSetArr.filter(
+    //   (tset, index) =>
+    //     index === teacherSetArr.findIndex((other) => tset.label === other.label)
+    // );
+    console.log("test tagset array")
+    console.log(Array.from(
+      new Map(teacherSetArr
+        .filter((value) => Object.keys(value).length !== 0) // Remove empty objects
+        .map(obj => [JSON.stringify(obj), obj]) // Convert objects to strings for uniqueness
+      ).values()
+    ))
     return (
       <TagSet
         id="tagSet-id-filter"
         isDismissible
         onClick={closeTeacherSetTag}
-        tagSetData={result.filter((value) => Object.keys(value).length !== 0)}
+        tagSetData={Array.from(
+          new Map(teacherSetArr
+            .filter((value) => Object.keys(value).length !== 0) // Remove empty objects
+            .map(obj => [JSON.stringify(obj), obj]) // Convert objects to strings for uniqueness
+          ).values()
+        )}
         type="filter"
       />
     );
@@ -1345,7 +1299,7 @@ export default function SearchTeacherSets(props) {
               marginBottom="xs"
             >
               <span>Filters applied</span>
-              {/* {teacherSetFilterTags()} */}
+              {teacherSetFilterTags()}
             </HStack>
           </div>
           <div>
@@ -1500,7 +1454,6 @@ export default function SearchTeacherSets(props) {
     }
   };
 
-
   const formatNumberRange = (num1, num2) => {
     // Helper function to format a number with commas
     const formatNumber = (num) => {
@@ -1530,7 +1483,7 @@ export default function SearchTeacherSets(props) {
   };
   
   const formattedRange = formatNumberRange(10, 100);
-const htmlContent = `Audio Player helper text. ${formattedRange}`;
+  const htmlContent = `Audio Player helper text. ${formattedRange}`;
 
   return (
     <TemplateAppContainer
