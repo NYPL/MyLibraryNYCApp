@@ -16,17 +16,17 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :password
 
-  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer:true,
-  less_than_or_equal_to: 27777099999999, uniqueness: true
+  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer: true,
+                                      less_than_or_equal_to: 27777099999999, uniqueness: true
   validates_numericality_of :barcode, on: :update, presence: true, allow_blank: false,
-  only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
+                                      only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
 
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
   # the record.
   validates :first_name, :last_name, :presence => true
   validates_format_of :first_name, :last_name, :with => /\A[^0-9`!@;#$%\^&*+_=\x00-\x19]+\z/
-  validates_format_of :alt_email,:with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
+  validates_format_of :alt_email, :with => Devise::email_regexp, :allow_blank => true, :allow_nil => true
   validates :alt_email, uniqueness: true, allow_blank: true, allow_nil: true
   # validate :validate_password_pattern, on: :create
   # PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[[:^alnum:]])/x
@@ -44,8 +44,7 @@ class User < ActiveRecord::Base
   #   self.password_confirmation ||= User.default_password
   # end
 
-
-  STATUS_LABELS = {'pending' => 'pending', 'complete' => 'complete'}.freeze
+  STATUS_LABELS = { "pending" => "pending", "complete" => "complete" }.freeze
 
   def self.ransackable_associations(auth_object = nil)
     ["holds", "school", "email"]
@@ -55,25 +54,24 @@ class User < ActiveRecord::Base
     ["alt_barcodes", "alt_email", "barcode", "confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "current_sign_in_at", "current_sign_in_ip", "email", "encrypted_password", "first_name", "holds", "home_library", "id", "id_value", "last_name", "last_sign_in_at", "last_sign_in_ip", "remember_created_at", "reset_password_sent_at", "reset_password_token", "school_id", "sign_in_count", "status", "unconfirmed_email", "updated_at"]
   end
 
-
   ## NOTE: Validation methods, including this one, are called twice when
   # making new user from the admin interface. While not a behavior we want,
   # it doesn't currently pose a problem.
   def validate_email_pattern
-    if (!defined?(email) || email.blank? || !email.index('@'))
-      errors.add(:email, ' is required and should end in @schools.nyc.gov or another participating school address')
+    if (!defined?(email) || email.blank? || !email.index("@"))
+      errors.add(:email, " is required and should end in @schools.nyc.gov or another participating school address")
       return false
     end
     email.downcase.strip
 
-    allowed_email_patterns = AllowedUserEmailMasks.where(active:true).pluck(:email_pattern)
+    allowed_email_patterns = AllowedUserEmailMasks.where(active: true).pluck(:email_pattern)
 
-    index = email.index('@')
+    index = email.index("@")
 
     if (index && (allowed_email_patterns.include? email[index..]))
       return true
     else
-      errors.add(:email, 'should end in @schools.nyc.gov or another participating school address')
+      errors.add(:email, "should end in @schools.nyc.gov or another participating school address")
       return false
     end
   end
@@ -96,7 +94,7 @@ class User < ActiveRecord::Base
   end
 
   def name(full = false)
-    handle = self.email.sub /@.*/, ''
+    handle = self.email.sub /@.*/, ""
     name = self.first_name
     name += " #{self.last_name}" if full && !self.last_name.nil? && !self.last_name.empty?
     name.nil? ? handle : name
@@ -132,10 +130,10 @@ class User < ActiveRecord::Base
   # 'pending' and save.  In the future, there may be other conditions that
   # could set the user to "pending", and we'll be checking for those here, as well.
   def save_as_pending!
-    LogWrapper.log('DEBUG', {
-       'message' => "Saving as pending #{self.id}",
-       'method' => "#{model_name}.save_as_pending!",
-       'status' => "before save action"
+    LogWrapper.log("DEBUG", {
+      "message" => "Saving as pending #{self.id}",
+      "method" => "#{model_name}.save_as_pending!",
+      "status" => "before save action",
     })
 
     # do we need to fill in a provisional barcode?
@@ -145,7 +143,7 @@ class User < ActiveRecord::Base
       self.barcode = self.assign_barcode!
     end
 
-    self.status = STATUS_LABELS['pending']
+    self.status = STATUS_LABELS["pending"]
 
     self.save!
   end
@@ -154,12 +152,12 @@ class User < ActiveRecord::Base
   # Assigns a barcode based on the current range in the MLN db.
   # Does not check the barcode for availability/uniqueness in Sierra.
   # We have an ActiveJob for that.
-  def assign_barcode(number_tries=0)
-    LogWrapper.log('DEBUG', {
-       'message' => "Begin assigning barcode to #{self.email}",
-       'method' => "#{model_name}.assign_barcode",
-       'status' => "start"
-      })
+  def assign_barcode(number_tries = 0)
+    LogWrapper.log("DEBUG", {
+      "message" => "Begin assigning barcode to #{self.email}",
+      "method" => "#{model_name}.assign_barcode",
+      "status" => "start",
+    })
 
     # Integer(string) can raise ArgumentError.  we choose not to rescue it, because
     # not having min and max barcode range boundaries set in the application.yml file
@@ -177,22 +175,22 @@ class User < ActiveRecord::Base
         raise_barcode_error_message
       end
 
-      LogWrapper.log('DEBUG', {
-         'message' => "Had a barcode.  Changed it to #{self.barcode}.  Returning from method.",
-         'method' => "#{model_name}.assign_barcode!",
-         'status' => "end",
-         'user' => {email: self.email}
-        })
+      LogWrapper.log("DEBUG", {
+        "message" => "Had a barcode.  Changed it to #{self.barcode}.  Returning from method.",
+        "method" => "#{model_name}.assign_barcode!",
+        "status" => "end",
+        "user" => { email: self.email },
+      })
       return self.barcode
     end
     last_user_barcode = User.where.not(barcode: nil).where("barcode < #{max_barcode}").order(barcode: :desc).pluck(:barcode).first
 
-    LogWrapper.log('DEBUG', {
-       'message' => "Found last_user_barcode: #{last_user_barcode || 'NIL'}.",
-       'method' => "#{model_name}.assign_barcode!",
-       'status' => "end",
-       'user' => {email: self.email}
-      })
+    LogWrapper.log("DEBUG", {
+      "message" => "Found last_user_barcode: #{last_user_barcode || "NIL"}.",
+      "method" => "#{model_name}.assign_barcode!",
+      "status" => "end",
+      "user" => { email: self.email },
+    })
 
     # no non-nil barcodes found?  this should never happen, but let's make sure we can handle it
     if last_user_barcode.blank?
@@ -222,20 +220,20 @@ class User < ActiveRecord::Base
       raise_barcode_error_message
     end
 
-    LogWrapper.log('DEBUG', {
-       'message' => "Barcode has been assigned to #{self.email}",
-       'method' => "#{model_name}.assign_barcode!",
-       'status' => "end",
-       'barcode' => "#{self.barcode}"
-      })
+    LogWrapper.log("DEBUG", {
+      "message" => "Barcode has been assigned to #{self.email}",
+      "method" => "#{model_name}.assign_barcode!",
+      "status" => "end",
+      "barcode" => "#{self.barcode}",
+    })
     return self.barcode
   end
 
   def raise_barcode_error_message
-    LogWrapper.log('ERROR', {
-          'method' => "#{model_name}.assign_barcode!",
-          'message' => "MLN app has run out of available user barcodes"
-      })
+    LogWrapper.log("ERROR", {
+      "method" => "#{model_name}.assign_barcode!",
+      "message" => "MLN app has run out of available user barcodes",
+    })
     raise RangeError, "MLN app has run out of available user barcodes"
   end
 
@@ -250,8 +248,8 @@ class User < ActiveRecord::Base
       is_barcode_available = barcode_available_in_sierra?
 
       unless is_barcode_available
-        Delayed::Worker.logger.info("User status is updating from #{self.status} to #{STATUS_LABELS['complete']}")
-        self.status = STATUS_LABELS['complete']
+        Delayed::Worker.logger.info("User status is updating from #{self.status} to #{STATUS_LABELS["complete"]}")
+        self.status = STATUS_LABELS["complete"]
         self.save!
       end
     rescue StandardError => e
@@ -262,49 +260,48 @@ class User < ActiveRecord::Base
   def barcode_available_in_sierra?
     is_barcode_available = false
     response = HTTParty.get(
-      ENV.fetch('PATRON_MICROSERVICE_URL_V01') + "?barcode=#{self.barcode}",
-      headers:
-        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
-          'Content-Type' => 'application/json' },
-      timeout: 10
+      ENV.fetch("PATRON_MICROSERVICE_URL_V01") + "?barcode=#{self.barcode}&nyplSource=sierra-nypl",
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
     )
 
     if (response.code == 404)
       is_barcode_available = true
-      LogWrapper.log('ERROR', {
-        'method' => "barcode_available_in_sierra?",
-        'message' => "Barcode is available in sierra we can assign to user. Barcode: #{self.barcode}"
+      LogWrapper.log("ERROR", {
+        "method" => "barcode_available_in_sierra?",
+        "message" => "Barcode is available in sierra we can assign to user. Barcode: #{self.barcode}",
       })
     elsif (response.code == 409)
       is_barcode_available = false
-      LogWrapper.log('ERROR', {
-        'method' => "barcode_available_in_sierra?",
-        'message' => "Duplicate patrons found for query. Barcode: #{self.barcode}"
+      LogWrapper.log("ERROR", {
+        "method" => "barcode_available_in_sierra?",
+        "message" => "Duplicate patrons found for query. Barcode: #{self.barcode}",
       })
     elsif (response.code >= 500)
-      LogWrapper.log('ERROR', {
-        'method' => "barcode_available_in_sierra?",
-        'message' => "Internal Server error. Barcode: #{self.barcode}"
+      LogWrapper.log("ERROR", {
+        "method" => "barcode_available_in_sierra?",
+        "message" => "Internal Server error. Barcode: #{self.barcode}",
       })
       # raise InternalServerException.new(GENERIC_SERVER_ERROR[:code], GENERIC_SERVER_ERROR[:msg])
     end
 
-    LogWrapper.log('INFO', {
-      'method' => "barcode_available_in_sierra?",
-      'message' => "barcode_available_in_sierra response details: #{response.code} is_barcode_available: #{is_barcode_available}"
+    LogWrapper.log("INFO", {
+      "method" => "barcode_available_in_sierra?",
+      "message" => "barcode_available_in_sierra response details: #{response.code} is_barcode_available: #{is_barcode_available}",
     })
     return is_barcode_available
   end
 
-  def calculate_next_recurring_event_date(current_date=Date.today, month=6, day=30)
+  def calculate_next_recurring_event_date(current_date = Date.today, month = 6, day = 30)
     # Check if it's after June 30th or on June 30th
     future_date = if current_date.month > month || (current_date.month == month && current_date.day >= day)
-                    Date.new(current_date.year + 1, month, day)
-                  else
-                    Date.new(current_date.year, month, day)
-                  end
+        Date.new(current_date.year + 1, month, day)
+      else
+        Date.new(current_date.year, month, day)
+      end
     # Format the date as a string in "YYYY-MM-DD" format
-    future_date.strftime('%Y-%m-%d')
+    future_date.strftime("%Y-%m-%d")
   end
 
   # Sends a request to the patron creator microservice.
@@ -318,66 +315,65 @@ class User < ActiveRecord::Base
     Delayed::Worker.logger.info("user password details #{self.password} ")
 
     query = {
-      'names' => ["#{self.last_name.upcase}, #{self.first_name.upcase}"],
-      'emails' => [email],
-      'pin' => pin,
-      'patronType' => patron_type,
-      'patronCodes' => {
-        'pcode1' => '-',
-        'pcode2' => '-',
-        'pcode3' => pcode3,
-        'pcode4' => pcode4
+      "names" => ["#{self.last_name.upcase}, #{self.first_name.upcase}"],
+      "emails" => [email],
+      "pin" => pin,
+      "patronType" => patron_type,
+      "patronCodes" => {
+        "pcode1" => "-",
+        "pcode2" => "-",
+        "pcode3" => pcode3,
+        "pcode4" => pcode4,
       },
-      'barcodes' => [self.barcode.present? ? "#{self.barcode}" : self.assign_barcode.to_s],
+      "barcodes" => [self.barcode.present? ? "#{self.barcode}" : self.assign_barcode.to_s],
       addresses: [
         {
           lines: [
             "#{school.address_line_1}",
-            "#{school.address_line_2}"
+            "#{school.address_line_2}",
           ],
-          type: 'a'
-        }
+          type: "a",
+        },
       ],
       phones: [{
         number: school.phone_number,
-        type: "t"
+        type: "t",
       }],
       varFields: [{
         fieldTag: "o",
-        content: school.name
+        content: school.name,
       }],
-      expirationDate: calculate_next_recurring_event_date
+      expirationDate: calculate_next_recurring_event_date,
     }
     Delayed::Worker.logger.info("User request details #{query} ")
     response = HTTParty.post(
-      ENV.fetch('PATRON_MICROSERVICE_URL_V02', nil),
+      ENV.fetch("PATRON_MICROSERVICE_URL_V02", nil),
       body: query.to_json,
-      headers:
-        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
-          'Content-Type' => 'application/json' },
-      timeout: 10
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
     )
     Delayed::Worker.logger.info("User response details #{response.code}  #{response.message}")
     case response.code
     when 201
-      LogWrapper.log('DEBUG', {
-          'message' => "The account with e-mail #{email} was
+      LogWrapper.log("DEBUG", {
+        "message" => "The account with e-mail #{email} was
            successfully created from the micro-service!",
-          'status' => response.code
-        })
+        "status" => response.code,
+      })
     when 400
-      LogWrapper.log('ERROR', {
-        'message' => "An error has occured when sending a request to the patron creator service",
-        'status' => response.code,
-        'responseData' => response.body
+      LogWrapper.log("ERROR", {
+        "message" => "An error has occured when sending a request to the patron creator service",
+        "status" => response.code,
+        "responseData" => response.body,
       })
       raise Exceptions::InvalidResponse, response["message"]["description"]
     else
-      LogWrapper.log('ERROR', {
-          'message' => "An error has occured when sending a request to the patron creator service",
-          'status' => response.code,
-          'responseData' => response.body
-        })
+      LogWrapper.log("ERROR", {
+        "message" => "An error has occured when sending a request to the patron creator service",
+        "status" => response.code,
+        "responseData" => response.body,
+      })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
     response
@@ -392,59 +388,58 @@ class User < ActiveRecord::Base
   # 200 - 1 record with the same e-mail was found
   def get_email_records(email)
     query = {
-      'email' => email
+      "email" => email,
     }
 
     response = HTTParty.get(
-      ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil),
+      ENV.fetch("PATRON_MICROSERVICE_URL_V01", nil),
       query: query,
-      headers:
-        {
-          'Authorization' => "Bearer #{Oauth.get_oauth_token}",
-          'Content-Type' => 'application/json'
-        }
+      headers: {
+        "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+        "Content-Type" => "application/json",
+      },
     )
     response = JSON.parse(response.body)
-    case response['statusCode']
+    case response["statusCode"]
     when 404
-      LogWrapper.log('DEBUG', {
-         'message' => "No records found with the e-mail #{email} in Sierra database",
-         'status' => response['statusCode'],
-         'user' =>  { email: email }
-        })
+      LogWrapper.log("DEBUG", {
+        "message" => "No records found with the e-mail #{email} in Sierra database",
+        "status" => response["statusCode"],
+        "user" => { email: email },
+      })
     when 409
-      LogWrapper.log('DEBUG', {
-         'message' => "The following e-mail #{email} has more then 1 record in the Sierra database with the same e-mail",
-         'status' => response['statusCode'],
-         'user' => { email: email }
-        })
+      LogWrapper.log("DEBUG", {
+        "message" => "The following e-mail #{email} has more then 1 record in the Sierra database with the same e-mail",
+        "status" => response["statusCode"],
+        "user" => { email: email },
+      })
     when 200
-      LogWrapper.log('DEBUG', {
-         'message' => "The following e-mail #{email} has 1 other record in the Sierra database with the same e-mail",
-         'status' => response['statusCode'],
-         'user' => { email: email }
-        })
-      response = {statusCode: 200, message: 'This e-mail address already exists!'}
+      LogWrapper.log("DEBUG", {
+        "message" => "The following e-mail #{email} has 1 other record in the Sierra database with the same e-mail",
+        "status" => response["statusCode"],
+        "user" => { email: email },
+      })
+      response = { statusCode: 200, message: "This e-mail address already exists!" }
     else
-      LogWrapper.log('ERROR', {
-         'message' => "#{response}",
-         'status' => response['statusCode'],
-         'user' => { email: email }
-        })
+      LogWrapper.log("ERROR", {
+        "message" => "#{response}",
+        "status" => response["statusCode"],
+        "user" => { email: email },
+      })
     end
-      return response
+    return response
   end
 
   def patron_type
-    school.borough == 'QUEENS' ? 149 : 151
+    school.borough == "QUEENS" ? 149 : 151
   end
 
   def pcode3
-    return 1 if school.borough == 'BRONX'
-    return 2 if school.borough == 'MANHATTAN'
-    return 3 if school.borough == 'STATEN ISLAND'
-    return 4 if school.borough == 'BROOKLYN'
-    return 5 if school.borough == 'QUEENS'
+    return 1 if school.borough == "BRONX"
+    return 2 if school.borough == "MANHATTAN"
+    return 3 if school.borough == "STATEN ISLAND"
+    return 4 if school.borough == "BROOKLYN"
+    return 5 if school.borough == "QUEENS"
   end
 
   # This returns the sierra code, not the school's zcode
