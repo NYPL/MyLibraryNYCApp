@@ -3915,7 +3915,7 @@ class ActiveSupport::TestCase
   # Returns the passed in response status code, and an appropriate response body to match it.
   def mock_check_barcode_request(barcode, status_code)
     if status_code == '404'
-      stub_request(:get, "#{ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil)}?barcode=" + barcode)
+      stub_request(:get, "#{ENV.fetch('PATRON_MICROSERVICE_URL_V01', nil)}?barcode=" + barcode + '&nyplSource=sierra-nypl')
         .to_return(status: 404, body: {
           "message" => "Failed to retrieve patron record by barcode",
           "statusCode" => 404
@@ -4042,7 +4042,7 @@ class ActiveSupport::TestCase
   end
 
   # send_request_to_bibs_microservice sends an https request
-  # to "https://qa-platform.nypl.org/api/v0.1/bibs?standardNumber=9781896580601" and returns a
+  # to "https://qa-platform.nypl.org/api/v0.1/bibs?standardNumber=9781896580601&nyplSource=sierra-nypl" and returns a
   # status of success if Sierra API finds the bib record.
   def send_request_to_bibs_microservice
     20.times do |x|
@@ -4065,7 +4065,7 @@ class ActiveSupport::TestCase
   # to "https://https://qa-platform.nypl.org/api/v0.1/items
   # status of success if Sierra API finds the bib record.
   def mock_send_request_to_items_microservice
-    items_query_params = "?bibId=998&limit=25&offset=0"
+    items_query_params = "?bibId=998&limit=25&offset=0&nyplSource=sierra-nypl"
     stub_request(:get, "#{ENV.fetch('ITEMS_MICROSERVICE_URL_V01', nil)}" + items_query_params).
       with(
         headers: {
@@ -4073,7 +4073,7 @@ class ActiveSupport::TestCase
         'Content-Type' => 'application/json'
         }).to_return(status: 200, body: ITEM_JSON_REQUEST_BODY, headers: {})
 
-    items_query_params = "?bibId=999&limit=25&offset=0"
+    items_query_params = "?bibId=999&limit=25&offset=0&nyplSource=sierra-nypl"
     stub_request(:get, "#{ENV.fetch('ITEMS_MICROSERVICE_URL_V01', nil)}" + items_query_params).
       with(
         headers: {
@@ -4083,7 +4083,7 @@ class ActiveSupport::TestCase
   end
 
   def mock_items_response_with7899158
-    stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=7899158&limit=25&offset=0").
+    stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=7899158&limit=25&offset=0&nyplSource=sierra-nypl").
       with(
         headers: {
         'Accept' => '*/*',
@@ -4154,7 +4154,7 @@ class ActiveSupport::TestCase
   end
 
   def mock_item_response_with_empty_bib
-    stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=&limit=25&offset=0").
+    stub_request(:get, "https://qa-platform.nypl.org/api/v0.1/items?bibId=&limit=25&offset=0&nyplSource=sierra-nypl").
       with(
         headers: {
         'Accept' => '*/*',

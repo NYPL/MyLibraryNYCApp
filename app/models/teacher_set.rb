@@ -33,20 +33,19 @@ class TeacherSet < ActiveRecord::Base
 
   KEY_WORDS = ["NYC"]
 
-  AVAILABLE = 'available'
-  UNAVAILABLE = 'unavailable'
+  AVAILABLE = "available"
+  UNAVAILABLE = "unavailable"
 
   PRE_K_VAL = -1
   K_VAL = 0
 
-  AVAILABILITY_LABELS = {'available' => 'Available', 'unavailable' => 'Checked Out'}
-  SET_TYPE_LABELS = {'single' => 'Book Club Set', 'multi' => 'Topic Sets'}
-  TOPIC_SET = 'Topic Set'
-  BOOK_CLUB_SET = 'Book Club Set'
-  SIERRA_NYPL = 'sierra-nypl'
+  AVAILABILITY_LABELS = { "available" => "Available", "unavailable" => "Checked Out" }
+  SET_TYPE_LABELS = { "single" => "Book Club Set", "multi" => "Topic Sets" }
+  TOPIC_SET = "Topic Set"
+  BOOK_CLUB_SET = "Book Club Set"
+  SIERRA_NYPL = "sierra-nypl"
 
-
-  FULLTEXT_COLUMNS = ['title', 'description', 'contents']
+  FULLTEXT_COLUMNS = ["title", "description", "contents"]
 
   def self.ransackable_associations(auth_object = nil)
     ["books", "holds", "subject_teacher_sets", "subjects", "teacher_set_books", "teacher_set_notes", "versions"]
@@ -58,7 +57,7 @@ class TeacherSet < ActiveRecord::Base
 
   def new_or_pending_holds
     # puts "holds: #{holds.where(:status => ['new','pending'])}"
-    holds.where(:status => ['new','pending'])
+    holds.where(:status => ["new", "pending"])
   end
 
   def held_by?(user)
@@ -76,7 +75,7 @@ class TeacherSet < ActiveRecord::Base
 
   def pending_holds_for_user(user)
     if user
-      holds.where(:user_id => user.id, :status => ['new','pending']).order('created_at desc')
+      holds.where(:user_id => user.id, :status => ["new", "pending"]).order("created_at desc")
     else
       []
     end
@@ -84,12 +83,12 @@ class TeacherSet < ActiveRecord::Base
 
   # Get all teacher-set status holds except for cancelled and closed.
   def ts_holds_count
-    ts_holds = holds.where.not(status: ['cancelled'])
+    ts_holds = holds.where.not(status: ["cancelled"])
     ts_holds.present? ? ts_holds.sum(:quantity) : nil
   end
 
   # Current user Teacher set holds count
-  def holds_count_for_user(user, hold_id=nil)
+  def holds_count_for_user(user, hold_id = nil)
     holds = holds_for_user(user, hold_id)
     holds.present? ? holds.sum(:quantity) : nil
   end
@@ -111,8 +110,8 @@ class TeacherSet < ActiveRecord::Base
 
   # calculate teacher-set available copies while creating/cancelling the hold
   # quantity = No.of holds requested while creation of hold.
-  def calculate_available_copies(status, quantity=nil, current_user=nil, hold_id=nil)
-    if status == 'cancelled'
+  def calculate_available_copies(status, quantity = nil, current_user = nil, hold_id = nil)
+    if status == "cancelled"
       user_holds_count = holds_count_for_user(current_user, hold_id).to_i
       available_copies = self.available_copies.to_i + user_holds_count
     else
@@ -121,7 +120,7 @@ class TeacherSet < ActiveRecord::Base
     available_copies
   end
 
-  def update_teacher_set_availability_in_db(status, quantity=nil, current_user=nil, hold_id=nil)
+  def update_teacher_set_availability_in_db(status, quantity = nil, current_user = nil, hold_id = nil)
     available_copies = calculate_available_copies(status, quantity, current_user, hold_id)
     self.available_copies = available_copies
     self.availability = availability
@@ -131,27 +130,27 @@ class TeacherSet < ActiveRecord::Base
   # Update teacher-set availability while creation/cancellation of hold.
   def update_teacher_set_availability_in_elastic_search
     body = {
-     :availability => self.availability,
-     :available_copies => self.available_copies,
-     :total_copies => self.total_copies,
+      :availability => self.availability,
+      :available_copies => self.available_copies,
+      :total_copies => self.total_copies,
     }
     ElasticSearch.new.update_document_by_id(self.id, body)
   end
 
   # Get teacher-set holds by user and hold_id
   def ts_holds_by_user_and_hold_id(user, hold_id)
-    holds.where(:user_id => user.id, :id => hold_id).where.not(status: ['cancelled', 'closed'])
+    holds.where(:user_id => user.id, :id => hold_id).where.not(status: ["cancelled", "closed"])
   end
 
   # Get teacher-set holds by user.
   def ts_holds_by_user(user)
-    holds.where(:user_id => user.id).where.not(status: ['cancelled', 'closed'])
+    holds.where(:user_id => user.id).where.not(status: ["cancelled", "closed"])
   end
 
   def make_slug
     # check for nil title otherwise parameterize will fail
-    parameterized_title = (self.title || '').parameterize
-    self.slug ||= [parameterized_title, rand(36**6).to_s(36)].join("-")
+    parameterized_title = (self.title || "").parameterize
+    self.slug ||= [parameterized_title, rand(36 ** 6).to_s(36)].join("-")
   end
 
   # Poor man's subject... TODO: replace with column in DB
@@ -169,27 +168,27 @@ class TeacherSet < ActiveRecord::Base
   end
 
   def suitabilities_string
-    suitabilities.join('; ')
+    suitabilities.join("; ")
   end
 
   # Fetch first book cover uri, with size = (:small|:medium|:large)
   def image_uri(size = :small)
     books.first.image_uri(size) if !books.empty?
   end
-  
+
   def self.initialize_teacher_set(bib_id)
     TeacherSet.where(bnumber: "b#{bib_id}").first_or_initialize
   end
-    
+
   def self.create_or_update_teacher_set(req_body)
-    bib_id = req_body['id']
+    bib_id = req_body["id"]
 
     if req_body["suppressed"]
       # If bib request-body has suppressed value as true then delete teacher-set from database and elastic-search.
       teacher_set = self.delete_teacher_set(bib_id, req_body["suppressed"])
       if teacher_set.destroyed?
-        LogWrapper.log('INFO', {message: "message: #{BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:msg]}",
-                       method: __method__, bib_id: bib_id, teacher_set_id: teacher_set.id, suppressed: req_body["suppressed"]})
+        LogWrapper.log("INFO", { message: "message: #{BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:msg]}",
+                                 method: __method__, bib_id: bib_id, teacher_set_id: teacher_set.id, suppressed: req_body["suppressed"] })
         raise SuppressedBibRecordException.new(BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:code], BIB_RECORD_SUPPRESSED_REMOVED_FROM_MLN[:msg])
       end
     end
@@ -205,10 +204,10 @@ class TeacherSet < ActiveRecord::Base
     teacher_set.clean_primary_subject
 
     # update all teacher-set subjects.
-    teacher_set.update_subjects_via_api(teacher_set.all_var_fields('650'))
+    teacher_set.update_subjects_via_api(teacher_set.all_var_fields("650"))
 
     # Create/Update all teacher-set notes.
-    teacher_set.update_notes(teacher_set.var_field_data('500', true))
+    teacher_set.update_notes(teacher_set.var_field_data("500", true))
 
     # Create/Update all books.
     teacher_set.update_included_book_list(req_body)
@@ -221,30 +220,30 @@ class TeacherSet < ActiveRecord::Base
   # Update teacher-set table from bib request body.
   def update_teacher_set_attributes_from_bib_request(ts_items_info)
     self.update(
-      title: @req_body['title'],
-      call_number: var_field_data('091'),
-      description: var_field_data('520'),
-      edition: var_field_data('250'),
-      isbn: var_field_data('020'),
-      primary_language: fixed_field('24'),
-      publisher: var_field_data('260'),
-      contents: var_field_data('505'),
-      area_of_study: var_field_data('690', false),
-      physical_description: var_field_data('300', false),
-      details_url: "http://legacycatalog.nypl.org/record=b#{@req_body['id']}~S1",
+      title: @req_body["title"],
+      call_number: var_field_data("091"),
+      description: var_field_data("520"),
+      edition: var_field_data("250"),
+      isbn: var_field_data("020"),
+      primary_language: fixed_field("24"),
+      publisher: var_field_data("260"),
+      contents: var_field_data("505"),
+      area_of_study: var_field_data("690", false),
+      physical_description: var_field_data("300", false),
+      details_url: "http://legacycatalog.nypl.org/record=b#{@req_body["id"]}~S1",
       # If Grade value is Pre-K saves as -1 and Grade value is 'K' saves as '0' in TeacherSet table.
-      grade_begin: grade_or_lexile_array('grade')[0] || '',
-      grade_end: grade_or_lexile_array('grade')[1] || '',
-      lexile_begin: grade_or_lexile_array('lexile')[0] || '', # NOTE: lexile functionality has been taken off
-      lexile_end: grade_or_lexile_array('lexile')[1] || '', # NOTE: lexile functionality has been taken off
+      grade_begin: grade_or_lexile_array("grade")[0] || "",
+      grade_end: grade_or_lexile_array("grade")[1] || "",
+      lexile_begin: grade_or_lexile_array("lexile")[0] || "", # NOTE: lexile functionality has been taken off
+      lexile_end: grade_or_lexile_array("lexile")[1] || "", # NOTE: lexile functionality has been taken off
       available_copies: ts_items_info[:available_count],
       total_copies: ts_items_info[:total_count],
       availability: ts_items_info[:availability_string],
-      set_type: derive_set_type(var_field_data('526'))
+      set_type: derive_set_type(var_field_data("526")),
     )
     self
   end
-  
+
   # Create or update teacherset document in elastic search.
   def create_or_update_teacherset_document_in_es
     body = teacher_set_info
@@ -255,15 +254,15 @@ class TeacherSet < ActiveRecord::Base
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
       # If teacherset document not found in elastic search than create document in ES.
       resp = elastic_search.create_document(body[:id], body)
-      if resp['result'] == "created"
-        LogWrapper.log('DEBUG', {'message' => "Successfullly created elastic search doc. Teacher set id #{body[:id]}",'method' => __method__})
+      if resp["result"] == "created"
+        LogWrapper.log("DEBUG", { "message" => "Successfullly created elastic search doc. Teacher set id #{body[:id]}", "method" => __method__ })
       else
-        LogWrapper.log('ERROR', {'message' => "Elastic search document not created/updated. Error: #{e.message}, ts-id: #{body[:id]}", 
-                                 'method' => __method__})
+        LogWrapper.log("ERROR", { "message" => "Elastic search document not created/updated. Error: #{e.message}, ts-id: #{body[:id]}",
+                                  "method" => __method__ })
       end
     rescue StandardError => e
-      LogWrapper.log('ERROR', {'message' => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}, message: #{e.message}",
-                               'method' => __method__})
+      LogWrapper.log("ERROR", { "message" => "Error occured while updating elastic search doc. Teacher set id #{body[:id]}, message: #{e.message}",
+                                "method" => __method__ })
       raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
     end
   end
@@ -274,12 +273,12 @@ class TeacherSet < ActiveRecord::Base
     teacher_set = self.get_teacher_set_by_bnumber(bib_id)
     unless teacher_set.present?
       if suppressed
-        raise SuppressedBibRecordException.new(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:code],BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:msg])
+        raise SuppressedBibRecordException.new(BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:code], BIB_RECORD_SUPPRESSED_NOT_ADDED_TO_MLN[:msg])
       else
-        raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code],BIB_RECORD_NOT_FOUND[:msg])
+        raise BibRecordNotFoundException.new(BIB_RECORD_NOT_FOUND[:code], BIB_RECORD_NOT_FOUND[:msg])
       end
     end
-    
+
     # Delete teacher-set record
     resp = teacher_set.destroy
     # After deletion of teacherset data from db than delete teacherset doc from elastic search
@@ -294,11 +293,11 @@ class TeacherSet < ActiveRecord::Base
   rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
     raise ElasticsearchException.new(TEACHER_SET_NOT_FOUND_IN_ES[:code], TEACHER_SET_NOT_FOUND_IN_ES[:msg])
   rescue StandardError => e
-    LogWrapper.log('ERROR', {'message' => "Error occured while deleting elastic search doc. Teacher set id #{ts_id}. Error: #{e.message}",
-                             'method' => __method__})
+    LogWrapper.log("ERROR", { "message" => "Error occured while deleting elastic search doc. Teacher set id #{ts_id}. Error: #{e.message}",
+                              "method" => __method__ })
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], ELASTIC_SEARCH_STANDARD_EXCEPTION[:msg])
   end
-  
+
   # Make request input body to create teacherset document in elastic search.
   # Input param ts_obj eg: <TeacherSet:0x00007fd79383a640 id: 350, title: "Step",call_number: "Teacher",
   # description: "Book", details_url: "http://catalog.nypl.org/record=b21378444~S1","updated-7571-Step up to the plate, Maria Singh">
@@ -323,8 +322,8 @@ class TeacherSet < ActiveRecord::Base
         subjects_arr << subjects_hash
       end
     end
-    {title: self.title, description: self.description, contents: self.contents, 
-      id: self.id.to_i, details_url: self.details_url, grade_end: self.grade_end, 
+    { title: self.title, description: self.description, contents: self.contents,
+      id: self.id.to_i, details_url: self.details_url, grade_end: self.grade_end,
       grade_begin: self.grade_begin, availability: availability, total_copies: self.total_copies,
       call_number: self.call_number, language: self.language, physical_description: self.physical_description,
       primary_language: self.primary_language, created_at: created_at, updated_at: updated_at,
@@ -348,7 +347,7 @@ class TeacherSet < ActiveRecord::Base
                   WHERE _S.title ILIKE ?)"
 
       vals = [].fill("%#{params[:keyword]}%", 0, clauses.length)
-      sets = sets.where(clauses.join(' OR '), *vals)
+      sets = sets.where(clauses.join(" OR "), *vals)
     end
 
     [:grade_begin, :grade_end, :lexile_begin, :lexile_end].each do |k|
@@ -364,7 +363,7 @@ class TeacherSet < ActiveRecord::Base
     # e.g. grades = {Pre-K => -1, K => 0}
     # e.g. grade_begin=-1&grade_end=0 returns sets with ranges Pre-k to 1, Pre-k to K, K-3, etc.
     # Note these clauses purposefully include sets with null grade/lexile ranges by stakeholder request
-    ['grade','lexile'].each do |prop|
+    ["grade", "lexile"].each do |prop|
       begin_prop = "#{prop}_begin"
       end_prop = "#{prop}_end"
       null_clause = "(#{begin_prop} IS NULL AND #{end_prop} IS NULL)"
@@ -389,13 +388,13 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Internal name for "Subject" is area_of_study
-    if params['area of study'].present?
-      sets = sets.where("area_of_study = ?", params['area of study'].join())
+    if params["area of study"].present?
+      sets = sets.where("area_of_study = ?", params["area of study"].join())
     end
 
     # Internal name for "set type" is set_type
-    unless params['set type'].nil?
-      sets = sets.where("set_type = ?", params['set type'].join())
+    unless params["set type"].nil?
+      sets = sets.where("set_type = ?", params["set type"].join())
     end
 
     if params[:language].present?
@@ -406,11 +405,11 @@ class TeacherSet < ActiveRecord::Base
     end
 
     # Sort most available first with id as tie breaker to ensure consistent sorts
-    sets.order('availability ASC, available_copies DESC, id DESC')
+    sets.order("availability ASC, available_copies DESC, id DESC")
   end
 
   def self.facets_for_query(qry)
-    cache_key = qry.to_sql.sub /\ LIMIT.*/, ''
+    cache_key = qry.to_sql.sub /\ LIMIT.*/, ""
     cache_key = Digest::MD5.hexdigest cache_key.parameterize
     # NOTE: the expiry was 1.day, changing to 8.hour to see teacher set fixes in human-administered time.
     # TODO: take this cache expiration timeout constant out into a properties file.
@@ -419,24 +418,19 @@ class TeacherSet < ActiveRecord::Base
 
       # Facets for language, availability, type, and subject are pretty basic GROUPBYs:
       [
-        { :label => 'language',
-          :column => :primary_language
-        },
-        { :label => 'availability',
-          :column => 'availability',
-          :value_map => self::AVAILABILITY_LABELS
-        },
-        { :label => 'set type',
-          :column => 'set_type'
-        },
-        { :label => 'area of study',
-          :column => 'area_of_study'
-        }
+        { :label => "language",
+          :column => :primary_language },
+        { :label => "availability",
+          :column => "availability",
+          :value_map => self::AVAILABILITY_LABELS },
+        { :label => "set type",
+          :column => "set_type" },
+        { :label => "area of study",
+          :column => "area_of_study" },
       ].each do |config|
+        facets_group = { :label => config[:label], :items => [] }
 
-        facets_group = {:label => config[:label], :items => []}
-
-        qry.group(config[:column]).where("#{config[:column].to_s} IS NOT NULL").count.each do |(value,count)|
+        qry.group(config[:column]).where("#{config[:column].to_s} IS NOT NULL").count.each do |(value, count)|
           label = value
           unless config[:value_map].nil?
             label = config[:value_map][value]
@@ -445,9 +439,8 @@ class TeacherSet < ActiveRecord::Base
           facets_group[:items] << {
             :value => value,
             :label => label,
-            :count => count
+            :count => count,
           }
-
         end
 
         facets << facets_group
@@ -456,23 +449,23 @@ class TeacherSet < ActiveRecord::Base
       # Collect primary subjects for restricting subjects
       primary_subjects = []
 
-      unless (subjects_facet = facets.select { |f| f[:label] == 'area of study' }).nil?
+      unless (subjects_facet = facets.select { |f| f[:label] == "area of study" }).nil?
         primary_subjects = subjects_facet.first[:items].map { |s| s[:label] }
       end
 
       # Tags
-      subjects_facets = {:label => 'subjects', :items => []}
-      _qry = qry.joins(:subjects).where('subjects.title NOT IN (?)', primary_subjects).group('subjects.title', 'subjects.id')
+      subjects_facets = { :label => "subjects", :items => [] }
+      _qry = qry.joins(:subjects).where("subjects.title NOT IN (?)", primary_subjects).group("subjects.title", "subjects.id")
       # Restrict to min_count_for_facet (5). Used to only activate if no subjects currently selected,
       # but let's make it 5 consistently now.
       #if !_qry.to_sql.include?('JOIN subject_teacher_sets')
-      _qry = _qry.having('count(*) >= ?', Subject::MIN_COUNT_FOR_FACET)
+      _qry = _qry.having("count(*) >= ?", Subject::MIN_COUNT_FOR_FACET)
       _qry.count.each do |(vals, count)|
         (label, val) = vals
         subjects_facets[:items] << {
           :value => val,
           :label => label,
-          :count => count
+          :count => count,
         }
       end
 
@@ -480,7 +473,7 @@ class TeacherSet < ActiveRecord::Base
 
       # Specify desired order of facets:
       facets.sort_by! do |f|
-        ind = ['area of study', 'subjects', 'language','set type','availability'].index f[:label]
+        ind = ["area of study", "subjects", "language", "set type", "availability"].index f[:label]
         ind.nil? ? 1000 : ind
       end
 
@@ -492,11 +485,9 @@ class TeacherSet < ActiveRecord::Base
 
       facets
     end
-
-    
   end
 
-  def as_json(options = { })
+  def as_json(options = {})
     h = super(options)
     h[:subject] = subject
     h[:subject_key] = subject_key
@@ -510,7 +501,6 @@ class TeacherSet < ActiveRecord::Base
   #   self.upsert_from_catalog_item item['title'] unless item.nil? || item['title'].nil?
   # end
 
-
   # def self.upsert_from_catalog_item(item)
   #   # book = self.find_or_initialize_by_details_url item['details_url']
   #   book = self.find_or_initialize_by_id item['id'].to_i
@@ -518,7 +508,6 @@ class TeacherSet < ActiveRecord::Base
   #   book.update_from_catalog_item item
   #   book
   # end
-
 
   # def update_from_catalog_item(item)
   #   # puts "create book: #{item['id']}:  #{id}"
@@ -639,7 +628,6 @@ class TeacherSet < ActiveRecord::Base
   #   end
   # end
 
-
   def update_availability
     available_copies = 0
     total_copies = 0
@@ -650,8 +638,8 @@ class TeacherSet < ActiveRecord::Base
 
       doc = Nokogiri::HTML(content)
       puts "  Availability parsed from #{scrape_url}"
-      doc.css('.bibItemsEntry').each do |availability_row|
-        avail = availability_row.css('td').count { |td| td.text.strip.downcase.sub(/^\W+/,'') == 'available' } == 1
+      doc.css(".bibItemsEntry").each do |availability_row|
+        avail = availability_row.css("td").count { |td| td.text.strip.downcase.sub(/^\W+/, "") == "available" } == 1
 
         total_copies += 1
         available_copies += 1 if avail
@@ -661,7 +649,7 @@ class TeacherSet < ActiveRecord::Base
     # Update atts
     self.update({
       :available_copies => available_copies,
-      :total_copies => total_copies
+      :total_copies => total_copies,
     })
 
     puts "Recalculating availability as \"#{self.availability}\" because #{self.available_copies} of #{self.total_copies} \
@@ -676,10 +664,9 @@ class TeacherSet < ActiveRecord::Base
     copies = self.available_copies
     #Below code need to discuss with Darya.
     #copies -= self.new_or_pending_holds.count
-    status = copies > 0 ? 'available' : 'unavailable'
+    status = copies > 0 ? "available" : "unavailable"
     self.update_attribute :availability, status
   end
-
 
   # Probably old and unused.
   # Are you looking for the code that updates subjects when a teacher set is updated in Sierra,
@@ -787,7 +774,6 @@ class TeacherSet < ActiveRecord::Base
   #       return
   #     end
   #   end
-
 
   #   # If that fails, try pulling it from biblio list via link in circ widget:
   #   scrape_url = "http://nypl.bibliocommons.com/item/show_circulation_widget/#{id}"
@@ -907,12 +893,11 @@ class TeacherSet < ActiveRecord::Base
 
   # end
 
-
   # Save teacher-set set_type value
   def update_teacher_set_set_type_value(set_type_val)
     set_type = update_set_type(set_type_val)
-    LogWrapper.log('INFO', {'message' => "Teacher set set_type value: #{set_type} saved in DB", 
-                            'method' => 'teacher_set.update_teacher_set_set_type_value'})
+    LogWrapper.log("INFO", { "message" => "Teacher set set_type value: #{set_type} saved in DB",
+                             "method" => "teacher_set.update_teacher_set_set_type_value" })
   rescue StandardError => e
     raise DBException.new(TEACHERSET_SETTYPE_ERROR[:code], TEACHERSET_SETTYPE_ERROR[:msg])
   end
@@ -922,10 +907,10 @@ class TeacherSet < ActiveRecord::Base
       set_type = derive_set_type(set_type_val)
       update(set_type: set_type)
     rescue StandardError => e
-      LogWrapper.log('ERROR', {'message' => "Error occcured while updating the set_type value: #{set_type}",
-                               'method' => 'teacher_set.update_set_type'})
+      LogWrapper.log("ERROR", { "message" => "Error occcured while updating the set_type value: #{set_type}",
+                                "method" => "teacher_set.update_set_type" })
 
-      raise DBException.new(TEACHERSET_SETTYPE_ERROR[:code],TEACHERSET_SETTYPE_ERROR[:msg])
+      raise DBException.new(TEACHERSET_SETTYPE_ERROR[:code], TEACHERSET_SETTYPE_ERROR[:msg])
     end
     set_type
   end
@@ -938,41 +923,41 @@ class TeacherSet < ActiveRecord::Base
   # If teacher-set-books exactly 1, it's a Bookclub Set; else it's a Topic Set.
   def derive_set_type(set_type_field)
     set_type = set_type_field
-    return set_type.strip().gsub(/\.$/, '').titleize if set_type.present?
-    
+    return set_type.strip().gsub(/\.$/, "").titleize if set_type.present?
+
     if self.books.count.to_i > 1
       return TOPIC_SET
     elsif self.books.count.to_i == 1
       return BOOK_CLUB_SET
     end
   end
-  
+
   # Update teacher sets set-type nil to value from sierra
   def update_set_type_from_nil_to_value
     teacher_sets = TeacherSet.where(set_type: nil)
     teacher_sets.each do |teacher_set|
-      bib_id = teacher_set.bnumber.split('b')[1]
+      bib_id = teacher_set.bnumber.split("b")[1]
       next if bib_id.nil?
 
-      LogWrapper.log('DEBUG', {'message' => "Teacher set bib-id value: #{bib_id}", 'method' => 'teacher_set.update_set_type_from_nil_to_value'})
+      LogWrapper.log("DEBUG", { "message" => "Teacher set bib-id value: #{bib_id}", "method" => "teacher_set.update_set_type_from_nil_to_value" })
       set_type = teacher_set.get_set_type_value_from_bib_response(bib_id)
       teacher_set.update_set_type(set_type)
     end
   end
-  
+
   # Receive JSON related to a teacher_set.
   # For each ISBN, ensure there is an associated book.
   # Disassociate books that are no longer in the teacher set.
   def update_included_book_list(teacher_set_record)
     # Gather all ISBNs.
-    return unless teacher_set_record['varFields']
+    return unless teacher_set_record["varFields"]
 
     isbns = []
-    teacher_set_record['varFields'].each do |var_field|
-      next unless var_field['marcTag'] == '944'
-      next unless var_field['subfields'] && var_field['subfields'][0] && var_field['subfields'][0]['content']
+    teacher_set_record["varFields"].each do |var_field|
+      next unless var_field["marcTag"] == "944"
+      next unless var_field["subfields"] && var_field["subfields"][0] && var_field["subfields"][0]["content"]
 
-      isbns = var_field['subfields'][0]['content'].split
+      isbns = var_field["subfields"][0]["content"].split
     end
 
     # Delete teacher_set_books records for books with an ISBN that is not in the teacher_set's list of ISBNs.
@@ -1046,7 +1031,7 @@ class TeacherSet < ActiveRecord::Base
     # Check if "NYC" is present
     if KEY_WORDS.any? { |keyword| new_subject_string.include?(keyword) }
       # Remove any trailing period
-      new_subject_string = new_subject_string.gsub(/\.$/, '')
+      new_subject_string = new_subject_string.gsub(/\.$/, "")
 
       # Split the string into words
       parts = new_subject_string.split
@@ -1057,16 +1042,16 @@ class TeacherSet < ActiveRecord::Base
       end
 
       # Join the parts back into a single string
-      new_subject_string = parts.join(' ')
+      new_subject_string = parts.join(" ")
     else
-      new_subject_string = new_subject_string.gsub(/\.$/, '').titleize
+      new_subject_string = new_subject_string.gsub(/\.$/, "").titleize
     end
     # If new_subject_string is empty, return nil, else return new_subject_string.
     return unless new_subject_string.present?
 
-    return new_subject_string 
+    return new_subject_string
   end
-  
+
   # Delete old subjects that do not have any records in the join table,
   # because they are not associated with any teacher sets.
   def prune_subjects(subject_id_array)
@@ -1077,7 +1062,7 @@ class TeacherSet < ActiveRecord::Base
       end
     end
   end
-  
+
   # This is called from the bibs_controller.
   # Delete all records for a teacher set in the table TeacherSetNotes, then
   # create new records in that table.
@@ -1085,7 +1070,7 @@ class TeacherSet < ActiveRecord::Base
     TeacherSetNote.where(teacher_set_id: self.id).destroy_all
     return if teacher_set_notes_string.blank?
 
-    teacher_set_notes_string.split(',').each do |note_content|
+    teacher_set_notes_string.split(",").each do |note_content|
       TeacherSetNote.create(teacher_set_id: self.id, content: note_content)
     end
   rescue StandardError => e
@@ -1101,31 +1086,31 @@ class TeacherSet < ActiveRecord::Base
     self.update(total_copies: response[:total_count], available_copies: response[:available_count],
                 availability: response[:availability_string])
     update_teacher_set_availability_in_elastic_search
-    return {bibs_resp: response[:bibs_resp]}
+    return { bibs_resp: response[:bibs_resp] }
   end
 
   # Calls Bib service for items.
   def get_items_info_from_bibs_service(bibid)
     bibs_resp, items_found = send_request_to_items_microservice(bibid)
-    return {bibs_resp: bibs_resp} if !items_found
+    return { bibs_resp: bibs_resp } if !items_found
 
     total_count, available_count = parse_items_available_and_total_count(bibs_resp)
     availability_string = (available_count.to_i > 0) ? AVAILABLE : UNAVAILABLE
-    return {bibs_resp: bibs_resp, total_count: total_count, available_count: available_count, availability_string: availability_string}
+    return { bibs_resp: bibs_resp, total_count: total_count, available_count: available_count, availability_string: availability_string }
   end
-  
+
   # Parses out the items duedate, items code is '-' which determines if an item is available or not.
   # Calculates the total number of items in the list, the number of items that are
   # available to lend.
   def parse_items_available_and_total_count(response)
     available_count = 0
     total_count = 0
-    item_status_codes = ['w', 'm', 'k', 'u']
-    response['data'].each do |item|
-      total_count += 1 unless (item['status']['code'].present? && item_status_codes.include?(item['status']['code']))
-      available_count += 1 if (item['status']['code'].present? && item['status']['code'] == '-') && (!item['status']['duedate'].present?)
+    item_status_codes = ["w", "m", "k", "u"]
+    response["data"].each do |item|
+      total_count += 1 unless (item["status"]["code"].present? && item_status_codes.include?(item["status"]["code"]))
+      available_count += 1 if (item["status"]["code"].present? && item["status"]["code"] == "-") && (!item["status"]["duedate"].present?)
     end
-    LogWrapper.log('INFO','message' => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
+    LogWrapper.log("INFO", "message" => "TeacherSet available_count: #{available_count}, total_count: #{total_count}")
     return total_count, available_count
   end
 
@@ -1135,57 +1120,57 @@ class TeacherSet < ActiveRecord::Base
     set_type = nil
     if resp.present? && resp.code == 200
       resp["data"].each do |bib_record|
-        set_type_marctag = bib_record['varFields'].detect { |hash| hash['marcTag'] == '526' }
+        set_type_marctag = bib_record["varFields"].detect { |hash| hash["marcTag"] == "526" }
         if set_type_marctag.present?
-          set_type = set_type_marctag['subfields'].map { |x| x['content']}.join(', ')
+          set_type = set_type_marctag["subfields"].map { |x| x["content"] }.join(", ")
         end
       end
     end
     set_type
   end
 
-
   private
 
   #Sends a request to the items microservice.
   #Calling items service api by pagination, fetching 25 items by each call pushing into array.
   #If its getting less than 25 items by items service call, we are not calling again.
-  def send_request_to_items_microservice(bibid,offset=nil,response=nil,items_hash={})
+  def send_request_to_items_microservice(bibid, offset = nil, response = nil, items_hash = {})
     limit = 25
     offset = offset.nil? ? 0 : offset += 1
     request_offset = limit.to_i * offset.to_i
-    items_found = response && (response.code == 200 || items_hash['data'].present?)
+    items_found = response && (response.code == 200 || items_hash["data"].present?)
 
-    if response && (response.code != 200 || (items_hash['data'].present? && response['data'].size.to_i < limit))
+    if response && (response.code != 200 || (items_hash["data"].present? && response["data"].size.to_i < limit))
       return items_hash, items_found
     else
-      items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}"
-      response = HTTParty.get(ENV.fetch('ITEMS_MICROSERVICE_URL_V01', nil) + items_query_params, headers: { 
-        'authorization' => "Bearer #{Oauth.get_oauth_token}", 'Content-Type' => 'application/json' }, timeout: 10)
-      
-      if response.code == 200 || items_hash['data'].present?
-        resp = (ENV['RAILS_ENV'] == 'test')? JSON.parse(response) : response
-        items_hash['data'] ||= []
-        items_hash['data'] << resp['data'] if resp['data'].present?
-        items_hash['data'].flatten!
-        LogWrapper.log('DEBUG', {
-          'message' => "Response from item services api",
-          'method' => 'send_request_to_items_microservice',
-          'status' => response.code,
-          'responseData' => response.message
+      items_query_params = "?bibId=#{bibid}&limit=#{limit}&offset=#{request_offset}&nyplSource=sierra-nypl"
+      response = HTTParty.get(ENV.fetch("ITEMS_MICROSERVICE_URL_V01", nil) + items_query_params, headers: {
+                                                                                                   "authorization" => "Bearer #{Oauth.get_oauth_token}", "Content-Type" => "application/json",
+                                                                                                 }, timeout: 10)
+
+      if response.code == 200 || items_hash["data"].present?
+        resp = (ENV["RAILS_ENV"] == "test") ? JSON.parse(response) : response
+        items_hash["data"] ||= []
+        items_hash["data"] << resp["data"] if resp["data"].present?
+        items_hash["data"].flatten!
+        LogWrapper.log("DEBUG", {
+          "message" => "Response from item services api",
+          "method" => "send_request_to_items_microservice",
+          "status" => response.code,
+          "responseData" => response.message,
         })
       elsif response.code == 404
         items_hash = response
-        LogWrapper.log('DEBUG', {
-          'message' => "The items service could not find the Items with bibid=#{bibid}",
-          'method' => 'send_request_to_items_microservice',
-          'status' => response.code
+        LogWrapper.log("DEBUG", {
+          "message" => "The items service could not find the Items with bibid=#{bibid}",
+          "method" => "send_request_to_items_microservice",
+          "status" => response.code,
         })
       else
-        LogWrapper.log('ERROR', {
-          'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
-          'method' => 'send_request_to_items_microservice',
-          'status' => response.code
+        LogWrapper.log("ERROR", {
+          "message" => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
+          "method" => "send_request_to_items_microservice",
+          "status" => response.code,
         })
       end
     end
@@ -1197,32 +1182,32 @@ class TeacherSet < ActiveRecord::Base
   # Sends a request to the bibs microservice.(Get bib response by bibid)
   # Sierra-bib-response-by-bibid-url: "{BIBS_MICROSERVICE_URL_V01}/nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
   def send_request_to_bibs_microservice(bibid)
-    bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}"
+    bib_query_params = "?nyplSource=#{SIERRA_NYPL}&id=#{bibid}&nyplSource=sierra-nypl"
     response = HTTParty.get(
-      ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil) + bib_query_params, 
-      headers: { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",'Content-Type' => 'application/json' }, 
-      timeout: 10
+      ENV.fetch("BIBS_MICROSERVICE_URL_V01", nil) + bib_query_params,
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}", "Content-Type" => "application/json" },
+      timeout: 10,
     )
 
     if response.code == 200
-      LogWrapper.log('DEBUG', {
-        'message' => "Response from bib services api",
-        'method' => 'send_request_to_bibs_microservice',
-        'status' => response.code,
-        'responseData' => response.message
+      LogWrapper.log("DEBUG", {
+        "message" => "Response from bib services api",
+        "method" => "send_request_to_bibs_microservice",
+        "status" => response.code,
+        "responseData" => response.message,
       })
     elsif response.code == 404
       items_hash = response
-      LogWrapper.log('DEBUG', {
-        'message' => "The bib service could not find with bibid=#{bibid}",
-        'method' => 'send_request_to_bibs_microservice',
-        'status' => response.code
+      LogWrapper.log("DEBUG", {
+        "message" => "The bib service could not find with bibid=#{bibid}",
+        "method" => "send_request_to_bibs_microservice",
+        "status" => response.code,
       })
     else
-      LogWrapper.log('ERROR', {
-        'message' => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
-        'method' => 'send_request_to_bibs_microservice',
-        'status' => response.code
+      LogWrapper.log("ERROR", {
+        "message" => "An error has occured when sending a request to the bibs service bibid=#{bibid}",
+        "method" => "send_request_to_bibs_microservice",
+        "status" => response.code,
       })
     end
     response

@@ -557,11 +557,13 @@ export default function SearchTeacherSets(props) {
   };
 
   const displayAvailableCopies = (ts) => {
-    const copyLabel = ts.total_copies !== undefined && ts.total_copies > 1 ? "copies" : "copy";
-    return (
+    const copyLabel = ts.total_copies > 1 ? "copies" : "copy";
+    return ts.total_copies ? (
       <>
         {availableCopies(ts)} of {totalCopies(ts)} {copyLabel} available
       </>
+    ) : (
+      <></>
     );
   };
 

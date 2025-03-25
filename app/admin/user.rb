@@ -37,6 +37,8 @@ ActiveAdmin.register User do
   filter :last_name
   filter :school
   filter :barcode
+  filter :created_at
+  filter :updated_at
 
   form do |f|
     if f.object.errors.present? && f.object.errors.keys.present?

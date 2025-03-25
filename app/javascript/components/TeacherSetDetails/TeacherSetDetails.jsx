@@ -54,7 +54,7 @@ export default function TeacherSetDetails(props) {
   const [errorMessage, setErrorMessage] = useState("");
   const { isLargerThanMobile } = useNYPLBreakpoints();
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUserStatus, setCurrentUserStatus] = useState();
+  const [currentUserStatus, setCurrentUserStatus] = useState("");
   const [disabledButton, setDisabledButton] = useState(false);
   const [isSchoolActive, setIsSchoolActive] = useState("");
   const heroBgColor = useColorModeValue(
@@ -110,6 +110,7 @@ export default function TeacherSetDetails(props) {
         setTeacherSetNotes(res.data.teacher_set_notes);
         let userStatus = res.data.user ? res.data.user.status : "";
         setCurrentUserStatus(userStatus);
+        console.log(userStatus)
         setIsSchoolActive(res.data.is_school_active)
         setDisabledButton(!res.data.is_school_active)
         if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
@@ -183,9 +184,7 @@ export default function TeacherSetDetails(props) {
       .catch(function (error) {
         setDisabledButton(false);
         console.log(error);
-      }).finally(() => {
-        setDisabledButton(false);
-      });
+      })
   };
 
   const adobeAnalyticsForOrder = () => {
@@ -220,30 +219,23 @@ export default function TeacherSetDetails(props) {
     }
   };
 
-  const ACopies = () => {
-    if (teacherSet["available_copies"] !== undefined) {
-      return teacherSet["available_copies"];
-    } else {
-      return "";
-    }
-  };
-
-  const TotalCopies = () => {
-    if (teacherSet["total_copies"] !== undefined) {
-      return teacherSet["total_copies"];
-    } else {
-      return "";
-    }
-  };
-
-  const AvailableCopies = () => {
-    return (
-      <div color="var(--nypl-colors-ui-black)" style={{ textAlign: "center" }}>
-        {ACopies()} of {TotalCopies()} available
-      </div>
+  const displayAvailableCopies = (teacherSet) => {
+    const copyLabel = teacherSet.total_copies > 1 ? "copies" : "copy";
+    return teacherSet.total_copies ? (
+      <>
+        {teacherSet.available_copies || 0} of {teacherSet.total_copies || 0} {copyLabel} available
+      </>
+    ) : (
+      <></>
     );
   };
-
+  
+  const AvailableCopies = () => (
+    <div color="var(--nypl-colors-ui-black)" style={{ textAlign: "center" }}>
+      {displayAvailableCopies(teacherSet)}
+    </div>
+  );
+  
   const BooksCount = () => {
     return (
       <div>
@@ -448,7 +440,7 @@ export default function TeacherSetDetails(props) {
                 id="ts-order-submit"
                 buttonType="noBrand"
                 onClick={handleSubmit}
-                isDisabled={currentUserStatus && disabledButton}
+                isDisabled={currentUserStatus !== "" && disabledButton}
               >
                 {" "}
                 Place order{" "}

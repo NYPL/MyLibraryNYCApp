@@ -163,7 +163,6 @@ class Book < ActiveRecord::Base
   #   book
   # end
 
-
   def create_teacher_set_version_on_update
     teacher_sets.all.each do |teacher_set|
       teacher_set.update(last_book_change: "updated-#{self.id}-#{self.title}")
@@ -203,41 +202,40 @@ class Book < ActiveRecord::Base
   # Sends a request to the bibs microservice.
   def send_request_to_bibs_microservice
     response = HTTParty.get(
-      ENV.fetch('BIBS_MICROSERVICE_URL_V01', nil) + "?standardNumber=#{isbn}",
-      headers:
-        { 'Authorization' => "Bearer #{Oauth.get_oauth_token}",
-          'Content-Type' => 'application/json' },
-      timeout: 10
+      ENV.fetch("BIBS_MICROSERVICE_URL_V01", nil) + "?standardNumber=#{isbn}&nyplSource=sierra-nypl",
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
     )
 
     case response.code
     when 200
       @book_found = true
-      LogWrapper.log('DEBUG', {
-          'message' => "The bibs service responded with the book JSON.",
-          'status' => response.code
-        })
+      LogWrapper.log("DEBUG", {
+        "message" => "The bibs service responded with the book JSON.",
+        "status" => response.code,
+      })
     when 404
       @book_found = false
-      LogWrapper.log('ERROR', {
-          'message' => "The bibs service could not find the book with ISBN=#{isbn}",
-          'status' => response.code
-        })
+      LogWrapper.log("ERROR", {
+        "message" => "The bibs service could not find the book with ISBN=#{isbn}",
+        "status" => response.code,
+      })
     else
-      LogWrapper.log('ERROR', {
-          'message' => "An error has occured when sending a request to the bibs service",
-          'status' => response.code,
-          'responseData' => response.body
-        })
+      LogWrapper.log("ERROR", {
+        "message" => "An error has occured when sending a request to the bibs service",
+        "status" => response.code,
+        "responseData" => response.body,
+      })
       raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
     end
 
     return response
   end
-  
+
   def var_field(book_attributes, marcTag)
     begin
-      book_attributes['varFields'].detect{ |hash| hash['marcTag'] == marcTag }['subfields'].map{ |x| x['content']}.join(', ')
+      book_attributes["varFields"].detect { |hash| hash["marcTag"] == marcTag }["subfields"].map { |x| x["content"] }.join(", ")
     rescue
       return nil
     end
