@@ -1181,12 +1181,21 @@ export default function SearchTeacherSets(props) {
   };
 
   const closeTeacherSetTag = (tagSet) => {
+    console.log(tagSet.id)
     searchResultsTextRef.current.focus();
 
     if (tagSet.id === "clear-filters") {
       onClearAll();
       setAvailability("");
       setRangevalues([-1, 12]);
+      setTeacherSetArr([])
+      searchParams.delete("language");
+      searchParams.delete("area of study");
+      searchParams.delete("keyword");
+      searchParams.delete("subjects");
+      searchParams.delete("availability");
+      searchParams.delete("set type");
+      setSearchParams(searchParams);
     } else if (tagSet.label === "Available now") {
       setAvailability("");
     } else {
@@ -1211,6 +1220,7 @@ export default function SearchTeacherSets(props) {
       (element) => element.label !== tagSet.label
     );
 
+    
     const deleteQueryParams = teacherSetArr
       .filter((element) => element.label === tagSet.label)
       .flatMap(Object.keys);
@@ -1223,16 +1233,21 @@ export default function SearchTeacherSets(props) {
       } else if (item === "area of study") {
         searchParams.delete("area of study");
         setSearchParams(searchParams);
+        onClearItems("area of study")
       } else if (item === "availability") {
         searchParams.delete("availability");
         setSearchParams(searchParams);
+        onClearItems("availability")
       } else if (item === "keyword") {
         searchParams.delete("keyword");
         setSearchParams(searchParams);
+        onClearItems("keyword")
       } else if (item === "set type") {
         searchParams.delete("set type");
         setSearchParams(searchParams);
+        onClearItems("set type")
       } else if (item === "subjects") {
+        onClearItems("subjects")
         const subjects = new URLSearchParams(location.search).get("subjects");
         const subArr = [];
 
