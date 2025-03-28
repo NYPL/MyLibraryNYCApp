@@ -101,67 +101,60 @@ export default function SearchTeacherSets(props) {
   const { onChange, onMixedStateChange, selectedItems, onClear, onClearAll, setSelectedItems } =
     useMultiSelect();
 
-  const tagSetDetails = (label) => ({ label, id: label.toLowerCase() });
-
+  const tagSetDetails = (label) => ({ label, id: label });
+  
   useEffect(() => {
-    let newSelectedItems = { ...selectedItems }; // Clone to avoid mutation
-    let hasChanges = false; // Track if changes occur
-
+    const selected_items = selectedItems;
     if (getSelectedCategoriesCount(selectedItems) > 0) {
-      tsSelectedFacets(selectedItems, availability);
+      tsSelectedFacets(selected_items, availability);
     } else {
-      let availability_val = "";
-
-      queryParams.forEach((ts) => {
-        Object.keys(ts).forEach((key) => {
-          if (ts[key]) {
-            if (key === "availability") {
-              setAvailability([ts[key]]);
-              availability_val = [ts[key]];
-              setAvailableToggle(true);
-            } else {
-              newSelectedItems[key] = newSelectedItems[key] || { items: [] };
-
-              // Toggle selection (remove if exists, add if not)
-              const valuesArray = ts[key].split(",");
-              const prevLength = newSelectedItems[key]["items"].length;
-              newSelectedItems[key]["items"] = newSelectedItems[key]["items"].filter(
-                (item) => !valuesArray.includes(item)
-              );
-
-              // If items are empty, remove the facet
-              if (newSelectedItems[key]["items"].length === 0) {
-                delete newSelectedItems[key];
-              }
-
-              // Check if change happened
-              if (prevLength !== newSelectedItems && newSelectedItems[key] && newSelectedItems[key]["items"].length) {
-                hasChanges = true;
-              }
-            }
+      let availability_val = ""
+      queryParams.map((ts) => {
+        const tagSets = {};
+        if (ts.subjects) {
+          if (selected_items['subjects'] && selected_items['subjects']['items'].length === 0) {
+            selected_items['subjects']['items'] = selected_items['subjects']['items']
+          } else {
+            selected_items['subjects'] = selected_items['subjects'] || {}
+            selected_items['subjects']['items'] = ts["subjects"].split(",");
           }
-        });
+        } else if (ts["area of study"]) {
+          if (selected_items['area of study'] && selected_items['area of study']['items'].length === 0) {
+            selected_items['area of study']['items'] = selected_items['area of study']['items']
+          } else {
+            selected_items['area of study'] = selected_items['area of study'] || {}
+            selected_items['area of study']['items'] = ts["area of study"].split(",");
+          }
+        } 
+        else if (ts["set type"]) {
+          if (selected_items['set type'] && selected_items['set type']['items'].length === 0) {
+            selected_items['set type']['items'] = selected_items['set type']['items']
+          } else {
+            selected_items['set type'] = selected_items['set type'] || {}
+            selected_items['set type']['items'] = ts["set type"].split(",");;
+          }
+        } else if (ts["availability"]) {
+          setAvailability([ts["availability"]])
+          availability_val = [ts["availability"]]
+          setAvailableToggle(true);
+        } else if (ts["language"]) {
+          if (selected_items['language'] && selected_items['language']['items'].length === 0) {
+            selected_items['language']['items'] = selected_items['language']['items']
+          } else {
+            selected_items['language'] = selected_items['language'] || {}
+            selected_items['language']['items'] = ts["language"].split(",");;
+          }
+        }
       });
-
-      tsSelectedFacets(newSelectedItems, availability_val);
+      tsSelectedFacets(selected_items, availability_val);    
     }
+    // if (getSelectedCategoriesCount(selected_items) > 0) {
+    //   setIsDefaultOpen(true);
+    // }
 
-    if (getSelectedCategoriesCount(newSelectedItems) > 0) {
-      setIsDefaultOpen(true);
-    }
-
-    // Only update state if changes happened
-    if (hasChanges) {
-      setSelectedItems(newSelectedItems);
-    }
-
-  }, [selectedItems, location.search]); // Keep dependencies as needed
+  }, [selectedItems, location.search]);
 
 
-  useEffect(() => {
-    document.title = "Search Teacher Sets | MyLibraryNYC";
-    setIsLoading(true);
-  }, [facets, teacherSets, tsTotalCount, noTsResultsFound]);
 
   useEffect(() => {
     let timeoutId = "";
@@ -676,19 +669,24 @@ export default function SearchTeacherSets(props) {
 
   const availableResults = () => {
     windowScroll();
+    const teacherSetDataArr = []
     if (availableToggle === true) {
       setAvailableToggle(false);
       setAvailability("");
       searchParams.delete("availability");
       setSearchParams(searchParams);
+
+      // teacherSetArr.push(tagSetDetails('Available Now'))
+      // setTeacherSetArr(teacherSetArr)
     } else {
-      setAvailableToggle(true);
       setComputedCurrentPage(1);
       searchParams.delete("page");
-      setSearchParams(searchParams);
       searchParams.set("availability", ["available"]);
       setSearchParams(searchParams);
       setAvailability(["available"]);
+      teacherSetDataArr.push(tagSetDetails('Available Now'))
+      setAvailableToggle(true);
+      setTeacherSetArr(teacherSetDataArr)
     }
   };
 
@@ -1065,7 +1063,7 @@ export default function SearchTeacherSets(props) {
 
 
   const tsSelectedFacets = (selected_items, availability_val = "") => {
-
+    const teacherSetDataArr = []
     const queryValue = new URLSearchParams(location.search);
     let keywordValue;
 
@@ -1100,14 +1098,17 @@ export default function SearchTeacherSets(props) {
     searchParams.delete("page");
     setComputedCurrentPage(1);
 
+    console.log(tsSubjects)
     // Iterate over selected_items in the same order
     Object.keys(selected_items).forEach((facet) => {
       const facetItems = selected_items[facet]['items'];
       // Handle each facet based on its existence and items
       if (facetItems && facetItems.length > 0) {
         searchParams.set(facet, facetItems);
+       
         facetItems.forEach((value) => {
-          teacherSetArr.push(tagSetDetails(value));
+          const tagsetValue = facet === "subjects" ? tsSubjects[value] : value;
+          teacherSetDataArr.push(tagSetDetails(tagsetValue));
         });
         selectedFacetItems[facet] = [...new Set([...facetItems])];
       } else {
@@ -1118,15 +1119,15 @@ export default function SearchTeacherSets(props) {
 
     if (availability_val.length > 0) {
       availability_val.map((value) => {
-        teacherSetArr.push(tagSetDetails('Available Now'));
+        teacherSetDataArr.push(tagSetDetails('Available Now'));
       });
+
       searchParams.set("availability", availability_val);
       setAvailability(availability_val)
     } else {
       searchParams.delete("availability");
       setAvailability("")
     }
-
 
     // Update the search params and selected facets state
     setSearchParams(searchParams);
@@ -1137,7 +1138,7 @@ export default function SearchTeacherSets(props) {
     setAvailableToggle(availableToggleVal);
     setSortTitleValue(sortOrderVal);
     setComputedCurrentPage(pageNumber);
-    setTeacherSetArr(teacherSetArr);
+    setTeacherSetArr(teacherSetDataArr);
 
     // Prepare the parameters for the API call
     const params = {
@@ -1151,12 +1152,6 @@ export default function SearchTeacherSets(props) {
       firstFacetSelectedItem: Object.keys(selected_items)[0],
       selectedItemCount: getSelectedCategoriesCount(selectedItems),
     };
-
-    if (selected_items['subjects'] && selected_items['subjects']['items'].length > 0) {
-      selected_items['subjects']['items'].map((value) => {
-        teacherSetArr.push(tagSetDetails(tsSubjects[value]));
-      });
-    }
     // Make the API call with the updated params
     getTeacherSets(params);
   };
@@ -1181,14 +1176,14 @@ export default function SearchTeacherSets(props) {
   };
 
   const closeTeacherSetTag = (tagSet) => {
-    console.log(tagSet.id)
     searchResultsTextRef.current.focus();
 
     if (tagSet.id === "clear-filters") {
+      console.log("clear all")
+      setTeacherSetArr([]);
       onClearAll();
       setAvailability("");
       setRangevalues([-1, 12]);
-      setTeacherSetArr([])
       searchParams.delete("language");
       searchParams.delete("area of study");
       searchParams.delete("keyword");
@@ -1196,9 +1191,12 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("availability");
       searchParams.delete("set type");
       setSearchParams(searchParams);
+      setSelectedFacets({})
+      setSelectedItems({});
     } else if (tagSet.label === "Available now") {
       setAvailability("");
     } else {
+     
       let updatedCategory = "";
       let updatedFilters = [];
       for (const category in selectedFacets) {
@@ -1209,78 +1207,80 @@ export default function SearchTeacherSets(props) {
           );
         }
       }
+      console.log("clear one")
       const updatedSelectedItems = {
         ...selectedFacets,
         [updatedCategory]: { items: updatedFilters },
       };
       setSelectedItems(updatedSelectedItems);
-    }
-
-    const data = teacherSetArr.filter(
-      (element) => element.label !== tagSet.label
-    );
-
-    
-    const deleteQueryParams = teacherSetArr
-      .filter((element) => element.label === tagSet.label)
-      .flatMap(Object.keys);
-
-    deleteQueryParams.map((item) => {
-      if (item === "language") {
-        searchParams.delete("language");
-        setSearchParams(searchParams);
-        onClearItems("language")
-      } else if (item === "area of study") {
-        searchParams.delete("area of study");
-        setSearchParams(searchParams);
-        onClearItems("area of study")
-      } else if (item === "availability") {
-        searchParams.delete("availability");
-        setSearchParams(searchParams);
-        onClearItems("availability")
-      } else if (item === "keyword") {
-        searchParams.delete("keyword");
-        setSearchParams(searchParams);
-        onClearItems("keyword")
-      } else if (item === "set type") {
-        searchParams.delete("set type");
-        setSearchParams(searchParams);
-        onClearItems("set type")
-      } else if (item === "subjects") {
-        onClearItems("subjects")
-        const subjects = new URLSearchParams(location.search).get("subjects");
-        const subArr = [];
-
-        if (subjects !== null) {
-          subjects.split(",").map((subId) => {
-            if (
-              tsSubjects[subId] !== undefined &&
-              tsSubjects[subId] !== tagSet.label
-            ) {
-              subArr.push(subId);
-            }
-          });
-          searchParams.set("subjects", subArr);
+      const data = teacherSetArr.filter(
+        (element) => element.label !== tagSet.label
+      );
+  
+      console.log("clear down one")
+      const deleteQueryParams = teacherSetArr
+        .filter((element) => element.label === tagSet.label)
+        .flatMap(Object.keys);
+  
+      deleteQueryParams.map((item) => {
+        if (item === "language") {
+          searchParams.delete("language");
           setSearchParams(searchParams);
-
-          if (subjects.split(",").length === 1) {
-            searchParams.delete("subjects");
+          onClearItems("language")
+        } else if (item === "area of study") {
+          searchParams.delete("area of study");
+          setSearchParams(searchParams);
+          onClearItems("area of study")
+        } else if (item === "availability") {
+          searchParams.delete("availability");
+          setSearchParams(searchParams);
+          onClearItems("availability")
+        } else if (item === "keyword") {
+          searchParams.delete("keyword");
+          setSearchParams(searchParams);
+          onClearItems("keyword")
+        } else if (item === "set type") {
+          searchParams.delete("set type");
+          setSearchParams(searchParams);
+          onClearItems("set type")
+        } else if (item === "subjects") {
+          onClearItems("subjects")
+          const subjects = new URLSearchParams(location.search).get("subjects");
+          const subArr = [];
+  
+          if (subjects !== null) {
+            subjects.split(",").map((subId) => {
+              if (
+                tsSubjects[subId] !== undefined &&
+                tsSubjects[subId] !== tagSet.label
+              ) {
+                subArr.push(subId);
+              }
+            });
+            searchParams.set("subjects", subArr);
             setSearchParams(searchParams);
+  
+            if (subjects.split(",").length === 1) {
+              searchParams.delete("subjects");
+              setSearchParams(searchParams);
+            }
           }
+        } else if (item === "grade_begin") {
+          searchParams.delete("grade_begin");
+          setSearchParams(searchParams);
+          setGradeBegin(-1);
+          setRangevalues([-1, grade_end]);
+        } else if (item === "grade_end") {
+          searchParams.delete("grade_end");
+          setGradeEnd(12);
+          setRangevalues([grade_begin, 12]);
+          setSearchParams(searchParams);
         }
-      } else if (item === "grade_begin") {
-        searchParams.delete("grade_begin");
-        setSearchParams(searchParams);
-        setGradeBegin(-1);
-        setRangevalues([-1, grade_end]);
-      } else if (item === "grade_end") {
-        searchParams.delete("grade_end");
-        setGradeEnd(12);
-        setRangevalues([grade_begin, 12]);
-        setSearchParams(searchParams);
-      }
-    });
-    setTeacherSetArr(data);
+      });
+      console.log("clear down below one")
+
+      setTeacherSetArr(data);
+    }
   };
 
   const teacherSetFilterTags = () => {
@@ -1316,7 +1316,6 @@ export default function SearchTeacherSets(props) {
     //   (tset, index) =>
     //     index === teacherSetArr.findIndex((other) => tset.label === other.label)
     // );
-
     return (
       <TagSet
         id="tagSet-id-filter"
@@ -1339,17 +1338,16 @@ export default function SearchTeacherSets(props) {
     const language = queryValue.get("language");
     const subjects = queryValue.get("subjects");
     const setType = queryValue.get("set type");
-    // DON'T SHOW IN TAGSET FOR A WHILE
-    // const keyword = queryValue.get("keyword");
-    // const availability = queryValue.get("availability");
-    // const gradeBegin = queryValue.get("grade_begin");
-    // const gradeEnd = queryValue.get("grade_end");
+    const keyword = queryValue.get("keyword");
+    const availability = queryValue.get("availability");
+    const gradeBegin = queryValue.get("grade_begin");
+    const gradeEnd = queryValue.get("grade_end");
 
     if (
-      // gradeBegin !== null ||
-      // gradeEnd !== null
-      // availability !== null ||
-      // keyword !== null ||
+      gradeBegin !== null ||
+      gradeEnd !== null ||
+      availability !== null ||
+      keyword !== null ||
       areaOfStudy !== null ||
       language !== null ||
       subjects !== null ||
