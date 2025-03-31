@@ -1038,7 +1038,6 @@ export default function SearchTeacherSets(props) {
       keywordValue = queryValue.get("keyword");
       setUpdateKeyword(keywordValue);
       setShowKeyWord(true);
-      teacherSetDataArr.push(tagSetDetails(keywordValue));
     } else {
       keywordValue = "";
     }
@@ -1173,19 +1172,22 @@ export default function SearchTeacherSets(props) {
   const closeTeacherSetTag = (tagSet) => {
     //searchResultsTextRef.current.focus();
     if (tagSet.id === "clear-filters") {
-      setTeacherSetArr([]);
-      onClearAll();
-      setAvailability("");
-      setRangevalues([-1, 12]);
       searchParams.delete("language");
       searchParams.delete("area of study");
-      searchParams.delete("keyword");
       searchParams.delete("subjects");
       searchParams.delete("availability");
       searchParams.delete("set type");
+      searchParams.delete("grade_begin");
+      searchParams.delete("grade_end");
+      onClearAll();
+      setAvailability("");
+      setRangevalues([-1, 12]);
+      setGradeBegin(-1);
+      setGradeEnd(12);
       setSearchParams(searchParams);
       setSelectedFacets({})
       setSelectedItems({});
+      setTeacherSetArr([]);
     } else if (tagSet.label === "Available Now") {
       setAvailability("");
       searchParams.delete("availability");
