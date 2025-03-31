@@ -684,6 +684,16 @@ export default function SearchTeacherSets(props) {
       searchParams.set("grade_begin", gradeBeginVal);
       searchParams.set("grade_end", gradeEndVal);
       setSearchParams(searchParams);
+      const teacherSetDataArr = []
+      
+      if (gradeBeginVal && gradeEndVal) {
+        const tagSetGrades = {
+          label: "Grades " + gradeBeginVal + " to " + gradeEndVal,
+          id: 'grades'
+        };
+        teacherSetDataArr.push(tagSetGrades);
+      }
+      
       if (window.scrollY <= 10) {
         window.scrollTo(10, 10);
       } else {
@@ -1043,8 +1053,8 @@ export default function SearchTeacherSets(props) {
       searchParams.delete("availability");
       setAvailability("")
     }
-    
-    if (g_begin && g_end) {
+
+    if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
       const tagSetGradeBegin =
         parseInt(g_begin) === -1
           ? "Pre-K"
