@@ -408,6 +408,10 @@ class ElasticSearch
         if !["language", "area of study", "set type"].include?("subjects") && aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
           id_buckets = aggregations["id"]["buckets"]
           title_buckets = aggregations["title"]["buckets"]
+
+          # ✅ Get a list of all "area of study" values to prevent duplicates
+          area_of_study_keys = teacherset_docs.dig(:aggregations, "total_aggregations", "all_area_of_study", "area of study", "buckets")&.map { |bucket| bucket["key"] } || []
+
           if params["selectedItemCount"].to_i > 1
             # Extract override counts (generic for all values)
             override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "subjects", "title", "buckets")
@@ -419,6 +423,8 @@ class ElasticSearch
           if id_buckets.length == title_buckets.length
             id_buckets.each_with_index do |id_bucket, index|
               title_bucket = title_buckets[index]
+              # ✅ Exclude items that are present in "area of study"
+              next if area_of_study_keys.include?(title_bucket["key"])
               next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
 
               if params["selectedItemCount"].to_i > 1 && !["language", "area of study", "set type"].include?(alias_aggregation_name)
