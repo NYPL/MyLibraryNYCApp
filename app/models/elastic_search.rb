@@ -346,7 +346,7 @@ class ElasticSearch
     facets = get_language_availability_set_type_area_of_study_facets(teacher_sets_docs, facets, params)
     # Specify desired order of facets:
     facets.sort_by! do |f|
-      ind = ["area of study", "subjects", "language", "set type"].index f[:label]
+      ind = ["subjects", "area of study", "language", "set type"].index f[:label]
       ind.nil? ? 1000 : ind
     end
 
