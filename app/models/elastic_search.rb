@@ -236,16 +236,18 @@ class ElasticSearch
                   "path": "subjects",
                 },
                 "aggs": {
-                  "id": {
+                  "subject_details": {
                     "terms": {
                       "field": "subjects.id",
                       "size": 3000,
                     },
-                  },
-                  "title": {
-                    "terms": {
-                      "field": "subjects.title.keyword",
-                      "size": 3000,
+                    "aggs": {
+                      "title": {
+                        "terms": {
+                          "field": "subjects.title.keyword",
+                          "size": 3000,
+                        },
+                      },
                     },
                   },
                 },
@@ -309,25 +311,29 @@ class ElasticSearch
               },
             },
           },
+
           "all_subjects": {
             "nested": {
               "path": "subjects",
             },
             "aggs": {
-              "id": {
+              "subject_details": {
                 "terms": {
                   "field": "subjects.id",
                   "size": 3000,
                 },
-              },
-              "title": {
-                "terms": {
-                  "field": "subjects.title.keyword",
-                  "size": 3000,
+                "aggs": {
+                  "title": {
+                    "terms": {
+                      "field": "subjects.title.keyword",
+                      "size": 3000,
+                    },
+                  },
                 },
               },
             },
           },
+
         },
       },
     }
@@ -405,39 +411,36 @@ class ElasticSearch
       end
       case aggregation_name.to_s
       when "all_subjects", "subjects"
-        if !["language", "area of study", "set type"].include?("subjects") && aggregations&.dig("id", "buckets") && aggregations&.dig("title", "buckets")
-          id_buckets = aggregations["id"]["buckets"]
-          title_buckets = aggregations["title"]["buckets"]
-
+        if !["language", "area of study", "set type"].include?("subjects") && aggregations&.dig("subject_details", "buckets")
           # ✅ Get a list of all "area of study" values to prevent duplicates
           area_of_study_keys = teacherset_docs.dig(:aggregations, "total_aggregations", "all_area_of_study", "area of study", "buckets")&.map { |bucket| bucket["key"] } || []
 
           if params["selectedItemCount"].to_i > 1
             # Extract override counts (generic for all values)
-            override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "subjects", "title", "buckets")
+            override_counts = teacherset_docs.dig(:aggregations, "total_aggregations", "filtered_data", "subjects", "subject_details", "buckets")
             # Create a hash of the override counts for fast lookups, but only for counts > 0
             override_count_hash = override_counts.each_with_object({}) do |bucket, hash|
               hash[bucket["key"]] = bucket["doc_count"]
             end
           end
-          if id_buckets.length == title_buckets.length
-            id_buckets.each_with_index do |id_bucket, index|
-              title_bucket = title_buckets[index]
-              # ✅ Exclude items that are present in "area of study"
-              next if area_of_study_keys.include?(title_bucket["key"])
-              next if id_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
+          aggregations&.dig("subject_details", "buckets").each do |agg_bucket|
+            # ✅ Exclude items that are present in "area of study"
+            subject_title = agg_bucket["title"]["buckets"][0]["key"]
+            subject_id = agg_bucket["key"]
+            next if agg_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
+            next if area_of_study_keys.include?(subject_title)
 
-              if params["selectedItemCount"].to_i > 1 && !["language", "area of study", "set type"].include?(alias_aggregation_name)
-                if override_count_hash.key?(id_bucket["key"])
-                  id_bucket["doc_count"] = override_count_hash[id_bucket["key"]]
-                end
+            if params["selectedItemCount"].to_i > 1 && !["language", "area of study", "set type"].include?(alias_aggregation_name)
+              if override_count_hash.key?(subject_id)
+                agg_bucket["doc_count"] = override_count_hash[subject_id]
               end
-              facets_group[:items] << {
-                value: id_bucket["key"],
-                label: title_bucket["key"],
-                count: id_bucket["doc_count"],
-              }
             end
+
+            facets_group[:items] << {
+              value: subject_id,
+              label: subject_title,
+              count: agg_bucket["doc_count"],
+            }
           end
         else
           facets_group[:items] << { value: "No data available", label: "No data available", count: 0 }
@@ -472,10 +475,8 @@ class ElasticSearch
           facets_group[:items] << { value: "No data available", label: "No data available", count: 0 }
         end
       end
-
       facets << facets_group
     end
-
     facets
   end
 

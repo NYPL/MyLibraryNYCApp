@@ -107,7 +107,6 @@ export default function SearchTeacherSets(props) {
     const queryValue = new URLSearchParams(location.search);
     const tsfacets = {};
     const tagSetsDataArr = [];
-    setTsSubjects({});
 
     queryParams.map((ts) => {
       const tagSets = {};
@@ -1255,19 +1254,21 @@ export default function SearchTeacherSets(props) {
           );
         }
       }
+      
       const updatedSelectedItems = {
         ...selectedFacets,
         [updatedCategory]: { items: updatedFilters },
       };
       setSelectedItems(updatedSelectedItems);
+
       const data = teacherSetArr.filter(
         (element) => element.label !== tagSet.label
       );
-        
+
       const deleteQueryParams = teacherSetArr
         .filter((element) => element.label === tagSet.label)
         .flatMap(Object.keys);
-  
+
       deleteQueryParams.map((item) => {
         if (item === "language") {
           searchParams.delete("language");
@@ -1322,26 +1323,6 @@ export default function SearchTeacherSets(props) {
       });
     }
 
-    // teacherSetArr.map((value) => {
-    //   if (
-    //     value["grade_begin"] !== undefined ||
-    //     value["grade_end"] !== undefined
-    //   ) {
-    //     if (value["grade_begin"] !== undefined) {
-    //       const g_begin = value["label"];
-    //     }
-
-    //     if (value["grade_end"] !== undefined) {
-    //       const g_end = value["label"];
-    //     }
-    //   }
-    //   teacherSetArr.push(value);
-    // });
-
-    // let result = teacherSetArr.filter(
-    //   (tset, index) =>
-    //     index === teacherSetArr.findIndex((other) => tset.label === other.label)
-    // );
     return (
       <TagSet
         id="tagSet-id-filter"
