@@ -1,135 +1,134 @@
 namespace :elasticsearch do
-  desc 'Create Elasticsearch mappings and index for teachersets'
+  desc "Create Elasticsearch mappings and index for teachersets"
   task create_teacherset_index: :environment do
-    require 'elasticsearch'
+    require "elasticsearch"
 
     body = {
       settings: {
         analysis: {
           analyzer: {
             ts_analyzer: {
-              tokenizer: 'standard',
-              filter: %w[lowercase stop asciifolding]
-            }
-          }
-        }
+              tokenizer: "standard",
+              filter: %w[lowercase stop asciifolding],
+            },
+          },
+        },
       },
       mappings: {
         properties: {
           title: {
-            type: 'text',
+            type: "text",
             fields: {
               keyword: {
-                type: 'keyword'
-              }
+                type: "keyword",
+              },
             },
-            analyzer: 'ts_analyzer'
+            analyzer: "ts_analyzer",
           },
           description: {
-            type: 'text',
+            type: "text",
             fields: {
               keyword: {
-                type: 'keyword'
-              }
+                type: "keyword",
+              },
             },
-            analyzer: 'ts_analyzer'
+            analyzer: "ts_analyzer",
           },
           contents: {
-            type: 'text',
+            type: "text",
             fields: {
               keyword: {
-                type: 'keyword'
-              }
+                type: "keyword",
+              },
             },
-            analyzer: 'ts_analyzer'
+            analyzer: "ts_analyzer",
           },
-          grade_begin: { type: 'long' },
-          grade_end: { type: 'long' },
-          id: { type: 'long' },
-          details_url: { type: 'text' },
+          grade_begin: { type: "long" },
+          grade_end: { type: "long" },
+          id: { type: "long" },
+          details_url: { type: "text" },
           availability: {
-            type: 'text',
+            type: "text",
             fields: {
-              raw: { type: 'keyword' }
-            }
+              raw: { type: "keyword" },
+            },
           },
-          total_copies: { type: 'long' },
+          total_copies: { type: "long" },
           call_number: {
-            type: 'text',
+            type: "text",
             fields: {
-              keyword: { type: 'keyword' }
-            }
+              keyword: { type: "keyword" },
+            },
           },
           language: {
-            type: 'text',
+            type: "text",
             fields: {
-              keyword: { type: 'keyword' }
-            }
+              keyword: { type: "keyword" },
+            },
           },
           physical_description: {
-            type: 'text',
+            type: "text",
             fields: {
-              keyword: { type: 'keyword' }
-            }
+              keyword: { type: "keyword" },
+            },
           },
           primary_language: {
-            type: 'keyword'
+            type: "keyword",
           },
-          available_copies: { type: 'long' },
+          available_copies: { type: "long" },
           bnumber: {
-            type: 'text',
+            type: "text",
             fields: {
-              keyword: { type: 'keyword' }
-            }
+              keyword: { type: "keyword" },
+            },
           },
           set_type: {
-            type: 'keyword'
+            type: "keyword",
           },
           area_of_study: {
-            type: 'keyword'
+            type: "keyword",
           },
           created_at: {
-            type: 'date',
-            format: 'strict_date_optional_time||epoch_millis'
+            type: "date",
+            format: "strict_date_optional_time||epoch_millis",
           },
           updated_at: {
-            type: 'date',
-            format: 'strict_date_optional_time||epoch_millis'
+            type: "date",
+            format: "strict_date_optional_time||epoch_millis",
           },
           subjects: {
-            type: 'nested',
+            type: "nested",
             properties: {
-              id: { type: 'long' },
+              id: { type: "long" },
               title: {
-                type: 'text',
+                type: "text",
                 fields: {
-                  keyword: { type: 'keyword' }
-                }
+                  keyword: { type: "keyword" },
+                },
               },
               created_at: {
-                type: 'date',
-                format: 'strict_date_optional_time||epoch_millis'
+                type: "date",
+                format: "strict_date_optional_time||epoch_millis",
               },
               updated_at: {
-                type: 'date',
-                format: 'strict_date_optional_time||epoch_millis'
-              }
-            }
-          }
-        }
-      }
+                type: "date",
+                format: "strict_date_optional_time||epoch_millis",
+              },
+            },
+          },
+        },
+      },
     }
 
-    index_name = 'teacherset'
+    index_name = "teacherset"
     ElasticSearch.new.create_or_update_index(index_name, body)
   end
 
-  desc 'Create Elasticsearch mappings and index for teacherset subjects'
+  desc "Create Elasticsearch mappings and index for teacherset subjects"
   task delete_teacherset_index: :environment do
-    require 'elasticsearch'
+    require "elasticsearch"
 
-    index_name = 'teacherset'
+    index_name = "teacherset"
     ElasticSearch.new.delete_index(index_name)
   end
 end
-
