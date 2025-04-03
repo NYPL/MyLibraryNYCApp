@@ -3,11 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - MLN-1304-multi-select
+      - qa
       - production
   pull_request:
     branches:
-      - MLN-1304-multi-select
+      - qa
       - production
 
 jobs:
