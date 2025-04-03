@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   deploy_qa:
-    if: true #${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'qa' }}
+    #if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'MLN-1304-multi-select' }}
     name: Deploy QA
     runs-on: ubuntu-latest
     environment: qa
