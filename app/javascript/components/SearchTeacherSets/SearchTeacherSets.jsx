@@ -863,7 +863,7 @@ export default function SearchTeacherSets(props) {
     getTeacherSets(
       Object.assign(
         {
-          keyword: "",
+          keyword: keyword,
           grade_begin: grade_begin,
           grade_end: grade_end,
           sort_order: sortTitleValue,
