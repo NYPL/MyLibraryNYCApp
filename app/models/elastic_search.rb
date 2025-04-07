@@ -311,29 +311,36 @@ class ElasticSearch
               },
             },
           },
-
           "all_subjects": {
-            "nested": {
-              "path": "subjects",
+            "filter": {
+              "bool": {
+                "must": first_conditions,
+              },
             },
             "aggs": {
-              "subject_details": {
-                "terms": {
-                  "field": "subjects.id",
-                  "size": 3000,
+              "subjects": {
+                "nested": {
+                  "path": "subjects",
                 },
                 "aggs": {
-                  "title": {
+                  "subject_details": {
                     "terms": {
-                      "field": "subjects.title.keyword",
+                      "field": "subjects.id",
                       "size": 3000,
+                    },
+                    "aggs": {
+                      "title": {
+                        "terms": {
+                          "field": "subjects.title.keyword",
+                          "size": 3000,
+                        },
+                      },
                     },
                   },
                 },
               },
             },
           },
-
         },
       },
     }
@@ -395,7 +402,6 @@ class ElasticSearch
     ].each do |config|
       facets_group = { label: config[:label], items: [] }
       aggregation_name = config[:aggregation_name]
-
       if firstFacetSelectedItem == aggregation_name.to_s
         if alias_aggregation_name == "subjects"
           aggregations = teacherset_docs.dig(:aggregations, "total_aggregations", aggregation_name.to_s)
@@ -411,7 +417,9 @@ class ElasticSearch
       end
       case aggregation_name.to_s
       when "all_subjects", "subjects"
-        if !["language", "area of study", "set type"].include?("subjects") && aggregations&.dig("subject_details", "buckets")
+        sub_aggs = (aggregation_name.to_s === "all_subjects") ? aggregations&.dig("subjects", "subject_details", "buckets") : aggregations&.dig("subject_details", "buckets")
+
+        if !["language", "area of study", "set type"].include?("subjects") && sub_aggs
           # ✅ Get a list of all "area of study" values to prevent duplicates
           area_of_study_keys = teacherset_docs.dig(:aggregations, "total_aggregations", "all_area_of_study", "area of study", "buckets")&.map { |bucket| bucket["key"] } || []
 
@@ -423,7 +431,7 @@ class ElasticSearch
               hash[bucket["key"]] = bucket["doc_count"]
             end
           end
-          aggregations&.dig("subject_details", "buckets").each do |agg_bucket|
+          sub_aggs.each do |agg_bucket|
             # ✅ Exclude items that are present in "area of study"
             subject_title = agg_bucket["title"]["buckets"][0]["key"]
             subject_id = agg_bucket["key"]
