@@ -88,6 +88,7 @@ class ElasticSearch
     facets = facets_for_teacher_sets(teacherset_docs, params)
     [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
+    binding.pry
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
   end
 
@@ -187,14 +188,13 @@ class ElasticSearch
     firstFacetSelectedItem = params["firstFacetSelectedItem"]
     selectedItemCount = params["selectedItemCount"]
 
-    if keyword.present? || availability.present?
-      first_conditions = must_conditions
-    else
-      first_conditions = [
-        { range: { grade_begin: { lte: grade_end.to_i } } },
-        { range: { grade_end: { gte: grade_begin.to_i } } },
-      ]
-    end
+    first_conditions = [
+      { range: { grade_begin: { lte: grade_end.to_i } } },
+      { range: { grade_end: { gte: grade_begin.to_i } } },
+    ]
+
+    first_conditions << { terms: { availability: availability } } if availability.present?
+    first_conditions << keyword_conditions if keyword.present?
 
     aggregation_hash[:aggs] = {
       total_aggregations: {
