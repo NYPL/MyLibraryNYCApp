@@ -776,14 +776,15 @@ export default function SearchTeacherSets(props) {
 
   const renderMultiSelect = () => {
     if (!facets || facets.length === 0) return null;
-
     return facets.map((ts, i) => (
+
       <MultiSelect
         buttonText={tsLabel(ts)}
         key={`ts-facets-key-${i}`}
         id={ts.label}
         items={formattedItems(ts.items)}
         isBlockElement
+        isSearchable={ts.label == 'set type'? false : true}
         onChange={(e) => onChange(e.target.id, ts.label)}
         onMixedStateChange={(e) => {
           onMixedStateChange(e.target.id, id, formattedItems(ts.items));
@@ -791,7 +792,7 @@ export default function SearchTeacherSets(props) {
         onClear={() => onClearItems(ts.label)}
         selectedItems={selectedItems}
         width="full"
-        listOverflow="expand"
+        listOverflow={ts.label == 'set type'? "expand" : "scroll"}
         isDefaultOpen={isDefaultOpen}
       />
     ));
