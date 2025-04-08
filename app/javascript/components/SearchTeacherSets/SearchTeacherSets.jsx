@@ -115,10 +115,11 @@ export default function SearchTeacherSets(props) {
         tsfacets["subjects"] = ts.subjects.split(",");
         ts.subjects.split(",").map((value) => {
           if (tsSubjects[value] !== undefined) {
-            const subjectsHash = {};
-            subjectsHash["label"] = tsSubjects[value];
-            subjectsHash["subjects"] = [tsSubjects[value]];
-            tagSetsDataArr.push(subjectsHash);
+            const subjectsHash = {
+              label: tsSubjects[value],
+              id: value,
+            };
+            teacherSetArr.push(subjectsHash);
           }
         });
       } else if (ts["area of study"]) {
@@ -1104,71 +1105,40 @@ export default function SearchTeacherSets(props) {
       setAvailability("");
       searchParams.delete("availability");
       setSearchParams(searchParams);
-      //setTeacherSetArr([]);
     } else {
       let updatedCategory = "";
       let updatedFilters = [];
+
+
       for (const category in selectedFacets) {
-        if (selectedFacets[category].includes(tagSet.label)) {
+        if (selectedFacets[category].includes(tagSet.id)) {
           updatedCategory = category;
           updatedFilters = selectedFacets[category].filter(
-            (filter) => filter !== tagSet.label
+            (filter) => filter !== tagSet.id
           );
         }
       }
-      
-      const updatedSelectedItems = {
-        ...selectedFacets,
-        [updatedCategory]: { items: updatedFilters },
-      };
-      setSelectedItems(updatedSelectedItems);
 
-      const data = teacherSetArr.filter(
-        (element) => element.label !== tagSet.label
+      const mergedFacets = {
+        ...selectedFacets,
+        [updatedCategory]: { items: updatedFilters }
+      };
+      
+      // Normalize all values to have `items` key
+      const updatedSelectedItems = Object.entries(mergedFacets).reduce((acc, [key, value]) => {
+        const items = Array.isArray(value?.items) ? value.items : value;
+        acc[key] = { items: items || [] };
+        return acc;
+      }, {});
+
+      setSelectedItems(updatedSelectedItems);
+     
+      const uniqueTeacherSetArr = teacherSetArr.filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.label === item.label)
       );
 
-      const deleteQueryParams = teacherSetArr
-        .filter((element) => element.label === tagSet.label)
-        .flatMap(Object.keys);
-
-      deleteQueryParams.map((item) => {
-        if (item === "language") {
-          searchParams.delete("language");
-          setSearchParams(searchParams);
-          onClearItems("language")
-        } else if (item === "area of study") {
-          searchParams.delete("area of study");
-          setSearchParams(searchParams);
-          onClearItems("area of study")
-        } else if (item === "availability") {
-          searchParams.delete("availability");
-          setSearchParams(searchParams);
-          onClearItems("availability")
-        } else if (item === "keyword") {
-          searchParams.delete("keyword");
-          setSearchParams(searchParams);
-          onClearItems("keyword")
-        } else if (item === "set type") {
-          searchParams.delete("set type");
-          setSearchParams(searchParams);
-          onClearItems("set type")
-        } else if (item === "subjects") {
-          onClearItems("subjects")
-          searchParams.delete("subjects");
-          setSearchParams(searchParams);
-        } else if (item === "grade_begin") {
-          searchParams.delete("grade_begin");
-          setSearchParams(searchParams);
-          setGradeBegin(-1);
-          setRangevalues([-1, grade_end]);
-        } else if (item === "grade_end") {
-          searchParams.delete("grade_end");
-          setGradeEnd(12);
-          setRangevalues([grade_begin, 12]);
-          setSearchParams(searchParams);
-        }
-      });
-      setTeacherSetArr(data);
+      setTeacherSetArr(uniqueTeacherSetArr);
     }
   };
 
@@ -1177,14 +1147,14 @@ export default function SearchTeacherSets(props) {
     if (subjects !== null) {
       subjects.split(",").map((value) => {
         if (tsSubjects[value] !== undefined) {
-          const subjectsHash = {};
-          subjectsHash["label"] ||= tsSubjects[value];
-          subjectsHash["subjects"] ||= [tsSubjects[value]];
+          const subjectsHash = {
+            label: tsSubjects[value],
+            id: value,
+          };
           teacherSetArr.push(subjectsHash);
         }
       });
     }
-
     return (
       <TagSet
         id="tagSet-id-filter"
