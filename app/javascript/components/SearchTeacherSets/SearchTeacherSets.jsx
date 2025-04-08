@@ -1109,7 +1109,6 @@ export default function SearchTeacherSets(props) {
       let updatedCategory = "";
       let updatedFilters = [];
 
-
       for (const category in selectedFacets) {
         if (selectedFacets[category].includes(tagSet.id)) {
           updatedCategory = category;
@@ -1132,13 +1131,26 @@ export default function SearchTeacherSets(props) {
       }, {});
 
       setSelectedItems(updatedSelectedItems);
-     
-      const uniqueTeacherSetArr = teacherSetArr.filter(
-        (item, index, self) =>
-          index === self.findIndex((t) => t.label === item.label)
+
+      // Optionally clean up searchParams if any matching item is found
+      const hasGrades = teacherSetArr.some(
+        (element) => element.grade_begin && element.grade_end
       );
 
-      setTeacherSetArr(uniqueTeacherSetArr);
+      if (hasGrades) {
+        searchParams.delete("grade_begin");
+        searchParams.delete("grade_end");
+        setSearchParams(searchParams);
+        setGrades(-1, 12)
+      }
+
+      const data = teacherSetArr.filter(
+        (element) =>
+          !(element.grade_begin && element.grade_end) &&
+          element.label !== tagSet.label
+      );
+      console.log(data)
+      setTeacherSetArr(data);
     }
   };
 
