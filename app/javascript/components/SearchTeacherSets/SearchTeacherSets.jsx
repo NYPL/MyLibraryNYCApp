@@ -793,7 +793,7 @@ export default function SearchTeacherSets(props) {
         selectedItems={selectedItems}
         width="full"
         listOverflow={ts.label == 'set type'? "expand" : "scroll"}
-        isDefaultOpen={isDefaultOpen}
+        isDefaultOpen={ts.label == 'subjects'? true : false}
       />
     ));
   };
@@ -1082,7 +1082,7 @@ export default function SearchTeacherSets(props) {
   };
 
   const closeTeacherSetTag = (tagSet) => {
-    //searchResultsTextRef.current.focus();
+    searchResultsTextRef.current.focus();
     if (tagSet.id === "clear-filters") {
       searchParams.delete("language");
       searchParams.delete("area of study");
