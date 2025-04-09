@@ -1227,16 +1227,6 @@ export default function SearchTeacherSets(props) {
       }
     });
 
-    
-    let keywordValue;
-    if (queryValue.get("keyword")) {
-      keywordValue = queryValue.get("keyword");
-      setUpdateKeyword(keywordValue);
-      setShowKeyWord(true);
-    } else {
-      keywordValue = "";
-    }
-    
     const uniqueTagSetsDataArr = tagSetsDataArr.filter(
       (item, index, self) =>
         index === self.findIndex(
