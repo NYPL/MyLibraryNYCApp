@@ -119,7 +119,7 @@ export default function SearchTeacherSets(props) {
               label: tsSubjects[value],
               id: value,
             };
-            teacherSetArr.push(subjectsHash);
+            tagSetsDataArr.push(subjectsHash);
           }
         });
       } else if (ts["area of study"]) {
@@ -195,7 +195,15 @@ export default function SearchTeacherSets(props) {
       ? parseInt(queryValue.get("page"))
       : 1;
    
-    setTeacherSetArr(tagSetsDataArr);
+    
+    const uniqueTagSetsDataArr = tagSetsDataArr.filter(
+      (item, index, self) =>
+        index === self.findIndex(
+          (t) => t.label === item.label && t.id === item.id
+        )
+    );
+    console.log(uniqueTagSetsDataArr)
+    setTeacherSetArr(uniqueTagSetsDataArr);
 
   }, [selectedItems, location.search]);
 
@@ -714,8 +722,8 @@ export default function SearchTeacherSets(props) {
         min={-1}
         max={12}
         defaultValue={[parseInt(grade_begin), parseInt(grade_end)]}
-        onChange={getGrades}
-        //onChangeEnd={getGrades}
+        //onChange={getGrades}
+        onChangeEnd={getGrades}
         showBoxes={false}
         showHelperInvalidText
         showLabel
@@ -1149,7 +1157,6 @@ export default function SearchTeacherSets(props) {
           !(element.grade_begin && element.grade_end) &&
           element.label !== tagSet.label
       );
-      console.log(data)
       setTeacherSetArr(data);
     }
   };
