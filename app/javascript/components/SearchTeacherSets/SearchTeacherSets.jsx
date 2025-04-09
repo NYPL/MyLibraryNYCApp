@@ -1162,25 +1162,95 @@ export default function SearchTeacherSets(props) {
   };
 
   const teacherSetFilterTags = () => {
-    const subjects = new URLSearchParams(location.search).get("subjects");
-    if (subjects !== null) {
-      subjects.split(",").map((value) => {
-        if (tsSubjects[value] !== undefined) {
-          const subjectsHash = {
-            label: tsSubjects[value],
-            id: value,
-          };
-          teacherSetArr.push(subjectsHash);
-        }
-      });
+    const queryValue = new URLSearchParams(location.search);
+    const tagSetsDataArr = [];
+
+    queryParams.map((ts) => {
+      const tagSets = {};
+
+      if (ts.subjects) {
+        ts.subjects.split(",").map((value) => {
+          if (tsSubjects[value] !== undefined) {
+            const subjectsHash = {
+              label: tsSubjects[value],
+              id: value,
+            };
+            tagSetsDataArr.push(subjectsHash);
+          }
+        });
+      } else if (ts["area of study"]) {
+        ts["area of study"].split(",").forEach((value) => {
+          tagSetsDataArr.push(tagSetDetails(value));
+        });
+      } else if (ts["set type"]) {
+        ts["set type"].split(",").forEach((value) => {
+          tagSetsDataArr.push(tagSetDetails(value));
+        });
+      } else if (ts["availability"]) {
+        tagSets["label"] = "Available Now";
+        tagSets["availability"] = [ts["availability"]];
+        tagSetsDataArr.push(tagSets);
+      } else if (ts["language"]) {
+        ts["language"].split(",").forEach((value) => {
+          tagSetsDataArr.push(tagSetDetails(value));
+        });
+      }  else if (queryValue.get("grade_begin") && queryValue.get("grade_end")) {
+        const g_begin = queryValue.get("grade_begin")
+        ? queryValue.get("grade_begin")
+        : -1;
+
+        const g_end = queryValue.get("grade_end")
+        ? queryValue.get("grade_end")
+        : 12;
+
+        const tagSetGradeBegin =
+          parseInt(g_begin) === -1
+            ? "Pre-K"
+            : parseInt(g_begin) === 0
+            ? "K"
+            : parseInt(g_begin);
+  
+        const tagSetGradeEnd =
+          parseInt(g_end) === -1
+            ? "Pre-K"
+            : parseInt(g_end) === 0
+            ? "K"
+            : parseInt(g_end);
+  
+        const tagSetGrades = {
+          label: "Grades " + tagSetGradeBegin + " to " + tagSetGradeEnd,
+          grade_begin: [queryValue.get("grade_begin")],
+          grade_end: [queryValue.get("grade_end")],
+        };
+  
+        tagSetsDataArr.push(tagSetGrades);
+      }
+    });
+
+    
+    let keywordValue;
+    if (queryValue.get("keyword")) {
+      keywordValue = queryValue.get("keyword");
+      setUpdateKeyword(keywordValue);
+      setShowKeyWord(true);
+    } else {
+      keywordValue = "";
     }
+    
+    const uniqueTagSetsDataArr = tagSetsDataArr.filter(
+      (item, index, self) =>
+        index === self.findIndex(
+          (t) => t.label === item.label && t.id === item.id
+        )
+    );
+
     return (
       <TagSet
         id="tagSet-id-filter"
         isDismissible
         onClick={closeTeacherSetTag}
         tagSetData={Array.from(
-          new Map(teacherSetArr
+          new Map(uniqueTagSetsDataArr
             .filter((value) => 
               Object.keys(value).length !== 0 && value.label !== "" && value.id !== "" // ✅ Remove empty objects & empty strings
             )
