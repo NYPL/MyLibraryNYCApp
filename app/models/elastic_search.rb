@@ -88,7 +88,6 @@ class ElasticSearch
     facets = facets_for_teacher_sets(teacherset_docs, params)
     [teacherset_docs, facets, teacherset_docs[:totalMatches]]
   rescue StandardError => e
-    binding.pry
     raise ElasticsearchException.new(ELASTIC_SEARCH_STANDARD_EXCEPTION[:code], e.message)
   end
 
@@ -435,7 +434,7 @@ class ElasticSearch
             # ✅ Exclude items that are present in "area of study"
             subject_title = agg_bucket["title"]["buckets"][0]["key"]
             subject_id = agg_bucket["key"]
-            # next if agg_bucket["doc_count"] < Subject::MIN_COUNT_FOR_FACET
+            next if agg_bucket["doc_count"] < 3 #Subject::MIN_COUNT_FOR_FACET
             next if area_of_study_keys.include?(subject_title)
 
             if params["selectedItemCount"].to_i > 1 && !["language", "area of study", "set type"].include?(alias_aggregation_name)
