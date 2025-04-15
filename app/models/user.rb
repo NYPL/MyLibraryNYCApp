@@ -304,6 +304,57 @@ class User < ActiveRecord::Base
     future_date.strftime("%Y-%m-%d")
   end
 
+  def invoke_patron_create_service
+    query = {
+      usernameHasBeenValidated: false,
+      username: "poiurhsdgahjsdghsdgas",
+      name: "#{self.first_name.upcase} #{self.last_name.upcase}",
+      address: school.address_line_1,
+      pin: self.password,
+      ageGate: true,
+      policyType: "simplye",
+      email: email,
+      homeLibraryCode: "eb",
+      ecommunicationsPref: false,
+      acceptTerms: true,
+      birthdate: "01-01-1988", #Default birthdate for patrons
+    }
+    response = HTTParty.post(
+      ENV.fetch("PATRON_MICROSERVICE_URL_V03", nil),
+      body: query.to_json,
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
+    )
+
+    case response.code
+    when 200
+      self.status = User::STATUS_LABELS["complete"]
+      self.barcode = response["barcode"]
+      self.save!
+      LogWrapper.log("DEBUG", {
+        "message" => "The account with e-mail #{email} was
+           successfully created from the micro-service!",
+        "status" => response.code,
+      })
+    when 400
+      LogWrapper.log("ERROR", {
+        "message" => "An error has occured when sending a request to the patron creator service",
+        "status" => response.code,
+        "responseData" => response.body,
+      })
+      raise Exceptions::InvalidResponse, response["message"]["description"]
+    else
+      LogWrapper.log("ERROR", {
+        "message" => "An error has occured when sending a request to the patron creator service",
+        "status" => response.code,
+        "responseData" => response.body,
+      })
+      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+    end
+    response
+  end
+
   # Sends a request to the patron creator microservice.
   # Passes patron-specific information to the microservice s.a. name, email, and type.
   # The patron creator service creates a new patron record in the Sierra ILS, and comes back with

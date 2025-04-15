@@ -12,17 +12,17 @@ module Users
     def create
       begin
         resource = User.new(user_params)
-        resource.barcode = resource.assign_barcode
-        resource.status =  User::STATUS_LABELS['pending']
+        resource.status = User::STATUS_LABELS["pending"]
         resource.password = resource.password
+        resource.barcode = resource.invoke_patron_create_service
+        binding.pry
         if resource.valid?
           resource.save!
-          resource.create_patron_delayed_job
           sleep(1)
           sign_up(resource_name, resource)
-          if params.require(:registration)["user"]['news_letter_email'].present?
+          if params.require(:registration)["user"]["news_letter_email"].present?
             # If User has alt_email in the signup page use alt_email for news-letter signup, other-wise user-email.
-            email = user_params['alt_email'].present? ? user_params['alt_email'] : user_params['email']
+            email = user_params["alt_email"].present? ? user_params["alt_email"] : user_params["email"]
             NewsLetterController.new.send_news_letter_confirmation_email(email)
           end
           render json: { status: :created, user: resource, message: "Your account is
@@ -32,7 +32,8 @@ module Users
           render json: { status: 500, message: error_msg_hash(resource) || "Error" }
         end
       rescue Exceptions::InvalidResponse, StandardError => e
-        render json: { status: 500, message: {error: [e.message]} }
+        binding.pry
+        render json: { status: 500, message: { error: [e.message] } }
       end
     end
 
@@ -45,6 +46,7 @@ module Users
         render json: { status: :updated, user: current_user, message: "Your account has been updated." }
       end
     rescue StandardError => e
+      binding.pry
       if e.message == "Validation failed: Alt email has already been taken"
         render json: { status: 404, message: "Preferred email address has already been taken" }
       else
@@ -56,7 +58,7 @@ module Users
       @user = User.new
     end
 
-    # Below code for custom error messages. 
+    # Below code for custom error messages.
     # Because Devise gem display same attributes from database.
     # eg: 'Pin does not meet our requirements. Please try again' instead of this error message
     # display  'PIN(here PIN is capital letters) does not meet our requirements. Please try again.'
@@ -65,10 +67,10 @@ module Users
       error_msg_hash = {}
       if user.errors.messages[:alt_email].present?
         error_msg_hash[:alt_email] = if user.errors.messages[:alt_email][0] == "has already been taken"
-                                       ["Preferred email address has already been taken"] # ['Alt Email '.concat(alt_email)]
-                                     else
-                                       user.errors.messages[:alt_email]
-                                     end
+            ["Preferred email address has already been taken"] # ['Alt Email '.concat(alt_email)]
+          else
+            user.errors.messages[:alt_email]
+          end
       end
 
       if user.errors.messages[:email].present?
@@ -124,7 +126,7 @@ module Users
     # end
 
     private
-  
+
     def user_params
       params.require(:registration)["user"].permit(:alt_email, :school_id, :email, :first_name, :last_name, :password, :status)
     end
