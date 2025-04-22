@@ -16,10 +16,8 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :password
 
-  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer: true,
-                                      less_than_or_equal_to: 27777099999999, uniqueness: true
-  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: false,
-                                      only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
+  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: true, only_integer: true, uniqueness: true
+  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: true, only_integer: true, uniqueness: true
 
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
@@ -257,6 +255,57 @@ class User < ActiveRecord::Base
     end
   end
 
+  def assign_username(number_tries = 0)
+    query = { username: "#{self.first_name}#{self.last_name}" + "#{rand(10000..90000)}" }
+
+    Delayed::Worker.logger.info("username_available_in_sierra")
+    response = HTTParty.post(
+      ENV.fetch("VALIDATE_USERNAME_MICROSERVICE_URL_V03", nil),
+      body: query.to_json,
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
+    )
+    response
+  end
+
+  def username_available_in_sierra?
+    user_name = "#{self.first_name}#{self.last_name}" + "#{rand(10000..90000)}"
+    query = { username: user_name }
+
+    Delayed::Worker.logger.info("username_available_in_sierra")
+    response = HTTParty.post(
+      ENV.fetch("VALIDATE_USERNAME_MICROSERVICE_URL_V03", nil),
+      body: query.to_json,
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
+    )
+    Delayed::Worker.logger.info("username_available_in_sierra")
+    response = HTTParty.post(
+      ENV.fetch("VALIDATE_USERNAME_MICROSERVICE_URL_V03", nil),
+      body: query.to_json,
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
+    )
+    if (response.code == 200)
+      is_username_available = true
+      user_name = response["username"]
+      LogWrapper.log("INFO", {
+        "method" => "username_available_in_sierra?",
+        "message" => "username_available_in_sierra response details: #{response.code} is_user_available: #{is_username_available}",
+      })
+    else
+      is_username_available = false
+      LogWrapper.log("ERROR", {
+        "method" => "username_available_in_sierra?",
+        "message" => "username_available_in_sierra response details: #{response}",
+      })
+    end
+    return is_username_available, user_name
+  end
+
   def barcode_available_in_sierra?
     is_barcode_available = false
     response = HTTParty.get(
@@ -304,13 +353,13 @@ class User < ActiveRecord::Base
     future_date.strftime("%Y-%m-%d")
   end
 
-  def invoke_patron_create_service
+  def invoke_patron_create_service(pin, user_name)
     query = {
       usernameHasBeenValidated: false,
-      username: "poiurhsdgahjsdghsdgas",
+      username: user_name,
       name: "#{self.first_name.upcase} #{self.last_name.upcase}",
       address: school.address_line_1,
-      pin: self.password,
+      pin: pin,
       ageGate: true,
       policyType: "simplye",
       email: email,

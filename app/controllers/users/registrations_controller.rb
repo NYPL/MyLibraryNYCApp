@@ -14,7 +14,6 @@ module Users
         resource = User.new(user_params)
         resource.status = User::STATUS_LABELS["pending"]
         resource.password = resource.password
-        resource.barcode = resource.invoke_patron_create_service
         binding.pry
         if resource.valid?
           resource.save!
