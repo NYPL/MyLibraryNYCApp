@@ -12,12 +12,12 @@ module Users
     def create
       begin
         resource = User.new(user_params)
+        resource.barcode = resource.assign_barcode
         resource.status = User::STATUS_LABELS["pending"]
         resource.password = resource.password
-        resource.barcode = resource.invoke_patron_create_service
-        binding.pry
         if resource.valid?
           resource.save!
+          resource.create_patron_delayed_job
           sleep(1)
           sign_up(resource_name, resource)
           if params.require(:registration)["user"]["news_letter_email"].present?
@@ -32,7 +32,6 @@ module Users
           render json: { status: 500, message: error_msg_hash(resource) || "Error" }
         end
       rescue Exceptions::InvalidResponse, StandardError => e
-        binding.pry
         render json: { status: 500, message: { error: [e.message] } }
       end
     end
@@ -46,7 +45,6 @@ module Users
         render json: { status: :updated, user: current_user, message: "Your account has been updated." }
       end
     rescue StandardError => e
-      binding.pry
       if e.message == "Validation failed: Alt email has already been taken"
         render json: { status: 404, message: "Preferred email address has already been taken" }
       else
