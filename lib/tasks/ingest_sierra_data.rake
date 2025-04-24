@@ -39,7 +39,7 @@ namespace :ingest_sierra_data do
         row_hash = row.to_hash
         sierra_code = row_hash["sierra_code"].strip
         zcode = row_hash["zcode"].strip
-        zcode_match = SierraCodeZcodeMatch.find_by_sierra_code("1980")
+        zcode_match = SierraCodeZcodeMatch.find_by_sierra_code(sierra_code)
         puts "Updating zcode #{sierra_code}"
         sierra_data = %w[sierra_code zcode]
         sierra_data.each do |column_header_name|
