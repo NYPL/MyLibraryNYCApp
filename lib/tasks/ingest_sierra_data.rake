@@ -40,7 +40,7 @@ namespace :ingest_sierra_data do
         sierra_code = row_hash["sierra_code"].strip
         zcode = row_hash["zcode"].strip
         zcode_match = SierraCodeZcodeMatch.find_by_sierra_code(sierra_code)
-        puts "Updating zcode #{sierra_code}"
+        puts "Sierra code #{sierra_code}"
         sierra_data = %w[sierra_code zcode]
         sierra_data.each do |column_header_name|
           if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
@@ -48,7 +48,9 @@ namespace :ingest_sierra_data do
           end
         end
         if zcode_match.present?
+          puts "Before Updating zcode #{zcode_match.zcode}"
           school = School.find_by_code(zcode_match.zcode)
+          puts "After Updating zcode #{zcode}"
           school.update!(code: zcode) if school.present?
           zcode_match.update!(zcode: zcode)
         end
