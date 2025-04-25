@@ -24,14 +24,11 @@ namespace :ingest_sierra_data do
           end
         end
 
-        match = SierraCodeZcodeMatch.find_by_zcode(zcode)
-        if !match.present?
-          sierra = SierraCodeZcodeMatch.new
-          sierra.sierra_code = sierra_code
-          sierra.zcode = zcode
-          sierra.save!
-          puts "created sierra code #{sierra_code} zcode #{zcode}"
-        end
+        sierra = SierraCodeZcodeMatch.new
+        sierra.sierra_code = sierra_code
+        sierra.zcode = zcode
+        sierra.save!
+        puts "created sierra code #{sierra_code} zcode #{zcode}"
       end
     end
   end
