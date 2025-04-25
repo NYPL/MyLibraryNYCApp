@@ -23,7 +23,10 @@ namespace :ingest_sierra_data do
             raise "The #{column_header_name} column is mislabeled or missing from the CSV."
           end
         end
-        SierraCodeZcodeMatch.update!(sierra_code: sierra_code, zcode: zcode)
+        match = SierraCodeZcodeMatch.find_by_zcode(zcode)
+        if match.present?
+          match.update!(sierra_code: sierra_code, zcode: zcode)
+        end
       end
     end
   end
