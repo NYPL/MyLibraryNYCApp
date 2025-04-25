@@ -16,16 +16,21 @@ namespace :ingest_sierra_data do
         row_hash = row.to_hash
         sierra_code = row_hash["sierra_code"].strip
         zcode = row_hash["zcode"].strip
-        puts "Creating sierra code #{sierra_code}"
+        puts "Creating sierra code #{sierra_code} zcode #{zcode}"
         sierra_data = %w[sierra_code zcode]
         sierra_data.each do |column_header_name|
           if !row_hash.key?(column_header_name) || row_hash[column_header_name].blank?
             raise "The #{column_header_name} column is mislabeled or missing from the CSV."
           end
         end
+
         match = SierraCodeZcodeMatch.find_by_zcode(zcode)
-        if match.present?
-          match.update!(sierra_code: sierra_code, zcode: zcode)
+        if !match.present?
+          sierra = SierraCodeZcodeMatch.new
+          sierra.sierra_code = sierra_code
+          sierra.zcode = zcode
+          sierra.save!
+          puts "created sierra code #{sierra_code} zcode #{zcode}"
         end
       end
     end
