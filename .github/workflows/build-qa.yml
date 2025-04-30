@@ -11,10 +11,10 @@ permissions:
 on:
   push:
     branches:
-      - MLN-1304-multi-select
+      - MLN-1339-v0.3-update
 jobs:
   deploy_qa:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'qa' }}
+    #if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'qa' }}
     name: Deploy QA
     runs-on: ubuntu-latest
     environment: qa
