@@ -359,12 +359,11 @@ class User < ActiveRecord::Base
 
     case response.code
     when 200
-      self.status = User::STATUS_LABELS["complete"]
       self.barcode = response["barcode"]
       self.save!
       LogWrapper.log("DEBUG", {
         "message" => "The account with e-mail #{email} was
-           successfully created from the micro-service!",
+           successfully created patron from the micro-service!",
         "status" => response.code,
       })
     when 400
@@ -380,7 +379,7 @@ class User < ActiveRecord::Base
         "status" => response.code,
         "responseData" => response.body,
       })
-      raise Exceptions::InvalidResponse, "Invalid status code of: #{response.code}"
+      raise Exceptions::StandardError, "Status code: #{response.code}"
     end
     response
   end

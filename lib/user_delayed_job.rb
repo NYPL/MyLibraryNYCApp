@@ -10,25 +10,18 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
     is_username_available = false
     number_tries = 0
     # username already found in Sierra for another user?
-    # well, we can't be saving this user with a duplicate username.
-    # ask the user to increment the username, and try again.
+    # well, we can't be useing this user with a duplicate username.
+    # ask the user to generate another username, and try again.
     while is_username_available == false && number_tries < 7
-      begin
-        number_tries += 1
-        is_username_available, user_name = user.username_available_in_sierra
-        defensive_log("#{self.class.name}: userName: #{user_name} isUsernameAvailable: #{is_username_available}")
+      number_tries += 1
+      is_username_available, user_name = user.username_available_in_sierra
+      defensive_log("#{self.class.name}: userName: #{user_name} isUsernameAvailable: #{is_username_available} numberOfRetries: #{number_tries}")
 
-        # wait a bit before hitting Sierra up again
-      rescue Exceptions::InvalidResponse => e
-        defensive_log("#{self.class.name}: user.check_username_uniqueness_with_sierra threw an error: #{e.message || "nil"}")
-        raise e
-      end
-
-      # Barcode is not available in sierra assign userName to user
+      # userName is not available in sierra assign userName to user
       # and call sierra again with latest userName
       unless is_username_available
         defensive_log("#{self.class.name}: userName #{user_name}] was already in Sierra,
-          calling user assign_username again. No.of retries number_tries #{number_tries}")
+          calling user sierra again. No.of retries number_tries #{number_tries}")
         is_username_available, user_name = user.username_available_in_sierra
         sleep(60)
       end
@@ -46,13 +39,13 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
           defensive_log("#{self.class.name}: Patron creator service ran. Saving user in MLN db.")
           user.save_as_complete!
         end
-      rescue Exceptions::InvalidResponse => e
+      rescue Exceptions::InvalidResponse, Exceptions::StandardError => e
         defensive_log("#{self.class.name}: \
-          invoke_patron_create_service or  threw: #{e.message || "nil"} #{response}")
+          invoke_patron_create_service or threw: #{e.message || "nil"} #{response}")
         raise e
       end
     else
-      defensive_log("#{self.class.name}: UserBarcodeJob.perform: username_already_in_sierra still true")
+      defensive_log("#{self.class.name}: UserJob.perform: username_already_in_sierra")
     end
   end
 
