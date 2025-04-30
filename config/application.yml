@@ -12,6 +12,8 @@ when 'development'
   ENV['SECRET_KEY_BASE'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAOMwgeAGCSqGSIb3DQEHBqCB0jCBzwIBADCByQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxjUy6F+DQ0NZ0NH/UCARCAgZv7/TEPBAow+srmtwcgFdEMbthnWmJVMZmR+NyMl0gaoqiQyYqJvAwbmgwDBYQKeVm1qSqvbKJchR86HQJ2icnUCH/OShiQs3H8Bo+ddnc97v/mhJx8MlR6fYyxZF79VmhYvfIaRO1HwTyCMjbV7dGbVw8kj0xZG7tXXyAubcdBMeJrnja5GghViu+I3VaZxQz1/RwbMhK5x49M7A==")
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons"
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
+  ENV['VALIDATE_USERNAME_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/validations/username"
+  ENV['PATRON_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/patrons"
   ENV['BIBS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/bibs" #Development services is not working. So using qa urls.
   ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
@@ -38,6 +40,8 @@ when 'qa'
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
   ENV['BIBS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/bibs"
   ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
+  ENV['VALIDATE_USERNAME_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/validations/username"
+  ENV['PATRON_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/patrons"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKjWCFeFAdUNMdIDhQIBEIAn1FF0mYdxsNlM1WOEUyLGtjjpX42xgiSA1M8ui4kahfNsehZifUEj")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyT7AUGHHZGYCPxJ+UCARCAQ+dM+7Y22l3eOfrW4N+lkQ1ewHE6AFNi9nJTgrnAETk7Ovs+rX6NLSAUJLBKT+AIz6/r7/JxqJ1+1JD0zzHFhdZR0MU=")
@@ -65,6 +69,8 @@ when 'production'
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://platform.nypl.org/api/v0.2/patrons"
   ENV['BIBS_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/bibs"
   ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/items"
+  ENV['VALIDATE_USERNAME_MICROSERVICE_URL_V03'] = "https://platform.nypl.org/api/v0.3/validations/username"
+  ENV['PATRON_MICROSERVICE_URL_V03'] = "https://platform.nypl.org/api/v0.3/patrons"
   ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
   # production client id
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKjWCFeFAdUNMdIDhQIBEIAn1FF0mYdxsNlM1WOEUyLGtjjpX42xgiSA1M8ui4kahfNsehZifUEj")
@@ -94,12 +100,13 @@ when 'test'
   ENV['PATRON_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/patrons" #Development services is not working. So using qa urls.
   ENV['PATRON_MICROSERVICE_URL_V02'] = "https://qa-platform.nypl.org/api/v0.2/patrons"
   ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
-  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://platform.nypl.org/api/v0.1/bibs"
+  ENV['BIBS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/bibs"
+  ENV['VALIDATE_USERNAME_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/validations/username"
+  ENV['PATRON_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/patrons"
   ENV['NEWS_LETTER_GOOGLE_SPREAD_SHEET_ID'] = 'test_id'
   ENV['MLN_GOOGLE_ACCCOUNT'] = "{\"client_email\":\"google_mln_test@gmail.com\",\"private_key\":\"fake_key\"}"
   ENV['MLN_ENVIRONMENT_URL'] = "my-library-nyc-app-qa25.unpc66pkwp.us-east-1.elasticbeanstalk.com"
   ENV['MLN_API_GATEWAY_URL'] = 'qa-www.mylibrarynyc.org'
   ENV['ADOBE_LAUNCH_URL'] = "https://assets.adobedtm.com/1a9376472d37/47d869131fa4/launch-3ce19d1f4eed-development.min.js"
 end
-
 %>

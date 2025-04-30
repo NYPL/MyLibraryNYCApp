@@ -1,14 +1,17 @@
 name: Deploy QA
-on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+# on:
+#   workflow_run:
+#     workflows: ["CI"]
+#     types:
+#       - completed
 
 permissions:
   id-token: write
   contents: read
-
+on:
+  push:
+    branches:
+      - MLN-1304-multi-select
 jobs:
   deploy_qa:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'qa' }}

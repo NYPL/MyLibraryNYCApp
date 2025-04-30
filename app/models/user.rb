@@ -255,33 +255,11 @@ class User < ActiveRecord::Base
     end
   end
 
-  def assign_username(number_tries = 0)
-    query = { username: "#{self.first_name}#{self.last_name}" + "#{rand(10000..90000)}" }
-
-    Delayed::Worker.logger.info("username_available_in_sierra")
-    response = HTTParty.post(
-      ENV.fetch("VALIDATE_USERNAME_MICROSERVICE_URL_V03", nil),
-      body: query.to_json,
-      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
-                 "Content-Type" => "application/json" },
-      timeout: 10,
-    )
-    response
-  end
-
-  def username_available_in_sierra?
+  def username_available_in_sierra
     user_name = "#{self.first_name}#{self.last_name}" + "#{rand(10000..90000)}"
     query = { username: user_name }
 
-    Delayed::Worker.logger.info("username_available_in_sierra")
-    response = HTTParty.post(
-      ENV.fetch("VALIDATE_USERNAME_MICROSERVICE_URL_V03", nil),
-      body: query.to_json,
-      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
-                 "Content-Type" => "application/json" },
-      timeout: 10,
-    )
-    Delayed::Worker.logger.info("username_available_in_sierra")
+    Delayed::Worker.logger.info("Calling validate username api body #{query}")
     response = HTTParty.post(
       ENV.fetch("VALIDATE_USERNAME_MICROSERVICE_URL_V03", nil),
       body: query.to_json,
@@ -291,19 +269,19 @@ class User < ActiveRecord::Base
     )
     if (response.code == 200)
       is_username_available = true
-      user_name = response["username"]
+      Delayed::Worker.logger.info("User name api response details #{response}")
       LogWrapper.log("INFO", {
-        "method" => "username_available_in_sierra?",
+        "method" => "username_available_in_sierra",
         "message" => "username_available_in_sierra response details: #{response.code} is_user_available: #{is_username_available}",
       })
     else
       is_username_available = false
       LogWrapper.log("ERROR", {
-        "method" => "username_available_in_sierra?",
+        "method" => "username_available_in_sierra",
         "message" => "username_available_in_sierra response details: #{response}",
       })
     end
-    return is_username_available, user_name
+    [is_username_available, user_name]
   end
 
   def barcode_available_in_sierra?
@@ -368,6 +346,8 @@ class User < ActiveRecord::Base
       acceptTerms: true,
       birthdate: "01-01-1988", #Default birthdate for patrons
     }
+    Delayed::Worker.logger.info("Calling patron creator api body #{query}")
+
     response = HTTParty.post(
       ENV.fetch("PATRON_MICROSERVICE_URL_V03", nil),
       body: query.to_json,
@@ -375,6 +355,7 @@ class User < ActiveRecord::Base
                  "Content-Type" => "application/json" },
       timeout: 10,
     )
+    Delayed::Worker.logger.info("Patron response #{response}")
 
     case response.code
     when 200

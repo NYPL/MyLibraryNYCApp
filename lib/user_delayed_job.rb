@@ -3,10 +3,8 @@
 class UserDelayedJob < Struct.new(:user_id, :pin)
   def perform
     user = User.find(user_id)
-
     if user.blank?
-      defensive_log("UserBarcodeJob called with nil user or pin.")
-      raise Exceptions::ArgumentError, "UserBarcodeJob called with nil user or pin."
+      raise Exceptions::ArgumentError, "UserJob called with nil user or pin."
     end
 
     is_username_available = false
@@ -17,26 +15,29 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
     while is_username_available == false && number_tries < 7
       begin
         number_tries += 1
-        is_username_available, user_name = user.username_available_in_sierra?
+        is_username_available, user_name = user.username_available_in_sierra
+        defensive_log("#{self.class.name}: userName: #{user_name} isUsernameAvailable: #{is_username_available}")
+
         # wait a bit before hitting Sierra up again
       rescue Exceptions::InvalidResponse => e
         defensive_log("#{self.class.name}: user.check_username_uniqueness_with_sierra threw an error: #{e.message || "nil"}")
         raise e
       end
 
-      # Barcode is not available in sierra assign barcode to user
-      # and call sierra again with latest barcode
+      # Barcode is not available in sierra assign userName to user
+      # and call sierra again with latest userName
       unless is_username_available
-        defensive_log("#{self.class.name}: barcode [#{user.barcode}] was already in Sierra,
+        defensive_log("#{self.class.name}: userName #{user_name}] was already in Sierra,
           calling user assign_username again. No.of retries number_tries #{number_tries}")
-        is_username_available, user_name = user.username_available_in_sierra?
+        is_username_available, user_name = user.username_available_in_sierra
         sleep(60)
       end
     end
     if is_username_available == true
       begin
-        defensive_log("#{self.class.name}: barcode [#{user.barcode}] is available in Sierra, calling patron creator service.")
+        defensive_log("#{self.class.name}: userName [#{user_name}] is available in Sierra, calling patron creator service.")
         response = user.invoke_patron_create_service(pin, user_name)
+        defensive_log("Response code: #{response.code}")
 
         if response.code == 200
           defensive_log("Patron created successfully")
@@ -47,11 +48,11 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
         end
       rescue Exceptions::InvalidResponse => e
         defensive_log("#{self.class.name}: \
-          invoke_patron_create_service or user.save_as_complete threw: #{e.message || "nil"}")
+          invoke_patron_create_service or  threw: #{e.message || "nil"} #{response}")
         raise e
       end
     else
-      defensive_log("#{self.class.name}: UserBarcodeJob.perform: barcode_already_in_sierra still true")
+      defensive_log("#{self.class.name}: UserBarcodeJob.perform: username_already_in_sierra still true")
     end
   end
 
