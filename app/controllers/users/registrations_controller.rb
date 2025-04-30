@@ -12,6 +12,7 @@ module Users
     def create
       begin
         resource = User.new(user_params)
+        resource.barcode = resource.assign_barcode
         resource.status = User::STATUS_LABELS["pending"]
         resource.password = resource.password
         if resource.valid?
