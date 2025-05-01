@@ -8,7 +8,10 @@ on:
 permissions:
   id-token: write
   contents: read
-
+# on:
+#   push:
+#     branches:
+#       - MLN-1339-v0.3-update # this is for local branch deployment
 jobs:
   deploy_qa:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'qa' }}

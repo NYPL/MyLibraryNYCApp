@@ -16,10 +16,8 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :password
 
-  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer: true,
-                                      less_than_or_equal_to: 27777099999999, uniqueness: true
-  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: false,
-                                      only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
+  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: true, only_integer: true, uniqueness: true
+  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: true, only_integer: true, uniqueness: true
 
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
@@ -257,6 +255,35 @@ class User < ActiveRecord::Base
     end
   end
 
+  def username_available_in_sierra
+    user_name = "#{self.first_name}#{self.last_name}" + "#{rand(10000..90000)}"
+    query = { username: user_name }
+
+    Delayed::Worker.logger.info("Calling validate username api body #{query}")
+    response = HTTParty.post(
+      ENV.fetch("VALIDATE_USERNAME_MICROSERVICE_URL_V03", nil),
+      body: query.to_json,
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
+    )
+    if (response.code == 200)
+      is_username_available = true
+      Delayed::Worker.logger.info("User name api response details #{response}")
+      LogWrapper.log("INFO", {
+        "method" => "username_available_in_sierra",
+        "message" => "username_available_in_sierra response details: #{response.code} is_user_available: #{is_username_available}",
+      })
+    else
+      is_username_available = false
+      LogWrapper.log("ERROR", {
+        "method" => "username_available_in_sierra",
+        "message" => "username_available_in_sierra response details: #{response}",
+      })
+    end
+    [is_username_available, user_name]
+  end
+
   def barcode_available_in_sierra?
     is_barcode_available = false
     response = HTTParty.get(
@@ -302,6 +329,59 @@ class User < ActiveRecord::Base
       end
     # Format the date as a string in "YYYY-MM-DD" format
     future_date.strftime("%Y-%m-%d")
+  end
+
+  def invoke_patron_create_service(pin, user_name)
+    query = {
+      usernameHasBeenValidated: false,
+      username: user_name,
+      name: "#{self.first_name.upcase} #{self.last_name.upcase}",
+      address: school.address_line_1,
+      pin: pin,
+      ageGate: true,
+      policyType: "simplye",
+      email: email,
+      homeLibraryCode: "eb",
+      ecommunicationsPref: false,
+      acceptTerms: true,
+      birthdate: "01-01-1988", #Default birthdate for patrons
+    }
+    Delayed::Worker.logger.info("Calling patron creator api body #{query}")
+
+    response = HTTParty.post(
+      ENV.fetch("PATRON_MICROSERVICE_URL_V03", nil),
+      body: query.to_json,
+      headers: { "Authorization" => "Bearer #{Oauth.get_oauth_token}",
+                 "Content-Type" => "application/json" },
+      timeout: 10,
+    )
+    Delayed::Worker.logger.info("Patron response #{response}")
+
+    case response.code
+    when 200
+      self.barcode = response["barcode"]
+      self.save!
+      LogWrapper.log("DEBUG", {
+        "message" => "The account with e-mail #{email} was
+           successfully created patron from the micro-service!",
+        "status" => response.code,
+      })
+    when 400
+      LogWrapper.log("ERROR", {
+        "message" => "An error has occured when sending a request to the patron creator service",
+        "status" => response.code,
+        "responseData" => response.body,
+      })
+      raise Exceptions::InvalidResponse, response["message"]["description"]
+    else
+      LogWrapper.log("ERROR", {
+        "message" => "An error has occured when sending a request to the patron creator service",
+        "status" => response.code,
+        "responseData" => response.body,
+      })
+      raise Exceptions::StandardError, "Status code: #{response.code}"
+    end
+    response
   end
 
   # Sends a request to the patron creator microservice.

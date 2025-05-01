@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_24_194315) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_29_152141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -251,7 +251,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_24_194315) do
     t.string "unconfirmed_email"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.bigint "barcode", null: false
+    t.bigint "barcode"
     t.string "first_name", limit: 40
     t.string "last_name", limit: 40
     t.string "alt_email"
