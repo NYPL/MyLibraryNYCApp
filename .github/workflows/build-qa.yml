@@ -1,20 +1,20 @@
 name: Deploy QA
-# on:
-#   workflow_run:
-#     workflows: ["CI"]
-#     types:
-#       - completed
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
 
 permissions:
   id-token: write
   contents: read
-on:
-  push:
-    branches:
-      - MLN-1339-v0.3-update
+# on:
+#   push:
+#     branches:
+#       - MLN-1339-v0.3-update # this is for local branch deployment
 jobs:
   deploy_qa:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'qa' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'qa' }}
     name: Deploy QA
     runs-on: ubuntu-latest
     environment: qa
