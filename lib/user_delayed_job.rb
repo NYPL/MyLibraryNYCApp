@@ -16,9 +16,7 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
       number_tries += 1
       is_username_available, user_name = user.username_available_in_sierra
       defensive_log("#{self.class.name}: userName: #{user_name} isUsernameAvailable: #{is_username_available} numberOfRetries: #{number_tries}")
-
-      # userName is not available in sierra assign userName to user
-      # and call sierra again with latest userName
+      # userName is not available in sierra, call sierra again with latest userName
       unless is_username_available
         defensive_log("#{self.class.name}: userName #{user_name}] was already in Sierra,
           calling user sierra again. No.of retries number_tries #{number_tries}")
