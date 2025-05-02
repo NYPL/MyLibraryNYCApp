@@ -346,8 +346,7 @@ class User < ActiveRecord::Base
       acceptTerms: true,
       birthdate: "01-01-1988", #Default birthdate for patrons
     }
-    Delayed::Worker.logger.info("Calling patron creator api body #{query}")
-
+    Delayed::Worker.logger.info("Patron creator api body #{query}")
     response = HTTParty.post(
       ENV.fetch("PATRON_MICROSERVICE_URL_V03", nil),
       body: query.to_json,
