@@ -13,11 +13,11 @@ class UserDelayedJob < Struct.new(:user_id, :pin)
     # well, we can't be useing this user with a duplicate username.
     # ask the user to generate another username, and try again.
     while is_username_available == false && number_tries < 7
-      number_tries += 1
       is_username_available, user_name = user.username_available_in_sierra
       defensive_log("#{self.class.name}: userName: #{user_name} isUsernameAvailable: #{is_username_available} numberOfRetries: #{number_tries}")
       # userName is not available in sierra, call sierra again with latest userName
       unless is_username_available
+        number_tries += 1
         defensive_log("#{self.class.name}: userName #{user_name}] was already in Sierra,
           calling user sierra again. No.of retries number_tries #{number_tries}")
         is_username_available, user_name = user.username_available_in_sierra
