@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'user_delayed_job'
-
-# queue_as :user_barcode_queue
+require "user_delayed_job"
 
 # keep failed jobs in the database, so can troubleshoot later
 Delayed::Worker.destroy_failed_jobs = false
@@ -18,14 +16,12 @@ Delayed::Worker.max_run_time = 10.minutes
 
 Delayed::Worker.read_ahead = 10
 
-Delayed::Worker.default_queue_name = 'user_barcode_queue'
-
+Delayed::Worker.default_queue_name = "user_queue"
 
 # don't run delayed_job in test mode
 Delayed::Worker.delay_jobs = !Rails.env.test?
 
 Delayed::Worker.raise_signal_exceptions = :term
-
 
 # Delayed::Worker.queue_attributes = {
 #  default_high_priority: { priority: -10 },
