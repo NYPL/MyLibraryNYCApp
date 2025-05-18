@@ -16,8 +16,8 @@ class User < ActiveRecord::Base
   # Makes getters and setters
   attr_accessor :password
 
-  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: true, only_integer: true, uniqueness: true
-  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: true, only_integer: true, uniqueness: true
+  validates_numericality_of :barcode, on: :create, presence: true, allow_blank: false, only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
+  validates_numericality_of :barcode, on: :update, presence: true, allow_blank: false, only_integer: true, less_than_or_equal_to: 27777099999999, uniqueness: true
 
   # Validation's for email and pin only occurs when a user record is being
   # created on sign up. Does not occur when updating
