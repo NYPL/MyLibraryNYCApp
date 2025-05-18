@@ -30,5 +30,4 @@ Delayed::Worker.raise_signal_exceptions = :term
 # }
 
 Delayed::Worker.logger = Rails.logger
-Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))
-
+Delayed::Worker.logger = Logger.new(File.join(Rails.root, "log", "delayed_job.log"))
