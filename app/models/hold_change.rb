@@ -40,8 +40,7 @@ class HoldChange < ActiveRecord::Base
 
   def update_hold
     # puts "updating hold status: ", hold.status, status
-    hold.status = status
-    hold.save
+    hold.update_columns(status: status)
   end
 
 end
