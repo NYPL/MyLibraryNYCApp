@@ -16,7 +16,7 @@ when 'development'
   ENV['PATRON_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/patrons"
   ENV['BIBS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/bibs" #Development services is not working. So using qa urls.
   ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
-  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
+  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://ilsstaff.nypl.org/iii/sierra-api/v5/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHoweAYJKoZIhvcNAQcGoGswaQIBADBkBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCiu+c44rmkAHZSzwgIBEIA3r3JbNsxtD1aVD+BVXmVWEnHlq8n8WVya7K3f6k6wnHQLZyATp+KfRAsShCvZoYK0lroQp0d5MA==")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHIwcAYJKoZIhvcNAQcGoGMwYQIBADBcBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDO0hzJFgqsa9/6VUYQIBEIAvwWnkTBmkz6K7UVHBiB+X3/YDd7usP5VghcbUhNFXFcPJndNehabSCEAkNPd1Be4=")
   ENV['SMTP_USERNAME'] = AwsDecrypt.decrypt_kms("AQECAHjqALewp8JBJNxIQvR4oY795dyG7INaGR1glMsTEgetggAAAHIwcAYJKoZIhvcNAQcGoGMwYQIBADBcBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDL8fv+rOhYQbEh07hgIBEIAvKEUmsLQF7PgAXLMDzg+tT+LTlEpbO+hc/YgZ5LMYK+JPV7ddr2xQLBtJMUqA1hE=")
@@ -42,7 +42,7 @@ when 'qa'
   ENV['ITEMS_MICROSERVICE_URL_V01'] = "https://qa-platform.nypl.org/api/v0.1/items"
   ENV['VALIDATE_USERNAME_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/validations/username"
   ENV['PATRON_MICROSERVICE_URL_V03'] = "https://qa-platform.nypl.org/api/v0.3/patrons"
-  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://isso.nypl.org/oauth/token"
+  ENV['ISSO_OAUTH_TOKEN_URL'] = "https://ilsstaff.nypl.org/iii/sierra-api/v5/token"
   ENV['ISSO_CLIENT_ID'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHoweAYJKoZIhvcNAQcGoGswaQIBADBkBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCiu+c44rmkAHZSzwgIBEIA3r3JbNsxtD1aVD+BVXmVWEnHlq8n8WVya7K3f6k6wnHQLZyATp+KfRAsShCvZoYK0lroQp0d5MA==")
   ENV['ISSO_CLIENT_SECRET'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHIwcAYJKoZIhvcNAQcGoGMwYQIBADBcBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDO0hzJFgqsa9/6VUYQIBEIAvwWnkTBmkz6K7UVHBiB+X3/YDd7usP5VghcbUhNFXFcPJndNehabSCEAkNPd1Be4=")
   ENV['SMTP_USERNAME'] = AwsDecrypt.decrypt_kms("AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHIwcAYJKoZIhvcNAQcGoGMwYQIBADBcBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDJS1gh2i/zJZ+wGUCQIBEIAvVd/hjSYcXkKkrpjD3IWQSw8Zg1PlIGRIFWJkrLYaNhzTqysdPJCBUHk7VlA3AFM=")

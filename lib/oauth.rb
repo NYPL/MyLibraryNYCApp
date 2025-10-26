@@ -21,7 +21,7 @@ module Oauth
        'responseData' => "#{response.body}",
        'status' => response.code
        })
-      raise InvalidResponse, "Invalid status code of: #{response.code}"
+      raise Exception::InvalidResponse, "Invalid status code of: #{response.code}"
     end
   end
 end
