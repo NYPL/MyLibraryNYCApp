@@ -77,15 +77,20 @@ class Book < ActiveRecord::Base
 
 
   def image_uri(size=:small)
-    return nil if cover_uri.nil?
+    return nil if isbn.nil?
 
-    deriv = 'S'
-    deriv = 'M' if size == :medium
-    deriv = 'L' if size == :large
+    deriv = 'SC'
+    deriv = 'MC' if size == :medium
+    deriv = 'LC' if size == :large
 
-    cover_uri.sub /Type=L/, "Type=#{deriv}"
+    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/#{deriv}.gif&client=nyplvega&type=hw7"
   end
 
+  def cover_uri
+    return nil if isbn.nil?
+
+    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/MC.gif&client=nyplvega&type=hw7"
+  end
 
   # def update_from_catalog_item(item)
   #   self.update :details_url => item['details_url']

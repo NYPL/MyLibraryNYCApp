@@ -84,7 +84,11 @@ ActiveAdmin.register Book do
   end
 
   sidebar :Image, :only => :show do
-    image_tag book.image_uri :medium
+    if book && book.image_uri.present?
+      image_tag book.image_uri :medium
+    else
+      "No image available"
+    end
   end
 
 end
