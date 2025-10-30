@@ -89,7 +89,7 @@ class Book < ActiveRecord::Base
   def cover_uri
     return nil if isbn.nil?
 
-    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/MC.gif&client=nyplvega&type=hw7"
+    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/LC.gif&client=nyplvega&type=hw7"
   end
 
   # def update_from_catalog_item(item)
@@ -190,7 +190,7 @@ class Book < ActiveRecord::Base
         description: var_field(book_attributes, '520'),
         physical_description: var_field(book_attributes, '300'),
         format: var_field(book_attributes, '020'),
-        cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}",
+        cover_uri: "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/LC.gif&client=nyplvega&type=hw7",
         bib_code_3: fixed_field(book_attributes, '31', true)
       )
     rescue => e
