@@ -77,15 +77,20 @@ class Book < ActiveRecord::Base
 
 
   def image_uri(size=:small)
-    return nil if cover_uri.nil?
+    return nil if isbn.nil?
 
-    deriv = 'S'
-    deriv = 'M' if size == :medium
-    deriv = 'L' if size == :large
+    deriv = 'SC'
+    deriv = 'MC' if size == :medium
+    deriv = 'LC' if size == :large
 
-    cover_uri.sub /Type=L/, "Type=#{deriv}"
+    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/#{deriv}.gif&client=nyplvega&type=hw7"
   end
 
+  def cover_uri
+    return nil if isbn.nil?
+
+    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/LC.gif&client=nyplvega&type=hw7"
+  end
 
   # def update_from_catalog_item(item)
   #   self.update :details_url => item['details_url']
@@ -185,7 +190,7 @@ class Book < ActiveRecord::Base
         description: var_field(book_attributes, '520'),
         physical_description: var_field(book_attributes, '300'),
         format: var_field(book_attributes, '020'),
-        cover_uri: "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=L&Value=#{isbn}",
+        cover_uri: "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/LC.gif&client=nyplvega&type=hw7",
         bib_code_3: fixed_field(book_attributes, '31', true)
       )
     rescue => e
