@@ -104,7 +104,7 @@ function activateSchool(schoolId, activate) {
   
       $.each(el.data('titles'), function(i, t) {
         if(t['isbns'])
-          image_uris[t['id']] = 'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?&userID=NYPL49807&password=CC68707&content=M&Return=1&Type=S&Value=' + t['isbns'][0];
+          image_uris[t["id"]] = "https://secure.syndetics.com/index.aspx?isbn=" + t["isbns"][0] + "/SC.gif&client=nyplvega&type=hw7";
         title_uris[t['id']] = t['details_url']
       });
       // console.log("set image uri: ", image_uris, title_uris);
