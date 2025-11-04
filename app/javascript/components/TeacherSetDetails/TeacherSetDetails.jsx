@@ -322,6 +322,7 @@ export default function TeacherSetDetails(props) {
           aspectRatio="square"
           size="default"
           alt={data.title}
+          objectFit="contain"
         />
       );
     }
