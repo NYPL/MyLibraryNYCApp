@@ -83,13 +83,13 @@ class Book < ActiveRecord::Base
     deriv = 'MC' if size == :medium
     deriv = 'LC' if size == :large
 
-    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/#{deriv}.gif&client=nyplvega&type=hw7"
+    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/#{deriv}.gif&client=nyplvega&type=unbound"
   end
 
   def cover_uri
     return nil if isbn.nil?
 
-    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/LC.gif&client=nyplvega&type=hw7"
+    "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/LC.gif&client=nyplvega&type=unbound"
   end
 
   # def update_from_catalog_item(item)
@@ -190,7 +190,7 @@ class Book < ActiveRecord::Base
         description: var_field(book_attributes, '520'),
         physical_description: var_field(book_attributes, '300'),
         format: var_field(book_attributes, '020'),
-        cover_uri: "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/LC.gif&client=nyplvega&type=hw7",
+        cover_uri: "https://secure.syndetics.com/index.aspx?isbn=#{isbn}/LC.gif&client=nyplvega&type=unbound",
         bib_code_3: fixed_field(book_attributes, '31', true)
       )
     rescue => e

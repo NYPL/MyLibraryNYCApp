@@ -51,6 +51,7 @@ export default function ShowBookImage(props) {
           size="default"
           alt={props.book.title}
           className="bookImageTop"
+          objectFit="contain"
         />
       );
     } else {
