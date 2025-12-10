@@ -113,9 +113,6 @@ export default function TeacherSetDetails(props) {
         console.log(userStatus)
         setIsSchoolActive(res.data.is_school_active)
         setDisabledButton(!res.data.is_school_active)
-        if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
-          adobeAnalyticsForTeacherSet(res.data.teacher_set);
-        }
         if (res.data.teacher_set.title !== null) {
           document.title =
             "Teacher Set Details | " +
@@ -135,23 +132,6 @@ export default function TeacherSetDetails(props) {
     setQuantity(event.target.value);
   };
 
-  const adobeAnalyticsForTeacherSet = (teacher_set) => {
-    // Push the event data to the Adobe Data Layer
-    let title = teacher_set.title !== null ? teacher_set.title : "";
-    window.adobeDataLayer = window.adobeDataLayer || [];
-    window.adobeDataLayer.push({
-      event: "virtual_page_view",
-      page_name: "mylibrarynyc|teacher-set-details|" + title,
-      site_section: "Teacher Sets",
-    });
-
-    // Dynamically create and insert the script tag for Adobe Launch
-    const script = document.createElement("script");
-    script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
-    script.async = true;
-    document.head.appendChild(script);
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     setDisabledButton(true);
@@ -169,11 +149,6 @@ export default function TeacherSetDetails(props) {
           return false;
         } else {
           if (res.data.status === "created") {
-            if (env.RAILS_ENV !== "test" && env.RAILS_ENV !== "development") {
-              {
-                adobeAnalyticsForOrder();
-              }
-            }
             props.handleTeacherSetOrderedData(res.data.hold, teacherSet);
             navigate("/ordered_holds/" + res.data.hold["access_key"]);
           } else {
@@ -187,21 +162,6 @@ export default function TeacherSetDetails(props) {
       })
   };
 
-  const adobeAnalyticsForOrder = () => {
-    // Push the event data to the Adobe Data Layer
-    window.adobeDataLayer = window.adobeDataLayer || [];
-    window.adobeDataLayer.push({
-      event: "virtual_page_view",
-      page_name: "mylibrarynyc|order-details",
-      site_section: "Order",
-    });
-
-    // Dynamically create and insert the script tag for Adobe Launch
-    const script = document.createElement("script");
-    script.src = env.ADOBE_LAUNCH_URL; // assuming you are using a bundler that supports environment variables
-    script.async = true;
-    document.head.appendChild(script);
-  };
 
   const teacherSetTitle = () => {
     return <>{teacherSet["title"]}</>;
