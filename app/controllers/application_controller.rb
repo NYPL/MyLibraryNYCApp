@@ -1,10 +1,8 @@
 # frozen_string_literal: false
 
 class ApplicationController < ActionController::Base
-  include ApplicationHelper
 
   before_action :redirect_if_old_domain
-  before_action :adobe_titles
 
   protect_from_forgery only: [:update, :get, :put, :delete]
 
