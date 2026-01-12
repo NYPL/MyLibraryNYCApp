@@ -1659,7 +1659,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.2.0)
     bcrypt (3.1.20)
-    bigdecimal (3.1.8)
+    bigdecimal (4.0.1)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
     breakpoint (2.7.1)
@@ -1687,7 +1687,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.1)
       railties (>= 6.0.0)
-    csv (3.3.0)
+    csv (3.3.5)
     daemons (1.4.1)
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
@@ -1754,6 +1754,7 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
+    ffi (1.17.0)
     ffi (1.17.0-aarch64-linux-gnu)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
@@ -1804,7 +1805,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
     hashdiff (1.1.1)
-    httparty (0.22.0)
+    httparty (0.24.0)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -1855,6 +1856,7 @@ GEM
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.3)
     libv8-node (18.19.0.0-aarch64-linux)
+    libv8-node (18.19.0.0-x86_64-linux)
     logger (1.6.1)
     lograge (0.14.0)
       actionpack (>= 4)
@@ -1874,6 +1876,7 @@ GEM
     memoist (0.16.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.9)
     mini_racer (0.16.0)
       libv8-node (~> 18.19.0.0)
     minitest (5.25.1)
@@ -1886,8 +1889,8 @@ GEM
     mocha (2.4.5)
       ruby2_keywords (>= 0.0.5)
     multi_json (1.15.0)
-    multi_xml (0.7.1)
-      bigdecimal (~> 3.1)
+    multi_xml (0.8.1)
+      bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.1)
     mutex_m (0.2.0)
     net-imap (0.4.16)
@@ -1900,6 +1903,9 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
+    nokogiri (1.16.7)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.16.7-aarch64-linux)
       racc (~> 1.4)
     open_uri_redirections (0.2.1)
@@ -2133,6 +2139,7 @@ GEM
 
 PLATFORMS
   aarch64-linux-gnu
+  x86_64-linux
 
 DEPENDENCIES
   actioncable (~> 7.2)
@@ -2173,7 +2180,7 @@ DEPENDENCIES
   font-awesome-rails (~> 4.7)
   google-api-client (~> 0.53)
   google_drive (~> 3.0)
-  httparty (~> 0.22)
+  httparty (~> 0.24)
   importmap-rails (~> 2.0)
   jquery-rails (~> 4.6)
   jsbundling-rails (~> 1.3)
