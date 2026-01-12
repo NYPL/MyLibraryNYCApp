@@ -1754,6 +1754,7 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
+    ffi (1.17.0)
     ffi (1.17.0-aarch64-linux-gnu)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
@@ -1855,13 +1856,14 @@ GEM
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.3)
     libv8-node (18.19.0.0-aarch64-linux)
+    libv8-node (18.19.0.0-x86_64-linux)
     logger (1.6.1)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.22.0)
+    loofah (2.25.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     luhn (1.0.2)
@@ -1900,7 +1902,9 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.7-aarch64-linux)
+    nokogiri (1.19.0-aarch64-linux-gnu)
+      racc (~> 1.4)
+    nokogiri (1.19.0-x86_64-linux-gnu)
       racc (~> 1.4)
     open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
@@ -1969,9 +1973,9 @@ GEM
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.6.0)
+    rails-html-sanitizer (1.6.1)
       loofah (~> 2.21)
-      nokogiri (~> 1.14)
+      nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
     rails-perftest (0.0.7)
     railties (7.2.1)
       actionpack (= 7.2.1)
@@ -2133,6 +2137,7 @@ GEM
 
 PLATFORMS
   aarch64-linux-gnu
+  x86_64-linux
 
 DEPENDENCIES
   actioncable (~> 7.2)
