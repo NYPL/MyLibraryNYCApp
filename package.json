@@ -12,7 +12,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "breakpoint-sass": "^2.7.1",
     "chai": "3.5.0",
-    "create-react-class": "15.5.3",
+    "create-react-class": "15.7.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "esdoc": "^1.1.0",
