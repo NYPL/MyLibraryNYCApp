@@ -1754,6 +1754,7 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
+    ffi (1.17.0)
     ffi (1.17.0-aarch64-linux-gnu)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
@@ -1855,6 +1856,7 @@ GEM
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.3)
     libv8-node (18.19.0.0-aarch64-linux)
+    libv8-node (18.19.0.0-x86_64-linux)
     logger (1.6.1)
     lograge (0.14.0)
       actionpack (>= 4)
@@ -1874,6 +1876,7 @@ GEM
     memoist (0.16.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.9)
     mini_racer (0.16.0)
       libv8-node (~> 18.19.0.0)
     minitest (5.25.1)
@@ -1900,6 +1903,9 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
+    nokogiri (1.16.7)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.16.7-aarch64-linux)
       racc (~> 1.4)
     open_uri_redirections (0.2.1)
@@ -2014,7 +2020,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     retriable (3.1.2)
-    rexml (3.3.8)
+    rexml (3.4.2)
     rspec-core (3.13.1)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.3)
@@ -2133,6 +2139,7 @@ GEM
 
 PLATFORMS
   aarch64-linux-gnu
+  x86_64-linux
 
 DEPENDENCIES
   actioncable (~> 7.2)
@@ -2206,7 +2213,7 @@ DEPENDENCIES
   rails-perftest (~> 0.0)
   railties (~> 7.2)
   react_on_rails (~> 14.0)
-  rexml (~> 3.3)
+  rexml (~> 3.4)
   rspec-rails (~> 7.0)
   rubocop (~> 1.66)
   rubocop-performance (~> 1.22)
