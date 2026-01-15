@@ -22,6 +22,8 @@ services:
       RAILS_ENV=development bundle exec rake elasticsearch:delete_teacherset_index;
       RAILS_ENV=development bundle exec rake elasticsearch:create_teacherset_index;
       RAILS_ENV=development bundle exec rake seeds:teacher_sets;
+      yarn build --watch &
+      yarn build:css --watch &
       bundle exec rails server -b 0.0.0.0
       "
 

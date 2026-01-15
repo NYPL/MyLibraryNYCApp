@@ -244,8 +244,6 @@ export default function TeacherSetBooks() {
   };
 
   let bookTitle = book.title ? book.title : "Book Title";
-  let legacyDetailUrl =
-    "http://legacycatalog.nypl.org/record=" + book.bnumber + "~S1";
 
   return (
     <TemplateAppContainer
@@ -407,14 +405,6 @@ export default function TeacherSetBooks() {
             )}
           </List>
 
-          <Link
-            className="tsDetailUrl"
-            href={legacyDetailUrl}
-            id="ts-book-page-details_url"
-            type="external"
-          >
-            View in catalog
-          </Link>
           <Heading
             marginTop="l"
             marginBottom="l"
