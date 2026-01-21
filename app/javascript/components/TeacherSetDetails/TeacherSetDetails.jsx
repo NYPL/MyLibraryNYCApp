@@ -515,10 +515,6 @@ export default function TeacherSetDetails(props) {
     return teacherSet.availability === "available" ? "informative" : "neutral";
   };
 
-  const legacyDetailUrl = () => {
-    return "http://legacycatalog.nypl.org/record=" + teacherSet.bnumber + "~S1";
-  };
-
   const tsTitle = () => {
     return teacherSet.title ? teacherSet.title : "";
   };
@@ -792,14 +788,6 @@ export default function TeacherSetDetails(props) {
           {TeacherSetDescription()}
           {displayTeacherSetBooks()}
           {teacherSetListDetails(teacherSet)}
-          <Link
-            href={legacyDetailUrl()}
-            id="ts-page-details_url"
-            type="external"
-            marginTop="l"
-          >
-            View in catalog
-          </Link>
         </>
       }
       contentSidebar={orderTeacherSetsInfo()}
